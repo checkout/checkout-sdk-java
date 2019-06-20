@@ -1,11 +1,9 @@
-[![Build Status](https://travis-ci.com/smallporgies/checkout-sdk-java.svg?token=yeJf37D6ztNEaohydeEw&branch=master)](https://travis-ci.com/smallporgies/checkout-sdk-java)
-
 # Checkout.com Java SDK
 
-Built with Java 12 and Gradle 5
+Built with Java 8 and Gradle 5
 
 ## Dependencies
-This project is built with Jackson Databind and Datatype-JSR310 versions 2.9.8
+This project depends on Gson 2.8.5
 
 ## To Build
 
