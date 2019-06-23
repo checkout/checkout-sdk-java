@@ -12,17 +12,19 @@ env:
     - secure: "Bpz9JPQW5juQuQdSa9/BUndRoWyc8mp0NzbAh2wNFSDm53PsbL+awbqUrzTAfu1+X6PxHKAJwHa5VqK6EaBeYSvdA1WjfGYnX7F/RsII57tIxxMGFeaGJQSfHqfiCAUsh8TDC1vgAMW4LwqCc5ou0kpp7lGM1sTAjCiFs8vnf4agyVFCl2Xd/xwndAQAX09SV5rmotpMLpSwxHaqxaFmBJrlH2zi8xFQX6S1TzQEabu7VXI1oXFCQ5GxQXilCROaIn3YXsXLEfr8S+ZDkt6C4QmyxHOnRUPseIl3nfQP4gN1CbmoeVbaYSg00Mk41HbQNOOHv0gLkKmAmmYzt316Ngvd54yKINr27lEFbV0e8jCn8q+NpSlLSXVNzvwPhc4QLhsVDZZVPBuYRQglDMMQH+5pIi9YMq10SpKcGqr6s0KAiWOAxLgs0A/Dl5Xal8AlqyBLBSsSHL0f4AeoSIG0I0P8wL6Wn5ggAblhHWi/yqNqiiIfBgJeuEdJ+kKylTo5TuEcmsuAID0Eah25FdZcN03plUAcn5xC2MuFBYkd1TY/r6XGKFUdlnmNFIhZeDL2BODYEJZ30fxsKipWAYyns+z5A0rs4DXsKn1fmNSCzMeOPFlRA1K5ifDqFBWXECzkZu2eOyy/mFYBTMEXHuzG+I9ELGmYcZbgGFMMOK52hRI="
     - GPG_KEY_LOCATION=".travis/secret.gpg"
     - ENCRYPTED_GPG_KEY_LOCATION=".travis/secret.gpg.enc"
-
 branches:
   only:
     - master
     - dev
-
 language: java
-install: true
-
 jdk:
   - openjdk8
-
+before_install:
+  - chmod -R ug+x .travis
+  - .travis/install.sh
 script:
-  - ./gradlew build --scan -s
+  - chmod -R ug+x .travis
+  - .travis/build.sh
+  - .travis/merge-dev-to-master-gate.sh
+  - .travis/deploy-gate.sh
+  - .travis/tag-master-gate.sh
