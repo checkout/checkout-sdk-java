@@ -11,6 +11,18 @@ public class TestHelper {
         return createCardPaymentRequest(100);
     }
 
+    public static PaymentRequest<CardSource> createCardPayoutRequest() {
+        CardSource cardSource = new CardSource(TestCardSource.VISA.getNumber(), TestCardSource.VISA.getExpiryMonth(), TestCardSource.VISA.getExpiryYear());
+        cardSource.setFirstName("John");
+        cardSource.setLastName("Doe");
+
+
+        PaymentRequest<CardSource> request = PaymentRequest.fromDestination(cardSource, Currency.GBP, 100);
+        request.setReference(UUID.randomUUID().toString());
+
+        return request;
+    }
+
     public static PaymentRequest<CardSource> createCardPaymentRequest(Integer amount) {
         CardSource cardSource = new CardSource(TestCardSource.VISA.getNumber(), TestCardSource.VISA.getExpiryMonth(), TestCardSource.VISA.getExpiryYear());
         cardSource.setCvv(TestCardSource.VISA.getCvv());
@@ -18,7 +30,7 @@ public class TestHelper {
         CustomerRequest customer = new CustomerRequest();
         customer.setEmail(generateRandomEmail());
 
-        PaymentRequest<CardSource> request = new PaymentRequest<>(cardSource, Currency.GBP, amount);
+        PaymentRequest<CardSource> request = PaymentRequest.fromSource(cardSource, Currency.GBP, amount);
         request.setCapture(false);
         request.setCustomer(customer);
         request.setReference(UUID.randomUUID().toString());
@@ -34,7 +46,7 @@ public class TestHelper {
         CustomerRequest customer = new CustomerRequest();
         customer.setEmail(generateRandomEmail());
 
-        PaymentRequest<RequestSource> request = new PaymentRequest<>(alternativePaymentMethodRequestSource, currency, amount);
+        PaymentRequest<RequestSource> request = PaymentRequest.fromSource(alternativePaymentMethodRequestSource, currency, amount);
         request.setCapture(false);
         request.setReference(UUID.randomUUID().toString());
         request.setCustomer(customer);
@@ -53,7 +65,7 @@ public class TestHelper {
     }
 
     public static PaymentRequest<TokenSource> createTokenPaymentRequest(String token) {
-        PaymentRequest<TokenSource> request = new PaymentRequest<>(new TokenSource(token), Currency.GBP, 100);
+        PaymentRequest<TokenSource> request = PaymentRequest.fromSource(new TokenSource(token), Currency.GBP, 100);
         request.setCapture(false);
         return request;
     }

@@ -79,7 +79,7 @@ public class AlternativePaymentSourcePaymentsTests extends ApiTestFixture {
         alternativePaymentSource.put("billing_address", billingAddress);
         alternativePaymentSource.put("products", products);
 
-        PaymentRequest<AlternativePaymentSource> paymentRequest = new PaymentRequest<>(alternativePaymentSource, Currency.GBP, 1000);
+        PaymentRequest<AlternativePaymentSource> paymentRequest = PaymentRequest.fromSource(alternativePaymentSource, Currency.GBP, 1000);
         paymentRequest.setCapture(false);
         paymentRequest.setThreeDS(ThreeDSRequest.from(false));
         paymentRequest.setReference(UUID.randomUUID().toString());

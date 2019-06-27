@@ -10,6 +10,8 @@ public class CardSource implements RequestSource {
     private final int expiryMonth;
     private final int expiryYear;
     private String name;
+    private String firstName;
+    private String lastName;
     private String cvv;
     private Address billingAddress;
     private Phone phone;
@@ -76,5 +78,21 @@ public class CardSource implements RequestSource {
 
     public void setPhone(Phone phone) {
         this.phone = phone;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }
