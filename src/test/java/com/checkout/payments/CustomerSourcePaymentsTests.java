@@ -14,7 +14,7 @@ public class CustomerSourcePaymentsTests extends ApiTestFixture {
         PaymentRequest<CardSource> firstCardPayment = TestHelper.createCardPaymentRequest();
         PaymentResponse firstCardPaymentResponse = getApi().paymentsClient().requestAsync(firstCardPayment).get();
         CustomerSource customerSource = new CustomerSource(firstCardPayment.getCustomer().getId(), firstCardPayment.getCustomer().getEmail());
-        PaymentRequest<CustomerSource> customerPaymentRequest = new PaymentRequest<>(customerSource, Currency.GBP, 100);
+        PaymentRequest<CustomerSource> customerPaymentRequest = PaymentRequest.fromSource(customerSource, Currency.GBP, 100);
         customerPaymentRequest.setCapture(false);
 
         PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(customerPaymentRequest).get();

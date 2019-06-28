@@ -9,6 +9,7 @@ import java.util.Map;
 
 public class PaymentRequest<T extends RequestSource> {
     private final T source;
+    private final T destination;
     private final Integer amount;
     private final String currency;
     private String paymentType;
@@ -29,9 +30,9 @@ public class PaymentRequest<T extends RequestSource> {
     private PaymentRecipient recipient;
     private Map<String, Object> metadata = new HashMap<>();
 
-    public PaymentRequest(T source, String currency, Integer amount) {
-        if (source == null) {
-            throw new IllegalArgumentException("The payment source is required.");
+    private PaymentRequest(T sourceOrDestination, String currency, Integer amount, boolean isSource) {
+        if (sourceOrDestination == null) {
+            throw new IllegalArgumentException(String.format("The payment %s is required.", isSource ? "source" : "destination"));
         }
         if (CheckoutUtils.isNullOrWhitespace(currency)) {
             throw new IllegalArgumentException("The currency is required.");
@@ -39,13 +40,26 @@ public class PaymentRequest<T extends RequestSource> {
         if (amount != null && amount < 0) {
             throw new IllegalArgumentException("The amount cannot be negative");
         }
-        this.source = source;
+        this.source = isSource? sourceOrDestination : null;
+        this.destination = isSource ? null :  sourceOrDestination;
         this.amount = amount;
         this.currency = currency;
     }
 
+    public static <T extends RequestSource> PaymentRequest<T> fromSource(T source, String currency, Integer amount) {
+        return new PaymentRequest<>(source, currency, amount, true);
+    }
+
+    public static <T extends RequestSource> PaymentRequest<T> fromDestination(T destination, String currency, Integer amount) {
+        return new PaymentRequest<>(destination, currency, amount, false);
+    }
+
     public T getSource() {
         return source;
+    }
+
+    public T getDestination() {
+        return destination;
     }
 
     public Integer getAmount() {

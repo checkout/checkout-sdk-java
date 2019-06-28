@@ -20,6 +20,7 @@ public class PaymentProcessed extends Resource {
     private ThreeDSEnrollment threeDS;
     private RiskAssessment risk;
     private ResponseSource source;
+    private CardDestinationResponse destination;
     private CustomerResponse customer;
     private Instant processedOn;
     private String reference;
@@ -171,5 +172,13 @@ public class PaymentProcessed extends Resource {
 
     public Link getVoidLink() {
         return getLink("void");
+    }
+
+    public CardDestinationResponse getDestination() {
+        return destination;
+    }
+
+    public void setDestination(CardDestinationResponse destination) {
+        this.destination = destination;
     }
 }
