@@ -52,6 +52,12 @@ public class CardSource implements RequestSource {
         return name;
     }
 
+    /**
+     * Set the full name of a payin card source object.
+     * When using card as a payout destination you should use
+     * {@link #setFirstName(String)} and {@link #setLastName(String)}
+     * @param name the full name of the source card holder
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -84,6 +90,11 @@ public class CardSource implements RequestSource {
         return firstName;
     }
 
+    /**
+     * Set the first name of a payout card destination object.
+     * When using card as a payin source you should use {@link #setName(String)}
+     * @param firstName the first name of the destination card holder
+     */
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -92,6 +103,11 @@ public class CardSource implements RequestSource {
         return lastName;
     }
 
+    /**
+     * Set the last name of a payout card destination object.
+     * When using card as a payin source you should use {@link #setName(String)}
+     * @param lastName the last name of the destination card holder
+     */
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }

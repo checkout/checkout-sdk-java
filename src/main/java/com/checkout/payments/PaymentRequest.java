@@ -30,11 +30,6 @@ public class PaymentRequest<T extends RequestSource> {
     private PaymentRecipient recipient;
     private Map<String, Object> metadata = new HashMap<>();
 
-    @Deprecated
-    public PaymentRequest(T source, String currency, Integer amount) {
-        this(source, currency, amount, true);
-    }
-
     private PaymentRequest(T sourceOrDestination, String currency, Integer amount, boolean isSource) {
         if (sourceOrDestination == null) {
             throw new IllegalArgumentException(String.format("The payment %s is required.", isSource ? "source" : "destination"));
