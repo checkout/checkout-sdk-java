@@ -19,7 +19,7 @@ function runWithRetry()
 	done
 }
 
-export PROFILE_ID=profile_id
+export PROFILE_ID=57cde3b2433ed7
 export DESCRIPTION_PAYLOAD="<promoteRequest>\
     <data>\
         <description>Checkout SDK Release</description>\
@@ -34,6 +34,8 @@ export STAGING_ID=$(curl -s -u $SONATYPE_USERNAME:$SONATYPE_PASSWORD \
     "$API_ENDPOINT/staging/profiles/$PROFILE_ID/start" \
     | perl -nle 'print "$1" if ($_ =~ /.*<stagedRepositoryId>(.*)<\/stagedRepositoryId>.*/g);' \
     | awk '{$1=$1};1')
+
+echo "Staging ID is $STAGING_ID"
 
 export CLOSE_PAYLOAD="<promoteRequest>\
     <data>\
