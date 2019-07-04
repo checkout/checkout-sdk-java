@@ -1,9 +1,11 @@
-[![Build Status](https://travis-ci.com/checkout/checkout-sdk-java.svg?branch=master)](https://travis-ci.com/checkout/checkout-sdk-java)
+[![Build Status](https://travis-ci.com/checkout/checkout-sdk-java.svg?branch=master)](https://travis-ci.com/checkout/checkout-sdk-java) [![GitHub license](https://img.shields.io/github/license/checkout/checkout-sdk-java.svg)](https://github.com/checkout/checkout-sdk-java/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/checkout/checkout-sdk-java.svg)](https://GitHub.com/checkout/checkout-sdk-java/releases/)
 
 # Checkout.com Java SDK
 Built with Java 8 and Gradle 5
 
 See https://api-reference.checkout.com/ for the API docs on which this SDK is based.
+
+*** Warning: While we approach version 1.0.0 there could be breaking changes between minor version releases ***
 
 ## How to use
 
