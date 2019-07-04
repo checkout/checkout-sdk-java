@@ -1,9 +1,11 @@
 plugins {
     id 'java'
+    id 'java-library'
     id 'maven'
     id 'maven-publish'
     id 'signing'
-    id "io.codearte.nexus-staging" version "0.8.0"
+    id 'io.codearte.nexus-staging' version '0.21.0'
+    id 'de.marcphilipp.nexus-publish' version '0.2.0'
     id 'com.gradle.build-scan' version '2.3'
 }
 
@@ -31,89 +33,90 @@ test {
     environment "CHECKOUT_SECRET_KEY", System.getenv("CHECKOUT_SECRET_KEY")
 }
 
-gradle.taskGraph.whenReady { taskGraph ->
-    if (taskGraph.hasTask(test) && (System.getenv('CHECKOUT_PUBLIC_KEY') == null || System.getenv('CHECKOUT_SECRET_KEY') == null)) {
-        throw new GradleException("Please ensure both the CHECKOUT_PUBLIC_KEY and CHECKOUT_SECRET_KEY environment variables are set in order to run the tests against the Checkout Sandbox.")
-    }
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = 'sources'
 }
 
 task javadocJar(type: Jar) {
-    archiveClassifier = 'javadoc'
     from javadoc
-}
-task sourcesJar(type: Jar) {
-    archiveClassifier = 'sources'
-    from sourceSets.main.allSource
-}
-artifacts {
-    archives javadocJar, sourcesJar
+    archiveClassifier = 'javadoc'
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment {
-                MavenDeployment deployment -> signing.signPom(deployment)
-            }
-            repository(url: maven2_url) {
-                authentication(userName: System.getenv('SONATYPE_USERNAME'), password: System.getenv('SONATYPE_PASSWORD'))
-            }
-            snapshotRepository(url: snapshot_url) {
-                authentication(userName: System.getenv('SONATYPE_USERNAME'), password: System.getenv('SONATYPE_PASSWORD'))
-            }
-            pom.project {
-                name project_name
-                packaging 'jar'
-                description project_description
-                url project_url
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from(components.java)
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = project_name
+                packaging = 'jar'
+                description = project_description
+                url = project_url
                 scm {
-                    connection project_scm
-                    developerConnection project_scm
-                    url project_url
+                    connection = project_scm
+                    developerConnection = project_scm
+                    url = project_url
                 }
                 licenses {
                     license {
-                        name project_license_slug
-                        url project_license_url
+                        name = project_license_slug
+                        url = project_license_url
                     }
                 }
                 developers {
                     developer {
-                        id project_developer
-                        name project_developer
+                        id = project_developer
+                        name = project_developer
                     }
                 }
             }
         }
+    }
+    repositories {
+        maven {
+            url = version.endsWith('SNAPSHOT') ? snapshot_url : maven2_url
+        }
+    }
+}
+
+nexusStaging {
+    stagingProfileId = "57cde3b2433ed7"
+    username = System.getenv("SONATYPE_USERNAME")
+    password = System.getenv("SONATYPE_PASSWORD")
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
     }
 }
 
 gradle.taskGraph.whenReady { taskGraph ->
     if (taskGraph.allTasks.any { it instanceof Sign }) {
-        allprojects { ext."signing.keyId" = System.getenv('GPG_KEY_ID') }
-        allprojects { ext."signing.secretKeyRingFile" = System.getenv('GPG_KEY_LOCATION') }
-        allprojects { ext."signing.password" = System.getenv('GPG_PASSPHRASE') }
+        allprojects {
+            ext."signing.keyId" = System.getenv('GPG_KEY_ID')
+            ext."signing.secretKeyRingFile" = System.getenv('GPG_KEY_LOCATION')
+            ext."signing.password" = System.getenv('GPG_PASSPHRASE')
+        }
     }
+
     // Do not sign archives by default (a local build without gpg keyring should succeed)
     if (taskGraph.allTasks.any { it.name == 'build' || it.name == 'assemble' }) {
-        tasks.findAll { it.name == 'signArchives' || it.name == 'signDocsJar' || it.name == 'signTestJar' }.each { task ->
+        tasks.findAll {
+            it.name == 'signArchives' || it.name == 'signDocsJar' || it.name == 'signTestJar'
+        }.each { task ->
             task.enabled = false
         }
     }
-}
-signing
-        {
-            sign configurations.archives
-        }
-build.dependsOn.remove(signArchives)
 
-def uploadAndRelease(def username, def password, def repoDir) {
-    def proc = ['./uploadAndRelease.sh', username, password, repoDir].execute([], file("${rootDir.toString()}/gradle"))
-    proc.waitForProcessOutput(System.out, System.err)
-}
-
-task publishToNexusAndClose(dependsOn: 'publish'){
-    doLast {
-        uploadAndRelease(System.getenv('SONATYPE_USERNAME'), System.getenv('SONATYPE_PASSWORD'), "$rootDir/build/deploy")
+    if (taskGraph.hasTask(test) && (System.getenv('CHECKOUT_PUBLIC_KEY') == null || System.getenv('CHECKOUT_SECRET_KEY') == null)) {
+        throw new GradleException("Please ensure both the CHECKOUT_PUBLIC_KEY and CHECKOUT_SECRET_KEY environment variables are set in order to run the tests against the Checkout Sandbox.")
     }
 }
