@@ -3,6 +3,8 @@
 # Checkout.com Java SDK
 Built with Java 8 and Gradle 5
 
+See https://api-reference.checkout.com/ for the API docs on which this SDK is based.
+
 ## How to use
 
 #### Importing from Maven Central
