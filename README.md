@@ -6,7 +6,22 @@ Built with Java 8 and Gradle 5
 ## How to use
 
 #### Importing from Maven Central
-Coming soon!
+The jar, javadoc, and sources are all available from Maven Central. You can import the library into your project like so:
+
+Gradle
+```groovy
+dependencies {
+    implementation 'com.checkout:checkout-sdk-java:0.1.0'
+}
+```
+Maven
+```xml
+<dependency>
+    <groupId>com.checkout</groupId>
+    <artifactId>checkout-sdk-java</artifactId>
+    <version>0.1.0</version>
+</dependency>
+```
 
 #### Using the SDK
 
