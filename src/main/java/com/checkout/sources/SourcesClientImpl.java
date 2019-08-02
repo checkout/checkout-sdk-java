@@ -8,7 +8,6 @@ import com.checkout.common.Resource;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class SourcesClientImpl implements SourcesClient {
@@ -40,7 +39,7 @@ public class SourcesClientImpl implements SourcesClient {
 
     private CompletableFuture<SourceResponse> requestSourceAsync(SourceRequest sourceRequest, Map<Integer, Class<? extends Resource>> resultTypeMappings) {
         final String path = "sources";
-        return apiClient.postAsync(path, credentials, resultTypeMappings, sourceRequest, Optional.empty())
+        return apiClient.postAsync(path, credentials, resultTypeMappings, sourceRequest, null)
                 .thenApply(it -> {
                     if (it instanceof SourceProcessed) {
                         return SourceResponse.from((SourceProcessed) it);

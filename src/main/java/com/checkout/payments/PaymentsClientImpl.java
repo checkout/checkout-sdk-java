@@ -6,7 +6,10 @@ import com.checkout.CheckoutConfiguration;
 import com.checkout.SecretKeyCredentials;
 import com.checkout.common.Resource;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class PaymentsClientImpl implements PaymentsClient {
@@ -39,12 +42,12 @@ public class PaymentsClientImpl implements PaymentsClient {
 
     @Override
     public <T extends RequestSource> CompletableFuture<PaymentResponse> requestAsync(PaymentRequest<T> paymentRequest) {
-        return requestPaymentAsync(paymentRequest, PAYMENT_RESPONSE_MAPPINGS, Optional.empty());
+        return requestPaymentAsync(paymentRequest, null);
     }
 
     @Override
     public <T extends RequestSource> CompletableFuture<PaymentResponse> requestAsync(PaymentRequest<T> paymentRequest, String idempotencyKey) {
-        return requestPaymentAsync(paymentRequest, PAYMENT_RESPONSE_MAPPINGS, Optional.of(idempotencyKey));
+        return requestPaymentAsync(paymentRequest, idempotencyKey);
     }
 
     @Override
@@ -72,13 +75,13 @@ public class PaymentsClientImpl implements PaymentsClient {
     @Override
     public CompletableFuture<CaptureResponse> captureAsync(String paymentId, CaptureRequest captureRequest) {
         final String path = "/captures";
-        return apiClient.postAsync(getPaymentUrl(paymentId) + path, credentials, CaptureResponse.class, captureRequest, Optional.empty());
+        return apiClient.postAsync(getPaymentUrl(paymentId) + path, credentials, CaptureResponse.class, captureRequest, null);
     }
 
     @Override
     public CompletableFuture<CaptureResponse> captureAsync(String paymentId, CaptureRequest captureRequest, String idempotencyKey) {
         final String path = "/captures";
-        return apiClient.postAsync(getPaymentUrl(paymentId) + path, credentials, CaptureResponse.class, captureRequest, Optional.of(idempotencyKey));
+        return apiClient.postAsync(getPaymentUrl(paymentId) + path, credentials, CaptureResponse.class, captureRequest, idempotencyKey);
     }
 
     @Override
@@ -94,13 +97,13 @@ public class PaymentsClientImpl implements PaymentsClient {
     @Override
     public CompletableFuture<RefundResponse> refundAsync(String paymentId, RefundRequest refundRequest) {
         final String path = "/refunds";
-        return apiClient.postAsync(getPaymentUrl(paymentId) + path, credentials, RefundResponse.class, refundRequest, Optional.empty());
+        return apiClient.postAsync(getPaymentUrl(paymentId) + path, credentials, RefundResponse.class, refundRequest, null);
     }
 
     @Override
     public CompletableFuture<RefundResponse> refundAsync(String paymentId, RefundRequest refundRequest, String idempotencyKey) {
         final String path = "/refunds";
-        return apiClient.postAsync(getPaymentUrl(paymentId) + path, credentials, RefundResponse.class, refundRequest, Optional.of(idempotencyKey));
+        return apiClient.postAsync(getPaymentUrl(paymentId) + path, credentials, RefundResponse.class, refundRequest, idempotencyKey);
     }
 
     @Override
@@ -116,22 +119,22 @@ public class PaymentsClientImpl implements PaymentsClient {
     @Override
     public CompletableFuture<VoidResponse> voidAsync(String paymentId, VoidRequest voidRequest) {
         final String path = "/voids";
-        return apiClient.postAsync(getPaymentUrl(paymentId) + path, credentials, VoidResponse.class, voidRequest, Optional.empty());
+        return apiClient.postAsync(getPaymentUrl(paymentId) + path, credentials, VoidResponse.class, voidRequest, null);
     }
 
     @Override
     public CompletableFuture<VoidResponse> voidAsync(String paymentId, VoidRequest voidRequest, String idempotencyKey) {
         final String path = "/voids";
-        return apiClient.postAsync(getPaymentUrl(paymentId) + path, credentials, VoidResponse.class, voidRequest, Optional.of(idempotencyKey));
+        return apiClient.postAsync(getPaymentUrl(paymentId) + path, credentials, VoidResponse.class, voidRequest, idempotencyKey);
     }
 
-    private <T extends RequestSource> CompletableFuture<PaymentResponse> requestPaymentAsync(PaymentRequest<T> paymentRequest, Map<Integer, Class<? extends Resource>> resultTypeMappings, Optional<String> idempotencyKey) {
+    private <T extends RequestSource> CompletableFuture<PaymentResponse> requestPaymentAsync(PaymentRequest<T> paymentRequest, String idempotencyKey) {
         final String path = "payments";
-        return apiClient.postAsync(path, credentials, resultTypeMappings, paymentRequest, idempotencyKey)
+        return apiClient.postAsync(path, credentials, PAYMENT_RESPONSE_MAPPINGS, paymentRequest, idempotencyKey)
                 .thenApply((Resource it) -> {
-                    if(it instanceof PaymentPending) {
-                        return PaymentResponse.from((PaymentPending)it);
-                    } else if(it instanceof PaymentProcessed) {
+                    if (it instanceof PaymentPending) {
+                        return PaymentResponse.from((PaymentPending) it);
+                    } else if (it instanceof PaymentProcessed) {
                         return PaymentResponse.from((PaymentProcessed) it);
                     } else {
                         throw new IllegalStateException("Expected one of PaymentPending and PaymentProcessed but was " + it.getClass());

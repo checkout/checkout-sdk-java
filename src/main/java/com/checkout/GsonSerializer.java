@@ -6,12 +6,14 @@ import com.checkout.payments.CardSourceResponse;
 import com.checkout.payments.ResponseSource;
 import com.google.gson.*;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+@Slf4j
 public class GsonSerializer implements Serializer {
     private static final Gson DEFAULT_GSON = new GsonBuilder()
             .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (LocalDate date, Type typeOfSrc, JsonSerializationContext context) ->
@@ -39,11 +41,14 @@ public class GsonSerializer implements Serializer {
 
     @Override
     public <T> String toJson(T object) {
-        return gson.toJson(object);
+        String result = gson.toJson(object);
+        log.debug("toJson: " + result);
+        return result;
     }
 
     @Override
     public <T> T fromJson(String json, Class<T> type) {
+        log.debug("fromJson: " + json);
         return gson.fromJson(json, type);
     }
 }

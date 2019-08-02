@@ -27,4 +27,9 @@ public class CheckoutConfiguration {
         this.secretKey = secretKey;
         this.uri = uri;
     }
+
+    public CheckoutConfiguration(String secretKey, String uri, String publicKey) {
+        this(secretKey, uri);
+        this.publicKey = publicKey;
+    }
 }
