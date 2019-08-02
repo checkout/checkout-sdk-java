@@ -108,7 +108,7 @@ public class GetPaymentTests extends ApiTestFixture {
     @Test
     public void can_get_payment_recipient() throws Exception {
         PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
-        paymentRequest.setRecipient(new PaymentRecipient(LocalDate.of(1985, 5, 15), "4242424242", "W1T", "Wensle"));
+        paymentRequest.setRecipient(new PaymentRecipient(LocalDate.of(1985, 5, 15), "4242424242", "W1T", null, "Wensle"));
 
         PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
 

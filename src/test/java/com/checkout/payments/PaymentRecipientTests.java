@@ -24,7 +24,7 @@ public class PaymentRecipientTests {
 
         @Test(expected = IllegalArgumentException.class)
         public void given_account_number_invalid_should_throw_exception() {
-            new PaymentRecipient(LocalDate.now(), invalidAccountNumber, "NW1", "Jones");
+            new PaymentRecipient(LocalDate.now(), invalidAccountNumber, "NW1", null, "Jones");
         }
     }
 
@@ -42,7 +42,7 @@ public class PaymentRecipientTests {
 
         @Test(expected = IllegalArgumentException.class)
         public void given_account_number_invalid_should_throw_exception() {
-            new PaymentRecipient(LocalDate.now(), "1234567890", invalidZip, "Jones");
+            new PaymentRecipient(LocalDate.now(), "1234567890", invalidZip, null, "Jones");
         }
     }
 
@@ -60,7 +60,7 @@ public class PaymentRecipientTests {
 
         @Test(expected = IllegalArgumentException.class)
         public void given_account_number_invalid_should_throw_exception() {
-            new PaymentRecipient(LocalDate.now(), "1234567890", "NW1", invalidLastName);
+            new PaymentRecipient(LocalDate.now(), "1234567890", "NW1", null, invalidLastName);
         }
     }
 }
