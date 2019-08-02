@@ -1,7 +1,15 @@
 package com.checkout.payments;
 
 import com.checkout.common.CheckoutUtils;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class IdSource implements RequestSource {
     public static final String TYPE_NAME = "id";
     private String id;
@@ -14,22 +22,6 @@ public class IdSource implements RequestSource {
             throw new IllegalArgumentException("The source ID is required");
         }
         this.id = id;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCvv() {
-        return cvv;
-    }
-
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
     }
 
     @Override

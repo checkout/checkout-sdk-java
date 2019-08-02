@@ -3,7 +3,15 @@ package com.checkout.sources;
 import com.checkout.common.Address;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.Phone;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SourceRequest {
     private String type;
     private Address billingAddress;
@@ -22,53 +30,5 @@ public class SourceRequest {
 
         this.type = type;
         this.billingAddress = billingAddress;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Address getBillingAddress() {
-        return billingAddress;
-    }
-
-    public void setBillingAddress(Address billingAddress) {
-        this.billingAddress = billingAddress;
-    }
-
-    public String getReference() {
-        return reference;
-    }
-
-    public void setReference(String reference) {
-        this.reference = reference;
-    }
-
-    public Phone getPhone() {
-        return phone;
-    }
-
-    public void setPhone(Phone phone) {
-        this.phone = phone;
-    }
-
-    public CustomerRequest getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(CustomerRequest customer) {
-        this.customer = customer;
-    }
-
-    public SourceData getSourceData() {
-        return sourceData;
-    }
-
-    public void setSourceData(SourceData sourceData) {
-        this.sourceData = sourceData;
     }
 }

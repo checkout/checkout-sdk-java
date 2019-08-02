@@ -2,9 +2,11 @@ package com.checkout.payments;
 
 import com.checkout.common.CheckoutUtils;
 import com.google.gson.annotations.SerializedName;
+import lombok.Data;
 
 import java.time.LocalDate;
 
+@Data
 public class PaymentRecipient {
     @SerializedName("dob")
     private final LocalDate dateOfBirth;
@@ -33,25 +35,5 @@ public class PaymentRecipient {
         this.zip = zip;
         this.firstName = firstName;
         this.lastName = lastName;
-    }
-
-    public LocalDate getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public String getZip() {
-        return zip;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
     }
 }

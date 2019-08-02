@@ -3,7 +3,14 @@ package com.checkout.payments;
 import com.checkout.common.Link;
 import com.checkout.common.Resource;
 import com.google.gson.annotations.SerializedName;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class PaymentPending extends Resource {
     private String id;
     private String status;
@@ -11,46 +18,6 @@ public class PaymentPending extends Resource {
     private CustomerResponse customer;
     @SerializedName("3ds")
     private ThreeDSEnrollment threeDS;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getReference() {
-        return reference;
-    }
-
-    public void setReference(String reference) {
-        this.reference = reference;
-    }
-
-    public CustomerResponse getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(CustomerResponse customer) {
-        this.customer = customer;
-    }
-
-    public ThreeDSEnrollment getThreeDS() {
-        return threeDS;
-    }
-
-    public void setThreeDS(ThreeDSEnrollment threeDS) {
-        this.threeDS = threeDS;
-    }
 
     public boolean requiresRedirect() {
         return hasLink("redirect");

@@ -1,13 +1,8 @@
 package com.checkout.payments;
 
+import lombok.Data;
+
+@Data
 public class RiskRequest {
     private final boolean enabled;
-
-    public RiskRequest(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
 }

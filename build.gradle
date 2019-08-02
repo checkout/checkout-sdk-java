@@ -4,6 +4,7 @@ plugins {
     id 'de.marcphilipp.nexus-publish' version '0.2.0'
     id 'io.codearte.nexus-staging' version '0.21.0'
     id 'com.gradle.build-scan' version '2.3'
+    id "io.freefair.lombok" version "3.8.1"
 }
 
 sourceCompatibility = 1.8

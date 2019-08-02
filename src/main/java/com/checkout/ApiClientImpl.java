@@ -24,7 +24,6 @@ public class ApiClientImpl implements ApiClient {
     private static final int UNPROCESSABLE = 422;
     private static final Logger logger = Logger.getLogger("com.checkout.ApiClientImpl");
 
-
     private final CheckoutConfiguration configuration;
     private final Serializer serializer;
 

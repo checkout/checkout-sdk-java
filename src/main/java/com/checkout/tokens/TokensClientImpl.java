@@ -37,6 +37,7 @@ public class TokensClientImpl implements TokensClient {
         if (walletTokenRequest == null) {
             throw new IllegalArgumentException("walletTokenRequest must not be null");
         }
+
         return apiClient.postAsync("tokens", credentials, TokenResponse.class, walletTokenRequest, Optional.empty());
     }
 }

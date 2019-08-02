@@ -1,13 +1,8 @@
 package com.checkout.payments;
 
+import lombok.Data;
+
+@Data
 public class RiskAssessment {
     private boolean flagged;
-
-    public boolean isFlagged() {
-        return flagged;
-    }
-
-    public void setFlagged(boolean flagged) {
-        this.flagged = flagged;
-    }
 }

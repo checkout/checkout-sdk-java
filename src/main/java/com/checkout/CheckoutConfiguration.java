@@ -1,7 +1,9 @@
 package com.checkout;
 
 import com.checkout.common.CheckoutUtils;
+import lombok.Data;
 
+@Data
 public class CheckoutConfiguration {
     public static final String PRODUCTION_URI = "https://api.checkout.com/";
     public static final String SANDBOX_URI = "https://api.sandbox.checkout.com/";
@@ -24,21 +26,5 @@ public class CheckoutConfiguration {
 
         this.secretKey = secretKey;
         this.uri = uri;
-    }
-
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    public String getUri() {
-        return uri;
-    }
-
-    public String getPublicKey() {
-        return publicKey;
-    }
-
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
     }
 }

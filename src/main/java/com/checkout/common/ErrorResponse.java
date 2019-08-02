@@ -1,35 +1,15 @@
 package com.checkout.common;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import java.util.List;
 
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class ErrorResponse extends Resource {
-    private String requestId;
-    private String errorType;
+    private final String errorType;
     private List<String> errorCodes;
-
-    @Override
-    public String getRequestId() {
-        return requestId;
-    }
-
-    @Override
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
-    }
-
-    public String getErrorType() {
-        return errorType;
-    }
-
-    public void setErrorType(String errorType) {
-        this.errorType = errorType;
-    }
-
-    public List<String> getErrorCodes() {
-        return errorCodes;
-    }
-
-    public void setErrorCodes(List<String> errorCodes) {
-        this.errorCodes = errorCodes;
-    }
 }

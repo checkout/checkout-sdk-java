@@ -1,16 +1,20 @@
 package com.checkout.tokens;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Map;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class WalletTokenRequest implements TokenRequest {
 
     private WalletType type;
     private Map<String, Object> tokenData;
-
-    public WalletTokenRequest(WalletType walletType, Map<String, Object> tokenData) {
-        this.type = walletType;
-        this.tokenData = tokenData;
-    }
 
     @Override
     public String getType() {
@@ -27,13 +31,5 @@ public class WalletTokenRequest implements TokenRequest {
 
     public void setWalletType(WalletType walletType) {
         this.type = walletType;
-    }
-
-    public Map<String, Object> getTokenData() {
-        return tokenData;
-    }
-
-    public void setTokenData(Map<String, Object> tokenData) {
-        this.tokenData = tokenData;
     }
 }

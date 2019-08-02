@@ -1,9 +1,13 @@
 package com.checkout.payments;
 
 import com.checkout.common.CheckoutUtils;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.HashMap;
 
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class AlternativePaymentSource extends HashMap<String, Object> implements RequestSource {
     private static final String TYPE_FIELD = "type";
 

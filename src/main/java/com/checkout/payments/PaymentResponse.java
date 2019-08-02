@@ -1,5 +1,8 @@
 package com.checkout.payments;
 
+import lombok.Data;
+
+@Data
 public class PaymentResponse {
     private PaymentProcessed payment;
     private PaymentPending pending;
@@ -16,23 +19,7 @@ public class PaymentResponse {
         return response;
     }
 
-    public PaymentProcessed getPayment() {
-        return payment;
-    }
-
-    public void setPayment(PaymentProcessed payment) {
-        this.payment = payment;
-    }
-
-    public PaymentPending getPending() {
-        return pending;
-    }
-
     public boolean isPending() {
         return pending != null;
-    }
-
-    public void setPending(PaymentPending pending) {
-        this.pending = pending;
     }
 }
