@@ -15,7 +15,7 @@ The jar, javadoc, and sources are all available from Maven Central. You can impo
 Gradle
 ```groovy
 dependencies {
-    implementation 'com.checkout:checkout-sdk-java:0.2.0'
+    implementation 'com.checkout:checkout-sdk-java:0.3.0'
 }
 ```
 Maven
@@ -23,12 +23,11 @@ Maven
 <dependency>
     <groupId>com.checkout</groupId>
     <artifactId>checkout-sdk-java</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
 </dependency>
 ```
 
 #### Using the SDK
-
 Here's a simple example of how to create the client and which values it needs to bootstrap.
 ```java
 import com.checkout.CheckoutApi;
@@ -56,10 +55,10 @@ class Main {
 Please see the tests for more examples. Samples will be provided in due course.
 
 ## Dependencies
-This project is compiled with Gson 2.8.5 and depends on a compatible version of Gson at runtime. If you are adding the jar directly to your project you will need to provide Gson as well.
+ - gson 2.8.5
+ - slf4j-api 1.7.26
 
 ## To Build
-
 The tests require a sandbox account to connect to. Once you have one you can specify the `CHECKOUT_PUBLIC_KEY` and `CHECKOUT_SECRET_KEY` using environment variables.
 Then just run:
 ```
