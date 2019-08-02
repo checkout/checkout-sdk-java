@@ -3,26 +3,16 @@ package com.checkout;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.ErrorResponse;
 import com.checkout.common.Resource;
-import com.checkout.payments.AlternativePaymentSourceResponse;
-import com.checkout.payments.CardSource;
-import com.checkout.payments.CardSourceResponse;
-import com.checkout.payments.ResponseSource;
-import com.google.gson.*;
-import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -33,28 +23,16 @@ import java.util.logging.Logger;
 public class ApiClientImpl implements ApiClient {
     private static final int UNPROCESSABLE = 422;
     private static final Logger logger = Logger.getLogger("com.checkout.ApiClientImpl");
-    private static final Gson DEFAULT_OBJECT_MAPPER = new GsonBuilder()
-            .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (LocalDate date, Type typeOfSrc, JsonSerializationContext context) ->
-                    new JsonPrimitive(date.format(DateTimeFormatter.ISO_LOCAL_DATE)))
-            .registerTypeAdapter(Instant.class, (JsonSerializer<Instant>) (Instant date, Type typeOfSrc, JsonSerializationContext context) ->
-                    new JsonPrimitive(date.toString()))
-            .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (JsonElement json, Type typeOfSrc, JsonDeserializationContext context) ->
-                    LocalDate.parse(json.getAsString(), DateTimeFormatter.ISO_LOCAL_DATE))
-            .registerTypeAdapter(Instant.class, (JsonDeserializer<Instant>) (JsonElement json, Type typeOfSrc, JsonDeserializationContext context) ->
-                    Instant.parse(json.getAsString()))
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(ResponseSource.class, "type", true, AlternativePaymentSourceResponse.class)
-                    .registerSubtype(CardSourceResponse.class, CardSource.TYPE_NAME))
-            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .create();
+
 
     private final CheckoutConfiguration configuration;
-    private final Gson serializer;
+    private final Serializer serializer;
 
     public ApiClientImpl(CheckoutConfiguration configuration) {
-        this(configuration, DEFAULT_OBJECT_MAPPER);
+        this(configuration, new GsonSerializer());
     }
 
-    public ApiClientImpl(CheckoutConfiguration configuration, Gson serializer) {
+    public ApiClientImpl(CheckoutConfiguration configuration, Serializer serializer) {
         if (configuration == null) {
             throw new IllegalArgumentException("configuration must not be null");
         }
@@ -132,9 +110,9 @@ public class ApiClientImpl implements ApiClient {
 
             T result = serializer.fromJson(json, resultType);
             String requestId = httpUrlConnection.getHeaderFields().getOrDefault("Cko-Request-Id", Collections.singletonList("NO_REQUEST_ID_SUPPLIED")).get(0);
-            if(result instanceof Resource) {
-                ((Resource)result).setRequestId(requestId);
-            } else if(result instanceof Resource[]) {
+            if (result instanceof Resource) {
+                ((Resource) result).setRequestId(requestId);
+            } else if (result instanceof Resource[]) {
                 Arrays.stream((Resource[]) result).forEach(it -> it.setRequestId(requestId));
             }
             return result;
