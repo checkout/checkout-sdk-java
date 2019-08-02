@@ -2,15 +2,17 @@ package com.checkout.common;
 
 import java.util.List;
 
-public class ErrorResponse {
+public class ErrorResponse extends Resource {
     private String requestId;
     private String errorType;
     private List<String> errorCodes;
 
+    @Override
     public String getRequestId() {
         return requestId;
     }
 
+    @Override
     public void setRequestId(String requestId) {
         this.requestId = requestId;
     }

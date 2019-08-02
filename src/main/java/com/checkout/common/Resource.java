@@ -1,5 +1,6 @@
 package com.checkout.common;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
@@ -9,6 +10,8 @@ public class Resource {
 
     @SerializedName("_links")
     private Map<String, Link> links;
+    @Expose(deserialize = false, serialize = false)
+    private String requestId;
 
     public Resource() {
         links = new HashMap<>();
@@ -32,5 +35,13 @@ public class Resource {
 
     public Link getLink(String relation) {
         return links.get(relation);
+    }
+
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
     }
 }

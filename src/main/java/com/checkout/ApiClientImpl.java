@@ -23,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -127,7 +128,15 @@ public class ApiClientImpl implements ApiClient {
             }
             String json = stringBuilder.toString();
             logger.info(json);
-            return serializer.fromJson(json, resultType);
+
+            T result = serializer.fromJson(json, resultType);
+            String requestId = httpUrlConnection.getHeaderFields().getOrDefault("Cko-Request-Id", Collections.singletonList("NO_REQUEST_ID_SUPPLIED")).get(0);
+            if(result instanceof Resource) {
+                ((Resource)result).setRequestId(requestId);
+            } else if(result instanceof Resource[]) {
+                Arrays.stream((Resource[]) result).forEach(it -> it.setRequestId(requestId));
+            }
+            return result;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -186,7 +195,6 @@ public class ApiClientImpl implements ApiClient {
         try {
             if (!CheckoutUtils.isSuccessHttpStatusCode(httpUrlConnection.getResponseCode())) {
                 String requestId = httpUrlConnection.getHeaderFields().getOrDefault("Cko-Request-Id", Collections.singletonList("NO_REQUEST_ID_SUPPLIED")).get(0);
-
                 if (httpUrlConnection.getResponseCode() == UNPROCESSABLE) {
                     ErrorResponse error = deserializeJsonAsync(httpUrlConnection, ErrorResponse.class);
                     throw new CheckoutValidationException(error, httpUrlConnection.getResponseCode(), requestId);
