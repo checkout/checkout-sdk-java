@@ -5,6 +5,7 @@ import com.checkout.ApiCredentials;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.PublicKeyCredentials;
 
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class TokensClientImpl implements TokensClient {
@@ -28,7 +29,7 @@ public class TokensClientImpl implements TokensClient {
         if (cardTokenRequest == null) {
             throw new IllegalArgumentException("cardTokenRequest must not be null");
         }
-        return apiClient.postAsync("tokens", credentials, CardTokenResponse.class, cardTokenRequest);
+        return apiClient.postAsync("tokens", credentials, CardTokenResponse.class, cardTokenRequest, Optional.empty());
     }
 
     @Override
@@ -36,6 +37,6 @@ public class TokensClientImpl implements TokensClient {
         if (walletTokenRequest == null) {
             throw new IllegalArgumentException("walletTokenRequest must not be null");
         }
-        return apiClient.postAsync("tokens", credentials, TokenResponse.class, walletTokenRequest);
+        return apiClient.postAsync("tokens", credentials, TokenResponse.class, walletTokenRequest, Optional.empty());
     }
 }

@@ -26,6 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
@@ -74,12 +75,12 @@ public class ApiClientImpl implements ApiClient {
             throw new IllegalArgumentException("credentials must not be null");
         }
 
-        return sendRequestAsync("GET", path, credentials, null)
+        return sendRequestAsync("GET", path, credentials, null, Optional.empty())
                 .thenApply(httpUrlConnection -> deserializeJsonAsync(httpUrlConnection, responseType));
     }
 
     @Override
-    public <T> CompletableFuture<T> postAsync(String path, ApiCredentials credentials, Class<T> responseType, Object request) {
+    public <T> CompletableFuture<T> postAsync(String path, ApiCredentials credentials, Class<T> responseType, Object request, Optional<String> idempotencyKey) {
         if (CheckoutUtils.isNullOrEmpty(path)) {
             throw new IllegalArgumentException("path must not be null or blank");
         }
@@ -87,12 +88,12 @@ public class ApiClientImpl implements ApiClient {
             throw new IllegalArgumentException("credentials must not be null");
         }
 
-        return sendRequestAsync("POST", path, credentials, request)
+        return sendRequestAsync("POST", path, credentials, request, idempotencyKey)
                 .thenApply(httpUrlConnection -> deserializeJsonAsync(httpUrlConnection, responseType));
     }
 
     @Override
-    public CompletableFuture<? extends Resource> postAsync(String path, ApiCredentials credentials, Map<Integer, Class<? extends Resource>> resultTypeMappings, Object request) {
+    public CompletableFuture<? extends Resource> postAsync(String path, ApiCredentials credentials, Map<Integer, Class<? extends Resource>> resultTypeMappings, Object request, Optional<String> idempotencyKey) {
         if (CheckoutUtils.isNullOrEmpty(path)) {
             throw new IllegalArgumentException("path must not be null");
         }
@@ -103,7 +104,7 @@ public class ApiClientImpl implements ApiClient {
             throw new IllegalArgumentException("resultTypeMappings must not be null");
         }
 
-        return sendRequestAsync("POST", path, credentials, request)
+        return sendRequestAsync("POST", path, credentials, request, idempotencyKey)
                 .thenApply(httpUrlConnection -> {
                     try {
                         Class<? extends Resource> resultType = resultTypeMappings.get(httpUrlConnection.getResponseCode());
@@ -142,7 +143,7 @@ public class ApiClientImpl implements ApiClient {
         }
     }
 
-    private CompletableFuture<HttpURLConnection> sendRequestAsync(String httpMethod, String path, ApiCredentials credentials, Object request) {
+    private CompletableFuture<HttpURLConnection> sendRequestAsync(String httpMethod, String path, ApiCredentials credentials, Object request, Optional<String> idempotencyKey) {
         if (CheckoutUtils.isNullOrEmpty(path)) {
             throw new IllegalArgumentException("path must not be null or empty");
         }
@@ -152,6 +153,7 @@ public class ApiClientImpl implements ApiClient {
             httpUrlConnection.setRequestProperty("user-agent", "checkout-sdk-java/" + CheckoutUtils.getVersionFromManifest());
             httpUrlConnection.setRequestProperty("Accept", "application/json");
             httpUrlConnection.setRequestProperty("Content-Type", "application/json");
+            idempotencyKey.ifPresent(it -> httpUrlConnection.setRequestProperty("Cko-Idempotency-Key", it));
             httpUrlConnection.setRequestMethod(httpMethod);
             httpUrlConnection.setDoInput(true);
             httpUrlConnection.setDoOutput(true);
