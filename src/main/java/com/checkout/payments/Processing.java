@@ -4,15 +4,20 @@ public class Processing {
     private Boolean aft;
     private String mid;
 
-    public Processing() {}
+    public Processing() {
+    }
 
     public Processing(Boolean aft) {
-        this();
-        this.aft = aft;
+        this(aft, null);
     }
 
     public Processing(String mid) {
+        this(null, mid);
+    }
+
+    public Processing(Boolean aft, String mid) {
         this();
+        this.aft = aft;
         this.mid = mid;
     }
 
