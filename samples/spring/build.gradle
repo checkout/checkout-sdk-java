@@ -2,19 +2,18 @@ plugins {
     id 'java'
     id 'io.freefair.lombok'
     id 'org.springframework.boot' version '2.1.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.7.RELEASE'
 }
-
-apply plugin: 'io.spring.dependency-management'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
     compile rootProject
+    implementation 'org.springframework.boot:spring-boot-dependencies:2.0.5.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.slf4j:slf4j-simple:1.7.26'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
