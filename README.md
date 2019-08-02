@@ -15,7 +15,7 @@ The jar, javadoc, and sources are all available from Maven Central. You can impo
 Gradle
 ```groovy
 dependencies {
-    implementation 'com.checkout:checkout-sdk-java:0.1.0'
+    implementation 'com.checkout:checkout-sdk-java:0.2.0'
 }
 ```
 Maven
@@ -23,7 +23,7 @@ Maven
 <dependency>
     <groupId>com.checkout</groupId>
     <artifactId>checkout-sdk-java</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
