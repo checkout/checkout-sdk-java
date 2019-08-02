@@ -28,6 +28,7 @@ public class PaymentRequest<T extends RequestSource> {
     private String failureUrl;
     private String paymentIp;
     private PaymentRecipient recipient;
+    private Processing processing;
     private Map<String, Object> metadata = new HashMap<>();
 
     private PaymentRequest(T sourceOrDestination, String currency, Integer amount, boolean isSource) {
@@ -188,6 +189,14 @@ public class PaymentRequest<T extends RequestSource> {
 
     public void setRecipient(PaymentRecipient recipient) {
         this.recipient = recipient;
+    }
+
+    public Processing getProcessing() {
+        return processing;
+    }
+
+    public void setProcessing(Processing processing) {
+        this.processing = processing;
     }
 
     public Map<String, Object> getMetadata() {
