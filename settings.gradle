@@ -1,1 +1,3 @@
 rootProject.name = 'checkout-sdk-java'
+
+include 'samples:spring'
