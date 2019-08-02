@@ -3,7 +3,6 @@ package com.checkout.sources;
 import com.checkout.common.Resource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data

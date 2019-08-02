@@ -28,6 +28,10 @@ public class CheckoutConfiguration {
         this.uri = uri;
     }
 
+    public CheckoutConfiguration(String secretKey, boolean useSandbox, String publicKey) {
+        this(secretKey, useSandbox ? SANDBOX_URI : PRODUCTION_URI, publicKey);
+    }
+
     public CheckoutConfiguration(String secretKey, String uri, String publicKey) {
         this(secretKey, uri);
         this.publicKey = publicKey;

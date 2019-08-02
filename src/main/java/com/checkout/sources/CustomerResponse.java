@@ -1,7 +1,6 @@
 package com.checkout.sources;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class CustomerResponse {

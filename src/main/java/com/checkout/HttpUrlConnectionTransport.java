@@ -29,38 +29,42 @@ public class HttpUrlConnectionTransport implements Transport {
         try {
             HttpURLConnection httpUrlConnection = (HttpURLConnection) getRequestUrl(path).openConnection();
             httpUrlConnection.setRequestProperty("user-agent", "checkout-sdk-java/" + CheckoutUtils.getVersionFromManifest());
-            httpUrlConnection.setRequestProperty("Accept", "application/json");
-            httpUrlConnection.setRequestProperty("Content-Type", "application/json");
+            httpUrlConnection.setRequestProperty("Accept", "application/json;charset=UTF-8");
+            httpUrlConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+            httpUrlConnection.setRequestProperty("Authorization", apiCredentials.getAuthorizationHeader());
             if (idempotencyKey != null) {
                 httpUrlConnection.setRequestProperty("Cko-Idempotency-Key", idempotencyKey);
             }
             httpUrlConnection.setRequestMethod(httpMethod);
             httpUrlConnection.setDoInput(true);
             httpUrlConnection.setDoOutput(true);
-            apiCredentials.authorizeAsync(httpUrlConnection);
 
-            if (jsonRequest != null) {
-                try (OutputStream os = httpUrlConnection.getOutputStream()) {
-                    os.write(jsonRequest.getBytes(StandardCharsets.UTF_8));
-                }
-            } else {
-                switch (httpMethod) {
-                    case "POST":
-                        try (OutputStream os = httpUrlConnection.getOutputStream()) {
-                            os.write("".getBytes(StandardCharsets.UTF_8));
-                        }
-                        break;
-                    case "GET":
-                        httpUrlConnection.connect();
-                        break;
-                }
-            }
-
-            log.info(httpMethod + " " + httpUrlConnection.getURL());
+            log.info("Request: " + httpUrlConnection.getRequestProperties().toString());
 
             return CompletableFuture.supplyAsync(() -> {
                 try {
+                    if (jsonRequest != null) {
+                        try (OutputStream os = httpUrlConnection.getOutputStream()) {
+                            os.write(jsonRequest.getBytes(StandardCharsets.UTF_8));
+                        }
+                    } else {
+                        switch (httpMethod) {
+                            case "POST":
+                                try (OutputStream os = httpUrlConnection.getOutputStream()) {
+                                    os.write("".getBytes(StandardCharsets.UTF_8));
+                                }
+                                break;
+                            case "GET":
+                                httpUrlConnection.connect();
+                                break;
+                        }
+                    }
+
+                    log.info(httpMethod + " " + httpUrlConnection.getURL());
+
                     httpUrlConnection.connect();
+
+                    log.info("Response: " + httpUrlConnection.getHeaderFields().toString());
 
                     final int statusCode = httpUrlConnection.getResponseCode();
                     final String requestId = httpUrlConnection.getHeaderFields().getOrDefault("Cko-Request-Id", Collections.singletonList("NO_REQUEST_ID_SUPPLIED")).get(0);
