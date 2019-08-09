@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,9 +36,9 @@ public class GetPaymentResponse extends Resource {
     private ShippingDetails shipping;
     private String paymentIp;
     private PaymentRecipient recipient;
-    private Map<String, Object> metadata;
+    private Map<String, Object> metadata = new HashMap<>();
     private String eci;
-    private List<PaymentActionSummary> actions;
+    private List<PaymentActionSummary> actions = new ArrayList<>();
 
     public boolean requiresRedirect() {
         return hasLink("redirect");

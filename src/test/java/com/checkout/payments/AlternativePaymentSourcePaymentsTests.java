@@ -39,6 +39,7 @@ public class AlternativePaymentSourcePaymentsTests extends ApiTestFixture {
 
         Assert.assertNotNull(verifiedPayment);
         Assert.assertEquals(payment.getId(), verifiedPayment.getId());
+        Assert.assertNotNull(verifiedPayment);
 
         AlternativePaymentSourceResponse verifiedSource = (AlternativePaymentSourceResponse) verifiedPayment.getSource();
         verifiedSource.keySet().forEach(key -> Assert.assertEquals(alternativePaymentSource.get(key), verifiedSource.get(key)));

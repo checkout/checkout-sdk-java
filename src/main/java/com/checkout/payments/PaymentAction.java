@@ -4,6 +4,7 @@ import com.checkout.common.Resource;
 import lombok.*;
 
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.Map;
 
 @Data
@@ -18,6 +19,6 @@ public class PaymentAction extends Resource {
     private String responseCode;
     private String responseSummary;
     private String reference;
-    private Map<String, Object> metadata;
+    private Map<String, Object> metadata = new HashMap<>();
     private boolean approved;
 }
