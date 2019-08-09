@@ -52,7 +52,7 @@ class Main {
 }
 ```
 
-Please see the tests for more examples. Samples will be provided in due course.
+Please see the tests for more examples. There are also a growing collection of samples available [under samples](/samples)
 
 ## Dependencies
  - gson 2.8.5
