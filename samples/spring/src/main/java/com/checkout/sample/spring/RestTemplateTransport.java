@@ -3,11 +3,9 @@ package com.checkout.sample.spring;
 import com.checkout.ApiCredentials;
 import com.checkout.Transport;
 import com.checkout.common.CheckoutUtils;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -55,13 +53,17 @@ public class RestTemplateTransport implements Transport {
         }
 
         return CompletableFuture.supplyAsync(() -> {
-            ResponseEntity<String> response = restTemplate.exchange(request, String.class);
-            return new Response(response.getStatusCodeValue(), response.getBody(), extractRequestId(response));
+            try {
+                ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+                return new Response(response.getStatusCodeValue(), response.getBody(), extractRequestId(response.getHeaders()));
+            } catch (HttpStatusCodeException e) {
+                return new Response(e.getRawStatusCode(), e.getResponseBodyAsString(), extractRequestId(e.getResponseHeaders()));
+            }
         });
     }
 
-    private String extractRequestId(ResponseEntity<String> response) {
-        return Optional.ofNullable(response.getHeaders().get("Ck-Request-Id"))
+    private String extractRequestId(HttpHeaders headers) {
+        return Optional.ofNullable(headers.get("Ck-Request-Id"))
                 .flatMap(list -> list.stream().findFirst())
                 .orElse("NO_REQUEST_ID_SUPPLIED");
     }
