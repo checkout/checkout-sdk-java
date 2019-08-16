@@ -1,19 +1,22 @@
 package com.checkout;
 
+import com.checkout.common.ApiResponseInfo;
 import com.checkout.common.CheckoutUtils;
 
 public class CheckoutApiException extends CheckoutException {
-    private final int httpStatusCode;
-    private final String requestId;
+    private final ApiResponseInfo apiResponseInfo;
 
-    public CheckoutApiException(int httpStatusCode, String requestId) {
-        this(httpStatusCode, requestId, null);
+    public CheckoutApiException(ApiResponseInfo apiResponseInfo) {
+        this(apiResponseInfo, null);
     }
 
-    public CheckoutApiException(int httpStatusCode, String requestId, String additionalInformation) {
-        super(generateMessage(httpStatusCode, additionalInformation));
-        this.httpStatusCode = httpStatusCode;
-        this.requestId = requestId;
+    public CheckoutApiException(ApiResponseInfo apiResponseInfo, String additionalInformation) {
+        super(generateMessage(apiResponseInfo.getHttpStatusCode(), additionalInformation));
+        this.apiResponseInfo = apiResponseInfo;
+    }
+
+    public ApiResponseInfo getApiResponseInfo() {
+        return apiResponseInfo;
     }
 
     private static String generateMessage(int httpStatusCode, String additionalInformation) {
@@ -23,13 +26,5 @@ public class CheckoutApiException extends CheckoutException {
             return message + " " + additionalInformation;
 
         return message;
-    }
-
-    public int getHttpStatusCode() {
-        return httpStatusCode;
-    }
-
-    public String getRequestId() {
-        return requestId;
     }
 }

@@ -15,7 +15,7 @@ public class Resource {
     @SerializedName("_links")
     private Map<String, Link> links = new HashMap<>();
     @Expose(deserialize = false, serialize = false)
-    private String requestId;
+    private ApiResponseInfo apiResponseInfo;
 
     public Link getSelfLink() {
         return getLink("self");

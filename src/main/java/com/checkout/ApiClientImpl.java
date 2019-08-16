@@ -1,5 +1,6 @@
 package com.checkout;
 
+import com.checkout.common.ApiResponseInfo;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.ErrorResponse;
 import com.checkout.common.Resource;
@@ -91,11 +92,11 @@ public class ApiClientImpl implements ApiClient {
             switch (response.getStatusCode()) {
                 case UNPROCESSABLE:
                     ErrorResponse error = serializer.fromJson(response.getBody(), ErrorResponse.class);
-                    throw new CheckoutValidationException(error, response.getStatusCode(), response.getRequestId());
+                    throw new CheckoutValidationException(error, new ApiResponseInfo(response.getStatusCode(), response.getRequestId()));
                 case NOT_FOUND:
                     throw new CheckoutResourceNotFoundException(response.getRequestId());
                 default:
-                    throw new CheckoutApiException(response.getStatusCode(), response.getRequestId());
+                    throw new CheckoutApiException(new ApiResponseInfo(response.getStatusCode(), response.getRequestId()));
             }
         }
         return response;
@@ -104,9 +105,12 @@ public class ApiClientImpl implements ApiClient {
     private <T> T deserialize(Transport.Response response, Class<T> responseType) {
         T result = serializer.fromJson(response.getBody(), responseType);
         if (result instanceof Resource) {
-            ((Resource) result).setRequestId(response.getRequestId());
+            ((Resource) result).setApiResponseInfo(new ApiResponseInfo(response.getStatusCode(), response.getRequestId()));
         } else if (result instanceof Resource[]) {
-            Arrays.stream(((Resource[]) result)).forEach(element -> element.setRequestId(response.getRequestId()));
+            Arrays.stream(((Resource[]) result))
+                    .forEach(element ->
+                            element.setApiResponseInfo(new ApiResponseInfo(response.getStatusCode(), response.getRequestId()))
+                    );
         }
         return result;
     }
