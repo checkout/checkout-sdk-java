@@ -96,6 +96,13 @@ javadoc {
     }
 }
 
+jar {
+    manifest {
+        attributes'Implementation-Title': 'checkout-sdk-java',
+                'Implementation-Version': archiveVersion
+    }
+}
+
 gradle.taskGraph.whenReady { taskGraph ->
     if (taskGraph.allTasks.any { it instanceof Sign }) {
         allprojects {
