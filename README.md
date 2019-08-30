@@ -5,8 +5,6 @@ Built with Java 8 and Gradle 5
 
 See https://api-reference.checkout.com/ for the API docs on which this SDK is based.
 
-*** Warning: While we approach version 1.0.0 there could be breaking changes between minor version releases ***
-
 ## How to use
 
 #### Importing from Maven Central
@@ -15,7 +13,7 @@ The jar, javadoc, and sources are all available from Maven Central. You can impo
 Gradle
 ```groovy
 dependencies {
-    implementation 'com.checkout:checkout-sdk-java:0.4.0'
+    implementation 'com.checkout:checkout-sdk-java:1.0.0'
 }
 ```
 Maven
@@ -23,7 +21,7 @@ Maven
 <dependency>
     <groupId>com.checkout</groupId>
     <artifactId>checkout-sdk-java</artifactId>
-    <version>0.4.0</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
