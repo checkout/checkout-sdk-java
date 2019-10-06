@@ -20,7 +20,7 @@ public class HttpUrlConnectionTransport implements Transport {
 
     @Deprecated
     public HttpUrlConnectionTransport(String baseUri) {
-        this(baseUri, 10000); // 10 second default timeout
+        this(baseUri, 60000); // 60 second default timeout
     }
 
     public HttpUrlConnectionTransport(String baseUri, int timeout) {

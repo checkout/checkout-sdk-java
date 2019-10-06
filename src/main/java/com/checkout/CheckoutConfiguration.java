@@ -11,7 +11,7 @@ public class CheckoutConfiguration {
     private final String secretKey;
     private final String uri;
 
-    private int connectionTimeout = 10000; // default to 10 seconds
+    private int connectionTimeout = 60000; // default to 60 seconds
     private String publicKey = null; // no public key required for production
 
     public CheckoutConfiguration(String secretKey, boolean useSandbox) {
