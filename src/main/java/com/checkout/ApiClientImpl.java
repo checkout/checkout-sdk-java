@@ -18,7 +18,7 @@ public class ApiClientImpl implements ApiClient {
     private final Transport transport;
 
     public ApiClientImpl(CheckoutConfiguration configuration) {
-        this(new GsonSerializer(), new HttpUrlConnectionTransport(configuration.getUri()));
+        this(new GsonSerializer(), new HttpUrlConnectionTransport(configuration.getUri(), configuration.getConnectionTimeout()));
     }
 
     public ApiClientImpl(Serializer serializer, Transport transport) {

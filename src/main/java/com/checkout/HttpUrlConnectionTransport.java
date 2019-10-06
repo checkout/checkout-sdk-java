@@ -7,10 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
@@ -19,9 +16,16 @@ import java.util.concurrent.CompletableFuture;
 public class HttpUrlConnectionTransport implements Transport {
 
     private final URI baseUri;
+    private final int timeout;
 
+    @Deprecated
     public HttpUrlConnectionTransport(String baseUri) {
+        this(baseUri, 10000); // 10 second default timeout
+    }
+
+    public HttpUrlConnectionTransport(String baseUri, int timeout) {
         this.baseUri = URI.create(baseUri);
+        this.timeout = timeout;
     }
 
     @Override
@@ -30,6 +34,8 @@ public class HttpUrlConnectionTransport implements Transport {
             HttpURLConnection connection = null;
             try {
                 HttpURLConnection httpUrlConnection = (HttpURLConnection) getRequestUrl(path).openConnection();
+                httpUrlConnection.setConnectTimeout(timeout);
+                httpUrlConnection.setReadTimeout(timeout);
                 connection = httpUrlConnection;
                 httpUrlConnection.setRequestProperty("user-agent", "checkout-sdk-java/" + CheckoutUtils.getVersionFromManifest());
                 httpUrlConnection.setRequestProperty("Accept", "application/json;charset=UTF-8");

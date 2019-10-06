@@ -10,7 +10,9 @@ public class CheckoutConfiguration {
 
     private final String secretKey;
     private final String uri;
-    private String publicKey;
+
+    private int connectionTimeout = 10000; // default to 10 seconds
+    private String publicKey = null; // no public key required for production
 
     public CheckoutConfiguration(String secretKey, boolean useSandbox) {
         this(secretKey, useSandbox ? SANDBOX_URI : PRODUCTION_URI);
@@ -34,6 +36,22 @@ public class CheckoutConfiguration {
 
     public CheckoutConfiguration(String secretKey, String uri, String publicKey) {
         this(secretKey, uri);
+        this.publicKey = publicKey;
+    }
+
+    public int getConnectionTimeout() {
+        return connectionTimeout;
+    }
+
+    public void setConnectionTimeout(int connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
         this.publicKey = publicKey;
     }
 }
