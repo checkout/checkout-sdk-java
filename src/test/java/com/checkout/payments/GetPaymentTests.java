@@ -1,6 +1,7 @@
 package com.checkout.payments;
 
 import com.checkout.ApiTestFixture;
+import com.checkout.CheckoutResourceNotFoundException;
 import com.checkout.TestHelper;
 import com.checkout.common.Address;
 import com.checkout.common.CheckoutUtils;
@@ -13,8 +14,26 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class GetPaymentTests extends ApiTestFixture {
+
+    @Test
+    public void resource_not_found_handled_correctly() throws Exception {
+        try {
+            getApi().paymentsClient().getAsync("not-found").get();
+            Assert.fail();
+        } catch (ExecutionException e) {
+            Assert.assertTrue(e.getCause() instanceof CheckoutResourceNotFoundException);
+        }
+    }
+
+    @Test(expected = TimeoutException.class)
+    public void handle_timeout() throws Exception {
+        getApi().paymentsClient().getAsync("not-found").get(5, TimeUnit.MILLISECONDS);
+    }
 
     @Test
     public void can_get_non_3ds_payment() throws Exception {
