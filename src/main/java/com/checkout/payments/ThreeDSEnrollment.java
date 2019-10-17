@@ -10,4 +10,5 @@ public class ThreeDSEnrollment {
     private String authenticationResponse;
     private String cryptogram;
     private String xid;
+    private String version;
 }
