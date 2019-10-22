@@ -1,35 +1,19 @@
 package com.checkout.tokens;
 
 import com.checkout.common.Resource;
+import lombok.*;
 
 import java.time.Instant;
 
+@Data
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class TokenResponse extends Resource {
+    @Getter
     private String type;
+    @Getter
     private String token;
+    @Getter
     private Instant expiresOn;
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public Instant getExpiresOn() {
-        return expiresOn;
-    }
-
-    public void setExpiresOn(Instant expiresOn) {
-        this.expiresOn = expiresOn;
-    }
 }

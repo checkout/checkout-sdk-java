@@ -1,9 +1,14 @@
 package com.checkout.payments;
 
 import com.checkout.common.CheckoutUtils;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 
+@Data
 public class CustomerSource implements RequestSource {
     public static final String TYPE_NAME = "customer";
     private final String id;
@@ -25,14 +30,6 @@ public class CustomerSource implements RequestSource {
     private static boolean IsValidEmail(String email) {
         String[] parts = email.split("@");
         return parts.length == 2 && Arrays.stream(parts).noneMatch(CheckoutUtils::isNullOrWhitespace);
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     @Override

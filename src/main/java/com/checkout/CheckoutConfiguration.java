@@ -1,14 +1,18 @@
 package com.checkout;
 
 import com.checkout.common.CheckoutUtils;
+import lombok.Data;
 
+@Data
 public class CheckoutConfiguration {
     public static final String PRODUCTION_URI = "https://api.checkout.com/";
     public static final String SANDBOX_URI = "https://api.sandbox.checkout.com/";
 
     private final String secretKey;
     private final String uri;
-    private String publicKey;
+
+    private int connectionTimeout = 60000; // default to 60 seconds
+    private String publicKey = null; // no public key required for production
 
     public CheckoutConfiguration(String secretKey, boolean useSandbox) {
         this(secretKey, useSandbox ? SANDBOX_URI : PRODUCTION_URI);
@@ -26,12 +30,21 @@ public class CheckoutConfiguration {
         this.uri = uri;
     }
 
-    public String getSecretKey() {
-        return secretKey;
+    public CheckoutConfiguration(String secretKey, boolean useSandbox, String publicKey) {
+        this(secretKey, useSandbox ? SANDBOX_URI : PRODUCTION_URI, publicKey);
     }
 
-    public String getUri() {
-        return uri;
+    public CheckoutConfiguration(String secretKey, String uri, String publicKey) {
+        this(secretKey, uri);
+        this.publicKey = publicKey;
+    }
+
+    public int getConnectionTimeout() {
+        return connectionTimeout;
+    }
+
+    public void setConnectionTimeout(int connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
     }
 
     public String getPublicKey() {

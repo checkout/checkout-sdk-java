@@ -39,7 +39,7 @@ public class SourcesClientImpl implements SourcesClient {
 
     private CompletableFuture<SourceResponse> requestSourceAsync(SourceRequest sourceRequest, Map<Integer, Class<? extends Resource>> resultTypeMappings) {
         final String path = "sources";
-        return apiClient.postAsync(path, credentials, resultTypeMappings, sourceRequest)
+        return apiClient.postAsync(path, credentials, resultTypeMappings, sourceRequest, null)
                 .thenApply(it -> {
                     if (it instanceof SourceProcessed) {
                         return SourceResponse.from((SourceProcessed) it);

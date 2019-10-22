@@ -1,5 +1,6 @@
 package com.checkout;
 
+import com.checkout.common.ApiResponseInfo;
 import com.checkout.common.ErrorResponse;
 
 import java.util.Collections;
@@ -7,8 +8,8 @@ import java.util.Collections;
 public class CheckoutValidationException extends CheckoutApiException {
     private ErrorResponse error;
 
-    public CheckoutValidationException(ErrorResponse error, int httpStatusCode, String requestId) {
-        super(httpStatusCode, requestId, generateDetailsMessage(error));
+    public CheckoutValidationException(ErrorResponse error, ApiResponseInfo apiResponseInfo) {
+        super(apiResponseInfo, generateDetailsMessage(error));
         this.error = error;
     }
 

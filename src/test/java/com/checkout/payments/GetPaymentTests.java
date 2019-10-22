@@ -1,6 +1,7 @@
 package com.checkout.payments;
 
 import com.checkout.ApiTestFixture;
+import com.checkout.CheckoutResourceNotFoundException;
 import com.checkout.TestHelper;
 import com.checkout.common.Address;
 import com.checkout.common.CheckoutUtils;
@@ -13,8 +14,26 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class GetPaymentTests extends ApiTestFixture {
+
+    @Test
+    public void resource_not_found_handled_correctly() throws Exception {
+        try {
+            getApi().paymentsClient().getAsync("not-found").get();
+            Assert.fail();
+        } catch (ExecutionException e) {
+            Assert.assertTrue(e.getCause() instanceof CheckoutResourceNotFoundException);
+        }
+    }
+
+    @Test(expected = TimeoutException.class)
+    public void handle_timeout() throws Exception {
+        getApi().paymentsClient().getAsync("not-found").get(5, TimeUnit.MILLISECONDS);
+    }
 
     @Test
     public void can_get_non_3ds_payment() throws Exception {
@@ -43,6 +62,7 @@ public class GetPaymentTests extends ApiTestFixture {
         Assert.assertEquals(PaymentStatus.AUTHORIZED, paymentDetails.getStatus());
         Assert.assertNotNull(paymentDetails.getSource());
         Assert.assertTrue(paymentDetails.isApproved());
+        Assert.assertNotNull(paymentDetails.getActions());
     }
 
     @Test
@@ -76,6 +96,7 @@ public class GetPaymentTests extends ApiTestFixture {
         Assert.assertEquals(PaymentStatus.PENDING, paymentDetails.getStatus());
         Assert.assertNotNull(paymentDetails.getSource());
         Assert.assertFalse(paymentDetails.isApproved());
+        Assert.assertNotNull(paymentDetails.getActions());
     }
 
     @Test
@@ -91,6 +112,7 @@ public class GetPaymentTests extends ApiTestFixture {
         Assert.assertFalse(paymentDetails.getMetadata().isEmpty());
         Assert.assertEquals(1, paymentDetails.getMetadata().size());
         Assert.assertEquals("1234", paymentDetails.getMetadata().get("test"));
+        Assert.assertNotNull(paymentDetails.getActions());
     }
 
     @Test
@@ -103,12 +125,14 @@ public class GetPaymentTests extends ApiTestFixture {
         GetPaymentResponse paymentDetails = getApi().paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
 
         Assert.assertEquals(paymentRequest.getPaymentIp(), paymentDetails.getPaymentIp());
+        Assert.assertNotNull(paymentDetails.getActions());
+        Assert.assertNotNull(paymentDetails.getMetadata());
     }
 
     @Test
     public void can_get_payment_recipient() throws Exception {
         PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
-        paymentRequest.setRecipient(new PaymentRecipient(LocalDate.of(1985, 5, 15), "4242424242", "W1T", "Wensle"));
+        paymentRequest.setRecipient(new PaymentRecipient(LocalDate.of(1985, 5, 15), "4242424242", "W1T", null, "Wensle"));
 
         PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
 
@@ -119,6 +143,8 @@ public class GetPaymentTests extends ApiTestFixture {
         Assert.assertEquals(paymentRequest.getRecipient().getDateOfBirth(), paymentDetails.getRecipient().getDateOfBirth());
         Assert.assertEquals(paymentRequest.getRecipient().getLastName(), paymentDetails.getRecipient().getLastName());
         Assert.assertEquals(paymentRequest.getRecipient().getZip(), paymentDetails.getRecipient().getZip());
+        Assert.assertNotNull(paymentDetails.getActions());
+        Assert.assertNotNull(paymentDetails.getMetadata());
     }
 
     @Test
@@ -153,6 +179,8 @@ public class GetPaymentTests extends ApiTestFixture {
         Assert.assertNotNull(paymentDetails.getShipping().getPhone());
         Assert.assertEquals(paymentRequest.getShipping().getPhone().getCountryCode(), paymentDetails.getShipping().getPhone().getCountryCode());
         Assert.assertEquals(paymentRequest.getShipping().getPhone().getNumber(), paymentDetails.getShipping().getPhone().getNumber());
+        Assert.assertNotNull(paymentDetails.getActions());
+        Assert.assertNotNull(paymentDetails.getMetadata());
     }
 
     @Test
@@ -165,6 +193,8 @@ public class GetPaymentTests extends ApiTestFixture {
         GetPaymentResponse paymentDetails = getApi().paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
 
         Assert.assertEquals(paymentRequest.getDescription(), paymentDetails.getDescription());
+        Assert.assertNotNull(paymentDetails.getActions());
+        Assert.assertNotNull(paymentDetails.getMetadata());
     }
 
     @Test

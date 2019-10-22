@@ -1,33 +1,28 @@
 plugins {
-    id 'java'
     id 'java-library'
-    id 'maven-publish'
+    id 'signing'
+    id 'de.marcphilipp.nexus-publish' version '0.2.0'
+    id 'io.codearte.nexus-staging' version '0.21.0'
     id 'com.gradle.build-scan' version '2.3'
+    id 'io.freefair.lombok' version '3.8.1'
 }
 
-group 'com.checkout'
-version '0.1.0-SNAPSHOT'
-
-publishing {
-    publications {
-        myLibrary(MavenPublication) {
-            from components.java
-        }
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
     }
 }
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-}
-
 dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'org.slf4j:slf4j-api:1.7.26'
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.slf4j:slf4j-simple:1.7.26'
 }
 
 buildScan {
@@ -38,9 +33,94 @@ buildScan {
 test {
     environment "CHECKOUT_PUBLIC_KEY", System.getenv("CHECKOUT_PUBLIC_KEY")
     environment "CHECKOUT_SECRET_KEY", System.getenv("CHECKOUT_SECRET_KEY")
+    systemProperty "org.slf4j.simpleLogger.defaultLogLevel", "DEBUG"
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier = 'javadoc'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from(components.java)
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = project_name
+                packaging = 'jar'
+                description = project_description
+                url = project_url
+                scm {
+                    connection = project_scm
+                    developerConnection = project_scm
+                    url = project_url
+                }
+                licenses {
+                    license {
+                        name = project_license_slug
+                        url = project_license_url
+                    }
+                }
+                developers {
+                    developer {
+                        id = project_developer
+                        name = project_developer
+                    }
+                }
+            }
+        }
+    }
+}
+
+nexusStaging {
+    username = System.getenv("SONATYPE_USERNAME")
+    password = System.getenv("SONATYPE_PASSWORD")
+    stagingProfileId = "57cde3b2433ed7"
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+
+javadoc {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+jar {
+    manifest {
+        attributes'Implementation-Title': 'checkout-sdk-java',
+                'Implementation-Version': archiveVersion
+    }
 }
 
 gradle.taskGraph.whenReady { taskGraph ->
+    if (taskGraph.allTasks.any { it instanceof Sign }) {
+        allprojects {
+            ext."signing.keyId" = System.getenv('GPG_KEY_ID')
+            ext."signing.secretKeyRingFile" = System.getenv('GPG_KEY_LOCATION')
+            ext."signing.password" = System.getenv('GPG_PASSPHRASE')
+        }
+    }
+
+    // Do not sign archives by default (a local build without gpg keyring should succeed)
+    if (taskGraph.allTasks.any { it.name == 'build' || it.name == 'assemble' }) {
+        tasks.findAll {
+            it.name == 'signArchives' || it.name == 'signDocsJar' || it.name == 'signTestJar'
+        }.each { task ->
+            task.enabled = false
+        }
+    }
+
     if (taskGraph.hasTask(test) && (System.getenv('CHECKOUT_PUBLIC_KEY') == null || System.getenv('CHECKOUT_SECRET_KEY') == null)) {
         throw new GradleException("Please ensure both the CHECKOUT_PUBLIC_KEY and CHECKOUT_SECRET_KEY environment variables are set in order to run the tests against the Checkout Sandbox.")
     }

@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+    id 'io.freefair.lombok'
+    id 'org.springframework.boot' version '2.1.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.7.RELEASE'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile rootProject
+    implementation 'org.springframework.boot:spring-boot-dependencies:2.0.5.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    environment "CHECKOUT_PUBLIC_KEY", System.getenv("CHECKOUT_PUBLIC_KEY")
+    environment "CHECKOUT_SECRET_KEY", System.getenv("CHECKOUT_SECRET_KEY")
+    systemProperty "org.slf4j.simpleLogger.defaultLogLevel", "DEBUG"
+}
