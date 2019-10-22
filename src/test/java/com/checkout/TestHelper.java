@@ -19,6 +19,21 @@ public class TestHelper {
 
         PaymentRequest<CardSource> request = PaymentRequest.fromDestination(cardSource, Currency.GBP, 100);
         request.setReference(UUID.randomUUID().toString());
+        Processing processing = Processing.builder().senderInformation(
+                SenderInformation.builder()
+                    .firstName("Jane")
+                    .lastName("Doe-Doe")
+                    .address("1 Random Ave.")
+                    .city("New York")
+                    .country("US")
+                    .postalCode("12345")
+                    .state("New York")
+                    .accountNumber("DE1234567890")
+                    .reference("U1234567890")
+                    .sourceOfFunds("Credit")
+                    .build()
+        ).build();
+        request.setProcessing(processing);
 
         return request;
     }
