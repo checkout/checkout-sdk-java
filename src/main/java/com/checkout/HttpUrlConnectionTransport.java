@@ -7,7 +7,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
@@ -17,11 +20,6 @@ public class HttpUrlConnectionTransport implements Transport {
 
     private final URI baseUri;
     private final int timeout;
-
-    @Deprecated
-    public HttpUrlConnectionTransport(String baseUri) {
-        this(baseUri, 60000); // 60 second default timeout
-    }
 
     public HttpUrlConnectionTransport(String baseUri, int timeout) {
         this.baseUri = URI.create(baseUri);
