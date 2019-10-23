@@ -12,7 +12,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CaptureRequest {
-    private Integer amount;
+    private Long amount;
     private String reference;
     private Map<String, Object> metadata;
 }
