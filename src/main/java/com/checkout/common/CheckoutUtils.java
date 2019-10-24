@@ -10,7 +10,7 @@ public class CheckoutUtils {
     }
 
     public static String getVersionFromManifest() {
-        return CheckoutUtils.class.getPackage().getSpecificationVersion();
+        return CheckoutUtils.class.getPackage().getImplementationVersion();
     }
 
     public static boolean isSuccessHttpStatusCode(int httpStatusCode) {
