@@ -16,7 +16,7 @@ import java.time.Instant;
 public class PaymentProcessed extends Resource {
     private String id;
     private String actionId;
-    private int amount;
+    private long amount;
     private String currency;
     private boolean approved;
     private String status;

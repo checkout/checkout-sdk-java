@@ -14,7 +14,7 @@ public class PaymentAction extends Resource {
     private String id;
     private String type;
     private Instant processedOn;
-    private int amount;
+    private long amount;
     private String authCode;
     private String responseCode;
     private String responseSummary;
