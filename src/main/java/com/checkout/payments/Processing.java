@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class Processing {
     private Boolean aft;
     private String mid;
+    private SenderInformation senderInformation;
 }

@@ -21,7 +21,7 @@ public class GetPaymentResponse extends Resource {
     private String id;
     private Instant requestedOn;
     private ResponseSource source;
-    private Integer amount;
+    private Long amount;
     private String currency;
     private String paymentType;
     private String reference;

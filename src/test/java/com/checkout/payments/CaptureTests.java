@@ -35,7 +35,7 @@ public class CaptureTests extends ApiTestFixture {
         metadata.put("CaptureTests", "can_partially_capture_payment");
 
         CaptureRequest captureRequest = new CaptureRequest();
-        captureRequest.setAmount(500);
+        captureRequest.setAmount(500L);
         captureRequest.setReference("Partial Capture");
         captureRequest.setMetadata(metadata);
 
@@ -46,7 +46,7 @@ public class CaptureTests extends ApiTestFixture {
     }
 
     private PaymentProcessed makePayment() throws Exception {
-        PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest(1000);
+        PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest(1000L);
         paymentRequest.setCapture(false);
 
         PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();

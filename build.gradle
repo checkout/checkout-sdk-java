@@ -99,7 +99,7 @@ javadoc {
 jar {
     manifest {
         attributes'Implementation-Title': 'checkout-sdk-java',
-                'Implementation-Version': archiveVersion
+                'Implementation-Version': archiveVersion.get()
     }
 }
 

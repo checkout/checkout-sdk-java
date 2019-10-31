@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class TestHelper {
     public static PaymentRequest<CardSource> createCardPaymentRequest() {
-        return createCardPaymentRequest(100);
+        return createCardPaymentRequest(100L);
     }
 
     public static PaymentRequest<CardSource> createCardPayoutRequest() {
@@ -17,13 +17,28 @@ public class TestHelper {
         cardSource.setLastName("Doe");
 
 
-        PaymentRequest<CardSource> request = PaymentRequest.fromDestination(cardSource, Currency.GBP, 100);
+        PaymentRequest<CardSource> request = PaymentRequest.fromDestination(cardSource, Currency.GBP, 100L);
         request.setReference(UUID.randomUUID().toString());
+        Processing processing = Processing.builder().senderInformation(
+                SenderInformation.builder()
+                    .firstName("Jane")
+                    .lastName("Doe-Doe")
+                    .address("1 Random Ave.")
+                    .city("New York")
+                    .country("US")
+                    .postalCode("12345")
+                    .state("New York")
+                    .accountNumber("DE1234567890")
+                    .reference("U1234567890")
+                    .sourceOfFunds("Credit")
+                    .build()
+        ).build();
+        request.setProcessing(processing);
 
         return request;
     }
 
-    public static PaymentRequest<CardSource> createCardPaymentRequest(Integer amount) {
+    public static PaymentRequest<CardSource> createCardPaymentRequest(Long amount) {
         CardSource cardSource = new CardSource(TestCardSource.VISA.getNumber(), TestCardSource.VISA.getExpiryMonth(), TestCardSource.VISA.getExpiryYear());
         cardSource.setCvv(TestCardSource.VISA.getCvv());
 
@@ -42,7 +57,7 @@ public class TestHelper {
         return createAlternativePaymentMethodRequest(alternativePaymentMethodRequestSource, currency, 100);
     }
 
-    public static PaymentRequest<RequestSource> createAlternativePaymentMethodRequest(RequestSource alternativePaymentMethodRequestSource, String currency, int amount) {
+    public static PaymentRequest<RequestSource> createAlternativePaymentMethodRequest(RequestSource alternativePaymentMethodRequestSource, String currency, long amount) {
         CustomerRequest customer = new CustomerRequest();
         customer.setEmail(generateRandomEmail());
 
@@ -65,7 +80,7 @@ public class TestHelper {
     }
 
     public static PaymentRequest<TokenSource> createTokenPaymentRequest(String token) {
-        PaymentRequest<TokenSource> request = PaymentRequest.fromSource(new TokenSource(token), Currency.GBP, 100);
+        PaymentRequest<TokenSource> request = PaymentRequest.fromSource(new TokenSource(token), Currency.GBP, 100L);
         request.setCapture(false);
         return request;
     }

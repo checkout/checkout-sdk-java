@@ -16,7 +16,7 @@ public class IdSourcePaymentsTests extends ApiTestFixture {
         PaymentResponse firstCardPaymentResponse = getApi().paymentsClient().requestAsync(firstCardPayment).get();
 
         IdSource idSource = new IdSource(((CardSourceResponse) firstCardPaymentResponse.getPayment().getSource()).getId());
-        PaymentRequest<IdSource> cardIdPaymentRequest = PaymentRequest.fromSource(idSource, Currency.GBP, 100);
+        PaymentRequest<IdSource> cardIdPaymentRequest = PaymentRequest.fromSource(idSource, Currency.GBP, 100L);
         cardIdPaymentRequest.setCapture(false);
         cardIdPaymentRequest.setCustomer(toRequest(firstCardPaymentResponse.getPayment().getCustomer()));
 

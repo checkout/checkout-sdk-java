@@ -17,7 +17,7 @@ import java.util.Map;
 public class PaymentRequest<T extends RequestSource> {
     private final T source;
     private final T destination;
-    private final Integer amount;
+    private final Long amount;
     @NonNull
     private final String currency;
     private String paymentType;
@@ -40,7 +40,7 @@ public class PaymentRequest<T extends RequestSource> {
     @Builder.Default
     private Map<String, Object> metadata = new HashMap<>();
 
-    private PaymentRequest(T sourceOrDestination, String currency, Integer amount, boolean isSource) {
+    private PaymentRequest(T sourceOrDestination, String currency, Long amount, boolean isSource) {
         if (sourceOrDestination == null) {
             throw new IllegalArgumentException(String.format("The payment %s is required.", isSource ? "source" : "destination"));
         }
@@ -57,11 +57,11 @@ public class PaymentRequest<T extends RequestSource> {
         this.metadata = new HashMap<>();
     }
 
-    public static <T extends RequestSource> PaymentRequest<T> fromSource(T source, String currency, Integer amount) {
+    public static <T extends RequestSource> PaymentRequest<T> fromSource(T source, String currency, Long amount) {
         return new PaymentRequest<>(source, currency, amount, true);
     }
 
-    public static <T extends RequestSource> PaymentRequest<T> fromDestination(T destination, String currency, Integer amount) {
+    public static <T extends RequestSource> PaymentRequest<T> fromDestination(T destination, String currency, Long amount) {
         return new PaymentRequest<>(destination, currency, amount, false);
     }
 }
