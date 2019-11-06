@@ -43,7 +43,7 @@ public class RestTemplateTransport implements Transport {
                 .header("user-agent", "checkout-sdk-java/" + CheckoutUtils.getVersionFromManifest())
                 .header("Authorization", apiCredentials.getAuthorizationHeader());
         if (idempotencyKey != null) {
-            requestBuilder = requestBuilder.header("Ck-Idempotency-Key", idempotencyKey);
+            requestBuilder = requestBuilder.header("Cko-Idempotency-Key", idempotencyKey);
         }
         RequestEntity<?> request;
         if (jsonRequest != null) {
