@@ -43,6 +43,30 @@ public class ApiClientImpl implements ApiClient {
     }
 
     @Override
+    public <T> CompletableFuture<T> putAsync(String path, ApiCredentials credentials, Class<T> responseType, Object request) {
+        if (CheckoutUtils.isNullOrEmpty(path)) {
+            throw new IllegalArgumentException("path must not be null");
+        }
+        if (credentials == null) {
+            throw new IllegalArgumentException("credentials must not be null");
+        }
+
+        return sendRequestAsync("PUT", path, credentials, request, null, responseType);
+    }
+
+    @Override
+    public CompletableFuture<Void> deleteAsync(String path, ApiCredentials credentials) {
+        if (CheckoutUtils.isNullOrEmpty(path)) {
+            throw new IllegalArgumentException("path must not be null");
+        }
+        if (credentials == null) {
+            throw new IllegalArgumentException("credentials must not be null");
+        }
+
+        return sendRequestAsync("DELETE", path, credentials, null, null, Void.class);
+    }
+
+    @Override
     public <T> CompletableFuture<T> postAsync(String path, ApiCredentials credentials, Class<T> responseType, Object request, String idempotencyKey) {
         if (CheckoutUtils.isNullOrEmpty(path)) {
             throw new IllegalArgumentException("path must not be null or blank");

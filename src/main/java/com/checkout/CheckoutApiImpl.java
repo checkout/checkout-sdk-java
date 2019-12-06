@@ -6,17 +6,21 @@ import com.checkout.sources.SourcesClient;
 import com.checkout.sources.SourcesClientImpl;
 import com.checkout.tokens.TokensClient;
 import com.checkout.tokens.TokensClientImpl;
+import com.checkout.webhooks.WebhooksClient;
+import com.checkout.webhooks.WebhooksClientImpl;
 
 public class CheckoutApiImpl implements CheckoutApi {
 
     private PaymentsClient paymentsClient;
     private SourcesClient sourcesClient;
     private TokensClient tokensClient;
+    private WebhooksClient webhooksClient;
 
     public CheckoutApiImpl(ApiClient apiClient, CheckoutConfiguration configuration) {
         paymentsClient = new PaymentsClientImpl(apiClient, configuration);
         sourcesClient = new SourcesClientImpl(apiClient, configuration);
         tokensClient = new TokensClientImpl(apiClient, configuration);
+        webhooksClient = new WebhooksClientImpl(apiClient, configuration);
     }
 
     public static CheckoutApi create(String secretKey, boolean useSandbox, String publicKey) {
@@ -48,5 +52,10 @@ public class CheckoutApiImpl implements CheckoutApi {
     @Override
     public TokensClient tokensClient() {
         return tokensClient;
+    }
+
+    @Override
+    public WebhooksClient webhooksClient() {
+        return webhooksClient;
     }
 }
