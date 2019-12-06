@@ -34,6 +34,11 @@ public class WebhooksTests extends ApiTestFixture {
         WebhookResponse webhook = getApi().webhooksClient().retrieveWebhook(id).get();
         Assert.assertEquals(webhookRequest.getUrl(), webhook.getUrl());
         Assert.assertEquals(webhookRequest.getEventTypes(), webhook.getEventTypes());
+        Assert.assertTrue(webhook.isActive());
+        Assert.assertEquals("json", webhook.getContentType());
+        Assert.assertEquals(1, webhook.getHeaders().size());
+        Assert.assertTrue(webhook.getHeaders().containsKey("authorization"));
+        Assert.assertNotNull(webhook.getHeaders().get("authorization"));
 
         List<WebhookResponse> response = getApi().webhooksClient().retrieveWebhooks().get();
         Assert.assertNotNull(response);
