@@ -56,7 +56,7 @@ public class EventsClientImpl implements EventsClient {
             parameters.add("skip=" + skip.toString());
         }
         if (paymentId != null) {
-            parameters.add("paymentId=" + paymentId);
+            parameters.add("payment_id=" + paymentId);
         }
 
         if (!parameters.isEmpty()) {

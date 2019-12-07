@@ -17,6 +17,6 @@ public class EventResponse extends Resource {
     private String type;
     private String version;
     private Instant createdOn;
-    private Map<String, String> data;
+    private Map<String, Object> data;
     private List<EventNotificationSummaryResponse> notifications;
 }
