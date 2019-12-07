@@ -91,7 +91,7 @@ public class EventsTests extends ApiTestFixture {
 
     @Test
     public void retrieve_event_notification() throws Exception {
-        String webhookUrl = "https://checkout.com/fail5";
+        String webhookUrl = "https://google.com/fail5";
         WebhookResponse webhook = getApi().webhooksClient().registerWebhook(WebhookRequest.builder()
                 .url(webhookUrl)
                 .eventTypes(getApi().eventsClient().retrieveAllEventTypes("2.0").get().get(0).getEventTypes())
@@ -120,7 +120,7 @@ public class EventsTests extends ApiTestFixture {
             Assert.assertNotNull(attempt);
             Assert.assertNotNull(attempt.getTimestamp());
             Assert.assertNotNull(attempt.getResponseBody());
-            Assert.assertNotNull(attempt.getRetryMode());
+            Assert.assertNotNull(attempt.getSendMode());
         } finally {
             getApi().webhooksClient().removeWebhook(webhook.getId()).get();
         }
@@ -128,7 +128,7 @@ public class EventsTests extends ApiTestFixture {
 
     @Test
     public void test_retry_specific_webhook() throws Exception {
-        String webhookUrl = "https://checkout.com/fail3";
+        String webhookUrl = "https://google.com/fail3";
         WebhookResponse webhook = getApi().webhooksClient().registerWebhook(WebhookRequest.builder()
                 .url(webhookUrl)
                 .eventTypes(getApi().eventsClient().retrieveAllEventTypes("2.0").get().get(0).getEventTypes())
@@ -160,7 +160,7 @@ public class EventsTests extends ApiTestFixture {
 
     @Test
     public void test_retry_all_webhooks() throws Exception {
-        String webhookUrl = "https://checkout.com/fail4";
+        String webhookUrl = "https://google.com/fail4";
         WebhookResponse webhook = getApi().webhooksClient().registerWebhook(WebhookRequest.builder()
                 .url(webhookUrl)
                 .eventTypes(getApi().eventsClient().retrieveAllEventTypes("2.0").get().get(0).getEventTypes())

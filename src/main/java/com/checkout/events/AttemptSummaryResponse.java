@@ -13,6 +13,6 @@ import java.time.Instant;
 public class AttemptSummaryResponse extends Resource {
     private int statusCode;
     private String responseBody;
-    private String retryMode;
+    private String sendMode;
     private Instant timestamp;
 }

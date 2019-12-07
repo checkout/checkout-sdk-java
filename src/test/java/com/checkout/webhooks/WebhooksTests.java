@@ -12,7 +12,7 @@ public class WebhooksTests extends ApiTestFixture {
     @Test
     public void can_create_webhook() throws Exception {
         WebhookRequest webhookRequest = WebhookRequest.builder()
-                .url("https://checkout.com/fail")
+                .url("https://google.com/fail")
                 .eventTypes(Collections.singletonList("payment_captured"))
                 .build();
         WebhookResponse webhookResponse = getApi().webhooksClient().registerWebhook(webhookRequest).get();
@@ -25,7 +25,7 @@ public class WebhooksTests extends ApiTestFixture {
     @Test
     public void can_retrieve_webhook() throws Exception {
         WebhookRequest webhookRequest = WebhookRequest.builder()
-                .url("https://checkout.com/fail")
+                .url("https://google.com/fail")
                 .eventTypes(Collections.singletonList("payment_captured"))
                 .build();
         WebhookResponse webhookResponse = getApi().webhooksClient().registerWebhook(webhookRequest).get();
@@ -52,14 +52,14 @@ public class WebhooksTests extends ApiTestFixture {
     @Test
     public void can_update_webhook() throws Exception {
         WebhookRequest webhookRequest = WebhookRequest.builder()
-                .url("https://checkout.com/fail")
+                .url("https://google.com/fail")
                 .eventTypes(Collections.singletonList("payment_captured"))
                 .build();
         WebhookResponse webhookResponse = getApi().webhooksClient().registerWebhook(webhookRequest).get();
         String id = webhookResponse.getId();
 
         webhookRequest = webhookResponse.toRequest();
-        webhookRequest.setUrl("https://checkout.com/fail2");
+        webhookRequest.setUrl("https://google.com/fail2");
 
         WebhookResponse webhook = getApi().webhooksClient().updateWebhook(id, webhookRequest).get();
         Assert.assertEquals(webhookRequest.getUrl(), webhook.getUrl());
@@ -69,7 +69,7 @@ public class WebhooksTests extends ApiTestFixture {
     @Test
     public void can_delete_webhook() throws Exception {
         WebhookRequest webhookRequest = WebhookRequest.builder()
-                .url("https://checkout.com/fail")
+                .url("https://google.com/fail")
                 .eventTypes(Collections.singletonList("payment_captured"))
                 .build();
         WebhookResponse webhookResponse = getApi().webhooksClient().registerWebhook(webhookRequest).get();
