@@ -1,5 +1,6 @@
 package com.checkout;
 
+import com.checkout.events.EventsClient;
 import com.checkout.payments.PaymentsClient;
 import com.checkout.sources.SourcesClient;
 import com.checkout.tokens.TokensClient;
@@ -13,4 +14,6 @@ public interface CheckoutApi {
     TokensClient tokensClient();
 
     WebhooksClient webhooksClient();
+
+    EventsClient eventsClient();
 }
