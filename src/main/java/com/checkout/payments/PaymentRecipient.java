@@ -1,6 +1,5 @@
 package com.checkout.payments;
 
-import com.checkout.common.CheckoutUtils;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
@@ -20,16 +19,6 @@ public class PaymentRecipient {
                             String zip,
                             String firstName,
                             String lastName) {
-        if (CheckoutUtils.isNullOrWhitespace(accountNumber) || accountNumber.length() < 10) {
-            throw new IllegalArgumentException("The recipient's account number must be provided. See https://docs.checkout.com/docs/requirements-for-financial-institutions for scheme specific rules.");
-        }
-        if (CheckoutUtils.isNullOrWhitespace(zip)) {
-            throw new IllegalArgumentException("The recipient's zip must be provided.");
-        }
-        if (CheckoutUtils.isNullOrWhitespace(lastName)) {
-            throw new IllegalArgumentException("The recipient's last name must be provided.");
-        }
-
         this.dateOfBirth = dateOfBirth;
         this.accountNumber = accountNumber;
         this.zip = zip;
