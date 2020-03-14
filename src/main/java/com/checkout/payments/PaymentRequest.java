@@ -39,6 +39,7 @@ public class PaymentRequest<T extends RequestSource> {
     private Processing processing;
     @Builder.Default
     private Map<String, Object> metadata = new HashMap<>();
+    private String fundTransferType;
 
     private PaymentRequest(T sourceOrDestination, String currency, Long amount, boolean isSource) {
         if (sourceOrDestination == null) {

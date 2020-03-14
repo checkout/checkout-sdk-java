@@ -15,4 +15,6 @@ public class Processing {
     private String mid;
     @SerializedName("senderInformation")
     private SenderInformation senderInformation;
+    @SerializedName("skipExpiry")
+    private Boolean skipExpiry;
 }
