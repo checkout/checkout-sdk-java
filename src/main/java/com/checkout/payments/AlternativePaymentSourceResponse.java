@@ -8,14 +8,14 @@ import java.util.HashMap;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class AlternativePaymentSourceResponse extends HashMap<String, Object> implements ResponseSource {
-    private String type;
+    private static final String TYPE_FIELD = "type";
 
     @Override
     public String getType() {
-        return type;
+        return get(TYPE_FIELD).toString();
     }
 
     public void setType(String type) {
-        this.type = type;
+        put(TYPE_FIELD, type);
     }
 }

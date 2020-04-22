@@ -37,6 +37,7 @@ public class AlternativePaymentSourcePaymentsTests extends ApiTestFixture {
 
         GetPaymentResponse verifiedPayment = getApi().paymentsClient().getAsync(payment.getId()).get();
 
+        Assert.assertEquals("giropay", verifiedPayment.getSource().getType());
         Assert.assertNotNull(verifiedPayment);
         Assert.assertEquals(payment.getId(), verifiedPayment.getId());
         Assert.assertNotNull(verifiedPayment);
