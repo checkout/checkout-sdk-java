@@ -21,12 +21,12 @@ module.exports = {
                     label: 'Docs',
                     position: 'right',
                 },
-                {
-                    to: 'playground',
-                    activeBasePath: 'playground',
-                    label: 'Playground',
-                    position: 'right',
-                },
+                // {
+                //     to: 'playground',
+                //     activeBasePath: 'playground',
+                //     label: 'Playground',
+                //     position: 'right',
+                // },
                 {
                     href: 'https://github.com/checkout/checkout-sdk-java',
                     label: 'GitHub',

@@ -17,54 +17,65 @@ You can find a list of request body parameters and possible outcomes [here](http
 
 ## Retrieve webhooks
 
-```js
-const webhooks = await cko.webhooks.retrieveWebhooks();
+```java
+List<WebhookResponse> response = api.webhooksClient().retrieveWebhooks().get();
 ```
 
 ## Register webhook
 
-```js
-const webhook = await cko.webhooks.registerWebhook({
-    url: 'https://example.com/webhook',
-    active: true,
-    headers: {
-        authorization: '1234'
-    },
-    content_type: 'json',
-    event_types: ['payment_approved', 'payment_captured']
-});
+```java
+List<String> eventTypes = Arrays.asList("payment_captured",
+                                        "payment_approved",
+                                        "payment_declined");
+
+WebhookRequest webhookRequest = WebhookRequest.builder()
+  .url("https://example.com/webhook")
+  .eventTypes(eventTypes)
+  .build();
+
+WebhookResponse webhookResponse =
+    api.webhooksClient().registerWebhook(webhookRequest).get();
 ```
 
 ## Retrieve webhook
 
-```js
-const webhook = await cko.webhooks.retrieveWebhook('wh_tdt72zlbe7cudogxdgit6nwk6i');
+```java
+WebhookResponse webhook =
+    api.webhooksClient().retrieveWebhook("wh_tdt72zlbe7cudogxdgit6nwk6i").get();
 ```
 
 ## Update webhook
 
-```js
-const webhook = await cko.webhooks.updateWebhook('wh_ahun3lg7bf4e3lohbhni65335u', {
-    url: 'https://example.com/webhooks/updated',
-    active: true,
-    headers: {
-        authorization: '1234'
-    },
-    content_type: 'json',
-    event_types: ['payment_approved', 'payment_captured']
-});
+```java
+List<String> eventTypes = Arrays.asList("payment_captured",
+                                        "payment_approved",
+                                        "payment_declined");
+
+WebhookRequest webhookRequest = WebhookRequest.builder()
+  .url("https://example.com/webhooks/updated")
+  .eventTypes(eventTypes)
+  .build();
+
+WebhookResponse webhook =
+    api.webhooksClient().updateWebhook("wh_ahun3lg7bf4e3lohbhni65335u",
+                                        webhookRequest).get();
 ```
 
 ## Partially update webhook
 
-```js
-const webhook = await cko.webhooks.partiallyUpdateWebhook('wh_ahun3lg7bf4e3lohbhni65335u', {
-    url: 'https://example.com/webhooks/updated'
-});
+```java
+WebhookResponse oldWebhook =
+    api.webhooksClient().retrieveWebhook("wh_ahun3lg7bf4e3lohbhni65335u").get();
+    
+WebhookRequest webhookRequest = oldWebhook.toRequest();
+webhookRequest.setUrl("https://example.com/webhooks/updated");
+
+WebhookResponse newWebhook =
+    api.webhooksClient().updateWebhook(oldWebhook.getId(), webhookRequest).get();
 ```
 
 ## Remove webhook
 
-```js
-const webhook = await cko.webhooks.removeWebhook('wh_ahun3lg7bf4e3lohbhni65335u');
+```java
+api.webhooksClient().removeWebhook("wh_ahun3lg7bf4e3lohbhni65335u").get();
 ```

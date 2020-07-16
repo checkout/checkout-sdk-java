@@ -3,18 +3,14 @@ id: errors
 title: Error Handling
 ---
 
-You can handle validation and HTTP errors like so:
+You can handle validation and API errors like so:
 
 ```java
-CheckoutApi api = CheckoutApiImpl.create(secretKey, true, publicKey);
-TokenSource tokenSource = new TokenSource("tok_ubfj2q76miwundwlk72vxt2i7q");
-PaymentRequest<TokenSource> paymentRequest =
-    PaymentRequest.fromSource(tokenSource, Currency.USD, 5600);
+CheckoutApi api = CheckoutApiImpl.create("sk_XXXX", true, "pk_XXXX");
 
 try {
     // some async request made with the SDK
-    PaymentResponse response =
-        api.paymentsClient().requestAsync(paymentRequest).get();
+    PaymentResponse response = api.paymentsClient().requestAsync(...).get();
     ...
 } catch (CheckoutValidationException e) {
     return validationError(e.getError());
@@ -24,7 +20,7 @@ try {
 }
 ```
 
-## SDK specific errors
+## SDK errors
 
 The errors follow the Checkout.com [API Reference](https://api-reference.checkout.com/).
 The errors will be formatted like this:

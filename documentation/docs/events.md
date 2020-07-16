@@ -17,44 +17,48 @@ You can find a list of request body parameters and possible outcomes [here](http
 
 ## Retrieve event types
 
-```js
-const events = await cko.events.retrieveEventTypes();
+```java
+List<EventTypesResponse> allEventTypesResponses =
+    api.eventsClient().retrieveAllEventTypes(null).get();
 ```
 
 ## Retrieve events
 
-```js
-const events = await cko.events.retrieveEvents({
-    from: '2019-03-01T00:00:00Z'
-});
+```java
+Instant from = Instant.now().minus(90, ChronoUnit.DAYS).truncatedTo(ChronoUnit.SECONDS);
+Instant to = Instant.now().minus(7, ChronoUnit.DAYS).truncatedTo(ChronoUnit.SECONDS);
+int limit = 5;
+int skip = 2;
+String paymentId = null;
+
+EventsPageResponse eventsPageResponse =
+    getApi().eventsClient().retrieveEvents(from, to, limit, skip, paymentId).get();
 ```
 
 ## Retrieve event
 
-```js
-const event = await cko.events.retrieveEvent('evt_c2qelfixai2u3es3ksovngkx3e');
+```java
+EventResponse event =
+    api.eventsClient().retrieveEvent("evt_c2qelfixai2u3es3ksovngkx3e").get();
 ```
 
 ## Retrieve event notification
 
-```js
-const notification = await cko.events.retrieveEventNotification({
-    eventId: 'evt_c2qelfixai2u3es3ksovngkx3e',
-    notificationId: 'ntf_wqjkqpgjy33uxoywcej4fnw6qm'
-});
+```java
+EventNotificationResponse notification =
+    api.eventsClient().retrieveEventNotification("evt_c2qelfixai2u3es3ksovngkx3e",
+                                                 "ntf_wqjkqpgjy33uxoywcej4fnw6qm").get();
 ```
 
 ## Retry webhook
 
-```js
-const retry = await cko.events.retry({
-    eventId: 'evt_c2qelfixai2u3es3ksovngkx3e',
-    webhookId: 'wh_mpkyioafmajulnhjvwmrklenb4'
-});
+```java
+api.eventsClient().retryWebhook("evt_c2qelfixai2u3es3ksovngkx3e",
+                                "wh_mpkyioafmajulnhjvwmrklenb4").get();
 ```
 
 ## Retry all webhooks
 
-```js
-const retryAll = await cko.events.retryAll('evt_c2qelfixai2u3es3ksovngkx3e');
+```java
+api.eventsClient().retryAllWebhooks("evt_c2qelfixai2u3es3ksovngkx3e").get();
 ```

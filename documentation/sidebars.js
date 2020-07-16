@@ -5,12 +5,8 @@ module.exports = {
             'payments',
             'sources',
             'tokens',
-            'instruments',
             'webhooks',
-            'events',
-            'disputes',
-            'files',
-            'reconciliation'
+            'events'
         ]
     }
 };
