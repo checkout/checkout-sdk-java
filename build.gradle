@@ -81,6 +81,8 @@ publishing {
 }
 
 nexusStaging {
+    connectTimeout = Duration.ofMinutes(5)
+    clientTimeout  = Duration.ofMinutes(5)
     username = System.getenv("SONATYPE_USERNAME")
     password = System.getenv("SONATYPE_PASSWORD")
     stagingProfileId = "57cde3b2433ed7"
