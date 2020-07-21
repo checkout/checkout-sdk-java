@@ -7,7 +7,7 @@ The jar, javadoc, and sources are all available from [Maven Central](https://sea
 
 ### Gradle
 
-```java
+```groovy
 dependencies {
     implementation 'com.checkout:checkout-sdk-java:2.3.1'
 }
@@ -15,7 +15,7 @@ dependencies {
 
 ### Maven
 
-```java
+```xml
 <dependency>
     <groupId>com.checkout</groupId>
     <artifactId>checkout-sdk-java</artifactId>
