@@ -22,6 +22,7 @@ public class CardSource implements RequestSource {
     private String cvv;
     private Address billingAddress;
     private Phone phone;
+    private boolean stored;
 
     public CardSource(String number, int expiryMonth, int expiryYear) {
         if (CheckoutUtils.isNullOrWhitespace(number)) {
