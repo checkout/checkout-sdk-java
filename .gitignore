@@ -2,3 +2,4 @@
 .idea/
 build/
 lombok.config
+.DS_Store
