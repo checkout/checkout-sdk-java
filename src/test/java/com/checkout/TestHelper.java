@@ -41,6 +41,7 @@ public class TestHelper {
     public static PaymentRequest<CardSource> createCardPaymentRequest(Long amount) {
         CardSource cardSource = new CardSource(TestCardSource.VISA.getNumber(), TestCardSource.VISA.getExpiryMonth(), TestCardSource.VISA.getExpiryYear());
         cardSource.setCvv(TestCardSource.VISA.getCvv());
+        cardSource.setStored(false);
 
         CustomerRequest customer = new CustomerRequest();
         customer.setEmail(generateRandomEmail());

@@ -29,7 +29,7 @@ public class CardSourcePaymentsTests extends ApiTestFixture {
         Assert.assertTrue(paymentResponse.getPayment().canCapture());
         Assert.assertTrue(paymentResponse.getPayment().canVoid());
         Assert.assertNotNull(paymentResponse.getPayment().getSource());
-        Assert.assertFalse(paymentRequest.getSource().isStored());
+        Assert.assertFalse(paymentRequest.getSource().getStored());
     }
 
     @Test
