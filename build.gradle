@@ -80,6 +80,15 @@ publishing {
     }
 }
 
+nexusStaging {
+    username = System.getenv("SONATYPE_USERNAME")
+    password = System.getenv("SONATYPE_PASSWORD")
+    stagingProfileId = "57cde3b2433ed7"
+    packageGroup = "com.checkout"
+    numberOfRetries = 100
+    delayBetweenRetriesInMillis = 5000
+}
+
 nexusPublishing {
     connectTimeout = Duration.ofMinutes(15)
     clientTimeout  = Duration.ofMinutes(15)
@@ -91,15 +100,6 @@ nexusPublishing {
             password = rootProject.nexusStaging.password
         }
     }
-}
-
-nexusStaging {
-    username = System.getenv("SONATYPE_USERNAME")
-    password = System.getenv("SONATYPE_PASSWORD")
-    stagingProfileId = "57cde3b2433ed7"
-    packageGroup = "com.checkout"
-    numberOfRetries = 100
-    delayBetweenRetriesInMillis = 5000
 }
 
 signing {
