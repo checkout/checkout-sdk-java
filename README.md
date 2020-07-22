@@ -38,7 +38,7 @@ import com.checkout.CheckoutApiImpl;
 
 # :book: Documentation
 
-You can see the [SDK documentation here].
+You can see the [SDK documentation here](https://checkout.github.io/checkout-sdk-java/getting_started/).
 
 # :heavy_plus_sign: Dependencies
  - gson 2.8.5
