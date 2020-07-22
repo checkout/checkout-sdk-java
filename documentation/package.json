@@ -13,6 +13,7 @@
         "@docusaurus/plugin-google-analytics": "^2.0.0-alpha.37",
         "@docusaurus/preset-classic": "^2.0.0-alpha.50",
         "classnames": "^2.2.6",
+        "gh-pages": "^3.1.0",
         "react": "^16.8.4",
         "react-dom": "^16.8.4",
         "react-runkit": "^0.9.0"

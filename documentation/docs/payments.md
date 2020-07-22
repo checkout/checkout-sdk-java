@@ -26,11 +26,9 @@ CustomerRequest customer = new CustomerRequest();
 customer.setEmail("user@email.com");
 customer.setName("James Bond");
 
-PaymentRequest<TokenSource> paymentRequest = PaymentRequest.fromSource(
-                                                              tokenSource,
-                                                              Currency.USD,
-                                                              1000); //cents
-request.setCustomer(customer);
+PaymentRequest<TokenSource> paymentRequest =
+  PaymentRequest.fromSource(tokenSource, Currency.USD, 1000); //cents
+paymentRequest.setCustomer(customer);
 paymentRequest.setReference("ORD-123");
 
 PaymentResponse response = api.paymentsClient().requestAsync(paymentRequest).get();
@@ -52,11 +50,9 @@ CustomerRequest customer = new CustomerRequest();
 customer.setEmail("user@email.com");
 customer.setName("James Bond");
 
-PaymentRequest<CardSource> paymentRequest = PaymentRequest.fromSource(
-                                                            cardSource,
-                                                            Currency.USD,
-                                                            1000); //cents
-request.setCustomer(customer);
+PaymentRequest<CardSource> paymentRequest =
+  PaymentRequest.fromSource(cardSource, Currency.USD, 1000); //cents
+paymentRequest.setCustomer(customer);
 paymentRequest.setReference("ORD-123");
 
 PaymentResponse response = api.paymentsClient().requestAsync(paymentRequest).get();
@@ -73,11 +69,9 @@ CustomerRequest customer = new CustomerRequest();
 customer.setEmail("user@email.com");
 customer.setName("James Bond");
 
-PaymentRequest<IdSource> paymentRequest = PaymentRequest.fromSource(
-                                                          idSource,
-                                                          Currency.USD,
-                                                          1000); //cents
-cardIdPaymentRequest.setCustomer(customer);
+PaymentRequest<IdSource> paymentRequest =
+  PaymentRequest.fromSource(idSource, Currency.USD, 1000); //cents
+paymentRequest.setCustomer(customer);
 paymentRequest.setReference("ORD-456");
 
 PaymentResponse response = api.paymentsClient().requestAsync(paymentRequest).get();
@@ -89,12 +83,10 @@ After you perform at least one successful payment for a customer, Checkout.com w
 
 ```java
 CustomerSource customerSource =
-    new CustomerSource("cus_6artgoevd77u7ojah2wled32sa");
+  new CustomerSource("cus_6artgoevd77u7ojah2wled32sa");
 
-PaymentRequest<CustomerSource> paymentRequest = PaymentRequest.fromSource(
-                                                                customerSource,
-                                                                Currency.USD,
-                                                                1000); //cents
+PaymentRequest<CustomerSource> paymentRequest =
+  PaymentRequest.fromSource(customerSource, Currency.USD, 1000); //cents
 paymentRequest.setReference("ORD-456");
 
 PaymentResponse response = api.paymentsClient().requestAsync(paymentRequest).get();
@@ -108,14 +100,12 @@ This is an example of a payment request for [Giropay](https://docs.checkout.com/
 
 ```java
 AlternativePaymentSource alternativePaymentSource =
-    new AlternativePaymentSource("giropay");
+  new AlternativePaymentSource("giropay");
 alternativePaymentSource.put("bic", "TESTDETT421");
 alternativePaymentSource.put("purpose", "CKO Giropay test");
 
-PaymentRequest<RequestSource> paymentRequest = PaymentRequest.fromSource(
-                                                          alternativePaymentSource,
-                                                          Currency.EUR,
-                                                          1000); //cents
+PaymentRequest<RequestSource> paymentRequest =
+  PaymentRequest.fromSource(alternativePaymentSource, Currency.EUR, 1000); //cents
 
 PaymentResponse response = api.paymentsClient().requestAsync(paymentRequest).get();
 ```
@@ -159,11 +149,9 @@ CustomerRequest customer = new CustomerRequest();
 customer.setEmail("user@email.com");
 customer.setName("James Bond");
 
-PaymentRequest<TokenSource> paymentRequest = PaymentRequest.fromSource(
-                                                                tokenSource,
-                                                                Currency.USD,
-                                                                1000); //cents
-request.setCustomer(customer);
+PaymentRequest<TokenSource> paymentRequest =
+  PaymentRequest.fromSource(tokenSource, Currency.USD, 1000); //cents
+paymentRequest.setCustomer(customer);
 paymentRequest.setReference("ORD-123");
 paymentRequest.setThreeDS(ThreeDSRequest.from(true)); //3DS: enabled
 
@@ -208,28 +196,28 @@ Payment requests are influenced by risk rules so you can have situations where a
 
 ```js
 try {
-    PaymentResponse response = api.paymentsClient().requestAsync(...).get();
+  PaymentResponse response = api.paymentsClient().requestAsync(...).get();
 
-    if (response.isPending()) {
-        // Local/3DS payment. Redirect the customer to payment.getPending().getRedirectLink()
-    } else if (response.getPayment().isApproved() && !response.getPayment().getRisk()) {
-        // The payment was successful and not flagged by any risk rule
-    } else if (response.getPayment().isApproved() && response.getPayment().getRisk()) {
-        /* The payment was successful but it was flagged by a risk rule;
-        this means you need to manually decide if you want to capture it or void it */
-    } else if (!response.getPayment().isApproved()) {
-        // The payment was declined
-    }
+  if (response.isPending()) {
+    // Local/3DS payment. Redirect the customer to payment.getPending().getRedirectLink()
+  } else if (response.getPayment().isApproved() && !response.getPayment().getRisk()) {
+    // The payment was successful and not flagged by any risk rule
+  } else if (response.getPayment().isApproved() && response.getPayment().getRisk()) {
+    /* The payment was successful but it was flagged by a risk rule;
+       this means you need to manually decide if you want to capture it or void it */
+  } else if (!response.getPayment().isApproved()) {
+    // The payment was declined
+  }
 } catch (Exception e) {
-    LOG.severe("Payment response could not be handled");
-    throw e;
+  LOG.severe("Payment response could not be handled");
+  throw e;
 }
 ```
 
 ## Get payment details
 
 ```java
-GetPaymentResponse payment = api.paymentsClient().getAsync("pay_je5hbbb4u3oe7k4u3lbwlu3zkq").get(); // or with session id sid_XX
+GetPaymentResponse payment = api.paymentsClient().getAsync("pay_je5hbbb4u3oe7k4u3lbwlu3zkq").get(); // or with session id sid_XXX
 ```
 
 ## Get payment actions
@@ -246,12 +234,11 @@ api.paymentsClient().captureAsync("pay_je5hbbb4u3oe7k4u3lbwlu3zkq").get();
 
 // Or partial capture
 CaptureRequest captureRequest = CaptureRequest.builder()
-    .reference("your reference")
-    .amount(100)
-    .build();
+  .reference("your reference")
+  .amount(100)
+  .build();
 
-api.paymentsClient().captureAsync("pay_je5hbbb4u3oe7k4u3lbwlu3zkq",
-                                    captureRequest).get();
+api.paymentsClient().captureAsync("pay_je5hbbb4u3oe7k4u3lbwlu3zkq", captureRequest).get();
 ```
 
 ## Refund a payment
@@ -262,12 +249,11 @@ api.paymentsClient().refundAsync("pay_je5hbbb4u3oe7k4u3lbwlu3zkq").get();
 
 // Or partial refund
 RefundRequest refundRequest = RefundRequest.builder()
-    .reference("your reference")
-    .amount(100)
-    .build();
+  .reference("your reference")
+  .amount(100)
+  .build();
 
-api.paymentsClient().refundAsync("pay_je5hbbb4u3oe7k4u3lbwlu3zkq",
-                                  refundRequest).get();
+api.paymentsClient().refundAsync("pay_je5hbbb4u3oe7k4u3lbwlu3zkq", refundRequest).get();
 ```
 
 ## Void a payment

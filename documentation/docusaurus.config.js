@@ -1,12 +1,11 @@
 module.exports = {
     title: 'checkout-sdk-java',
-    tagline: 'Checkout.com SDK for Node JS',
-    url: 'https://checkout.github.io',
+    tagline: 'Checkout.com SDK for Java',
+    url: 'https://stephen-gilbert-cko.github.io',
     baseUrl: '/checkout-sdk-java/',
     favicon: 'img/favicon.png',
-    organizationName: 'checkout', // Usually your GitHub org/user name.
+    organizationName: 'stephen-gilbert-cko', // Usually your GitHub org/user name.
     projectName: 'checkout-sdk-java', // Usually your repo name.
-    scripts: ['https://embed.runkit.com'],
     themeConfig: {
         navbar: {
             title: 'checkout-sdk-java',
@@ -21,14 +20,8 @@ module.exports = {
                     label: 'Docs',
                     position: 'right',
                 },
-                // {
-                //     to: 'playground',
-                //     activeBasePath: 'playground',
-                //     label: 'Playground',
-                //     position: 'right',
-                // },
                 {
-                    href: 'https://github.com/checkout/checkout-sdk-java',
+                    href: 'https://github.com/stephen-gilbert-cko/checkout-sdk-java',
                     label: 'GitHub',
                     position: 'right',
                 },

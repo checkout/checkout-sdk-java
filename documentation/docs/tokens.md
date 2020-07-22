@@ -28,8 +28,8 @@ tokenData.put("data", "XXX");
 tokenData.put("signature", "XXX");
 tokenData.put("header", headerData);
 
-WalletTokenRequest walletTokenRequest = new WalletTokenRequest('applepay',
-                                                                tokenData);
+WalletTokenRequest walletTokenRequest =
+    new WalletTokenRequest('applepay', tokenData);
 try {
     TokenResponse tokenRequest =
         api.tokensClient().requestAsync(walletTokenRequest).get();
@@ -39,7 +39,7 @@ try {
 } catch (CheckoutValidationException e) {
     return validationError(e.getError());
 } catch (CheckoutApiException e) {
-    LOG.severe("Payment request failed with status code " + e.getHttpStatusCode());
+    LOG.severe("Token request failed with status code " + e.getHttpStatusCode());
     throw e;
 }
 ```
@@ -52,8 +52,8 @@ tokenData.put("protocolVersion", "ECv1");
 tokenData.put("signature", "XXX");
 tokenData.put("signedMessage", "XXX");
 
-WalletTokenRequest walletTokenRequest = new WalletTokenRequest('googlepay',
-                                                                tokenData);
+WalletTokenRequest walletTokenRequest =
+    new WalletTokenRequest('googlepay', tokenData);
 try {
     TokenResponse tokenRequest =
         api.tokensClient().requestAsync(walletTokenRequest).get();
@@ -63,7 +63,7 @@ try {
 } catch (CheckoutValidationException e) {
     return validationError(e.getError());
 } catch (CheckoutApiException e) {
-    LOG.severe("Payment request failed with status code " + e.getHttpStatusCode());
+    LOG.severe("Token request failed with status code " + e.getHttpStatusCode());
     throw e;
 }
 ```
