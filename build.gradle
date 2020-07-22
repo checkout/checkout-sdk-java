@@ -1,8 +1,8 @@
 plugins {
     id 'java-library'
     id 'signing'
-    id 'de.marcphilipp.nexus-publish' version '0.2.0'
-    id 'io.codearte.nexus-staging' version '0.21.0'
+    id 'de.marcphilipp.nexus-publish' version '0.4.0'
+    id 'io.codearte.nexus-staging' version '0.21.2'
     id 'com.gradle.build-scan' version '2.3'
     id 'io.freefair.lombok' version '3.8.1'
 }
@@ -80,10 +80,26 @@ publishing {
     }
 }
 
+nexusPublishing {
+    connectTimeout = Duration.ofMinutes(15)
+    clientTimeout  = Duration.ofMinutes(15)
+    repositories {
+        sonatype {
+            packageGroup = rootProject.nexusStaging.packageGroup
+            stagingProfileId = rootProject.nexusStaging.stagingProfileId
+            username = rootProject.nexusStaging.username
+            password = rootProject.nexusStaging.password
+        }
+    }
+}
+
 nexusStaging {
     username = System.getenv("SONATYPE_USERNAME")
     password = System.getenv("SONATYPE_PASSWORD")
     stagingProfileId = "57cde3b2433ed7"
+    packageGroup = "com.checkout"
+    numberOfRetries = 100
+    delayBetweenRetriesInMillis = 5000
 }
 
 signing {
