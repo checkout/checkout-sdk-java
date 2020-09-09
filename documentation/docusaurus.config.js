@@ -21,7 +21,7 @@ module.exports = {
           position: "right",
         },
         {
-          href: "https://github.com/stephen-gilbert-cko/checkout-sdk-java",
+          href: "https://github.com/checkout/checkout-sdk-java",
           label: "GitHub",
           position: "right",
         },
