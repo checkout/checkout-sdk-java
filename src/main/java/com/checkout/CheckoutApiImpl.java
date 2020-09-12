@@ -2,6 +2,8 @@ package com.checkout;
 
 import com.checkout.events.EventsClient;
 import com.checkout.events.EventsClientImpl;
+import com.checkout.instruments.InstrumentsClient;
+import com.checkout.instruments.InstrumentsClientImpl;
 import com.checkout.payments.PaymentsClient;
 import com.checkout.payments.PaymentsClientImpl;
 import com.checkout.sources.SourcesClient;
@@ -18,6 +20,7 @@ public class CheckoutApiImpl implements CheckoutApi {
     private TokensClient tokensClient;
     private WebhooksClient webhooksClient;
     private EventsClient eventsClient;
+    private InstrumentsClient instrumentsClient;
 
     public CheckoutApiImpl(ApiClient apiClient, CheckoutConfiguration configuration) {
         paymentsClient = new PaymentsClientImpl(apiClient, configuration);
@@ -25,6 +28,7 @@ public class CheckoutApiImpl implements CheckoutApi {
         tokensClient = new TokensClientImpl(apiClient, configuration);
         webhooksClient = new WebhooksClientImpl(apiClient, configuration);
         eventsClient = new EventsClientImpl(apiClient, configuration);
+        instrumentsClient = new InstrumentsClientImpl(apiClient, configuration);
     }
 
     public static CheckoutApi create(String secretKey, boolean useSandbox, String publicKey) {
@@ -66,5 +70,10 @@ public class CheckoutApiImpl implements CheckoutApi {
     @Override
     public EventsClient eventsClient() {
         return eventsClient;
+    }
+
+    @Override
+    public InstrumentsClient instrumentsClient() {
+        return instrumentsClient;
     }
 }
