@@ -52,7 +52,7 @@ public class EventsTests extends ApiTestFixture {
         Assert.assertEquals(0, eventsPageResponse.getSkip());
         Assert.assertEquals(10, eventsPageResponse.getLimit());
         Assert.assertNotNull(eventsPageResponse.getData());
-        Assert.assertEquals(10, eventsPageResponse.getData().size());
+        Assert.assertTrue(0 < eventsPageResponse.getData().size());
         Assert.assertNotNull(eventsPageResponse.getData().get(0).getId());
         Assert.assertNotNull(eventsPageResponse.getData().get(0).getType());
         Assert.assertNotNull(eventsPageResponse.getData().get(0).getCreatedOn());
