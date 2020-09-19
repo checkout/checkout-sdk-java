@@ -32,6 +32,7 @@ public class PaymentProcessed extends Resource {
     private Instant processedOn;
     private String reference;
     private String eci;
+    private String schemeId;
 
     public Link getActionsLink() {
         return getLink("actions");
