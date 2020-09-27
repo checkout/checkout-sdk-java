@@ -27,13 +27,6 @@ dependencies {
 </dependency>
 ```
 
-### Java
-
-```java
-import com.checkout.CheckoutApi;
-import com.checkout.CheckoutApiImpl;
-```
-
 > If you don't have your own API keys, you can sign up for a test account [here](https://www.checkout.com/get-test-account).
 
 # :book: Documentation
@@ -43,6 +36,7 @@ You can see the [SDK documentation here](https://checkout.github.io/checkout-sdk
 # :heavy_plus_sign: Dependencies
  - gson 2.8.5
  - slf4j-api 1.7.26
+ - apache httpclient 4.5.12
 
 # :dash: Quickstart
 
