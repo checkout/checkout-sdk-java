@@ -9,8 +9,6 @@ import com.checkout.tokens.CardTokenResponse;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.UUID;
-
 public class InstrumentsTests extends ApiTestFixture {
     @Test
     public void can_create_instrument() throws Exception {
@@ -34,6 +32,71 @@ public class InstrumentsTests extends ApiTestFixture {
         Assert.assertNotNull(response.getIssuerCountry());
         Assert.assertNotNull(response.getProductId());
         Assert.assertNotNull(response.getProductType());
+    }
+
+    @Test
+    public void can_get_instrument() throws Exception {
+        CardTokenResponse cardToken = getApi().tokensClient().requestAsync(createValidTokenRequest()).get();
+
+        CreateInstrumentRequest request = CreateInstrumentRequest.builder()
+                .type("token")
+                .token(cardToken.getToken())
+                .build();
+        CreateInstrumentResponse createInstrumentResponse = getApi().instrumentsClient().createInstrument(request).get();
+
+        InstrumentDetailsResponse instrument = getApi().instrumentsClient().getInstrument(createInstrumentResponse.getId()).get();
+        Assert.assertNotNull(instrument);
+        Assert.assertEquals(createInstrumentResponse.getBin(), instrument.getBin());
+        Assert.assertEquals(createInstrumentResponse.getProductType(), instrument.getProductType());
+        Assert.assertEquals(createInstrumentResponse.getProductId(), instrument.getProductId());
+        Assert.assertEquals(createInstrumentResponse.getId(), instrument.getId());
+        Assert.assertEquals(createInstrumentResponse.getType(), instrument.getType());
+        Assert.assertEquals(createInstrumentResponse.getExpiryMonth(), instrument.getExpiryMonth());
+        Assert.assertEquals(createInstrumentResponse.getExpiryYear(), instrument.getExpiryYear());
+        Assert.assertEquals(createInstrumentResponse.getScheme(), instrument.getScheme());
+        Assert.assertEquals(createInstrumentResponse.getLast4(), instrument.getLast4());
+        Assert.assertEquals(createInstrumentResponse.getBin(), instrument.getBin());
+        Assert.assertEquals(createInstrumentResponse.getCardType(), instrument.getCardType());
+        Assert.assertEquals(createInstrumentResponse.getCardCategory(), instrument.getCardCategory());
+        Assert.assertEquals(createInstrumentResponse.getIssuer(), instrument.getIssuer());
+        Assert.assertEquals(createInstrumentResponse.getIssuerCountry(), instrument.getIssuerCountry());
+        Assert.assertNotNull(instrument.getFingerprint());
+        Assert.assertNotNull(instrument.getAccountHolder());
+        Assert.assertNotNull(instrument.getAccountHolder().getBillingAddress());
+        Assert.assertNotNull(instrument.getAccountHolder().getBillingAddress().getAddressLine1());
+        Assert.assertNotNull(instrument.getAccountHolder().getBillingAddress().getAddressLine2());
+        Assert.assertNotNull(instrument.getAccountHolder().getBillingAddress().getCity());
+        Assert.assertNotNull(instrument.getAccountHolder().getBillingAddress().getCountry());
+        Assert.assertNotNull(instrument.getAccountHolder().getBillingAddress().getState());
+        Assert.assertNotNull(instrument.getAccountHolder().getBillingAddress().getZip());
+        Assert.assertNotNull(instrument.getAccountHolder().getPhone());
+        Assert.assertNotNull(instrument.getAccountHolder().getPhone().getCountryCode());
+        Assert.assertNotNull(instrument.getAccountHolder().getPhone().getNumber());
+        Assert.assertNotNull(instrument.getCustomer());
+        Assert.assertNotNull(instrument.getCustomer().getId());
+        Assert.assertNotNull(instrument.getCustomer().getEmail());
+        Assert.assertTrue(instrument.getCustomer().isDefault());
+    }
+
+    @Test
+    public void can_update_instrument() throws Exception {
+        CardTokenResponse cardToken = getApi().tokensClient().requestAsync(createValidTokenRequest()).get();
+
+        CreateInstrumentRequest request = CreateInstrumentRequest.builder()
+                .type("token")
+                .token(cardToken.getToken())
+                .build();
+        CreateInstrumentResponse response = getApi().instrumentsClient().createInstrument(request).get();
+        UpdateInstrumentResponse updateResponse = getApi().instrumentsClient().updateInstrument(response.getId(), UpdateInstrumentRequest.builder()
+                .name("Test")
+                .build()).get();
+
+        Assert.assertNotNull(updateResponse);
+        Assert.assertNotNull(updateResponse.getFingerprint());
+        Assert.assertNotNull(updateResponse.getType());
+
+        InstrumentDetailsResponse instrument = getApi().instrumentsClient().getInstrument(response.getId()).get();
+        Assert.assertEquals("Test", instrument.getName());
     }
 
     private CardTokenRequest createValidTokenRequest() {

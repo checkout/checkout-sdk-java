@@ -18,7 +18,7 @@ public class ApiClientImpl implements ApiClient {
     private final Transport transport;
 
     public ApiClientImpl(CheckoutConfiguration configuration) {
-        this(new GsonSerializer(), new HttpUrlConnectionTransport(configuration.getUri(), configuration.getConnectionTimeout()));
+        this(new GsonSerializer(), new ApacheHttpClientTransport(configuration.getUri(), configuration.getApacheHttpClientBuilder()));
     }
 
     public ApiClientImpl(Serializer serializer, Transport transport) {
@@ -76,6 +76,18 @@ public class ApiClientImpl implements ApiClient {
         }
 
         return sendRequestAsync("POST", path, credentials, request, idempotencyKey, responseType);
+    }
+
+    @Override
+    public <T> CompletableFuture<T> patchAsync(String path, ApiCredentials credentials, Class<T> responseType, Object request, String idempotencyKey) {
+        if (CheckoutUtils.isNullOrEmpty(path)) {
+            throw new IllegalArgumentException("path must not be null or blank");
+        }
+        if (credentials == null) {
+            throw new IllegalArgumentException("credentials must not be null");
+        }
+
+        return sendRequestAsync("PATCH", path, credentials, request, idempotencyKey, responseType);
     }
 
     @Override

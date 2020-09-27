@@ -20,6 +20,7 @@ targetCompatibility = 1.8
 dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'org.slf4j:slf4j-api:1.7.26'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.12'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.slf4j:slf4j-simple:1.7.26'
