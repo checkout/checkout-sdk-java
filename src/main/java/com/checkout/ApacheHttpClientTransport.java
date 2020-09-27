@@ -86,14 +86,18 @@ public class ApacheHttpClientTransport implements Transport {
                         .map(Header::getValue).orElse("NO_REQUEST_ID_SUPPLIED");
 
                 if (statusCode != 404) {
-                    try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        String line;
-                        while ((line = bufferedReader.readLine()) != null) {
-                            stringBuilder.append(line).append("\n");
+                    if (response.getEntity() != null && response.getEntity().getContent() != null) {
+                        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
+                            StringBuilder stringBuilder = new StringBuilder();
+                            String line;
+                            while ((line = bufferedReader.readLine()) != null) {
+                                stringBuilder.append(line).append("\n");
+                            }
+                            String jsonBody = stringBuilder.toString();
+                            return new Response(statusCode, jsonBody, requestId);
                         }
-                        String jsonBody = stringBuilder.toString();
-                        return new Response(statusCode, jsonBody, requestId);
+                    } else {
+                        return new Response(statusCode, null, requestId);
                     }
                 } else {
                     return new Response(statusCode, null, requestId);

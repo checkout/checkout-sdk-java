@@ -6,6 +6,7 @@ import com.checkout.payments.PaymentResponse;
 import com.checkout.webhooks.WebhookRequest;
 import com.checkout.webhooks.WebhookResponse;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Instant;
@@ -13,6 +14,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class EventsTests extends ApiTestFixture {
+
+    @Before
+    public void before() throws Exception {
+        Thread.sleep(5000);
+    }
 
     @Test
     public void retrieve_all_event_types() throws Exception {
@@ -101,7 +107,7 @@ public class EventsTests extends ApiTestFixture {
             final String paymentId = payment.getPayment().getId();
 
             // Sometimes the events aren't available immediately
-            Thread.sleep(5000);
+            Thread.sleep(10000);
             final String eventId = getApi().eventsClient().retrieveEvents(null, null, null, null, paymentId).get().getData().get(0).getId();
             EventResponse event = getApi().eventsClient().retrieveEvent(eventId).get();
             Assert.assertNotNull(event.getNotifications());
@@ -138,7 +144,7 @@ public class EventsTests extends ApiTestFixture {
             final String paymentId = payment.getPayment().getId();
 
             // Sometimes the events aren't available immediately
-            Thread.sleep(5000);
+            Thread.sleep(10000);
             final String eventId = getApi().eventsClient().retrieveEvents(null, null, null, null, paymentId).get().getData().get(0).getId();
             EventResponse originalEvent = getApi().eventsClient().retrieveEvent(eventId).get();
             long initialAttempts = originalEvent.getNotifications().stream()
@@ -147,7 +153,7 @@ public class EventsTests extends ApiTestFixture {
 
             getApi().eventsClient().retryWebhook(eventId, webhook.getId()).get();
 
-            Thread.sleep(5000);
+            Thread.sleep(10000);
             EventResponse retriedEvent = getApi().eventsClient().retrieveEvent(eventId).get();
             long retriedAttempts = retriedEvent.getNotifications().stream()
                     .filter(it -> webhookUrl.equals(it.getUrl()))
@@ -170,7 +176,7 @@ public class EventsTests extends ApiTestFixture {
             final String paymentId = payment.getPayment().getId();
 
             // Sometimes the events aren't available immediately
-            Thread.sleep(5000);
+            Thread.sleep(10000);
             final String eventId = getApi().eventsClient().retrieveEvents(null, null, null, null, paymentId).get().getData().get(0).getId();
             EventResponse originalEvent = getApi().eventsClient().retrieveEvent(eventId).get();
             long initialAttempts = originalEvent.getNotifications().stream()
@@ -179,7 +185,7 @@ public class EventsTests extends ApiTestFixture {
 
             getApi().eventsClient().retryAllWebhooks(eventId).get();
 
-            Thread.sleep(5000);
+            Thread.sleep(10000);
             EventResponse retriedEvent = getApi().eventsClient().retrieveEvent(eventId).get();
             long retriedAttempts = retriedEvent.getNotifications().stream()
                     .filter(it -> webhookUrl.equals(it.getUrl()))
