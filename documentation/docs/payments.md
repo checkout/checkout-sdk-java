@@ -211,9 +211,9 @@ try {
 
   if (response.isPending()) {
     // Local/3DS payment. Redirect the customer to payment.getPending().getRedirectLink()
-  } else if (response.getPayment().isApproved() && !response.getPayment().getRisk()) {
+  } else if (response.getPayment().isApproved() && !response.getPayment().getRisk().isFlagged()) {
     // The payment was successful and not flagged by any risk rule
-  } else if (response.getPayment().isApproved() && response.getPayment().getRisk()) {
+  } else if (response.getPayment().isApproved() && response.getPayment().getRisk().isFlagged()) {
     /* The payment was successful but it was flagged by a risk rule;
        this means you need to manually decide if you want to capture it or void it */
   } else if (!response.getPayment().isApproved()) {
