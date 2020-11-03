@@ -31,6 +31,17 @@ PaymentRequest<TokenSource> paymentRequest =
 paymentRequest.setCustomer(customer);
 paymentRequest.setReference("ORD-123");
 
+// Optionally, pass arbitrary metadata. Checkout will pass that metadata to the `payment_captured` webhook if the payment succeeds.
+HashMap metadata = new HashMap<String, Object>();
+metadata.put("my_custom_key", "my_custom_value"); 
+// .. other custom field you wish to receie in a webhook
+paymentRequest.setMetadata(metadata);
+
+// Optionally, a custom success and failure url can be passed (for cases where 3DS is invoked)
+paymentRequest.setSuccessUrl("https://my-website.com/some-page/success");
+paymentRequest.setFailureUrl("https://my-website.com/some-page/failure");
+
+
 PaymentResponse response = api.paymentsClient().requestAsync(paymentRequest).get();
 ```
 
