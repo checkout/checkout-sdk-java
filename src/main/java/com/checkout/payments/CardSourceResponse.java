@@ -31,6 +31,9 @@ public class CardSourceResponse implements ResponseSource {
     private String productType;
     private String avsCheck;
     private String cvvCheck;
+    private Boolean payouts;
+    private String fastFunds;
+    private String paymentAccountReference;
 
     @Override
     public String getType() {
