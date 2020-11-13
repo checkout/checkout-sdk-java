@@ -21,6 +21,7 @@ public class PaymentRequest<T extends RequestSource> {
     @NonNull
     private final String currency;
     private String paymentType;
+    private Boolean merchantInitiated;
     private String reference;
     private String description;
     private Boolean capture;
