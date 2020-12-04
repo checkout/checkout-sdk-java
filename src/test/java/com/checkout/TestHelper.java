@@ -19,6 +19,9 @@ import com.checkout.payments.hosted.HostedPaymentRequest;
 import com.checkout.payments.links.PaymentLinkRequest;
 import com.checkout.tokens.CardTokenRequest;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -219,6 +222,14 @@ public class TestHelper {
                 .locale("en-GB")
                 .threeDS(createThreeDS())
                 .build();
+    }
+
+    public static String readFile(String path) {
+        try {
+            return String.join("\n", Files.readAllLines(Paths.get(path)));
+        } catch (IOException ex){
+            return null;
+        }
     }
 
 }

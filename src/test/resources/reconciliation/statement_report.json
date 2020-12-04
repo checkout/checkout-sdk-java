@@ -1,0 +1,43 @@
+{
+  "count": 1,
+  "data": [
+    {
+      "id": "190110B107654",
+      "period_start": "2019-01-09T00:00:00Z",
+      "period_end": "2019-01-09T23:59:59Z",
+      "date": "2020-12-04T13:33:50Z",
+      "payouts": [
+        {
+          "currency": "GBP",
+          "carried_forward_amount": "0",
+          "current_period_amount": "15005.24",
+          "net_amount": "15005.24",
+          "date": "2019-01-10T00:00:00Z",
+          "period_start": "2019-01-09T00:00:00Z",
+          "period_end": "2019-01-09T23:59:59Z",
+          "id": "ABCDEFGH",
+          "status": "Remitted",
+          "payout_fee": "-5",
+          "_links": {
+            "payments": {
+              "href": "http://api.checkout.com/reporting/statements/190110B107654/payments?payout_id=ABCDEFGH"
+            }
+          }
+        }
+      ],
+      "_links": {
+        "payments": {
+          "href": "http://api.checkout.com/reporting/statements/190110B107654/payments"
+        }
+      }
+    }
+  ],
+  "_links": {
+    "next": {
+      "href": "http://api.checkout.com/reporting/statements?from=01%2F01%2F2019%2000%3A00%3A00&to=01%2F11%2F2019%2000%3A00%3A00&limit=1&skip=1"
+    },
+    "self": {
+      "href": "http://api.checkout.com/reporting/statements?from=01%2F01%2F2019%2000%3A00%3A00&to=01%2F11%2F2019%2000%3A00%3A00&limit=1"
+    }
+  }
+}
