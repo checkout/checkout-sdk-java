@@ -14,6 +14,8 @@ import com.checkout.payments.hosted.HostedPaymentsClient;
 import com.checkout.payments.hosted.HostedPaymentsClientImpl;
 import com.checkout.payments.links.PaymentLinksClient;
 import com.checkout.payments.links.PaymentLinksClientImpl;
+import com.checkout.reconciliation.ReconciliationClient;
+import com.checkout.reconciliation.ReconciliationClientImpl;
 import com.checkout.sources.SourcesClient;
 import com.checkout.sources.SourcesClientImpl;
 import com.checkout.tokens.TokensClient;
@@ -33,6 +35,7 @@ public final class CheckoutApiImpl implements CheckoutApi {
     private final HostedPaymentsClient hostedPaymentsClient;
     private final CustomersClient customersClient;
     private final DisputesClient disputesClient;
+    private final ReconciliationClient reconciliationClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         final ApiClient apiClient = new ApiClientImpl(configuration);
@@ -46,6 +49,7 @@ public final class CheckoutApiImpl implements CheckoutApi {
         this.hostedPaymentsClient = new HostedPaymentsClientImpl(apiClient, configuration);
         this.customersClient = new CustomersClientImpl(apiClient, configuration);
         this.disputesClient = new DisputesClientImpl(apiClient, configuration);
+        this.reconciliationClient = new ReconciliationClientImpl(apiClient, configuration);
     }
 
     /**
@@ -63,6 +67,7 @@ public final class CheckoutApiImpl implements CheckoutApi {
         this.hostedPaymentsClient = new HostedPaymentsClientImpl(apiClient, configuration);
         this.customersClient = new CustomersClientImpl(apiClient, configuration);
         this.disputesClient = new DisputesClientImpl(apiClient, configuration);
+        this.reconciliationClient = new ReconciliationClientImpl(apiClient, configuration);
     }
 
     /**
@@ -134,5 +139,10 @@ public final class CheckoutApiImpl implements CheckoutApi {
     public DisputesClient disputesClient() {
         return disputesClient;
     }
-}
 
+    @Override
+    public ReconciliationClient reconciliationClient() {
+        return reconciliationClient;
+    }
+
+}
