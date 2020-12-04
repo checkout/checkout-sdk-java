@@ -1,9 +1,18 @@
 package com.checkout;
 
 import com.checkout.common.Currency;
-import com.checkout.payments.*;
+import com.checkout.payments.CardSource;
+import com.checkout.payments.CustomerRequest;
+import com.checkout.payments.PaymentRequest;
+import com.checkout.payments.Processing;
+import com.checkout.payments.RequestSource;
+import com.checkout.payments.SenderInformation;
+import com.checkout.payments.TokenSource;
 import com.checkout.tokens.CardTokenRequest;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 public class TestHelper {
@@ -84,5 +93,13 @@ public class TestHelper {
         PaymentRequest<TokenSource> request = PaymentRequest.fromSource(new TokenSource(token), Currency.GBP, 100L);
         request.setCapture(false);
         return request;
+    }
+
+    public static String readFile(String path) {
+        try {
+            return String.join("\n", Files.readAllLines(Paths.get(path)));
+        } catch (IOException ex){
+            return null;
+        }
     }
 }
