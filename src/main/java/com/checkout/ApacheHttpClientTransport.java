@@ -84,7 +84,7 @@ public class ApacheHttpClientTransport implements Transport {
 
                 response = httpClient.execute(request);
 
-                log.info("Response: " + Arrays.toString(response.getAllHeaders()));
+                log.info("Response: " + response.getStatusLine().getStatusCode() + " " + Arrays.toString(response.getAllHeaders()));
 
                 final int statusCode = response.getStatusLine().getStatusCode();
                 final String requestId = Optional.ofNullable(response.getFirstHeader("Cko-Request-Id"))
