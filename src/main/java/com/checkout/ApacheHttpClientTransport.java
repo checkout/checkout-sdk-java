@@ -4,7 +4,6 @@ import com.checkout.common.CheckoutUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -34,6 +33,12 @@ public class ApacheHttpClientTransport implements Transport {
         } else {
             httpClient = HttpClients.createDefault();
         }
+    }
+
+    private Header[] sanitiseHeaders(Header[] headers) {
+        return Arrays.stream(headers)
+                .filter(it -> !it.getName().equals("Authorization"))
+                .toArray(Header[]::new);
     }
 
     @Override
@@ -68,7 +73,7 @@ public class ApacheHttpClientTransport implements Transport {
                 request.setHeader("Cko-Idempotency-Key", idempotencyKey);
             }
 
-            log.info("Request: " + Arrays.toString(request.getAllHeaders()));
+            log.info("Request: " + Arrays.toString(sanitiseHeaders(request.getAllHeaders())));
 
             try {
                 if (jsonRequest != null && request instanceof HttpEntityEnclosingRequest) {
