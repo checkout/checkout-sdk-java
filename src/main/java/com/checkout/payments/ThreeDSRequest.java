@@ -17,6 +17,7 @@ public class ThreeDSRequest {
     private String eci;
     private String cryptogram;
     private String xid;
+    private String version;
 
     public static ThreeDSRequest from(boolean enabled) {
         ThreeDSRequest request = new ThreeDSRequest();
