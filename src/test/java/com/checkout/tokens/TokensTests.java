@@ -1,6 +1,6 @@
 package com.checkout.tokens;
 
-import com.checkout.ApiTestFixture;
+import com.checkout.SandboxTestFixture;
 import com.checkout.TestCardSource;
 import com.checkout.common.Address;
 import com.checkout.common.Phone;
@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import java.time.Instant;
 
-public class TokensTests extends ApiTestFixture {
+public class TokensTests extends SandboxTestFixture {
     @Test
     public void can_tokenize_card() throws Exception {
         CardTokenRequest request = createValidRequest();

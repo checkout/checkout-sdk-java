@@ -1,13 +1,13 @@
 package com.checkout.sources;
 
-import com.checkout.ApiTestFixture;
+import com.checkout.SandboxTestFixture;
 import com.checkout.common.Address;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.Phone;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class SourcesTests extends ApiTestFixture {
+public class SourcesTests extends SandboxTestFixture {
 
     @Test
     public void can_request_sepa_source() throws Exception {

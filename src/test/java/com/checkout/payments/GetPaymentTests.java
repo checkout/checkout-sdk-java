@@ -1,6 +1,6 @@
 package com.checkout.payments;
 
-import com.checkout.ApiTestFixture;
+import com.checkout.SandboxTestFixture;
 import com.checkout.CheckoutResourceNotFoundException;
 import com.checkout.TestHelper;
 import com.checkout.common.Address;
@@ -18,7 +18,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class GetPaymentTests extends ApiTestFixture {
+public class GetPaymentTests extends SandboxTestFixture {
 
     @Test
     public void resource_not_found_handled_correctly() throws Exception {

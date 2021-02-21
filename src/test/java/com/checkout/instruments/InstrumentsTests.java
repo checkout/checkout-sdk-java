@@ -1,6 +1,6 @@
 package com.checkout.instruments;
 
-import com.checkout.ApiTestFixture;
+import com.checkout.SandboxTestFixture;
 import com.checkout.TestCardSource;
 import com.checkout.common.Address;
 import com.checkout.common.Phone;
@@ -9,7 +9,7 @@ import com.checkout.tokens.CardTokenResponse;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class InstrumentsTests extends ApiTestFixture {
+public class InstrumentsTests extends SandboxTestFixture {
     @Test
     public void can_create_instrument() throws Exception {
         CardTokenResponse cardToken = getApi().tokensClient().requestAsync(createValidTokenRequest()).get();

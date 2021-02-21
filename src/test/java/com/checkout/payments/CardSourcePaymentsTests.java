@@ -1,6 +1,6 @@
 package com.checkout.payments;
 
-import com.checkout.ApiTestFixture;
+import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
 import com.checkout.common.CheckoutUtils;
 import org.junit.Assert;
@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import java.util.UUID;
 
-public class CardSourcePaymentsTests extends ApiTestFixture {
+public class CardSourcePaymentsTests extends SandboxTestFixture {
     @Test
     public void can_request_non_3ds_card_payment() throws Exception {
         PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();

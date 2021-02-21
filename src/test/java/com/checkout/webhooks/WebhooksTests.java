@@ -1,13 +1,13 @@
 package com.checkout.webhooks;
 
-import com.checkout.ApiTestFixture;
+import com.checkout.SandboxTestFixture;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Collections;
 import java.util.List;
 
-public class WebhooksTests extends ApiTestFixture {
+public class WebhooksTests extends SandboxTestFixture {
 
     @Test
     public void can_create_webhook() throws Exception {

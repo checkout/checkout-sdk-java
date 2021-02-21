@@ -1,11 +1,11 @@
 package com.checkout;
 
-public class ApiTestFixture {
+public class SandboxTestFixture {
 
     public static final CheckoutConfiguration CONFIGURATION = loadConfiguration();
     private CheckoutApi api;
 
-    public ApiTestFixture() {
+    public SandboxTestFixture() {
         api = new CheckoutApiImpl(new ApiClientImpl(CONFIGURATION), CONFIGURATION);
     }
 

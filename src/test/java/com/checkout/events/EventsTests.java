@@ -1,6 +1,6 @@
 package com.checkout.events;
 
-import com.checkout.ApiTestFixture;
+import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
 import com.checkout.payments.PaymentResponse;
 import com.checkout.webhooks.WebhookRequest;
@@ -13,7 +13,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-public class EventsTests extends ApiTestFixture {
+public class EventsTests extends SandboxTestFixture {
 
     @Before
     public void before() throws Exception {
