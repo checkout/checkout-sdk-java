@@ -10,7 +10,10 @@ public interface EventsClient {
 
     /**
      * Any parameter can be set to null, and the default will be used as per the REST API documentation
+     *
+     * @deprecated This method no longer works as the corresponding REST API end point no longer exists
      */
+    @Deprecated
     CompletableFuture<EventsPageResponse> retrieveEvents(Instant from, Instant to, Integer limit, Integer skip, String paymentId);
 
     CompletableFuture<EventResponse> retrieveEvent(String eventId);
