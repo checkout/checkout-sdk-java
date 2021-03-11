@@ -18,6 +18,8 @@ public class ThreeDSRequest {
     private String cryptogram;
     private String xid;
     private String version;
+    private String exemption;
+    private String challengeIndicator;
 
     public static ThreeDSRequest from(boolean enabled) {
         ThreeDSRequest request = new ThreeDSRequest();
