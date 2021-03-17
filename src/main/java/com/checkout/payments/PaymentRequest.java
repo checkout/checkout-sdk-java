@@ -41,6 +41,9 @@ public class PaymentRequest<T extends RequestSource> {
     @Builder.Default
     private Map<String, Object> metadata = new HashMap<>();
     private String fundTransferType;
+    private String processingChannelId;
+    private AuthorizationType authorizationType;
+    private MarketplaceData marketplace;
 
     private PaymentRequest(T sourceOrDestination, String currency, Long amount, boolean isSource) {
         if (sourceOrDestination == null) {
