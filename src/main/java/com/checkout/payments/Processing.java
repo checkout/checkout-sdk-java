@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -17,4 +19,5 @@ public class Processing {
     private SenderInformation senderInformation;
     @SerializedName("skipExpiry")
     private Boolean skipExpiry;
+    private DLocal dlocal;
 }
