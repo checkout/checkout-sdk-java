@@ -10,8 +10,8 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class CardSource implements RequestSource {
-    public static final String TYPE_NAME = "card";
+public class DLocalSource implements RequestSource {
+    public static final String TYPE_NAME = "dlocal";
     private final String number;
     private final int expiryMonth;
     private final int expiryYear;
@@ -24,7 +24,7 @@ public class CardSource implements RequestSource {
     private Phone phone;
     private Boolean stored;
 
-    public CardSource(String number, int expiryMonth, int expiryYear) {
+    public DLocalSource(String number, int expiryMonth, int expiryYear) {
         if (CheckoutUtils.isNullOrWhitespace(number)) {
             throw new IllegalArgumentException("The card number is required.");
         }

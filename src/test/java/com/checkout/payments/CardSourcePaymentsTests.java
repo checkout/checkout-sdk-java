@@ -29,6 +29,7 @@ public class CardSourcePaymentsTests extends SandboxTestFixture {
         Assert.assertTrue(paymentResponse.getPayment().canCapture());
         Assert.assertTrue(paymentResponse.getPayment().canVoid());
         Assert.assertNotNull(paymentResponse.getPayment().getSource());
+        Assert.assertTrue(paymentResponse.getPayment().getSource() instanceof CardSourceResponse);
         Assert.assertFalse(paymentRequest.getSource().getStored());
     }
 

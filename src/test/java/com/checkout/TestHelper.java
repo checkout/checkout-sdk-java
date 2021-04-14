@@ -11,6 +11,10 @@ public class TestHelper {
         return createCardPaymentRequest(100L);
     }
 
+    public static PaymentRequest<DLocalSource> createDLocalPaymentRequest() {
+        return createDLocalPaymentRequest(100L);
+    }
+
     public static PaymentRequest<CardSource> createCardPayoutRequest() {
         CardSource cardSource = new CardSource(TestCardSource.VISA.getNumber(), TestCardSource.VISA.getExpiryMonth(), TestCardSource.VISA.getExpiryYear());
         cardSource.setFirstName("John");
@@ -47,6 +51,22 @@ public class TestHelper {
         customer.setEmail(generateRandomEmail());
 
         PaymentRequest<CardSource> request = PaymentRequest.fromSource(cardSource, Currency.GBP, amount);
+        request.setCapture(false);
+        request.setCustomer(customer);
+        request.setReference(UUID.randomUUID().toString());
+
+        return request;
+    }
+
+    public static PaymentRequest<DLocalSource> createDLocalPaymentRequest(Long amount) {
+        DLocalSource dlocalSource = new DLocalSource(TestCardSource.VISA.getNumber(), TestCardSource.VISA.getExpiryMonth(), TestCardSource.VISA.getExpiryYear());
+        dlocalSource.setCvv(TestCardSource.VISA.getCvv());
+        dlocalSource.setStored(false);
+
+        CustomerRequest customer = new CustomerRequest();
+        customer.setEmail(generateRandomEmail());
+
+        PaymentRequest<DLocalSource> request = PaymentRequest.fromSource(dlocalSource, Currency.GBP, amount);
         request.setCapture(false);
         request.setCustomer(customer);
         request.setReference(UUID.randomUUID().toString());
