@@ -6,19 +6,13 @@ import com.checkout.common.CheckoutUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.UUID;
-
 public class DLocalSourcePaymentsTests extends SandboxTestFixture {
     @Test
     public void can_request_non_3ds_card_payment() throws Exception {
         PaymentRequest<DLocalSource> paymentRequest = TestHelper.createDLocalPaymentRequest();
         paymentRequest.setThreeDS(ThreeDSRequest.from(false));
 
-        System.out.println(paymentRequest);
-
         PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
-
-        System.out.println(paymentResponse);
 
         Assert.assertNotNull(paymentResponse.getPayment());
         Assert.assertTrue(paymentResponse.getPayment().isApproved());

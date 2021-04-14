@@ -1,6 +1,9 @@
 package com.checkout;
 
-import com.checkout.payments.*;
+import com.checkout.payments.AlternativePaymentSourceResponse;
+import com.checkout.payments.CardSource;
+import com.checkout.payments.CardSourceResponse;
+import com.checkout.payments.ResponseSource;
 import com.google.gson.*;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +25,6 @@ public class GsonSerializer implements Serializer {
             .registerTypeAdapter(Instant.class, (JsonDeserializer<Instant>) (JsonElement json, Type typeOfSrc, JsonDeserializationContext context) ->
                     Instant.parse(json.getAsString()))
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(ResponseSource.class, "type", true, AlternativePaymentSourceResponse.class)
-                    .registerSubtype(CardSourceResponse.class, DLocalSource.TYPE_NAME)
                     .registerSubtype(CardSourceResponse.class, CardSource.TYPE_NAME))
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .create();
