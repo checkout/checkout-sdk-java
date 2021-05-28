@@ -13,7 +13,7 @@ The jar, javadoc, and sources are all available from [Maven Central](https://sea
 
 ```groovy
 dependencies {
-    implementation 'com.checkout:checkout-sdk-java:3.6.0'
+    implementation 'com.checkout:checkout-sdk-java:3.7.0'
 }
 ```
 
@@ -23,7 +23,7 @@ dependencies {
 <dependency>
     <groupId>com.checkout</groupId>
     <artifactId>checkout-sdk-java</artifactId>
-    <version>3.6.0</version>
+    <version>3.7.0</version>
 </dependency>
 ```
 
