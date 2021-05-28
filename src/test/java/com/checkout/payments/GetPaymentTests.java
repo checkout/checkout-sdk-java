@@ -132,7 +132,7 @@ public class GetPaymentTests extends SandboxTestFixture {
     @Test
     public void can_get_payment_recipient() throws Exception {
         PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
-        paymentRequest.setRecipient(new PaymentRecipient(LocalDate.of(1985, 5, 15), "4242424242", "W1T", null, "Wensle"));
+        paymentRequest.setRecipient(new PaymentRecipient(LocalDate.of(1985, 5, 15), "4242424242", "W1T", null, "Wensle", null));
 
         PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
 
