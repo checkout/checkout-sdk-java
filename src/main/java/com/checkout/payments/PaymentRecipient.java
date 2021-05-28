@@ -13,16 +13,19 @@ public class PaymentRecipient {
     private final String zip;
     private final String firstName;
     private final String lastName;
+    private final String country;
 
     public PaymentRecipient(LocalDate dateOfBirth,
                             String accountNumber,
                             String zip,
                             String firstName,
-                            String lastName) {
+                            String lastName,
+                            String country) {
         this.dateOfBirth = dateOfBirth;
         this.accountNumber = accountNumber;
         this.zip = zip;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.country = country;
     }
 }
