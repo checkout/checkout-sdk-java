@@ -38,4 +38,9 @@ public class InstrumentsClientImpl implements InstrumentsClient {
     public CompletableFuture<UpdateInstrumentResponse> updateInstrument(String instrumentId, UpdateInstrumentRequest updateInstrumentRequest) {
         return apiClient.patchAsync("instruments/" + instrumentId, credentials, UpdateInstrumentResponse.class, updateInstrumentRequest, null);
     }
+
+    @Override
+    public CompletableFuture<Void> deleteInstrument(String instrumentId) {
+        return apiClient.deleteAsync("instruments/" + instrumentId, credentials);
+    }
 }

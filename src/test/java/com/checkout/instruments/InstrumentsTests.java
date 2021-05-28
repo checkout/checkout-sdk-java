@@ -1,5 +1,7 @@
 package com.checkout.instruments;
 
+import com.checkout.CheckoutApiException;
+import com.checkout.CheckoutResourceNotFoundException;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestCardSource;
 import com.checkout.common.Address;
@@ -8,6 +10,8 @@ import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.concurrent.ExecutionException;
 
 public class InstrumentsTests extends SandboxTestFixture {
     @Test
@@ -97,6 +101,25 @@ public class InstrumentsTests extends SandboxTestFixture {
 
         InstrumentDetailsResponse instrument = getApi().instrumentsClient().getInstrument(response.getId()).get();
         Assert.assertEquals("Test", instrument.getName());
+    }
+
+    @Test(expected = CheckoutResourceNotFoundException.class)
+    public void can_delete_instrument() throws Throwable {
+        CardTokenResponse cardToken = getApi().tokensClient().requestAsync(createValidTokenRequest()).get();
+
+        CreateInstrumentRequest request = CreateInstrumentRequest.builder()
+                .type("token")
+                .token(cardToken.getToken())
+                .build();
+        CreateInstrumentResponse response = getApi().instrumentsClient().createInstrument(request).get();
+
+        getApi().instrumentsClient().deleteInstrument(response.getId()).get();
+
+        try {
+            getApi().instrumentsClient().getInstrument(response.getId()).get();
+        } catch (ExecutionException e) {
+            throw e.getCause();
+        }
     }
 
     private CardTokenRequest createValidTokenRequest() {

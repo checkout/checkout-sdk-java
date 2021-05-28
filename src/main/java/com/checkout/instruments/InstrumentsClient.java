@@ -9,4 +9,9 @@ public interface InstrumentsClient {
     CompletableFuture<InstrumentDetailsResponse> getInstrument(String instrumentId);
 
     CompletableFuture<UpdateInstrumentResponse> updateInstrument(String instrumentId, UpdateInstrumentRequest updateInstrumentRequest);
+
+    /**
+     * @param instrumentId - matching a pattern ^(src)_(\w{26})$
+     */
+    CompletableFuture<Void> deleteInstrument(String instrumentId);
 }
