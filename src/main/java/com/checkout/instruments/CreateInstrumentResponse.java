@@ -19,4 +19,5 @@ public class CreateInstrumentResponse {
     private String issuerCountry;
     private String productId;
     private String productType;
+    private String fingerprint;
 }

@@ -36,6 +36,7 @@ public class InstrumentsTests extends SandboxTestFixture {
         Assert.assertNotNull(response.getIssuerCountry());
         Assert.assertNotNull(response.getProductId());
         Assert.assertNotNull(response.getProductType());
+        Assert.assertNotNull(response.getFingerprint());
     }
 
     @Test
@@ -64,6 +65,7 @@ public class InstrumentsTests extends SandboxTestFixture {
         Assert.assertEquals(createInstrumentResponse.getCardCategory(), instrument.getCardCategory());
         Assert.assertEquals(createInstrumentResponse.getIssuer(), instrument.getIssuer());
         Assert.assertEquals(createInstrumentResponse.getIssuerCountry(), instrument.getIssuerCountry());
+        Assert.assertEquals(createInstrumentResponse.getFingerprint(), instrument.getFingerprint());
         Assert.assertNotNull(instrument.getFingerprint());
         Assert.assertNotNull(instrument.getAccountHolder());
         Assert.assertNotNull(instrument.getAccountHolder().getBillingAddress());
