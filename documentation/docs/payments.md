@@ -165,6 +165,8 @@ PaymentRequest<TokenSource> paymentRequest =
 paymentRequest.setCustomer(customer);
 paymentRequest.setReference("ORD-123");
 paymentRequest.setThreeDS(ThreeDSRequest.from(true)); //3DS: enabled
+paymentRequest.setSuccessUrl("https://my-website.com/some-page/success");
+paymentRequest.setFailureUrl("https://my-website.com/some-page/failure");
 
 PaymentResponse response = api.paymentsClient().requestAsync(paymentRequest).get();
 ```
