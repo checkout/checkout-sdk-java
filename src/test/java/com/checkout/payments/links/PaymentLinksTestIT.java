@@ -1,5 +1,6 @@
 package com.checkout.payments.links;
 
+import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
 import com.checkout.payments.PaymentStatus;
@@ -17,6 +18,10 @@ import static org.junit.Assert.assertTrue;
 public class PaymentLinksTestIT extends SandboxTestFixture {
 
     public static final String REFERENCE = "ORD-123A";
+
+    public PaymentLinksTestIT() {
+        super(PlatformType.CLASSIC);
+    }
 
     @Test
     public void shouldCreatePaymentsLink() throws ExecutionException, InterruptedException {

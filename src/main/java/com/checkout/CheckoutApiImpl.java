@@ -17,7 +17,7 @@ import com.checkout.tokens.TokensClientImpl;
 import com.checkout.webhooks.WebhooksClient;
 import com.checkout.webhooks.WebhooksClientImpl;
 
-public class CheckoutApiImpl implements CheckoutApi {
+public final class CheckoutApiImpl implements CheckoutApi {
 
     private final PaymentsClient paymentsClient;
     private final SourcesClient sourcesClient;
@@ -28,31 +28,51 @@ public class CheckoutApiImpl implements CheckoutApi {
     private final PaymentLinksClient paymentLinksClient;
     private final HostedPaymentsClient hostedPaymentsClient;
 
+    public CheckoutApiImpl(final CheckoutConfiguration configuration) {
+        final ApiClient apiClient = new ApiClientImpl(configuration);
+        this.paymentsClient = new PaymentsClientImpl(apiClient, configuration);
+        this.sourcesClient = new SourcesClientImpl(apiClient, configuration);
+        this.tokensClient = new TokensClientImpl(apiClient, configuration);
+        this.webhooksClient = new WebhooksClientImpl(apiClient, configuration);
+        this.eventsClient = new EventsClientImpl(apiClient, configuration);
+        this.instrumentsClient = new InstrumentsClientImpl(apiClient, configuration);
+        this.paymentLinksClient = new PaymentLinksClientImpl(apiClient, configuration);
+        this.hostedPaymentsClient = new HostedPaymentsClientImpl(apiClient, configuration);
+    }
+
+    /**
+     * @deprecated Will be removed in a future version
+     */
+    @Deprecated
     public CheckoutApiImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        paymentsClient = new PaymentsClientImpl(apiClient, configuration);
-        sourcesClient = new SourcesClientImpl(apiClient, configuration);
-        tokensClient = new TokensClientImpl(apiClient, configuration);
-        webhooksClient = new WebhooksClientImpl(apiClient, configuration);
-        eventsClient = new EventsClientImpl(apiClient, configuration);
-        instrumentsClient = new InstrumentsClientImpl(apiClient, configuration);
-        paymentLinksClient = new PaymentLinksClientImpl(apiClient, configuration);
-        hostedPaymentsClient = new HostedPaymentsClientImpl(apiClient, configuration);
+        this.paymentsClient = new PaymentsClientImpl(apiClient, configuration);
+        this.sourcesClient = new SourcesClientImpl(apiClient, configuration);
+        this.tokensClient = new TokensClientImpl(apiClient, configuration);
+        this.webhooksClient = new WebhooksClientImpl(apiClient, configuration);
+        this.eventsClient = new EventsClientImpl(apiClient, configuration);
+        this.instrumentsClient = new InstrumentsClientImpl(apiClient, configuration);
+        this.paymentLinksClient = new PaymentLinksClientImpl(apiClient, configuration);
+        this.hostedPaymentsClient = new HostedPaymentsClientImpl(apiClient, configuration);
     }
 
-    public static CheckoutApi create(String secretKey, boolean useSandbox, String publicKey) {
-        CheckoutConfiguration configuration = new CheckoutConfiguration(secretKey, useSandbox);
+    /**
+     * @deprecated Will be removed in a future version
+     */
+    @Deprecated
+    public static CheckoutApi create(final String secretKey, final boolean useSandbox, final String publicKey) {
+        final CheckoutConfiguration configuration = new CheckoutConfiguration(secretKey, useSandbox, publicKey);
         configuration.setPublicKey(publicKey);
-
-        ApiClient apiClient = new ApiClientImpl(configuration);
-        return new CheckoutApiImpl(apiClient, configuration);
+        return new CheckoutApiImpl(configuration);
     }
 
-    public static CheckoutApi create(String secretKey, String uri, String publicKey) {
-        CheckoutConfiguration configuration = new CheckoutConfiguration(secretKey, uri);
+    /**
+     * @deprecated Will be removed in a future version
+     */
+    @Deprecated
+    public static CheckoutApi create(final String secretKey, final String uri, final String publicKey) {
+        final CheckoutConfiguration configuration = new CheckoutConfiguration(secretKey, uri);
         configuration.setPublicKey(publicKey);
-
-        ApiClient apiClient = new ApiClientImpl(configuration);
-        return new CheckoutApiImpl(apiClient, configuration);
+        return new CheckoutApiImpl(configuration);
     }
 
     @Override
@@ -86,8 +106,14 @@ public class CheckoutApiImpl implements CheckoutApi {
     }
 
     @Override
-    public PaymentLinksClient paymentLinksClient() { return paymentLinksClient; }
+    public PaymentLinksClient paymentLinksClient() {
+        return paymentLinksClient;
+    }
 
     @Override
-    public HostedPaymentsClient hostedPaymentsClient() { return hostedPaymentsClient; }
+    public HostedPaymentsClient hostedPaymentsClient() {
+        return hostedPaymentsClient;
+    }
+
 }
+

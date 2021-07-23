@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+import static com.checkout.common.CheckoutUtils.requiresNonNull;
+
 public class ApiClientImpl implements ApiClient {
 
     private static final int UNPROCESSABLE = 422;
@@ -22,10 +24,8 @@ public class ApiClientImpl implements ApiClient {
     }
 
     public ApiClientImpl(Serializer serializer, Transport transport) {
-        if (serializer == null) {
-            throw new IllegalArgumentException("serializer must not be null");
-        }
-
+        requiresNonNull("serializer", serializer);
+        requiresNonNull("transport", transport);
         this.serializer = serializer;
         this.transport = transport;
     }

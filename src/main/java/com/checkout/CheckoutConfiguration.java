@@ -1,45 +1,97 @@
 package com.checkout;
 
-import com.checkout.common.CheckoutUtils;
-import lombok.Data;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-@Data
-public class CheckoutConfiguration {
-    public static final String PRODUCTION_URI = "https://api.checkout.com/";
-    public static final String SANDBOX_URI = "https://api.sandbox.checkout.com/";
+import java.net.URI;
 
-    private final String secretKey;
+import static com.checkout.Environment.lookup;
+import static com.checkout.PlatformType.CLASSIC;
+import static com.checkout.PlatformType.FOUR;
+import static com.checkout.common.CheckoutUtils.requiresNonBlank;
+import static com.checkout.common.CheckoutUtils.requiresNonNull;
+
+public final class CheckoutConfiguration {
+
+    private PlatformType platformType;
+    private String secretKey;
+    private String publicKey;
+
+    /**
+     * @deprecated Will be removed in a future version
+     */
+    @Deprecated
     private final String uri;
 
-    // no public key required for production
-    private String publicKey = null;
+    private HttpClientBuilder apacheHttpClientBuilder;
 
-    // optionally exposing to allow client configuration of timeouts etc
-    private HttpClientBuilder apacheHttpClientBuilder = null;
-
-    public CheckoutConfiguration(String secretKey, boolean useSandbox) {
-        this(secretKey, useSandbox ? SANDBOX_URI : PRODUCTION_URI);
+    public CheckoutConfiguration(final String publicKey, final String secretKey, final Environment environment) {
+        requiresNonNull("environment", environment);
+        this.uri = environment.getUri();
+        validateAndSetKeys(publicKey, secretKey, FOUR);
     }
 
-    public CheckoutConfiguration(String secretKey, String uri) {
-        if (CheckoutUtils.isNullOrEmpty(secretKey)) {
-            throw new IllegalArgumentException("Your API secret key is required");
-        }
-        if (CheckoutUtils.isNullOrEmpty(uri)) {
-            throw new IllegalArgumentException("The API URI is required");
-        }
+    public CheckoutConfiguration(final String publicKey, final String secretKey, final URI uri) {
+        requiresNonNull("uri", uri);
+        this.uri = uri.toString();
+        validateAndSetKeys(publicKey, secretKey, FOUR);
+    }
 
-        this.secretKey = secretKey;
+    public CheckoutConfiguration(final String secretKey, final boolean useSandbox) {
+        this(null, secretKey, lookup(useSandbox).getUri());
+    }
+
+    public CheckoutConfiguration(final String secretKey, final boolean useSandbox, final String publicKey) {
+        this(publicKey, secretKey, lookup(useSandbox).getUri());
+    }
+
+    public CheckoutConfiguration(final String secretKey, final String uri) {
+        this(null, secretKey, uri);
+    }
+
+    private CheckoutConfiguration(final String publicKey, final String secretKey, final String uri) {
+        requiresNonBlank("uri", uri);
         this.uri = uri;
+        validateAndSetKeys(publicKey, secretKey, CLASSIC);
     }
 
-    public CheckoutConfiguration(String secretKey, boolean useSandbox, String publicKey) {
-        this(secretKey, useSandbox ? SANDBOX_URI : PRODUCTION_URI, publicKey);
+    private void validateAndSetKeys(final String publicKey, final String secretKey, final PlatformType platformType) {
+        requiresNonNull("platformType", platformType);
+        if (publicKey != null) {
+            platformType.validatePublicKey(publicKey);
+            this.publicKey = publicKey;
+        }
+        platformType.validateSecretKey(secretKey);
+        this.platformType = platformType;
+        this.secretKey = secretKey;
     }
 
-    public CheckoutConfiguration(String secretKey, String uri, String publicKey) {
-        this(secretKey, uri);
+    public PlatformType getCustomerPlatformType() {
+        return platformType;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(final String publicKey) {
+        CLASSIC.validatePublicKey(publicKey);
         this.publicKey = publicKey;
     }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public HttpClientBuilder getApacheHttpClientBuilder() {
+        return apacheHttpClientBuilder;
+    }
+
+    public void setApacheHttpClientBuilder(final HttpClientBuilder apacheHttpClientBuilder) {
+        this.apacheHttpClientBuilder = apacheHttpClientBuilder;
+    }
+
 }

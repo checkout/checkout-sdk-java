@@ -18,15 +18,15 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
+    implementation 'com.google.guava:guava:30.0-jre'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'org.slf4j:slf4j-api:1.7.26'
     implementation 'org.apache.httpcomponents:httpclient:4.5.12'
+    implementation 'org.apache.commons:commons-lang3:3.11'
     implementation 'javax.validation:validation-api:2.0.1.Final'
-
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.slf4j:slf4j-simple:1.7.26'
-    testCompile 'com.github.tomakehurst:wiremock-jre8:2.27.2'
     testCompile 'org.mockito:mockito-inline:3.11.2'
 }
 
@@ -38,6 +38,8 @@ buildScan {
 test {
     environment "CHECKOUT_PUBLIC_KEY", System.getenv("CHECKOUT_PUBLIC_KEY")
     environment "CHECKOUT_SECRET_KEY", System.getenv("CHECKOUT_SECRET_KEY")
+    environment "CHECKOUT_FOUR_PUBLIC_KEY", System.getenv("CHECKOUT_FOUR_PUBLIC_KEY")
+    environment "CHECKOUT_FOUR_SECRET_KEY", System.getenv("CHECKOUT_FOUR_SECRET_KEY")
     systemProperty "org.slf4j.simpleLogger.defaultLogLevel", "INFO"
     testLogging {
         outputs.upToDateWhen {false}
@@ -146,10 +148,13 @@ gradle.taskGraph.whenReady { taskGraph ->
         }
     }
 
-    if (taskGraph.hasTask(test) && (System.getenv('CHECKOUT_PUBLIC_KEY') == null || System.getenv('CHECKOUT_SECRET_KEY') == null)) {
+    if (taskGraph.hasTask(test)
+            && (System.getenv('CHECKOUT_PUBLIC_KEY') == null || System.getenv('CHECKOUT_SECRET_KEY') == null)
+            && (System.getenv('CHECKOUT_FOUR_PUBLIC_KEY') == null || System.getenv('CHECKOUT_FOUR_SECRET_KEY') == null)) {
         // @TODO: This just blocks testing locally without proper credentials. But it would be better to have different
         //  tests that anyone can run with mocks or just unit tests and a different test phase run optionally for proper
         //  integration tests.
         // throw new GradleException("Please ensure both the CHECKOUT_PUBLIC_KEY and CHECKOUT_SECRET_KEY environment variables are set in order to run the tests against the Checkout Sandbox.")
     }
+
 }
