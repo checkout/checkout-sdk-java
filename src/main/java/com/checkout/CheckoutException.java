@@ -1,7 +1,7 @@
 package com.checkout;
 
 public class CheckoutException extends RuntimeException {
-    public CheckoutException(String message) {
+    public CheckoutException(final String message) {
         super(message);
     }
 }

@@ -1,31 +1,60 @@
 package com.checkout;
 
-public class SandboxTestFixture {
+import com.checkout.beta.Checkout;
+import com.checkout.beta.CheckoutApi;
 
-    public static final CheckoutConfiguration CONFIGURATION = loadConfiguration();
-    private CheckoutApi api;
+import java.util.concurrent.CompletableFuture;
 
-    public SandboxTestFixture() {
-        api = new CheckoutApiImpl(new ApiClientImpl(CONFIGURATION), CONFIGURATION);
+import static java.util.Objects.requireNonNull;
+import static org.junit.Assert.fail;
+
+public abstract class SandboxTestFixture {
+
+    private com.checkout.CheckoutApi api;
+    private CheckoutApi apiV2;
+
+    public SandboxTestFixture(final PlatformType platformType) {
+        final CheckoutConfiguration configuration = loadConfiguration(platformType);
+        switch (platformType) {
+            case CLASSIC:
+                this.api = new CheckoutApiImpl(configuration);
+                break;
+            case FOUR:
+                this.apiV2 = Checkout.staticKeys()
+                        .publicKey(configuration.getPublicKey())
+                        .secretKey(configuration.getSecretKey())
+                        .environment(Environment.SANDBOX)
+                        .build();
+                break;
+        }
     }
 
-    private static CheckoutConfiguration loadConfiguration() {
-        String secretKey = System.getenv("CHECKOUT_SECRET_KEY");
-        String publicKey = System.getenv("CHECKOUT_PUBLIC_KEY");
-
-        if(secretKey == null) {
-            throw new IllegalStateException("Please set the checkout.secretKey java variable!");
+    private CheckoutConfiguration loadConfiguration(final PlatformType platformType) {
+        switch (platformType) {
+            case CLASSIC:
+                return new CheckoutConfiguration(requireNonNull(System.getenv("CHECKOUT_SECRET_KEY")), true, requireNonNull(System.getenv("CHECKOUT_PUBLIC_KEY")));
+            case FOUR:
+                return new CheckoutConfiguration(requireNonNull(System.getenv("CHECKOUT_FOUR_PUBLIC_KEY")), requireNonNull(System.getenv("CHECKOUT_FOUR_SECRET_KEY")), Environment.SANDBOX);
+            default:
+                throw new CheckoutArgumentException("unsupported configuration");
         }
-        if(publicKey == null) {
-            throw new IllegalStateException("Please set the checkout.publicKey java variable!");
-        }
-
-        CheckoutConfiguration configuration = new CheckoutConfiguration(secretKey, true);
-        configuration.setPublicKey(publicKey);
-        return configuration;
     }
 
-    public CheckoutApi getApi() {
+    protected <T> T blocking(final CompletableFuture<T> future) {
+        try {
+            return future.get();
+        } catch (final Exception e) {
+            fail(e.getMessage());
+        }
+        return null;
+    }
+
+    public com.checkout.CheckoutApi getApi() {
         return api;
     }
+
+    public CheckoutApi getApiV2() {
+        return apiV2;
+    }
+
 }

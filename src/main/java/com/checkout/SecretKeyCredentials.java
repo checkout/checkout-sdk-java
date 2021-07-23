@@ -1,17 +1,22 @@
 package com.checkout;
 
-public class SecretKeyCredentials implements ApiCredentials {
-    private final CheckoutConfiguration configuration;
+public final class SecretKeyCredentials extends AbstractKeyCredentials implements ApiCredentials {
 
-    public SecretKeyCredentials(CheckoutConfiguration configuration) {
-        if (configuration == null) {
-            throw new IllegalArgumentException("configuration must not be null");
-        }
-        this.configuration = configuration;
+    /**
+     * @deprecated Will be made private in a future version
+     */
+    @Deprecated
+    public SecretKeyCredentials(final CheckoutConfiguration configuration) {
+        super(configuration);
+    }
+
+    public static SecretKeyCredentials fromConfiguration(final CheckoutConfiguration configuration) {
+        return new SecretKeyCredentials(configuration);
     }
 
     @Override
     public String getAuthorizationHeader() {
-        return configuration.getSecretKey();
+        return getHeader(configuration.getSecretKey());
     }
+
 }

@@ -1,17 +1,22 @@
 package com.checkout;
 
-public class PublicKeyCredentials implements ApiCredentials {
-    private final CheckoutConfiguration configuration;
+public final class PublicKeyCredentials extends AbstractKeyCredentials implements ApiCredentials {
 
-    public PublicKeyCredentials(CheckoutConfiguration configuration) {
-        if (configuration == null) {
-            throw new IllegalArgumentException("configuration must not be null");
-        }
-        this.configuration = configuration;
+    /**
+     * @deprecated Will be made private in a future version
+     */
+    @Deprecated
+    public PublicKeyCredentials(final CheckoutConfiguration configuration) {
+        super(configuration);
+    }
+
+    public static PublicKeyCredentials fromConfiguration(final CheckoutConfiguration configuration) {
+        return new PublicKeyCredentials(configuration);
     }
 
     @Override
     public String getAuthorizationHeader() {
-        return configuration.getPublicKey();
+        return getHeader(configuration.getPublicKey());
     }
+
 }

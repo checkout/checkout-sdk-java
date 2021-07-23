@@ -1,5 +1,6 @@
 package com.checkout.payments.hosted;
 
+import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
 import org.junit.Test;
@@ -13,6 +14,10 @@ import static org.junit.Assert.assertTrue;
 public class HostedPaymentsTestIT extends SandboxTestFixture {
 
     public static final String REFERENCE = "ORD-123A";
+
+    public HostedPaymentsTestIT() {
+        super(PlatformType.CLASSIC);
+    }
 
     @Test
     public void shouldCreateHostedPayments() throws ExecutionException, InterruptedException {
