@@ -4,7 +4,15 @@ import com.checkout.payments.AlternativePaymentSourceResponse;
 import com.checkout.payments.CardSource;
 import com.checkout.payments.CardSourceResponse;
 import com.checkout.payments.ResponseSource;
-import com.google.gson.*;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,6 +23,7 @@ import java.time.format.DateTimeFormatter;
 
 @Slf4j
 public class GsonSerializer implements Serializer {
+
     private static final Gson DEFAULT_GSON = new GsonBuilder()
             .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (LocalDate date, Type typeOfSrc, JsonSerializationContext context) ->
                     new JsonPrimitive(date.format(DateTimeFormatter.ISO_LOCAL_DATE)))
@@ -35,26 +44,26 @@ public class GsonSerializer implements Serializer {
         this(DEFAULT_GSON);
     }
 
-    public GsonSerializer(Gson gson) {
+    public GsonSerializer(final Gson gson) {
         this.gson = gson;
     }
 
     @Override
-    public <T> String toJson(T object) {
-        String result = gson.toJson(object);
+    public <T> String toJson(final T object) {
+        final String result = gson.toJson(object);
         log.debug("toJson: " + result);
         return result;
     }
 
     @Override
-    public <T> T fromJson(String json, Class<T> type) {
+    public <T> T fromJson(final String json, final Class<T> type) {
         log.debug("fromJson: " + json);
         return gson.fromJson(json, type);
     }
 
     @Override
-    public <T> T fromJson(String json, Type type) {
-        log.debug("fromJson: " + json);
+    public <T> T fromJson(final String json, final Type type) {
         return gson.fromJson(json, type);
     }
+
 }

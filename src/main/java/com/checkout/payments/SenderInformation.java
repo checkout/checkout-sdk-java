@@ -11,19 +11,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SenderInformation {
-	@SerializedName("firstName")
-	private String firstName;
-	@SerializedName("lastName")
-	private String lastName;
-	private String address;
-	private String city;
-	@SerializedName("postalCode")
-	private String postalCode;
-	private String state;
-	private String country;
-	@SerializedName("sourceOfFunds")
-	private String sourceOfFunds;
-	@SerializedName("accountNumber")
-	private String accountNumber;
-	private String reference;
+    @SerializedName("firstName")
+    private String firstName;
+    @SerializedName("lastName")
+    private String lastName;
+    private String address;
+    private String city;
+    @SerializedName("postalCode")
+    private String postalCode;
+    private String state;
+    private String country;
+    @SerializedName("sourceOfFunds")
+    private String sourceOfFunds;
+    @SerializedName("accountNumber")
+    private String accountNumber;
+    private String reference;
 }

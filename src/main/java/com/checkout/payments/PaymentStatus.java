@@ -16,5 +16,6 @@ public class PaymentStatus {
     public static final String CHARGEBACK = "Chargeback";
     public static final String PAYMENT_RECEIVED = "Payment Received";
 
-    private PaymentStatus() {}
+    private PaymentStatus() {
+    }
 }

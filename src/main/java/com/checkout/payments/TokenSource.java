@@ -5,7 +5,6 @@ import com.checkout.common.CheckoutUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NonNull;
 
 @Data
 @Builder
@@ -16,7 +15,7 @@ public class TokenSource implements RequestSource {
     private final String type = TYPE_NAME;
     private Address billingAddress;
 
-    public TokenSource(String token) {
+    public TokenSource(final String token) {
         if (CheckoutUtils.isNullOrWhitespace(token)) {
             throw new IllegalArgumentException("The token must be provided.");
         }

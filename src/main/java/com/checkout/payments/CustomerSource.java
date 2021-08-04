@@ -1,10 +1,7 @@
 package com.checkout.payments;
 
 import com.checkout.common.CheckoutUtils;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 
@@ -16,7 +13,7 @@ public class CustomerSource implements RequestSource {
 
     private final String type = TYPE_NAME;
 
-    public CustomerSource(String id, String email) {
+    public CustomerSource(final String id, final String email) {
         if (CheckoutUtils.isNullOrWhitespace(id) && CheckoutUtils.isNullOrWhitespace(email))
             throw new IllegalArgumentException("Either the customer id or email is required.");
 
@@ -27,8 +24,8 @@ public class CustomerSource implements RequestSource {
         this.id = id;
     }
 
-    private static boolean IsValidEmail(String email) {
-        String[] parts = email.split("@");
+    private static boolean IsValidEmail(final String email) {
+        final String[] parts = email.split("@");
         return parts.length == 2 && Arrays.stream(parts).noneMatch(CheckoutUtils::isNullOrWhitespace);
     }
 

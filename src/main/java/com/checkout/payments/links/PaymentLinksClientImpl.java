@@ -1,9 +1,9 @@
 package com.checkout.payments.links;
 
+import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SecretKeyCredentials;
-import com.checkout.AbstractClient;
 
 import java.util.concurrent.CompletableFuture;
 

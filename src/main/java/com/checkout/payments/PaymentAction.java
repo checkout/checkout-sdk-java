@@ -1,7 +1,9 @@
 package com.checkout.payments;
 
 import com.checkout.common.Resource;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.Instant;
 import java.util.HashMap;

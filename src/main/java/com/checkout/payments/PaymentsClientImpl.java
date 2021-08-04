@@ -1,9 +1,9 @@
 package com.checkout.payments;
 
+import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SecretKeyCredentials;
-import com.checkout.AbstractClient;
 import com.checkout.common.Resource;
 
 import java.util.Arrays;
@@ -20,7 +20,7 @@ public class PaymentsClientImpl extends AbstractClient implements PaymentsClient
         PAYMENT_RESPONSE_MAPPINGS.put(201, PaymentProcessed.class); // CREATED
     }
 
-    public PaymentsClientImpl(final ApiClient apiClient, final  CheckoutConfiguration configuration) {
+    public PaymentsClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, SecretKeyCredentials.fromConfiguration(configuration));
     }
 
