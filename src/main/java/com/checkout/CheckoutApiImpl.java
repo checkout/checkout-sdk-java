@@ -6,6 +6,10 @@ import com.checkout.instruments.InstrumentsClient;
 import com.checkout.instruments.InstrumentsClientImpl;
 import com.checkout.payments.PaymentsClient;
 import com.checkout.payments.PaymentsClientImpl;
+import com.checkout.payments.hosted.HostedPaymentsClient;
+import com.checkout.payments.hosted.HostedPaymentsClientImpl;
+import com.checkout.payments.links.PaymentLinksClient;
+import com.checkout.payments.links.PaymentLinksClientImpl;
 import com.checkout.sources.SourcesClient;
 import com.checkout.sources.SourcesClientImpl;
 import com.checkout.tokens.TokensClient;
@@ -15,20 +19,24 @@ import com.checkout.webhooks.WebhooksClientImpl;
 
 public class CheckoutApiImpl implements CheckoutApi {
 
-    private PaymentsClient paymentsClient;
-    private SourcesClient sourcesClient;
-    private TokensClient tokensClient;
-    private WebhooksClient webhooksClient;
-    private EventsClient eventsClient;
-    private InstrumentsClient instrumentsClient;
+    private final PaymentsClient paymentsClient;
+    private final SourcesClient sourcesClient;
+    private final TokensClient tokensClient;
+    private final WebhooksClient webhooksClient;
+    private final EventsClient eventsClient;
+    private final InstrumentsClient instrumentsClient;
+    private final PaymentLinksClient paymentLinksClient;
+    private final HostedPaymentsClient hostedPaymentsClient;
 
-    public CheckoutApiImpl(ApiClient apiClient, CheckoutConfiguration configuration) {
+    public CheckoutApiImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         paymentsClient = new PaymentsClientImpl(apiClient, configuration);
         sourcesClient = new SourcesClientImpl(apiClient, configuration);
         tokensClient = new TokensClientImpl(apiClient, configuration);
         webhooksClient = new WebhooksClientImpl(apiClient, configuration);
         eventsClient = new EventsClientImpl(apiClient, configuration);
         instrumentsClient = new InstrumentsClientImpl(apiClient, configuration);
+        paymentLinksClient = new PaymentLinksClientImpl(apiClient, configuration);
+        hostedPaymentsClient = new HostedPaymentsClientImpl(apiClient, configuration);
     }
 
     public static CheckoutApi create(String secretKey, boolean useSandbox, String publicKey) {
@@ -76,4 +84,10 @@ public class CheckoutApiImpl implements CheckoutApi {
     public InstrumentsClient instrumentsClient() {
         return instrumentsClient;
     }
+
+    @Override
+    public PaymentLinksClient paymentLinksClient() { return paymentLinksClient; }
+
+    @Override
+    public HostedPaymentsClient hostedPaymentsClient() { return hostedPaymentsClient; }
 }
