@@ -18,7 +18,7 @@ public class TokensTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldRequestToken_card() {
+    public void shouldRequestToken() {
 
         final CardTokenRequest request = CardTokenRequest.builder()
                 .number(TestCardSource.VISA.getNumber())
