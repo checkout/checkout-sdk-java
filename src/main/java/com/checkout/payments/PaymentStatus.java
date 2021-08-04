@@ -1,6 +1,7 @@
 package com.checkout.payments;
 
 public class PaymentStatus {
+    public static final String ACTIVE = "Active";
     public static final String AUTHORIZED = "Authorized";
     public static final String CANCELED = "Canceled";
     public static final String CAPTURED = "Captured";
@@ -13,4 +14,7 @@ public class PaymentStatus {
     public static final String VOIDED = "Voided";
     public static final String CARD_VERIFIED = "Card Verified";
     public static final String CHARGEBACK = "Chargeback";
+    public static final String PAYMENT_RECEIVED = "Payment Received";
+
+    private PaymentStatus() {}
 }

@@ -274,3 +274,34 @@ api.paymentsClient().refundAsync("pay_je5hbbb4u3oe7k4u3lbwlu3zkq", refundRequest
 ```java
 api.paymentsClient().voidAsync("pay_je5hbbb4u3oe7k4u3lbwlu3zkq").get();
 ```
+
+## Create a Payment Link
+Create a Payment Link and pass through all the payment information, like the amount, currency, country and reference.
+Don't forget to include [required fields](https://api-reference.checkout.com/#operation/createAPaymentLinkSession).
+```java
+//Create payment link request
+final PaymentLinkRequest paymentLinkRequest = PaymentLinkRequest.builder()....build();
+
+api.paymentLinksClient().createAsync(paymentLinksRequest).get();
+```
+
+## Get Payment Link Details
+Retrieve details about a specific Payment Link using its ID returned when the link was created. In the response, you will see the status of the Payment Link.
+
+For more information, see the [Payment Links documentation](https://docs.checkout.com/integrate/payment-links).
+```java
+api.paymentLinksClient().getAsync("paymentLinkID").get();
+```
+
+## Create a Hosted Payments Page session
+Create a Hosted Payments Page session and pass through all the payment information, like the amount, currency, country and reference.
+
+To get started with our Hosted Payments Page, contact your Solutions Engineer or integration@checkout.com.
+
+Don't forget to include [required fields](https://api-reference.checkout.com/#tag/Hosted-Payments-Page).
+```java
+//Create hosted payments request
+final HostedPaymentRequest request = HostedPaymentRequest.builder()....build();
+
+api.hostedPaymentsClient().createAsync(request).get();
+```

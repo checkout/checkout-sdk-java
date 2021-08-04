@@ -1,9 +1,25 @@
 package com.checkout;
 
+import com.checkout.common.Address;
 import com.checkout.common.Currency;
-import com.checkout.payments.*;
+import com.checkout.common.Phone;
+import com.checkout.common.Product;
+import com.checkout.payments.BillingInformation;
+import com.checkout.payments.CardSource;
+import com.checkout.payments.CustomerRequest;
+import com.checkout.payments.DLocalSource;
+import com.checkout.payments.PaymentRequest;
+import com.checkout.payments.Processing;
+import com.checkout.payments.RequestSource;
+import com.checkout.payments.RiskRequest;
+import com.checkout.payments.SenderInformation;
+import com.checkout.payments.ThreeDSRequest;
+import com.checkout.payments.TokenSource;
+import com.checkout.payments.hosted.HostedPaymentRequest;
+import com.checkout.payments.links.PaymentLinkRequest;
 import com.checkout.tokens.CardTokenRequest;
 
+import java.util.Collections;
 import java.util.UUID;
 
 public class TestHelper {
@@ -105,4 +121,86 @@ public class TestHelper {
         request.setCapture(false);
         return request;
     }
+
+    public static CustomerRequest createCustomer() {
+        return CustomerRequest.builder()
+                .email(generateRandomEmail())
+                .name("Jack Napier")
+                .build();
+    }
+
+    public static Phone createPhone() {
+        return Phone.builder()
+                .countryCode("+1")
+                .number("4155552671")
+                .build();
+    }
+
+    public static Address createAddress() {
+        return Address.builder()
+                .addressLine1("Checkout.com")
+                .addressLine2("90 Tottenham Court Road")
+                .city("London")
+                .state("London")
+                .zip("W1T 4TJ")
+                .country("GB")
+                .build();
+    }
+
+    public static Product createProduct() {
+        return Product.builder()
+                .name("Gold Necklace")
+                .quantity(1L)
+                .price(200L)
+                .build();
+    }
+
+    public static ThreeDSRequest createThreeDS() {
+        return ThreeDSRequest.builder()
+                .enabled(Boolean.FALSE)
+                .attemptN3D(Boolean.FALSE)
+                .build();
+    }
+
+    public static PaymentLinkRequest createPaymentLinksRequest(final String reference){
+        return PaymentLinkRequest.builder()
+                .amount(200L)
+                .currency(Currency.GBP)
+                .reference(reference)
+                .description("Payment for Gold Necklace")
+                .expiresIn(604800)
+                .customer(createCustomer())
+                .billing(BillingInformation.builder()
+                        .address(createAddress())
+                        .phone(createPhone())
+                        .build())
+                .products(Collections.singletonList(createProduct()))
+                .threeDS(createThreeDS())
+                .risk(new RiskRequest(Boolean.FALSE))
+                .returnUrl("https://example.com/success")
+                .locale("en-GB")
+                .build();
+    }
+
+    public static HostedPaymentRequest createHostedPaymentRequest(final String reference){
+        return HostedPaymentRequest.builder()
+                .amount(1000L)
+                .reference(reference)
+                .currency(Currency.GBP)
+                .description("Payment for Gold Necklace")
+                .customer(createCustomer())
+                .billing(BillingInformation.builder()
+                        .address(createAddress())
+                        .phone(createPhone())
+                        .build())
+                .products(Collections.singletonList(createProduct()))
+                .risk(new RiskRequest(Boolean.FALSE))
+                .successUrl("https://example.com/payments/success")
+                .cancelUrl("https://example.com/payments/success")
+                .failureUrl("https://example.com/payments/success")
+                .locale("en-GB")
+                .threeDS(createThreeDS())
+                .build();
+    }
+
 }
