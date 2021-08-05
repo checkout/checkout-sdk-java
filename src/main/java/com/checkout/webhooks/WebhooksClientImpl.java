@@ -1,60 +1,51 @@
 package com.checkout.webhooks;
 
 import com.checkout.ApiClient;
-import com.checkout.ApiCredentials;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SecretKeyCredentials;
+import com.checkout.AbstractClient;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class WebhooksClientImpl implements WebhooksClient {
+public class WebhooksClientImpl extends AbstractClient implements WebhooksClient {
 
-    private final ApiClient apiClient;
-    private final ApiCredentials credentials;
+    private static final String WEBHOOKS = "webhooks";
 
-    public WebhooksClientImpl(ApiClient apiClient, CheckoutConfiguration configuration) {
-        if (apiClient == null) {
-            throw new IllegalArgumentException("apiClient must not be null");
-        }
-        if (configuration == null) {
-            throw new IllegalArgumentException("configuration must not be null");
-        }
-
-        this.apiClient = apiClient;
-        credentials = new SecretKeyCredentials(configuration);
+    public WebhooksClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
+        super(apiClient, new SecretKeyCredentials(configuration));
     }
 
     @Override
     public CompletableFuture<List<WebhookResponse>> retrieveWebhooks() {
-        return apiClient.getAsync("webhooks", credentials, WebhookResponse[].class)
+        return apiClient.getAsync(WEBHOOKS, apiCredentials, WebhookResponse[].class)
                 .thenApply(it -> it == null ? new WebhookResponse[0] : it)
                 .thenApply(Arrays::asList);
     }
 
     @Override
-    public CompletableFuture<WebhookResponse> registerWebhook(WebhookRequest webhookRequest) {
+    public CompletableFuture<WebhookResponse> registerWebhook(final WebhookRequest webhookRequest) {
         return registerWebhook(webhookRequest, null);
     }
 
     @Override
-    public CompletableFuture<WebhookResponse> registerWebhook(WebhookRequest webhookRequest, String idempotencyKey) {
-        return apiClient.postAsync("webhooks", credentials, WebhookResponse.class, webhookRequest, idempotencyKey);
+    public CompletableFuture<WebhookResponse> registerWebhook(final WebhookRequest webhookRequest, final String idempotencyKey) {
+        return apiClient.postAsync(WEBHOOKS, apiCredentials, WebhookResponse.class, webhookRequest, idempotencyKey);
     }
 
     @Override
-    public CompletableFuture<WebhookResponse> retrieveWebhook(String id) {
-        return apiClient.getAsync("webhooks/" + id, credentials, WebhookResponse.class);
+    public CompletableFuture<WebhookResponse> retrieveWebhook(final String id) {
+        return apiClient.getAsync(WEBHOOKS + "/" + id, apiCredentials, WebhookResponse.class);
     }
 
     @Override
-    public CompletableFuture<WebhookResponse> updateWebhook(String id, WebhookRequest webhookRequest) {
-        return apiClient.putAsync("webhooks/" + id, credentials, WebhookResponse.class, webhookRequest);
+    public CompletableFuture<WebhookResponse> updateWebhook(final String id, final WebhookRequest webhookRequest) {
+        return apiClient.putAsync(WEBHOOKS + "/" + id, apiCredentials, WebhookResponse.class, webhookRequest);
     }
 
     @Override
-    public CompletableFuture<Void> removeWebhook(String id) {
-        return apiClient.deleteAsync("webhooks/" + id, credentials);
+    public CompletableFuture<Void> removeWebhook(final String id) {
+        return apiClient.deleteAsync(WEBHOOKS + "/" + id, apiCredentials);
     }
 }
