@@ -1,5 +1,6 @@
 package com.checkout;
 
+import com.checkout.customers.CustomersClient;
 import com.checkout.events.EventsClient;
 import com.checkout.instruments.InstrumentsClient;
 import com.checkout.payments.PaymentsClient;
@@ -25,4 +26,6 @@ public interface CheckoutApi {
     PaymentLinksClient paymentLinksClient();
 
     HostedPaymentsClient hostedPaymentsClient();
+
+    CustomersClient customersClient();
 }

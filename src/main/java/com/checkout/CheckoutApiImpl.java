@@ -1,5 +1,7 @@
 package com.checkout;
 
+import com.checkout.customers.CustomersClient;
+import com.checkout.customers.CustomersClientImpl;
 import com.checkout.events.EventsClient;
 import com.checkout.events.EventsClientImpl;
 import com.checkout.instruments.InstrumentsClient;
@@ -27,6 +29,7 @@ public final class CheckoutApiImpl implements CheckoutApi {
     private final InstrumentsClient instrumentsClient;
     private final PaymentLinksClient paymentLinksClient;
     private final HostedPaymentsClient hostedPaymentsClient;
+    private final CustomersClient customersClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         final ApiClient apiClient = new ApiClientImpl(configuration);
@@ -38,6 +41,7 @@ public final class CheckoutApiImpl implements CheckoutApi {
         this.instrumentsClient = new InstrumentsClientImpl(apiClient, configuration);
         this.paymentLinksClient = new PaymentLinksClientImpl(apiClient, configuration);
         this.hostedPaymentsClient = new HostedPaymentsClientImpl(apiClient, configuration);
+        this.customersClient = new CustomersClientImpl(apiClient, configuration);
     }
 
     /**
@@ -53,6 +57,7 @@ public final class CheckoutApiImpl implements CheckoutApi {
         this.instrumentsClient = new InstrumentsClientImpl(apiClient, configuration);
         this.paymentLinksClient = new PaymentLinksClientImpl(apiClient, configuration);
         this.hostedPaymentsClient = new HostedPaymentsClientImpl(apiClient, configuration);
+        this.customersClient = new CustomersClientImpl(apiClient, configuration);
     }
 
     /**
@@ -115,5 +120,9 @@ public final class CheckoutApiImpl implements CheckoutApi {
         return hostedPaymentsClient;
     }
 
+    @Override
+    public CustomersClient customersClient() {
+        return customersClient;
+    }
 }
 

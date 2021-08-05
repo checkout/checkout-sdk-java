@@ -1,9 +1,9 @@
 package com.checkout.events;
 
 import com.checkout.ApiClient;
-import com.checkout.ApiCredentials;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SecretKeyCredentials;
+import com.checkout.AbstractClient;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -11,38 +11,29 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class EventsClientImpl implements EventsClient {
+public class EventsClientImpl extends AbstractClient implements EventsClient {
 
-    private final ApiClient apiClient;
-    private final ApiCredentials credentials;
+    private static final String EVENTS = "events/";
 
-    public EventsClientImpl(ApiClient apiClient, CheckoutConfiguration configuration) {
-        if (apiClient == null) {
-            throw new IllegalArgumentException("apiClient must not be null");
-        }
-        if (configuration == null) {
-            throw new IllegalArgumentException("configuration must not be null");
-        }
-
-        this.apiClient = apiClient;
-        credentials = new SecretKeyCredentials(configuration);
+    public EventsClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
+        super(apiClient, new SecretKeyCredentials(configuration));
     }
 
     @Override
-    public CompletableFuture<List<EventTypesResponse>> retrieveAllEventTypes(String version) {
+    public CompletableFuture<List<EventTypesResponse>> retrieveAllEventTypes(final String version) {
         String path = "event-types";
         if (version != null) {
             path += "?version=" + version;
         }
-        return apiClient.getAsync(path, credentials, EventTypesResponse[].class)
+        return apiClient.getAsync(path, apiCredentials, EventTypesResponse[].class)
                 .thenApply(it -> it == null ? new EventTypesResponse[0] : it)
                 .thenApply(Arrays::asList);
     }
 
     @Override
-    public CompletableFuture<EventsPageResponse> retrieveEvents(Instant from, Instant to, Integer limit, Integer skip, String paymentId) {
+    public CompletableFuture<EventsPageResponse> retrieveEvents(final Instant from, final Instant to, final Integer limit, final Integer skip, final String paymentId) {
         String path = "events";
-        List<String> parameters = new ArrayList<>();
+        final List<String> parameters = new ArrayList<>();
         if (from != null) {
             parameters.add("from=" + from.toString());
         }
@@ -63,26 +54,26 @@ public class EventsClientImpl implements EventsClient {
             path += "?" + String.join("&", parameters);
         }
 
-        return apiClient.getAsync(path, credentials, EventsPageResponse.class);
+        return apiClient.getAsync(path, apiCredentials, EventsPageResponse.class);
     }
 
     @Override
-    public CompletableFuture<EventResponse> retrieveEvent(String eventId) {
-        return apiClient.getAsync("events/" + eventId, credentials, EventResponse.class);
+    public CompletableFuture<EventResponse> retrieveEvent(final String eventId) {
+        return apiClient.getAsync(EVENTS + eventId, apiCredentials, EventResponse.class);
     }
 
     @Override
-    public CompletableFuture<EventNotificationResponse> retrieveEventNotification(String eventId, String notificationId) {
-        return apiClient.getAsync("events/" + eventId + "/notifications/" + notificationId, credentials, EventNotificationResponse.class);
+    public CompletableFuture<EventNotificationResponse> retrieveEventNotification(final String eventId, final String notificationId) {
+        return apiClient.getAsync(EVENTS + eventId + "/notifications/" + notificationId, apiCredentials, EventNotificationResponse.class);
     }
 
     @Override
-    public CompletableFuture<Void> retryWebhook(String eventId, String webhookId) {
-        return apiClient.postAsync("events/" + eventId + "/webhooks/" + webhookId + "/retry", credentials, Void.class, null, null);
+    public CompletableFuture<Void> retryWebhook(final String eventId, final String webhookId) {
+        return apiClient.postAsync(EVENTS + eventId + "/webhooks/" + webhookId + "/retry", apiCredentials, Void.class, null, null);
     }
 
     @Override
-    public CompletableFuture<Void> retryAllWebhooks(String eventId) {
-        return apiClient.postAsync("events/" + eventId + "/webhooks/retry", credentials, Void.class, null, null);
+    public CompletableFuture<Void> retryAllWebhooks(final String eventId) {
+        return apiClient.postAsync(EVENTS + eventId + "/webhooks/retry", apiCredentials, Void.class, null, null);
     }
 }
