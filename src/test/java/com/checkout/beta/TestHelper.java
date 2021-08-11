@@ -3,6 +3,8 @@ package com.checkout.beta;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.Environment;
 
+import java.util.UUID;
+
 public class TestHelper {
 
     public static final String VALID_CLASSIC_SK = "sk_test_fde517a8-3f01-41ef-b4bd-4282384b0a64";
@@ -20,6 +22,10 @@ public class TestHelper {
 
     public static CheckoutConfiguration mockFourConfiguration() {
         return new CheckoutConfiguration(VALID_FOUR_PK, VALID_FOUR_SK, Environment.SANDBOX);
+    }
+
+    public static String getRandomEmail() {
+        return UUID.randomUUID().toString() + "@checkout-sdk-java.com";
     }
 
 }
