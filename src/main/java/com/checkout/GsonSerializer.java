@@ -35,6 +35,10 @@ public class GsonSerializer implements Serializer {
                     Instant.parse(json.getAsString()))
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(ResponseSource.class, "type", true, AlternativePaymentSourceResponse.class)
                     .registerSubtype(CardSourceResponse.class, CardSource.TYPE_NAME))
+            // TODO Re-enable for customer instruments when related functionality is implemented for CS2
+            //.registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(CustomerInstrument.class)
+            //        .registerSubtype(CustomerBankAccountInstrument.class)
+            //        .registerSubtype(CustomerCardInstrument.class))
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .create();
 
