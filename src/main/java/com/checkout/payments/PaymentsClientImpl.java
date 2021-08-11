@@ -21,7 +21,7 @@ public class PaymentsClientImpl extends AbstractClient implements PaymentsClient
     }
 
     public PaymentsClientImpl(final ApiClient apiClient, final  CheckoutConfiguration configuration) {
-        super(apiClient, new SecretKeyCredentials(configuration));
+        super(apiClient, SecretKeyCredentials.fromConfiguration(configuration));
     }
 
     private static String getPaymentUrl(final String paymentId) {

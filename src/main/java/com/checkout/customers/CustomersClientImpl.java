@@ -13,7 +13,7 @@ public class CustomersClientImpl extends AbstractClient implements CustomersClie
     public static final String CUSTOMERS = "/customers";
 
     public CustomersClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, new SecretKeyCredentials(configuration));
+        super(apiClient, SecretKeyCredentials.fromConfiguration(configuration));
     }
 
     @Override

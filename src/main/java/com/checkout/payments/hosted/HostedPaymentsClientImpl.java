@@ -12,7 +12,7 @@ public class HostedPaymentsClientImpl extends AbstractClient implements HostedPa
     public static final String HOSTED_PAYMENTS = "/hosted-payments";
 
     public HostedPaymentsClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, new SecretKeyCredentials(configuration));
+        super(apiClient, SecretKeyCredentials.fromConfiguration(configuration));
     }
 
     @Override

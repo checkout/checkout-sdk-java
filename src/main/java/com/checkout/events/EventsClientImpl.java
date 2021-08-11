@@ -16,7 +16,7 @@ public class EventsClientImpl extends AbstractClient implements EventsClient {
     private static final String EVENTS = "events/";
 
     public EventsClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, new SecretKeyCredentials(configuration));
+        super(apiClient, SecretKeyCredentials.fromConfiguration(configuration));
     }
 
     @Override

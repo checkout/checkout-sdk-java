@@ -18,7 +18,7 @@ public class SourcesClientImpl extends AbstractClient implements SourcesClient {
     }
 
     public SourcesClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, new SecretKeyCredentials(configuration));
+        super(apiClient, SecretKeyCredentials.fromConfiguration(configuration));
     }
 
     @Override

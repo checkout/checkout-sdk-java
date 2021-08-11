@@ -12,7 +12,7 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
     private static final String INSTRUMENTS = "instruments";
 
     public InstrumentsClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, new SecretKeyCredentials(configuration));
+        super(apiClient, SecretKeyCredentials.fromConfiguration(configuration));
     }
 
     @Override

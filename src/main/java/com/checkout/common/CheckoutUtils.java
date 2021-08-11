@@ -3,6 +3,8 @@ package com.checkout.common;
 import com.checkout.CheckoutArgumentException;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Map;
+
 public class CheckoutUtils {
 
     /**
@@ -41,4 +43,16 @@ public class CheckoutUtils {
         }
     }
 
+    public static void validateMultipleRequires(final Map<String, Object> params) {
+        if (params != null) {
+            params.forEach((property, object) -> {
+                if (object instanceof String)
+                    requiresNonBlank(property, (String) object);
+                requiresNonNull(property, object);
+            });
+        }
+    }
+
+    private CheckoutUtils() {
+    }
 }

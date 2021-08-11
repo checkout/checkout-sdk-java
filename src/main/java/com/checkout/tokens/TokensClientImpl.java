@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 public class TokensClientImpl extends AbstractClient implements TokensClient {
 
     public TokensClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, new PublicKeyCredentials(configuration));
+        super(apiClient, PublicKeyCredentials.fromConfiguration(configuration));
     }
 
     @Override
