@@ -14,7 +14,7 @@ public class WebhooksClientImpl extends AbstractClient implements WebhooksClient
     private static final String WEBHOOKS = "webhooks";
 
     public WebhooksClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, new SecretKeyCredentials(configuration));
+        super(apiClient, SecretKeyCredentials.fromConfiguration(configuration));
     }
 
     @Override

@@ -24,6 +24,7 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpclient:4.5.12'
     implementation 'org.apache.commons:commons-lang3:3.11'
     implementation 'javax.validation:validation-api:2.0.1.Final'
+    implementation 'org.apache.httpcomponents:httpmime:4.5.13'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.slf4j:slf4j-simple:1.7.26'

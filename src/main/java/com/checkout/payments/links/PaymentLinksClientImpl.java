@@ -12,7 +12,7 @@ public class PaymentLinksClientImpl extends AbstractClient implements PaymentLin
     public static final String PAYMENT_LINKS = "/payment-links";
 
     public PaymentLinksClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, new SecretKeyCredentials(configuration));
+        super(apiClient, SecretKeyCredentials.fromConfiguration(configuration));
     }
 
     @Override

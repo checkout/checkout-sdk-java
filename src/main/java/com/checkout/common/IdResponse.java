@@ -1,9 +1,11 @@
 package com.checkout.common;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public final class IdResponse {
+@EqualsAndHashCode(callSuper=true)
+public final class IdResponse extends Resource {
 
     private String id;
 }

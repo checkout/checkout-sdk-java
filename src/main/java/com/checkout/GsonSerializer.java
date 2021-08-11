@@ -51,4 +51,10 @@ public class GsonSerializer implements Serializer {
         log.debug("fromJson: " + json);
         return gson.fromJson(json, type);
     }
+
+    @Override
+    public <T> T fromJson(String json, Type type) {
+        log.debug("fromJson: " + json);
+        return gson.fromJson(json, type);
+    }
 }
