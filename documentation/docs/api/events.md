@@ -1,6 +1,7 @@
 ---
 id: events
 title: Events
+sidebar_position: 3
 ---
 
 export const Highlight = ({children, color}) => (

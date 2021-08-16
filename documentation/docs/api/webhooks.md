@@ -1,6 +1,7 @@
 ---
 id: webhooks
 title: Webhooks
+sidebar_position: 7
 ---
 
 export const Highlight = ({children, color}) => (
