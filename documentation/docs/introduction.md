@@ -1,7 +1,8 @@
 ---
-id: getting_started
-title: Getting Started
-sidebar_label: Getting Started
+sidebar_position: 1
+id: introduction
+title: Checkout Java SDK
+sidebar_label: Introduction
 ---
 
 The Checkout.com Java SDK makes it easy to interact with the Unified Payments API. You can easily accept payments from cards, digital wallets and the most popular alternative payment methods, as well as pay out to a variety of destinations, all using the same integration.

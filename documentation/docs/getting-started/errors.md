@@ -1,6 +1,7 @@
 ---
 id: errors
 title: Error Handling
+sidebar_position: 4
 ---
 
 You can handle validation and API errors like so:
@@ -43,6 +44,6 @@ The errors above are triggered by status codes that do not fall in the 20* statu
 
 :::tip
 
-It's important to understand that Declines, or 3D Secure responses do not throw an exception, since the status code associated with them are in the 20* range. In the [Payments](payments.md) section you will see some examples of best practices when it comes to handling responses.
+It's important to understand that Declines, or 3D Secure responses do not throw an exception, since the status code associated with them are in the 20* range. In the [Payments](../api/payments.md) section you will see some examples of best practices when it comes to handling responses.
 
 :::

@@ -1,6 +1,7 @@
 ---
 id: initialize
 title: Initialize
+sidebar_position: 2
 ---
 
 Create the client like so:

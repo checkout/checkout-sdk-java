@@ -1,21 +1,31 @@
+const lightCodeTheme = require('prism-react-renderer/themes/github');
+const darkCodeTheme = require('prism-react-renderer/themes/dracula');
+
+/** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
-  title: "checkout-sdk-java",
-  tagline: "Checkout.com SDK for Java",
-  url: "https://checkout.github.io",
+  title: 'checkout-sdk-java',
+  tagline: 'Checkout.com SDK for Java',
+  url: 'https://checkout.github.io',
   baseUrl: "/checkout-sdk-java/",
   favicon: "img/favicon.png",
-  organizationName: "checkout", // Usually your GitHub org/user name.
-  projectName: "checkout-sdk-java", // Usually your repo name.
+  organizationName: 'checkout',
+  projectName: 'checkout-sdk-java',
   themeConfig: {
+    prism: {
+      additionalLanguages: ['java'],
+    },
+    googleAnalytics: {
+      trackingID: "UA-165971486-1",
+    },
     navbar: {
       title: "checkout-sdk-java",
       logo: {
         alt: "checkout-sdk-java",
         src: "img/logo.png",
       },
-      links: [
+      items: [
         {
-          to: "getting_started",
+          to: "docs/introduction",
           activeBasePath: "docs",
           label: "Docs",
           position: "right",
@@ -29,29 +39,20 @@ module.exports = {
     },
     footer: {
       style: "dark",
-      copyright: `© ${new Date().getFullYear()} Checkout.com    `,
-    },
-    googleAnalytics: {
-      trackingID: "UA-165971486-1",
-    },
+      copyright: `© ${new Date().getFullYear()} Checkout.com`,
+    }
   },
   presets: [
     [
-      "@docusaurus/preset-classic",
+      '@docusaurus/preset-classic',
       {
         docs: {
-          sidebarPath: require.resolve("./sidebars.js"),
-          routeBasePath: "",
-          // editUrl: 'https://github.com/facebook/docusaurus/edit/master/website/'
+          sidebarPath: require.resolve('./sidebars.js'),
         },
         theme: {
-          customCss: require.resolve("./src/css/custom.css"),
+          customCss: require.resolve('./src/css/custom.css'),
         },
       },
     ],
-  ],
-  plugins: [
-    // Basic usage.
-    require.resolve("@docusaurus/plugin-google-analytics"),
   ],
 };

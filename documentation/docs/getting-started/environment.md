@@ -1,6 +1,7 @@
 ---
 id: environment
 title: Environment
+sidebar_position: 3
 ---
 
 The SDK will target an environment based on the **useSandbox** value you provide when you initialize it:
