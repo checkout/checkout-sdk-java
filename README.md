@@ -1,93 +1,106 @@
+# Checkout.com Java SDK
+
 [![Build Status](https://travis-ci.com/checkout/checkout-sdk-java.svg?branch=master)](https://travis-ci.com/checkout/checkout-sdk-java) [![GitHub license](https://img.shields.io/github/license/checkout/checkout-sdk-java.svg)](https://github.com/checkout/checkout-sdk-java/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/checkout/checkout-sdk-java.svg)](https://GitHub.com/checkout/checkout-sdk-java/releases/)
 
-<p align="center"><img src="https://i.ibb.co/6FrwfWt/Screenshot-2020-07-17-at-18-13-39.png" width="20%"></p>
+<p><img src="https://i.ibb.co/6FrwfWt/Screenshot-2020-07-17-at-18-13-39.png" width="20%"></p>
 
-# Checkout.com Java SDK
-Built with Java 8 and Gradle 5
+## Getting started
 
-# :computer: Import
+Binaries, Javadoc, and sources are all available from [Maven Central](https://search.maven.org/artifact/com.checkout/checkout-sdk-java).
 
-The jar, javadoc, and sources are all available from [Maven Central](https://search.maven.org/artifact/com.checkout/checkout-sdk-java).
-
-### Gradle
+#### Gradle
 
 ```groovy
 dependencies {
-    implementation 'com.checkout:checkout-sdk-java:3.7.0'
+    implementation 'com.checkout:checkout-sdk-java:<version>'
 }
 ```
-
-### Maven
+#### Maven
 
 ```xml
 <dependency>
     <groupId>com.checkout</groupId>
     <artifactId>checkout-sdk-java</artifactId>
-    <version>3.7.0</version>
+    <version>version</version>
 </dependency>
 ```
 
-> If you don't have your own API keys, you can sign up for a test account [here](https://www.checkout.com/get-test-account).
+Please check in GitHub releases for all the versions available.
 
-# :book: Documentation
+## How to use the SDK
 
-You can see the [SDK documentation here](https://checkout.github.io/checkout-sdk-java/getting_started/).
+This SDK can be used with two different pair of API keys provided by Checkout. However, using different API keys imply using specific API features. Please find in the table below the types of keys that can be used within this SDK.
 
-# :heavy_plus_sign: Dependencies
- - gson 2.8.5
- - slf4j-api 1.7.26
- - apache httpclient 4.5.12
+| Account System | Public Key (example)                         | Secret Key (example)                         |
+| -------------- | -------------------------------------------- | -------------------------------------------- |
+| Classic        | pk_test_fe70ff27-7c42-4ce1-ae90-5691a188ee7b | sk_test_fde517a8-3z01-41ef-b4bd-4282384b0a64 |
+| Four           | pk_sbox_pkhpdtvmkgf7hdgpwnbhw7r2uic          | sk_sbox_m73dzypy7cf3gfd46xr4yj5xo4e          |
 
-# :dash: Quickstart
+If you don't have your own API keys, you can sign up for a test account [here](https://www.checkout.com/get-test-account).
 
-Here's a simple example of how to create the client and which values it needs to bootstrap:
+This SDK does not support oAuth (yet).
+
+### Classic
+
+If your pair of keys matches the Classic type, this is how the SDK should be used:
 
 ```java
-import com.checkout.CheckoutApi;
-import com.checkout.CheckoutApiImpl;
-import com.checkout.payments.RefundResponse;
+public static void main(String[] args) {
 
-import java.util.concurrent.CompletableFuture;
+    boolean useSandbox = true;
 
-class Main {
-    public static void main(String[] args) {
-        String secretKey = "my_checkout_secret_key";
-        String publicKey = "my_checkout_public_key";
-        boolean useSandbox = true;
-        
-        CheckoutApi checkoutApi = CheckoutApiImpl.create(secretKey, useSandbox, publicKey);
-        
-        String paymentId = "my_test_payment_id";
-        
-        CompletableFuture<RefundResponse> refundResponse = checkoutApi.paymentsClient().refundAsync(paymentId);
-        // etc...
-    }
+    CheckoutApi checkoutApi = CheckoutApiImpl.create("secret_key", useSandbox, "public_key");
+
+    PaymentsClient paymentsClient = checkoutApi.paymentsClient();
+    CompletableFuture<RefundResponse> refundResponse = paymentsClient.refundAsync("payment_id");
+    
 }
 ```
 
-Please see the tests for more examples. There is also a growing collection of samples available under [samples](/samples).
+### Four (BETA)
 
-# :construction_worker: Building Locally
+If your pair of keys matches the Four type, this is how the SDK should be used:
 
-The tests require a sandbox account to connect to. Once you have one, you can specify the `CHECKOUT_PUBLIC_KEY` and `CHECKOUT_SECRET_KEY` using environment variables.
+```java
+public static void main(String[] args) {
 
-Then just run:
+    CheckoutApi checkoutApi = Checkout.staticKeys()
+                .environment(Environment.SANDBOX)
+                .build();
+
+    PaymentsClient paymentsClient = checkoutApi.paymentsClient();
+    CompletableFuture<RefundResponse> refundResponse = paymentsClient.refundPayment("payment_id");
+}
+```
+
+Please note that at the moment, support for Four API keys is quite limited. Future releases will provide a bigger feature set for this credential type.
+
+More examples can be found in the following places:
+
+* Samples available under [samples](/samples)
+* Integration tests in this repo, located under [src/test](/src/test)
+
+## Building from source
+
+Once you checkout the code from GitHub, the project can be built using Gradle:
+
 ```
 gradlew build
+
+# skip tests
+gradlew build -x test
 ```
 
-# :sparkles: Contributing and Release Process
+Integration tests execution requires two pairs of keys, and the following environment variables set in your system:
 
-This is based on the OSM Lab Atlas project, who have a very helpful document [here](https://github.com/osmlab/atlas/wiki/Gradle,-Travis-CI-and-Maven-Central).
+* For Classic account systems: `CHECKOUT_PUBLIC_KEY` & `CHECKOUT_SECRET_KEY`
+* For Four account systems: `CHECKOUT_FOUR_PUBLIC_KEY` & `CHECKOUT_FOUR_SECRET_KEY`
 
-`dev` is the default branch, and all commits/pull requests that are accepted should be merged into here. Travis will then automatically build and test the project, and if successful will merge into `master`. This is the only way code should end up in `master`.
+## Code of Conduct
 
-To perform an actual release (and you need permissions on the project to do this, not just anyone can run this) you should:
-- run the script `.travis/trigger-release.sh` locally - or just use the Travis UI if you prefer to manually trigger a build on `master`, with the parameters: `"before_script": "export MANUAL_RELEASE_TRIGGERED=true"`.
-- This should build master, and publish to https://oss.sonatype.org a release. The version number is taken from the `version` field in the `gradle.properties` file, and the `-SNAPSHOT` suffix removed. 
-- Finally a tag is made in Github with that version number. 
-- As a manual next step, you should update references in the documentation to the new version number, turn the tag into a GitHub release with documentation on what has changed (and how to access that particular release), and increment the version number in `gradle.properties`, being sure to *keep* the `-SNAPSHOT` suffix.
+Please refer to [Code of Conduct](CODE_OF_CONDUCT.md)
 
-# :warning: Note
+## Licensing
 
-Sometimes there can be random failures when uploading to https://oss.sonatype.org due to timeouts or other difficult to diagnose problems. Generally just trying again should work.
+[MIT](https://github.com/checkout/checkout-sdk-java/blob/dev/LICENSE.md)
+
