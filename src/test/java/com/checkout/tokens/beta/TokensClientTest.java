@@ -4,22 +4,22 @@ import com.checkout.ApiClient;
 import com.checkout.CheckoutArgumentException;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.PublicKeyCredentials;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.checkout.TestHelper.mockFourConfiguration;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class TokensClientTest {
 
     @Mock
@@ -29,7 +29,7 @@ public class TokensClientTest {
 
     private TokensClient tokensClient;
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.checkoutConfiguration = mockFourConfiguration();
         this.tokensClient = new TokensClientImpl(apiClient, checkoutConfiguration);

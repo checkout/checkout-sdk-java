@@ -180,7 +180,7 @@ public class TestHelper {
                 .build();
     }
 
-    public static PaymentLinkRequest createPaymentLinksRequest(final String reference){
+    public static PaymentLinkRequest createPaymentLinksRequest(final String reference) {
         return PaymentLinkRequest.builder()
                 .amount(200L)
                 .currency(Currency.GBP)
@@ -200,7 +200,7 @@ public class TestHelper {
                 .build();
     }
 
-    public static HostedPaymentRequest createHostedPaymentRequest(final String reference){
+    public static HostedPaymentRequest createHostedPaymentRequest(final String reference) {
         return HostedPaymentRequest.builder()
                 .amount(1000L)
                 .reference(reference)

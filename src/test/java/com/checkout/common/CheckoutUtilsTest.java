@@ -1,12 +1,12 @@
 package com.checkout.common;
 
 import com.checkout.CheckoutArgumentException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.checkout.common.CheckoutUtils.requiresNonBlank;
 import static com.checkout.common.CheckoutUtils.requiresNonNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class CheckoutUtilsTest {
 
@@ -30,36 +30,36 @@ public class CheckoutUtilsTest {
 
     }
 
-    private void testNoExceptionIsThrownRequiresNonBlank(String property, String content) {
+    private void testNoExceptionIsThrownRequiresNonBlank(final String property, final String content) {
         try {
             requiresNonBlank(property, content);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             fail();
         }
     }
 
-    private void testExceptionIsThrownRequiresNonBlank(String property, String content) {
+    private void testExceptionIsThrownRequiresNonBlank(final String property, final String content) {
         try {
             requiresNonBlank(property, content);
             fail();
-        } catch (CheckoutArgumentException e) {
+        } catch (final CheckoutArgumentException e) {
             assertEquals(property + " must be not be blank", e.getMessage());
         }
     }
 
-    private void testNoExceptionIsThrownRequiresNonNull(String property, Object content) {
+    private void testNoExceptionIsThrownRequiresNonNull(final String property, final Object content) {
         try {
             requiresNonNull(property, content);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             fail();
         }
     }
 
-    private void testExceptionIsThrownRequiresNonNull(String property, Object content) {
+    private void testExceptionIsThrownRequiresNonNull(final String property, final Object content) {
         try {
             requiresNonNull(property, content);
             fail();
-        } catch (CheckoutArgumentException e) {
+        } catch (final CheckoutArgumentException e) {
             assertEquals(property + " must be not be null", e.getMessage());
         }
     }

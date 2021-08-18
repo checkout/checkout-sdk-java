@@ -3,9 +3,13 @@ package com.checkout.payments;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
-import com.checkout.common.CheckoutUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DLocalSourcePaymentsTestIT extends SandboxTestFixture {
 
@@ -15,25 +19,26 @@ public class DLocalSourcePaymentsTestIT extends SandboxTestFixture {
 
     @Test
     public void can_request_non_3ds_card_payment() throws Exception {
-        PaymentRequest<DLocalSource> paymentRequest = TestHelper.createDLocalPaymentRequest();
+        final PaymentRequest<DLocalSource> paymentRequest = TestHelper.createDLocalPaymentRequest();
         paymentRequest.setThreeDS(ThreeDSRequest.from(false));
 
-        PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
 
-        Assert.assertNotNull(paymentResponse.getPayment());
-        Assert.assertTrue(paymentResponse.getPayment().isApproved());
-        Assert.assertFalse(CheckoutUtils.isNullOrEmpty(paymentResponse.getPayment().getId()));
-        Assert.assertFalse(CheckoutUtils.isNullOrEmpty(paymentResponse.getPayment().getActionId()));
-        Assert.assertEquals(paymentRequest.getAmount().intValue(), paymentResponse.getPayment().getAmount());
-        Assert.assertEquals(paymentRequest.getCurrency(), paymentResponse.getPayment().getCurrency());
-        Assert.assertEquals(paymentRequest.getReference(), paymentResponse.getPayment().getReference());
-        Assert.assertNotNull(paymentResponse.getPayment().getCustomer());
-        Assert.assertFalse(CheckoutUtils.isNullOrEmpty(paymentResponse.getPayment().getCustomer().getId()));
-        Assert.assertFalse(CheckoutUtils.isNullOrEmpty(paymentResponse.getPayment().getCustomer().getEmail()));
-        Assert.assertTrue(paymentResponse.getPayment().canCapture());
-        Assert.assertTrue(paymentResponse.getPayment().canVoid());
-        Assert.assertNotNull(paymentResponse.getPayment().getSource());
-        Assert.assertTrue(paymentResponse.getPayment().getSource() instanceof CardSourceResponse);
-        Assert.assertFalse(paymentRequest.getSource().getStored());
+        assertNotNull(paymentResponse.getPayment());
+        assertTrue(paymentResponse.getPayment().isApproved());
+        assertFalse(StringUtils.isEmpty(paymentResponse.getPayment().getId()));
+        assertFalse(StringUtils.isEmpty(paymentResponse.getPayment().getActionId()));
+        assertEquals(paymentRequest.getAmount().intValue(), paymentResponse.getPayment().getAmount());
+        assertEquals(paymentRequest.getCurrency(), paymentResponse.getPayment().getCurrency());
+        assertEquals(paymentRequest.getReference(), paymentResponse.getPayment().getReference());
+        assertNotNull(paymentResponse.getPayment().getCustomer());
+        assertFalse(StringUtils.isEmpty(paymentResponse.getPayment().getCustomer().getId()));
+        assertFalse(StringUtils.isEmpty(paymentResponse.getPayment().getCustomer().getEmail()));
+        assertTrue(paymentResponse.getPayment().canCapture());
+        assertTrue(paymentResponse.getPayment().canVoid());
+        assertNotNull(paymentResponse.getPayment().getSource());
+        assertTrue(paymentResponse.getPayment().getSource() instanceof CardSourceResponse);
+        assertFalse(paymentRequest.getSource().getStored());
     }
+
 }

@@ -27,8 +27,8 @@ import static com.checkout.payments.beta.CardSourceHelper.getCardSourcePayment;
 import static com.checkout.payments.beta.CardSourceHelper.getCorporateSender;
 import static com.checkout.payments.beta.CardSourceHelper.getIndividualSender;
 import static com.checkout.payments.beta.CardSourceHelper.getRequestCardSource;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
 

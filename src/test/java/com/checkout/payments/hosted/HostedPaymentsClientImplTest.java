@@ -4,24 +4,24 @@ import com.checkout.ApiClient;
 import com.checkout.ApiCredentials;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.TestHelper;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class HostedPaymentsClientImplTest {
 
     private static final String REFERENCE = "ORD-1234";
@@ -38,7 +38,7 @@ public class HostedPaymentsClientImplTest {
     @Mock
     private CompletableFuture<HostedPaymentResponse> responseAsync;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         responseAsync = CompletableFuture.completedFuture(response);
         when(response.getReference()).thenReturn(REFERENCE);

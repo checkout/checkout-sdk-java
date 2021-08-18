@@ -1,15 +1,15 @@
 package com.checkout;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.checkout.TestHelper.mockClassicConfiguration;
 import static com.checkout.TestHelper.mockFourConfiguration;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CheckoutApiTest {
 
     @Mock
@@ -20,7 +20,7 @@ public class CheckoutApiTest {
 
     @Test
     public void shouldInstantiateAndRetrieveClients() {
-        CheckoutApi checkoutApi = new CheckoutApiImpl(fourConfiguration);
+        final CheckoutApi checkoutApi = new CheckoutApiImpl(fourConfiguration);
         assertNotNull(checkoutApi.paymentsClient());
         assertNotNull(checkoutApi.sourcesClient());
         assertNotNull(checkoutApi.tokensClient());
@@ -31,7 +31,7 @@ public class CheckoutApiTest {
 
     @Test
     public void shouldInstantiateAndRetrieveClients_deprecatedConstructor() {
-        CheckoutApi checkoutApi = new CheckoutApiImpl(apiClient, classicConfiguration);
+        final CheckoutApi checkoutApi = new CheckoutApiImpl(apiClient, classicConfiguration);
         assertNotNull(checkoutApi.paymentsClient());
         assertNotNull(checkoutApi.sourcesClient());
         assertNotNull(checkoutApi.tokensClient());
@@ -42,7 +42,7 @@ public class CheckoutApiTest {
 
     @Test
     public void shouldInstantiateAndRetrieveClients_deprecatedStaticConstructor_1() {
-        CheckoutApi checkoutApi = CheckoutApiImpl.create(classicConfiguration.getSecretKey(), true, classicConfiguration.getPublicKey());
+        final CheckoutApi checkoutApi = CheckoutApiImpl.create(classicConfiguration.getSecretKey(), true, classicConfiguration.getPublicKey());
         assertNotNull(checkoutApi.paymentsClient());
         assertNotNull(checkoutApi.sourcesClient());
         assertNotNull(checkoutApi.tokensClient());
@@ -53,7 +53,7 @@ public class CheckoutApiTest {
 
     @Test
     public void shouldInstantiateAndRetrieveClients_deprecatedStaticConstructor_2() {
-        CheckoutApi checkoutApi = CheckoutApiImpl.create(classicConfiguration.getSecretKey(), "uri", classicConfiguration.getPublicKey());
+        final CheckoutApi checkoutApi = CheckoutApiImpl.create(classicConfiguration.getSecretKey(), "uri", classicConfiguration.getPublicKey());
         assertNotNull(checkoutApi.paymentsClient());
         assertNotNull(checkoutApi.sourcesClient());
         assertNotNull(checkoutApi.tokensClient());

@@ -3,10 +3,14 @@ package com.checkout.payments;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
-import com.checkout.common.CheckoutUtils;
 import com.checkout.common.Currency;
-import org.junit.Assert;
-import org.junit.Test;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AlternativePaymentSourcePaymentsTestIT extends SandboxTestFixture {
 
@@ -16,29 +20,29 @@ public class AlternativePaymentSourcePaymentsTestIT extends SandboxTestFixture {
 
     @Test
     public void can_request_ideal_payment() throws Exception {
-        AlternativePaymentSource alternativePaymentSource = new AlternativePaymentSource("ideal");
+        final AlternativePaymentSource alternativePaymentSource = new AlternativePaymentSource("ideal");
         alternativePaymentSource.put("bic", "INGBNL2A");
         alternativePaymentSource.put("description", "ORD 5023 4E89");
 
         requestAlternativePayment(alternativePaymentSource);
     }
 
-    private PaymentPending requestAlternativePayment(AlternativePaymentSource alternativePaymentSource) throws Exception {
-        PaymentRequest<RequestSource> paymentRequest = TestHelper.createAlternativePaymentMethodRequest(alternativePaymentSource, Currency.EUR);
+    private PaymentPending requestAlternativePayment(final AlternativePaymentSource alternativePaymentSource) throws Exception {
+        final PaymentRequest<RequestSource> paymentRequest = TestHelper.createAlternativePaymentMethodRequest(alternativePaymentSource, Currency.EUR);
 
-        PaymentResponse apiResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
-        Assert.assertTrue(apiResponse.isPending());
-        Assert.assertNotNull(apiResponse.getPending());
+        final PaymentResponse apiResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        assertTrue(apiResponse.isPending());
+        assertNotNull(apiResponse.getPending());
 
-        PaymentPending pendingPayment = apiResponse.getPending();
-        Assert.assertFalse(CheckoutUtils.isNullOrEmpty(pendingPayment.getId()));
-        Assert.assertEquals(PaymentStatus.PENDING, pendingPayment.getStatus());
-        Assert.assertEquals(paymentRequest.getReference(), pendingPayment.getReference());
-        Assert.assertNotNull(pendingPayment.getCustomer());
-        Assert.assertFalse(CheckoutUtils.isNullOrEmpty(pendingPayment.getCustomer().getId()));
-        Assert.assertFalse(CheckoutUtils.isNullOrEmpty(pendingPayment.getCustomer().getEmail()));
-        Assert.assertTrue(pendingPayment.requiresRedirect());
-        Assert.assertNotNull(pendingPayment.getRedirectLink());
+        final PaymentPending pendingPayment = apiResponse.getPending();
+        assertFalse(StringUtils.isEmpty(pendingPayment.getId()));
+        assertEquals(PaymentStatus.PENDING, pendingPayment.getStatus());
+        assertEquals(paymentRequest.getReference(), pendingPayment.getReference());
+        assertNotNull(pendingPayment.getCustomer());
+        assertFalse(StringUtils.isBlank(pendingPayment.getCustomer().getId()));
+        assertFalse(StringUtils.isEmpty(pendingPayment.getCustomer().getEmail()));
+        assertTrue(pendingPayment.requiresRedirect());
+        assertNotNull(pendingPayment.getRedirectLink());
 
         return pendingPayment;
     }

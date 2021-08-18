@@ -8,25 +8,25 @@ import com.checkout.common.FilePurpose;
 import com.checkout.common.FileRequest;
 import com.checkout.common.IdResponse;
 import org.apache.http.entity.ContentType;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class DisputesClientImplTest {
 
     private static final String DISPUTES = "/disputes";
@@ -51,9 +51,6 @@ public class DisputesClientImplTest {
 
     @Mock
     private Dispute dispute;
-
-    @Mock
-    private PaymentDispute paymentDispute;
 
     @Mock
     private DisputesQueryResponse disputesQueryResponse;
@@ -85,7 +82,9 @@ public class DisputesClientImplTest {
     @Mock
     private CompletableFuture<FileDetailsResponse> fileDetailsResponseFuture;
 
-    @Before
+    private PaymentDispute paymentDispute;
+
+    @BeforeEach
     public void setUp() {
         disputesQueryResponseFuture = CompletableFuture.completedFuture(disputesQueryResponse);
         disputeDetailsFuture = CompletableFuture.completedFuture(disputeDetailsResponse);
@@ -93,30 +92,24 @@ public class DisputesClientImplTest {
         idResponseFuture = CompletableFuture.completedFuture(idResponse);
         fileDetailsResponseFuture = CompletableFuture.completedFuture(fileDetailsResponse);
         client = new DisputesClientImpl(apiClient, configuration);
-        setUpPayment();
-    }
-
-    private void setUpPayment() {
-        when(paymentDispute.getId()).thenReturn(PAYMENT_ID);
-        when(paymentDispute.getAmount()).thenReturn(PAYMENT_AMOUNT);
-        when(paymentDispute.getArn()).thenReturn(PAYMENT_ARN);
+        paymentDispute = PaymentDispute.builder().id(PAYMENT_ID).amount(PAYMENT_AMOUNT).arn(PAYMENT_ARN).build();
     }
 
     @Test
     public void shouldPerformQuery() throws ExecutionException, InterruptedException {
-        DisputesQueryFilter request = DisputesQueryFilter.builder().paymentId(PAYMENT_ID).limit(250).build();
+        final DisputesQueryFilter request = DisputesQueryFilter.builder().paymentId(PAYMENT_ID).limit(250).build();
         doReturn(disputesQueryResponseFuture)
                 .when(apiClient)
                 .queryAsync(eq(DISPUTES), any(ApiCredentials.class),
                         any(DisputesQueryFilter.class), eq(DisputesQueryResponse.class));
         when(disputesQueryResponse.getLimit()).thenReturn(request.getLimit());
         when(disputesQueryResponse.getTotalCount()).thenReturn(1);
-        when(disputesQueryResponse.getData()).thenReturn(Arrays.asList(dispute));
+        when(disputesQueryResponse.getData()).thenReturn(Collections.singletonList(dispute));
         when(dispute.getId()).thenReturn(DISPUTE_ID);
         when(dispute.getCategory()).thenReturn(DisputeCategory.FRAUDULENT);
         when(dispute.getPaymentId()).thenReturn(PAYMENT_ID);
 
-        DisputesQueryResponse response = client.query(request).get();
+        final DisputesQueryResponse response = client.query(request).get();
         assertNotNull(response);
         assertEquals(request.getLimit(), response.getLimit());
         assertEquals(1, response.getTotalCount().intValue());
@@ -136,7 +129,7 @@ public class DisputesClientImplTest {
         when(disputeDetailsResponse.getReasonCode()).thenReturn(REASON_CODE);
         when(disputeDetailsResponse.getStatus()).thenReturn(DisputeStatus.EVIDENCE_REQUIRED);
         when(disputeDetailsResponse.getPayment()).thenReturn(paymentDispute);
-        DisputeDetailsResponse response = client.getDisputeDetails(DISPUTE_ID).get();
+        final DisputeDetailsResponse response = client.getDisputeDetails(DISPUTE_ID).get();
         assertNotNull(response);
         assertEquals(DISPUTE_ID, response.getId());
         assertEquals(DisputeCategory.FRAUDULENT, response.getCategory());
@@ -150,7 +143,7 @@ public class DisputesClientImplTest {
 
     @Test
     public void shouldUploadFile() throws ExecutionException, InterruptedException {
-        FileRequest request = FileRequest.builder()
+        final FileRequest request = FileRequest.builder()
                 .file(new File(FILE_NAME))
                 .contentType(ContentType.IMAGE_JPEG)
                 .purpose(FilePurpose.DISPUTE_EVIDENCE).build();
@@ -159,7 +152,7 @@ public class DisputesClientImplTest {
                 .submitFileAsync(eq(FILES), any(ApiCredentials.class), any(FileRequest.class),
                         eq(IdResponse.class));
         when(idResponse.getId()).thenReturn(FILE_ID);
-        IdResponse response = client.uploadFile(request).get();
+        final IdResponse response = client.uploadFile(request).get();
         assertNotNull(response);
         assertEquals(FILE_ID, response.getId());
     }
@@ -186,7 +179,7 @@ public class DisputesClientImplTest {
         when(evidenceResponse.getAdditionalEvidenceText()).thenReturn(TEXT_MESSAGE);
         when(evidenceResponse.getProofOfDeliveryOrServiceDateFile()).thenReturn(FILE_NAME);
         when(evidenceResponse.getProofOfDeliveryOrServiceDateText()).thenReturn(TEXT_MESSAGE);
-        DisputeEvidenceResponse response = client.getEvidence(DISPUTE_ID).get();
+        final DisputeEvidenceResponse response = client.getEvidence(DISPUTE_ID).get();
         assertNotNull(response);
         assertEquals(FILE_NAME, response.getProofOfDeliveryOrServiceFile());
         assertEquals(TEXT_MESSAGE, response.getProofOfDeliveryOrServiceText());
@@ -216,7 +209,7 @@ public class DisputesClientImplTest {
         when(fileDetailsResponse.getFilename()).thenReturn(FILE_NAME);
         when(fileDetailsResponse.getId()).thenReturn(FILE_ID);
         when(fileDetailsResponse.getPurpose()).thenReturn(FilePurpose.DISPUTE_EVIDENCE.getPurpose());
-        FileDetailsResponse response = client.getFileDetails(FILE_ID).get();
+        final FileDetailsResponse response = client.getFileDetails(FILE_ID).get();
         assertNotNull(response);
         assertEquals(FILE_ID, response.getId());
         assertEquals(FILE_NAME, response.getFilename());

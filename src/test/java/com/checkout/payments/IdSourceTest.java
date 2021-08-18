@@ -1,20 +1,23 @@
 package com.checkout.payments;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class IdSourceTest {
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void given_id_missing_should_throw_exception() {
-        new IdSource(null);
+        assertThrows(IllegalArgumentException.class, () -> new IdSource(null));
     }
 
     @Test
     public void can_create_id_source() {
-        IdSource source = new IdSource("src_xxx");
+        final IdSource source = new IdSource("src_xxx");
         source.setCvv("0757");
-        Assert.assertEquals("src_xxx", source.getId());
-        Assert.assertEquals("0757", source.getCvv());
+        assertEquals("src_xxx", source.getId());
+        assertEquals("0757", source.getCvv());
     }
+
 }

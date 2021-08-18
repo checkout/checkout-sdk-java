@@ -3,8 +3,9 @@ package com.checkout.payments;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CardVerificationTestIT extends SandboxTestFixture {
 
@@ -14,9 +15,9 @@ public class CardVerificationTestIT extends SandboxTestFixture {
 
     @Test
     public void can_verify_card() throws Exception {
-        PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest(0L);
-        PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest(0L);
+        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
 
-        Assert.assertEquals(PaymentStatus.CARD_VERIFIED, paymentResponse.getPayment().getStatus());
+        assertEquals(PaymentStatus.CARD_VERIFIED, paymentResponse.getPayment().getStatus());
     }
 }
