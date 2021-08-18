@@ -18,7 +18,7 @@ import com.checkout.payments.beta.response.PaymentResponse;
 import com.checkout.payments.beta.response.PaymentStatus;
 import com.checkout.payments.beta.response.source.ResponseCardSource;
 import com.checkout.payments.beta.sender.RequestIndividualSender;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,10 +30,11 @@ import java.util.concurrent.TimeoutException;
 import static com.checkout.payments.beta.CardSourceHelper.getCardSourcePayment;
 import static com.checkout.payments.beta.CardSourceHelper.getIndividualSender;
 import static com.checkout.payments.beta.CardSourceHelper.getRequestCardSource;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class GetPaymentsTestIT extends AbstractPaymentsTestIT {
 
@@ -47,9 +48,9 @@ public class GetPaymentsTestIT extends AbstractPaymentsTestIT {
         }
     }
 
-    @Test(expected = TimeoutException.class)
-    public void shouldHandleTimeout() throws Exception {
-        paymentsClient.getPayment("fake").get(5, TimeUnit.MILLISECONDS);
+    @Test
+    public void shouldHandleTimeout() {
+        assertThrows(TimeoutException.class, () -> paymentsClient.getPayment("fake").get(5, TimeUnit.MILLISECONDS));
     }
 
     @Test

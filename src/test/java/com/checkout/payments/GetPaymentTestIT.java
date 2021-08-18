@@ -5,10 +5,9 @@ import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
 import com.checkout.common.Address;
-import com.checkout.common.CheckoutUtils;
 import com.checkout.common.Phone;
-import org.junit.Assert;
-import org.junit.Test;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -18,6 +17,14 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class GetPaymentTestIT extends SandboxTestFixture {
 
@@ -29,246 +36,247 @@ public class GetPaymentTestIT extends SandboxTestFixture {
     public void resource_not_found_handled_correctly() throws Exception {
         try {
             getApi().paymentsClient().getAsync("not-found").get();
-            Assert.fail();
-        } catch (ExecutionException e) {
-            Assert.assertTrue(e.getCause() instanceof CheckoutResourceNotFoundException);
+            fail();
+        } catch (final ExecutionException e) {
+            assertTrue(e.getCause() instanceof CheckoutResourceNotFoundException);
         }
     }
 
-    @Test(expected = TimeoutException.class)
-    public void handle_timeout() throws Exception {
-        getApi().paymentsClient().getAsync("not-found").get(5, TimeUnit.MILLISECONDS);
+    @Test
+    public void handle_timeout() {
+        assertThrows(TimeoutException.class, () ->
+                getApi().paymentsClient().getAsync("not-found").get(5, TimeUnit.MILLISECONDS));
     }
 
     @Test
     public void can_get_non_3ds_payment() throws Exception {
-        PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
+        final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setPaymentType(PaymentType.RECURRING);
 
-        PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
 
-        GetPaymentResponse paymentDetails = getApi().paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
+        final GetPaymentResponse paymentDetails = getApi().paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
 
-        Assert.assertNotNull(paymentDetails);
-        Assert.assertEquals(paymentResponse.getPayment().getId(), paymentDetails.getId());
-        Assert.assertNotNull(paymentDetails.getCustomer());
-        Assert.assertEquals(paymentResponse.getPayment().getCustomer().getId(), paymentDetails.getCustomer().getId());
-        Assert.assertEquals(paymentRequest.getCustomer().getEmail(), paymentDetails.getCustomer().getEmail());
-        Assert.assertEquals(paymentResponse.getPayment().getAmount(), paymentDetails.getAmount().intValue());
-        Assert.assertEquals(paymentResponse.getPayment().getCurrency(), paymentDetails.getCurrency());
-        Assert.assertEquals(paymentRequest.getPaymentType(), paymentDetails.getPaymentType());
-        Assert.assertNotNull(paymentDetails.getBillingDescriptor());
-        Assert.assertFalse(CheckoutUtils.isNullOrWhitespace(paymentDetails.getReference()));
-        Assert.assertNotNull(paymentDetails.getRisk());
-        Assert.assertTrue(paymentDetails.getRequestedOn().isAfter(paymentResponse.getPayment().getProcessedOn().minus(1, ChronoUnit.MINUTES)));
-        Assert.assertNull(paymentDetails.getThreeDS());
-        Assert.assertNotNull(paymentDetails.getLinks());
-        Assert.assertFalse(paymentDetails.getLinks().isEmpty());
-        Assert.assertEquals(PaymentStatus.AUTHORIZED, paymentDetails.getStatus());
-        Assert.assertNotNull(paymentDetails.getSource());
-        Assert.assertTrue(paymentDetails.isApproved());
-        Assert.assertNotNull(paymentDetails.getActions());
+        assertNotNull(paymentDetails);
+        assertEquals(paymentResponse.getPayment().getId(), paymentDetails.getId());
+        assertNotNull(paymentDetails.getCustomer());
+        assertEquals(paymentResponse.getPayment().getCustomer().getId(), paymentDetails.getCustomer().getId());
+        assertEquals(paymentRequest.getCustomer().getEmail(), paymentDetails.getCustomer().getEmail());
+        assertEquals(paymentResponse.getPayment().getAmount(), paymentDetails.getAmount().intValue());
+        assertEquals(paymentResponse.getPayment().getCurrency(), paymentDetails.getCurrency());
+        assertEquals(paymentRequest.getPaymentType(), paymentDetails.getPaymentType());
+        assertNotNull(paymentDetails.getBillingDescriptor());
+        assertFalse(StringUtils.isBlank(paymentDetails.getReference()));
+        assertNotNull(paymentDetails.getRisk());
+        assertTrue(paymentDetails.getRequestedOn().isAfter(paymentResponse.getPayment().getProcessedOn().minus(1, ChronoUnit.MINUTES)));
+        assertNull(paymentDetails.getThreeDS());
+        assertNotNull(paymentDetails.getLinks());
+        assertFalse(paymentDetails.getLinks().isEmpty());
+        assertEquals(PaymentStatus.AUTHORIZED, paymentDetails.getStatus());
+        assertNotNull(paymentDetails.getSource());
+        assertTrue(paymentDetails.isApproved());
+        assertNotNull(paymentDetails.getActions());
     }
 
     @Test
     public void can_get_3ds_payment_before_auth() throws Exception {
-        PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
+        final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setThreeDS(ThreeDSRequest.from(true));
 
-        PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
-        Assert.assertTrue(paymentResponse.isPending());
+        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        assertTrue(paymentResponse.isPending());
 
-        GetPaymentResponse paymentDetails = getApi().paymentsClient().getAsync(paymentResponse.getPending().getId()).get();
+        final GetPaymentResponse paymentDetails = getApi().paymentsClient().getAsync(paymentResponse.getPending().getId()).get();
 
-        Assert.assertNotNull(paymentDetails);
-        Assert.assertEquals(paymentResponse.getPending().getId(), paymentDetails.getId());
-        Assert.assertNotNull(paymentDetails.getCustomer());
-        Assert.assertEquals(paymentResponse.getPending().getCustomer().getId(), paymentDetails.getCustomer().getId());
-        Assert.assertEquals(paymentRequest.getCustomer().getEmail(), paymentDetails.getCustomer().getEmail());
-        Assert.assertEquals(paymentRequest.getAmount(), paymentDetails.getAmount());
-        Assert.assertEquals(paymentRequest.getCurrency(), paymentDetails.getCurrency());
-        Assert.assertFalse(CheckoutUtils.isNullOrWhitespace(paymentDetails.getReference()));
-        Assert.assertEquals(PaymentType.REGULAR, paymentDetails.getPaymentType());
-        Assert.assertNotNull(paymentDetails.getRisk());
-        Assert.assertTrue(paymentDetails.getRequestedOn().isAfter(Instant.MIN));
-        Assert.assertNotNull(paymentDetails.getThreeDS());
-        Assert.assertFalse(paymentDetails.getThreeDS().isDowngraded());
-        Assert.assertFalse(CheckoutUtils.isNullOrEmpty(paymentDetails.getThreeDS().getEnrolled()));
-        Assert.assertTrue(paymentDetails.requiresRedirect());
-        Assert.assertNotNull(paymentDetails.getRedirectLink());
-        Assert.assertNotNull(paymentDetails.getLinks());
-        Assert.assertFalse(paymentDetails.getLinks().isEmpty());
-        Assert.assertEquals(PaymentStatus.PENDING, paymentDetails.getStatus());
-        Assert.assertNotNull(paymentDetails.getSource());
-        Assert.assertFalse(paymentDetails.isApproved());
-        Assert.assertNotNull(paymentDetails.getActions());
+        assertNotNull(paymentDetails);
+        assertEquals(paymentResponse.getPending().getId(), paymentDetails.getId());
+        assertNotNull(paymentDetails.getCustomer());
+        assertEquals(paymentResponse.getPending().getCustomer().getId(), paymentDetails.getCustomer().getId());
+        assertEquals(paymentRequest.getCustomer().getEmail(), paymentDetails.getCustomer().getEmail());
+        assertEquals(paymentRequest.getAmount(), paymentDetails.getAmount());
+        assertEquals(paymentRequest.getCurrency(), paymentDetails.getCurrency());
+        assertFalse(StringUtils.isBlank(paymentDetails.getReference()));
+        assertEquals(PaymentType.REGULAR, paymentDetails.getPaymentType());
+        assertNotNull(paymentDetails.getRisk());
+        assertTrue(paymentDetails.getRequestedOn().isAfter(Instant.MIN));
+        assertNotNull(paymentDetails.getThreeDS());
+        assertFalse(paymentDetails.getThreeDS().isDowngraded());
+        assertFalse(StringUtils.isBlank(paymentDetails.getThreeDS().getEnrolled()));
+        assertTrue(paymentDetails.requiresRedirect());
+        assertNotNull(paymentDetails.getRedirectLink());
+        assertNotNull(paymentDetails.getLinks());
+        assertFalse(paymentDetails.getLinks().isEmpty());
+        assertEquals(PaymentStatus.PENDING, paymentDetails.getStatus());
+        assertNotNull(paymentDetails.getSource());
+        assertFalse(paymentDetails.isApproved());
+        assertNotNull(paymentDetails.getActions());
     }
 
     @Test
     public void can_get_payment_metadata() throws Exception {
-        PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
+        final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.getMetadata().put("test", "1234");
 
-        PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
 
-        GetPaymentResponse paymentDetails = getApi().paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
+        final GetPaymentResponse paymentDetails = getApi().paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
 
-        Assert.assertNotNull(paymentDetails.getMetadata());
-        Assert.assertFalse(paymentDetails.getMetadata().isEmpty());
-        Assert.assertEquals(1, paymentDetails.getMetadata().size());
-        Assert.assertEquals("1234", paymentDetails.getMetadata().get("test"));
-        Assert.assertNotNull(paymentDetails.getActions());
+        assertNotNull(paymentDetails.getMetadata());
+        assertFalse(paymentDetails.getMetadata().isEmpty());
+        assertEquals(1, paymentDetails.getMetadata().size());
+        assertEquals("1234", paymentDetails.getMetadata().get("test"));
+        assertNotNull(paymentDetails.getActions());
     }
 
     @Test
     public void can_get_payment_ip() throws Exception {
-        PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
+        final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setPaymentIp("10.1.2.3");
 
-        PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
 
-        GetPaymentResponse paymentDetails = getApi().paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
+        final GetPaymentResponse paymentDetails = getApi().paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
 
-        Assert.assertEquals(paymentRequest.getPaymentIp(), paymentDetails.getPaymentIp());
-        Assert.assertNotNull(paymentDetails.getActions());
-        Assert.assertNotNull(paymentDetails.getMetadata());
+        assertEquals(paymentRequest.getPaymentIp(), paymentDetails.getPaymentIp());
+        assertNotNull(paymentDetails.getActions());
+        assertNotNull(paymentDetails.getMetadata());
     }
 
     @Test
     public void can_get_payment_recipient() throws Exception {
-        PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
+        final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setRecipient(new PaymentRecipient(LocalDate.of(1985, 5, 15), "4242424242", "W1T", null, "Wensle", null));
 
-        PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
 
-        GetPaymentResponse paymentDetails = getApi().paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
+        final GetPaymentResponse paymentDetails = getApi().paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
 
-        Assert.assertNotNull(paymentDetails.getRecipient());
-        Assert.assertEquals(paymentRequest.getRecipient().getAccountNumber(), paymentDetails.getRecipient().getAccountNumber());
-        Assert.assertEquals(paymentRequest.getRecipient().getDateOfBirth(), paymentDetails.getRecipient().getDateOfBirth());
-        Assert.assertEquals(paymentRequest.getRecipient().getLastName(), paymentDetails.getRecipient().getLastName());
-        Assert.assertEquals(paymentRequest.getRecipient().getZip(), paymentDetails.getRecipient().getZip());
-        Assert.assertNotNull(paymentDetails.getActions());
-        Assert.assertNotNull(paymentDetails.getMetadata());
+        assertNotNull(paymentDetails.getRecipient());
+        assertEquals(paymentRequest.getRecipient().getAccountNumber(), paymentDetails.getRecipient().getAccountNumber());
+        assertEquals(paymentRequest.getRecipient().getDateOfBirth(), paymentDetails.getRecipient().getDateOfBirth());
+        assertEquals(paymentRequest.getRecipient().getLastName(), paymentDetails.getRecipient().getLastName());
+        assertEquals(paymentRequest.getRecipient().getZip(), paymentDetails.getRecipient().getZip());
+        assertNotNull(paymentDetails.getActions());
+        assertNotNull(paymentDetails.getMetadata());
     }
 
     @Test
     public void can_get_payment_shipping() throws Exception {
-        PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
-        Address address = new Address();
+        final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
+        final Address address = new Address();
         address.setAddressLine1("221B Baker Street");
         address.setCity("London");
         address.setCountry("UK");
         address.setState("n/a");
         address.setZip("NW1 6XE");
-        Phone phone = new Phone();
+        final Phone phone = new Phone();
         phone.setCountryCode("44");
         phone.setNumber("124312431243");
-        ShippingDetails shippingDetails = new ShippingDetails();
+        final ShippingDetails shippingDetails = new ShippingDetails();
         shippingDetails.setAddress(address);
         shippingDetails.setPhone(phone);
         paymentRequest.setShipping(shippingDetails);
 
-        PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
 
-        GetPaymentResponse paymentDetails = getApi().paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
+        final GetPaymentResponse paymentDetails = getApi().paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
 
-        Assert.assertNotNull(paymentDetails.getShipping());
-        Assert.assertNotNull(paymentDetails.getShipping().getAddress());
-        Assert.assertEquals(paymentRequest.getShipping().getAddress().getAddressLine1(), paymentDetails.getShipping().getAddress().getAddressLine1());
-        Assert.assertEquals(paymentRequest.getShipping().getAddress().getAddressLine2(), paymentDetails.getShipping().getAddress().getAddressLine2());
-        Assert.assertEquals(paymentRequest.getShipping().getAddress().getCity(), paymentDetails.getShipping().getAddress().getCity());
-        Assert.assertEquals(paymentRequest.getShipping().getAddress().getCountry(), paymentDetails.getShipping().getAddress().getCountry());
-        Assert.assertEquals(paymentRequest.getShipping().getAddress().getState(), paymentDetails.getShipping().getAddress().getState());
-        Assert.assertEquals(paymentRequest.getShipping().getAddress().getZip(), paymentDetails.getShipping().getAddress().getZip());
-        Assert.assertNotNull(paymentDetails.getShipping().getPhone());
-        Assert.assertEquals(paymentRequest.getShipping().getPhone().getCountryCode(), paymentDetails.getShipping().getPhone().getCountryCode());
-        Assert.assertEquals(paymentRequest.getShipping().getPhone().getNumber(), paymentDetails.getShipping().getPhone().getNumber());
-        Assert.assertNotNull(paymentDetails.getActions());
-        Assert.assertNotNull(paymentDetails.getMetadata());
+        assertNotNull(paymentDetails.getShipping());
+        assertNotNull(paymentDetails.getShipping().getAddress());
+        assertEquals(paymentRequest.getShipping().getAddress().getAddressLine1(), paymentDetails.getShipping().getAddress().getAddressLine1());
+        assertEquals(paymentRequest.getShipping().getAddress().getAddressLine2(), paymentDetails.getShipping().getAddress().getAddressLine2());
+        assertEquals(paymentRequest.getShipping().getAddress().getCity(), paymentDetails.getShipping().getAddress().getCity());
+        assertEquals(paymentRequest.getShipping().getAddress().getCountry(), paymentDetails.getShipping().getAddress().getCountry());
+        assertEquals(paymentRequest.getShipping().getAddress().getState(), paymentDetails.getShipping().getAddress().getState());
+        assertEquals(paymentRequest.getShipping().getAddress().getZip(), paymentDetails.getShipping().getAddress().getZip());
+        assertNotNull(paymentDetails.getShipping().getPhone());
+        assertEquals(paymentRequest.getShipping().getPhone().getCountryCode(), paymentDetails.getShipping().getPhone().getCountryCode());
+        assertEquals(paymentRequest.getShipping().getPhone().getNumber(), paymentDetails.getShipping().getPhone().getNumber());
+        assertNotNull(paymentDetails.getActions());
+        assertNotNull(paymentDetails.getMetadata());
     }
 
     @Test
     public void can_get_payment_description() throws Exception {
-        PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
+        final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setDescription("Too descriptive");
 
-        PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
 
-        GetPaymentResponse paymentDetails = getApi().paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
+        final GetPaymentResponse paymentDetails = getApi().paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
 
-        Assert.assertEquals(paymentRequest.getDescription(), paymentDetails.getDescription());
-        Assert.assertNotNull(paymentDetails.getActions());
-        Assert.assertNotNull(paymentDetails.getMetadata());
+        assertEquals(paymentRequest.getDescription(), paymentDetails.getDescription());
+        assertNotNull(paymentDetails.getActions());
+        assertNotNull(paymentDetails.getMetadata());
     }
 
     @Test
     public void can_get_payment_action() throws Exception {
-        PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
+        final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
 
-        PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
 
-        List<PaymentAction> actionsResponse = getApi().paymentsClient().getActionsAsync(paymentResponse.getPayment().getId()).get();
+        final List<PaymentAction> actionsResponse = getApi().paymentsClient().getActionsAsync(paymentResponse.getPayment().getId()).get();
 
-        Assert.assertNotNull(actionsResponse);
-        Assert.assertEquals(1, actionsResponse.size());
+        assertNotNull(actionsResponse);
+        assertEquals(1, actionsResponse.size());
 
-        PaymentProcessed payment = paymentResponse.getPayment();
-        PaymentAction paymentAction = actionsResponse.get(0);
-        Assert.assertNotNull(paymentAction);
-        Assert.assertEquals(payment.getActionId(), paymentAction.getId());
-        Assert.assertFalse(paymentAction.getProcessedOn().isBefore(payment.getProcessedOn()));
-        Assert.assertTrue(paymentAction.isApproved());
-        Assert.assertEquals(payment.isApproved(), paymentAction.isApproved());
-        Assert.assertEquals(payment.getResponseCode(), paymentAction.getResponseCode());
-        Assert.assertEquals(payment.getResponseSummary(), paymentAction.getResponseSummary());
-        Assert.assertEquals(payment.getReference(), paymentAction.getReference());
-        Assert.assertEquals(payment.getAuthCode(), paymentAction.getAuthCode());
-        Assert.assertEquals(ActionType.AUTHORIZATION, paymentAction.getType());
-        Assert.assertNotNull(paymentAction.getLinks());
+        final PaymentProcessed payment = paymentResponse.getPayment();
+        final PaymentAction paymentAction = actionsResponse.get(0);
+        assertNotNull(paymentAction);
+        assertEquals(payment.getActionId(), paymentAction.getId());
+        assertFalse(paymentAction.getProcessedOn().isBefore(payment.getProcessedOn()));
+        assertTrue(paymentAction.isApproved());
+        assertEquals(payment.isApproved(), paymentAction.isApproved());
+        assertEquals(payment.getResponseCode(), paymentAction.getResponseCode());
+        assertEquals(payment.getResponseSummary(), paymentAction.getResponseSummary());
+        assertEquals(payment.getReference(), paymentAction.getReference());
+        assertEquals(payment.getAuthCode(), paymentAction.getAuthCode());
+        assertEquals(ActionType.AUTHORIZATION, paymentAction.getType());
+        assertNotNull(paymentAction.getLinks());
     }
 
     @Test
     public void can_get_multiple_payment_actions() throws Exception {
-        PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
+        final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
 
-        PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
-        CaptureRequest captureRequest = new CaptureRequest();
+        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final CaptureRequest captureRequest = new CaptureRequest();
         captureRequest.setReference(UUID.randomUUID().toString());
 
-        CaptureResponse captureResponse = getApi().paymentsClient().captureAsync(paymentResponse.getPayment().getId(), captureRequest).get();
+        final CaptureResponse captureResponse = getApi().paymentsClient().captureAsync(paymentResponse.getPayment().getId(), captureRequest).get();
 
-        List<PaymentAction> actionsResponse = getApi().paymentsClient().getActionsAsync(paymentResponse.getPayment().getId()).get();
+        final List<PaymentAction> actionsResponse = getApi().paymentsClient().getActionsAsync(paymentResponse.getPayment().getId()).get();
 
-        Assert.assertNotNull(actionsResponse);
+        assertNotNull(actionsResponse);
 
-        PaymentAction authorizationPaymentAction = actionsResponse.stream().filter(a -> ActionType.AUTHORIZATION.equals(a.getType())).findFirst().get();
-        Assert.assertNotNull(authorizationPaymentAction);
-        Assert.assertEquals(paymentResponse.getPayment().getActionId(), authorizationPaymentAction.getId());
+        final PaymentAction authorizationPaymentAction = actionsResponse.stream().filter(a -> ActionType.AUTHORIZATION.equals(a.getType())).findFirst().get();
+        assertNotNull(authorizationPaymentAction);
+        assertEquals(paymentResponse.getPayment().getActionId(), authorizationPaymentAction.getId());
 
-        PaymentAction capturePaymentAction = actionsResponse.stream().filter(a -> ActionType.CAPTURE.equals(a.getType())).findFirst().get();
-        Assert.assertNotNull(capturePaymentAction);
-        Assert.assertEquals(captureResponse.getActionId(), capturePaymentAction.getId());
-        Assert.assertEquals(captureResponse.getReference(), capturePaymentAction.getReference());
-        Assert.assertNotNull(capturePaymentAction.getLinks());
+        final PaymentAction capturePaymentAction = actionsResponse.stream().filter(a -> ActionType.CAPTURE.equals(a.getType())).findFirst().get();
+        assertNotNull(capturePaymentAction);
+        assertEquals(captureResponse.getActionId(), capturePaymentAction.getId());
+        assertEquals(captureResponse.getReference(), capturePaymentAction.getReference());
+        assertNotNull(capturePaymentAction.getLinks());
     }
 
     @Test
     public void can_get_payment_action_metadata() throws Exception {
-        PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
+        final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.getMetadata().put("test", "1234");
 
-        PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
 
-        List<PaymentAction> actionsResponse = getApi().paymentsClient().getActionsAsync(paymentResponse.getPayment().getId()).get();
+        final List<PaymentAction> actionsResponse = getApi().paymentsClient().getActionsAsync(paymentResponse.getPayment().getId()).get();
 
-        Assert.assertNotNull(actionsResponse);
+        assertNotNull(actionsResponse);
 
-        PaymentAction paymentAction = actionsResponse.get(0);
-        Assert.assertNotNull(paymentAction);
-        Assert.assertNotNull(paymentAction.getMetadata());
-        Assert.assertFalse(paymentAction.getMetadata().isEmpty());
-        Assert.assertEquals(1, paymentAction.getMetadata().size());
-        Assert.assertEquals("1234", paymentAction.getMetadata().get("test"));
+        final PaymentAction paymentAction = actionsResponse.get(0);
+        assertNotNull(paymentAction);
+        assertNotNull(paymentAction.getMetadata());
+        assertFalse(paymentAction.getMetadata().isEmpty());
+        assertEquals(1, paymentAction.getMetadata().size());
+        assertEquals("1234", paymentAction.getMetadata().get("test"));
     }
 }

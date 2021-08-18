@@ -3,10 +3,14 @@ package com.checkout.sources;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.Address;
-import com.checkout.common.CheckoutUtils;
 import com.checkout.common.Phone;
-import org.junit.Assert;
-import org.junit.Test;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SourcesTestIT extends SandboxTestFixture {
 
@@ -16,20 +20,20 @@ public class SourcesTestIT extends SandboxTestFixture {
 
     @Test
     public void can_request_sepa_source() throws Exception {
-        SourceRequest sourceRequest = createSepaSourceRequest();
-        SourceResponse sourceResponse = getApi().sourcesClient().requestAsync(sourceRequest).get();
+        final SourceRequest sourceRequest = createSepaSourceRequest();
+        final SourceResponse sourceResponse = getApi().sourcesClient().requestAsync(sourceRequest).get();
 
-        Assert.assertNotNull(sourceResponse);
-        SourceProcessed source = sourceResponse.getSource();
-        Assert.assertFalse(CheckoutUtils.isNullOrEmpty(source.getId()));
-        Assert.assertEquals("10000", source.getResponseCode());
-        Assert.assertNotNull(source.getResponseData());
-        Assert.assertTrue(sourceRequest.getType().equalsIgnoreCase(source.getType()));
-        Assert.assertTrue(source.getResponseData().containsKey("mandate_reference"));
+        assertNotNull(sourceResponse);
+        final SourceProcessed source = sourceResponse.getSource();
+        assertFalse(StringUtils.isEmpty(source.getId()));
+        assertEquals("10000", source.getResponseCode());
+        assertNotNull(source.getResponseData());
+        assertTrue(sourceRequest.getType().equalsIgnoreCase(source.getType()));
+        assertTrue(source.getResponseData().containsKey("mandate_reference"));
     }
 
     private SourceRequest createSepaSourceRequest() {
-        Address billingAddress = new Address();
+        final Address billingAddress = new Address();
         billingAddress.setAddressLine1("Checkout.com");
         billingAddress.setAddressLine2("90 Tottenham Court Road");
         billingAddress.setCity("London");
@@ -37,11 +41,11 @@ public class SourcesTestIT extends SandboxTestFixture {
         billingAddress.setZip("W1T 4TJ");
         billingAddress.setCountry("GB");
 
-        Phone phone = new Phone();
+        final Phone phone = new Phone();
         phone.setCountryCode("+1");
         phone.setNumber("415 555 2671");
 
-        SourceData sourceData = new SourceData();
+        final SourceData sourceData = new SourceData();
         sourceData.put("first_name", "Marcus");
         sourceData.put("last_name", "Barrilius Maximus");
         sourceData.put("account_iban", "DE68100100101234567895");
@@ -49,7 +53,7 @@ public class SourcesTestIT extends SandboxTestFixture {
         sourceData.put("billing_descriptor", "Java SDK test");
         sourceData.put("mandate_type", "single");
 
-        SourceRequest request = new SourceRequest("sepa", billingAddress);
+        final SourceRequest request = new SourceRequest("sepa", billingAddress);
         request.setPhone(phone);
         request.setReference("Java SDK test");
         request.setSourceData(sourceData);

@@ -2,11 +2,14 @@ package com.checkout.events;
 
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class EventsTestIT extends SandboxTestFixture {
 
@@ -14,36 +17,36 @@ public class EventsTestIT extends SandboxTestFixture {
         super(PlatformType.CLASSIC);
     }
 
-    @Before
+    @BeforeEach
     public void before() throws Exception {
         Thread.sleep(5000);
     }
 
     @Test
     public void retrieve_all_event_types() throws Exception {
-        List<EventTypesResponse> allEventTypesResponses = getApi().eventsClient().retrieveAllEventTypes(null).get();
-        Assert.assertNotNull(allEventTypesResponses);
-        Assert.assertEquals(2, allEventTypesResponses.size());
+        final List<EventTypesResponse> allEventTypesResponses = getApi().eventsClient().retrieveAllEventTypes(null).get();
+        assertNotNull(allEventTypesResponses);
+        assertEquals(2, allEventTypesResponses.size());
     }
 
     @Test
     public void retrieve_v1_event_types() throws Exception {
-        List<EventTypesResponse> v1EventTypesResponses = getApi().eventsClient().retrieveAllEventTypes("1.0").get();
-        Assert.assertNotNull(v1EventTypesResponses);
-        Assert.assertEquals(1, v1EventTypesResponses.size());
-        Assert.assertEquals("1.0", v1EventTypesResponses.get(0).getVersion());
-        Assert.assertNotNull(v1EventTypesResponses.get(0).getEventTypes());
-        Assert.assertFalse(v1EventTypesResponses.get(0).getEventTypes().isEmpty());
+        final List<EventTypesResponse> v1EventTypesResponses = getApi().eventsClient().retrieveAllEventTypes("1.0").get();
+        assertNotNull(v1EventTypesResponses);
+        assertEquals(1, v1EventTypesResponses.size());
+        assertEquals("1.0", v1EventTypesResponses.get(0).getVersion());
+        assertNotNull(v1EventTypesResponses.get(0).getEventTypes());
+        assertFalse(v1EventTypesResponses.get(0).getEventTypes().isEmpty());
     }
 
     @Test
     public void retrieve_v2_event_types() throws Exception {
-        List<EventTypesResponse> v2EventTypesResponses = getApi().eventsClient().retrieveAllEventTypes("2.0").get();
-        Assert.assertNotNull(v2EventTypesResponses);
-        Assert.assertEquals(1, v2EventTypesResponses.size());
-        Assert.assertEquals("2.0", v2EventTypesResponses.get(0).getVersion());
-        Assert.assertNotNull(v2EventTypesResponses.get(0).getEventTypes());
-        Assert.assertFalse(v2EventTypesResponses.get(0).getEventTypes().isEmpty());
+        final List<EventTypesResponse> v2EventTypesResponses = getApi().eventsClient().retrieveAllEventTypes("2.0").get();
+        assertNotNull(v2EventTypesResponses);
+        assertEquals(1, v2EventTypesResponses.size());
+        assertEquals("2.0", v2EventTypesResponses.get(0).getVersion());
+        assertNotNull(v2EventTypesResponses.get(0).getEventTypes());
+        assertFalse(v2EventTypesResponses.get(0).getEventTypes().isEmpty());
     }
 
     // TODO: Find ways to test events APIs again

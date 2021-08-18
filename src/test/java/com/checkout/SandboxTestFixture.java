@@ -6,7 +6,7 @@ import com.checkout.beta.CheckoutApi;
 import java.util.concurrent.CompletableFuture;
 
 import static java.util.Objects.requireNonNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class SandboxTestFixture {
 

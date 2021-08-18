@@ -7,16 +7,16 @@ import com.checkout.payments.beta.request.source.RequestCardSource;
 import com.checkout.payments.beta.response.PaymentResponse;
 import com.checkout.payments.beta.response.source.ResponseCardSource;
 import com.checkout.payments.beta.sender.RequestCorporateSender;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
 import static com.checkout.payments.beta.CardSourceHelper.getCardSourcePayment;
 import static com.checkout.payments.beta.CardSourceHelper.getCorporateSender;
 import static com.checkout.payments.beta.CardSourceHelper.getRequestCardSource;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
 

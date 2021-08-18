@@ -7,26 +7,26 @@ import com.checkout.CheckoutResourceNotFoundException;
 import com.checkout.beta.TestHelper;
 import com.checkout.common.beta.IdResponse;
 import com.checkout.common.beta.Phone;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class CustomersClientImplTest {
 
     private static final String CUSTOMER_ID = "cus_123456789abcdefgh";
@@ -57,7 +57,7 @@ public class CustomersClientImplTest {
 
     private CustomersClient client;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         when(idResponse.getId()).thenReturn(CUSTOMER_ID);
         idAsync = CompletableFuture.completedFuture(idResponse);
@@ -161,7 +161,7 @@ public class CustomersClientImplTest {
         //Verify customer does not exist
         try {
             client.get(customerId);
-            Assert.fail();
+            fail();
         } catch (final CheckoutResourceNotFoundException ex) {
             //do nothing
         }

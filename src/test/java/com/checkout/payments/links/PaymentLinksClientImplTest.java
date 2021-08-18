@@ -5,27 +5,27 @@ import com.checkout.ApiCredentials;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.TestHelper;
 import com.checkout.payments.PaymentStatus;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static org.hamcrest.CoreMatchers.anyOf;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PaymentLinksClientImplTest {
 
     private static final String REFERENCE = "ORD-1234";
@@ -52,14 +52,12 @@ public class PaymentLinksClientImplTest {
 
     private PaymentLinkRequest paymentLinksRequest;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         paymentLinkAsync = CompletableFuture.completedFuture(paymentLinkResponse);
         paymentLinkDetailAsync = CompletableFuture.completedFuture(paymentLinkDetailsResponse);
         client = new PaymentLinksClientImpl(apiClient, configuration);
         paymentLinksRequest = TestHelper.createPaymentLinksRequest(REFERENCE);
-        setUpPaymentLinkResponse();
-        setUpPaymentLinkDetailsResponse();
     }
 
     private void setUpPaymentLinkResponse() {
@@ -83,6 +81,7 @@ public class PaymentLinksClientImplTest {
 
     @Test
     public void shouldCreatePaymentsLink() throws ExecutionException, InterruptedException {
+        setUpPaymentLinkDetailsResponse();
         Mockito.doReturn(paymentLinkDetailAsync)
                 .when(apiClient).getAsync(eq(PaymentLinksClientImpl.PAYMENT_LINKS + "/" + REFERENCE),
                 any(ApiCredentials.class),
@@ -103,6 +102,7 @@ public class PaymentLinksClientImplTest {
 
     @Test
     public void shouldRetrievePaymentsLink() throws ExecutionException, InterruptedException {
+        setUpPaymentLinkResponse();
         Mockito.doReturn(paymentLinkAsync)
                 .when(apiClient).postAsync(eq(PaymentLinksClientImpl.PAYMENT_LINKS), any(ApiCredentials.class),
                 eq(PaymentLinkResponse.class), any(PaymentLinkRequest.class), any());
@@ -111,4 +111,5 @@ public class PaymentLinksClientImplTest {
         assertEquals(paymentLinksRequest.getReference(), response.getReference());
         assertNotNull(response.getLinks());
     }
+
 }

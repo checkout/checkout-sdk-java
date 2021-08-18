@@ -1,9 +1,7 @@
 package com.checkout;
 
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -18,13 +16,12 @@ import static com.checkout.TestHelper.VALID_CLASSIC_PK;
 import static com.checkout.TestHelper.VALID_CLASSIC_SK;
 import static com.checkout.TestHelper.VALID_FOUR_PK;
 import static com.checkout.TestHelper.VALID_FOUR_SK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
-@RunWith(MockitoJUnitRunner.class)
 public class CheckoutConfigurationTest {
 
     @Test

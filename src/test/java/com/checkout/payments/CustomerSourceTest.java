@@ -1,36 +1,22 @@
 package com.checkout.payments;
 
-import com.checkout.payments.CustomerSource;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CustomerSourceTest {
 
-    @RunWith(Parameterized.class)
-    public static class Enclosed {
-        @Parameterized.Parameter
-        public String email;
-
-        @Parameterized.Parameters
-        public static List<String> emails() {
-            List<String> emails = new ArrayList<>();
-            Collections.addAll(emails, "test@@", "test@", "test@@test", "test");
-            return emails;
-        }
-
-        @Test(expected = IllegalArgumentException.class)
-        public void given_invalid_email_should_throw_exception() {
-            new CustomerSource(null, email);
-        }
-    }
-
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void missing_id_and_email_should_throw_exception() {
-        new CustomerSource(null, null);
+        assertThrows(IllegalArgumentException.class, () -> new CustomerSource(null, null));
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"test@@", "test@", "test@@test", "test"})
+    public void given_invalid_email_should_throw_exception(final String email) {
+        assertThrows(IllegalArgumentException.class, () -> new CustomerSource(null, email));
+    }
+
 }

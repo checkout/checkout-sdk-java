@@ -2,9 +2,7 @@ package com.checkout.beta;
 
 import com.checkout.CheckoutArgumentException;
 import com.checkout.Environment;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,11 +11,10 @@ import static com.checkout.TestHelper.INVALID_FOUR_PK;
 import static com.checkout.TestHelper.INVALID_FOUR_SK;
 import static com.checkout.TestHelper.VALID_FOUR_PK;
 import static com.checkout.TestHelper.VALID_FOUR_SK;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@RunWith(MockitoJUnitRunner.class)
 public class CheckoutTest {
 
     @Test

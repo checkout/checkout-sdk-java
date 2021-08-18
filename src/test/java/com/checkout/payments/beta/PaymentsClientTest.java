@@ -20,11 +20,11 @@ import com.checkout.payments.beta.response.source.ResponseIdSource;
 import com.checkout.payments.beta.sender.RequestInstrumentSender;
 import com.checkout.payments.beta.voids.VoidRequest;
 import com.checkout.payments.beta.voids.VoidResponse;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,15 +38,15 @@ import static com.checkout.payments.beta.PaymentsClientImpl.PAYMENT_ACTION_TYPE;
 import static com.checkout.payments.beta.PaymentsClientImpl.PAYMENT_TYPE;
 import static com.checkout.payments.beta.PaymentsClientImpl.REFUNDS_PATH;
 import static com.checkout.payments.beta.PaymentsClientImpl.VOIDS_PATH;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class PaymentsClientTest {
 
     @Mock
@@ -57,7 +57,7 @@ public class PaymentsClientTest {
 
     private PaymentsClient paymentsClient;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         paymentsClient = new PaymentsClientImpl(apiClient, checkoutConfiguration);
     }

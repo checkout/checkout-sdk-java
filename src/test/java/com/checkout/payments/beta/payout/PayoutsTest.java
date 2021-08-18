@@ -4,9 +4,9 @@ import com.checkout.payments.beta.payout.source.RequestCurrencyAccountSource;
 import com.checkout.payments.beta.sender.RequestCorporateSender;
 import com.checkout.payments.beta.sender.RequestIndividualSender;
 import com.checkout.payments.beta.sender.RequestInstrumentSender;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PayoutsTest {
 
