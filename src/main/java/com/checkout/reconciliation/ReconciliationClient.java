@@ -1,12 +1,23 @@
 package com.checkout.reconciliation;
 
 
-import java.time.Instant;
+import com.checkout.common.QueryFilterDateRange;
+
 import java.util.concurrent.CompletableFuture;
 
 public interface ReconciliationClient {
-    CompletableFuture<PaymentReportResponse> paymentsReportAsync(Instant from, Instant to, String reference, Integer limit);
-    CompletableFuture<PaymentReportResponse> singlePaymentReportAsync(String paymentId);
-    CompletableFuture<StatementReportResponse> statementsReportAsync(Instant from, Instant to);
+
+    CompletableFuture<ReconciliationPaymentReportResponse> queryPaymentsReport(ReconciliationQueryPaymentsFilter filter);
+
+    CompletableFuture<ReconciliationPaymentReportResponse> singlePaymentReportAsync(String paymentId);
+
+    CompletableFuture<StatementReportResponse> queryStatementsReport(QueryFilterDateRange filter);
+
+    CompletableFuture<String> retrieveCSVPaymentReport(String targetFile);
+
+    CompletableFuture<String> retrieveCSVSingleStatementReport(String statementId, String targetFile);
+
+    CompletableFuture<String> retrieveCSVStatementsReport(String targetFile);
+
 
 }
