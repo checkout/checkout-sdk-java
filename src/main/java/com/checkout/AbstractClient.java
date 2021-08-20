@@ -1,5 +1,8 @@
 package com.checkout;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static com.checkout.common.CheckoutUtils.requiresNonNull;
 
 public abstract class AbstractClient {
@@ -12,6 +15,11 @@ public abstract class AbstractClient {
         requiresNonNull("apiCredentials", apiCredentials);
         this.apiClient = apiClient;
         this.apiCredentials = apiCredentials;
+    }
+
+    protected static String constructApiPath(final String... pathParams) {
+        return Stream.of(pathParams)
+                .collect(Collectors.joining("/"));
     }
 
 }

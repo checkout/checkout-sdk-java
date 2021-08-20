@@ -1,77 +1,53 @@
 package com.checkout.reconciliation;
 
+import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
-import com.checkout.ApiCredentials;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SecretKeyCredentials;
+import com.checkout.common.QueryFilterDateRange;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class ReconciliationClientImpl implements ReconciliationClient {
+public class ReconciliationClientImpl extends AbstractClient implements ReconciliationClient {
 
-    private final ApiClient apiClient;
-    private final ApiCredentials credentials;
+    private static final String REPORTING = "reporting";
+    private static final String PAYMENTS = "payments";
+    private static final String STATEMENTS = "statements";
+    private static final String DOWNLOAD = "download";
 
-    public ReconciliationClientImpl(ApiClient apiClient, CheckoutConfiguration configuration) {
-        if (apiClient == null) {
-            throw new IllegalArgumentException("apiClient must not be null");
-        }
-        if (configuration == null) {
-            throw new IllegalArgumentException("configuration must not be null");
-        }
-
-        this.apiClient = apiClient;
-        credentials = new SecretKeyCredentials(configuration);
-    }
-
-
-    @Override
-    public CompletableFuture<PaymentReportResponse> paymentsReportAsync(Instant from, Instant to, String reference, Integer limit) {
-        String path = "reporting/payments";
-        List<String> parameters = new ArrayList<>();
-        if(from != null) {
-            parameters.add("from=" + from.toString());
-        }
-        if(to != null){
-            parameters.add("to=" + to.toString());
-        }
-        if(reference != null){
-            parameters.add("reference=" + reference);
-        }
-        if(limit != null){
-            parameters.add("limit=" + limit.toString());
-        }
-
-        if(!parameters.isEmpty()){
-            path += "?" + String.join("&", parameters);
-        }
-
-        return apiClient.getAsync(path, credentials, PaymentReportResponse.class);
+    public ReconciliationClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
+        super(apiClient, SecretKeyCredentials.fromConfiguration(configuration));
     }
 
     @Override
-    public CompletableFuture<PaymentReportResponse> singlePaymentReportAsync(String paymentId) {
-        return apiClient.getAsync("reporting/payments/" + paymentId, credentials, PaymentReportResponse.class);
+    public CompletableFuture<ReconciliationPaymentReportResponse> queryPaymentsReport(final ReconciliationQueryPaymentsFilter filter) {
+        return apiClient.queryAsync(constructApiPath(REPORTING, PAYMENTS), apiCredentials, filter, ReconciliationPaymentReportResponse.class);
     }
 
     @Override
-    public CompletableFuture<StatementReportResponse> statementsReportAsync(Instant from, Instant to) {
-        String path = "reporting/statements";
-        List<String> parameters = new ArrayList<>();
-        if(from != null) {
-            parameters.add("from=" + from.toString());
-        }
-        if(to != null){
-            parameters.add("to=" + to.toString());
-        }
-
-        if(!parameters.isEmpty()){
-            path += "?" + String.join("&", parameters);
-        }
-
-        return apiClient.getAsync(path, credentials, StatementReportResponse.class);
+    public CompletableFuture<ReconciliationPaymentReportResponse> singlePaymentReportAsync(final String paymentId) {
+        return apiClient.getAsync(constructApiPath(REPORTING, PAYMENTS, paymentId), apiCredentials, ReconciliationPaymentReportResponse.class);
     }
+
+    @Override
+    public CompletableFuture<StatementReportResponse> queryStatementsReport(final QueryFilterDateRange filter) {
+        return apiClient.queryAsync(constructApiPath(REPORTING, STATEMENTS), apiCredentials, filter, StatementReportResponse.class);
+    }
+
+    @Override
+    public CompletableFuture<String> retrieveCSVPaymentReport(final String targetFile) {
+        return apiClient.retrieveFileAsync(constructApiPath(REPORTING, PAYMENTS, DOWNLOAD), apiCredentials, targetFile);
+    }
+
+    @Override
+    public CompletableFuture<String> retrieveCSVSingleStatementReport(final String statementId, final String targetFile) {
+        return apiClient.retrieveFileAsync(constructApiPath(REPORTING, STATEMENTS, statementId, PAYMENTS, DOWNLOAD),
+                apiCredentials, targetFile);
+    }
+
+    @Override
+    public CompletableFuture<String> retrieveCSVStatementsReport(final String targetFile) {
+        return apiClient.retrieveFileAsync(constructApiPath(REPORTING, STATEMENTS, DOWNLOAD), apiCredentials, targetFile);
+    }
+
 }

@@ -112,6 +112,14 @@ public class ApiClientImpl implements ApiClient {
                 .thenApply(response -> deserialize(response, responseType));
     }
 
+    @Override
+    public CompletableFuture<String> retrieveFileAsync(final String path, final ApiCredentials credentials, final String targetFile) {
+        validateMultipleRequires(ImmutableMap.of(PATH, path, CREDENTIALS, credentials));
+        return transport.invoke("GET_FILE", path, credentials, targetFile, null)
+                .thenApply(this::errorCheck)
+                .thenApply(Response::getBody);
+    }
+
     private <T> CompletableFuture<T> sendRequestAsync(final String httpMethod, final String path, final ApiCredentials credentials, final Object request, final String idempotencyKey, final Type responseType) {
         return transport.invoke(httpMethod, path, credentials, request == null ? null : serializer.toJson(request), idempotencyKey)
                 .thenApply(this::errorCheck)

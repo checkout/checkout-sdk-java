@@ -29,4 +29,6 @@ public interface ApiClient {
 
     <T> CompletableFuture<T> submitFileAsync(String path, ApiCredentials credentials, FileRequest request, Class<T> responseType);
 
+    CompletableFuture<String> retrieveFileAsync(String path, ApiCredentials credentials, String targetFile);
+
 }

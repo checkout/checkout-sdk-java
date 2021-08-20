@@ -12,6 +12,9 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class StatementReportResponse extends Resource {
+
     private int count;
+
     private List<StatementData> data;
+
 }
