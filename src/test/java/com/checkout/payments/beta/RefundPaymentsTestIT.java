@@ -34,7 +34,7 @@ public class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
         // capture
         capturePayment(paymentResponse.getId());
 
-        waitForIt();
+        nap();
 
         // refund
         final RefundRequest refundRequest = RefundRequest.builder()
@@ -60,7 +60,7 @@ public class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
         // Capture Payment
         capturePayment(paymentResponse.getId());
 
-        waitForIt();
+        nap();
 
         // Refund
         final RefundRequest refundRequest = RefundRequest.builder()

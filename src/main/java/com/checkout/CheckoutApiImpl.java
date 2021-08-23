@@ -23,7 +23,7 @@ import com.checkout.tokens.TokensClientImpl;
 import com.checkout.webhooks.WebhooksClient;
 import com.checkout.webhooks.WebhooksClientImpl;
 
-public final class CheckoutApiImpl implements CheckoutApi {
+public final class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutApi {
 
     private final PaymentsClient paymentsClient;
     private final SourcesClient sourcesClient;
@@ -38,7 +38,7 @@ public final class CheckoutApiImpl implements CheckoutApi {
     private final ReconciliationClient reconciliationClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
-        final ApiClient apiClient = new ApiClientImpl(configuration);
+        super(new ApiClientImpl(configuration), configuration);
         this.paymentsClient = new PaymentsClientImpl(apiClient, configuration);
         this.sourcesClient = new SourcesClientImpl(apiClient, configuration);
         this.tokensClient = new TokensClientImpl(apiClient, configuration);
@@ -53,6 +53,7 @@ public final class CheckoutApiImpl implements CheckoutApi {
     }
 
     public CheckoutApiImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
+        super(apiClient, configuration);
         this.paymentsClient = new PaymentsClientImpl(apiClient, configuration);
         this.sourcesClient = new SourcesClientImpl(apiClient, configuration);
         this.tokensClient = new TokensClientImpl(apiClient, configuration);

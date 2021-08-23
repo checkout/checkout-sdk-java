@@ -27,7 +27,7 @@ public class AlternativePaymentSourcePaymentsTestIT extends SandboxTestFixture {
         requestAlternativePayment(alternativePaymentSource);
     }
 
-    private PaymentPending requestAlternativePayment(final AlternativePaymentSource alternativePaymentSource) throws Exception {
+    private void requestAlternativePayment(final AlternativePaymentSource alternativePaymentSource) throws Exception {
         final PaymentRequest<RequestSource> paymentRequest = TestHelper.createAlternativePaymentMethodRequest(alternativePaymentSource, Currency.EUR);
 
         final PaymentResponse apiResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
@@ -44,6 +44,5 @@ public class AlternativePaymentSourcePaymentsTestIT extends SandboxTestFixture {
         assertTrue(pendingPayment.requiresRedirect());
         assertNotNull(pendingPayment.getRedirectLink());
 
-        return pendingPayment;
     }
 }

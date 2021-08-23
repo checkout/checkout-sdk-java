@@ -104,52 +104,6 @@ paymentRequest.setReference("ORD-456");
 PaymentResponse response = api.paymentsClient().requestAsync(paymentRequest).get();
 ```
 
-## Request a payment for a <Highlight color="#25c2a0">local payment method</Highlight>
-
-The [API Reference](https://api-reference.checkout.com/#tag/Payments/paths/~1payments/post) contains a list of local payment options that you can use, as well as the other information required in the payment source (if required).
-
-This is an example of a payment request for [Giropay](https://docs.checkout.com/payment-methods/bank-transfers/giropay):
-
-```java
-AlternativePaymentSource alternativePaymentSource =
-  new AlternativePaymentSource("giropay");
-alternativePaymentSource.put("bic", "TESTDETT421");
-alternativePaymentSource.put("purpose", "CKO Giropay test");
-
-PaymentRequest<RequestSource> paymentRequest =
-  PaymentRequest.fromSource(alternativePaymentSource, Currency.EUR, 1000); //cents
-
-PaymentResponse response = api.paymentsClient().requestAsync(paymentRequest).get();
-```
-
-This request is meant to return a redirection URL, so you can let the customer complete the transaction on the local payment method's website. Normally a successful response would look like this:
-
-```json
-{
-  "id": "pay_d3ohhwwu3qderfjlzitknc26sq",
-  "status": "Pending",
-  "customer": {
-    "id": "cus_hfgq4ctsnr6e3cfhq5ctwb5gtu"
-  },
-  "_links": {
-    "self": {
-      "href": "https://api.sandbox.checkout.com/payments/pay_d3ohhwwu3qderfjlzitknc26sq"
-    },
-    "redirect": {
-      "href": "https://ftg-customer-integration.giropay.de/ftgbank/b/bankselection/219499703994809788;jsessionid=8ECFE1809F9BAB6635EC9D37D98A1CAE.sf-testapp01tom21?op=001"
-    }
-  }
-}
-```
-
-You can access the redirection URL via the SDK like so:
-
-```java
-PaymentPending pendingPayment = response.getPending();
-// Your redirect link
-pendingPayment.getRedirectLink();
-```
-
 ## Request a <Highlight color="#25c2a0">3D Secure payment</Highlight>
 
 You have the ability to authenticate with 3DS in a payment request. The request body is similar to normal card payments, but with some additional parameters. [Read more about 3DS](https://docs.checkout.com/docs/3d-secure-payments)
