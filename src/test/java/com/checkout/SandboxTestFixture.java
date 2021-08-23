@@ -4,6 +4,7 @@ import com.checkout.beta.Checkout;
 import com.checkout.beta.CheckoutApi;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -47,6 +48,17 @@ public abstract class SandboxTestFixture {
             fail(e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * Take a Nap
+     */
+    protected void nap() {
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (final InterruptedException ignore) {
+            fail();
+        }
     }
 
     public com.checkout.CheckoutApi getApi() {

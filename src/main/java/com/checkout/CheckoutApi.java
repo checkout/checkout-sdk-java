@@ -12,7 +12,8 @@ import com.checkout.sources.SourcesClient;
 import com.checkout.tokens.TokensClient;
 import com.checkout.webhooks.WebhooksClient;
 
-public interface CheckoutApi {
+public interface CheckoutApi extends CheckoutApmApi {
+
     PaymentsClient paymentsClient();
 
     SourcesClient sourcesClient();
@@ -34,4 +35,5 @@ public interface CheckoutApi {
     DisputesClient disputesClient();
 
     ReconciliationClient reconciliationClient();
+
 }

@@ -1,6 +1,10 @@
 package com.checkout.payments;
 
-import com.checkout.common.CheckoutUtils;
+import com.checkout.common.beta.Currency;
+import com.checkout.payments.apm.BalotoSource;
+import com.checkout.payments.apm.BoletoSource;
+import com.checkout.payments.apm.FawrySource;
+import com.checkout.payments.apm.GiropaySource;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +14,9 @@ import lombok.NonNull;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.checkout.common.CheckoutUtils.requiresNonBlank;
+import static com.checkout.common.CheckoutUtils.requiresNonNull;
 
 @Data
 @Builder
@@ -45,16 +52,14 @@ public class PaymentRequest<T extends RequestSource> {
     private AuthorizationType authorizationType;
     private MarketplaceData marketplace;
 
-    private PaymentRequest(T sourceOrDestination, String currency, Long amount, boolean isSource) {
-        if (sourceOrDestination == null) {
-            throw new IllegalArgumentException(String.format("The payment %s is required.", isSource ? "source" : "destination"));
-        }
-        if (CheckoutUtils.isNullOrWhitespace(currency)) {
-            throw new IllegalArgumentException("The currency is required.");
-        }
-        if (amount != null && amount < 0) {
-            throw new IllegalArgumentException("The amount cannot be negative");
-        }
+    /**
+     * @deprecated Please use {@link PaymentRequest} constructor with {@link Currency} parameter enum type.
+     */
+    @Deprecated
+    private PaymentRequest(final T sourceOrDestination, final String currency, final Long amount, final boolean isSource) {
+        requiresNonNull("sourceOrDestination", sourceOrDestination);
+        requiresNonBlank("currency", currency);
+        requiresNonNull("amount", amount);
         this.source = isSource ? sourceOrDestination : null;
         this.destination = isSource ? null : sourceOrDestination;
         this.amount = amount;
@@ -62,11 +67,40 @@ public class PaymentRequest<T extends RequestSource> {
         this.metadata = new HashMap<>();
     }
 
-    public static <T extends RequestSource> PaymentRequest<T> fromSource(T source, String currency, Long amount) {
+    private PaymentRequest(final T sourceOrDestination, final Currency currency, final Long amount, final boolean isSource) {
+        requiresNonNull("sourceOrDestination", sourceOrDestination);
+        requiresNonNull("currency", currency);
+        requiresNonNull("amount", amount);
+        this.source = isSource ? sourceOrDestination : null;
+        this.destination = isSource ? null : sourceOrDestination;
+        this.amount = amount;
+        this.currency = currency.name();
+        this.metadata = new HashMap<>();
+    }
+
+
+    public static <T extends RequestSource> PaymentRequest<T> fromSource(final T source, final String currency, final Long amount) {
         return new PaymentRequest<>(source, currency, amount, true);
     }
 
-    public static <T extends RequestSource> PaymentRequest<T> fromDestination(T destination, String currency, Long amount) {
+    public static <T extends RequestSource> PaymentRequest<T> fromDestination(final T destination, final String currency, final Long amount) {
         return new PaymentRequest<>(destination, currency, amount, false);
     }
+
+    public static PaymentRequest<BalotoSource> baloto(final BalotoSource balotoSource, final Currency currency, final Long amount) {
+        return new PaymentRequest<>(balotoSource, currency, amount, true);
+    }
+
+    public static PaymentRequest<BoletoSource> boleto(final BoletoSource balotoSource, final Currency currency, final Long amount) {
+        return new PaymentRequest<>(balotoSource, currency, amount, true);
+    }
+
+    public static PaymentRequest<FawrySource> fawry(final FawrySource fawrySource, final Currency currency, final Long amount) {
+        return new PaymentRequest<>(fawrySource, currency, amount, true);
+    }
+
+    public static PaymentRequest<GiropaySource> giropay(final GiropaySource giropaySource, final Currency currency, final Long amount) {
+        return new PaymentRequest<>(giropaySource, currency, amount, true);
+    }
+
 }

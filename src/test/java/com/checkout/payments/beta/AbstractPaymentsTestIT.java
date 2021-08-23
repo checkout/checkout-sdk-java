@@ -28,7 +28,6 @@ import static com.checkout.payments.beta.CardSourceHelper.getCorporateSender;
 import static com.checkout.payments.beta.CardSourceHelper.getIndividualSender;
 import static com.checkout.payments.beta.CardSourceHelper.getRequestCardSource;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
 
@@ -136,14 +135,6 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
                 .build();
         return blocking(tokensClient.requestAsync(request));
-    }
-
-    protected void waitForIt() {
-        try {
-            Thread.sleep(2000);
-        } catch (final InterruptedException ignore) {
-            fail();
-        }
     }
 
 }

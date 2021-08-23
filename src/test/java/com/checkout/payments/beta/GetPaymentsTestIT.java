@@ -261,7 +261,7 @@ public class GetPaymentsTestIT extends AbstractPaymentsTestIT {
 
         final CaptureResponse captureResponse = capturePayment(payment.getId(), captureRequest);
 
-        waitForIt();
+        nap();
 
         // capture
 
