@@ -31,6 +31,13 @@ jobs:
           CHECKOUT_FOUR_SECRET_KEY: ${{ secrets.IT_CHECKOUT_FOUR_SECRET_KEY }}
           CHECKOUT_FOUR_PUBLIC_KEY: ${{ secrets.IT_CHECKOUT_FOUR_PUBLIC_KEY }}
         run: ./gradlew build jar
+      - id: publish
+        env:
+          GPG_KEY: '${{ secrets.GPG_KEY }}'
+          GPG_PASSPHRASE: '${{ secrets.GPG_PASSPHRASE }}'
+          SONATYPE_PASSWORD: '${{ secrets.SONATYPE_PASSWORD }}'
+          SONATYPE_USERNAME: '${{ secrets.SONATYPE_USERNAME }}'
+        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
       - id: create-release
         uses: actions/create-release@v1
         env:
@@ -41,13 +48,6 @@ jobs:
           body: ${{ github.event.head_commit.message }}
           draft: false
           prerelease: false
-      - id: release
-        env:
-          GPG_KEY: '${{ secrets.GPG_KEY }}'
-          GPG_PASSPHRASE: '${{ secrets.GPG_PASSPHRASE }}'
-          SONATYPE_PASSWORD: '${{ secrets.SONATYPE_PASSWORD }}'
-          SONATYPE_USERNAME: '${{ secrets.SONATYPE_USERNAME }}'
-        run: ./gradlew publishToSonatype closeAndReleaseRepository
   docs-release:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
