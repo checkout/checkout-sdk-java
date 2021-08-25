@@ -33,16 +33,10 @@ This SDK can be used with two different pair of API keys provided by Checkout. H
 
 | Account System | Public Key (example)                         | Secret Key (example)                         |
 | -------------- | -------------------------------------------- | -------------------------------------------- |
-| Classic        | pk_test_fe70ff27-7c42-4ce1-ae90-5691a188ee7b | sk_test_fde517a8-3z01-41ef-b4bd-4282384b0a64 |
+| default        | pk_test_fe70ff27-7c42-4ce1-ae90-5691a188ee7b | sk_test_fde517a8-3z01-41ef-b4bd-4282384b0a64 |
 | Four           | pk_sbox_pkhpdtvmkgf7hdgpwnbhw7r2uic          | sk_sbox_m73dzypy7cf3gfd46xr4yj5xo4e          |
 
 If you don't have your own API keys, you can sign up for a test account [here](https://www.checkout.com/get-test-account).
-
-This SDK does not support oAuth (yet).
-
-### Classic
-
-If your pair of keys matches the Classic type, this is how the SDK should be used:
 
 ```java
 public static void main(String[] args) {
