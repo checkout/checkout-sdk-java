@@ -52,10 +52,6 @@ public final class CheckoutApiImpl implements CheckoutApi {
         this.reconciliationClient = new ReconciliationClientImpl(apiClient, configuration);
     }
 
-    /**
-     * @deprecated Will be removed in a future version
-     */
-    @Deprecated
     public CheckoutApiImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         this.paymentsClient = new PaymentsClientImpl(apiClient, configuration);
         this.sourcesClient = new SourcesClientImpl(apiClient, configuration);
@@ -70,20 +66,12 @@ public final class CheckoutApiImpl implements CheckoutApi {
         this.reconciliationClient = new ReconciliationClientImpl(apiClient, configuration);
     }
 
-    /**
-     * @deprecated Will be removed in a future version
-     */
-    @Deprecated
     public static CheckoutApi create(final String secretKey, final boolean useSandbox, final String publicKey) {
         final CheckoutConfiguration configuration = new CheckoutConfiguration(secretKey, useSandbox, publicKey);
         configuration.setPublicKey(publicKey);
         return new CheckoutApiImpl(configuration);
     }
 
-    /**
-     * @deprecated Will be removed in a future version
-     */
-    @Deprecated
     public static CheckoutApi create(final String secretKey, final String uri, final String publicKey) {
         final CheckoutConfiguration configuration = new CheckoutConfiguration(secretKey, uri);
         configuration.setPublicKey(publicKey);
