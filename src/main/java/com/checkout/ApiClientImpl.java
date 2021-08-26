@@ -78,6 +78,12 @@ public class ApiClientImpl implements ApiClient {
     }
 
     @Override
+    public <T> CompletableFuture<T> patchAsync(final String path, final ApiCredentials credentials, final Type type, final Object request, final String idempotencyKey) {
+        validateMultipleRequires(ImmutableMap.of(PATH, path, CREDENTIALS, credentials, "type", type, "request", request));
+        return sendRequestAsync("PATCH", path, credentials, request, idempotencyKey, type);
+    }
+
+    @Override
     public CompletableFuture<? extends Resource> postAsync(final String path, final ApiCredentials credentials, final Map<Integer, Class<? extends Resource>> resultTypeMappings, final Object request, final String idempotencyKey) {
         validateMultipleRequires(ImmutableMap.of(PATH, path, CREDENTIALS, credentials, "resultTypeMappings", resultTypeMappings));
         return transport.invoke("POST", path, credentials, serializer.toJson(request), idempotencyKey)

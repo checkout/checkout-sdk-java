@@ -1,9 +1,9 @@
 package com.checkout.customers.beta;
 
 import com.checkout.CheckoutResourceNotFoundException;
-import com.checkout.PlatformType;
-import com.checkout.SandboxTestFixture;
 import com.checkout.common.beta.Phone;
+import com.checkout.instruments.beta.CardTokenInstrumentsTestIT;
+import com.checkout.instruments.beta.get.GetCardInstrumentResponse;
 import org.junit.jupiter.api.Test;
 
 import static com.checkout.beta.TestHelper.getRandomEmail;
@@ -12,11 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CustomersTestIT extends SandboxTestFixture {
-
-    public CustomersTestIT() {
-        super(PlatformType.FOUR);
-    }
+public class CustomersTestIT extends CardTokenInstrumentsTestIT {
 
     @Test
     public void shouldCreateAndGetCustomer() {
@@ -39,8 +35,13 @@ public class CustomersTestIT extends SandboxTestFixture {
         assertEquals(customerRequest.getName(), customerResponse.getName());
         assertEquals(customerRequest.getPhone(), customerResponse.getPhone());
         assertNull(customerResponse.getDefaultId());
-        // TODO Review customer instruments when related functionality is implemented for CS2
-        //assertTrue(customerResponse.getInstruments().isEmpty());
+        assertTrue(customerResponse.getInstruments().isEmpty());
+
+        super.createTokenInstrument(customerId);
+
+        final CustomerResponse customerWithInstruments = blocking(getApiV2().customersClient().get(customerId));
+        assertEquals(1, customerWithInstruments.getInstruments().size());
+        assertTrue(customerWithInstruments.getInstruments().get(0) instanceof GetCardInstrumentResponse);
 
     }
 
@@ -90,4 +91,5 @@ public class CustomersTestIT extends SandboxTestFixture {
             assertTrue(e.getCause() instanceof CheckoutResourceNotFoundException);
         }
     }
+
 }

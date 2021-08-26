@@ -1,10 +1,12 @@
 package com.checkout.customers.beta;
 
 import com.checkout.common.beta.Phone;
+import com.checkout.instruments.beta.get.GetInstrumentResponse;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -23,5 +25,7 @@ public final class CustomerResponse {
     private Phone phone;
 
     private Map<String, Object> metadata;
+
+    private List<GetInstrumentResponse> instruments;
 
 }

@@ -1,4 +1,4 @@
-package com.checkout.customers.beta.instrument;
+package com.checkout.common.beta;
 
 import com.google.gson.annotations.SerializedName;
 
