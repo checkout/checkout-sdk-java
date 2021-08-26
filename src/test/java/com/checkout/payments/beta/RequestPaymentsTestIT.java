@@ -267,7 +267,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
     @Test
     public void shouldMakeTokenPayment() {
 
-        final CardTokenResponse cardTokenResponse = getToken();
+        final CardTokenResponse cardTokenResponse = requestToken();
 
         final RequestTokenSource tokenSource = RequestTokenSource.builder()
                 .token(cardTokenResponse.getToken())
@@ -322,7 +322,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
     @Test
     public void shouldMakeTokenPayment_3ds() {
 
-        final CardTokenResponse cardTokenResponse = getToken();
+        final CardTokenResponse cardTokenResponse = requestToken();
 
         final RequestTokenSource tokenSource = RequestTokenSource.builder()
                 .token(cardTokenResponse.getToken())

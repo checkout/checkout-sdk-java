@@ -7,12 +7,10 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public final class BankDetails {
+public final class UpdateCustomerRequest {
 
-    private String name;
+    private String id;
 
-    private String branch;
-
-    private Address address;
+    private boolean defaultCustomer;
 
 }

@@ -81,7 +81,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
 
     protected PaymentResponse<ResponseCardSource> makeTokenPayment() {
 
-        final CardTokenResponse cardTokenResponse = getToken();
+        final CardTokenResponse cardTokenResponse = requestToken();
 
         final RequestTokenSource tokenSource = RequestTokenSource.builder()
                 .token(cardTokenResponse.getToken())
@@ -128,7 +128,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
         return captureResponse;
     }
 
-    protected CardTokenResponse getToken() {
+    protected CardTokenResponse requestToken() {
         final CardTokenRequest request = CardTokenRequest.builder()
                 .number(CardSourceHelper.Visa.NUMBER)
                 .expiryMonth(CardSourceHelper.Visa.EXPIRY_MONTH)

@@ -23,6 +23,8 @@ public interface ApiClient {
 
     <T> CompletableFuture<T> patchAsync(String path, ApiCredentials credentials, Class<T> responseType, Object request, String idempotencyKey);
 
+    <T> CompletableFuture<T> patchAsync(String path, ApiCredentials credentials, Type type, Object request, String idempotencyKey);
+
     CompletableFuture<? extends Resource> postAsync(String path, ApiCredentials credentials, Map<Integer, Class<? extends Resource>> resultTypeMappings, Object request, String idempotencyKey);
 
     <T> CompletableFuture<T> queryAsync(String path, ApiCredentials credentials, Object filter, Class<T> responseType);

@@ -1,9 +1,9 @@
 package com.checkout.customers.beta;
 
-import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SecretKeyCredentials;
+import com.checkout.beta.AbstractClient;
 import com.checkout.common.beta.IdResponse;
 
 import java.util.concurrent.CompletableFuture;
@@ -37,7 +37,7 @@ public class CustomersClientImpl extends AbstractClient implements CustomersClie
     }
 
     private String getCustomersUrl(final String customerId) {
-        return CUSTOMERS_PATH + "/" + customerId;
+        return buildPath(CUSTOMERS_PATH, customerId);
     }
 
 }
