@@ -1,4 +1,4 @@
-package com.checkout.payments.beta.response;
+package com.checkout.disputes.beta;
 
 import com.checkout.common.beta.ThreeDSEnrollmentStatus;
 import lombok.Builder;
@@ -6,9 +6,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public final class ThreeDSEnrollmentData {
+public final class ThreeDSVersionEnrollment {
 
-    private boolean downgraded;
+    private String version;
 
     private ThreeDSEnrollmentStatus enrolled;
 

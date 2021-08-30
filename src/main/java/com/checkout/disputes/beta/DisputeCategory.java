@@ -1,4 +1,4 @@
-package com.checkout.disputes;
+package com.checkout.disputes.beta;
 
 import com.google.gson.annotations.SerializedName;
 

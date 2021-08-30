@@ -14,6 +14,8 @@ import java.util.UUID;
 
 public class CardSourceHelper {
 
+    private static long amount = 10L;
+
     public static class Visa {
 
         public static final String NUMBER = "4242424242424242";
@@ -63,12 +65,17 @@ public class CardSourceHelper {
         return Payments.card(cardSource).fromSender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())
-                .amount(10L)
+                .amount(amount)
                 .currency(Currency.EUR)
                 .threeDSRequest(threeDSRequest)
                 .successUrl(three3ds ? "https://test.checkout.com/success" : null)
                 .failureUrl(three3ds ? "https://test.checkout.com/failure" : null)
                 .build();
+    }
+
+    public static PaymentRequest getCardSourcePaymentForDispute(final RequestCardSource cardSource, final RequestSender sender, final boolean three3ds) {
+        amount = 1040L;
+        return getCardSourcePayment(cardSource, sender, three3ds);
     }
 
 }

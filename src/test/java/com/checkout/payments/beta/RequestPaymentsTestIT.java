@@ -14,7 +14,7 @@ import com.checkout.payments.beta.response.PaymentResponse;
 import com.checkout.payments.beta.response.PaymentResponseBalances;
 import com.checkout.payments.beta.response.PaymentStatus;
 import com.checkout.payments.beta.response.ThreeDSEnrollmentData;
-import com.checkout.payments.beta.response.ThreeDSEnrollmentStatus;
+import com.checkout.common.beta.ThreeDSEnrollmentStatus;
 import com.checkout.payments.beta.response.source.ResponseCardSource;
 import com.checkout.payments.beta.sender.RequestCorporateSender;
 import com.checkout.payments.beta.sender.RequestIndividualSender;
