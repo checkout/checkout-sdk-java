@@ -7,7 +7,11 @@ import com.checkout.beta.AbstractClient;
 
 import java.util.concurrent.CompletableFuture;
 
+import static com.checkout.common.CheckoutUtils.requiresNonNull;
+
 public class TokensClientImpl extends AbstractClient implements TokensClient {
+
+    private static final String TOKENS_PATH = "tokens";
 
     public TokensClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, PublicKeyCredentials.fromConfiguration(configuration));
@@ -15,18 +19,14 @@ public class TokensClientImpl extends AbstractClient implements TokensClient {
 
     @Override
     public CompletableFuture<CardTokenResponse> requestAsync(final CardTokenRequest cardTokenRequest) {
-        if (cardTokenRequest == null) {
-            throw new IllegalArgumentException("cardTokenRequest must not be null");
-        }
-        return apiClient.postAsync("tokens", apiCredentials, CardTokenResponse.class, cardTokenRequest, null);
+        requiresNonNull("cardTokenRequest", cardTokenRequest);
+        return apiClient.postAsync(TOKENS_PATH, apiCredentials, CardTokenResponse.class, cardTokenRequest, null);
     }
 
     @Override
     public CompletableFuture<TokenResponse> requestAsync(final WalletTokenRequest walletTokenRequest) {
-        if (walletTokenRequest == null) {
-            throw new IllegalArgumentException("walletTokenRequest must not be null");
-        }
-
-        return apiClient.postAsync("tokens", apiCredentials, TokenResponse.class, walletTokenRequest, null);
+        requiresNonNull("walletTokenRequest", walletTokenRequest);
+        return apiClient.postAsync(TOKENS_PATH, apiCredentials, TokenResponse.class, walletTokenRequest, null);
     }
+
 }

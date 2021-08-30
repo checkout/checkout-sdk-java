@@ -2,12 +2,13 @@ package com.checkout.tokens.beta;
 
 import com.google.gson.annotations.SerializedName;
 
-public enum WalletType {
+public enum TokenType {
 
+    @SerializedName("card")
+    CARD,
     @SerializedName("applepay")
-    APPLE_PAY,
-
+    APPLEPAY,
     @SerializedName("googlepay")
-    GOOGLE_PAY
+    GOOGLEPAY
 
 }

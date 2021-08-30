@@ -1,11 +1,13 @@
-package com.checkout.tokens.beta;
+package com.checkout.tokens;
 
 import com.google.gson.annotations.SerializedName;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
+@AllArgsConstructor
 public final class TokenHeader {
 
     @SerializedName("ephemeralPublicKey")

@@ -21,47 +21,48 @@ public class TokensTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_tokenize_card() throws Exception {
-        final CardTokenRequest request = createValidRequest();
-        final CardTokenResponse token = getApi().tokensClient().requestAsync(request).get();
+    public void shouldRequestCardToken() {
 
-        assertNotNull(token);
-        assertNotNull(token.getToken());
-        assertNotEquals(token.getToken().trim(), "");
-        assertTrue(token.getExpiresOn().isAfter(Instant.now()));
-        assertNotNull(token.getBillingAddress());
-        assertEquals(token.getBillingAddress().getAddressLine1(), request.getBillingAddress().getAddressLine1());
-        assertEquals(token.getBillingAddress().getAddressLine2(), request.getBillingAddress().getAddressLine2());
-        assertEquals(token.getBillingAddress().getCity(), request.getBillingAddress().getCity());
-        assertEquals(token.getBillingAddress().getState(), request.getBillingAddress().getState());
-        assertEquals(token.getBillingAddress().getZip(), request.getBillingAddress().getZip());
-        assertEquals(token.getBillingAddress().getCountry(), request.getBillingAddress().getCountry());
-        assertNotNull(token.getPhone());
-        assertEquals(token.getPhone().getCountryCode(), request.getPhone().getCountryCode());
-        assertEquals(token.getPhone().getNumber(), request.getPhone().getNumber());
-        assertEquals(token.getType(), "card");
-        assertEquals(token.getExpiryMonth(), request.getExpiryMonth());
-        assertEquals(token.getExpiryYear(), request.getExpiryYear());
+        final Address billingAddress = Address.builder()
+                .addressLine1("Checkout.com")
+                .addressLine2("90 Tottenham Court Road")
+                .city("London")
+                .state("London")
+                .zip("W1T 4TJ")
+                .country("GB")
+                .build();
+
+        final Phone phone = Phone.builder().countryCode("44").number("020 222333").build();
+
+        final CardTokenRequest request = CardTokenRequest.builder()
+                .number(TestCardSource.VISA.getNumber())
+                .expiryMonth(TestCardSource.VISA.getExpiryMonth())
+                .expiryYear(TestCardSource.VISA.getExpiryYear())
+                .cvv(TestCardSource.VISA.getCvv())
+                .billingAddress(billingAddress)
+                .phone(phone)
+                .build();
+
+        final CardTokenResponse cardTokenResponse = blocking(getApi().tokensClient().requestAsync(request));
+
+        assertNotNull(cardTokenResponse);
+        assertNotNull(cardTokenResponse.getToken());
+        assertEquals(cardTokenResponse.getType(), "card");
+        assertEquals(cardTokenResponse.getExpiryMonth(), request.getExpiryMonth());
+        assertEquals(cardTokenResponse.getExpiryYear(), request.getExpiryYear());
+        assertNotEquals(cardTokenResponse.getToken().trim(), "");
+        assertTrue(cardTokenResponse.getExpiresOn().isAfter(Instant.now()));
+        assertNotNull(cardTokenResponse.getBillingAddress());
+        assertEquals(cardTokenResponse.getBillingAddress().getAddressLine1(), request.getBillingAddress().getAddressLine1());
+        assertEquals(cardTokenResponse.getBillingAddress().getAddressLine2(), request.getBillingAddress().getAddressLine2());
+        assertEquals(cardTokenResponse.getBillingAddress().getCity(), request.getBillingAddress().getCity());
+        assertEquals(cardTokenResponse.getBillingAddress().getState(), request.getBillingAddress().getState());
+        assertEquals(cardTokenResponse.getBillingAddress().getZip(), request.getBillingAddress().getZip());
+        assertEquals(cardTokenResponse.getBillingAddress().getCountry(), request.getBillingAddress().getCountry());
+        assertNotNull(cardTokenResponse.getPhone());
+        assertEquals(cardTokenResponse.getPhone().getCountryCode(), request.getPhone().getCountryCode());
+        assertEquals(cardTokenResponse.getPhone().getNumber(), request.getPhone().getNumber());
+
     }
 
-    private CardTokenRequest createValidRequest() {
-        final Address billingAddress = new Address();
-        billingAddress.setAddressLine1("Checkout.com");
-        billingAddress.setAddressLine2("90 Tottenham Court Road");
-        billingAddress.setCity("London");
-        billingAddress.setState("London");
-        billingAddress.setZip("W1T 4TJ");
-        billingAddress.setCountry("GB");
-
-        final Phone phone = new Phone();
-        phone.setCountryCode("44");
-        phone.setNumber("020 222333");
-
-        final CardTokenRequest request = new CardTokenRequest(TestCardSource.VISA.getNumber(), TestCardSource.VISA.getExpiryMonth(), TestCardSource.VISA.getExpiryYear());
-        request.setCvv(TestCardSource.VISA.getCvv());
-        request.setBillingAddress(billingAddress);
-        request.setPhone(phone);
-
-        return request;
-    }
 }

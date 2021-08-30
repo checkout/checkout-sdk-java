@@ -1,23 +1,17 @@
-package com.checkout.tokens.beta;
+package com.checkout.tokens;
 
 import com.checkout.ApiClient;
 import com.checkout.CheckoutArgumentException;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.PublicKeyCredentials;
-import com.checkout.tokens.TokenHeader;
-import com.checkout.tokens.beta.request.ApplePayTokenData;
-import com.checkout.tokens.beta.request.ApplePayTokenRequest;
-import com.checkout.tokens.beta.request.CardTokenRequest;
-import com.checkout.tokens.beta.request.GooglePayTokenData;
-import com.checkout.tokens.beta.request.GooglePayTokenRequest;
-import com.checkout.tokens.beta.request.WalletTokenRequest;
-import com.checkout.tokens.beta.response.CardTokenResponse;
-import com.checkout.tokens.beta.response.TokenResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.checkout.TestHelper.mockFourConfiguration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -112,39 +106,38 @@ public class TokensClientTest {
                 .transactionId("3cee89679130a4b2617c76118a1c62fd400cd45b49dc0916d5b951b560cd17b4")
                 .build();
 
-        final ApplePayTokenData applePayTokenData = ApplePayTokenData.builder()
-                .version("EC_v1")
-                .data("t7GeajLB9skXB6QSWfEpPA4WPhDqB7ekdd")
-                .tokenHeader(tokenHeader)
-                .signature(signature)
-                .build();
+        final Map<String, Object> tokenData = new HashMap<>();
+        tokenData.put("version", "EC_v1");
+        tokenData.put("data", "t7GeajLB9skXB6QSWfEpPA4WPhDqB7ekdd");
+        tokenData.put("signature", signature);
+        tokenData.put("header", tokenHeader);
 
-        final ApplePayTokenRequest applePayTokenRequest = ApplePayTokenRequest.builder()
-                .applePayTokenData(applePayTokenData)
-                .build();
+        final WalletTokenRequest walletTokenRequest = WalletTokenRequest.builder()
+                .tokenData(tokenData).build();
 
-        tokensClient.requestAsync(applePayTokenRequest);
+        tokensClient.requestAsync(walletTokenRequest);
 
-        verify(apiClient).postAsync(eq("tokens"), any(PublicKeyCredentials.class), eq(TokenResponse.class), eq(applePayTokenRequest), isNull());
+        verify(apiClient).postAsync(eq("tokens"), any(PublicKeyCredentials.class), eq(TokenResponse.class), eq(walletTokenRequest), isNull());
 
     }
 
     @Test
     public void shouldRequestGooglePayToken() {
 
-        final GooglePayTokenData googlePayTokenData = GooglePayTokenData.builder()
-                .signature("TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ")
-                .protocolVersion("ECv1")
-                .signedMessage("Signed Message")
-                .build();
+        final Map<String, Object> tokenData = new HashMap<>();
+        tokenData.put("protocolVersion", "EC_v1");
+        tokenData.put("signature", "t7GeajLB9skXB6QSWfEpPA4WPhDqB7ekdd");
+        tokenData.put("signedMessage", "'{\"encryptedMessage\":\n" +
+                "              \"ZW5jcnlwdGVkTWVzc2FnZQ==\",\n" +
+                "              \"ephemeralPublicKey\": \"ZXBoZW1lcmFsUHVibGljS2V5\",\n" +
+                "              \"tag\": \"c2lnbmF0dXJl\"}'");
 
-        final GooglePayTokenRequest googlePayTokenRequest = GooglePayTokenRequest.builder()
-                .googlePayTokenData(googlePayTokenData)
-                .build();
+        final WalletTokenRequest walletTokenRequest = WalletTokenRequest.builder()
+                .tokenData(tokenData).build();
 
-        tokensClient.requestAsync(googlePayTokenRequest);
+        tokensClient.requestAsync(walletTokenRequest);
 
-        verify(apiClient).postAsync(eq("tokens"), any(PublicKeyCredentials.class), eq(TokenResponse.class), eq(googlePayTokenRequest), isNull());
+        verify(apiClient).postAsync(eq("tokens"), any(PublicKeyCredentials.class), eq(TokenResponse.class), eq(walletTokenRequest), isNull());
 
     }
 

@@ -1,12 +1,15 @@
-package com.checkout.tokens.beta;
+package com.checkout.tokens.beta.request;
 
+import com.checkout.tokens.TokenHeader;
 import com.google.gson.annotations.SerializedName;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public final class TokenData {
+@AllArgsConstructor
+public final class ApplePayTokenData {
 
     private String version;
 

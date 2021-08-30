@@ -17,9 +17,9 @@ import com.checkout.payments.beta.response.source.ResponseCardSource;
 import com.checkout.payments.beta.response.source.ResponseIdSource;
 import com.checkout.payments.beta.sender.RequestCorporateSender;
 import com.checkout.payments.beta.sender.RequestIndividualSender;
-import com.checkout.tokens.beta.CardTokenRequest;
-import com.checkout.tokens.beta.CardTokenResponse;
 import com.checkout.tokens.beta.TokensClient;
+import com.checkout.tokens.beta.request.CardTokenRequest;
+import com.checkout.tokens.beta.response.CardTokenResponse;
 
 import java.util.UUID;
 

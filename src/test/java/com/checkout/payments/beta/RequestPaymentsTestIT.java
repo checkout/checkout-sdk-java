@@ -18,7 +18,7 @@ import com.checkout.common.beta.ThreeDSEnrollmentStatus;
 import com.checkout.payments.beta.response.source.ResponseCardSource;
 import com.checkout.payments.beta.sender.RequestCorporateSender;
 import com.checkout.payments.beta.sender.RequestIndividualSender;
-import com.checkout.tokens.beta.CardTokenResponse;
+import com.checkout.tokens.beta.response.CardTokenResponse;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;

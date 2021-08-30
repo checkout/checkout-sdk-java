@@ -1,4 +1,4 @@
-package com.checkout.tokens.beta;
+package com.checkout.tokens.beta.response;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
