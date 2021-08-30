@@ -1,4 +1,4 @@
-package com.checkout.payments.beta.response;
+package com.checkout.common.beta;
 
 import com.google.gson.annotations.SerializedName;
 
