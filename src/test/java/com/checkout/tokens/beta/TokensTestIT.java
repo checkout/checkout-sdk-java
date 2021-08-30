@@ -3,6 +3,8 @@ package com.checkout.tokens.beta;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestCardSource;
+import com.checkout.tokens.beta.request.CardTokenRequest;
+import com.checkout.tokens.beta.response.CardTokenResponse;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -18,7 +20,7 @@ public class TokensTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldRequestToken() {
+    public void shouldRequestCardToken() {
 
         final CardTokenRequest request = CardTokenRequest.builder()
                 .number(TestCardSource.VISA.getNumber())

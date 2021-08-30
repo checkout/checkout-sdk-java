@@ -3,6 +3,7 @@ package com.checkout.tokens;
 import com.checkout.common.Address;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.Phone;
+import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,20 +11,29 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class CardTokenRequest implements TokenRequest {
+public final class CardTokenRequest implements TokenRequest {
+
     private final String type = "card";
-    private final String number;
-    private final int expiryMonth;
-    private final int expiryYear;
+
+    private String number;
+
+    @SerializedName("expiry_month")
+    private int expiryMonth;
+
+    @SerializedName("expiry_year")
+    private int expiryYear;
+
     private String name;
+
     private String cvv;
+
+    @SerializedName("billing_address")
     private Address billingAddress;
+
     private Phone phone;
 
-    public CardTokenRequest(String number, int expiryMonth, int expiryYear) {
-        if (CheckoutUtils.isNullOrEmpty(number)) {
-            throw new IllegalArgumentException("The card number is required.");
-        }
+    public CardTokenRequest(final String number, final int expiryMonth, final int expiryYear) {
+        CheckoutUtils.requiresNonBlank("number", number);
         if (expiryMonth < 1 || expiryMonth > 12) {
             throw new IllegalArgumentException("The expiry month must be between 1 and 12");
         }
@@ -34,6 +44,7 @@ public class CardTokenRequest implements TokenRequest {
 
     @Override
     public String getType() {
-        return "card";
+        return type;
     }
+
 }
