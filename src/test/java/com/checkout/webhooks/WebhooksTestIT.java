@@ -2,12 +2,15 @@ package com.checkout.webhooks;
 
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,75 +20,80 @@ public class WebhooksTestIT extends SandboxTestFixture {
         super(PlatformType.DEFAULT);
     }
 
-    @Test
-    public void can_create_webhook() throws Exception {
-        final WebhookRequest webhookRequest = WebhookRequest.builder()
-                .url("https://google.com/fail")
-                .eventTypes(Collections.singletonList("payment_captured"))
-                .build();
-        final WebhookResponse webhookResponse = getApi().webhooksClient().registerWebhook(webhookRequest).get();
-        assertNotNull(webhookResponse);
-
-        final String id = webhookResponse.getId();
-        assertNotNull(id);
+    @BeforeEach
+    protected void cleanup() {
+        final List<WebhookResponse> webhookResponses = blocking(getApi().webhooksClient().retrieveWebhooks());
+        webhookResponses.forEach(
+                webhookResponse -> blocking(getApi().webhooksClient().removeWebhook(webhookResponse.getId())));
     }
 
     @Test
-    public void can_retrieve_webhook() throws Exception {
-        final WebhookRequest webhookRequest = WebhookRequest.builder()
-                .url("https://google.com/fail")
-                .eventTypes(Collections.singletonList("payment_captured"))
-                .build();
-        final WebhookResponse webhookResponse = getApi().webhooksClient().registerWebhook(webhookRequest).get();
-        final String id = webhookResponse.getId();
+    public void shouldRegisterWebhook() {
 
-        WebhookResponse webhook = getApi().webhooksClient().retrieveWebhook(id).get();
-        assertEquals(webhookRequest.getUrl(), webhook.getUrl());
-        assertEquals(webhookRequest.getEventTypes(), webhook.getEventTypes());
+        final WebhookResponse webhookResponse = registerWebhook();
+        assertNotNull(webhookResponse);
+        assertNotNull(webhookResponse.getId());
+        assertEquals("https://google.com/fail", webhookResponse.getUrl());
+        assertTrue(webhookResponse.isActive());
+        assertFalse(webhookResponse.getHeaders().isEmpty());
+        assertEquals(Stream.of(EventType.values()).map(EventType::getCode).collect(Collectors.toList()), webhookResponse.getEventTypes());
+        assertTrue(webhookResponse.hasLink("self"));
+
+    }
+
+    @Test
+    public void shouldRetrieveWebhook() {
+
+        final WebhookResponse webhookResponse = registerWebhook();
+
+        final WebhookResponse webhook = blocking(getApi().webhooksClient().retrieveWebhook(webhookResponse.getId()));
+        assertEquals("https://google.com/fail", webhook.getUrl());
+        assertEquals(Stream.of(EventType.values()).map(EventType::getCode).collect(Collectors.toList()), webhook.getEventTypes());
         assertTrue(webhook.isActive());
         assertEquals("json", webhook.getContentType());
         assertEquals(1, webhook.getHeaders().size());
         assertTrue(webhook.getHeaders().containsKey("authorization"));
         assertNotNull(webhook.getHeaders().get("authorization"));
 
-        final List<WebhookResponse> response = getApi().webhooksClient().retrieveWebhooks().get();
+        final List<WebhookResponse> response = blocking(getApi().webhooksClient().retrieveWebhooks());
         assertNotNull(response);
+        assertTrue(response.size() >= 1);
 
-        webhook = response.stream().filter(it -> id.equals(it.getId())).findFirst().orElse(null);
-        assertNotNull(webhook);
-        assertEquals(webhookRequest.getUrl(), webhook.getUrl());
-        assertEquals(webhookRequest.getEventTypes(), webhook.getEventTypes());
+        final WebhookResponse webhook2 = response.stream().filter(it -> webhook.getId().equals(it.getId())).findFirst().orElse(null);
+        assertNotNull(webhook2);
+        assertEquals("https://google.com/fail", webhook2.getUrl());
+        assertEquals(Stream.of(EventType.values()).map(EventType::getCode).collect(Collectors.toList()), webhook2.getEventTypes());
+
     }
 
     @Test
-    public void can_update_webhook() throws Exception {
-        WebhookRequest webhookRequest = WebhookRequest.builder()
-                .url("https://google.com/fail")
-                .eventTypes(Collections.singletonList("payment_captured"))
-                .build();
-        final WebhookResponse webhookResponse = getApi().webhooksClient().registerWebhook(webhookRequest).get();
-        final String id = webhookResponse.getId();
+    public void shouldUpdateWebhook() {
 
-        webhookRequest = webhookResponse.toRequest();
-        webhookRequest.setUrl("https://google.com/fail2");
+        final WebhookResponse webhookResponse = registerWebhook();
 
-        final WebhookResponse webhook = getApi().webhooksClient().updateWebhook(id, webhookRequest).get();
-        assertEquals(webhookRequest.getUrl(), webhook.getUrl());
-        assertEquals(webhookRequest.getEventTypes(), webhook.getEventTypes());
-    }
-
-    @Test
-    public void can_delete_webhook() throws Exception {
         final WebhookRequest webhookRequest = WebhookRequest.builder()
-                .url("https://google.com/fail")
-                .eventTypes(Collections.singletonList("payment_captured"))
+                .headers(webhookResponse.getHeaders())
+                .active(webhookResponse.isActive())
+                .contentType(webhookResponse.getContentType())
+                .url("https://google.com/fail2")
                 .build();
-        final WebhookResponse webhookResponse = getApi().webhooksClient().registerWebhook(webhookRequest).get();
-        final String id = webhookResponse.getId();
 
-        final List<WebhookResponse> responseBeforeRemoval = getApi().webhooksClient().retrieveWebhooks().get();
-        getApi().webhooksClient().removeWebhook(id).get();
-        final List<WebhookResponse> responseAfterRemoval = getApi().webhooksClient().retrieveWebhooks().get();
+        webhookRequest.addEventTypes(EventType.PAYMENT_APPROVED, EventType.PAYMENT_CAPTURED);
+
+        final WebhookResponse webhook = blocking(getApi().webhooksClient().updateWebhook(webhookResponse.getId(), webhookRequest));
+        assertEquals(webhookRequest.getUrl(), webhook.getUrl());
+        assertEquals(webhookRequest.getEventTypes(), webhook.getEventTypes());
+
+    }
+
+    @Test
+    public void canDeleteWebhook() {
+
+        final WebhookResponse webhookResponse = registerWebhook();
+
+        final List<WebhookResponse> responseBeforeRemoval = blocking(getApi().webhooksClient().retrieveWebhooks());
+        blocking(getApi().webhooksClient().removeWebhook(webhookResponse.getId()));
+        final List<WebhookResponse> responseAfterRemoval = blocking(getApi().webhooksClient().retrieveWebhooks());
         assertEquals(responseBeforeRemoval.size() - 1, responseAfterRemoval.size());
 
         responseAfterRemoval.stream()
@@ -97,7 +105,21 @@ public class WebhooksTestIT extends SandboxTestFixture {
                         throw new IllegalStateException(e);
                     }
                 });
-        final List<WebhookResponse> emptyResponse = getApi().webhooksClient().retrieveWebhooks().get();
+        final List<WebhookResponse> emptyResponse = blocking(getApi().webhooksClient().retrieveWebhooks());
         assertTrue(emptyResponse.isEmpty());
+
     }
+
+    protected WebhookResponse registerWebhook() {
+
+        final WebhookRequest webhookRequest = WebhookRequest.builder()
+                .url("https://google.com/fail")
+                .build();
+
+        webhookRequest.addEventTypes(EventType.values());
+
+        return blocking(getApi().webhooksClient().registerWebhook(webhookRequest));
+
+    }
+
 }

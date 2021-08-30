@@ -1,18 +1,22 @@
 package com.checkout.events;
 
-import com.checkout.common.Resource;
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.time.Instant;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class AttemptSummaryResponse extends Resource {
+public final class AttemptSummaryResponse {
+
+    @SerializedName("status_code")
     private int statusCode;
+
+    @SerializedName("response_body")
     private String responseBody;
+
+    @SerializedName("send_mode")
     private String sendMode;
+
     private Instant timestamp;
+
 }

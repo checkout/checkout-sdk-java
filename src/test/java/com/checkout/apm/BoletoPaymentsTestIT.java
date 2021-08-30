@@ -34,6 +34,8 @@ public class BoletoPaymentsTestIT extends SandboxTestFixture {
 
         final PaymentRequest<BoletoSource> request = PaymentRequest.boleto(boletoSource, com.checkout.common.beta.Currency.BRL, 100L);
 
+        nap();
+
         final PaymentResponse response = blocking(getApi().paymentsClient().requestAsync(request));
 
         assertNotNull(response);
@@ -46,6 +48,8 @@ public class BoletoPaymentsTestIT extends SandboxTestFixture {
         assertTrue(paymentPending.hasLink("redirect"));
 
         // Get payment
+
+        nap();
 
         final GetPaymentResponse getPaymentResponse = blocking(getApi().paymentsClient().getAsync(paymentPending.getId()));
 
@@ -75,6 +79,8 @@ public class BoletoPaymentsTestIT extends SandboxTestFixture {
 
         final PaymentRequest<BoletoSource> request = PaymentRequest.boleto(boletoSource, com.checkout.common.beta.Currency.BRL, 100L);
 
+        nap();
+
         final PaymentResponse response = blocking(getApi().paymentsClient().requestAsync(request));
 
         assertNotNull(response);
@@ -87,6 +93,8 @@ public class BoletoPaymentsTestIT extends SandboxTestFixture {
         assertTrue(paymentProcessed.hasLink("actions"));
 
         // Get payment
+
+        nap();
 
         final GetPaymentResponse getPaymentResponse = blocking(getApi().paymentsClient().getAsync(paymentProcessed.getId()));
 
