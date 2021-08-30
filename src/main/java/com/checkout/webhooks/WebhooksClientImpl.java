@@ -1,13 +1,16 @@
 package com.checkout.webhooks;
 
+import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SecretKeyCredentials;
-import com.checkout.AbstractClient;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+import static com.checkout.common.CheckoutUtils.requiresNonBlank;
+import static com.checkout.common.CheckoutUtils.requiresNonNull;
 
 public class WebhooksClientImpl extends AbstractClient implements WebhooksClient {
 
@@ -31,21 +34,27 @@ public class WebhooksClientImpl extends AbstractClient implements WebhooksClient
 
     @Override
     public CompletableFuture<WebhookResponse> registerWebhook(final WebhookRequest webhookRequest, final String idempotencyKey) {
+        requiresNonNull("webhookRequest", webhookRequest);
         return apiClient.postAsync(WEBHOOKS, apiCredentials, WebhookResponse.class, webhookRequest, idempotencyKey);
     }
 
     @Override
-    public CompletableFuture<WebhookResponse> retrieveWebhook(final String id) {
-        return apiClient.getAsync(WEBHOOKS + "/" + id, apiCredentials, WebhookResponse.class);
+    public CompletableFuture<WebhookResponse> retrieveWebhook(final String webhookId) {
+        requiresNonBlank("webhookId", webhookId);
+        return apiClient.getAsync(constructApiPath(WEBHOOKS, webhookId), apiCredentials, WebhookResponse.class);
     }
 
     @Override
-    public CompletableFuture<WebhookResponse> updateWebhook(final String id, final WebhookRequest webhookRequest) {
-        return apiClient.putAsync(WEBHOOKS + "/" + id, apiCredentials, WebhookResponse.class, webhookRequest);
+    public CompletableFuture<WebhookResponse> updateWebhook(final String webhookId, final WebhookRequest webhookRequest) {
+        requiresNonBlank("webhookId", webhookId);
+        requiresNonNull("webhookRequest", webhookRequest);
+        return apiClient.putAsync(constructApiPath(WEBHOOKS, webhookId), apiCredentials, WebhookResponse.class, webhookRequest);
     }
 
     @Override
-    public CompletableFuture<Void> removeWebhook(final String id) {
-        return apiClient.deleteAsync(WEBHOOKS + "/" + id, apiCredentials);
+    public CompletableFuture<Void> removeWebhook(final String webhookId) {
+        requiresNonBlank("webhookId", webhookId);
+        return apiClient.deleteAsync(constructApiPath(WEBHOOKS, webhookId), apiCredentials);
     }
+
 }

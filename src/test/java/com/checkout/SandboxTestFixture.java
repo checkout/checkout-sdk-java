@@ -51,11 +51,18 @@ public abstract class SandboxTestFixture {
     }
 
     /**
-     * Take a Nap
+     * Take a quick nap
      */
     protected void nap() {
+        nap(2);
+    }
+
+    /**
+     * Take a custom nap
+     */
+    protected void nap(final int seconds) {
         try {
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(seconds);
         } catch (final InterruptedException ignore) {
             fail();
         }
