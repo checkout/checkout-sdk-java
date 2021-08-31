@@ -11,7 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerRequest {
+
     private String id;
+
     @SerializedName("default")
     private boolean isDefault;
+
 }

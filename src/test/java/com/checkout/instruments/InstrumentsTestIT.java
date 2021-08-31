@@ -8,9 +8,8 @@ import com.checkout.common.Address;
 import com.checkout.common.Phone;
 import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -18,19 +17,40 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class InstrumentsTestIT extends SandboxTestFixture {
 
+    private AccountHolder accountHolder;
+
     public InstrumentsTestIT() {
         super(PlatformType.CLASSIC);
     }
 
+    @BeforeEach
+    public void setUp() {
+        accountHolder = AccountHolder.builder()
+                .billingAddress(Address.builder()
+                        .addressLine1("123 Street")
+                        .addressLine2("Hollywood Avenue")
+                        .city("Los Angeles")
+                        .state("CA")
+                        .zip("91001")
+                        .country("US")
+                        .build())
+                .phone(Phone.builder()
+                        .countryCode("1")
+                        .number("999555222")
+                        .build())
+                .build();
+    }
+
     @Test
-    public void can_create_instrument() throws Exception {
-        final CardTokenResponse cardToken = getApi().tokensClient().requestAsync(createValidTokenRequest()).get();
+    public void shouldCreateInstrument() {
+        final CardTokenResponse cardToken = blocking(getApi().tokensClient().requestAsync(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type("token")
                 .token(cardToken.getToken())
+                .accountHolder(accountHolder)
                 .build();
-        final CreateInstrumentResponse response = getApi().instrumentsClient().createInstrument(request).get();
+        final CreateInstrumentResponse response = blocking(getApi().instrumentsClient().createInstrument(request));
 
         assertNotNull(response);
         assertNotNull(response.getId());
@@ -44,19 +64,23 @@ public class InstrumentsTestIT extends SandboxTestFixture {
         assertNotNull(response.getIssuerCountry());
         assertNotNull(response.getProductId());
         assertNotNull(response.getProductType());
+        assertNotNull(response.getCustomer());
+        assertNotNull(response.getCustomer().getId());
+        assertNotNull(response.getCustomer().getEmail());
     }
 
     @Test
-    public void can_get_instrument() throws Exception {
-        final CardTokenResponse cardToken = getApi().tokensClient().requestAsync(createValidTokenRequest()).get();
+    public void shouldGetInstrument() {
+        final CardTokenResponse cardToken = blocking(getApi().tokensClient().requestAsync(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type("token")
                 .token(cardToken.getToken())
+                .accountHolder(accountHolder)
                 .build();
-        final CreateInstrumentResponse createInstrumentResponse = getApi().instrumentsClient().createInstrument(request).get();
+        final CreateInstrumentResponse createInstrumentResponse = blocking(getApi().instrumentsClient().createInstrument(request));
 
-        final InstrumentDetailsResponse instrument = getApi().instrumentsClient().getInstrument(createInstrumentResponse.getId()).get();
+        final InstrumentDetailsResponse instrument = blocking(getApi().instrumentsClient().getInstrument(createInstrumentResponse.getId()));
         assertNotNull(instrument);
         assertEquals(createInstrumentResponse.getBin(), instrument.getBin());
         assertEquals(createInstrumentResponse.getProductType(), instrument.getProductType());
@@ -72,18 +96,21 @@ public class InstrumentsTestIT extends SandboxTestFixture {
         assertEquals(createInstrumentResponse.getCardCategory(), instrument.getCardCategory());
         assertEquals(createInstrumentResponse.getIssuer(), instrument.getIssuer());
         assertEquals(createInstrumentResponse.getIssuerCountry(), instrument.getIssuerCountry());
+        assertNotNull(createInstrumentResponse.getCustomer());
+        assertNotNull(createInstrumentResponse.getCustomer().getId());
+        assertNotNull(createInstrumentResponse.getCustomer().getEmail());
         assertNotNull(instrument.getFingerprint());
         assertNotNull(instrument.getAccountHolder());
         assertNotNull(instrument.getAccountHolder().getBillingAddress());
-        assertNotNull(instrument.getAccountHolder().getBillingAddress().getAddressLine1());
-        assertNotNull(instrument.getAccountHolder().getBillingAddress().getAddressLine2());
-        assertNotNull(instrument.getAccountHolder().getBillingAddress().getCity());
-        assertNotNull(instrument.getAccountHolder().getBillingAddress().getCountry());
-        assertNotNull(instrument.getAccountHolder().getBillingAddress().getState());
-        assertNotNull(instrument.getAccountHolder().getBillingAddress().getZip());
+        assertEquals(accountHolder.getBillingAddress().getAddressLine1(), instrument.getAccountHolder().getBillingAddress().getAddressLine1());
+        assertEquals(accountHolder.getBillingAddress().getAddressLine2(), instrument.getAccountHolder().getBillingAddress().getAddressLine2());
+        assertEquals(accountHolder.getBillingAddress().getCity(), instrument.getAccountHolder().getBillingAddress().getCity());
+        assertEquals(accountHolder.getBillingAddress().getCountry(), instrument.getAccountHolder().getBillingAddress().getCountry());
+        assertEquals(accountHolder.getBillingAddress().getState(), instrument.getAccountHolder().getBillingAddress().getState());
+        assertEquals(accountHolder.getBillingAddress().getZip(), instrument.getAccountHolder().getBillingAddress().getZip());
         assertNotNull(instrument.getAccountHolder().getPhone());
-        assertNotNull(instrument.getAccountHolder().getPhone().getCountryCode());
-        assertNotNull(instrument.getAccountHolder().getPhone().getNumber());
+        assertEquals(accountHolder.getPhone().getCountryCode(), instrument.getAccountHolder().getPhone().getCountryCode());
+        assertEquals(accountHolder.getPhone().getNumber(), instrument.getAccountHolder().getPhone().getNumber());
         assertNotNull(instrument.getCustomer());
         assertNotNull(instrument.getCustomer().getId());
         assertNotNull(instrument.getCustomer().getEmail());
@@ -91,35 +118,35 @@ public class InstrumentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_update_instrument() throws Exception {
-        final CardTokenResponse cardToken = getApi().tokensClient().requestAsync(createValidTokenRequest()).get();
+    public void shouldUpdateInstrument(){
+        final CardTokenResponse cardToken = blocking(getApi().tokensClient().requestAsync(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type("token")
                 .token(cardToken.getToken())
                 .build();
-        final CreateInstrumentResponse response = getApi().instrumentsClient().createInstrument(request).get();
-        final UpdateInstrumentResponse updateResponse = getApi().instrumentsClient().updateInstrument(response.getId(), UpdateInstrumentRequest.builder()
+        final CreateInstrumentResponse response = blocking(getApi().instrumentsClient().createInstrument(request));
+        final UpdateInstrumentResponse updateResponse = blocking(getApi().instrumentsClient().updateInstrument(response.getId(), UpdateInstrumentRequest.builder()
                 .name("Test")
-                .build()).get();
+                .build()));
 
         assertNotNull(updateResponse);
         assertNotNull(updateResponse.getFingerprint());
         assertNotNull(updateResponse.getType());
 
-        final InstrumentDetailsResponse instrument = getApi().instrumentsClient().getInstrument(response.getId()).get();
+        final InstrumentDetailsResponse instrument = blocking(getApi().instrumentsClient().getInstrument(response.getId()));
         assertEquals("Test", instrument.getName());
     }
 
     @Test
-    public void can_delete_instrument() throws ExecutionException, InterruptedException {
-        final CardTokenResponse cardToken = getApi().tokensClient().requestAsync(createValidTokenRequest()).get();
+    public void shouldDeleteInstrument() {
+        final CardTokenResponse cardToken = blocking(getApi().tokensClient().requestAsync(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type("token")
                 .token(cardToken.getToken())
                 .build();
-        final CreateInstrumentResponse response = getApi().instrumentsClient().createInstrument(request).get();
+        final CreateInstrumentResponse response = blocking(getApi().instrumentsClient().createInstrument(request));
 
         try {
             getApi().instrumentsClient().getInstrument(response.getId()).get();
@@ -130,17 +157,19 @@ public class InstrumentsTestIT extends SandboxTestFixture {
     }
 
     private CardTokenRequest createValidTokenRequest() {
-        final Address billingAddress = new Address();
-        billingAddress.setAddressLine1("Checkout.com");
-        billingAddress.setAddressLine2("90 Tottenham Court Road");
-        billingAddress.setCity("London");
-        billingAddress.setState("London");
-        billingAddress.setZip("W1T 4TJ");
-        billingAddress.setCountry("GB");
+        final Address billingAddress = Address.builder()
+                .addressLine1("Checkout.com")
+                .addressLine2("90 Tottenham Court Road")
+                .city("London")
+                .state("London")
+                .zip("W1T 4TJ")
+                .country("GB")
+                .build();
 
-        final Phone phone = new Phone();
-        phone.setCountryCode("44");
-        phone.setNumber("020 222333");
+        final Phone phone = Phone.builder()
+                .countryCode("44")
+                .number("020 222333")
+                .build();
 
         final CardTokenRequest request = new CardTokenRequest(TestCardSource.VISA.getNumber(), TestCardSource.VISA.getExpiryMonth(), TestCardSource.VISA.getExpiryYear());
         request.setCvv(TestCardSource.VISA.getCvv());

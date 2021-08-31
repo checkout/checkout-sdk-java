@@ -11,7 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public final class Phone {
+
     @SerializedName(value="country_code", alternate={"countryCode"})
     private String countryCode;
+
     private String number;
+
 }
