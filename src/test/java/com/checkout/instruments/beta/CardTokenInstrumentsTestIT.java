@@ -17,7 +17,7 @@ import com.checkout.instruments.beta.update.UpdateInstrumentTokenRequest;
 import com.checkout.payments.beta.AbstractPaymentsTestIT;
 import org.junit.jupiter.api.Test;
 
-import static com.checkout.beta.TestHelper.getRandomEmail;
+import static com.checkout.TestHelper.generateRandomEmail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -138,7 +138,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
     private CreateInstrumentTokenResponse createTokenInstrument() {
 
         final CustomerRequest customerRequest = CustomerRequest.builder()
-                .email(getRandomEmail())
+                .email(generateRandomEmail())
                 .name("Testing")
                 .phone(Phone.builder()
                         .countryCode("1")

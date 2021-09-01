@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class DLocalSourcePaymentsTestIT extends SandboxTestFixture {
 
     public DLocalSourcePaymentsTestIT() {
-        super(PlatformType.CLASSIC);
+        super(PlatformType.DEFAULT);
     }
 
     @Test

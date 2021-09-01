@@ -2,8 +2,8 @@ package com.checkout;
 
 public enum PlatformType {
 
-    CLASSIC("^sk_([a-z]+)_(\\w{8})-(\\w{4})-(\\w{4})-(\\w{4})-(\\w{12})$", "^pk_([a-z]+)_(\\w{8})-(\\w{4})-(\\w{4})-(\\w{4})-(\\w{12})$"),
-    FOUR("^sk_([a-z]+)_?[a-z2-7]{26}[a-z2-7*#$=]$", "^pk_([a-z]+)_?[a-z2-7]{26}[a-z2-7*#$=]$");
+    DEFAULT("^sk_(test_)?(\\w{8})-(\\w{4})-(\\w{4})-(\\w{4})-(\\w{12})$", "^pk_(test_)?(\\w{8})-(\\w{4})-(\\w{4})-(\\w{4})-(\\w{12})$"),
+    FOUR("^sk_(sbox_)?[a-z2-7]{26}[a-z2-7*#$=]$", "^pk_(sbox_)?[a-z2-7]{26}[a-z2-7*#$=]$");
 
     private final String secretKeyPattern;
     private final String publicKeyPattern;
@@ -28,6 +28,9 @@ public enum PlatformType {
     }
 
     public boolean validateKey(final String key, final String pattern) {
+        if (key == null) {
+            return false;
+        }
         return key.matches(pattern);
     }
 

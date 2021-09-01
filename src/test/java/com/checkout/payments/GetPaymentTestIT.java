@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class GetPaymentTestIT extends SandboxTestFixture {
 
     public GetPaymentTestIT() {
-        super(PlatformType.CLASSIC);
+        super(PlatformType.DEFAULT);
     }
 
     @Test

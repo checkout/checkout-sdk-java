@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 public class CardDestinationPaymentTestIT extends SandboxTestFixture {
 
     public CardDestinationPaymentTestIT() {
-        super(PlatformType.CLASSIC);
+        super(PlatformType.DEFAULT);
     }
 
     @Test

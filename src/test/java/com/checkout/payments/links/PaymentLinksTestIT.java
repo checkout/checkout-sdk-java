@@ -20,7 +20,7 @@ public class PaymentLinksTestIT extends SandboxTestFixture {
     public static final String REFERENCE = "ORD-123A";
 
     public PaymentLinksTestIT() {
-        super(PlatformType.CLASSIC);
+        super(PlatformType.DEFAULT);
     }
 
     @Test

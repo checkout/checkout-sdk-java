@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class AlternativePaymentSourcePaymentsTestIT extends SandboxTestFixture {
 
     public AlternativePaymentSourcePaymentsTestIT() {
-        super(PlatformType.CLASSIC);
+        super(PlatformType.DEFAULT);
     }
 
     @Test
