@@ -4,7 +4,7 @@ import com.checkout.ApiClient;
 import com.checkout.ApiCredentials;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.CheckoutResourceNotFoundException;
-import com.checkout.beta.TestHelper;
+import com.checkout.TestHelper;
 import com.checkout.common.beta.IdResponse;
 import com.checkout.common.beta.Phone;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,7 +76,7 @@ public class CustomersClientImplTest {
                 .getAsync(eq(CustomersClientImpl.CUSTOMERS_PATH + "/" + CUSTOMER_ID), any(ApiCredentials.class),
                         eq(CustomerResponse.class));
         final CustomerRequest customerRequest = CustomerRequest.builder()
-                .email(TestHelper.getRandomEmail())
+                .email(TestHelper.generateRandomEmail())
                 .name("Armando Ibarra")
                 .phone(Phone.builder()
                         .countryCode("65")
@@ -111,7 +111,7 @@ public class CustomersClientImplTest {
                         eq(Void.class), any(CustomerRequest.class), any());
         //Create Customer
         final CustomerRequest customerRequest = CustomerRequest.builder()
-                .email(TestHelper.getRandomEmail())
+                .email(TestHelper.generateRandomEmail())
                 .name("Armando Ibarra")
                 .phone(Phone.builder()
                         .countryCode("3")
@@ -121,7 +121,7 @@ public class CustomersClientImplTest {
         final String customerId = client.create(customerRequest).get().getId();
         assertNotNull(customerId);
         //Update Customer
-        customerRequest.setEmail(TestHelper.getRandomEmail());
+        customerRequest.setEmail(TestHelper.generateRandomEmail());
         customerRequest.setName("Armando Changed");
         when(customerResponse.getEmail()).thenReturn(customerRequest.getEmail());
         when(customerResponse.getName()).thenReturn(customerRequest.getName());
@@ -147,7 +147,7 @@ public class CustomersClientImplTest {
                 .deleteAsync(eq(CustomersClientImpl.CUSTOMERS_PATH + "/" + CUSTOMER_ID), any(ApiCredentials.class));
         //Create Customer
         final CustomerRequest customerRequest = CustomerRequest.builder()
-                .email(TestHelper.getRandomEmail())
+                .email(TestHelper.generateRandomEmail())
                 .name("Armando Ibarra")
                 .phone(Phone.builder()
                         .countryCode("3")

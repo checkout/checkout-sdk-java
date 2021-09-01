@@ -16,7 +16,7 @@ public class HostedPaymentsTestIT extends SandboxTestFixture {
     public static final String REFERENCE = "ORD-123A";
 
     public HostedPaymentsTestIT() {
-        super(PlatformType.CLASSIC);
+        super(PlatformType.DEFAULT);
     }
 
     @Test

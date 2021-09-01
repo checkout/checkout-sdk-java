@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class WebhooksTestIT extends SandboxTestFixture {
 
     public WebhooksTestIT() {
-        super(PlatformType.CLASSIC);
+        super(PlatformType.DEFAULT);
     }
 
     @Test

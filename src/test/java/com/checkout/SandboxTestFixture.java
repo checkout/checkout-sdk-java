@@ -17,7 +17,7 @@ public abstract class SandboxTestFixture {
     public SandboxTestFixture(final PlatformType platformType) {
         final CheckoutConfiguration configuration = loadConfiguration(platformType);
         switch (platformType) {
-            case CLASSIC:
+            case DEFAULT:
                 this.api = new CheckoutApiImpl(configuration);
                 break;
             case FOUR:
@@ -32,7 +32,7 @@ public abstract class SandboxTestFixture {
 
     private CheckoutConfiguration loadConfiguration(final PlatformType platformType) {
         switch (platformType) {
-            case CLASSIC:
+            case DEFAULT:
                 return new CheckoutConfiguration(requireNonNull(System.getenv("CHECKOUT_SECRET_KEY")), true, requireNonNull(System.getenv("CHECKOUT_PUBLIC_KEY")));
             case FOUR:
                 return new CheckoutConfiguration(requireNonNull(System.getenv("CHECKOUT_FOUR_PUBLIC_KEY")), requireNonNull(System.getenv("CHECKOUT_FOUR_SECRET_KEY")), Environment.SANDBOX);

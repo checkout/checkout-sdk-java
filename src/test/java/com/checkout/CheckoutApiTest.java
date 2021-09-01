@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.checkout.TestHelper.mockClassicConfiguration;
+import static com.checkout.TestHelper.mockDefaultConfiguration;
 import static com.checkout.TestHelper.mockFourConfiguration;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -15,7 +15,7 @@ public class CheckoutApiTest {
     @Mock
     private ApiClient apiClient;
 
-    private final CheckoutConfiguration classicConfiguration = mockClassicConfiguration();
+    private final CheckoutConfiguration defaultConfiguration = mockDefaultConfiguration();
     private final CheckoutConfiguration fourConfiguration = mockFourConfiguration();
 
     @Test
@@ -31,7 +31,7 @@ public class CheckoutApiTest {
 
     @Test
     public void shouldInstantiateAndRetrieveClients_deprecatedConstructor() {
-        final CheckoutApi checkoutApi = new CheckoutApiImpl(apiClient, classicConfiguration);
+        final CheckoutApi checkoutApi = new CheckoutApiImpl(apiClient, defaultConfiguration);
         assertNotNull(checkoutApi.paymentsClient());
         assertNotNull(checkoutApi.sourcesClient());
         assertNotNull(checkoutApi.tokensClient());
@@ -42,7 +42,7 @@ public class CheckoutApiTest {
 
     @Test
     public void shouldInstantiateAndRetrieveClients_deprecatedStaticConstructor_1() {
-        final CheckoutApi checkoutApi = CheckoutApiImpl.create(classicConfiguration.getSecretKey(), true, classicConfiguration.getPublicKey());
+        final CheckoutApi checkoutApi = CheckoutApiImpl.create(defaultConfiguration.getSecretKey(), true, defaultConfiguration.getPublicKey());
         assertNotNull(checkoutApi.paymentsClient());
         assertNotNull(checkoutApi.sourcesClient());
         assertNotNull(checkoutApi.tokensClient());
@@ -53,7 +53,7 @@ public class CheckoutApiTest {
 
     @Test
     public void shouldInstantiateAndRetrieveClients_deprecatedStaticConstructor_2() {
-        final CheckoutApi checkoutApi = CheckoutApiImpl.create(classicConfiguration.getSecretKey(), "uri", classicConfiguration.getPublicKey());
+        final CheckoutApi checkoutApi = CheckoutApiImpl.create(defaultConfiguration.getSecretKey(), "uri", defaultConfiguration.getPublicKey());
         assertNotNull(checkoutApi.paymentsClient());
         assertNotNull(checkoutApi.sourcesClient());
         assertNotNull(checkoutApi.tokensClient());

@@ -6,7 +6,7 @@ import com.checkout.instruments.beta.CardTokenInstrumentsTestIT;
 import com.checkout.instruments.beta.get.GetCardInstrumentResponse;
 import org.junit.jupiter.api.Test;
 
-import static com.checkout.beta.TestHelper.getRandomEmail;
+import static com.checkout.TestHelper.generateRandomEmail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -18,7 +18,7 @@ public class CustomersTestIT extends CardTokenInstrumentsTestIT {
     public void shouldCreateAndGetCustomer() {
 
         final CustomerRequest customerRequest = CustomerRequest.builder()
-                .email(getRandomEmail())
+                .email(generateRandomEmail())
                 .name("Testing")
                 .phone(Phone.builder()
                         .countryCode("1")
@@ -49,7 +49,7 @@ public class CustomersTestIT extends CardTokenInstrumentsTestIT {
     public void shouldCreateAndUpdateCustomer() {
         //Create Customer
         final CustomerRequest customerRequest = CustomerRequest.builder()
-                .email(getRandomEmail())
+                .email(generateRandomEmail())
                 .name("Testing")
                 .phone(Phone.builder()
                         .countryCode("1")
@@ -59,7 +59,7 @@ public class CustomersTestIT extends CardTokenInstrumentsTestIT {
         final String customerId = blocking(getApiV2().customersClient().create(customerRequest)).getId();
         assertNotNull(customerId);
         //Update Customer
-        customerRequest.setEmail(getRandomEmail());
+        customerRequest.setEmail(generateRandomEmail());
         customerRequest.setName("Testing New");
         blocking(getApiV2().customersClient().update(customerId, customerRequest));
         //Verify changes were applied
@@ -73,7 +73,7 @@ public class CustomersTestIT extends CardTokenInstrumentsTestIT {
     public void shouldCreateAndEditCustomer() {
         //Create Customer
         final CustomerRequest customerRequest = CustomerRequest.builder()
-                .email(getRandomEmail())
+                .email(generateRandomEmail())
                 .name("Testing")
                 .phone(Phone.builder()
                         .countryCode("1")

@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CardVerificationTestIT extends SandboxTestFixture {
 
     public CardVerificationTestIT() {
-        super(PlatformType.CLASSIC);
+        super(PlatformType.DEFAULT);
     }
 
     @Test

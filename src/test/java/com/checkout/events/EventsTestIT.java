@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class EventsTestIT extends SandboxTestFixture {
 
     public EventsTestIT() {
-        super(PlatformType.CLASSIC);
+        super(PlatformType.DEFAULT);
     }
 
     @BeforeEach

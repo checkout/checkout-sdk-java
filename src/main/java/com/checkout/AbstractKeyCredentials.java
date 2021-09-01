@@ -15,7 +15,7 @@ public abstract class AbstractKeyCredentials {
 
     protected String getHeader(final String key) {
         switch (configuration.getCustomerPlatformType()) {
-            case CLASSIC:
+            case DEFAULT:
                 return key;
             case FOUR:
                 return BEARER + key;

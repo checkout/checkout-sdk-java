@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TokensTestIT extends SandboxTestFixture {
 
     public TokensTestIT() {
-        super(PlatformType.CLASSIC);
+        super(PlatformType.DEFAULT);
     }
 
     @Test

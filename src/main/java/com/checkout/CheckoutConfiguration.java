@@ -5,7 +5,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import java.net.URI;
 
 import static com.checkout.Environment.lookup;
-import static com.checkout.PlatformType.CLASSIC;
+import static com.checkout.PlatformType.DEFAULT;
 import static com.checkout.PlatformType.FOUR;
 import static com.checkout.common.CheckoutUtils.requiresNonBlank;
 import static com.checkout.common.CheckoutUtils.requiresNonNull;
@@ -51,7 +51,7 @@ public final class CheckoutConfiguration {
     private CheckoutConfiguration(final String publicKey, final String secretKey, final String uri) {
         requiresNonBlank("uri", uri);
         this.uri = uri;
-        validateAndSetKeys(publicKey, secretKey, CLASSIC);
+        validateAndSetKeys(publicKey, secretKey, DEFAULT);
     }
 
     private void validateAndSetKeys(final String publicKey, final String secretKey, final PlatformType platformType) {
@@ -78,7 +78,7 @@ public final class CheckoutConfiguration {
     }
 
     public void setPublicKey(final String publicKey) {
-        CLASSIC.validatePublicKey(publicKey);
+        DEFAULT.validatePublicKey(publicKey);
         this.publicKey = publicKey;
     }
 

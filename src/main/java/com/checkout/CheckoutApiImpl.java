@@ -69,7 +69,6 @@ public final class CheckoutApiImpl extends AbstractCheckoutApmApi implements Che
 
     public static CheckoutApi create(final String secretKey, final boolean useSandbox, final String publicKey) {
         final CheckoutConfiguration configuration = new CheckoutConfiguration(secretKey, useSandbox, publicKey);
-        configuration.setPublicKey(publicKey);
         return new CheckoutApiImpl(configuration);
     }
 

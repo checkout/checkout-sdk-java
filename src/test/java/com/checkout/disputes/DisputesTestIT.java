@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class DisputesTestIT extends SandboxTestFixture {
 
     public DisputesTestIT() {
-        super(PlatformType.CLASSIC);
+        super(PlatformType.DEFAULT);
     }
 
     @Test
