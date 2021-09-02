@@ -5,6 +5,7 @@ import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestCardSource;
 import com.checkout.common.Address;
+import com.checkout.common.CountryCode;
 import com.checkout.common.Phone;
 import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
@@ -32,7 +33,7 @@ public class InstrumentsTestIT extends SandboxTestFixture {
                         .city("Los Angeles")
                         .state("CA")
                         .zip("91001")
-                        .country("US")
+                        .country(CountryCode.US)
                         .build())
                 .phone(Phone.builder()
                         .countryCode("1")
@@ -163,7 +164,7 @@ public class InstrumentsTestIT extends SandboxTestFixture {
                 .city("London")
                 .state("London")
                 .zip("W1T 4TJ")
-                .country("GB")
+                .country(CountryCode.GB)
                 .build();
 
         final Phone phone = Phone.builder()

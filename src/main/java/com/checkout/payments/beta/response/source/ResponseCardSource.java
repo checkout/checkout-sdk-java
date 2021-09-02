@@ -1,5 +1,6 @@
 package com.checkout.payments.beta.response.source;
 
+import com.checkout.common.CountryCode;
 import com.checkout.common.beta.Address;
 import com.checkout.common.beta.CardCategory;
 import com.checkout.common.beta.CardType;
@@ -48,7 +49,7 @@ public final class ResponseCardSource extends ResponseSource {
     private final String issuer;
 
     @SerializedName("issuer_country")
-    private final String issuerCountry;
+    private final CountryCode issuerCountry;
 
     @SerializedName("product_id")
     private final String productId;

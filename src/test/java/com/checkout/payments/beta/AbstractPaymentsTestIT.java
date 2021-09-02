@@ -2,6 +2,7 @@ package com.checkout.payments.beta;
 
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
+import com.checkout.common.CountryCode;
 import com.checkout.common.beta.Address;
 import com.checkout.common.beta.Currency;
 import com.checkout.common.beta.Phone;
@@ -89,7 +90,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                         .addressLine1("Address Line 1")
                         .addressLine2("Address Line 2")
                         .city("City")
-                        .country("ES")
+                        .country(CountryCode.ES)
                         .build())
                 .phone(Phone.builder().number("675676541").countryCode("+34").build())
                 .build();

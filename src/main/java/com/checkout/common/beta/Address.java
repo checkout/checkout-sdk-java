@@ -1,5 +1,6 @@
 package com.checkout.common.beta;
 
+import com.checkout.common.CountryCode;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,6 @@ public final class Address {
 
     private String zip;
 
-    private String country;
+    private CountryCode country;
 
 }

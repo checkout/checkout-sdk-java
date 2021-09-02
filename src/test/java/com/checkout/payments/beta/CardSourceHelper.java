@@ -1,5 +1,6 @@
 package com.checkout.payments.beta;
 
+import com.checkout.common.CountryCode;
 import com.checkout.common.beta.Address;
 import com.checkout.common.beta.Currency;
 import com.checkout.payments.beta.request.PaymentRequest;
@@ -33,7 +34,7 @@ public class CardSourceHelper {
                         .addressLine1("Address Line 1")
                         .addressLine2("Address Line 2")
                         .city("City")
-                        .country("UK")
+                        .country(CountryCode.GB)
                         .build())
                 .build();
     }
@@ -45,7 +46,7 @@ public class CardSourceHelper {
                         .addressLine1("Address Line 1")
                         .addressLine2("Address Line 2")
                         .city("City")
-                        .country("UK")
+                        .country(CountryCode.GB)
                         .build())
                 .build();
     }

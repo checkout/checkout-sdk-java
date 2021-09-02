@@ -1,5 +1,6 @@
 package com.checkout.payments.apm;
 
+import com.checkout.common.CountryCode;
 import com.checkout.payments.RequestSource;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ public final class BalotoSource implements RequestSource {
     @SerializedName("integration_type")
     private final IntegrationType integrationType = IntegrationType.REDIRECT;
 
-    private final String country;
+    private final CountryCode country;
 
     private final Payer payer;
 

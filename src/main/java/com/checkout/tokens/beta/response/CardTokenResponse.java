@@ -1,5 +1,6 @@
 package com.checkout.tokens.beta.response;
 
+import com.checkout.common.CountryCode;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,7 +32,7 @@ public final class CardTokenResponse extends TokenResponse {
     private String issuer;
 
     @SerializedName("issuer_country")
-    private String issuerCountry;
+    private CountryCode issuerCountry;
 
     @SerializedName("product_id")
     private String productId;

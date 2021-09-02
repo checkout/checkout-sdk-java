@@ -1,6 +1,7 @@
 package com.checkout.instruments.beta;
 
 import com.checkout.CheckoutResourceNotFoundException;
+import com.checkout.common.CountryCode;
 import com.checkout.common.beta.AccountHolder;
 import com.checkout.common.beta.Address;
 import com.checkout.common.beta.Phone;
@@ -97,7 +98,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
                                 .city("London")
                                 .state("London")
                                 .zip("W1T 4TJ")
-                                .country("GB")
+                                .country(CountryCode.GB)
                                 .build())
                         .build())
                 .build();
@@ -172,7 +173,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
                                 .city("London")
                                 .state("London")
                                 .zip("W1T 4TJ")
-                                .country("GB")
+                                .country(CountryCode.GB)
                                 .build())
                         .build())
                 .customer(CreateCustomerInstrumentRequest.builder()
