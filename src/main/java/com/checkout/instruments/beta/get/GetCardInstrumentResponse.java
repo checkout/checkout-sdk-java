@@ -1,5 +1,6 @@
 package com.checkout.instruments.beta.get;
 
+import com.checkout.common.CountryCode;
 import com.checkout.common.beta.CardCategory;
 import com.checkout.common.beta.CardType;
 import com.checkout.common.beta.InstrumentType;
@@ -36,7 +37,7 @@ public final class GetCardInstrumentResponse extends GetInstrumentResponse {
     private String issuer;
 
     @SerializedName("issuer_country")
-    private String issuerCountry;
+    private CountryCode issuerCountry;
 
     @SerializedName("product_id")
     private String productId;

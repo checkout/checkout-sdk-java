@@ -1,6 +1,7 @@
 package com.checkout.payments.beta;
 
 import com.checkout.CheckoutResourceNotFoundException;
+import com.checkout.common.CountryCode;
 import com.checkout.common.beta.Address;
 import com.checkout.common.beta.Currency;
 import com.checkout.common.beta.Phone;
@@ -118,7 +119,7 @@ public class GetPaymentsTestIT extends AbstractPaymentsTestIT {
 
         final PaymentRecipient recipient = PaymentRecipient.builder()
                 .accountNumber("1234567")
-                .country("ES")
+                .country(CountryCode.ES)
                 .dateOfBirth(LocalDate.of(1985, 5, 15))
                 .firstName("IT")
                 .lastName("TESTING")
@@ -157,7 +158,7 @@ public class GetPaymentsTestIT extends AbstractPaymentsTestIT {
                 .addressLine1("Address Line 1")
                 .addressLine2("Address Line 2")
                 .city("City")
-                .country("UK")
+                .country(CountryCode.GB)
                 .build();
 
         final Phone phone = Phone.builder().number("675676541").countryCode("+34").build();
@@ -184,7 +185,7 @@ public class GetPaymentsTestIT extends AbstractPaymentsTestIT {
 
         final ShippingDetails shippingDetails = paymentReturned.getShipping();
         assertEquals("City", shippingDetails.getAddress().getCity());
-        assertEquals("UK", shippingDetails.getAddress().getCountry());
+        assertEquals(CountryCode.GB, shippingDetails.getAddress().getCountry());
         assertEquals(phone, shippingDetails.getPhone());
 
     }

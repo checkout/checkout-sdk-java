@@ -4,6 +4,7 @@ import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestCardSource;
 import com.checkout.common.Address;
+import com.checkout.common.CountryCode;
 import com.checkout.common.Phone;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +30,7 @@ public class TokensTestIT extends SandboxTestFixture {
                 .city("London")
                 .state("London")
                 .zip("W1T 4TJ")
-                .country("GB")
+                .country(CountryCode.GB)
                 .build();
 
         final Phone phone = Phone.builder().countryCode("44").number("020 222333").build();

@@ -1,5 +1,6 @@
 package com.checkout.payments.beta;
 
+import com.checkout.common.CountryCode;
 import com.checkout.common.beta.Address;
 import com.checkout.common.beta.Currency;
 import com.checkout.common.beta.Phone;
@@ -51,7 +52,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                         .addressLine1("Address Line 1")
                         .addressLine2("Address Line 2")
                         .city("City")
-                        .country("UK")
+                        .country(CountryCode.GB)
                         .build())
                 .build();
 
@@ -113,7 +114,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                         .addressLine1("Address Line 1")
                         .addressLine2("Address Line 2")
                         .city("City")
-                        .country("UK")
+                        .country(CountryCode.GB)
                         .build())
                 .build();
 
@@ -167,7 +168,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                         .addressLine1("Address Line 1")
                         .addressLine2("Address Line 2")
                         .city("City")
-                        .country("UK")
+                        .country(CountryCode.GB)
                         .build())
                 .build();
 
@@ -275,7 +276,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                         .addressLine1("Address Line 1")
                         .addressLine2("Address Line 2")
                         .city("City")
-                        .country("ES")
+                        .country(CountryCode.ES)
                         .build())
                 .phone(Phone.builder().number("675676541").countryCode("+34").build())
                 .build();
@@ -330,7 +331,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                         .addressLine1("Address Line 1")
                         .addressLine2("Address Line 2")
                         .city("City")
-                        .country("ES")
+                        .country(CountryCode.ES)
                         .build())
                 .phone(Phone.builder().number("675676541").countryCode("+34").build())
                 .build();

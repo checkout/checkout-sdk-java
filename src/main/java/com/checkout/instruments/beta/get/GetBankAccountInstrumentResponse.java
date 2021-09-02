@@ -1,5 +1,6 @@
 package com.checkout.instruments.beta.get;
 
+import com.checkout.common.CountryCode;
 import com.checkout.common.beta.AccountType;
 import com.checkout.common.beta.BankDetails;
 import com.checkout.common.beta.Currency;
@@ -37,7 +38,7 @@ public final class GetBankAccountInstrumentResponse extends GetInstrumentRespons
 
     private Currency currency;
 
-    private String country;
+    private CountryCode country;
 
     private BankDetails bank;
 

@@ -1,5 +1,6 @@
 package com.checkout.payments.beta.request;
 
+import com.checkout.common.CountryCode;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +25,6 @@ public final class PaymentRecipient {
     @SerializedName("last_name")
     private String lastName;
 
-    private String country;
-
+    private CountryCode country;
 
 }

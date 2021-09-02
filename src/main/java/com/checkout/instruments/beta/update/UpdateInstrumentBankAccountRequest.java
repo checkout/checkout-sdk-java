@@ -1,5 +1,6 @@
 package com.checkout.instruments.beta.update;
 
+import com.checkout.common.CountryCode;
 import com.checkout.common.beta.AccountHolder;
 import com.checkout.common.beta.AccountType;
 import com.checkout.common.beta.BankDetails;
@@ -38,7 +39,7 @@ public final class UpdateInstrumentBankAccountRequest extends UpdateInstrumentRe
 
     private final Currency currency;
 
-    private final String country;
+    private final CountryCode country;
 
     @SerializedName("processing_channel_id")
     private final String processingChannelId;
@@ -59,7 +60,7 @@ public final class UpdateInstrumentBankAccountRequest extends UpdateInstrumentRe
                                                  final String bban,
                                                  final String swiftBic,
                                                  final Currency currency,
-                                                 final String country,
+                                                 final CountryCode country,
                                                  final String processingChannelId,
                                                  final AccountHolder accountHolder,
                                                  final BankDetails bank,

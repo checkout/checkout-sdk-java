@@ -3,6 +3,7 @@ package com.checkout.tokens.beta;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestCardSource;
+import com.checkout.common.CountryCode;
 import com.checkout.tokens.beta.request.CardTokenRequest;
 import com.checkout.tokens.beta.response.CardTokenResponse;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,7 @@ public class TokensTestIT extends SandboxTestFixture {
         assertEquals("CREDIT", response.getCardType());
         assertEquals("CONSUMER", response.getCardCategory());
         assertEquals("JPMORGAN CHASE BANK NA", response.getIssuer());
-        assertEquals("US", response.getIssuerCountry());
+        assertEquals(CountryCode.US, response.getIssuerCountry());
         assertEquals("A", response.getProductId());
         assertEquals("Visa Traditional", response.getProductType());
 

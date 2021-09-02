@@ -2,6 +2,7 @@ package com.checkout.apm;
 
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
+import com.checkout.common.CountryCode;
 import com.checkout.payments.AlternativePaymentSourceResponse;
 import com.checkout.payments.GetPaymentResponse;
 import com.checkout.payments.PaymentPending;
@@ -69,7 +70,7 @@ public class BalotoPaymentsTestIT extends SandboxTestFixture {
     private String makeBaletoPayment() {
 
         final BalotoSource balotoSource = BalotoSource.builder()
-                .country("CO")
+                .country(CountryCode.CO)
                 .description("simulate Via Baloto Demo Payment")
                 .payer(BalotoSource.Payer.builder().email("bruce@wayne-enterprises.com").name("Bruce Wayne").build())
                 .build();

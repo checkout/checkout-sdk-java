@@ -2,6 +2,7 @@ package com.checkout.apm;
 
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
+import com.checkout.common.CountryCode;
 import com.checkout.payments.AlternativePaymentSourceResponse;
 import com.checkout.payments.GetPaymentResponse;
 import com.checkout.payments.PaymentPending;
@@ -26,7 +27,7 @@ public class BoletoPaymentsTestIT extends SandboxTestFixture {
     public void shouldSucceedBoletoRedirectPayment() {
 
         final BoletoSource boletoSource = BoletoSource.builder()
-                .country("BR")
+                .country(CountryCode.BR)
                 .description("boleto payment")
                 .integrationType(IntegrationType.REDIRECT)
                 .payer(BoletoSource.Payer.builder().email("john@doe-enterprises.com").name("John Doe").document("53033315550").build())
@@ -71,7 +72,7 @@ public class BoletoPaymentsTestIT extends SandboxTestFixture {
     public void shouldMakeBoletoDirectPayment_thirdPartyRejection() {
 
         final BoletoSource boletoSource = BoletoSource.builder()
-                .country("BR")
+                .country(CountryCode.BR)
                 .description("boleto payment")
                 .integrationType(IntegrationType.DIRECT)
                 .payer(BoletoSource.Payer.builder().email("john@doe-enterprises.com").name("John Doe").document("53033315550").build())

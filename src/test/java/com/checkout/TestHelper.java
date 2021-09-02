@@ -1,6 +1,7 @@
 package com.checkout;
 
 import com.checkout.common.Address;
+import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.Phone;
 import com.checkout.common.Product;
@@ -63,7 +64,7 @@ public class TestHelper {
                         .lastName("Doe-Doe")
                         .address("1 Random Ave.")
                         .city("New York")
-                        .country("US")
+                        .country(CountryCode.US)
                         .postalCode("12345")
                         .state("New York")
                         .accountNumber("DE1234567890")
@@ -161,7 +162,7 @@ public class TestHelper {
                 .city("London")
                 .state("London")
                 .zip("W1T 4TJ")
-                .country("GB")
+                .country(CountryCode.GB)
                 .build();
     }
 

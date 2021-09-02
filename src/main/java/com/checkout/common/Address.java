@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Optional;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -24,6 +26,26 @@ public final class Address {
 
     private String zip;
 
-    private String country;
+    private CountryCode country;
+
+    /**
+     * @deprecated Will be removed on a future version
+     */
+    @Deprecated
+    public void setCountry(final String country) {
+        this.country = CountryCode.fromString(country);
+    }
+
+    public void setCountry(final CountryCode country) {
+        this.country = country;
+    }
+
+    /**
+     * @deprecated Will be removed on a future version
+     */
+    @Deprecated
+    public String getCountry() {
+        return Optional.ofNullable(country).map(CountryCode::name).orElse(null);
+    }
 
 }

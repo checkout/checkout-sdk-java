@@ -1,7 +1,10 @@
 package com.checkout.instruments;
 
+import com.checkout.common.CountryCode;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+
+import java.util.Optional;
 
 @Data
 public class InstrumentDetailsResponse {
@@ -36,7 +39,7 @@ public class InstrumentDetailsResponse {
     private String issuer;
 
     @SerializedName("issuer_country")
-    private String issuerCountry;
+    private CountryCode issuerCountry;
 
     @SerializedName("product_id")
     private String productId;
@@ -48,4 +51,25 @@ public class InstrumentDetailsResponse {
     private AccountHolder accountHolder;
 
     private CustomerResponse customer;
+
+    /**
+     * @deprecated Will be removed on a future version
+     */
+    @Deprecated
+    public String getIssuerCountry() {
+        return Optional.ofNullable(issuerCountry).map(CountryCode::name).orElse(null);
+    }
+
+    /**
+     * @deprecated Will be removed on a future version
+     */
+    @Deprecated
+    public void setIssuerCountry(final String issuerCountry) {
+        this.issuerCountry = CountryCode.fromString(issuerCountry);
+    }
+
+    public void setIssuerCountry(final CountryCode issuerCountry) {
+        this.issuerCountry = issuerCountry;
+    }
+
 }
