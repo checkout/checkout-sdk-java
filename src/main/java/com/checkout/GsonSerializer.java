@@ -24,14 +24,12 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
-import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-@Slf4j
 public class GsonSerializer implements Serializer {
 
     private static final Gson DEFAULT_GSON = new GsonBuilder()
@@ -71,14 +69,11 @@ public class GsonSerializer implements Serializer {
 
     @Override
     public <T> String toJson(final T object) {
-        final String result = gson.toJson(object);
-        log.debug("toJson: " + result);
-        return result;
+        return gson.toJson(object);
     }
 
     @Override
     public <T> T fromJson(final String json, final Class<T> type) {
-        log.debug("fromJson: " + json);
         return gson.fromJson(json, type);
     }
 

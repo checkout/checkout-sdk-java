@@ -93,7 +93,7 @@ public class ApacheHttpClientTransport implements Transport {
                 default:
                     throw new UnsupportedOperationException("Unsupported HTTP Method: " + httpMethod);
             }
-            log.info("{}:{}", httpMethod, request.getURI());
+            log.info("{}: {}", httpMethod, request.getURI());
             request.setHeader(AUTHORIZATION, apiCredentials.getAuthorizationHeader());
             if (idempotencyKey != null) {
                 request.setHeader("Cko-Idempotency-Key", idempotencyKey);
@@ -112,7 +112,7 @@ public class ApacheHttpClientTransport implements Transport {
                         .map(entry -> new BasicNameValuePair(entry.getKey(), entry.getValue()))
                         .collect(Collectors.toList());
                 request = new HttpGet(new URIBuilder(getRequestUrl(path)).addParameters(params).build());
-                log.info("GET:{}", request.getURI());
+                log.info("GET: {}", request.getURI());
                 request.setHeader(AUTHORIZATION, apiCredentials.getAuthorizationHeader());
                 return performCall(apiCredentials, null, request, ACCEPT_JSON);
             } catch (final URISyntaxException e) {
