@@ -1,8 +1,8 @@
 package com.checkout;
 
-import com.checkout.common.CheckoutUtils;
-
 import java.util.stream.Stream;
+
+import static com.checkout.common.CheckoutUtils.validateParams;
 
 public enum Environment {
 
@@ -20,7 +20,7 @@ public enum Environment {
     }
 
     public static Environment lookup(final String environment) {
-        CheckoutUtils.requiresNonBlank("environment", environment);
+        validateParams("environment", environment);
         return Stream.of(values())
                 .filter(entry -> entry.name().equals(environment.toUpperCase()))
                 .findFirst()

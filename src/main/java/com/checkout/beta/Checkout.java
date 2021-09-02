@@ -5,11 +5,15 @@ import com.checkout.ApiClientImpl;
 import com.checkout.CheckoutArgumentException;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.Environment;
-import com.google.common.annotations.Beta;
 
 import java.net.URI;
 
-@Beta
+/**
+ * BETA
+ *
+ * SDK entrypoint class to build FOUR credentials based {@link CheckoutApi} instances.
+ *
+ */
 public final class Checkout {
 
     private Checkout() {

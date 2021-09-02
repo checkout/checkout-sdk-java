@@ -45,7 +45,7 @@ public class TokensClientTest {
             new TokensClientImpl(null, checkoutConfiguration);
             fail();
         } catch (final CheckoutArgumentException checkoutArgumentException) {
-            assertEquals("apiClient must be not be null", checkoutArgumentException.getMessage());
+            assertEquals("apiClient cannot be null", checkoutArgumentException.getMessage());
         }
 
     }
@@ -57,7 +57,7 @@ public class TokensClientTest {
             tokensClient.requestAsync((CardTokenRequest) null);
             fail();
         } catch (final CheckoutArgumentException checkoutArgumentException) {
-            assertEquals("cardTokenRequest must be not be null", checkoutArgumentException.getMessage());
+            assertEquals("cardTokenRequest cannot be null", checkoutArgumentException.getMessage());
         }
 
         verifyNoInteractions(apiClient);
@@ -82,7 +82,7 @@ public class TokensClientTest {
             tokensClient.requestAsync((WalletTokenRequest) null);
             fail();
         } catch (final CheckoutArgumentException checkoutArgumentException) {
-            assertEquals("walletTokenRequest must be not be null", checkoutArgumentException.getMessage());
+            assertEquals("walletTokenRequest cannot be null", checkoutArgumentException.getMessage());
         }
 
         verifyNoInteractions(apiClient);

@@ -1,6 +1,6 @@
 package com.checkout;
 
-import static com.checkout.common.CheckoutUtils.requiresNonNull;
+import static com.checkout.common.CheckoutUtils.validateParams;
 
 public abstract class AbstractKeyCredentials {
 
@@ -9,7 +9,7 @@ public abstract class AbstractKeyCredentials {
     protected final CheckoutConfiguration configuration;
 
     public AbstractKeyCredentials(final CheckoutConfiguration configuration) {
-        requiresNonNull("configuration", configuration);
+        validateParams("configuration", configuration);
         this.configuration = configuration;
     }
 

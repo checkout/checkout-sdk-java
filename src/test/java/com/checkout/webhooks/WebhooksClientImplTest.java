@@ -96,7 +96,7 @@ public class WebhooksClientImplTest {
             webhooksClient.registerWebhook(null);
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("webhookRequest must be not be null", e.getMessage());
+            assertEquals("webhookRequest cannot be null", e.getMessage());
         }
 
         verifyNoInteractions(apiClient);
@@ -141,14 +141,14 @@ public class WebhooksClientImplTest {
             webhooksClient.retrieveWebhook("");
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("webhookId must be not be blank", e.getMessage());
+            assertEquals("webhookId cannot be blank", e.getMessage());
         }
 
         try {
             webhooksClient.retrieveWebhook(null);
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("webhookId must be not be blank", e.getMessage());
+            assertEquals("webhookId cannot be null", e.getMessage());
         }
 
         verifyNoInteractions(apiClient);
@@ -178,14 +178,14 @@ public class WebhooksClientImplTest {
             webhooksClient.updateWebhook("id", null);
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("webhookRequest must be not be null", e.getMessage());
+            assertEquals("webhookRequest cannot be null", e.getMessage());
         }
 
         try {
             webhooksClient.updateWebhook("", new WebhookRequest());
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("webhookId must be not be blank", e.getMessage());
+            assertEquals("webhookId cannot be blank", e.getMessage());
         }
 
         verifyNoInteractions(apiClient);
@@ -211,14 +211,14 @@ public class WebhooksClientImplTest {
             webhooksClient.removeWebhook(null);
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("webhookId must be not be blank", e.getMessage());
+            assertEquals("webhookId cannot be null", e.getMessage());
         }
 
         try {
             webhooksClient.removeWebhook("");
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("webhookId must be not be blank", e.getMessage());
+            assertEquals("webhookId cannot be blank", e.getMessage());
         }
 
         verifyNoInteractions(apiClient);

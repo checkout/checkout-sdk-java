@@ -5,7 +5,6 @@ import com.checkout.common.CheckoutUtils;
 import com.checkout.common.ErrorResponse;
 import com.checkout.common.FileRequest;
 import com.checkout.common.Resource;
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -13,7 +12,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import static com.checkout.common.CheckoutUtils.validateMultipleRequires;
+import static com.checkout.common.CheckoutUtils.validateParams;
 
 public class ApiClientImpl implements ApiClient {
 
@@ -30,62 +29,62 @@ public class ApiClientImpl implements ApiClient {
     }
 
     public ApiClientImpl(final Serializer serializer, final Transport transport) {
-        validateMultipleRequires(ImmutableMap.of("serializer", serializer, "transport", transport));
+        validateParams("serializer", serializer, "transport", transport);
         this.serializer = serializer;
         this.transport = transport;
     }
 
     @Override
     public <T> CompletableFuture<T> getAsync(final String path, final ApiCredentials credentials, final Class<T> responseType) {
-        validateMultipleRequires(ImmutableMap.of(PATH, path, CREDENTIALS, credentials));
+        validateParams(PATH, path, CREDENTIALS, credentials);
         return sendRequestAsync("GET", path, credentials, null, null, responseType);
     }
 
     @Override
     public <T> CompletableFuture<T> getAsync(final String path, final ApiCredentials credentials, final Type responseType) {
-        validateMultipleRequires(ImmutableMap.of(PATH, path, CREDENTIALS, credentials));
+        validateParams(PATH, path, CREDENTIALS, credentials);
         return sendRequestAsync("GET", path, credentials, null, null, responseType);
     }
 
     @Override
     public <T> CompletableFuture<T> putAsync(final String path, final ApiCredentials credentials, final Class<T> responseType, final Object request) {
-        validateMultipleRequires(ImmutableMap.of(PATH, path, CREDENTIALS, credentials));
+        validateParams(PATH, path, CREDENTIALS, credentials);
         return sendRequestAsync("PUT", path, credentials, request, null, responseType);
     }
 
     @Override
     public CompletableFuture<Void> deleteAsync(final String path, final ApiCredentials credentials) {
-        validateMultipleRequires(ImmutableMap.of(PATH, path, CREDENTIALS, credentials));
+        validateParams(PATH, path, CREDENTIALS, credentials);
         return sendRequestAsync("DELETE", path, credentials, null, null, Void.class);
     }
 
     @Override
     public <T> CompletableFuture<T> postAsync(final String path, final ApiCredentials credentials, final Class<T> responseType, final Object request, final String idempotencyKey) {
-        validateMultipleRequires(ImmutableMap.of(PATH, path, CREDENTIALS, credentials));
+        validateParams(PATH, path, CREDENTIALS, credentials);
         return sendRequestAsync("POST", path, credentials, request, idempotencyKey, responseType);
     }
 
     @Override
     public <T> CompletableFuture<T> postAsync(final String path, final ApiCredentials credentials, final Type responseType, final Object request, final String idempotencyKey) {
-        validateMultipleRequires(ImmutableMap.of(PATH, path, CREDENTIALS, credentials));
+        validateParams(PATH, path, CREDENTIALS, credentials);
         return sendRequestAsync("POST", path, credentials, request, idempotencyKey, responseType);
     }
 
     @Override
     public <T> CompletableFuture<T> patchAsync(final String path, final ApiCredentials credentials, final Class<T> responseType, final Object request, final String idempotencyKey) {
-        validateMultipleRequires(ImmutableMap.of(PATH, path, CREDENTIALS, credentials));
+        validateParams(PATH, path, CREDENTIALS, credentials);
         return sendRequestAsync("PATCH", path, credentials, request, idempotencyKey, responseType);
     }
 
     @Override
     public <T> CompletableFuture<T> patchAsync(final String path, final ApiCredentials credentials, final Type type, final Object request, final String idempotencyKey) {
-        validateMultipleRequires(ImmutableMap.of(PATH, path, CREDENTIALS, credentials, "type", type, "request", request));
+        validateParams(PATH, path, CREDENTIALS, credentials, "type", type, "request", request);
         return sendRequestAsync("PATCH", path, credentials, request, idempotencyKey, type);
     }
 
     @Override
     public CompletableFuture<? extends Resource> postAsync(final String path, final ApiCredentials credentials, final Map<Integer, Class<? extends Resource>> resultTypeMappings, final Object request, final String idempotencyKey) {
-        validateMultipleRequires(ImmutableMap.of(PATH, path, CREDENTIALS, credentials, "resultTypeMappings", resultTypeMappings));
+        validateParams(PATH, path, CREDENTIALS, credentials, "resultTypeMappings", resultTypeMappings);
         return transport.invoke("POST", path, credentials, serializer.toJson(request), idempotencyKey)
                 .thenApply(this::errorCheck)
                 .thenApply(response -> {
@@ -100,7 +99,7 @@ public class ApiClientImpl implements ApiClient {
     @Override
     public <T> CompletableFuture<T> queryAsync(final String path, final ApiCredentials credentials, final Object filter,
                                                final Class<T> responseType) {
-        validateMultipleRequires(ImmutableMap.of(PATH, path, CREDENTIALS, credentials, "filter", filter));
+        validateParams(PATH, path, CREDENTIALS, credentials, "filter", filter);
         final Map<String, String> params = serializer.fromJson(serializer.toJson(filter),
                 new TypeToken<Map<String, String>>() {
                 }.getType());
@@ -112,7 +111,7 @@ public class ApiClientImpl implements ApiClient {
     @Override
     public <T> CompletableFuture<T> submitFileAsync(final String path, final ApiCredentials credentials,
                                                     final FileRequest request, final Class<T> responseType) {
-        validateMultipleRequires(ImmutableMap.of(PATH, path, CREDENTIALS, credentials, "fileRequest", request));
+        validateParams(PATH, path, CREDENTIALS, credentials, "fileRequest", request);
         return transport.submitFile(path, credentials, request)
                 .thenApply(this::errorCheck)
                 .thenApply(response -> deserialize(response, responseType));
@@ -120,7 +119,7 @@ public class ApiClientImpl implements ApiClient {
 
     @Override
     public CompletableFuture<String> retrieveFileAsync(final String path, final ApiCredentials credentials, final String targetFile) {
-        validateMultipleRequires(ImmutableMap.of(PATH, path, CREDENTIALS, credentials));
+        validateParams(PATH, path, CREDENTIALS, credentials);
         return transport.invoke("GET_FILE", path, credentials, targetFile, null)
                 .thenApply(this::errorCheck)
                 .thenApply(Response::getBody);

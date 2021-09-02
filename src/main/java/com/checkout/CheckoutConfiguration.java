@@ -7,8 +7,7 @@ import java.net.URI;
 import static com.checkout.Environment.lookup;
 import static com.checkout.PlatformType.DEFAULT;
 import static com.checkout.PlatformType.FOUR;
-import static com.checkout.common.CheckoutUtils.requiresNonBlank;
-import static com.checkout.common.CheckoutUtils.requiresNonNull;
+import static com.checkout.common.CheckoutUtils.validateParams;
 
 public final class CheckoutConfiguration {
 
@@ -25,13 +24,13 @@ public final class CheckoutConfiguration {
     private HttpClientBuilder apacheHttpClientBuilder;
 
     public CheckoutConfiguration(final String publicKey, final String secretKey, final Environment environment) {
-        requiresNonNull("environment", environment);
+        validateParams("environment", environment);
         this.uri = environment.getUri();
         validateAndSetKeys(publicKey, secretKey, FOUR);
     }
 
     public CheckoutConfiguration(final String publicKey, final String secretKey, final URI uri) {
-        requiresNonNull("uri", uri);
+        validateParams("uri", uri);
         this.uri = uri.toString();
         validateAndSetKeys(publicKey, secretKey, FOUR);
     }
@@ -49,13 +48,13 @@ public final class CheckoutConfiguration {
     }
 
     private CheckoutConfiguration(final String publicKey, final String secretKey, final String uri) {
-        requiresNonBlank("uri", uri);
+        validateParams("uri", uri);
         this.uri = uri;
         validateAndSetKeys(publicKey, secretKey, DEFAULT);
     }
 
     private void validateAndSetKeys(final String publicKey, final String secretKey, final PlatformType platformType) {
-        requiresNonNull("platformType", platformType);
+        validateParams("platformType", platformType);
         if (publicKey != null) {
             platformType.validatePublicKey(publicKey);
             this.publicKey = publicKey;
