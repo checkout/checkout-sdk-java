@@ -31,7 +31,7 @@ public class CheckoutConfigurationTest {
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("environment must be not be null", e.getMessage());
+            assertEquals("environment cannot be null", e.getMessage());
         }
     }
 
@@ -60,7 +60,7 @@ public class CheckoutConfigurationTest {
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("uri must be not be null", e.getMessage());
+            assertEquals("uri cannot be null", e.getMessage());
         }
     }
 
@@ -88,7 +88,7 @@ public class CheckoutConfigurationTest {
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("uri must be not be blank", e.getMessage());
+            assertEquals("uri cannot be null", e.getMessage());
         }
     }
 

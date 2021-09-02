@@ -158,7 +158,7 @@ public class EventsClientImplTest {
             eventsClient.retrieveEvents(null);
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("retrieveEventsRequest must be not be null", e.getMessage());
+            assertEquals("retrieveEventsRequest cannot be null", e.getMessage());
         }
 
         verifyNoInteractions(apiClient);
@@ -188,14 +188,14 @@ public class EventsClientImplTest {
             eventsClient.retrieveEvent(null);
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("eventId must be not be blank", e.getMessage());
+            assertEquals("eventId cannot be null", e.getMessage());
         }
 
         try {
             eventsClient.retrieveEvent("");
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("eventId must be not be blank", e.getMessage());
+            assertEquals("eventId cannot be blank", e.getMessage());
         }
 
         verifyNoInteractions(apiClient);
@@ -209,14 +209,14 @@ public class EventsClientImplTest {
             eventsClient.retrieveEventNotification("eventId", null);
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("notificationId must be not be blank", e.getMessage());
+            assertEquals("notificationId cannot be null", e.getMessage());
         }
 
         try {
             eventsClient.retrieveEventNotification("eventId", "");
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("notificationId must be not be blank", e.getMessage());
+            assertEquals("notificationId cannot be blank", e.getMessage());
         }
 
         verifyNoInteractions(apiClient);
@@ -258,14 +258,14 @@ public class EventsClientImplTest {
             eventsClient.retryWebhook(null, "notificationId");
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("eventId must be not be blank", e.getMessage());
+            assertEquals("eventId cannot be null", e.getMessage());
         }
 
         try {
             eventsClient.retryWebhook("", "notificationId");
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("eventId must be not be blank", e.getMessage());
+            assertEquals("eventId cannot be blank", e.getMessage());
         }
 
         verifyNoInteractions(apiClient);
@@ -279,14 +279,14 @@ public class EventsClientImplTest {
             eventsClient.retryWebhook("eventId", null);
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("webhookId must be not be blank", e.getMessage());
+            assertEquals("webhookId cannot be null", e.getMessage());
         }
 
         try {
             eventsClient.retryWebhook("eventId", "");
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("webhookId must be not be blank", e.getMessage());
+            assertEquals("webhookId cannot be blank", e.getMessage());
         }
 
         verifyNoInteractions(apiClient);

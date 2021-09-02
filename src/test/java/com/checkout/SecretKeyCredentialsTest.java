@@ -16,7 +16,7 @@ public class SecretKeyCredentialsTest {
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("configuration must be not be null", e.getMessage());
+            assertEquals("configuration cannot be null", e.getMessage());
         }
     }
 
@@ -41,7 +41,7 @@ public class SecretKeyCredentialsTest {
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("configuration must be not be null", e.getMessage());
+            assertEquals("configuration cannot be null", e.getMessage());
         }
     }
 

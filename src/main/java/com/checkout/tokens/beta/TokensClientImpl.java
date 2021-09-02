@@ -11,7 +11,7 @@ import com.checkout.tokens.beta.response.TokenResponse;
 
 import java.util.concurrent.CompletableFuture;
 
-import static com.checkout.common.CheckoutUtils.requiresNonNull;
+import static com.checkout.common.CheckoutUtils.validateParams;
 
 public final class TokensClientImpl extends AbstractClient implements TokensClient {
 
@@ -23,13 +23,13 @@ public final class TokensClientImpl extends AbstractClient implements TokensClie
 
     @Override
     public CompletableFuture<CardTokenResponse> requestAsync(final CardTokenRequest cardTokenRequest) {
-        requiresNonNull("cardTokenRequest", cardTokenRequest);
+        validateParams("cardTokenRequest", cardTokenRequest);
         return apiClient.postAsync(TOKENS_PATH, apiCredentials, CardTokenResponse.class, cardTokenRequest, null);
     }
 
     @Override
     public CompletableFuture<TokenResponse> requestAsync(final WalletTokenRequest walletTokenRequest) {
-        requiresNonNull("walletTokenRequest", walletTokenRequest);
+        validateParams("walletTokenRequest", walletTokenRequest);
         return apiClient.postAsync(TOKENS_PATH, apiCredentials, TokenResponse.class, walletTokenRequest, null);
     }
 

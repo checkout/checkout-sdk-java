@@ -9,8 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static com.checkout.common.CheckoutUtils.requiresNonBlank;
-import static com.checkout.common.CheckoutUtils.requiresNonNull;
+import static com.checkout.common.CheckoutUtils.validateParams;
 
 public class WebhooksClientImpl extends AbstractClient implements WebhooksClient {
 
@@ -34,26 +33,25 @@ public class WebhooksClientImpl extends AbstractClient implements WebhooksClient
 
     @Override
     public CompletableFuture<WebhookResponse> registerWebhook(final WebhookRequest webhookRequest, final String idempotencyKey) {
-        requiresNonNull("webhookRequest", webhookRequest);
+        validateParams("webhookRequest", webhookRequest);
         return apiClient.postAsync(WEBHOOKS, apiCredentials, WebhookResponse.class, webhookRequest, idempotencyKey);
     }
 
     @Override
     public CompletableFuture<WebhookResponse> retrieveWebhook(final String webhookId) {
-        requiresNonBlank("webhookId", webhookId);
+        validateParams("webhookId", webhookId);
         return apiClient.getAsync(constructApiPath(WEBHOOKS, webhookId), apiCredentials, WebhookResponse.class);
     }
 
     @Override
     public CompletableFuture<WebhookResponse> updateWebhook(final String webhookId, final WebhookRequest webhookRequest) {
-        requiresNonBlank("webhookId", webhookId);
-        requiresNonNull("webhookRequest", webhookRequest);
+        validateParams("webhookId", webhookId, "webhookRequest", webhookRequest);
         return apiClient.putAsync(constructApiPath(WEBHOOKS, webhookId), apiCredentials, WebhookResponse.class, webhookRequest);
     }
 
     @Override
     public CompletableFuture<Void> removeWebhook(final String webhookId) {
-        requiresNonBlank("webhookId", webhookId);
+        validateParams("webhookId", webhookId);
         return apiClient.deleteAsync(constructApiPath(WEBHOOKS, webhookId), apiCredentials);
     }
 

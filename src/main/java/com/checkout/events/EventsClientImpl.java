@@ -10,8 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-import static com.checkout.common.CheckoutUtils.requiresNonBlank;
-import static com.checkout.common.CheckoutUtils.requiresNonNull;
+import static com.checkout.common.CheckoutUtils.validateParams;
 
 public class EventsClientImpl extends AbstractClient implements EventsClient {
 
@@ -50,33 +49,31 @@ public class EventsClientImpl extends AbstractClient implements EventsClient {
 
     @Override
     public CompletableFuture<EventsPageResponse> retrieveEvents(final RetrieveEventsRequest retrieveEventsRequest) {
-        requiresNonNull("retrieveEventsRequest", retrieveEventsRequest);
+        validateParams("retrieveEventsRequest", retrieveEventsRequest);
         return apiClient.queryAsync(EVENTS, apiCredentials, retrieveEventsRequest, EventsPageResponse.class);
     }
 
     @Override
     public CompletableFuture<EventResponse> retrieveEvent(final String eventId) {
-        requiresNonBlank("eventId", eventId);
+        validateParams("eventId", eventId);
         return apiClient.getAsync(constructApiPath(EVENTS, eventId), apiCredentials, EventResponse.class);
     }
 
     @Override
     public CompletableFuture<EventNotificationResponse> retrieveEventNotification(final String eventId, final String notificationId) {
-        requiresNonBlank("eventId", eventId);
-        requiresNonBlank("notificationId", notificationId);
+        validateParams("eventId", eventId, "notificationId", notificationId);
         return apiClient.getAsync(constructApiPath(EVENTS, eventId, NOTIFICATIONS, notificationId), apiCredentials, EventNotificationResponse.class);
     }
 
     @Override
     public CompletableFuture<Void> retryWebhook(final String eventId, final String webhookId) {
-        requiresNonBlank("eventId", eventId);
-        requiresNonBlank("webhookId", webhookId);
+        validateParams("eventId", eventId, "webhookId", webhookId);
         return apiClient.postAsync(constructApiPath(EVENTS, eventId, WEBHOOKS, webhookId, "retry"), apiCredentials, Void.class, null, null);
     }
 
     @Override
     public CompletableFuture<Void> retryAllWebhooks(final String eventId) {
-        requiresNonBlank("eventId", eventId);
+        validateParams("eventId", eventId);
         return apiClient.postAsync(constructApiPath(EVENTS, eventId, WEBHOOKS, "retry"), apiCredentials, Void.class, null, null);
     }
 

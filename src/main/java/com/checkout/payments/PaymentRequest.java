@@ -15,8 +15,7 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.checkout.common.CheckoutUtils.requiresNonBlank;
-import static com.checkout.common.CheckoutUtils.requiresNonNull;
+import static com.checkout.common.CheckoutUtils.validateParams;
 
 @Data
 @Builder
@@ -57,9 +56,7 @@ public class PaymentRequest<T extends RequestSource> {
      */
     @Deprecated
     private PaymentRequest(final T sourceOrDestination, final String currency, final Long amount, final boolean isSource) {
-        requiresNonNull("sourceOrDestination", sourceOrDestination);
-        requiresNonBlank("currency", currency);
-        requiresNonNull("amount", amount);
+        validateParams("sourceOrDestination", sourceOrDestination, "currency", currency, "amount", amount);
         this.source = isSource ? sourceOrDestination : null;
         this.destination = isSource ? null : sourceOrDestination;
         this.amount = amount;
@@ -68,9 +65,7 @@ public class PaymentRequest<T extends RequestSource> {
     }
 
     private PaymentRequest(final T sourceOrDestination, final Currency currency, final Long amount, final boolean isSource) {
-        requiresNonNull("sourceOrDestination", sourceOrDestination);
-        requiresNonNull("currency", currency);
-        requiresNonNull("amount", amount);
+        validateParams("sourceOrDestination", sourceOrDestination, "currency", currency, "amount", amount);
         this.source = isSource ? sourceOrDestination : null;
         this.destination = isSource ? null : sourceOrDestination;
         this.amount = amount;

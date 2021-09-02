@@ -1,12 +1,13 @@
 package com.checkout.tokens;
 
 import com.checkout.common.Address;
-import com.checkout.common.CheckoutUtils;
 import com.checkout.common.Phone;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+
+import static com.checkout.common.CheckoutUtils.validateParams;
 
 @Data
 @Builder
@@ -33,7 +34,7 @@ public final class CardTokenRequest implements TokenRequest {
     private Phone phone;
 
     public CardTokenRequest(final String number, final int expiryMonth, final int expiryYear) {
-        CheckoutUtils.requiresNonBlank("number", number);
+        validateParams("number", number);
         if (expiryMonth < 1 || expiryMonth > 12) {
             throw new IllegalArgumentException("The expiry month must be between 1 and 12");
         }

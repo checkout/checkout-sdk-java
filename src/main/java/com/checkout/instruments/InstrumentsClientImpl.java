@@ -7,8 +7,7 @@ import com.checkout.SecretKeyCredentials;
 
 import java.util.concurrent.CompletableFuture;
 
-import static com.checkout.common.CheckoutUtils.requiresNonBlank;
-import static com.checkout.common.CheckoutUtils.requiresNonNull;
+import static com.checkout.common.CheckoutUtils.validateParams;
 
 public class InstrumentsClientImpl extends AbstractClient implements InstrumentsClient {
 
@@ -20,27 +19,26 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
 
     @Override
     public CompletableFuture<CreateInstrumentResponse> createInstrument(final CreateInstrumentRequest createInstrumentRequest) {
-        requiresNonNull("createInstrumentRequest", createInstrumentRequest);
+        validateParams("createInstrumentRequest", createInstrumentRequest);
         return apiClient.postAsync(INSTRUMENTS, apiCredentials, CreateInstrumentResponse.class, createInstrumentRequest, null);
     }
 
     @Override
     public CompletableFuture<InstrumentDetailsResponse> getInstrument(final String instrumentId) {
-        requiresNonBlank("instrumentId", instrumentId);
+        validateParams("instrumentId", instrumentId);
         return apiClient.getAsync(constructApiPath(INSTRUMENTS, instrumentId), apiCredentials, InstrumentDetailsResponse.class);
     }
 
     @Override
     public CompletableFuture<UpdateInstrumentResponse> updateInstrument(final String instrumentId, final UpdateInstrumentRequest updateInstrumentRequest) {
-        requiresNonBlank("instrumentId", instrumentId);
-        requiresNonNull("updateInstrumentRequest", updateInstrumentRequest);
+        validateParams("instrumentId", instrumentId, "updateInstrumentRequest", updateInstrumentRequest);
         return apiClient.patchAsync(constructApiPath(INSTRUMENTS, instrumentId), apiCredentials, UpdateInstrumentResponse.class, updateInstrumentRequest, null);
     }
 
     @Override
     public CompletableFuture<Void> deleteInstrument(final String instrumentId) {
-        requiresNonBlank("instrumentId", instrumentId);
+        validateParams("instrumentId", instrumentId);
         return apiClient.deleteAsync(constructApiPath(INSTRUMENTS, instrumentId), apiCredentials);
     }
-    
+
 }

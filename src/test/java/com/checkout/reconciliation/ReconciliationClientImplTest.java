@@ -5,8 +5,6 @@ import com.checkout.ApiCredentials;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.common.Currency;
 import com.checkout.common.QueryFilterDateRange;
-import com.google.common.collect.ImmutableList;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -85,27 +84,27 @@ public class ReconciliationClientImplTest {
 
     private void setUpPaymentReport() {
         when(reconciliationPaymentReportResponse.getCount()).thenReturn(1);
-        when(reconciliationPaymentReportResponse.getData()).thenReturn(ImmutableList.of(paymentReportData));
+        when(reconciliationPaymentReportResponse.getData()).thenReturn(Collections.singletonList(paymentReportData));
         when(paymentReportData.getId()).thenReturn(PAYMENT_ID);
         when(paymentReportData.getProcessingCurrency()).thenReturn(Currency.USD);
         when(paymentReportData.getPayoutCurrency()).thenReturn(Currency.GBP);
         when(paymentReportData.getReference()).thenReturn(REFERENCE);
-        when(paymentReportData.getActions()).thenReturn(ImmutableList.of(action));
+        when(paymentReportData.getActions()).thenReturn(Collections.singletonList(action));
         when(action.getId()).thenReturn(ACTION_ID);
         when(action.getType()).thenReturn(ACTION_TYPE);
-        when(action.getBreakdown()).thenReturn(ImmutableList.of(breakdown));
+        when(action.getBreakdown()).thenReturn(Collections.singletonList(breakdown));
         when(breakdown.getType()).thenReturn(BREAKDOWN_TYPE);
 
     }
 
     private void setUpStatementResponse() {
         when(statementReportResponse.getCount()).thenReturn(1);
-        when(statementReportResponse.getData()).thenReturn(ImmutableList.of(statementData));
+        when(statementReportResponse.getData()).thenReturn(Collections.singletonList(statementData));
         when(statementData.getId()).thenReturn(STATEMENT_ID);
         when(statementData.getPeriodStart()).thenReturn(FROM);
         when(statementData.getPeriodEnd()).thenReturn(TO);
         when(statementData.getDate()).thenReturn(TO);
-        when(statementData.getPayouts()).thenReturn(ImmutableList.of(payout));
+        when(statementData.getPayouts()).thenReturn(Collections.singletonList(payout));
         when(payout.getCurrency()).thenReturn(Currency.GBP);
         when(payout.getPeriodStart()).thenReturn(FROM);
         when(payout.getPeriodEnd()).thenReturn(TO);
