@@ -1,6 +1,6 @@
 package com.checkout.payments.beta.action;
 
-import com.checkout.common.beta.Resource;
+import com.checkout.common.Resource;
 import com.checkout.payments.beta.Processing;
 import com.checkout.payments.beta.request.AuthorizationType;
 import com.google.gson.annotations.SerializedName;

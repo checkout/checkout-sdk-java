@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class InstrumentsClientImplTest {
+class InstrumentsClientImplTest {
 
     private static final String INSTRUMENTS = "instruments";
 
@@ -34,13 +34,13 @@ public class InstrumentsClientImplTest {
     private CheckoutConfiguration configuration;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         client = new InstrumentsClientImpl(apiClient, configuration);
     }
 
 
     @Test
-    public void shouldCreateInstrument() throws ExecutionException, InterruptedException {
+    void shouldCreateInstrument() throws ExecutionException, InterruptedException {
 
         final CreateInstrumentRequest request = mock(CreateInstrumentRequest.class);
         final CreateInstrumentResponse response = mock(CreateInstrumentResponse.class);
@@ -57,7 +57,7 @@ public class InstrumentsClientImplTest {
     }
 
     @Test
-    public void shouldGetInstrument() throws ExecutionException, InterruptedException {
+    void shouldGetInstrument() throws ExecutionException, InterruptedException {
 
         final InstrumentDetailsResponse response = mock(InstrumentDetailsResponse.class);
         when(apiClient.getAsync(eq(INSTRUMENTS + "/src_wmlfc3zyhqzehihu7giusaaawu"), any(SecretKeyCredentials.class),
@@ -71,7 +71,7 @@ public class InstrumentsClientImplTest {
     }
 
     @Test
-    public void shouldUpdateInstrument() throws ExecutionException, InterruptedException {
+    void shouldUpdateInstrument() throws ExecutionException, InterruptedException {
 
         final UpdateInstrumentRequest request = mock(UpdateInstrumentRequest.class);
         final UpdateInstrumentResponse response = mock(UpdateInstrumentResponse.class);
@@ -88,7 +88,7 @@ public class InstrumentsClientImplTest {
     }
 
     @Test
-    public void shouldDeleteInstrument() throws ExecutionException, InterruptedException {
+    void shouldDeleteInstrument() throws ExecutionException, InterruptedException {
 
         final Void response = mock(Void.class);
 

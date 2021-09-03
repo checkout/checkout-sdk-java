@@ -56,25 +56,25 @@ public class EventsClientImpl extends AbstractClient implements EventsClient {
     @Override
     public CompletableFuture<EventResponse> retrieveEvent(final String eventId) {
         validateParams("eventId", eventId);
-        return apiClient.getAsync(constructApiPath(EVENTS, eventId), apiCredentials, EventResponse.class);
+        return apiClient.getAsync(buildPath(EVENTS, eventId), apiCredentials, EventResponse.class);
     }
 
     @Override
     public CompletableFuture<EventNotificationResponse> retrieveEventNotification(final String eventId, final String notificationId) {
         validateParams("eventId", eventId, "notificationId", notificationId);
-        return apiClient.getAsync(constructApiPath(EVENTS, eventId, NOTIFICATIONS, notificationId), apiCredentials, EventNotificationResponse.class);
+        return apiClient.getAsync(buildPath(EVENTS, eventId, NOTIFICATIONS, notificationId), apiCredentials, EventNotificationResponse.class);
     }
 
     @Override
     public CompletableFuture<Void> retryWebhook(final String eventId, final String webhookId) {
         validateParams("eventId", eventId, "webhookId", webhookId);
-        return apiClient.postAsync(constructApiPath(EVENTS, eventId, WEBHOOKS, webhookId, "retry"), apiCredentials, Void.class, null, null);
+        return apiClient.postAsync(buildPath(EVENTS, eventId, WEBHOOKS, webhookId, "retry"), apiCredentials, Void.class, null, null);
     }
 
     @Override
     public CompletableFuture<Void> retryAllWebhooks(final String eventId) {
         validateParams("eventId", eventId);
-        return apiClient.postAsync(constructApiPath(EVENTS, eventId, WEBHOOKS, "retry"), apiCredentials, Void.class, null, null);
+        return apiClient.postAsync(buildPath(EVENTS, eventId, WEBHOOKS, "retry"), apiCredentials, Void.class, null, null);
     }
 
 }

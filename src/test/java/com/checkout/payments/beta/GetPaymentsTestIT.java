@@ -1,10 +1,10 @@
 package com.checkout.payments.beta;
 
 import com.checkout.CheckoutResourceNotFoundException;
+import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
-import com.checkout.common.beta.Address;
+import com.checkout.common.Phone;
 import com.checkout.common.beta.Currency;
-import com.checkout.common.beta.Phone;
 import com.checkout.payments.beta.action.PaymentAction;
 import com.checkout.payments.beta.action.PaymentActionType;
 import com.checkout.payments.beta.capture.CaptureRequest;
@@ -37,10 +37,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class GetPaymentsTestIT extends AbstractPaymentsTestIT {
+class GetPaymentsTestIT extends AbstractPaymentsTestIT {
 
     @Test
-    public void shouldHandleCorrectlyResourceNotFound() throws Exception {
+    void shouldHandleCorrectlyResourceNotFound() throws Exception {
         try {
             paymentsClient.getPayment("fake").get();
             fail();
@@ -50,12 +50,12 @@ public class GetPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldHandleTimeout() {
+    void shouldHandleTimeout() {
         assertThrows(TimeoutException.class, () -> paymentsClient.getPayment("fake").get(5, TimeUnit.MILLISECONDS));
     }
 
     @Test
-    public void shouldGetCardPayment() {
+    void shouldGetCardPayment() {
 
         final PaymentResponse<ResponseCardSource> payment = makeCardPayment(false);
 
@@ -67,7 +67,7 @@ public class GetPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldGetCardPaymentWithMetadata() {
+    void shouldGetCardPaymentWithMetadata() {
 
         final RequestCardSource source = getRequestCardSource();
         final RequestIndividualSender sender = getIndividualSender();
@@ -86,7 +86,7 @@ public class GetPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldGetCardPaymentWithIpAndDescription() {
+    void shouldGetCardPaymentWithIpAndDescription() {
 
         final RequestCardSource source = getRequestCardSource();
         final RequestIndividualSender sender = getIndividualSender();
@@ -112,7 +112,7 @@ public class GetPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldGetCardPaymentWithRecipient() {
+    void shouldGetCardPaymentWithRecipient() {
 
         final RequestCardSource source = getRequestCardSource();
         final RequestIndividualSender sender = getIndividualSender();
@@ -149,7 +149,7 @@ public class GetPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldGetCardPaymentWithShipping() {
+    void shouldGetCardPaymentWithShipping() {
 
         final RequestCardSource source = getRequestCardSource();
         final RequestIndividualSender sender = getIndividualSender();
@@ -185,13 +185,13 @@ public class GetPaymentsTestIT extends AbstractPaymentsTestIT {
 
         final ShippingDetails shippingDetails = paymentReturned.getShipping();
         assertEquals("City", shippingDetails.getAddress().getCity());
-        assertEquals(CountryCode.GB, shippingDetails.getAddress().getCountry());
+        assertEquals(CountryCode.GB.name(), shippingDetails.getAddress().getCountry());
         assertEquals(phone, shippingDetails.getPhone());
 
     }
 
     @Test
-    public void shouldGetCardPayment_3ds() {
+    void shouldGetCardPayment_3ds() {
 
         final PaymentResponse<ResponseCardSource> payment = makeCardPayment(true);
 
@@ -203,7 +203,7 @@ public class GetPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldGetCardTokenPayment() {
+    void shouldGetCardTokenPayment() {
 
         final PaymentResponse<ResponseCardSource> payment = makeTokenPayment();
 
@@ -215,7 +215,7 @@ public class GetPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldGetCardPaymentAction() {
+    void shouldGetCardPaymentAction() {
 
         final PaymentResponse<ResponseCardSource> payment = makeCardPayment(false);
 
@@ -242,7 +242,7 @@ public class GetPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldGetCardMultiplePaymentActions() {
+    void shouldGetCardMultiplePaymentActions() {
 
         // payment
 

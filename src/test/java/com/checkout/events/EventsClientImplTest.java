@@ -30,7 +30,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class EventsClientImplTest {
+class EventsClientImplTest {
 
     private static final String EVENT_TYPES = "event-types";
     private static final String EVENTS = "events";
@@ -43,13 +43,13 @@ public class EventsClientImplTest {
     private EventsClient eventsClient;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         final CheckoutConfiguration checkoutConfiguration = mockDefaultConfiguration();
         this.eventsClient = new EventsClientImpl(apiClient, checkoutConfiguration);
     }
 
     @Test
-    public void shouldRetrieveAllEventTypes_nullVersion() throws ExecutionException, InterruptedException {
+    void shouldRetrieveAllEventTypes_nullVersion() throws ExecutionException, InterruptedException {
 
         final EventTypesResponse[] eventTypesResponses = new EventTypesResponse[2];
         eventTypesResponses[0] = mock(EventTypesResponse.class);
@@ -67,7 +67,7 @@ public class EventsClientImplTest {
     }
 
     @Test
-    public void shouldRetrieveAllEventTypes_withVersion() throws ExecutionException, InterruptedException {
+    void shouldRetrieveAllEventTypes_withVersion() throws ExecutionException, InterruptedException {
 
         final EventTypesResponse[] eventTypesResponses = new EventTypesResponse[2];
         eventTypesResponses[0] = mock(EventTypesResponse.class);
@@ -85,7 +85,7 @@ public class EventsClientImplTest {
     }
 
     @Test
-    public void shouldRetrieveAllEventTypes_nullResponse() throws ExecutionException, InterruptedException {
+    void shouldRetrieveAllEventTypes_nullResponse() throws ExecutionException, InterruptedException {
 
         when(apiClient.getAsync(eq(EVENT_TYPES), any(ApiCredentials.class), eq(EventTypesResponse[].class)))
                 .thenReturn(CompletableFuture.completedFuture(null));
@@ -98,7 +98,7 @@ public class EventsClientImplTest {
     }
 
     @Test
-    public void shouldRetrieveEvents_deprecated() throws ExecutionException, InterruptedException {
+    void shouldRetrieveEvents_deprecated() throws ExecutionException, InterruptedException {
 
         final Instant from = LocalDateTime.now().minusYears(2).toInstant(ZoneOffset.UTC);
         final Instant to = LocalDateTime.now().toInstant(ZoneOffset.UTC);
@@ -123,7 +123,7 @@ public class EventsClientImplTest {
     }
 
     @Test
-    public void shouldRetrieveEvents() throws ExecutionException, InterruptedException {
+    void shouldRetrieveEvents() throws ExecutionException, InterruptedException {
 
         final Instant from = LocalDateTime.now().minusYears(2).toInstant(ZoneOffset.UTC);
         final Instant to = LocalDateTime.now().toInstant(ZoneOffset.UTC);
@@ -152,7 +152,7 @@ public class EventsClientImplTest {
     }
 
     @Test
-    public void retrieveEvents_shouldThrowOnNullRequest() {
+    void retrieveEvents_shouldThrowOnNullRequest() {
 
         try {
             eventsClient.retrieveEvents(null);
@@ -167,7 +167,7 @@ public class EventsClientImplTest {
 
 
     @Test
-    public void shouldRetrieveEvent() throws ExecutionException, InterruptedException {
+    void shouldRetrieveEvent() throws ExecutionException, InterruptedException {
 
         final EventResponse eventResponse = mock(EventResponse.class);
 
@@ -182,7 +182,7 @@ public class EventsClientImplTest {
     }
 
     @Test
-    public void retrieveEvent_shouldThrowIfEventIdIsNullOrEmpty() {
+    void retrieveEvent_shouldThrowIfEventIdIsNullOrEmpty() {
 
         try {
             eventsClient.retrieveEvent(null);
@@ -203,7 +203,7 @@ public class EventsClientImplTest {
     }
 
     @Test
-    public void retrieveEventNotification_shouldThrowIfNotificationIdIsNullOrEmpty() {
+    void retrieveEventNotification_shouldThrowIfNotificationIdIsNullOrEmpty() {
 
         try {
             eventsClient.retrieveEventNotification("eventId", null);
@@ -225,7 +225,7 @@ public class EventsClientImplTest {
 
 
     @Test
-    public void shouldRetrieveEventNotification() throws ExecutionException, InterruptedException {
+    void shouldRetrieveEventNotification() throws ExecutionException, InterruptedException {
 
         final EventNotificationResponse eventNotificationResponse = mock(EventNotificationResponse.class);
 
@@ -240,7 +240,7 @@ public class EventsClientImplTest {
     }
 
     @Test
-    public void shouldRetryWebhook() throws ExecutionException, InterruptedException {
+    void shouldRetryWebhook() throws ExecutionException, InterruptedException {
 
         when(apiClient.postAsync(eq(EVENTS + "/eventId/" + WEBHOOKS + "/webhookId/retry"), any(ApiCredentials.class), eq(Void.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(mock(Void.class)));
@@ -252,7 +252,7 @@ public class EventsClientImplTest {
     }
 
     @Test
-    public void retryWebhook_shouldThrowIfEventIdIsNullOrEmpty() {
+    void retryWebhook_shouldThrowIfEventIdIsNullOrEmpty() {
 
         try {
             eventsClient.retryWebhook(null, "notificationId");
@@ -273,7 +273,7 @@ public class EventsClientImplTest {
     }
 
     @Test
-    public void retryWebhook_shouldThrowIfWebhookIdIsNullOrEmpty() {
+    void retryWebhook_shouldThrowIfWebhookIdIsNullOrEmpty() {
 
         try {
             eventsClient.retryWebhook("eventId", null);
@@ -294,7 +294,7 @@ public class EventsClientImplTest {
     }
 
     @Test
-    public void shouldRetryWebhooks() throws ExecutionException, InterruptedException {
+    void shouldRetryWebhooks() throws ExecutionException, InterruptedException {
 
         when(apiClient.postAsync(eq(EVENTS + "/eventId/" + WEBHOOKS + "/retry"), any(ApiCredentials.class),
                 eq(Void.class), isNull(), isNull()))

@@ -26,7 +26,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class PaymentLinksClientImplTest {
+class PaymentLinksClientImplTest {
+
+    private static final String PAYMENT_LINKS = "/payment-links";
 
     private static final String REFERENCE = "ORD-1234";
 
@@ -53,7 +55,7 @@ public class PaymentLinksClientImplTest {
     private PaymentLinkRequest paymentLinksRequest;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         paymentLinkAsync = CompletableFuture.completedFuture(paymentLinkResponse);
         paymentLinkDetailAsync = CompletableFuture.completedFuture(paymentLinkDetailsResponse);
         client = new PaymentLinksClientImpl(apiClient, configuration);
@@ -80,10 +82,10 @@ public class PaymentLinksClientImplTest {
     }
 
     @Test
-    public void shouldCreatePaymentsLink() throws ExecutionException, InterruptedException {
+    void shouldCreatePaymentsLink() throws ExecutionException, InterruptedException {
         setUpPaymentLinkDetailsResponse();
         Mockito.doReturn(paymentLinkDetailAsync)
-                .when(apiClient).getAsync(eq(PaymentLinksClientImpl.PAYMENT_LINKS + "/" + REFERENCE),
+                .when(apiClient).getAsync(eq(PAYMENT_LINKS + "/" + REFERENCE),
                 any(ApiCredentials.class),
                 eq(PaymentLinkDetailsResponse.class));
         final PaymentLinkDetailsResponse response = client.getAsync(REFERENCE).get();
@@ -101,10 +103,10 @@ public class PaymentLinksClientImplTest {
     }
 
     @Test
-    public void shouldRetrievePaymentsLink() throws ExecutionException, InterruptedException {
+    void shouldRetrievePaymentsLink() throws ExecutionException, InterruptedException {
         setUpPaymentLinkResponse();
         Mockito.doReturn(paymentLinkAsync)
-                .when(apiClient).postAsync(eq(PaymentLinksClientImpl.PAYMENT_LINKS), any(ApiCredentials.class),
+                .when(apiClient).postAsync(eq(PAYMENT_LINKS), any(ApiCredentials.class),
                 eq(PaymentLinkResponse.class), any(PaymentLinkRequest.class), any());
         final PaymentLinkResponse response = client.createAsync(paymentLinksRequest).get();
         assertNotNull(response);

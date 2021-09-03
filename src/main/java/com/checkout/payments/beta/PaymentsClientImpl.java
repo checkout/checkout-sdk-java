@@ -1,9 +1,9 @@
 package com.checkout.payments.beta;
 
+import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SecretKeyCredentials;
-import com.checkout.beta.AbstractClient;
 import com.checkout.payments.beta.action.PaymentAction;
 import com.checkout.payments.beta.capture.CaptureRequest;
 import com.checkout.payments.beta.capture.CaptureResponse;
@@ -29,13 +29,13 @@ import java.util.concurrent.CompletableFuture;
 
 public final class PaymentsClientImpl extends AbstractClient implements PaymentsClient {
 
-    public static final String PAYMENTS_PATH = "/payments";
-    public static final String ACTIONS_PATH = "/actions";
-    public static final String CAPTURES_PATH = "/captures";
-    public static final String REFUNDS_PATH = "/refunds";
-    public static final String VOIDS_PATH = "/voids";
+    private static final String PAYMENTS_PATH = "/payments";
+    private static final String ACTIONS_PATH = "/actions";
+    private static final String CAPTURES_PATH = "/captures";
+    private static final String REFUNDS_PATH = "/refunds";
+    private static final String VOIDS_PATH = "/voids";
 
-    public static final Type PAYMENT_TYPE = TypeToken.getParameterized(PaymentResponse.class,
+    private static final Type PAYMENT_TYPE = TypeToken.getParameterized(PaymentResponse.class,
             ResponseCardSource.class,
             ResponseCurrencyAccountSource.class,
             ResponseIdSource.class,

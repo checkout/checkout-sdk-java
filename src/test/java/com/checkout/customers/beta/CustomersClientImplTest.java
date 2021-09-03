@@ -5,8 +5,8 @@ import com.checkout.ApiCredentials;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.CheckoutResourceNotFoundException;
 import com.checkout.TestHelper;
+import com.checkout.common.Phone;
 import com.checkout.common.beta.IdResponse;
-import com.checkout.common.beta.Phone;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +27,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CustomersClientImplTest {
+class CustomersClientImplTest {
 
     private static final String CUSTOMER_ID = "cus_123456789abcdefgh";
 
@@ -58,7 +58,7 @@ public class CustomersClientImplTest {
     private CustomersClient client;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         when(idResponse.getId()).thenReturn(CUSTOMER_ID);
         idAsync = CompletableFuture.completedFuture(idResponse);
         customerResponseAsync = CompletableFuture.completedFuture(customerResponse);
@@ -67,7 +67,7 @@ public class CustomersClientImplTest {
     }
 
     @Test
-    public void shouldCreateAndGetCustomer() throws ExecutionException, InterruptedException {
+    void shouldCreateAndGetCustomer() throws ExecutionException, InterruptedException {
         doReturn(idAsync)
                 .when(apiClient).postAsync(eq(CustomersClientImpl.CUSTOMERS_PATH), any(ApiCredentials.class),
                 eq(IdResponse.class), any(CustomerRequest.class), any());
@@ -97,7 +97,7 @@ public class CustomersClientImplTest {
     }
 
     @Test
-    public void shouldCreateAndUpdateCustomer() throws ExecutionException, InterruptedException {
+    void shouldCreateAndUpdateCustomer() throws ExecutionException, InterruptedException {
         doReturn(idAsync)
                 .when(apiClient).postAsync(eq(CustomersClientImpl.CUSTOMERS_PATH), any(ApiCredentials.class),
                 eq(IdResponse.class), any(CustomerRequest.class), any());
@@ -134,7 +134,7 @@ public class CustomersClientImplTest {
     }
 
     @Test
-    public void shouldCreateAndEditCustomer() throws ExecutionException, InterruptedException {
+    void shouldCreateAndEditCustomer() throws ExecutionException, InterruptedException {
         doReturn(idAsync)
                 .when(apiClient).postAsync(eq(CustomersClientImpl.CUSTOMERS_PATH), any(ApiCredentials.class),
                 eq(IdResponse.class), any(CustomerRequest.class), any());

@@ -27,8 +27,9 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CustomersClientImplTest {
+class CustomersClientImplTest {
 
+    private static final String CUSTOMERS = "/customers";
     private static final String CUSTOMER_ID = "cus_123456789abcdefgh";
 
     @Mock
@@ -58,7 +59,7 @@ public class CustomersClientImplTest {
     private CustomersClient client;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         when(idResponse.getId()).thenReturn(CUSTOMER_ID);
         idAsync = CompletableFuture.completedFuture(idResponse);
         customerDetailsAsync = CompletableFuture.completedFuture(customerDetailsResponse);
@@ -67,13 +68,13 @@ public class CustomersClientImplTest {
     }
 
     @Test
-    public void shouldCreateAndGetCustomer() throws ExecutionException, InterruptedException {
+    void shouldCreateAndGetCustomer() throws ExecutionException, InterruptedException {
         doReturn(idAsync)
-                .when(apiClient).postAsync(eq(CustomersClientImpl.CUSTOMERS), any(ApiCredentials.class),
+                .when(apiClient).postAsync(eq(CUSTOMERS), any(ApiCredentials.class),
                 eq(IdResponse.class), any(CustomerRequest.class), any());
         doReturn(customerDetailsAsync)
                 .when(apiClient)
-                .getAsync(eq(CustomersClientImpl.CUSTOMERS + "/" + CUSTOMER_ID), any(ApiCredentials.class),
+                .getAsync(eq(CUSTOMERS + "/" + CUSTOMER_ID), any(ApiCredentials.class),
                         eq(CustomerDetailsResponse.class));
         final CustomerRequest customerRequest = CustomerRequest.builder()
                 .email(TestHelper.generateRandomEmail())
@@ -95,17 +96,17 @@ public class CustomersClientImplTest {
     }
 
     @Test
-    public void shouldCreateAndUpdateCustomer() throws ExecutionException, InterruptedException {
+    void shouldCreateAndUpdateCustomer() throws ExecutionException, InterruptedException {
         doReturn(idAsync)
-                .when(apiClient).postAsync(eq(CustomersClientImpl.CUSTOMERS), any(ApiCredentials.class),
+                .when(apiClient).postAsync(eq(CUSTOMERS), any(ApiCredentials.class),
                 eq(IdResponse.class), any(CustomerRequest.class), any());
         doReturn(customerDetailsAsync)
                 .when(apiClient)
-                .getAsync(eq(CustomersClientImpl.CUSTOMERS + "/" + CUSTOMER_ID), any(ApiCredentials.class),
+                .getAsync(eq(CUSTOMERS + "/" + CUSTOMER_ID), any(ApiCredentials.class),
                         eq(CustomerDetailsResponse.class));
         doReturn(voidAsync)
                 .when(apiClient)
-                .patchAsync(eq(CustomersClientImpl.CUSTOMERS + "/" + CUSTOMER_ID), any(ApiCredentials.class),
+                .patchAsync(eq(CUSTOMERS + "/" + CUSTOMER_ID), any(ApiCredentials.class),
                         eq(Void.class), any(CustomerRequest.class), any());
         //Create Customer
         final CustomerRequest customerRequest = CustomerRequest.builder()
@@ -129,17 +130,17 @@ public class CustomersClientImplTest {
     }
 
     @Test
-    public void shouldCreateAndEditCustomer() throws ExecutionException, InterruptedException {
+    void shouldCreateAndEditCustomer() throws ExecutionException, InterruptedException {
         doReturn(idAsync)
-                .when(apiClient).postAsync(eq(CustomersClientImpl.CUSTOMERS), any(ApiCredentials.class),
+                .when(apiClient).postAsync(eq(CUSTOMERS), any(ApiCredentials.class),
                 eq(IdResponse.class), any(CustomerRequest.class), any());
         doThrow(new CheckoutResourceNotFoundException("Customer not found"))
                 .when(apiClient)
-                .getAsync(eq(CustomersClientImpl.CUSTOMERS + "/" + CUSTOMER_ID), any(ApiCredentials.class),
+                .getAsync(eq(CUSTOMERS + "/" + CUSTOMER_ID), any(ApiCredentials.class),
                         eq(CustomerDetailsResponse.class));
         doReturn(voidAsync)
                 .when(apiClient)
-                .deleteAsync(eq(CustomersClientImpl.CUSTOMERS + "/" + CUSTOMER_ID), any(ApiCredentials.class));
+                .deleteAsync(eq(CUSTOMERS + "/" + CUSTOMER_ID), any(ApiCredentials.class));
         //Create Customer
         final CustomerRequest customerRequest = CustomerRequest.builder()
                 .email(TestHelper.generateRandomEmail())

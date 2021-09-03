@@ -13,10 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class WebhooksTestIT extends SandboxTestFixture {
 
-    public WebhooksTestIT() {
+    protected WebhooksTestIT() {
         super(PlatformType.DEFAULT);
     }
 
@@ -28,7 +29,7 @@ public class WebhooksTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldRegisterWebhook() {
+    void shouldRegisterWebhook() {
 
         final WebhookResponse webhookResponse = registerWebhook();
         assertNotNull(webhookResponse);
@@ -42,7 +43,7 @@ public class WebhooksTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldRetrieveWebhook() {
+    void shouldRetrieveWebhook() {
 
         final WebhookResponse webhookResponse = registerWebhook();
 
@@ -67,7 +68,7 @@ public class WebhooksTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldUpdateWebhook() {
+    void shouldUpdateWebhook() {
 
         final WebhookResponse webhookResponse = registerWebhook();
 
@@ -87,7 +88,7 @@ public class WebhooksTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void canDeleteWebhook() {
+    void canDeleteWebhook() {
 
         final WebhookResponse webhookResponse = registerWebhook();
 
@@ -102,7 +103,7 @@ public class WebhooksTestIT extends SandboxTestFixture {
                     try {
                         getApi().webhooksClient().removeWebhook(it).get();
                     } catch (final Exception e) {
-                        throw new IllegalStateException(e);
+                        fail(e.getCause());
                     }
                 });
         final List<WebhookResponse> emptyResponse = blocking(getApi().webhooksClient().retrieveWebhooks());

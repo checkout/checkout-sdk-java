@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class FawryClientTest {
+class FawryClientTest {
 
     @Mock
     private ApiClient apiClient;
@@ -36,12 +36,12 @@ public class FawryClientTest {
     private FawryClient fawryClient;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.fawryClient = new FawryClientImpl(apiClient, checkoutConfiguration);
     }
 
     @Test
-    public void shouldApprovePayment() throws ExecutionException, InterruptedException {
+    void shouldApprovePayment() throws ExecutionException, InterruptedException {
 
         when(apiClient.putAsync(eq("/fawry/payments/reference/approval"), any(SecretKeyCredentials.class), eq(Void.class), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(voidResponse));
@@ -54,7 +54,7 @@ public class FawryClientTest {
     }
 
     @Test
-    public void shouldCancelPayment() throws ExecutionException, InterruptedException {
+    void shouldCancelPayment() throws ExecutionException, InterruptedException {
 
         when(apiClient.putAsync(eq("/fawry/payments/reference/cancellation"), any(SecretKeyCredentials.class), eq(Void.class), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(voidResponse));

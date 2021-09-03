@@ -1,9 +1,9 @@
 package com.checkout.disputes.beta;
 
+import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SecretKeyCredentials;
-import com.checkout.beta.AbstractClient;
 import com.checkout.common.FileDetailsResponse;
 import com.checkout.common.FileRequest;
 import com.checkout.common.IdResponse;

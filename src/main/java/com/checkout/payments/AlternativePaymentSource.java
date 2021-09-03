@@ -1,10 +1,11 @@
 package com.checkout.payments;
 
-import com.checkout.common.CheckoutUtils;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.util.HashMap;
+
+import static com.checkout.common.CheckoutUtils.validateParams;
 
 /**
  * @deprecated Use a specific payment source at {@link com.checkout.payments.apm}
@@ -16,9 +17,7 @@ public class AlternativePaymentSource extends HashMap<String, Object> implements
     private static final String TYPE_FIELD = "type";
 
     public AlternativePaymentSource(final String type) {
-        if (CheckoutUtils.isNullOrWhitespace(type)) {
-            throw new IllegalArgumentException("The alternative payment source type is required.");
-        }
+        validateParams("type", type);
         setType(type);
     }
 

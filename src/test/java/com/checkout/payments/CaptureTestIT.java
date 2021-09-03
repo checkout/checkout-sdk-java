@@ -14,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CaptureTestIT extends SandboxTestFixture {
+class CaptureTestIT extends SandboxTestFixture {
 
-    public CaptureTestIT() {
+    CaptureTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void can_fully_capture_payment() throws Exception {
+    void shouldFullyCapturePayment() throws Exception {
         final PaymentProcessed payment = makePayment();
 
         final Map<String, Object> metadata = new HashMap<>();
@@ -38,7 +38,7 @@ public class CaptureTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_partially_capture_payment() throws Exception {
+    void shouldCapturePaymentPartially() throws Exception {
         final PaymentProcessed payment = makePayment();
 
         final Map<String, Object> metadata = new HashMap<>();
@@ -64,4 +64,5 @@ public class CaptureTestIT extends SandboxTestFixture {
 
         return paymentResponse.getPayment();
     }
+
 }

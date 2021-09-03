@@ -7,14 +7,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CardVerificationTestIT extends SandboxTestFixture {
+class CardVerificationTestIT extends SandboxTestFixture {
 
-    public CardVerificationTestIT() {
+    CardVerificationTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void can_verify_card() throws Exception {
+    void shouldVerifyCard() throws Exception {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest(0L);
         final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
 

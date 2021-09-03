@@ -1,7 +1,7 @@
 package com.checkout.tokens.beta.request;
 
-import com.checkout.common.beta.Address;
-import com.checkout.common.beta.Phone;
+import com.checkout.common.Address;
+import com.checkout.common.Phone;
 import com.checkout.tokens.beta.TokenType;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;

@@ -9,14 +9,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class CardDestinationPaymentTestIT extends SandboxTestFixture {
+class CardDestinationPaymentTestIT extends SandboxTestFixture {
 
-    public CardDestinationPaymentTestIT() {
+    CardDestinationPaymentTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void canPerformCardPayout() throws Exception {
+    void canPerformCardPayout() throws Exception {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPayoutRequest();
         final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
         assertNull(paymentResponse.getPayment());

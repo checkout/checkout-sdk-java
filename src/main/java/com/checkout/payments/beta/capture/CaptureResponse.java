@@ -1,6 +1,6 @@
 package com.checkout.payments.beta.capture;
 
-import com.checkout.common.beta.Resource;
+import com.checkout.common.Resource;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

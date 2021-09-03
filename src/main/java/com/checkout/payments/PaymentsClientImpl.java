@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class PaymentsClientImpl extends AbstractClient implements PaymentsClient {
+
     private static final Map<Integer, Class<? extends Resource>> PAYMENT_RESPONSE_MAPPINGS = new HashMap<>();
 
     static {

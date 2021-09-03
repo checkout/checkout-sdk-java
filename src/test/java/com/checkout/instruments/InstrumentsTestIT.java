@@ -16,16 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class InstrumentsTestIT extends SandboxTestFixture {
+class InstrumentsTestIT extends SandboxTestFixture {
 
     private AccountHolder accountHolder;
 
-    public InstrumentsTestIT() {
+    InstrumentsTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         accountHolder = AccountHolder.builder()
                 .billingAddress(Address.builder()
                         .addressLine1("123 Street")
@@ -43,7 +43,7 @@ public class InstrumentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldCreateInstrument() {
+    void shouldCreateInstrument() {
         final CardTokenResponse cardToken = blocking(getApi().tokensClient().requestAsync(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
@@ -71,7 +71,7 @@ public class InstrumentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldGetInstrument() {
+    void shouldGetInstrument() {
         final CardTokenResponse cardToken = blocking(getApi().tokensClient().requestAsync(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
@@ -119,7 +119,7 @@ public class InstrumentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldUpdateInstrument(){
+    void shouldUpdateInstrument() {
         final CardTokenResponse cardToken = blocking(getApi().tokensClient().requestAsync(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
@@ -140,7 +140,7 @@ public class InstrumentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldDeleteInstrument() {
+    void shouldDeleteInstrument() {
         final CardTokenResponse cardToken = blocking(getApi().tokensClient().requestAsync(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()

@@ -26,7 +26,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ReconciliationClientImplTest {
+class ReconciliationClientImplTest {
 
     private static final Instant FROM = Instant.from(ZonedDateTime.of(2020, 2, 22, 12, 31, 44, 0, ZoneOffset.UTC));
     private static final Instant TO = Instant.from(ZonedDateTime.of(2020, 2, 26, 13, 21, 34, 0, ZoneOffset.UTC));
@@ -76,7 +76,7 @@ public class ReconciliationClientImplTest {
     private CompletableFuture<String> completableFileFuture;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         disputesQueryResponseFuture = CompletableFuture.completedFuture(reconciliationPaymentReportResponse);
         statementReportResponseFuture = CompletableFuture.completedFuture(statementReportResponse);
         client = new ReconciliationClientImpl(apiClient, configuration);
@@ -111,7 +111,7 @@ public class ReconciliationClientImplTest {
     }
 
     @Test
-    public void shouldQueryPaymentsReport() throws ExecutionException, InterruptedException {
+    void shouldQueryPaymentsReport() throws ExecutionException, InterruptedException {
         setUpPaymentReport();
         doReturn(disputesQueryResponseFuture)
                 .when(apiClient)
@@ -141,7 +141,7 @@ public class ReconciliationClientImplTest {
     }
 
     @Test
-    public void shouldSinglePaymentReportAsync() throws ExecutionException, InterruptedException {
+    void shouldSinglePaymentReportAsync() throws ExecutionException, InterruptedException {
         setUpPaymentReport();
         doReturn(disputesQueryResponseFuture)
                 .when(apiClient)
@@ -165,7 +165,7 @@ public class ReconciliationClientImplTest {
     }
 
     @Test
-    public void shouldQueryStatementsReport() throws ExecutionException, InterruptedException {
+    void shouldQueryStatementsReport() throws ExecutionException, InterruptedException {
         setUpStatementResponse();
         doReturn(statementReportResponseFuture)
                 .when(apiClient)
@@ -195,7 +195,7 @@ public class ReconciliationClientImplTest {
     }
 
     @Test
-    public void shouldRetrieveCSVPaymentReport() throws ExecutionException, InterruptedException {
+    void shouldRetrieveCSVPaymentReport() throws ExecutionException, InterruptedException {
         final String report = "/etc/foo/payment_report.csv";
         completableFileFuture = CompletableFuture.completedFuture(report);
         doReturn(completableFileFuture)
@@ -207,7 +207,7 @@ public class ReconciliationClientImplTest {
     }
 
     @Test
-    public void shouldRetrieveCSVSingleStatementReport() throws ExecutionException, InterruptedException {
+    void shouldRetrieveCSVSingleStatementReport() throws ExecutionException, InterruptedException {
         final String report = "/etc/foo/single_statement_report.csv";
         completableFileFuture = CompletableFuture.completedFuture(report);
         doReturn(completableFileFuture)
@@ -220,7 +220,7 @@ public class ReconciliationClientImplTest {
     }
 
     @Test
-    public void shouldRetrieveCSVStatementsReport() throws ExecutionException, InterruptedException {
+    void shouldRetrieveCSVStatementsReport() throws ExecutionException, InterruptedException {
         final String report = "/etc/foo/statement_report.csv";
         completableFileFuture = CompletableFuture.completedFuture(report);
         doReturn(completableFileFuture)

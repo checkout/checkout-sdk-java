@@ -8,22 +8,6 @@ public final class CheckoutUtils {
     private CheckoutUtils() {
     }
 
-    /**
-     * @deprecated Will be removed in a future version
-     */
-    @Deprecated
-    public static boolean isNullOrEmpty(final String string) {
-        return string == null || string.isEmpty();
-    }
-
-    /**
-     * @deprecated Will be removed in a future version
-     */
-    @Deprecated
-    public static boolean isNullOrWhitespace(final String string) {
-        return string == null || string.trim().isEmpty();
-    }
-
     public static String getVersionFromManifest() {
         return CheckoutUtils.class.getPackage().getImplementationVersion();
     }

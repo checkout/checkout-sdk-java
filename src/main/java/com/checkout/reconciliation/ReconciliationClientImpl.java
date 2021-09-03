@@ -21,33 +21,33 @@ public class ReconciliationClientImpl extends AbstractClient implements Reconcil
 
     @Override
     public CompletableFuture<ReconciliationPaymentReportResponse> queryPaymentsReport(final ReconciliationQueryPaymentsFilter filter) {
-        return apiClient.queryAsync(constructApiPath(REPORTING, PAYMENTS), apiCredentials, filter, ReconciliationPaymentReportResponse.class);
+        return apiClient.queryAsync(buildPath(REPORTING, PAYMENTS), apiCredentials, filter, ReconciliationPaymentReportResponse.class);
     }
 
     @Override
     public CompletableFuture<ReconciliationPaymentReportResponse> singlePaymentReportAsync(final String paymentId) {
-        return apiClient.getAsync(constructApiPath(REPORTING, PAYMENTS, paymentId), apiCredentials, ReconciliationPaymentReportResponse.class);
+        return apiClient.getAsync(buildPath(REPORTING, PAYMENTS, paymentId), apiCredentials, ReconciliationPaymentReportResponse.class);
     }
 
     @Override
     public CompletableFuture<StatementReportResponse> queryStatementsReport(final QueryFilterDateRange filter) {
-        return apiClient.queryAsync(constructApiPath(REPORTING, STATEMENTS), apiCredentials, filter, StatementReportResponse.class);
+        return apiClient.queryAsync(buildPath(REPORTING, STATEMENTS), apiCredentials, filter, StatementReportResponse.class);
     }
 
     @Override
     public CompletableFuture<String> retrieveCSVPaymentReport(final String targetFile) {
-        return apiClient.retrieveFileAsync(constructApiPath(REPORTING, PAYMENTS, DOWNLOAD), apiCredentials, targetFile);
+        return apiClient.retrieveFileAsync(buildPath(REPORTING, PAYMENTS, DOWNLOAD), apiCredentials, targetFile);
     }
 
     @Override
     public CompletableFuture<String> retrieveCSVSingleStatementReport(final String statementId, final String targetFile) {
-        return apiClient.retrieveFileAsync(constructApiPath(REPORTING, STATEMENTS, statementId, PAYMENTS, DOWNLOAD),
+        return apiClient.retrieveFileAsync(buildPath(REPORTING, STATEMENTS, statementId, PAYMENTS, DOWNLOAD),
                 apiCredentials, targetFile);
     }
 
     @Override
     public CompletableFuture<String> retrieveCSVStatementsReport(final String targetFile) {
-        return apiClient.retrieveFileAsync(constructApiPath(REPORTING, STATEMENTS, DOWNLOAD), apiCredentials, targetFile);
+        return apiClient.retrieveFileAsync(buildPath(REPORTING, STATEMENTS, DOWNLOAD), apiCredentials, targetFile);
     }
 
 }

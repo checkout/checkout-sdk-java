@@ -1,6 +1,6 @@
 package com.checkout.customers.beta;
 
-import com.checkout.common.beta.Phone;
+import com.checkout.common.Phone;
 import com.checkout.instruments.beta.get.GetInstrumentResponse;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;

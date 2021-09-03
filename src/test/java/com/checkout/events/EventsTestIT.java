@@ -20,17 +20,17 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class EventsTestIT extends WebhooksTestIT {
+class EventsTestIT extends WebhooksTestIT {
 
     @Test
-    public void retrieveDefaultEventTypes() {
+    void retrieveDefaultEventTypes() {
         final List<EventTypesResponse> allEventTypesResponses = blocking(getApi().eventsClient().retrieveAllEventTypes(null));
         assertNotNull(allEventTypesResponses);
         assertEquals(2, allEventTypesResponses.size());
     }
 
     @Test
-    public void retrieveV1EventTypes() {
+    void retrieveV1EventTypes() {
 
         final List<EventTypesResponse> eventTypesResponses = blocking(getApi().eventsClient().retrieveAllEventTypes("1.0"));
         assertNotNull(eventTypesResponses);
@@ -44,7 +44,7 @@ public class EventsTestIT extends WebhooksTestIT {
     }
 
     @Test
-    public void retrieveV2EventTypes() {
+    void retrieveV2EventTypes() {
 
         final List<EventTypesResponse> eventTypesResponses = blocking(getApi().eventsClient().retrieveAllEventTypes("2.0"));
         assertNotNull(eventTypesResponses);
@@ -59,7 +59,7 @@ public class EventsTestIT extends WebhooksTestIT {
     }
 
     @Test
-    public void shouldRetrieveEventsByPaymentId_deprecated() {
+    void shouldRetrieveEventsByPaymentId_deprecated() {
 
         registerWebhook();
 
@@ -89,7 +89,7 @@ public class EventsTestIT extends WebhooksTestIT {
     }
 
     @Test
-    public void shouldRetrieveEventsByPaymentId_andRetrieveEventById_andGetNotification() {
+    void shouldRetrieveEventsByPaymentId_andRetrieveEventById_andGetNotification() {
 
         registerWebhook();
 
@@ -147,7 +147,7 @@ public class EventsTestIT extends WebhooksTestIT {
     }
 
     @Test
-    public void shouldRetryWebhook() {
+    void shouldRetryWebhook() {
 
         final WebhookResponse webhookResponse = registerWebhook();
 
@@ -181,7 +181,7 @@ public class EventsTestIT extends WebhooksTestIT {
 
     }
 
-    public PaymentProcessed makeCardPayment() {
+    private PaymentProcessed makeCardPayment() {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setThreeDS(ThreeDSRequest.from(false));
         final PaymentResponse paymentResponse = blocking(getApi().paymentsClient().requestAsync(paymentRequest));

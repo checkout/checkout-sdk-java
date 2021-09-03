@@ -13,7 +13,6 @@ import com.checkout.payments.beta.response.source.ResponseCardSource;
 import com.checkout.payments.beta.sender.RequestIndividualSender;
 import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
 
 import java.io.File;
 import java.net.URL;
@@ -27,10 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class DisputesTestIT extends AbstractPaymentsTestIT {
+class DisputesTestIT extends AbstractPaymentsTestIT {
 
     @Test
-    public void shouldQueryDisputes() {
+    void shouldQueryDisputes() {
         DisputesQueryFilter query = DisputesQueryFilter
                 .builder()
                 .limit(100)
@@ -50,7 +49,7 @@ public class DisputesTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldGetDisputeDetails() {
+    void shouldGetDisputeDetails() {
         final DisputesQueryResponse queryResponse = blocking(getApiV2().disputesClient().query(DisputesQueryFilter.builder().build()));
         assertNotNull(queryResponse);
         if (queryResponse.getTotalCount() > 0) {
@@ -76,7 +75,7 @@ public class DisputesTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldFailOnAcceptDisputeAlreadyAccepted() {
+    void shouldFailOnAcceptDisputeAlreadyAccepted() {
         final DisputesQueryResponse queryResponse = blocking(getApiV2().disputesClient().query(DisputesQueryFilter.builder()
                 .statuses(DisputeStatus.ACCEPTED.toString()).build()));
         assertNotNull(queryResponse);
@@ -98,7 +97,7 @@ public class DisputesTestIT extends AbstractPaymentsTestIT {
      */
     //@Test
     //@Timeout(value = 3, unit = TimeUnit.MINUTES)
-    public void shouldTestFullDisputesWorkFlow() throws Exception {
+    void shouldTestFullDisputesWorkFlow() throws Exception {
         //Create a payment who triggers a dispute
         final RequestCardSource source = getRequestCardSource();
         final RequestIndividualSender sender = getIndividualSender();
@@ -106,7 +105,7 @@ public class DisputesTestIT extends AbstractPaymentsTestIT {
 
         // payment
         final PaymentResponse<ResponseCardSource> paymentResponse = makeCardPayment(request);
-        assertTrue(paymentResponse.canCapture());
+        assertTrue(paymentResponse.hasLink("capture"));
 
         // capture
         capturePayment(paymentResponse.getId());

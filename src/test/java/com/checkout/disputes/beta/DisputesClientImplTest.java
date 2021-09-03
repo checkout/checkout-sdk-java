@@ -27,7 +27,7 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class DisputesClientImplTest {
+class DisputesClientImplTest {
 
     private static final String DISPUTES = "disputes";
     private static final String FILES = "files";
@@ -85,7 +85,7 @@ public class DisputesClientImplTest {
     private PaymentDispute paymentDispute;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         disputesQueryResponseFuture = CompletableFuture.completedFuture(disputesQueryResponse);
         disputeDetailsFuture = CompletableFuture.completedFuture(disputeDetailsResponse);
         evidenceResponseFuture = CompletableFuture.completedFuture(evidenceResponse);
@@ -96,7 +96,7 @@ public class DisputesClientImplTest {
     }
 
     @Test
-    public void shouldPerformQuery() throws ExecutionException, InterruptedException {
+    void shouldPerformQuery() throws ExecutionException, InterruptedException {
         final DisputesQueryFilter request = DisputesQueryFilter.builder().paymentId(PAYMENT_ID).limit(250).build();
         doReturn(disputesQueryResponseFuture)
                 .when(apiClient)
@@ -120,7 +120,7 @@ public class DisputesClientImplTest {
     }
 
     @Test
-    public void shouldGetDisputeDetails() throws ExecutionException, InterruptedException {
+    void shouldGetDisputeDetails() throws ExecutionException, InterruptedException {
         doReturn(disputeDetailsFuture)
                 .when(apiClient)
                 .getAsync(eq("disputes/dsp_9ec11deafd679h77356a"), any(ApiCredentials.class), eq(DisputeDetailsResponse.class));
@@ -142,7 +142,7 @@ public class DisputesClientImplTest {
     }
 
     @Test
-    public void shouldUploadFile() throws ExecutionException, InterruptedException {
+    void shouldUploadFile() throws ExecutionException, InterruptedException {
         final FileRequest request = FileRequest.builder()
                 .file(new File(FILE_NAME))
                 .contentType(ContentType.IMAGE_JPEG)
@@ -158,7 +158,7 @@ public class DisputesClientImplTest {
     }
 
     @Test
-    public void shouldGetEvidence() throws ExecutionException, InterruptedException {
+    void shouldGetEvidence() throws ExecutionException, InterruptedException {
         doReturn(evidenceResponseFuture)
                 .when(apiClient)
                 .getAsync(eq("disputes/dsp_9ec11deafd679h77356a/evidence"),
@@ -202,7 +202,7 @@ public class DisputesClientImplTest {
     }
 
     @Test
-    public void shouldGetFileDetails() throws ExecutionException, InterruptedException {
+    void shouldGetFileDetails() throws ExecutionException, InterruptedException {
         doReturn(fileDetailsResponseFuture)
                 .when(apiClient)
                 .getAsync(eq("files/file_7kxknf5ftrgurfouydbbs74gvq"), any(ApiCredentials.class), eq(FileDetailsResponse.class));

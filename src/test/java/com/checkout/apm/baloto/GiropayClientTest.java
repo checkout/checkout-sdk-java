@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class GiropayClientTest {
+class GiropayClientTest {
 
     @Mock
     private ApiClient apiClient;
@@ -36,12 +36,12 @@ public class GiropayClientTest {
     private GiropayClient giropayClient;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.giropayClient = new GiropayClientImpl(apiClient, checkoutConfiguration);
     }
 
     @Test
-    public void shouldGetBanks() throws ExecutionException, InterruptedException {
+    void shouldGetBanks() throws ExecutionException, InterruptedException {
 
         when(apiClient.getAsync(eq("/giropay/banks"), any(SecretKeyCredentials.class), eq(BanksResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(banksResponse));
@@ -54,7 +54,7 @@ public class GiropayClientTest {
     }
 
     @Test
-    public void shouldGetEpsBanks() throws ExecutionException, InterruptedException {
+    void shouldGetEpsBanks() throws ExecutionException, InterruptedException {
 
         when(apiClient.getAsync(eq("/giropay/eps/banks"), any(SecretKeyCredentials.class), eq(BanksResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(banksResponse));

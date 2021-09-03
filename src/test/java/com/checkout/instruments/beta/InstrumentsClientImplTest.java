@@ -31,7 +31,7 @@ import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class InstrumentsClientImplTest {
+class InstrumentsClientImplTest {
 
     private static final String INSTRUMENTS = "instruments";
 
@@ -49,12 +49,12 @@ public class InstrumentsClientImplTest {
     private InstrumentsClient instrumentsClient;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.instrumentsClient = new InstrumentsClientImpl(apiClient, checkoutConfiguration);
     }
 
     @Test
-    public void shouldCreateInstrument() throws ExecutionException, InterruptedException {
+    void shouldCreateInstrument() throws ExecutionException, InterruptedException {
 
         final CreateInstrumentBankAccountRequest request = Mockito.mock(CreateInstrumentBankAccountRequest.class);
         final CreateInstrumentBankAccountResponse response = Mockito.mock(CreateInstrumentBankAccountResponse.class);
@@ -70,7 +70,7 @@ public class InstrumentsClientImplTest {
     }
 
     @Test
-    public void shouldGetInstrument() throws ExecutionException, InterruptedException {
+    void shouldGetInstrument() throws ExecutionException, InterruptedException {
 
         final GetInstrumentResponse response = Mockito.mock(GetBankAccountInstrumentResponse.class);
 
@@ -84,7 +84,7 @@ public class InstrumentsClientImplTest {
     }
 
     @Test
-    public void shouldUpdateInstrument() throws ExecutionException, InterruptedException {
+    void shouldUpdateInstrument() throws ExecutionException, InterruptedException {
 
         final UpdateInstrumentCardRequest request = Mockito.mock(UpdateInstrumentCardRequest.class);
         final UpdateInstrumentCardResponse response = Mockito.mock(UpdateInstrumentCardResponse.class);
@@ -100,7 +100,7 @@ public class InstrumentsClientImplTest {
     }
 
     @Test
-    public void shouldDeleteInstrument() throws ExecutionException, InterruptedException {
+    void shouldDeleteInstrument() throws ExecutionException, InterruptedException {
 
         final Void response = Mockito.mock(Void.class);
 

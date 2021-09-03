@@ -1,10 +1,10 @@
 package com.checkout.instruments.beta;
 
 import com.checkout.CheckoutResourceNotFoundException;
+import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
+import com.checkout.common.Phone;
 import com.checkout.common.beta.AccountHolder;
-import com.checkout.common.beta.Address;
-import com.checkout.common.beta.Phone;
 import com.checkout.common.beta.UpdateCustomerRequest;
 import com.checkout.customers.beta.CustomerRequest;
 import com.checkout.instruments.beta.create.CreateCustomerInstrumentRequest;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
 
     @Test
-    public void shouldCreateAndGetTokenInstrument() {
+    void shouldCreateAndGetTokenInstrument() {
 
         final CreateInstrumentTokenResponse tokenInstrument = createTokenInstrument();
 
@@ -55,7 +55,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldUpdateTokenInstrument() {
+    void shouldUpdateTokenInstrument() {
 
         final CreateInstrumentTokenResponse tokenInstrument = createTokenInstrument();
 
@@ -73,7 +73,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldUpdateCardInstrument() {
+    void shouldUpdateCardInstrument() {
 
         final CreateInstrumentTokenResponse tokenInstrument = createTokenInstrument();
 
@@ -121,7 +121,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldDeleteCardInstrument() {
+    void shouldDeleteCardInstrument() {
 
         final CreateInstrumentTokenResponse response = createTokenInstrument();
 

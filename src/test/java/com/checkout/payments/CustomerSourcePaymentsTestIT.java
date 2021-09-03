@@ -13,14 +13,15 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CustomerSourcePaymentsTestIT extends SandboxTestFixture {
+class CustomerSourcePaymentsTestIT extends SandboxTestFixture {
 
-    public CustomerSourcePaymentsTestIT() {
+    CustomerSourcePaymentsTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void can_request_card_payment() throws Exception {
+    void shouldRequestCardPayment() throws Exception {
+
         final PaymentRequest<CardSource> firstCardPayment = TestHelper.createCardPaymentRequest();
         final PaymentResponse firstCardPaymentResponse = getApi().paymentsClient().requestAsync(firstCardPayment).get();
         final CustomerSource customerSource = new CustomerSource(firstCardPayment.getCustomer().getId(), firstCardPayment.getCustomer().getEmail());

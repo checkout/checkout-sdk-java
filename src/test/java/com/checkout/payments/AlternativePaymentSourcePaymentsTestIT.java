@@ -12,14 +12,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class AlternativePaymentSourcePaymentsTestIT extends SandboxTestFixture {
+class AlternativePaymentSourcePaymentsTestIT extends SandboxTestFixture {
 
-    public AlternativePaymentSourcePaymentsTestIT() {
+    AlternativePaymentSourcePaymentsTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void can_request_ideal_payment() throws Exception {
+    void can_request_ideal_payment() throws Exception {
         final AlternativePaymentSource alternativePaymentSource = new AlternativePaymentSource("ideal");
         alternativePaymentSource.put("bic", "INGBNL2A");
         alternativePaymentSource.put("description", "ORD 5023 4E89");

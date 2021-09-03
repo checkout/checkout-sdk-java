@@ -17,14 +17,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class BoletoPaymentsTestIT extends SandboxTestFixture {
+class BoletoPaymentsTestIT extends SandboxTestFixture {
 
-    public BoletoPaymentsTestIT() {
+    BoletoPaymentsTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void shouldSucceedBoletoRedirectPayment() {
+    void shouldSucceedBoletoRedirectPayment() {
 
         final BoletoSource boletoSource = BoletoSource.builder()
                 .country(CountryCode.BR)
@@ -69,7 +69,7 @@ public class BoletoPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldMakeBoletoDirectPayment_thirdPartyRejection() {
+    void shouldMakeBoletoDirectPayment_thirdPartyRejection() {
 
         final BoletoSource boletoSource = BoletoSource.builder()
                 .country(CountryCode.BR)

@@ -1,8 +1,7 @@
 package com.checkout.payments.beta.response;
 
+import com.checkout.common.Resource;
 import com.checkout.common.beta.Currency;
-import com.checkout.common.beta.LinkType;
-import com.checkout.common.beta.Resource;
 import com.checkout.payments.beta.Processing;
 import com.checkout.payments.beta.request.PaymentRecipient;
 import com.checkout.payments.beta.request.ShippingDetails;
@@ -80,9 +79,5 @@ public class PaymentResponse<S extends ResponseSource> extends Resource implemen
     private String description;
 
     private Map<String, Object> metadata = new HashMap<>();
-
-    public boolean canCapture() {
-        return super.hasLink(LinkType.CAPTURE);
-    }
 
 }

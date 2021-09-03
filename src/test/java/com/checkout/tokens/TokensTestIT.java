@@ -15,14 +15,14 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TokensTestIT extends SandboxTestFixture {
+class TokensTestIT extends SandboxTestFixture {
 
-    public TokensTestIT() {
+    TokensTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void shouldRequestCardToken() {
+    void shouldRequestCardToken() {
 
         final Address billingAddress = Address.builder()
                 .addressLine1("Checkout.com")

@@ -1,6 +1,6 @@
 package com.checkout.payments.beta.payout;
 
-import com.checkout.common.beta.Resource;
+import com.checkout.common.Resource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

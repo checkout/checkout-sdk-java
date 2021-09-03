@@ -28,14 +28,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class DisputesTestIT extends SandboxTestFixture {
+class DisputesTestIT extends SandboxTestFixture {
 
-    public DisputesTestIT() {
+    DisputesTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void shouldQueryDisputes() {
+    void shouldQueryDisputes() {
         DisputesQueryFilter query = DisputesQueryFilter.builder().limit(250).build();
         DisputesQueryResponse response = blocking(getApi().disputesClient().query(query));
         assertNotNull(response);
@@ -51,7 +51,7 @@ public class DisputesTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldGetDisputeDetails() {
+    void shouldGetDisputeDetails() {
         final DisputesQueryResponse queryResponse = blocking(getApi().disputesClient().query(DisputesQueryFilter.builder().build()));
         assertNotNull(queryResponse);
         if (queryResponse.getTotalCount() > 0) {
@@ -77,7 +77,7 @@ public class DisputesTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldFailOnAcceptDisputeAlreadyAccepted() {
+    void shouldFailOnAcceptDisputeAlreadyAccepted() {
         final DisputesQueryResponse queryResponse = blocking(getApi().disputesClient().query(DisputesQueryFilter.builder()
                 .statuses(DisputeStatus.ACCEPTED.toString()).build()));
         assertNotNull(queryResponse);
@@ -99,7 +99,7 @@ public class DisputesTestIT extends SandboxTestFixture {
      */
     //@Test
     //@Timeout(30)
-    public void shouldTestFullDisputesWorkFlow() throws Exception {
+    void shouldTestFullDisputesWorkFlow() throws Exception {
         //Create a payment who triggers a dispute
         final CardTokenRequest cardTokenRequest = TestHelper.createCardTokenRequest();
         final CardTokenResponse cardTokenResponse = blocking(getApi().tokensClient().requestAsync(cardTokenRequest));

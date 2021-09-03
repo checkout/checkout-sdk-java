@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class HostedPaymentsClientImpl extends AbstractClient implements HostedPaymentsClient {
 
-    public static final String HOSTED_PAYMENTS = "/hosted-payments";
+    private static final String HOSTED_PAYMENTS = "/hosted-payments";
 
     public HostedPaymentsClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, SecretKeyCredentials.fromConfiguration(configuration));

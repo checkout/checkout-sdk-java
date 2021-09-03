@@ -11,14 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CustomersTestIT extends SandboxTestFixture {
+class CustomersTestIT extends SandboxTestFixture {
 
-    public CustomersTestIT() {
+    CustomersTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void shouldCreateAndGetCustomer() {
+    void shouldCreateAndGetCustomer() {
         final CustomerRequest customerRequest = CustomerRequest.builder()
                 .email(TestHelper.generateRandomEmail())
                 .name("Armando Ibarra")
@@ -36,7 +36,7 @@ public class CustomersTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldCreateAndUpdateCustomer() {
+    void shouldCreateAndUpdateCustomer() {
         //Create Customer
         final CustomerRequest customerRequest = CustomerRequest.builder()
                 .email(TestHelper.generateRandomEmail())
@@ -57,7 +57,7 @@ public class CustomersTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldCreateAndEditCustomer() {
+    void shouldCreateAndEditCustomer() {
         //Create Customer
         final CustomerRequest customerRequest = CustomerRequest.builder()
                 .email(TestHelper.generateRandomEmail())
