@@ -44,9 +44,9 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ApacheHttpClientTransport implements Transport {
 
-    public static final String ACCEPT_CSV = "text/csv";
-    public static final String ACCEPT_JSON = "application/json;charset=UTF-8";
-    public static final String AUTHORIZATION = "Authorization";
+    private static final String ACCEPT_CSV = "text/csv";
+    private static final String ACCEPT_JSON = "application/json;charset=UTF-8";
+    private static final String AUTHORIZATION = "Authorization";
     private final URI baseUri;
     private final CloseableHttpClient httpClient;
 

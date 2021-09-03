@@ -17,12 +17,12 @@ public class BalotoClientImpl extends AbstractClient implements BalotoClient {
 
     @Override
     public CompletableFuture<Void> succeed(final String paymentId) {
-        return apiClient.postAsync(constructApiPath(BALOTO_PATH, paymentId, "succeed"), apiCredentials, Void.class, null, null);
+        return apiClient.postAsync(buildPath(BALOTO_PATH, paymentId, "succeed"), apiCredentials, Void.class, null, null);
     }
 
     @Override
     public CompletableFuture<Void> expire(final String paymentId) {
-        return apiClient.postAsync(constructApiPath(BALOTO_PATH, paymentId, "expire"), apiCredentials, Void.class, null, null);
+        return apiClient.postAsync(buildPath(BALOTO_PATH, paymentId, "expire"), apiCredentials, Void.class, null, null);
     }
 
 }

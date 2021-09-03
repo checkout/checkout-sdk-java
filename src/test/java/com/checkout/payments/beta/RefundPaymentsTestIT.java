@@ -18,10 +18,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
+class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
 
     @Test
-    public void shouldRefundCardPayment() {
+    void shouldRefundCardPayment() {
 
         final RequestCardSource source = getRequestCardSource();
         final RequestCorporateSender sender = getCorporateSender();
@@ -29,7 +29,7 @@ public class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
 
         // payment
         final PaymentResponse<ResponseCardSource> paymentResponse = makeCardPayment(request);
-        assertTrue(paymentResponse.canCapture());
+        assertTrue(paymentResponse.hasLink("capture"));
 
         // capture
         capturePayment(paymentResponse.getId());
@@ -51,11 +51,11 @@ public class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldRefundTokenPayment() {
+    void shouldRefundTokenPayment() {
 
         // Make Payment
         final PaymentResponse<ResponseCardSource> paymentResponse = makeTokenPayment();
-        assertTrue(paymentResponse.canCapture());
+        assertTrue(paymentResponse.hasLink("capture"));
 
         // Capture Payment
         capturePayment(paymentResponse.getId());

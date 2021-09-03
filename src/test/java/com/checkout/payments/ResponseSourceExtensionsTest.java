@@ -5,25 +5,29 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ResponseSourceExtensionsTest {
+class ResponseSourceExtensionsTest {
 
     @Test
-    public void can_convert_to_card_source() {
+    void shouldConvertToCardSource() {
+
         final CardSourceResponse source = new CardSourceResponse();
         final PaymentProcessed payment = new PaymentProcessed();
         payment.setSource(source);
 
         assertTrue(payment.getSource() instanceof CardSourceResponse);
         assertEquals(source, payment.getSource());
+
     }
 
     @Test
-    public void can_convert_to_alternative_payment_source() {
+    void shouldConvertToAlternativePaymentSource() {
+
         final AlternativePaymentSourceResponse source = new AlternativePaymentSourceResponse();
         final PaymentProcessed payment = new PaymentProcessed();
         payment.setSource(source);
 
         assertTrue(payment.getSource() instanceof AlternativePaymentSourceResponse);
         assertEquals(source, payment.getSource());
+
     }
 }

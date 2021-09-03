@@ -17,12 +17,12 @@ public class FawryClientImpl extends AbstractClient implements FawryClient {
 
     @Override
     public CompletableFuture<Void> approve(final String reference) {
-        return apiClient.putAsync(constructApiPath(FAWRY_PATH, reference, "approval"), apiCredentials, Void.class, null);
+        return apiClient.putAsync(buildPath(FAWRY_PATH, reference, "approval"), apiCredentials, Void.class, null);
     }
 
     @Override
     public CompletableFuture<Void> cancel(final String reference) {
-        return apiClient.putAsync(constructApiPath(FAWRY_PATH, reference, "cancellation"), apiCredentials, Void.class, null);
+        return apiClient.putAsync(buildPath(FAWRY_PATH, reference, "cancellation"), apiCredentials, Void.class, null);
     }
 
 }

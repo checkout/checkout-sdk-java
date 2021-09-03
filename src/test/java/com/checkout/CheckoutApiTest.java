@@ -10,7 +10,7 @@ import static com.checkout.TestHelper.mockFourConfiguration;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
-public class CheckoutApiTest {
+class CheckoutApiTest {
 
     @Mock
     private ApiClient apiClient;
@@ -19,7 +19,7 @@ public class CheckoutApiTest {
     private final CheckoutConfiguration fourConfiguration = mockFourConfiguration();
 
     @Test
-    public void shouldInstantiateAndRetrieveClients() {
+    void shouldInstantiateAndRetrieveClients() {
         final CheckoutApi checkoutApi = new CheckoutApiImpl(fourConfiguration);
         assertNotNull(checkoutApi.paymentsClient());
         assertNotNull(checkoutApi.sourcesClient());
@@ -30,7 +30,7 @@ public class CheckoutApiTest {
     }
 
     @Test
-    public void shouldInstantiateAndRetrieveClients_deprecatedConstructor() {
+    void shouldInstantiateAndRetrieveClients_deprecatedConstructor() {
         final CheckoutApi checkoutApi = new CheckoutApiImpl(apiClient, defaultConfiguration);
         assertNotNull(checkoutApi.paymentsClient());
         assertNotNull(checkoutApi.sourcesClient());
@@ -41,7 +41,7 @@ public class CheckoutApiTest {
     }
 
     @Test
-    public void shouldInstantiateAndRetrieveClients_deprecatedStaticConstructor_1() {
+    void shouldInstantiateAndRetrieveClients_deprecatedStaticConstructor_1() {
         final CheckoutApi checkoutApi = CheckoutApiImpl.create(defaultConfiguration.getSecretKey(), true, defaultConfiguration.getPublicKey());
         assertNotNull(checkoutApi.paymentsClient());
         assertNotNull(checkoutApi.sourcesClient());
@@ -52,7 +52,7 @@ public class CheckoutApiTest {
     }
 
     @Test
-    public void shouldInstantiateAndRetrieveClients_deprecatedStaticConstructor_2() {
+    void shouldInstantiateAndRetrieveClients_deprecatedStaticConstructor_2() {
         final CheckoutApi checkoutApi = CheckoutApiImpl.create(defaultConfiguration.getSecretKey(), "uri", defaultConfiguration.getPublicKey());
         assertNotNull(checkoutApi.paymentsClient());
         assertNotNull(checkoutApi.sourcesClient());

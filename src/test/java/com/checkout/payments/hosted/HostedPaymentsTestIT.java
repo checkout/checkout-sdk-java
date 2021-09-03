@@ -11,16 +11,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class HostedPaymentsTestIT extends SandboxTestFixture {
+class HostedPaymentsTestIT extends SandboxTestFixture {
 
-    public static final String REFERENCE = "ORD-123A";
+    static final String REFERENCE = "ORD-123A";
 
-    public HostedPaymentsTestIT() {
+    HostedPaymentsTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void shouldCreateHostedPayments() throws ExecutionException, InterruptedException {
+    void shouldCreateHostedPayments() throws ExecutionException, InterruptedException {
         final HostedPaymentRequest request = TestHelper.createHostedPaymentRequest(REFERENCE);
         final HostedPaymentResponse response = getApi().hostedPaymentsClient().createAsync(request).get();
         assertNotNull(response);

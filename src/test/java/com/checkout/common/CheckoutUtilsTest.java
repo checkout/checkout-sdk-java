@@ -8,10 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class CheckoutUtilsTest {
+class CheckoutUtilsTest {
 
     @Test
-    public void shouldRequireNonBlank() {
+    void shouldRequireNonBlank() {
 
         testNoExceptionIsThrownRequiresNonBlank("name1", "john");
         testExceptionIsThrownRequiresNonBlank("age1", "");
@@ -20,7 +20,7 @@ public class CheckoutUtilsTest {
     }
 
     @Test
-    public void shouldRequireNonNull() {
+    void shouldRequireNonNull() {
 
         testNoExceptionIsThrownRequiresNonNull("name1", "john");
         testNoExceptionIsThrownRequiresNonNull("name2", new Object());
@@ -30,7 +30,7 @@ public class CheckoutUtilsTest {
     }
 
     @Test
-    public void shouldThrowOnNullOrEmptyProperty() {
+    void shouldThrowOnNullOrEmptyProperty() {
 
         testExceptionIsThrownOnInvalidProperty(null);
         testExceptionIsThrownOnInvalidProperty("");

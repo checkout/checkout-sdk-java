@@ -1,9 +1,9 @@
 package com.checkout.instruments.beta;
 
+import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SecretKeyCredentials;
-import com.checkout.beta.AbstractClient;
 import com.checkout.instruments.beta.create.CreateInstrumentRequest;
 import com.checkout.instruments.beta.create.CreateInstrumentResponse;
 import com.checkout.instruments.beta.get.GetInstrumentResponse;

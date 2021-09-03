@@ -22,8 +22,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class HostedPaymentsClientImplTest {
+class HostedPaymentsClientImplTest {
 
+    private static final String HOSTED_PAYMENTS = "/hosted-payments";
     private static final String REFERENCE = "ORD-1234";
 
     @Mock
@@ -39,18 +40,18 @@ public class HostedPaymentsClientImplTest {
     private CompletableFuture<HostedPaymentResponse> responseAsync;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         responseAsync = CompletableFuture.completedFuture(response);
         when(response.getReference()).thenReturn(REFERENCE);
         when(response.getLinks()).thenReturn(new HashMap<>());
     }
 
     @Test
-    public void shouldCreateHostedPayments() throws ExecutionException, InterruptedException {
+    void shouldCreateHostedPayments() throws ExecutionException, InterruptedException {
         final HostedPaymentRequest request = TestHelper.createHostedPaymentRequest(REFERENCE);
         final HostedPaymentsClient client = new HostedPaymentsClientImpl(apiClient, configuration);
         Mockito.doReturn(responseAsync)
-                .when(apiClient).postAsync(eq(HostedPaymentsClientImpl.HOSTED_PAYMENTS), any(ApiCredentials.class),
+                .when(apiClient).postAsync(eq(HOSTED_PAYMENTS), any(ApiCredentials.class),
                 eq(HostedPaymentResponse.class), any(HostedPaymentRequest.class), any());
         final HostedPaymentResponse hostedPaymentResponse = client.createAsync(request).get();
         assertNotNull(hostedPaymentResponse);

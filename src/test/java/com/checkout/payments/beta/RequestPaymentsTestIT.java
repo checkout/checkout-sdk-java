@@ -1,9 +1,10 @@
 package com.checkout.payments.beta;
 
+import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
-import com.checkout.common.beta.Address;
+import com.checkout.common.Phone;
 import com.checkout.common.beta.Currency;
-import com.checkout.common.beta.Phone;
+import com.checkout.common.beta.ThreeDSEnrollmentStatus;
 import com.checkout.payments.beta.request.PaymentRequest;
 import com.checkout.payments.beta.request.Payments;
 import com.checkout.payments.beta.request.ThreeDSRequest;
@@ -15,7 +16,6 @@ import com.checkout.payments.beta.response.PaymentResponse;
 import com.checkout.payments.beta.response.PaymentResponseBalances;
 import com.checkout.payments.beta.response.PaymentStatus;
 import com.checkout.payments.beta.response.ThreeDSEnrollmentData;
-import com.checkout.common.beta.ThreeDSEnrollmentStatus;
 import com.checkout.payments.beta.response.source.ResponseCardSource;
 import com.checkout.payments.beta.sender.RequestCorporateSender;
 import com.checkout.payments.beta.sender.RequestIndividualSender;
@@ -32,10 +32,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
+class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
 
     @Test
-    public void shouldMakeCardPayment() {
+    void shouldMakeCardPayment() {
 
         final RequestCardSource source = RequestCardSource.builder()
                 .number(CardSourceHelper.Visa.NUMBER)
@@ -97,7 +97,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldMakeCardPayment_3ds() {
+    void shouldMakeCardPayment_3ds() {
 
         final RequestCardSource source = RequestCardSource.builder()
                 .number(CardSourceHelper.Visa.NUMBER)
@@ -151,7 +151,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldMakeCardVerification() {
+    void shouldMakeCardVerification() {
 
         final RequestCardSource source = RequestCardSource.builder()
                 .number(CardSourceHelper.Visa.NUMBER)
@@ -213,7 +213,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldMakeIdSourcePayment() {
+    void shouldMakeIdSourcePayment() {
 
         final PaymentResponse<ResponseCardSource> cardPaymentResponse = makeCardPayment(false);
 
@@ -266,7 +266,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldMakeTokenPayment() {
+    void shouldMakeTokenPayment() {
 
         final CardTokenResponse cardTokenResponse = requestToken();
 
@@ -321,7 +321,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldMakeTokenPayment_3ds() {
+    void shouldMakeTokenPayment_3ds() {
 
         final CardTokenResponse cardTokenResponse = requestToken();
 

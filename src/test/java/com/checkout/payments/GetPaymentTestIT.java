@@ -26,14 +26,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class GetPaymentTestIT extends SandboxTestFixture {
+class GetPaymentTestIT extends SandboxTestFixture {
 
-    public GetPaymentTestIT() {
+    GetPaymentTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void resource_not_found_handled_correctly() throws Exception {
+    void resource_not_found_handled_correctly() throws Exception {
         try {
             getApi().paymentsClient().getAsync("not-found").get();
             fail();
@@ -43,13 +43,13 @@ public class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void handle_timeout() {
+    void handle_timeout() {
         assertThrows(TimeoutException.class, () ->
                 getApi().paymentsClient().getAsync("not-found").get(5, TimeUnit.MILLISECONDS));
     }
 
     @Test
-    public void can_get_non_3ds_payment() throws Exception {
+    void can_get_non_3ds_payment() throws Exception {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setPaymentType(PaymentType.RECURRING);
 
@@ -79,7 +79,7 @@ public class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_get_3ds_payment_before_auth() throws Exception {
+    void can_get_3ds_payment_before_auth() throws Exception {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setThreeDS(ThreeDSRequest.from(true));
 
@@ -113,7 +113,7 @@ public class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_get_payment_metadata() throws Exception {
+    void can_get_payment_metadata() throws Exception {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.getMetadata().put("test", "1234");
 
@@ -129,7 +129,7 @@ public class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_get_payment_ip() throws Exception {
+    void can_get_payment_ip() throws Exception {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setPaymentIp("10.1.2.3");
 
@@ -143,7 +143,7 @@ public class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_get_payment_recipient() throws Exception {
+    void can_get_payment_recipient() throws Exception {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setRecipient(new PaymentRecipient(LocalDate.of(1985, 5, 15), "4242424242", "W1T", null, "Wensle", null));
 
@@ -161,7 +161,7 @@ public class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_get_payment_shipping() throws Exception {
+    void can_get_payment_shipping() throws Exception {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         final Address address = new Address();
         address.setAddressLine1("221B Baker Street");
@@ -197,7 +197,7 @@ public class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_get_payment_description() throws Exception {
+    void can_get_payment_description() throws Exception {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setDescription("Too descriptive");
 
@@ -211,7 +211,7 @@ public class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_get_payment_action() throws Exception {
+    void can_get_payment_action() throws Exception {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
 
         final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
@@ -237,7 +237,7 @@ public class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_get_multiple_payment_actions() throws Exception {
+    void can_get_multiple_payment_actions() throws Exception {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
 
         final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
@@ -262,7 +262,7 @@ public class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_get_payment_action_metadata() throws Exception {
+    void can_get_payment_action_metadata() throws Exception {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.getMetadata().put("test", "1234");
 

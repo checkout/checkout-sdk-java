@@ -23,7 +23,10 @@ import com.checkout.tokens.CardTokenRequest;
 import java.util.Collections;
 import java.util.UUID;
 
-public class TestHelper {
+public final class TestHelper {
+
+    private TestHelper() {
+    }
 
     public static final String VALID_DEFAULT_SK = "sk_test_fde517a8-3f01-41ef-b4bd-4282384b0a64";
     public static final String VALID_DEFAULT_PK = "pk_test_fe70ff27-7c32-4ce1-ae90-5691a188ee7b";

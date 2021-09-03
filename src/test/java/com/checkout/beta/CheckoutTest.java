@@ -15,10 +15,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CheckoutTest {
+class CheckoutTest {
 
     @Test
-    public void shouldCreateCheckoutSdks() throws URISyntaxException {
+    void shouldCreateCheckoutSdks() throws URISyntaxException {
 
         final CheckoutApi checkoutApi1 = Checkout.staticKeys()
                 .publicKey(VALID_FOUR_PK)
@@ -53,7 +53,7 @@ public class CheckoutTest {
     }
 
     @Test
-    public void shouldFailToCreateCheckoutSdks() {
+    void shouldFailToCreateCheckoutSdks() {
 
         try {
             Checkout.staticKeys()

@@ -1,7 +1,7 @@
 package com.checkout.payments.beta.request;
 
-import com.checkout.common.beta.Address;
-import com.checkout.common.beta.Phone;
+import com.checkout.common.Address;
+import com.checkout.common.Phone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

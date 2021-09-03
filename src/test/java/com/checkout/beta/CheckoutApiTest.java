@@ -12,7 +12,7 @@ import static com.checkout.TestHelper.mockFourConfiguration;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
-public class CheckoutApiTest {
+class CheckoutApiTest {
 
     @Mock
     private ApiClient apiClient;
@@ -20,13 +20,13 @@ public class CheckoutApiTest {
     private CheckoutApi checkoutApi;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         final CheckoutConfiguration checkoutConfiguration = mockFourConfiguration();
         this.checkoutApi = new CheckoutApiImpl(apiClient, checkoutConfiguration);
     }
 
     @Test
-    public void shouldRetrieveTokensClient() {
+    void shouldRetrieveTokensClient() {
         assertNotNull(checkoutApi.tokensClient());
     }
 

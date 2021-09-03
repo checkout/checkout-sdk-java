@@ -22,10 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
-public class CheckoutConfigurationTest {
+class CheckoutConfigurationTest {
 
     @Test
-    public void shouldFailCreatingConfiguration_invalidEnvironment() {
+    void shouldFailCreatingConfiguration_invalidEnvironment() {
         try {
             new CheckoutConfiguration(VALID_FOUR_PK, VALID_FOUR_SK, (Environment) null);
             fail();
@@ -36,7 +36,7 @@ public class CheckoutConfigurationTest {
     }
 
     @Test
-    public void shouldFailCreatingConfiguration_invalidKeys() {
+    void shouldFailCreatingConfiguration_invalidKeys() {
         try {
             new CheckoutConfiguration(INVALID_FOUR_PK, VALID_FOUR_SK, Environment.SANDBOX);
             fail();
@@ -54,7 +54,7 @@ public class CheckoutConfigurationTest {
     }
 
     @Test
-    public void shouldFailCreatingConfiguration_invalidURI() {
+    void shouldFailCreatingConfiguration_invalidURI() {
         try {
             new CheckoutConfiguration(VALID_FOUR_PK, VALID_FOUR_SK, (URI) null);
             fail();
@@ -65,7 +65,7 @@ public class CheckoutConfigurationTest {
     }
 
     @Test
-    public void shouldCreateConfiguration() throws URISyntaxException {
+    void shouldCreateConfiguration() throws URISyntaxException {
 
         final CheckoutConfiguration checkoutConfiguration = new CheckoutConfiguration(VALID_FOUR_PK, VALID_FOUR_SK, Environment.PRODUCTION);
         assertEquals(FOUR, checkoutConfiguration.getCustomerPlatformType());
@@ -82,7 +82,7 @@ public class CheckoutConfigurationTest {
     }
 
     @Test
-    public void toDeprecate_shouldFailCreatingConfiguration_default_invalidURI() {
+    void toDeprecate_shouldFailCreatingConfiguration_default_invalidURI() {
         try {
             new CheckoutConfiguration(VALID_FOUR_PK, null);
             fail();
@@ -93,7 +93,7 @@ public class CheckoutConfigurationTest {
     }
 
     @Test
-    public void toDeprecate_shouldFailCreatingConfiguration_invalidKeys() {
+    void toDeprecate_shouldFailCreatingConfiguration_invalidKeys() {
         try {
             new CheckoutConfiguration(INVALID_DEFAULT_SK, true);
             fail();
@@ -112,7 +112,7 @@ public class CheckoutConfigurationTest {
     }
 
     @Test
-    public void toDeprecate_shouldCreateConfiguration_default() {
+    void toDeprecate_shouldCreateConfiguration_default() {
 
         final CheckoutConfiguration checkoutConfiguration = new CheckoutConfiguration(VALID_DEFAULT_SK, true);
         assertEquals(DEFAULT, checkoutConfiguration.getCustomerPlatformType());
@@ -141,7 +141,7 @@ public class CheckoutConfigurationTest {
     }
 
     @Test
-    public void shouldCreateFourConfigurationForProd() throws URISyntaxException {
+    void shouldCreateFourConfigurationForProd() throws URISyntaxException {
 
         final String validFourSk = "sk_m73dzbpy7cf3gfd46xr4yj5xo4e";
         final String validFourPk = "pk_pkhpdtvmkgf7hdnpwnbhw7r2uic";
@@ -161,7 +161,7 @@ public class CheckoutConfigurationTest {
     }
 
     @Test
-    public void shouldCreateDefaultConfigurationForProd() {
+    void shouldCreateDefaultConfigurationForProd() {
 
         final String validDefaultSk = "sk_fde517a8-3f01-41ef-b4bd-4282384b0a64";
         final String validDefaultPk = "pk_fe70ff27-7c32-4ce1-ae90-5691a188ee7b";
@@ -180,7 +180,7 @@ public class CheckoutConfigurationTest {
     }
 
     @Test
-    public void shouldFailCreatingConfigurationInvalidKeysWithSamePatternDefault() {
+    void shouldFailCreatingConfigurationInvalidKeysWithSamePatternDefault() {
         final String similarDefaultSk = "sk_tost_fde517a8-3f01-41ef-b4bd-4282384b0a64";
         final String similarDefaultPk = "pk_tost_fe70ff27-7c32-4ce1-ae90-5691a188ee7b";
         try {
@@ -201,7 +201,7 @@ public class CheckoutConfigurationTest {
     }
 
     @Test
-    public void shouldFailCreatingConfigurationInvalidKeysWithSamePatternFour() {
+    void shouldFailCreatingConfigurationInvalidKeysWithSamePatternFour() {
         final String similarFourSk = "sk_tost_m73dzbpy7cf3gfd46xr4yj5xo4e";
         final String similarFourPk = "pk_tost_pkhpdtvmkgf7hdnpwnbhw7r2uic";
         try {

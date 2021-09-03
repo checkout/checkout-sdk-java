@@ -15,14 +15,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class BalotoPaymentsTestIT extends SandboxTestFixture {
+class BalotoPaymentsTestIT extends SandboxTestFixture {
 
-    public BalotoPaymentsTestIT() {
+    BalotoPaymentsTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void shouldSucceedBalotoPayment() {
+    void shouldSucceedBalotoPayment() {
 
         final String paymentId = makeBaletoPayment();
 
@@ -45,7 +45,7 @@ public class BalotoPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldExpireBalotoPayment() {
+    void shouldExpireBalotoPayment() {
 
         final String paymentId = makeBaletoPayment();
 

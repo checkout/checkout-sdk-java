@@ -28,28 +28,28 @@ public class DisputesClientImpl extends AbstractClient implements DisputesClient
 
     @Override
     public CompletableFuture<DisputeDetailsResponse> getDisputeDetails(final String id) {
-        return apiClient.getAsync(constructApiPath(DISPUTES, id), apiCredentials, DisputeDetailsResponse.class);
+        return apiClient.getAsync(buildPath(DISPUTES, id), apiCredentials, DisputeDetailsResponse.class);
     }
 
     @Override
     public CompletableFuture<Void> accept(final String id) {
-        return apiClient.postAsync(constructApiPath(DISPUTES, id, ACCEPT), apiCredentials, Void.class, null, null);
+        return apiClient.postAsync(buildPath(DISPUTES, id, ACCEPT), apiCredentials, Void.class, null, null);
     }
 
 
     @Override
     public CompletableFuture<Void> putEvidence(final String id, final DisputeEvidenceRequest disputeEvidence) {
-        return apiClient.putAsync(constructApiPath(DISPUTES, id, EVIDENCE), apiCredentials, Void.class, disputeEvidence);
+        return apiClient.putAsync(buildPath(DISPUTES, id, EVIDENCE), apiCredentials, Void.class, disputeEvidence);
     }
 
     @Override
     public CompletableFuture<DisputeEvidenceResponse> getEvidence(final String id) {
-        return apiClient.getAsync(constructApiPath(DISPUTES, id, EVIDENCE), apiCredentials, DisputeEvidenceResponse.class);
+        return apiClient.getAsync(buildPath(DISPUTES, id, EVIDENCE), apiCredentials, DisputeEvidenceResponse.class);
     }
 
     @Override
     public CompletableFuture<Void> submitEvidence(final String id) {
-        return apiClient.postAsync(constructApiPath(DISPUTES, id, EVIDENCE), apiCredentials, Void.class, null, null);
+        return apiClient.postAsync(buildPath(DISPUTES, id, EVIDENCE), apiCredentials, Void.class, null, null);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class DisputesClientImpl extends AbstractClient implements DisputesClient
 
     @Override
     public CompletableFuture<FileDetailsResponse> getFileDetails(final String id) {
-        return apiClient.getAsync(constructApiPath(FILES, id), apiCredentials, FileDetailsResponse.class);
+        return apiClient.getAsync(buildPath(FILES, id), apiCredentials, FileDetailsResponse.class);
     }
 
 }

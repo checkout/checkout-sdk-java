@@ -1,7 +1,7 @@
 package com.checkout.customers.beta;
 
 import com.checkout.CheckoutResourceNotFoundException;
-import com.checkout.common.beta.Phone;
+import com.checkout.common.Phone;
 import com.checkout.instruments.beta.CardTokenInstrumentsTestIT;
 import com.checkout.instruments.beta.get.GetCardInstrumentResponse;
 import org.junit.jupiter.api.Test;
@@ -12,10 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CustomersTestIT extends CardTokenInstrumentsTestIT {
+class CustomersTestIT extends CardTokenInstrumentsTestIT {
 
     @Test
-    public void shouldCreateAndGetCustomer() {
+    void shouldCreateAndGetCustomer() {
 
         final CustomerRequest customerRequest = CustomerRequest.builder()
                 .email(generateRandomEmail())
@@ -46,7 +46,7 @@ public class CustomersTestIT extends CardTokenInstrumentsTestIT {
     }
 
     @Test
-    public void shouldCreateAndUpdateCustomer() {
+    void shouldCreateAndUpdateCustomer() {
         //Create Customer
         final CustomerRequest customerRequest = CustomerRequest.builder()
                 .email(generateRandomEmail())
@@ -70,7 +70,7 @@ public class CustomersTestIT extends CardTokenInstrumentsTestIT {
     }
 
     @Test
-    public void shouldCreateAndEditCustomer() {
+    void shouldCreateAndEditCustomer() {
         //Create Customer
         final CustomerRequest customerRequest = CustomerRequest.builder()
                 .email(generateRandomEmail())

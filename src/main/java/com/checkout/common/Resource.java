@@ -10,10 +10,11 @@ import java.util.Map;
 
 @Data
 @NoArgsConstructor
-public class Resource {
+public abstract class Resource {
 
     @SerializedName("_links")
     private Map<String, Link> links = new HashMap<>();
+
     @Expose(deserialize = false, serialize = false)
     private ApiResponseInfo apiResponseInfo;
 
@@ -21,11 +22,11 @@ public class Resource {
         return getLink("self");
     }
 
-    public boolean hasLink(String relation) {
+    public boolean hasLink(final String relation) {
         return links.containsKey(relation);
     }
 
-    public Link getLink(String relation) {
+    public Link getLink(final String relation) {
         return links.get(relation);
     }
 }

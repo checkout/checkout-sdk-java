@@ -1,7 +1,7 @@
 package com.checkout.instruments.beta.create;
 
+import com.checkout.common.Phone;
 import com.checkout.common.beta.CustomerRequest;
-import com.checkout.common.beta.Phone;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

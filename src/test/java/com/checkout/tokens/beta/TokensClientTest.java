@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
-public class TokensClientTest {
+class TokensClientTest {
 
     @Mock
     private ApiClient apiClient;
@@ -39,13 +39,13 @@ public class TokensClientTest {
     private TokensClient tokensClient;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         this.checkoutConfiguration = mockFourConfiguration();
         this.tokensClient = new TokensClientImpl(apiClient, checkoutConfiguration);
     }
 
     @Test
-    public void shouldThrowExceptionIfApiClientIsNull() {
+    void shouldThrowExceptionIfApiClientIsNull() {
 
         try {
             new TokensClientImpl(null, checkoutConfiguration);
@@ -57,7 +57,7 @@ public class TokensClientTest {
     }
 
     @Test
-    public void shouldThrowException_whenRequestIsNull_cardToken() {
+    void shouldThrowException_whenRequestIsNull_cardToken() {
 
         try {
             tokensClient.requestAsync((CardTokenRequest) null);
@@ -71,7 +71,7 @@ public class TokensClientTest {
     }
 
     @Test
-    public void shouldRequestCardToken() {
+    void shouldRequestCardToken() {
 
         final CardTokenRequest cardTokenRequest = CardTokenRequest.builder().number("123").expiryMonth(3).expiryYear(2024).build();
 
@@ -82,7 +82,7 @@ public class TokensClientTest {
     }
 
     @Test
-    public void shouldThrowException_whenRequestIsNull_walletToken() {
+    void shouldThrowException_whenRequestIsNull_walletToken() {
 
         try {
             tokensClient.requestAsync((WalletTokenRequest) null);
@@ -96,7 +96,7 @@ public class TokensClientTest {
     }
 
     @Test
-    public void shouldRequestApplePayToken() {
+    void shouldRequestApplePayToken() {
 
         final String signature = "MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCAMIID5j" +
                 "CCA4ugAwIBAgIIaGD2mdnMpw8wCgYIKoZIzj0EAwIwejEuMCwGA1UEAwwlQXBwbGUgQXBwbGljYXRpb24gS" +
@@ -130,7 +130,7 @@ public class TokensClientTest {
     }
 
     @Test
-    public void shouldRequestGooglePayToken() {
+    void shouldRequestGooglePayToken() {
 
         final GooglePayTokenData googlePayTokenData = GooglePayTokenData.builder()
                 .signature("TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ")

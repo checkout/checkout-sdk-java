@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class SourcesClientImpl extends AbstractClient implements SourcesClient {
+
     private static final Map<Integer, Class<? extends Resource>> SOURCE_RESPONSE_MAPPINGS = new HashMap<>();
 
     static {

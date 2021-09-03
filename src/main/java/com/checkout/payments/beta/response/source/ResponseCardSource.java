@@ -1,10 +1,10 @@
 package com.checkout.payments.beta.response.source;
 
+import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
-import com.checkout.common.beta.Address;
+import com.checkout.common.Phone;
 import com.checkout.common.beta.CardCategory;
 import com.checkout.common.beta.CardType;
-import com.checkout.common.beta.Phone;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

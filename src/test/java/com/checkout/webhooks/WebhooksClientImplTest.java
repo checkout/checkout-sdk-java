@@ -27,7 +27,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class WebhooksClientImplTest {
+class WebhooksClientImplTest {
 
     private static final String WEBHOOKS = "webhooks";
 
@@ -37,13 +37,13 @@ public class WebhooksClientImplTest {
     private WebhooksClient webhooksClient;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         final CheckoutConfiguration checkoutConfiguration = mockDefaultConfiguration();
         this.webhooksClient = new WebhooksClientImpl(apiClient, checkoutConfiguration);
     }
 
     @Test
-    public void shouldRetrieveWebhooks() throws ExecutionException, InterruptedException {
+    void shouldRetrieveWebhooks() throws ExecutionException, InterruptedException {
 
         final WebhookResponse[] webhookResponses = new WebhookResponse[2];
         webhookResponses[0] = mock(WebhookResponse.class);
@@ -61,7 +61,7 @@ public class WebhooksClientImplTest {
     }
 
     @Test
-    public void shouldRetrieveWebhooks_nullResponse() throws ExecutionException, InterruptedException {
+    void shouldRetrieveWebhooks_nullResponse() throws ExecutionException, InterruptedException {
 
         when(apiClient.getAsync(eq(WEBHOOKS), any(ApiCredentials.class), eq(WebhookResponse[].class)))
                 .thenReturn(CompletableFuture.completedFuture(null));
@@ -74,7 +74,7 @@ public class WebhooksClientImplTest {
     }
 
     @Test
-    public void shouldRegisterWebhook() throws ExecutionException, InterruptedException {
+    void shouldRegisterWebhook() throws ExecutionException, InterruptedException {
 
         final WebhookRequest webhookRequest = mock(WebhookRequest.class);
         final WebhookResponse webhookResponse = mock(WebhookResponse.class);
@@ -90,7 +90,7 @@ public class WebhooksClientImplTest {
     }
 
     @Test
-    public void registerWebhook_shouldThrowOnNullRequest() {
+    void registerWebhook_shouldThrowOnNullRequest() {
 
         try {
             webhooksClient.registerWebhook(null);
@@ -104,7 +104,7 @@ public class WebhooksClientImplTest {
     }
 
     @Test
-    public void shouldRegisterWebhook_idempotencyKey() throws ExecutionException, InterruptedException {
+    void shouldRegisterWebhook_idempotencyKey() throws ExecutionException, InterruptedException {
 
         final WebhookRequest webhookRequest = mock(WebhookRequest.class);
         final WebhookResponse webhookResponse = mock(WebhookResponse.class);
@@ -120,7 +120,7 @@ public class WebhooksClientImplTest {
     }
 
     @Test
-    public void shouldRetrieveWebhook_idempotencyKey() throws ExecutionException, InterruptedException {
+    void shouldRetrieveWebhook_idempotencyKey() throws ExecutionException, InterruptedException {
 
         final WebhookResponse webhookResponse = mock(WebhookResponse.class);
 
@@ -135,7 +135,7 @@ public class WebhooksClientImplTest {
     }
 
     @Test
-    public void retrieveWebhook_shouldThrowOnInvalidId() {
+    void retrieveWebhook_shouldThrowOnInvalidId() {
 
         try {
             webhooksClient.retrieveWebhook("");
@@ -156,7 +156,7 @@ public class WebhooksClientImplTest {
     }
 
     @Test
-    public void shouldUpdateWebhook() throws ExecutionException, InterruptedException {
+    void shouldUpdateWebhook() throws ExecutionException, InterruptedException {
 
         final WebhookRequest webhookRequest = mock(WebhookRequest.class);
         final WebhookResponse webhookResponse = mock(WebhookResponse.class);
@@ -172,7 +172,7 @@ public class WebhooksClientImplTest {
     }
 
     @Test
-    public void updateWebhook_shouldThrowOnNullRequest() {
+    void updateWebhook_shouldThrowOnNullRequest() {
 
         try {
             webhooksClient.updateWebhook("id", null);
@@ -205,7 +205,7 @@ public class WebhooksClientImplTest {
     }
 
     @Test
-    public void removeWebhook_shouldThrowOnInvalidId() {
+    void removeWebhook_shouldThrowOnInvalidId() {
 
         try {
             webhooksClient.removeWebhook(null);

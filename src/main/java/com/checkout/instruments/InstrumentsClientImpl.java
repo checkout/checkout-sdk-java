@@ -26,19 +26,19 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
     @Override
     public CompletableFuture<InstrumentDetailsResponse> getInstrument(final String instrumentId) {
         validateParams("instrumentId", instrumentId);
-        return apiClient.getAsync(constructApiPath(INSTRUMENTS, instrumentId), apiCredentials, InstrumentDetailsResponse.class);
+        return apiClient.getAsync(buildPath(INSTRUMENTS, instrumentId), apiCredentials, InstrumentDetailsResponse.class);
     }
 
     @Override
     public CompletableFuture<UpdateInstrumentResponse> updateInstrument(final String instrumentId, final UpdateInstrumentRequest updateInstrumentRequest) {
         validateParams("instrumentId", instrumentId, "updateInstrumentRequest", updateInstrumentRequest);
-        return apiClient.patchAsync(constructApiPath(INSTRUMENTS, instrumentId), apiCredentials, UpdateInstrumentResponse.class, updateInstrumentRequest, null);
+        return apiClient.patchAsync(buildPath(INSTRUMENTS, instrumentId), apiCredentials, UpdateInstrumentResponse.class, updateInstrumentRequest, null);
     }
 
     @Override
     public CompletableFuture<Void> deleteInstrument(final String instrumentId) {
         validateParams("instrumentId", instrumentId);
-        return apiClient.deleteAsync(constructApiPath(INSTRUMENTS, instrumentId), apiCredentials);
+        return apiClient.deleteAsync(buildPath(INSTRUMENTS, instrumentId), apiCredentials);
     }
 
 }

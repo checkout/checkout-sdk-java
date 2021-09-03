@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class PaymentLinksClientImpl extends AbstractClient implements PaymentLinksClient {
 
-    public static final String PAYMENT_LINKS = "/payment-links";
+    private static final String PAYMENT_LINKS = "/payment-links";
 
     public PaymentLinksClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, SecretKeyCredentials.fromConfiguration(configuration));

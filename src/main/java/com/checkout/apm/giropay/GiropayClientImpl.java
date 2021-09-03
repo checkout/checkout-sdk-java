@@ -17,12 +17,12 @@ public class GiropayClientImpl extends AbstractClient implements GiropayClient {
 
     @Override
     public CompletableFuture<BanksResponse> getBanks() {
-        return apiClient.getAsync(constructApiPath(GIROPAY_PATH, "banks"), apiCredentials, BanksResponse.class);
+        return apiClient.getAsync(buildPath(GIROPAY_PATH, "banks"), apiCredentials, BanksResponse.class);
     }
 
     @Override
     public CompletableFuture<BanksResponse> getEpsBanks() {
-        return apiClient.getAsync(constructApiPath(GIROPAY_PATH, "eps", "banks"), apiCredentials, BanksResponse.class);
+        return apiClient.getAsync(buildPath(GIROPAY_PATH, "eps", "banks"), apiCredentials, BanksResponse.class);
     }
 
 }

@@ -15,16 +15,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class PaymentLinksTestIT extends SandboxTestFixture {
+class PaymentLinksTestIT extends SandboxTestFixture {
 
-    public static final String REFERENCE = "ORD-123A";
+    static final String REFERENCE = "ORD-123A";
 
-    public PaymentLinksTestIT() {
+    PaymentLinksTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void shouldCreatePaymentsLink() throws ExecutionException, InterruptedException {
+    void shouldCreatePaymentsLink() throws ExecutionException, InterruptedException {
         final PaymentLinkRequest paymentLinksRequest = TestHelper.createPaymentLinksRequest(REFERENCE);
         final PaymentLinkResponse response = getApi().paymentLinksClient().createAsync(paymentLinksRequest).get();
         assertNotNull(response);
@@ -35,7 +35,7 @@ public class PaymentLinksTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldRetrievePaymentsLink() throws ExecutionException, InterruptedException {
+    void shouldRetrievePaymentsLink() throws ExecutionException, InterruptedException {
         final PaymentLinkRequest paymentLinksRequest = TestHelper.createPaymentLinksRequest(REFERENCE);
         final PaymentLinkResponse paymentLinkResponse = getApi().paymentLinksClient().createAsync(paymentLinksRequest).get();
         assertNotNull(paymentLinkResponse);

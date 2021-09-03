@@ -16,28 +16,27 @@ import com.checkout.payments.beta.request.source.RequestCardSource;
 import com.checkout.payments.beta.request.source.RequestIdSource;
 import com.checkout.payments.beta.response.PaymentResponse;
 import com.checkout.payments.beta.response.source.ResponseCardSource;
+import com.checkout.payments.beta.response.source.ResponseCurrencyAccountSource;
 import com.checkout.payments.beta.response.source.ResponseIdSource;
+import com.checkout.payments.beta.response.source.ResponseNetworkTokenSource;
+import com.checkout.payments.beta.response.source.ResponseTokenSource;
 import com.checkout.payments.beta.sender.RequestInstrumentSender;
 import com.checkout.payments.beta.voids.VoidRequest;
 import com.checkout.payments.beta.voids.VoidResponse;
+import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static com.checkout.payments.beta.PaymentsClientImpl.ACTIONS_PATH;
-import static com.checkout.payments.beta.PaymentsClientImpl.CAPTURES_PATH;
-import static com.checkout.payments.beta.PaymentsClientImpl.PAYMENTS_PATH;
 import static com.checkout.payments.beta.PaymentsClientImpl.PAYMENT_ACTION_TYPE;
-import static com.checkout.payments.beta.PaymentsClientImpl.PAYMENT_TYPE;
-import static com.checkout.payments.beta.PaymentsClientImpl.REFUNDS_PATH;
-import static com.checkout.payments.beta.PaymentsClientImpl.VOIDS_PATH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -47,7 +46,21 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class PaymentsClientImplTest {
+class PaymentsClientImplTest {
+
+    private static final String PAYMENTS_PATH = "/payments";
+    private static final String ACTIONS_PATH = "/actions";
+    private static final String CAPTURES_PATH = "/captures";
+    private static final String REFUNDS_PATH = "/refunds";
+    private static final String VOIDS_PATH = "/voids";
+
+    private static final Type PAYMENT_TYPE = TypeToken.getParameterized(PaymentResponse.class,
+            ResponseCardSource.class,
+            ResponseCurrencyAccountSource.class,
+            ResponseIdSource.class,
+            ResponseNetworkTokenSource.class,
+            ResponseTokenSource.class
+    ).getType();
 
     @Mock
     private ApiClient apiClient;
@@ -58,12 +71,12 @@ public class PaymentsClientImplTest {
     private PaymentsClient paymentsClient;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         paymentsClient = new PaymentsClientImpl(apiClient, checkoutConfiguration);
     }
 
     @Test
-    public void shouldRequestPayment() throws ExecutionException, InterruptedException {
+    void shouldRequestPayment() throws ExecutionException, InterruptedException {
 
         final RequestIdSource source = mock(RequestIdSource.class);
         final RequestInstrumentSender sender = mock(RequestInstrumentSender.class);
@@ -82,7 +95,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldRequestPayment_idempotencyKey() throws ExecutionException, InterruptedException {
+    void shouldRequestPayment_idempotencyKey() throws ExecutionException, InterruptedException {
 
         final RequestCardSource source = mock(RequestCardSource.class);
         final RequestInstrumentSender sender = mock(RequestInstrumentSender.class);
@@ -101,7 +114,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldRequestPayout() throws ExecutionException, InterruptedException {
+    void shouldRequestPayout() throws ExecutionException, InterruptedException {
 
         final RequestCurrencyAccountSource source = mock(RequestCurrencyAccountSource.class);
         final RequestInstrumentSender sender = mock(RequestInstrumentSender.class);
@@ -120,7 +133,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldRequestPayout_idempotencyKey() throws ExecutionException, InterruptedException {
+    void shouldRequestPayout_idempotencyKey() throws ExecutionException, InterruptedException {
 
         final RequestCurrencyAccountSource source = mock(RequestCurrencyAccountSource.class);
         final RequestInstrumentSender sender = mock(RequestInstrumentSender.class);
@@ -139,7 +152,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldGetPayment() throws ExecutionException, InterruptedException {
+    void shouldGetPayment() throws ExecutionException, InterruptedException {
 
         final PaymentResponse<ResponseIdSource> response = (PaymentResponse<ResponseIdSource>) mock(PaymentResponse.class);
 
@@ -154,7 +167,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldGetPaymentActions() throws ExecutionException, InterruptedException {
+    void shouldGetPaymentActions() throws ExecutionException, InterruptedException {
 
         final List<PaymentAction> response = Arrays.asList(new PaymentAction(), new PaymentAction());
 
@@ -169,7 +182,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldCapturePayment() throws ExecutionException, InterruptedException {
+    void shouldCapturePayment() throws ExecutionException, InterruptedException {
 
         final CaptureResponse response = new CaptureResponse();
 
@@ -184,7 +197,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldCapturePayment_idempotencyKey() throws ExecutionException, InterruptedException {
+    void shouldCapturePayment_idempotencyKey() throws ExecutionException, InterruptedException {
 
         final CaptureResponse response = new CaptureResponse();
 
@@ -199,7 +212,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldCapturePayment_request() throws ExecutionException, InterruptedException {
+    void shouldCapturePayment_request() throws ExecutionException, InterruptedException {
 
         final CaptureRequest request = CaptureRequest.builder().build();
         final CaptureResponse response = new CaptureResponse();
@@ -215,7 +228,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldCapturePayment_request_idempotencyKey() throws ExecutionException, InterruptedException {
+    void shouldCapturePayment_request_idempotencyKey() throws ExecutionException, InterruptedException {
 
         final CaptureRequest request = CaptureRequest.builder().build();
         final CaptureResponse response = new CaptureResponse();
@@ -231,7 +244,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldRefundPayment() throws ExecutionException, InterruptedException {
+    void shouldRefundPayment() throws ExecutionException, InterruptedException {
 
         final RefundResponse response = new RefundResponse();
 
@@ -246,7 +259,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldRefundPayment_idempotencyKey() throws ExecutionException, InterruptedException {
+    void shouldRefundPayment_idempotencyKey() throws ExecutionException, InterruptedException {
 
         final RefundResponse response = new RefundResponse();
 
@@ -261,7 +274,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldRefundPayment_request() throws ExecutionException, InterruptedException {
+    void shouldRefundPayment_request() throws ExecutionException, InterruptedException {
 
         final RefundRequest request = RefundRequest.builder().build();
         final RefundResponse response = new RefundResponse();
@@ -277,7 +290,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldRefundPayment_request_idempotencyKey() throws ExecutionException, InterruptedException {
+    void shouldRefundPayment_request_idempotencyKey() throws ExecutionException, InterruptedException {
 
         final RefundRequest request = RefundRequest.builder().build();
         final RefundResponse response = new RefundResponse();
@@ -293,7 +306,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldVoidPayment() throws ExecutionException, InterruptedException {
+    void shouldVoidPayment() throws ExecutionException, InterruptedException {
 
         final VoidResponse response = new VoidResponse();
 
@@ -308,7 +321,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldVoidPayment_idempotencyKey() throws ExecutionException, InterruptedException {
+    void shouldVoidPayment_idempotencyKey() throws ExecutionException, InterruptedException {
 
         final VoidResponse response = new VoidResponse();
 
@@ -323,7 +336,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldVoidPayment_request() throws ExecutionException, InterruptedException {
+    void shouldVoidPayment_request() throws ExecutionException, InterruptedException {
 
         final VoidRequest request = VoidRequest.builder().build();
         final VoidResponse response = new VoidResponse();
@@ -339,7 +352,7 @@ public class PaymentsClientImplTest {
     }
 
     @Test
-    public void shouldVoidPayment_request_idempotencyKey() throws ExecutionException, InterruptedException {
+    void shouldVoidPayment_request_idempotencyKey() throws ExecutionException, InterruptedException {
 
         final VoidRequest request = VoidRequest.builder().build();
         final VoidResponse response = new VoidResponse();

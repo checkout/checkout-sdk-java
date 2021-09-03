@@ -1,5 +1,6 @@
 package com.checkout.common.beta;
 
+import com.checkout.common.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

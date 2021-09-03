@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class PublicKeyCredentialsTest {
+class PublicKeyCredentialsTest {
 
     @Test
-    public void shouldNotCreateCheckoutConfiguration_invalidConfiguration() {
+    void shouldNotCreateCheckoutConfiguration_invalidConfiguration() {
         try {
             PublicKeyCredentials.fromConfiguration(null);
             fail();
@@ -21,21 +21,21 @@ public class PublicKeyCredentialsTest {
     }
 
     @Test
-    public void shouldCreateCheckoutConfiguration() {
+    void shouldCreateCheckoutConfiguration() {
         final CheckoutConfiguration checkoutConfiguration = mockFourConfiguration();
         final PublicKeyCredentials publicKeyCredentials = PublicKeyCredentials.fromConfiguration(checkoutConfiguration);
         assertEquals("Bearer " + checkoutConfiguration.getPublicKey(), publicKeyCredentials.getAuthorizationHeader());
     }
 
     @Test
-    public void toDeprecate_shouldCreateCheckoutConfiguration() {
+    void toDeprecate_shouldCreateCheckoutConfiguration() {
         final CheckoutConfiguration checkoutConfiguration = mockFourConfiguration();
         final PublicKeyCredentials publicKeyCredentials = new PublicKeyCredentials(checkoutConfiguration);
         assertEquals("Bearer " + checkoutConfiguration.getPublicKey(), publicKeyCredentials.getAuthorizationHeader());
     }
 
     @Test
-    public void toDeprecate_shouldNotCreateCheckoutConfiguration_invalidConfiguration() {
+    void toDeprecate_shouldNotCreateCheckoutConfiguration_invalidConfiguration() {
         try {
             new PublicKeyCredentials(null);
             fail();

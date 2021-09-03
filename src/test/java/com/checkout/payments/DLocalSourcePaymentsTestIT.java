@@ -11,14 +11,15 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class DLocalSourcePaymentsTestIT extends SandboxTestFixture {
+class DLocalSourcePaymentsTestIT extends SandboxTestFixture {
 
-    public DLocalSourcePaymentsTestIT() {
+    DLocalSourcePaymentsTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void can_request_non_3ds_card_payment() throws Exception {
+    void shouldRequestNon3dsCardPayment() throws Exception {
+
         final PaymentRequest<DLocalSource> paymentRequest = TestHelper.createDLocalPaymentRequest();
         paymentRequest.setThreeDS(ThreeDSRequest.from(false));
 

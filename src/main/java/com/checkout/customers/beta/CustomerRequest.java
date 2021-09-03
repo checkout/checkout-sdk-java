@@ -1,6 +1,6 @@
 package com.checkout.customers.beta;
 
-import com.checkout.common.beta.Phone;
+import com.checkout.common.Phone;
 import lombok.Builder;
 import lombok.Data;
 

@@ -1,5 +1,8 @@
 package com.checkout;
 
+import lombok.Data;
+
+@Data
 public class TestCardSource {
 
     public static final TestCardSource VISA = new TestCardSource();
@@ -16,35 +19,4 @@ public class TestCardSource {
     private int expiryYear;
     private String cvv;
 
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public int getExpiryMonth() {
-        return expiryMonth;
-    }
-
-    public void setExpiryMonth(int expiryMonth) {
-        this.expiryMonth = expiryMonth;
-    }
-
-    public int getExpiryYear() {
-        return expiryYear;
-    }
-
-    public void setExpiryYear(int expiryYear) {
-        this.expiryYear = expiryYear;
-    }
-
-    public String getCvv() {
-        return cvv;
-    }
-
-    public void setCvv(String cvv) {
-        this.cvv = cvv;
-    }
 }

@@ -1,9 +1,9 @@
 package com.checkout.tokens;
 
+import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.PublicKeyCredentials;
-import com.checkout.beta.AbstractClient;
 
 import java.util.concurrent.CompletableFuture;
 

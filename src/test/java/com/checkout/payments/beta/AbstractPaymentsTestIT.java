@@ -2,10 +2,10 @@ package com.checkout.payments.beta;
 
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
+import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
-import com.checkout.common.beta.Address;
+import com.checkout.common.Phone;
 import com.checkout.common.beta.Currency;
-import com.checkout.common.beta.Phone;
 import com.checkout.payments.beta.capture.CaptureRequest;
 import com.checkout.payments.beta.capture.CaptureResponse;
 import com.checkout.payments.beta.request.PaymentRequest;

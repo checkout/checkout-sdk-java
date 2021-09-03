@@ -44,7 +44,7 @@ public class GsonSerializer implements Serializer {
                     Instant.parse(json.getAsString()))
             // Payments CS1
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(ResponseSource.class, "type", true, AlternativePaymentSourceResponse.class)
-                    .registerSubtype(CardSourceResponse.class, CardSource.TYPE_NAME))
+                    .registerSubtype(CardSourceResponse.class, "card"))
             // Instruments CS2
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(CreateInstrumentResponse.class, "type")
                     .registerSubtype(CreateInstrumentBankAccountResponse.class, InstrumentType.BANK_ACCOUNT.identifier())

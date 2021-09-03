@@ -1,6 +1,6 @@
 package com.checkout.payments.beta.sender;
 
-import com.checkout.common.beta.Address;
+import com.checkout.common.Address;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

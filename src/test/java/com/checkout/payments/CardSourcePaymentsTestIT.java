@@ -13,14 +13,15 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CardSourcePaymentsTestIT extends SandboxTestFixture {
+class CardSourcePaymentsTestIT extends SandboxTestFixture {
 
-    public CardSourcePaymentsTestIT() {
+    CardSourcePaymentsTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void can_request_non_3ds_card_payment() throws Exception {
+    void shouldRequestNon3dsCardPayment() throws Exception {
+
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setThreeDS(ThreeDSRequest.from(false));
 
@@ -44,7 +45,8 @@ public class CardSourcePaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_request_3ds_card_payment() throws Exception {
+    void shouldRequest3dsCardPayment() throws Exception {
+
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setThreeDS(ThreeDSRequest.from(true));
 
@@ -68,7 +70,8 @@ public class CardSourcePaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_void_payment() throws Exception {
+    void shouldVoidPayment() throws Exception {
+
         // Auth
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
@@ -85,7 +88,8 @@ public class CardSourcePaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_refund_payment() throws Exception {
+    void shouldRefundPayment() throws Exception {
+
         // Auth
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
@@ -103,4 +107,5 @@ public class CardSourcePaymentsTestIT extends SandboxTestFixture {
         assertFalse(StringUtils.isEmpty(refundResponse.getActionId()));
         assertEquals(refundRequest.getReference(), refundResponse.getReference());
     }
+
 }

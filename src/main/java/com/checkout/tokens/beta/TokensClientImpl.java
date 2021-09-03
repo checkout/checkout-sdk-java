@@ -1,9 +1,9 @@
 package com.checkout.tokens.beta;
 
+import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.PublicKeyCredentials;
-import com.checkout.beta.AbstractClient;
 import com.checkout.tokens.beta.request.CardTokenRequest;
 import com.checkout.tokens.beta.request.WalletTokenRequest;
 import com.checkout.tokens.beta.response.CardTokenResponse;

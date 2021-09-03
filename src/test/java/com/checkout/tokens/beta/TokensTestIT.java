@@ -14,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TokensTestIT extends SandboxTestFixture {
+class TokensTestIT extends SandboxTestFixture {
 
-    public TokensTestIT() {
+    TokensTestIT() {
         super(PlatformType.FOUR);
     }
 
     @Test
-    public void shouldRequestCardToken() {
+    void shouldRequestCardToken() {
 
         final CardTokenRequest request = CardTokenRequest.builder()
                 .number(TestCardSource.VISA.getNumber())

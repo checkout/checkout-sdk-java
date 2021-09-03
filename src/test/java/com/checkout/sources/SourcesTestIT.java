@@ -12,14 +12,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SourcesTestIT extends SandboxTestFixture {
+class SourcesTestIT extends SandboxTestFixture {
 
-    public SourcesTestIT() {
+    SourcesTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void can_request_sepa_source() throws Exception {
+    void can_request_sepa_source() throws Exception {
         final SourceRequest sourceRequest = createSepaSourceRequest();
         final SourceResponse sourceResponse = getApi().sourcesClient().requestAsync(sourceRequest).get();
 

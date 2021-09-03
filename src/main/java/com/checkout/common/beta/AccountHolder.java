@@ -1,5 +1,7 @@
 package com.checkout.common.beta;
 
+import com.checkout.common.Address;
+import com.checkout.common.Phone;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,22 +1,23 @@
 package com.checkout.payments;
 
+import com.checkout.CheckoutArgumentException;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-public class CustomerSourceTest {
+class CustomerSourceTest {
 
     @Test
-    public void missing_id_and_email_should_throw_exception() {
-        assertThrows(IllegalArgumentException.class, () -> new CustomerSource(null, null));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"test@@", "test@", "test@@test", "test"})
-    public void given_invalid_email_should_throw_exception(final String email) {
-        assertThrows(IllegalArgumentException.class, () -> new CustomerSource(null, email));
+    void shouldThrowExceptionWhenIdAndEmailAreNotProvided() {
+        try {
+            new CustomerSource(null, null);
+            fail();
+        } catch (final Exception e) {
+            assertTrue(e instanceof CheckoutArgumentException);
+            assertEquals("either the customer id or email is required", e.getMessage());
+        }
     }
 
 }

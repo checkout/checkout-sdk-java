@@ -20,7 +20,7 @@ import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class BalotoClientTest {
+class BalotoClientTest {
 
     @Mock
     private ApiClient apiClient;
@@ -34,12 +34,12 @@ public class BalotoClientTest {
     private BalotoClient balotoClient;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.balotoClient = new BalotoClientImpl(apiClient, checkoutConfiguration);
     }
 
     @Test
-    public void shouldSucceedPayment() throws ExecutionException, InterruptedException {
+    void shouldSucceedPayment() throws ExecutionException, InterruptedException {
 
         when(apiClient.postAsync(eq("/apms/baloto/payments/payment_id/succeed"), any(SecretKeyCredentials.class), eq(Void.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(voidResponse));
@@ -52,7 +52,7 @@ public class BalotoClientTest {
     }
 
     @Test
-    public void shouldExpirePayment() throws ExecutionException, InterruptedException {
+    void shouldExpirePayment() throws ExecutionException, InterruptedException {
 
         when(apiClient.postAsync(eq("/apms/baloto/payments/payment_id/expire"), any(SecretKeyCredentials.class), eq(Void.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(voidResponse));

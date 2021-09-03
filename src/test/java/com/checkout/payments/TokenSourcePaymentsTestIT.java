@@ -15,14 +15,15 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TokenSourcePaymentsTestIT extends SandboxTestFixture {
+class TokenSourcePaymentsTestIT extends SandboxTestFixture {
 
-    public TokenSourcePaymentsTestIT() {
+    TokenSourcePaymentsTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void can_request_non_3ds_card_payment() throws Exception {
+    void shouldRequestNon3dsCardPayment() throws Exception {
+
         final CardTokenRequest cardTokenRequest = TestHelper.createCardTokenRequest();
         final CardTokenResponse cardTokenResponse = getApi().tokensClient().requestAsync(cardTokenRequest).get();
         final PaymentRequest<TokenSource> paymentRequest = TestHelper.createTokenPaymentRequest(cardTokenResponse.getToken());
@@ -43,7 +44,8 @@ public class TokenSourcePaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_request_3ds_card_payment() throws Exception {
+    void shouldRequest3dsCardPayment() throws Exception {
+
         final CardTokenRequest cardTokenRequest = TestHelper.createCardTokenRequest();
         final CardTokenResponse cardTokenResponse = getApi().tokensClient().requestAsync(cardTokenRequest).get();
         final PaymentRequest<TokenSource> paymentRequest = TestHelper.createTokenPaymentRequest(cardTokenResponse.getToken());
@@ -66,12 +68,12 @@ public class TokenSourcePaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_capture_payment() throws Exception {
+    void shouldCapturePayment() throws Exception {
+
         final CardTokenRequest cardTokenRequest = TestHelper.createCardTokenRequest();
         final CardTokenResponse cardTokenResponse = getApi().tokensClient().requestAsync(cardTokenRequest).get();
         final PaymentRequest<TokenSource> paymentRequest = TestHelper.createTokenPaymentRequest(cardTokenResponse.getToken());
         final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
-
 
         assertTrue(paymentResponse.getPayment().canCapture());
 
@@ -85,7 +87,8 @@ public class TokenSourcePaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_void_payment() throws Exception {
+    void shouldVoidPayment() throws Exception {
+
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
         assertTrue(paymentResponse.getPayment().canVoid());
@@ -100,7 +103,8 @@ public class TokenSourcePaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void can_refund_payment() throws Exception {
+    void shouldRefundPayment() throws Exception {
+
         final CardTokenRequest cardTokenRequest = TestHelper.createCardTokenRequest();
         final CardTokenResponse cardTokenResponse = getApi().tokensClient().requestAsync(cardTokenRequest).get();
         final PaymentRequest<TokenSource> paymentRequest = TestHelper.createTokenPaymentRequest(cardTokenResponse.getToken());
@@ -117,4 +121,5 @@ public class TokenSourcePaymentsTestIT extends SandboxTestFixture {
         assertFalse(StringUtils.isEmpty(refundResponse.getActionId()));
         assertEquals(refundRequest.getReference(), refundResponse.getReference());
     }
+
 }

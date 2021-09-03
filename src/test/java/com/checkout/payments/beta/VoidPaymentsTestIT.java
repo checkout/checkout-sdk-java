@@ -12,10 +12,10 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class VoidPaymentsTestIT extends AbstractPaymentsTestIT {
+class VoidPaymentsTestIT extends AbstractPaymentsTestIT {
 
     @Test
-    public void shouldVoidCardPayment() {
+    void shouldVoidCardPayment() {
 
         final PaymentResponse<ResponseCardSource> paymentResponse = makeCardPayment(false);
 
@@ -33,7 +33,7 @@ public class VoidPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldVoidIdSourcePayment() {
+    void shouldVoidIdSourcePayment() {
 
         final PaymentResponse<ResponseIdSource> paymentResponse = makeIdSourcePayment();
 
@@ -51,7 +51,7 @@ public class VoidPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    public void shouldVoidTokenSourcePayment() {
+    void shouldVoidTokenSourcePayment() {
 
         final PaymentResponse<ResponseCardSource> paymentResponse = makeTokenPayment();
 

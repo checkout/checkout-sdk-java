@@ -14,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GiropayPaymentsTestIT extends SandboxTestFixture {
+class GiropayPaymentsTestIT extends SandboxTestFixture {
 
-    public GiropayPaymentsTestIT() {
+    GiropayPaymentsTestIT() {
         super(PlatformType.DEFAULT);
     }
 
     @Test
-    public void shouldMakeGiropayPayment() {
+    void shouldMakeGiropayPayment() {
 
         final GiropaySource giropaySource = GiropaySource.builder()
                 .bic("TESTDETT421")
@@ -44,7 +44,7 @@ public class GiropayPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldGetBanks() {
+    void shouldGetBanks() {
 
         final BanksResponse banksResponse = blocking(getApi().giropayClient().getBanks());
 
@@ -56,7 +56,7 @@ public class GiropayPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    public void shouldGetEpsBanks() {
+    void shouldGetEpsBanks() {
 
         final BanksResponse banksResponse = blocking(getApi().giropayClient().getEpsBanks());
 
