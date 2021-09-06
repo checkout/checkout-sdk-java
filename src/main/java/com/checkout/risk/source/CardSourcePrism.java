@@ -1,4 +1,4 @@
-package com.checkout.payments.beta.request.source;
+package com.checkout.risk.source;
 
 import com.checkout.common.Address;
 import com.checkout.common.PaymentSourceType;
@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class RequestCardSource extends RequestSource {
+public final class CardSourcePrism extends RiskPaymentRequestSource {
 
     private final String number;
 
@@ -24,22 +24,16 @@ public final class RequestCardSource extends RequestSource {
 
     private final String name;
 
-    private final Integer ccv;
-
-    private final boolean stored;
-
     @SerializedName("billing_address")
     private final Address billingAddress;
 
     private final Phone phone;
 
     @Builder
-    private RequestCardSource(final String number,
+    protected CardSourcePrism(final String number,
                               final Integer expiryMonth,
                               final Integer expiryYear,
                               final String name,
-                              final Integer ccv,
-                              final boolean stored,
                               final Address billingAddress,
                               final Phone phone) {
         super(PaymentSourceType.CARD);
@@ -47,8 +41,6 @@ public final class RequestCardSource extends RequestSource {
         this.expiryMonth = expiryMonth;
         this.expiryYear = expiryYear;
         this.name = name;
-        this.ccv = ccv;
-        this.stored = stored;
         this.billingAddress = billingAddress;
         this.phone = phone;
     }

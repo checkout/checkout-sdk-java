@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import static com.checkout.payments.beta.request.source.PaymentSourceType.NETWORK_TOKEN;
+import static com.checkout.common.PaymentSourceType.NETWORK_TOKEN;
 
 @Getter
 @EqualsAndHashCode(callSuper = true)

@@ -1,4 +1,4 @@
-package com.checkout.payments.beta.request.source;
+package com.checkout.risk.source;
 
 import com.checkout.common.PaymentSourceType;
 import lombok.Builder;
@@ -9,17 +9,14 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class RequestIdSource extends RequestSource {
+public final class CustomerSourcePrism extends RiskPaymentRequestSource {
 
     private final String id;
 
-    private final Integer ccv;
-
     @Builder
-    private RequestIdSource(final String id, final Integer ccv) {
-        super(PaymentSourceType.ID);
+    protected CustomerSourcePrism(final String id) {
+        super(PaymentSourceType.CUSTOMER);
         this.id = id;
-        this.ccv = ccv;
     }
 
 }

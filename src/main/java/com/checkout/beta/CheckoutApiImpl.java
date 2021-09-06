@@ -10,6 +10,8 @@ import com.checkout.instruments.beta.InstrumentsClient;
 import com.checkout.instruments.beta.InstrumentsClientImpl;
 import com.checkout.payments.beta.PaymentsClient;
 import com.checkout.payments.beta.PaymentsClientImpl;
+import com.checkout.risk.RiskClient;
+import com.checkout.risk.RiskClientImpl;
 import com.checkout.tokens.beta.TokensClient;
 import com.checkout.tokens.beta.TokensClientImpl;
 
@@ -20,6 +22,7 @@ public final class CheckoutApiImpl implements CheckoutApi {
     private final CustomersClient customersClient;
     private final DisputesClient disputesClient;
     private final InstrumentsClient instrumentsClient;
+    private final RiskClient riskClient;
 
     public CheckoutApiImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         this.tokensClient = new TokensClientImpl(apiClient, configuration);
@@ -27,6 +30,7 @@ public final class CheckoutApiImpl implements CheckoutApi {
         this.customersClient = new CustomersClientImpl(apiClient, configuration);
         this.disputesClient = new DisputesClientImpl(apiClient, configuration);
         this.instrumentsClient = new InstrumentsClientImpl(apiClient, configuration);
+        this.riskClient = new RiskClientImpl(apiClient, configuration);
     }
 
     @Override
@@ -52,6 +56,11 @@ public final class CheckoutApiImpl implements CheckoutApi {
     @Override
     public InstrumentsClient instrumentsClient() {
         return instrumentsClient;
+    }
+
+    @Override
+    public RiskClient riskClient() {
+        return riskClient;
     }
 
 }

@@ -1,7 +1,7 @@
 package com.checkout.instruments.beta.get;
 
 import com.checkout.common.beta.AccountHolder;
-import com.checkout.common.beta.CustomerResponse;
+import com.checkout.common.CustomerResponse;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 

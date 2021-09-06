@@ -77,7 +77,7 @@ class CustomersClientImplTest {
                         eq(CustomerResponse.class));
         final CustomerRequest customerRequest = CustomerRequest.builder()
                 .email(TestHelper.generateRandomEmail())
-                .name("Armando Ibarra")
+                .name("Customer")
                 .phone(Phone.builder()
                         .countryCode("65")
                         .number("765432323")
@@ -112,7 +112,7 @@ class CustomersClientImplTest {
         //Create Customer
         final CustomerRequest customerRequest = CustomerRequest.builder()
                 .email(TestHelper.generateRandomEmail())
-                .name("Armando Ibarra")
+                .name("Customer")
                 .phone(Phone.builder()
                         .countryCode("3")
                         .number("3455235233")
@@ -122,7 +122,7 @@ class CustomersClientImplTest {
         assertNotNull(customerId);
         //Update Customer
         customerRequest.setEmail(TestHelper.generateRandomEmail());
-        customerRequest.setName("Armando Changed");
+        customerRequest.setName("Customer Changed");
         when(customerResponse.getEmail()).thenReturn(customerRequest.getEmail());
         when(customerResponse.getName()).thenReturn(customerRequest.getName());
         client.update(customerId, customerRequest).get();
@@ -148,7 +148,7 @@ class CustomersClientImplTest {
         //Create Customer
         final CustomerRequest customerRequest = CustomerRequest.builder()
                 .email(TestHelper.generateRandomEmail())
-                .name("Armando Ibarra")
+                .name("Customer")
                 .phone(Phone.builder()
                         .countryCode("3")
                         .number("3455235233")

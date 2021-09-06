@@ -1,4 +1,4 @@
-package com.checkout.payments.beta.request.source;
+package com.checkout.common;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -11,6 +11,8 @@ public enum PaymentSourceType {
     @SerializedName("network_token")
     NETWORK_TOKEN,
     @SerializedName("token")
-    TOKEN
+    TOKEN,
+    @SerializedName("customer")
+    CUSTOMER
 
 }

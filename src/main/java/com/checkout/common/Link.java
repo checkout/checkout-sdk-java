@@ -6,4 +6,5 @@ import lombok.Data;
 public class Link {
     private final String href;
     private final String title;
+    private final String link;
 }
