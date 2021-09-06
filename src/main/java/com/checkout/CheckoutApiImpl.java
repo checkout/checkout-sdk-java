@@ -16,6 +16,8 @@ import com.checkout.payments.links.PaymentLinksClient;
 import com.checkout.payments.links.PaymentLinksClientImpl;
 import com.checkout.reconciliation.ReconciliationClient;
 import com.checkout.reconciliation.ReconciliationClientImpl;
+import com.checkout.risk.RiskClient;
+import com.checkout.risk.RiskClientImpl;
 import com.checkout.sources.SourcesClient;
 import com.checkout.sources.SourcesClientImpl;
 import com.checkout.tokens.TokensClient;
@@ -36,6 +38,7 @@ public final class CheckoutApiImpl extends AbstractCheckoutApmApi implements Che
     private final CustomersClient customersClient;
     private final DisputesClient disputesClient;
     private final ReconciliationClient reconciliationClient;
+    private final RiskClient riskClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         super(new ApiClientImpl(configuration), configuration);
@@ -50,6 +53,7 @@ public final class CheckoutApiImpl extends AbstractCheckoutApmApi implements Che
         this.customersClient = new CustomersClientImpl(apiClient, configuration);
         this.disputesClient = new DisputesClientImpl(apiClient, configuration);
         this.reconciliationClient = new ReconciliationClientImpl(apiClient, configuration);
+        this.riskClient = new RiskClientImpl(apiClient, configuration);
     }
 
     public CheckoutApiImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
@@ -65,6 +69,7 @@ public final class CheckoutApiImpl extends AbstractCheckoutApmApi implements Che
         this.customersClient = new CustomersClientImpl(apiClient, configuration);
         this.disputesClient = new DisputesClientImpl(apiClient, configuration);
         this.reconciliationClient = new ReconciliationClientImpl(apiClient, configuration);
+        this.riskClient = new RiskClientImpl(apiClient, configuration);
     }
 
     public static CheckoutApi create(final String secretKey, final boolean useSandbox, final String publicKey) {
@@ -131,6 +136,11 @@ public final class CheckoutApiImpl extends AbstractCheckoutApmApi implements Che
     @Override
     public ReconciliationClient reconciliationClient() {
         return reconciliationClient;
+    }
+
+    @Override
+    public RiskClient riskClient() {
+        return riskClient;
     }
 
 }

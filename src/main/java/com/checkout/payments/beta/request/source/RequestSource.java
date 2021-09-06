@@ -1,5 +1,6 @@
 package com.checkout.payments.beta.request.source;
 
+import com.checkout.common.PaymentSourceType;
 import lombok.Data;
 
 @Data

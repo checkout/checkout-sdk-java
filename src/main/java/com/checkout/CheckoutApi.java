@@ -8,6 +8,7 @@ import com.checkout.payments.PaymentsClient;
 import com.checkout.payments.hosted.HostedPaymentsClient;
 import com.checkout.payments.links.PaymentLinksClient;
 import com.checkout.reconciliation.ReconciliationClient;
+import com.checkout.risk.RiskClient;
 import com.checkout.sources.SourcesClient;
 import com.checkout.tokens.TokensClient;
 import com.checkout.webhooks.WebhooksClient;
@@ -35,5 +36,7 @@ public interface CheckoutApi extends CheckoutApmApi {
     DisputesClient disputesClient();
 
     ReconciliationClient reconciliationClient();
+
+    RiskClient riskClient();
 
 }

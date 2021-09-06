@@ -29,4 +29,5 @@ public abstract class Resource {
     public Link getLink(final String relation) {
         return links.get(relation);
     }
+
 }

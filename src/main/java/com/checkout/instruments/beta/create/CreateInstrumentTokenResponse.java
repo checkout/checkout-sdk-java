@@ -3,7 +3,7 @@ package com.checkout.instruments.beta.create;
 import com.checkout.common.CountryCode;
 import com.checkout.common.beta.CardCategory;
 import com.checkout.common.beta.CardType;
-import com.checkout.common.beta.CustomerResponse;
+import com.checkout.common.CustomerResponse;
 import com.checkout.common.beta.InstrumentType;
 import com.google.gson.annotations.SerializedName;
 import lombok.EqualsAndHashCode;

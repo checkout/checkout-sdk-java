@@ -8,7 +8,7 @@ import com.checkout.common.beta.ThreeDSEnrollmentStatus;
 import com.checkout.payments.beta.request.PaymentRequest;
 import com.checkout.payments.beta.request.Payments;
 import com.checkout.payments.beta.request.ThreeDSRequest;
-import com.checkout.payments.beta.request.source.PaymentSourceType;
+import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.beta.request.source.RequestCardSource;
 import com.checkout.payments.beta.request.source.RequestIdSource;
 import com.checkout.payments.beta.request.source.RequestTokenSource;

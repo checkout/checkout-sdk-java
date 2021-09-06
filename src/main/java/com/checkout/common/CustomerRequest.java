@@ -1,4 +1,4 @@
-package com.checkout.common.beta;
+package com.checkout.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

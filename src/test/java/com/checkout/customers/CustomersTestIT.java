@@ -21,7 +21,7 @@ class CustomersTestIT extends SandboxTestFixture {
     void shouldCreateAndGetCustomer() {
         final CustomerRequest customerRequest = CustomerRequest.builder()
                 .email(TestHelper.generateRandomEmail())
-                .name("Armando Ibarra")
+                .name("Customer")
                 .phone(TestHelper.createPhone())
                 .build();
         final String customerId = blocking(getApi().customersClient().create(customerRequest)).getId();
@@ -40,14 +40,14 @@ class CustomersTestIT extends SandboxTestFixture {
         //Create Customer
         final CustomerRequest customerRequest = CustomerRequest.builder()
                 .email(TestHelper.generateRandomEmail())
-                .name("Armando Ibarra")
+                .name("Customer")
                 .phone(TestHelper.createPhone())
                 .build();
         final String customerId = blocking(getApi().customersClient().create(customerRequest)).getId();
         assertNotNull(customerId);
         //Update Customer
         customerRequest.setEmail(TestHelper.generateRandomEmail());
-        customerRequest.setName("Armando Changed");
+        customerRequest.setName("Customer Changed");
         blocking(getApi().customersClient().update(customerId, customerRequest));
         //Verify changes were applied
         final CustomerDetailsResponse customerDetailsResponse = blocking(getApi().customersClient().get(customerId));
@@ -61,7 +61,7 @@ class CustomersTestIT extends SandboxTestFixture {
         //Create Customer
         final CustomerRequest customerRequest = CustomerRequest.builder()
                 .email(TestHelper.generateRandomEmail())
-                .name("Armando Ibarra")
+                .name("Customer")
                 .phone(TestHelper.createPhone())
                 .build();
         final String customerId = blocking(getApi().customersClient().create(customerRequest)).getId();

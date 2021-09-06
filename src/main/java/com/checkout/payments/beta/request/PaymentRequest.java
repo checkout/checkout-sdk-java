@@ -1,7 +1,7 @@
 package com.checkout.payments.beta.request;
 
 import com.checkout.common.beta.Currency;
-import com.checkout.common.beta.CustomerRequest;
+import com.checkout.common.CustomerRequest;
 import com.checkout.payments.beta.BillingDescriptor;
 import com.checkout.payments.beta.request.source.RequestSource;
 import com.checkout.payments.beta.sender.RequestSender;
