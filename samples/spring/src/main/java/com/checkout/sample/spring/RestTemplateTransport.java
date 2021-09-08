@@ -3,6 +3,7 @@ package com.checkout.sample.spring;
 import com.checkout.ApiCredentials;
 import com.checkout.Response;
 import com.checkout.Transport;
+import com.checkout.client.ClientOperation;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.FileRequest;
 import org.springframework.http.HttpEntity;
@@ -50,10 +51,10 @@ public class RestTemplateTransport implements Transport {
     }
 
     @Override
-    public CompletableFuture<Response> invoke(final String httpMethod, final String path, final ApiCredentials apiCredentials, final String jsonRequest, final String idempotencyKey) {
-        validateParams("httpMethod", httpMethod, "path", path, "apiCredentials", apiCredentials, "jsonRequest", jsonRequest);
+    public CompletableFuture<Response> invoke(final ClientOperation clientOperation, final String path, final ApiCredentials apiCredentials, final String jsonRequest, final String idempotencyKey) {
+        validateParams("httpMethod", clientOperation, "path", path, "apiCredentials", apiCredentials, "jsonRequest", jsonRequest);
         RequestEntity.BodyBuilder requestBuilder = RequestEntity
-                .method(HttpMethod.resolve(httpMethod), getRequestUri(path))
+                .method(HttpMethod.resolve(clientOperation.name()), getRequestUri(path))
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .acceptCharset(StandardCharsets.UTF_8)
