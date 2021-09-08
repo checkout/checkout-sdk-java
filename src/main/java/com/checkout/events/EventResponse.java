@@ -1,7 +1,6 @@
 package com.checkout.events;
 
 import com.checkout.common.Resource;
-import com.checkout.webhooks.EventType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +17,7 @@ public final class EventResponse extends Resource {
 
     private String id;
 
-    private EventType type;
+    private String type;
 
     private String version;
 
@@ -28,13 +27,5 @@ public final class EventResponse extends Resource {
     private Map<String, Object> data;
 
     private List<EventNotificationSummaryResponse> notifications;
-
-    /**
-     * Will be removed in a future version.
-     */
-    @Deprecated
-    public String getType() {
-        return type.getCode();
-    }
 
 }

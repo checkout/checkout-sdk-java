@@ -11,6 +11,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class SandboxTestFixture {
 
+    protected static final String SELF = "self";
+
     private com.checkout.CheckoutApi api;
     private CheckoutApi apiV2;
 

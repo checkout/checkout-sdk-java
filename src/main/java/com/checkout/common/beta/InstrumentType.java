@@ -5,22 +5,12 @@ import com.google.gson.annotations.SerializedName;
 public enum InstrumentType {
 
     @SerializedName("bank_account")
-    BANK_ACCOUNT("bank_account"),
+    BANK_ACCOUNT,
 
     @SerializedName("token")
-    TOKEN("token"),
+    TOKEN,
 
     @SerializedName("card")
-    CARD("card");
-
-    private final String identifier;
-
-    InstrumentType(final String identifier) {
-        this.identifier = identifier;
-    }
-
-    public String identifier() {
-        return identifier;
-    }
+    CARD
 
 }

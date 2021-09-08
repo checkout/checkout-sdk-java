@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Data
 @Builder
@@ -38,17 +36,6 @@ public final class WebhookRequest {
     @Deprecated
     public WebhookRequest(final String url, final List<String> eventTypes) {
         this(url, true, new HashMap<>(), "json", eventTypes);
-    }
-
-    /**
-     * Added with the deprecation of {@link WebhookRequest} constructor
-     * to serve as a utility method to set event types.
-     * <p>
-     * Will be removed in a future version.
-     */
-    @Deprecated
-    public void addEventTypes(final EventType... eventTypes) {
-        this.eventTypes.addAll(Stream.of(eventTypes).map(EventType::getCode).collect(Collectors.toList()));
     }
 
 }

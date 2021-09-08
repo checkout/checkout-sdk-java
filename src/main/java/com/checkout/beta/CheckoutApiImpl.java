@@ -14,6 +14,8 @@ import com.checkout.risk.RiskClient;
 import com.checkout.risk.RiskClientImpl;
 import com.checkout.tokens.beta.TokensClient;
 import com.checkout.tokens.beta.TokensClientImpl;
+import com.checkout.workflows.beta.WorkflowsClient;
+import com.checkout.workflows.beta.WorkflowsClientImpl;
 
 public final class CheckoutApiImpl implements CheckoutApi {
 
@@ -23,6 +25,7 @@ public final class CheckoutApiImpl implements CheckoutApi {
     private final DisputesClient disputesClient;
     private final InstrumentsClient instrumentsClient;
     private final RiskClient riskClient;
+    private final WorkflowsClient workflowsClient;
 
     public CheckoutApiImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         this.tokensClient = new TokensClientImpl(apiClient, configuration);
@@ -31,6 +34,7 @@ public final class CheckoutApiImpl implements CheckoutApi {
         this.disputesClient = new DisputesClientImpl(apiClient, configuration);
         this.instrumentsClient = new InstrumentsClientImpl(apiClient, configuration);
         this.riskClient = new RiskClientImpl(apiClient, configuration);
+        this.workflowsClient = new WorkflowsClientImpl(apiClient, configuration);
     }
 
     @Override
@@ -61,6 +65,11 @@ public final class CheckoutApiImpl implements CheckoutApi {
     @Override
     public RiskClient riskClient() {
         return riskClient;
+    }
+
+    @Override
+    public WorkflowsClient workflowsClient() {
+        return workflowsClient;
     }
 
 }

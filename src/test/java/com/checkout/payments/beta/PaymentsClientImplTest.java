@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static com.checkout.payments.beta.PaymentsClientImpl.PAYMENT_ACTION_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -61,6 +60,9 @@ class PaymentsClientImplTest {
             ResponseNetworkTokenSource.class,
             ResponseTokenSource.class
     ).getType();
+
+    private static final Type PAYMENT_ACTION_TYPE = new TypeToken<List<PaymentAction>>() {
+    }.getType();
 
     @Mock
     private ApiClient apiClient;

@@ -1,26 +1,43 @@
 package com.checkout.events;
 
+import com.checkout.PlatformType;
+import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
 import com.checkout.payments.CardSource;
 import com.checkout.payments.PaymentProcessed;
 import com.checkout.payments.PaymentRequest;
 import com.checkout.payments.PaymentResponse;
 import com.checkout.payments.ThreeDSRequest;
-import com.checkout.webhooks.EventType;
+import com.checkout.webhooks.WebhookRequest;
 import com.checkout.webhooks.WebhookResponse;
-import com.checkout.webhooks.WebhooksTestIT;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class EventsTestIT extends WebhooksTestIT {
+class EventsTestIT extends SandboxTestFixture {
+
+    private static final List<String> GATEWAY_EVENT_TYPES = Arrays.asList("payment_approved", "payment_pending",
+            "payment_declined", "payment_expired", "payment_canceled", "payment_voided", "payment_void_declined",
+            "payment_captured", "payment_capture_declined", "payment_capture_pending", "payment_refunded",
+            "payment_refund_declined", "payment_refund_pending");
+
+    public EventsTestIT() {
+        super(PlatformType.DEFAULT);
+    }
+
+    @BeforeEach
+    protected void cleanup() {
+        final List<WebhookResponse> webhookResponses = blocking(getApi().webhooksClient().retrieveWebhooks());
+        webhookResponses.forEach(webhookResponse -> blocking(getApi().webhooksClient().removeWebhook(webhookResponse.getId())));
+    }
 
     @Test
     void retrieveDefaultEventTypes() {
@@ -82,9 +99,9 @@ class EventsTestIT extends WebhooksTestIT {
         final EventSummaryResponse eventSummaryResponse = eventsPageResponse.getData().get(0);
         assertNotNull(eventSummaryResponse.getId());
         assertNotNull(eventSummaryResponse.getCreatedOn());
-        assertEquals(EventType.PAYMENT_APPROVED.getCode(), eventSummaryResponse.getType());
-        assertTrue(eventSummaryResponse.hasLink("self"));
-        assertTrue(eventSummaryResponse.hasLink("webhooks-retry"));
+        assertEquals("payment_approved", eventSummaryResponse.getType());
+        assertNotNull(eventSummaryResponse.getLink("self"));
+        assertNotNull(eventSummaryResponse.getLink("webhooks-retry"));
 
     }
 
@@ -117,9 +134,9 @@ class EventsTestIT extends WebhooksTestIT {
         final EventSummaryResponse eventSummaryResponse = eventsPageResponse.getData().get(0);
         assertNotNull(eventSummaryResponse.getId());
         assertNotNull(eventSummaryResponse.getCreatedOn());
-        assertEquals(EventType.PAYMENT_APPROVED.getCode(), eventSummaryResponse.getType());
-        assertTrue(eventSummaryResponse.hasLink("self"));
-        assertTrue(eventSummaryResponse.hasLink("webhooks-retry"));
+        assertEquals("payment_approved", eventSummaryResponse.getType());
+        assertNotNull(eventSummaryResponse.getLink("self"));
+        assertNotNull(eventSummaryResponse.getLink("webhooks-retry"));
 
         // Retrieve Event
         final EventResponse eventResponse = blocking(getApi().eventsClient().retrieveEvent(eventSummaryResponse.getId()));
@@ -128,9 +145,9 @@ class EventsTestIT extends WebhooksTestIT {
         assertNotNull(eventResponse.getId());
         assertNotNull(eventResponse.getData());
         assertEquals(1, eventResponse.getNotifications().size());
-        assertEquals(EventType.PAYMENT_APPROVED.getCode(), eventSummaryResponse.getType());
-        assertTrue(eventResponse.hasLink("self"));
-        assertTrue(eventResponse.hasLink("webhooks-retry"));
+        assertEquals("payment_approved", eventSummaryResponse.getType());
+        assertNotNull(eventResponse.getLink("self"));
+        assertNotNull(eventResponse.getLink("webhooks-retry"));
 
         // Get Notification
         final EventNotificationResponse eventNotificationResponse = blocking(getApi().eventsClient()
@@ -141,8 +158,8 @@ class EventsTestIT extends WebhooksTestIT {
         assertNotNull(eventNotificationResponse.getUrl());
         assertFalse(eventNotificationResponse.getSuccess());
         assertFalse(eventNotificationResponse.getAttempts().isEmpty());
-        assertTrue(eventNotificationResponse.hasLink("self"));
-        assertTrue(eventNotificationResponse.hasLink("webhook-retry"));
+        assertNotNull(eventNotificationResponse.getLink("self"));
+        assertNotNull(eventNotificationResponse.getLink("webhook-retry"));
 
     }
 
@@ -178,6 +195,18 @@ class EventsTestIT extends WebhooksTestIT {
         blocking(getApi().eventsClient().retryWebhook(eventSummaryResponse.getId(), webhookResponse.getId()));
 
         blocking(getApi().eventsClient().retryAllWebhooks(eventSummaryResponse.getId()));
+
+    }
+
+    protected WebhookResponse registerWebhook() {
+
+        final WebhookRequest webhookRequest = WebhookRequest.builder()
+                .url("https://google.com/fail")
+                .build();
+
+        webhookRequest.setEventTypes(GATEWAY_EVENT_TYPES);
+
+        return blocking(getApi().webhooksClient().registerWebhook(webhookRequest));
 
     }
 

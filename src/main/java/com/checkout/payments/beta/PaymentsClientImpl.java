@@ -43,7 +43,7 @@ public final class PaymentsClientImpl extends AbstractClient implements Payments
             ResponseTokenSource.class
     ).getType();
 
-    public static final Type PAYMENT_ACTION_TYPE = new TypeToken<List<PaymentAction>>() {
+    private static final Type PAYMENT_ACTION_TYPE = new TypeToken<List<PaymentAction>>() {
     }.getType();
 
     public PaymentsClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {

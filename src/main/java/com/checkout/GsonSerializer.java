@@ -11,9 +11,15 @@ import com.checkout.instruments.beta.update.UpdateInstrumentBankAccountResponse;
 import com.checkout.instruments.beta.update.UpdateInstrumentCardResponse;
 import com.checkout.instruments.beta.update.UpdateInstrumentResponse;
 import com.checkout.payments.AlternativePaymentSourceResponse;
-import com.checkout.payments.CardSource;
 import com.checkout.payments.CardSourceResponse;
 import com.checkout.payments.ResponseSource;
+import com.checkout.workflows.beta.actions.WorkflowActionType;
+import com.checkout.workflows.beta.actions.response.WebhookWorkflowActionResponse;
+import com.checkout.workflows.beta.actions.response.WorkflowActionResponse;
+import com.checkout.workflows.beta.conditions.WorkflowConditionType;
+import com.checkout.workflows.beta.conditions.response.EntityWorkflowConditionResponse;
+import com.checkout.workflows.beta.conditions.response.EventWorkflowConditionResponse;
+import com.checkout.workflows.beta.conditions.response.WorkflowConditionResponse;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -32,6 +38,8 @@ import java.time.format.DateTimeFormatter;
 
 public class GsonSerializer implements Serializer {
 
+    private static final String TYPE = "type";
+
     private static final Gson DEFAULT_GSON = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
             .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (LocalDate date, Type typeOfSrc, JsonSerializationContext context) ->
@@ -43,18 +51,24 @@ public class GsonSerializer implements Serializer {
             .registerTypeAdapter(Instant.class, (JsonDeserializer<Instant>) (JsonElement json, Type typeOfSrc, JsonDeserializationContext context) ->
                     Instant.parse(json.getAsString()))
             // Payments CS1
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(ResponseSource.class, "type", true, AlternativePaymentSourceResponse.class)
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(ResponseSource.class, TYPE, true, AlternativePaymentSourceResponse.class)
                     .registerSubtype(CardSourceResponse.class, "card"))
             // Instruments CS2
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(CreateInstrumentResponse.class, "type")
-                    .registerSubtype(CreateInstrumentBankAccountResponse.class, InstrumentType.BANK_ACCOUNT.identifier())
-                    .registerSubtype(CreateInstrumentTokenResponse.class, InstrumentType.CARD.identifier()))
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(GetInstrumentResponse.class, "type")
-                    .registerSubtype(GetBankAccountInstrumentResponse.class, InstrumentType.BANK_ACCOUNT.identifier())
-                    .registerSubtype(GetCardInstrumentResponse.class, InstrumentType.CARD.identifier()))
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(UpdateInstrumentResponse.class, "type")
-                    .registerSubtype(UpdateInstrumentBankAccountResponse.class, InstrumentType.BANK_ACCOUNT.identifier())
-                    .registerSubtype(UpdateInstrumentCardResponse.class, InstrumentType.CARD.identifier()))
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(CreateInstrumentResponse.class, TYPE)
+                    .registerSubtype(CreateInstrumentBankAccountResponse.class, identifier(InstrumentType.BANK_ACCOUNT))
+                    .registerSubtype(CreateInstrumentTokenResponse.class, identifier(InstrumentType.CARD)))
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(GetInstrumentResponse.class, TYPE)
+                    .registerSubtype(GetBankAccountInstrumentResponse.class, identifier(InstrumentType.BANK_ACCOUNT))
+                    .registerSubtype(GetCardInstrumentResponse.class, identifier(InstrumentType.CARD)))
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(UpdateInstrumentResponse.class, TYPE)
+                    .registerSubtype(UpdateInstrumentBankAccountResponse.class, identifier(InstrumentType.BANK_ACCOUNT))
+                    .registerSubtype(UpdateInstrumentCardResponse.class, identifier(InstrumentType.CARD)))
+            // Workflows CS2
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(WorkflowActionResponse.class, TYPE)
+                    .registerSubtype(WebhookWorkflowActionResponse.class, identifier(WorkflowActionType.WEBHOOK)))
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(WorkflowConditionResponse.class, TYPE)
+                    .registerSubtype(EventWorkflowConditionResponse.class, identifier(WorkflowConditionType.EVENT))
+                    .registerSubtype(EntityWorkflowConditionResponse.class, identifier(WorkflowConditionType.ENTITY)))
             .create();
 
     private final Gson gson;
@@ -80,6 +94,13 @@ public class GsonSerializer implements Serializer {
     @Override
     public <T> T fromJson(final String json, final Type type) {
         return gson.fromJson(json, type);
+    }
+
+    private static <E extends Enum<E>> String identifier(final E enumEntry) {
+        if (enumEntry == null) {
+            throw new IllegalStateException("invalid enum entry");
+        }
+        return enumEntry.name().toLowerCase();
     }
 
 }
