@@ -5,9 +5,8 @@ import com.checkout.SandboxTestFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -21,11 +20,15 @@ public class WebhooksTestIT extends SandboxTestFixture {
         super(PlatformType.DEFAULT);
     }
 
+    private static final List<String> GATEWAY_EVENT_TYPES = Arrays.asList("payment_approved", "payment_pending",
+            "payment_declined", "payment_expired", "payment_canceled", "payment_voided", "payment_void_declined",
+            "payment_captured", "payment_capture_declined", "payment_capture_pending", "payment_refunded",
+            "payment_refund_declined", "payment_refund_pending");
+
     @BeforeEach
     protected void cleanup() {
         final List<WebhookResponse> webhookResponses = blocking(getApi().webhooksClient().retrieveWebhooks());
-        webhookResponses.forEach(
-                webhookResponse -> blocking(getApi().webhooksClient().removeWebhook(webhookResponse.getId())));
+        webhookResponses.forEach(webhookResponse -> blocking(getApi().webhooksClient().removeWebhook(webhookResponse.getId())));
     }
 
     @Test
@@ -37,8 +40,8 @@ public class WebhooksTestIT extends SandboxTestFixture {
         assertEquals("https://google.com/fail", webhookResponse.getUrl());
         assertTrue(webhookResponse.isActive());
         assertFalse(webhookResponse.getHeaders().isEmpty());
-        assertEquals(Stream.of(EventType.values()).map(EventType::getCode).collect(Collectors.toList()), webhookResponse.getEventTypes());
-        assertTrue(webhookResponse.hasLink("self"));
+        assertEquals(GATEWAY_EVENT_TYPES, webhookResponse.getEventTypes());
+        assertNotNull(webhookResponse.getLink("self"));
 
     }
 
@@ -49,7 +52,7 @@ public class WebhooksTestIT extends SandboxTestFixture {
 
         final WebhookResponse webhook = blocking(getApi().webhooksClient().retrieveWebhook(webhookResponse.getId()));
         assertEquals("https://google.com/fail", webhook.getUrl());
-        assertEquals(Stream.of(EventType.values()).map(EventType::getCode).collect(Collectors.toList()), webhook.getEventTypes());
+        assertEquals(GATEWAY_EVENT_TYPES, webhook.getEventTypes());
         assertTrue(webhook.isActive());
         assertEquals("json", webhook.getContentType());
         assertEquals(1, webhook.getHeaders().size());
@@ -63,7 +66,7 @@ public class WebhooksTestIT extends SandboxTestFixture {
         final WebhookResponse webhook2 = response.stream().filter(it -> webhook.getId().equals(it.getId())).findFirst().orElse(null);
         assertNotNull(webhook2);
         assertEquals("https://google.com/fail", webhook2.getUrl());
-        assertEquals(Stream.of(EventType.values()).map(EventType::getCode).collect(Collectors.toList()), webhook2.getEventTypes());
+        assertEquals(GATEWAY_EVENT_TYPES, webhook2.getEventTypes());
 
     }
 
@@ -79,7 +82,8 @@ public class WebhooksTestIT extends SandboxTestFixture {
                 .url("https://google.com/fail2")
                 .build();
 
-        webhookRequest.addEventTypes(EventType.PAYMENT_APPROVED, EventType.PAYMENT_CAPTURED);
+        webhookRequest.getEventTypes().add("payment_approved");
+        webhookRequest.getEventTypes().add("payment_captured");
 
         final WebhookResponse webhook = blocking(getApi().webhooksClient().updateWebhook(webhookResponse.getId(), webhookRequest));
         assertEquals(webhookRequest.getUrl(), webhook.getUrl());
@@ -117,7 +121,7 @@ public class WebhooksTestIT extends SandboxTestFixture {
                 .url("https://google.com/fail")
                 .build();
 
-        webhookRequest.addEventTypes(EventType.values());
+        webhookRequest.setEventTypes(GATEWAY_EVENT_TYPES);
 
         return blocking(getApi().webhooksClient().registerWebhook(webhookRequest));
 

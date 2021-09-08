@@ -6,6 +6,7 @@ import com.checkout.instruments.beta.InstrumentsClient;
 import com.checkout.payments.beta.PaymentsClient;
 import com.checkout.risk.RiskClient;
 import com.checkout.tokens.beta.TokensClient;
+import com.checkout.workflows.beta.WorkflowsClient;
 
 public interface CheckoutApi {
 
@@ -20,6 +21,8 @@ public interface CheckoutApi {
     InstrumentsClient instrumentsClient();
 
     RiskClient riskClient();
+
+    WorkflowsClient workflowsClient();
 
 }
 

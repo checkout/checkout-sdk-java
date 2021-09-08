@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
+public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
 
     @Test
     void shouldMakeCardPayment() {
