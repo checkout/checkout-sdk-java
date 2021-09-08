@@ -1,5 +1,12 @@
 package com.checkout;
 
+import static com.checkout.client.ClientOperation.DELETE;
+import static com.checkout.client.ClientOperation.GET;
+import static com.checkout.client.ClientOperation.GET_FILE;
+import static com.checkout.client.ClientOperation.PATCH;
+import static com.checkout.client.ClientOperation.POST;
+
+import com.checkout.client.ClientOperation;
 import com.checkout.common.ApiResponseInfo;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.ErrorResponse;
@@ -12,6 +19,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+import static com.checkout.client.ClientOperation.PUT;
 import static com.checkout.common.CheckoutUtils.validateParams;
 
 public class ApiClientImpl implements ApiClient {
@@ -37,55 +45,55 @@ public class ApiClientImpl implements ApiClient {
     @Override
     public <T> CompletableFuture<T> getAsync(final String path, final ApiCredentials credentials, final Class<T> responseType) {
         validateParams(PATH, path, CREDENTIALS, credentials);
-        return sendRequestAsync("GET", path, credentials, null, null, responseType);
+        return sendRequestAsync(GET, path, credentials, null, null, responseType);
     }
 
     @Override
     public <T> CompletableFuture<T> getAsync(final String path, final ApiCredentials credentials, final Type responseType) {
         validateParams(PATH, path, CREDENTIALS, credentials);
-        return sendRequestAsync("GET", path, credentials, null, null, responseType);
+        return sendRequestAsync(GET, path, credentials, null, null, responseType);
     }
 
     @Override
     public <T> CompletableFuture<T> putAsync(final String path, final ApiCredentials credentials, final Class<T> responseType, final Object request) {
         validateParams(PATH, path, CREDENTIALS, credentials);
-        return sendRequestAsync("PUT", path, credentials, request, null, responseType);
+        return sendRequestAsync(PUT, path, credentials, request, null, responseType);
     }
 
     @Override
     public CompletableFuture<Void> deleteAsync(final String path, final ApiCredentials credentials) {
         validateParams(PATH, path, CREDENTIALS, credentials);
-        return sendRequestAsync("DELETE", path, credentials, null, null, Void.class);
+        return sendRequestAsync(DELETE, path, credentials, null, null, Void.class);
     }
 
     @Override
     public <T> CompletableFuture<T> postAsync(final String path, final ApiCredentials credentials, final Class<T> responseType, final Object request, final String idempotencyKey) {
         validateParams(PATH, path, CREDENTIALS, credentials);
-        return sendRequestAsync("POST", path, credentials, request, idempotencyKey, responseType);
+        return sendRequestAsync(POST, path, credentials, request, idempotencyKey, responseType);
     }
 
     @Override
     public <T> CompletableFuture<T> postAsync(final String path, final ApiCredentials credentials, final Type responseType, final Object request, final String idempotencyKey) {
         validateParams(PATH, path, CREDENTIALS, credentials);
-        return sendRequestAsync("POST", path, credentials, request, idempotencyKey, responseType);
+        return sendRequestAsync(POST, path, credentials, request, idempotencyKey, responseType);
     }
 
     @Override
     public <T> CompletableFuture<T> patchAsync(final String path, final ApiCredentials credentials, final Class<T> responseType, final Object request, final String idempotencyKey) {
         validateParams(PATH, path, CREDENTIALS, credentials);
-        return sendRequestAsync("PATCH", path, credentials, request, idempotencyKey, responseType);
+        return sendRequestAsync(PATCH, path, credentials, request, idempotencyKey, responseType);
     }
 
     @Override
     public <T> CompletableFuture<T> patchAsync(final String path, final ApiCredentials credentials, final Type type, final Object request, final String idempotencyKey) {
         validateParams(PATH, path, CREDENTIALS, credentials, "type", type, "request", request);
-        return sendRequestAsync("PATCH", path, credentials, request, idempotencyKey, type);
+        return sendRequestAsync(PATCH, path, credentials, request, idempotencyKey, type);
     }
 
     @Override
     public CompletableFuture<? extends Resource> postAsync(final String path, final ApiCredentials credentials, final Map<Integer, Class<? extends Resource>> resultTypeMappings, final Object request, final String idempotencyKey) {
         validateParams(PATH, path, CREDENTIALS, credentials, "resultTypeMappings", resultTypeMappings);
-        return transport.invoke("POST", path, credentials, serializer.toJson(request), idempotencyKey)
+        return transport.invoke(POST, path, credentials, serializer.toJson(request), idempotencyKey)
                 .thenApply(this::errorCheck)
                 .thenApply(response -> {
                     final Class<? extends Resource> responseType = resultTypeMappings.get(response.getStatusCode());
@@ -120,13 +128,13 @@ public class ApiClientImpl implements ApiClient {
     @Override
     public CompletableFuture<String> retrieveFileAsync(final String path, final ApiCredentials credentials, final String targetFile) {
         validateParams(PATH, path, CREDENTIALS, credentials);
-        return transport.invoke("GET_FILE", path, credentials, targetFile, null)
+        return transport.invoke(GET_FILE, path, credentials, targetFile, null)
                 .thenApply(this::errorCheck)
                 .thenApply(Response::getBody);
     }
 
-    private <T> CompletableFuture<T> sendRequestAsync(final String httpMethod, final String path, final ApiCredentials credentials, final Object request, final String idempotencyKey, final Type responseType) {
-        return transport.invoke(httpMethod, path, credentials, request == null ? null : serializer.toJson(request), idempotencyKey)
+    private <T> CompletableFuture<T> sendRequestAsync(final ClientOperation clientOperation, final String path, final ApiCredentials credentials, final Object request, final String idempotencyKey, final Type responseType) {
+        return transport.invoke(clientOperation, path, credentials, request == null ? null : serializer.toJson(request), idempotencyKey)
                 .thenApply(this::errorCheck)
                 .thenApply(response -> deserialize(response, responseType));
     }
