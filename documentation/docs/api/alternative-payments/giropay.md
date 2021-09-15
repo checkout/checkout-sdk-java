@@ -1,7 +1,6 @@
 ---
 id: giropay
 title: Giropay
-sidebar_position: 4
 ---
 
 More information on this topic can be found in the [official docs](https://docs.checkout.com/payments/payment-methods/bank-transfers/giropay).

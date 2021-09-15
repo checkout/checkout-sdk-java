@@ -1,7 +1,6 @@
 ---
 id: boleto
 title: Boleto
-sidebar_position: 2
 ---
 
 More information on this topic can be found in the [official docs](https://docs.checkout.com/payments/payment-methods/cash-and-atm-payment/boleto-bancario).

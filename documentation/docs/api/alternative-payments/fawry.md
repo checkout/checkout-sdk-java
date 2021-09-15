@@ -1,7 +1,6 @@
 ---
 id: fawry
 title: Fawry
-sidebar_position: 3
 ---
 
 More information on this topic can be found in the [official docs](https://docs.checkout.com/payments/payment-methods/cash-and-atm-payment/fawry).

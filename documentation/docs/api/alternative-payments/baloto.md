@@ -1,7 +1,6 @@
 ---
 id: baloto
 title: Baloto
-sidebar_position: 1
 ---
 
 More information on this topic can be found in the [official docs](https://docs.checkout.com/payments/payment-methods/cash-and-atm-payment/via-baloto).

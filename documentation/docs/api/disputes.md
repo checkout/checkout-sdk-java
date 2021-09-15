@@ -1,7 +1,6 @@
 ---
 id: disputes
 title: Disputes
-sidebar_position: 2
 ---
 
 You can find a list of request body parameters and possible outcomes [here](https://api-reference.checkout.com/#tag/Disputes).
