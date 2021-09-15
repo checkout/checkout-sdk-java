@@ -25,11 +25,11 @@ class TokenSourcePaymentsTestIT extends SandboxTestFixture {
     void shouldRequestNon3dsCardPayment() throws Exception {
 
         final CardTokenRequest cardTokenRequest = TestHelper.createCardTokenRequest();
-        final CardTokenResponse cardTokenResponse = getApi().tokensClient().requestAsync(cardTokenRequest).get();
+        final CardTokenResponse cardTokenResponse = defaultApi.tokensClient().requestAsync(cardTokenRequest).get();
         final PaymentRequest<TokenSource> paymentRequest = TestHelper.createTokenPaymentRequest(cardTokenResponse.getToken());
         paymentRequest.setThreeDS(ThreeDSRequest.from(false));
 
-        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
 
         assertNotNull(paymentResponse.getPayment());
         assertTrue(paymentResponse.getPayment().isApproved());
@@ -47,11 +47,11 @@ class TokenSourcePaymentsTestIT extends SandboxTestFixture {
     void shouldRequest3dsCardPayment() throws Exception {
 
         final CardTokenRequest cardTokenRequest = TestHelper.createCardTokenRequest();
-        final CardTokenResponse cardTokenResponse = getApi().tokensClient().requestAsync(cardTokenRequest).get();
+        final CardTokenResponse cardTokenResponse = defaultApi.tokensClient().requestAsync(cardTokenRequest).get();
         final PaymentRequest<TokenSource> paymentRequest = TestHelper.createTokenPaymentRequest(cardTokenResponse.getToken());
         paymentRequest.setThreeDS(ThreeDSRequest.from(true));
 
-        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
 
         assertTrue(paymentResponse.isPending());
         final PaymentPending pending = paymentResponse.getPending();
@@ -71,16 +71,16 @@ class TokenSourcePaymentsTestIT extends SandboxTestFixture {
     void shouldCapturePayment() throws Exception {
 
         final CardTokenRequest cardTokenRequest = TestHelper.createCardTokenRequest();
-        final CardTokenResponse cardTokenResponse = getApi().tokensClient().requestAsync(cardTokenRequest).get();
+        final CardTokenResponse cardTokenResponse = defaultApi.tokensClient().requestAsync(cardTokenRequest).get();
         final PaymentRequest<TokenSource> paymentRequest = TestHelper.createTokenPaymentRequest(cardTokenResponse.getToken());
-        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
 
         assertTrue(paymentResponse.getPayment().canCapture());
 
         final CaptureRequest captureRequest = new CaptureRequest();
         captureRequest.setReference(UUID.randomUUID().toString());
 
-        final CaptureResponse captureResponse = getApi().paymentsClient().captureAsync(paymentResponse.getPayment().getId(), captureRequest).get();
+        final CaptureResponse captureResponse = defaultApi.paymentsClient().captureAsync(paymentResponse.getPayment().getId(), captureRequest).get();
 
         assertFalse(StringUtils.isEmpty(captureResponse.getActionId()));
         assertEquals(captureRequest.getReference(), captureResponse.getReference());
@@ -90,13 +90,13 @@ class TokenSourcePaymentsTestIT extends SandboxTestFixture {
     void shouldVoidPayment() throws Exception {
 
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
-        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
         assertTrue(paymentResponse.getPayment().canVoid());
 
         final VoidRequest voidRequest = new VoidRequest();
         voidRequest.setReference(UUID.randomUUID().toString());
 
-        final VoidResponse voidResponse = getApi().paymentsClient().voidAsync(paymentResponse.getPayment().getId(), voidRequest).get();
+        final VoidResponse voidResponse = defaultApi.paymentsClient().voidAsync(paymentResponse.getPayment().getId(), voidRequest).get();
 
         assertFalse(StringUtils.isEmpty(voidResponse.getActionId()));
         assertEquals(voidRequest.getReference(), voidResponse.getReference());
@@ -106,17 +106,17 @@ class TokenSourcePaymentsTestIT extends SandboxTestFixture {
     void shouldRefundPayment() throws Exception {
 
         final CardTokenRequest cardTokenRequest = TestHelper.createCardTokenRequest();
-        final CardTokenResponse cardTokenResponse = getApi().tokensClient().requestAsync(cardTokenRequest).get();
+        final CardTokenResponse cardTokenResponse = defaultApi.tokensClient().requestAsync(cardTokenRequest).get();
         final PaymentRequest<TokenSource> paymentRequest = TestHelper.createTokenPaymentRequest(cardTokenResponse.getToken());
-        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
         assertTrue(paymentResponse.getPayment().canCapture());
 
-        getApi().paymentsClient().captureAsync(paymentResponse.getPayment().getId()).get();
+        defaultApi.paymentsClient().captureAsync(paymentResponse.getPayment().getId()).get();
 
         final RefundRequest refundRequest = new RefundRequest();
         refundRequest.setReference(UUID.randomUUID().toString());
 
-        final RefundResponse refundResponse = getApi().paymentsClient().refundAsync(paymentResponse.getPayment().getId(), refundRequest).get();
+        final RefundResponse refundResponse = defaultApi.paymentsClient().refundAsync(paymentResponse.getPayment().getId(), refundRequest).get();
 
         assertFalse(StringUtils.isEmpty(refundResponse.getActionId()));
         assertEquals(refundRequest.getReference(), refundResponse.getReference());

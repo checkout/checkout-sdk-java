@@ -18,7 +18,7 @@ class CardDestinationPaymentTestIT extends SandboxTestFixture {
     @Test
     void canPerformCardPayout() throws Exception {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPayoutRequest();
-        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
         assertNull(paymentResponse.getPayment());
         assertNotNull(paymentResponse.getPending());
         assertNotNull(paymentResponse.getPending().getId());

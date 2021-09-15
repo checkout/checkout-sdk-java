@@ -1,8 +1,10 @@
 package com.checkout.payments.hosted;
 
 import com.checkout.ApiClient;
-import com.checkout.ApiCredentials;
+import com.checkout.SdkAuthorization;
+import com.checkout.SdkAuthorizationType;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.SdkCredentials;
 import com.checkout.TestHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +36,12 @@ class HostedPaymentsClientImplTest {
     private CheckoutConfiguration configuration;
 
     @Mock
+    private SdkCredentials sdkCredentials;
+
+    @Mock
+    private SdkAuthorization authorization;
+
+    @Mock
     private HostedPaymentResponse response;
 
     @Mock
@@ -41,6 +49,8 @@ class HostedPaymentsClientImplTest {
 
     @BeforeEach
     void setUp() {
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
         responseAsync = CompletableFuture.completedFuture(response);
         when(response.getReference()).thenReturn(REFERENCE);
         when(response.getLinks()).thenReturn(new HashMap<>());
@@ -51,7 +61,7 @@ class HostedPaymentsClientImplTest {
         final HostedPaymentRequest request = TestHelper.createHostedPaymentRequest(REFERENCE);
         final HostedPaymentsClient client = new HostedPaymentsClientImpl(apiClient, configuration);
         Mockito.doReturn(responseAsync)
-                .when(apiClient).postAsync(eq(HOSTED_PAYMENTS), any(ApiCredentials.class),
+                .when(apiClient).postAsync(eq(HOSTED_PAYMENTS), any(SdkAuthorization.class),
                 eq(HostedPaymentResponse.class), any(HostedPaymentRequest.class), any());
         final HostedPaymentResponse hostedPaymentResponse = client.createAsync(request).get();
         assertNotNull(hostedPaymentResponse);

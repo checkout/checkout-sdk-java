@@ -5,92 +5,74 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import java.net.URI;
 
 import static com.checkout.Environment.lookup;
-import static com.checkout.PlatformType.DEFAULT;
-import static com.checkout.PlatformType.FOUR;
 import static com.checkout.common.CheckoutUtils.validateParams;
 
 public final class CheckoutConfiguration {
 
-    private PlatformType platformType;
-    private String secretKey;
-    private String publicKey;
+    private final String uri;
+    private final SdkCredentials sdkCredentials;
+    private HttpClientBuilder httpClientBuilder;
+
+    public CheckoutConfiguration(final SdkCredentials sdkCredentials, final Environment environment) {
+        validateParams("sdkCredentials", sdkCredentials, "environment", environment);
+        this.sdkCredentials = sdkCredentials;
+        this.uri = environment.getUri();
+    }
+
+    public CheckoutConfiguration(final SdkCredentials sdkCredentials, final URI uri) {
+        validateParams("sdkCredentials", sdkCredentials, "uri", uri);
+        this.sdkCredentials = sdkCredentials;
+        this.uri = uri.toString();
+    }
 
     /**
-     * @deprecated Will be removed in a future version
+     * @deprecated Please use {@link CheckoutSdk#defaultSdk()} as the entrypoint to create new SDK instances.
      */
     @Deprecated
-    private final String uri;
-
-    private HttpClientBuilder apacheHttpClientBuilder;
-
-    public CheckoutConfiguration(final String publicKey, final String secretKey, final Environment environment) {
-        validateParams("environment", environment);
-        this.uri = environment.getUri();
-        validateAndSetKeys(publicKey, secretKey, FOUR);
+    private CheckoutConfiguration(final String publicKey, final String secretKey, final String uri) {
+        validateParams("secretKey", secretKey, "uri", uri);
+        this.uri = uri;
+        this.sdkCredentials = new DefaultStaticKeysSdkCredentials(secretKey, publicKey);
     }
 
-    public CheckoutConfiguration(final String publicKey, final String secretKey, final URI uri) {
-        validateParams("uri", uri);
-        this.uri = uri.toString();
-        validateAndSetKeys(publicKey, secretKey, FOUR);
-    }
-
+    /**
+     * @deprecated Please use {@link CheckoutSdk#defaultSdk()} as the entrypoint to create new SDK instances.
+     */
+    @Deprecated
     public CheckoutConfiguration(final String secretKey, final boolean useSandbox) {
         this(null, secretKey, lookup(useSandbox).getUri());
     }
 
+    /**
+     * @deprecated Please use {@link CheckoutSdk#defaultSdk()} as the entrypoint to create new SDK instances.
+     */
+    @Deprecated
     public CheckoutConfiguration(final String secretKey, final boolean useSandbox, final String publicKey) {
         this(publicKey, secretKey, lookup(useSandbox).getUri());
     }
 
+    /**
+     * @deprecated Please use {@link CheckoutSdk#defaultSdk()} as the entrypoint to create new SDK instances.
+     */
+    @Deprecated
     public CheckoutConfiguration(final String secretKey, final String uri) {
         this(null, secretKey, uri);
-    }
-
-    private CheckoutConfiguration(final String publicKey, final String secretKey, final String uri) {
-        validateParams("uri", uri);
-        this.uri = uri;
-        validateAndSetKeys(publicKey, secretKey, DEFAULT);
-    }
-
-    private void validateAndSetKeys(final String publicKey, final String secretKey, final PlatformType platformType) {
-        validateParams("platformType", platformType);
-        if (publicKey != null) {
-            platformType.validatePublicKey(publicKey);
-            this.publicKey = publicKey;
-        }
-        platformType.validateSecretKey(secretKey);
-        this.platformType = platformType;
-        this.secretKey = secretKey;
-    }
-
-    public PlatformType getCustomerPlatformType() {
-        return platformType;
-    }
-
-    public String getSecretKey() {
-        return secretKey;
-    }
-
-    public String getPublicKey() {
-        return publicKey;
-    }
-
-    public void setPublicKey(final String publicKey) {
-        DEFAULT.validatePublicKey(publicKey);
-        this.publicKey = publicKey;
     }
 
     public String getUri() {
         return uri;
     }
 
-    public HttpClientBuilder getApacheHttpClientBuilder() {
-        return apacheHttpClientBuilder;
+    public SdkCredentials getSdkCredentials() {
+        return sdkCredentials;
     }
 
-    public void setApacheHttpClientBuilder(final HttpClientBuilder apacheHttpClientBuilder) {
-        this.apacheHttpClientBuilder = apacheHttpClientBuilder;
+    public HttpClientBuilder getApacheHttpClientBuilder() {
+        return httpClientBuilder;
+    }
+
+    public void setApacheHttpClientBuilder(final HttpClientBuilder httpClientBuilder) {
+        this.httpClientBuilder = httpClientBuilder;
     }
 
 }

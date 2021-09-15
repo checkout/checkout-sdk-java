@@ -23,12 +23,12 @@ class CustomerSourcePaymentsTestIT extends SandboxTestFixture {
     void shouldRequestCardPayment() throws Exception {
 
         final PaymentRequest<CardSource> firstCardPayment = TestHelper.createCardPaymentRequest();
-        final PaymentResponse firstCardPaymentResponse = getApi().paymentsClient().requestAsync(firstCardPayment).get();
+        final PaymentResponse firstCardPaymentResponse = defaultApi.paymentsClient().requestAsync(firstCardPayment).get();
         final CustomerSource customerSource = new CustomerSource(firstCardPayment.getCustomer().getId(), firstCardPayment.getCustomer().getEmail());
         final PaymentRequest<CustomerSource> customerPaymentRequest = PaymentRequest.fromSource(customerSource, Currency.GBP, 100L);
         customerPaymentRequest.setCapture(false);
 
-        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(customerPaymentRequest).get();
+        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(customerPaymentRequest).get();
 
         assertNotNull(paymentResponse.getPayment());
         assertTrue(paymentResponse.getPayment().isApproved());

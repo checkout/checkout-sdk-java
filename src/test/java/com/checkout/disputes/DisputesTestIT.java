@@ -37,13 +37,13 @@ class DisputesTestIT extends SandboxTestFixture {
     @Test
     void shouldQueryDisputes() {
         DisputesQueryFilter query = DisputesQueryFilter.builder().limit(250).build();
-        DisputesQueryResponse response = blocking(getApi().disputesClient().query(query));
+        DisputesQueryResponse response = blocking(defaultApi.disputesClient().query(query));
         assertNotNull(response);
         assertEquals(query.getLimit(), response.getLimit());
         if (response.getTotalCount() > 0) {
             final Dispute dispute = response.getData().get(0);
             query = DisputesQueryFilter.builder().id(dispute.getId()).build();
-            response = blocking(getApi().disputesClient().query(query));
+            response = blocking(defaultApi.disputesClient().query(query));
             assertNotNull(response);
             assertEquals(1L, response.getTotalCount().longValue());
             assertEquals(query.getId(), response.getData().get(0).getId());
@@ -52,11 +52,11 @@ class DisputesTestIT extends SandboxTestFixture {
 
     @Test
     void shouldGetDisputeDetails() {
-        final DisputesQueryResponse queryResponse = blocking(getApi().disputesClient().query(DisputesQueryFilter.builder().build()));
+        final DisputesQueryResponse queryResponse = blocking(defaultApi.disputesClient().query(DisputesQueryFilter.builder().build()));
         assertNotNull(queryResponse);
         if (queryResponse.getTotalCount() > 0) {
             final Dispute disputeQueried = queryResponse.getData().get(0);
-            final DisputeDetailsResponse detailsResponse = blocking(getApi().disputesClient().getDisputeDetails(disputeQueried.getId()));
+            final DisputeDetailsResponse detailsResponse = blocking(defaultApi.disputesClient().getDisputeDetails(disputeQueried.getId()));
             assertNotNull(detailsResponse);
             assertEquals(disputeQueried.getId(), detailsResponse.getId());
             assertNotNull(detailsResponse.getStatus());
@@ -78,13 +78,13 @@ class DisputesTestIT extends SandboxTestFixture {
 
     @Test
     void shouldFailOnAcceptDisputeAlreadyAccepted() {
-        final DisputesQueryResponse queryResponse = blocking(getApi().disputesClient().query(DisputesQueryFilter.builder()
+        final DisputesQueryResponse queryResponse = blocking(defaultApi.disputesClient().query(DisputesQueryFilter.builder()
                 .statuses(DisputeStatus.ACCEPTED.toString()).build()));
         assertNotNull(queryResponse);
         if (queryResponse.getTotalCount() > 0) {
             final Dispute dispute = queryResponse.getData().get(0);
             try {
-                getApi().disputesClient().accept(dispute.getId()).get();
+                defaultApi.disputesClient().accept(dispute.getId()).get();
                 fail();
             } catch (final Exception ex) {
                 assertTrue(ex.getCause() instanceof CheckoutValidationException);
@@ -102,15 +102,15 @@ class DisputesTestIT extends SandboxTestFixture {
     void shouldTestFullDisputesWorkFlow() throws Exception {
         //Create a payment who triggers a dispute
         final CardTokenRequest cardTokenRequest = TestHelper.createCardTokenRequest();
-        final CardTokenResponse cardTokenResponse = blocking(getApi().tokensClient().requestAsync(cardTokenRequest));
+        final CardTokenResponse cardTokenResponse = blocking(defaultApi.tokensClient().requestAsync(cardTokenRequest));
         final PaymentRequest<TokenSource> paymentRequest = PaymentRequest.fromSource(
                 new TokenSource(cardTokenResponse.getToken()), Currency.GBP, 1040L);
         paymentRequest.setCapture(true);
-        final PaymentResponse paymentResponse = blocking(getApi().paymentsClient().requestAsync(paymentRequest));
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
         assertTrue(paymentResponse.getPayment().canCapture());
         final CaptureRequest captureRequest = new CaptureRequest();
         captureRequest.setReference(UUID.randomUUID().toString());
-        blocking(getApi().paymentsClient().captureAsync(paymentResponse.getPayment().getId(), captureRequest));
+        blocking(defaultApi.paymentsClient().captureAsync(paymentResponse.getPayment().getId(), captureRequest));
         //Query for dispute
         DisputesQueryResponse queryResponse = null;
         final DisputesQueryFilter query = DisputesQueryFilter.builder()
@@ -119,10 +119,10 @@ class DisputesTestIT extends SandboxTestFixture {
                 .build();
         while (queryResponse == null || queryResponse.getTotalCount() == 0) {
             TimeUnit.SECONDS.sleep(20);
-            queryResponse = blocking(getApi().disputesClient().query(query));
+            queryResponse = blocking(defaultApi.disputesClient().query(query));
         }
         //Get dispute details
-        final DisputeDetailsResponse disputeDetails = blocking(getApi().disputesClient()
+        final DisputeDetailsResponse disputeDetails = blocking(defaultApi.disputesClient()
                 .getDisputeDetails(queryResponse.getData().get(0).getId()));
         assertEquals(paymentResponse.getPayment().getId(), disputeDetails.getPayment().getId());
         assertEquals(paymentResponse.getPayment().getAmount(), disputeDetails.getPayment().getAmount());
@@ -135,10 +135,10 @@ class DisputesTestIT extends SandboxTestFixture {
                 .contentType(ContentType.create("application/pdf"))
                 .purpose(FilePurpose.DISPUTE_EVIDENCE)
                 .build();
-        final IdResponse fileResponse = blocking(getApi().disputesClient().uploadFile(fileRequest));
+        final IdResponse fileResponse = blocking(defaultApi.disputesClient().uploadFile(fileRequest));
         assertNotNull(fileResponse);
         assertNotNull(fileResponse.getId());
-        final FileDetailsResponse fileDetailsResponse = blocking(getApi().disputesClient().getFileDetails(fileResponse.getId()));
+        final FileDetailsResponse fileDetailsResponse = blocking(defaultApi.disputesClient().getFileDetails(fileResponse.getId()));
         assertNotNull(fileDetailsResponse);
         assertEquals(fileRequest.getFile().getName(), fileDetailsResponse.getFilename());
         assertEquals(fileRequest.getPurpose().getPurpose(), fileDetailsResponse.getPurpose());
@@ -161,15 +161,15 @@ class DisputesTestIT extends SandboxTestFixture {
                 .proofOfDeliveryOrServiceDateFile(fileDetailsResponse.getId())
                 .proofOfDeliveryOrServiceDateText("Copy of the customer receipt showing the merchandise was delivered on 2018-12-20")
                 .build();
-        blocking(getApi().disputesClient().putEvidence(disputeDetails.getId(), evidenceRequest));
+        blocking(defaultApi.disputesClient().putEvidence(disputeDetails.getId(), evidenceRequest));
         //Retrieve your dispute evidence details
-        final DisputeEvidenceResponse evidenceResponse = blocking(getApi().disputesClient().getEvidence(disputeDetails.getId()));
+        final DisputeEvidenceResponse evidenceResponse = blocking(defaultApi.disputesClient().getEvidence(disputeDetails.getId()));
         assertNotNull(evidenceResponse);
         assertEquals(evidenceRequest.getProofOfDeliveryOrServiceFile(), evidenceResponse.getProofOfDeliveryOrServiceFile());
         assertEquals(evidenceRequest.getProofOfDeliveryOrServiceText(), evidenceResponse.getProofOfDeliveryOrServiceText());
         assertEquals(evidenceRequest.getProofOfDeliveryOrServiceDateText(), evidenceResponse.getProofOfDeliveryOrServiceDateText());
         //Submit your dispute evidence
-        blocking(getApi().disputesClient().submitEvidence(disputeDetails.getId()));
+        blocking(defaultApi.disputesClient().submitEvidence(disputeDetails.getId()));
     }
 
 }

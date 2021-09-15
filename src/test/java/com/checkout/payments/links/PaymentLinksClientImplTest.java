@@ -1,8 +1,10 @@
 package com.checkout.payments.links;
 
 import com.checkout.ApiClient;
-import com.checkout.ApiCredentials;
+import com.checkout.SdkAuthorization;
+import com.checkout.SdkAuthorizationType;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.SdkCredentials;
 import com.checkout.TestHelper;
 import com.checkout.payments.PaymentStatus;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +41,12 @@ class PaymentLinksClientImplTest {
     private CheckoutConfiguration configuration;
 
     @Mock
+    private SdkCredentials sdkCredentials;
+
+    @Mock
+    private SdkAuthorization authorization;
+
+    @Mock
     private PaymentLinkResponse paymentLinkResponse;
 
     @Mock
@@ -56,6 +64,8 @@ class PaymentLinksClientImplTest {
 
     @BeforeEach
     void setUp() {
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
         paymentLinkAsync = CompletableFuture.completedFuture(paymentLinkResponse);
         paymentLinkDetailAsync = CompletableFuture.completedFuture(paymentLinkDetailsResponse);
         client = new PaymentLinksClientImpl(apiClient, configuration);
@@ -86,7 +96,7 @@ class PaymentLinksClientImplTest {
         setUpPaymentLinkDetailsResponse();
         Mockito.doReturn(paymentLinkDetailAsync)
                 .when(apiClient).getAsync(eq(PAYMENT_LINKS + "/" + REFERENCE),
-                any(ApiCredentials.class),
+                any(SdkAuthorization.class),
                 eq(PaymentLinkDetailsResponse.class));
         final PaymentLinkDetailsResponse response = client.getAsync(REFERENCE).get();
         assertNotNull(response);
@@ -106,7 +116,7 @@ class PaymentLinksClientImplTest {
     void shouldRetrievePaymentsLink() throws ExecutionException, InterruptedException {
         setUpPaymentLinkResponse();
         Mockito.doReturn(paymentLinkAsync)
-                .when(apiClient).postAsync(eq(PAYMENT_LINKS), any(ApiCredentials.class),
+                .when(apiClient).postAsync(eq(PAYMENT_LINKS), any(SdkAuthorization.class),
                 eq(PaymentLinkResponse.class), any(PaymentLinkRequest.class), any());
         final PaymentLinkResponse response = client.createAsync(paymentLinksRequest).get();
         assertNotNull(response);

@@ -27,8 +27,8 @@ public class WebhooksTestIT extends SandboxTestFixture {
 
     @BeforeEach
     protected void cleanup() {
-        final List<WebhookResponse> webhookResponses = blocking(getApi().webhooksClient().retrieveWebhooks());
-        webhookResponses.forEach(webhookResponse -> blocking(getApi().webhooksClient().removeWebhook(webhookResponse.getId())));
+        final List<WebhookResponse> webhookResponses = blocking(defaultApi.webhooksClient().retrieveWebhooks());
+        webhookResponses.forEach(webhookResponse -> blocking(defaultApi.webhooksClient().removeWebhook(webhookResponse.getId())));
     }
 
     @Test
@@ -50,7 +50,7 @@ public class WebhooksTestIT extends SandboxTestFixture {
 
         final WebhookResponse webhookResponse = registerWebhook();
 
-        final WebhookResponse webhook = blocking(getApi().webhooksClient().retrieveWebhook(webhookResponse.getId()));
+        final WebhookResponse webhook = blocking(defaultApi.webhooksClient().retrieveWebhook(webhookResponse.getId()));
         assertEquals("https://google.com/fail", webhook.getUrl());
         assertEquals(GATEWAY_EVENT_TYPES, webhook.getEventTypes());
         assertTrue(webhook.isActive());
@@ -59,7 +59,7 @@ public class WebhooksTestIT extends SandboxTestFixture {
         assertTrue(webhook.getHeaders().containsKey("authorization"));
         assertNotNull(webhook.getHeaders().get("authorization"));
 
-        final List<WebhookResponse> response = blocking(getApi().webhooksClient().retrieveWebhooks());
+        final List<WebhookResponse> response = blocking(defaultApi.webhooksClient().retrieveWebhooks());
         assertNotNull(response);
         assertTrue(response.size() >= 1);
 
@@ -85,7 +85,7 @@ public class WebhooksTestIT extends SandboxTestFixture {
         webhookRequest.getEventTypes().add("payment_approved");
         webhookRequest.getEventTypes().add("payment_captured");
 
-        final WebhookResponse webhook = blocking(getApi().webhooksClient().updateWebhook(webhookResponse.getId(), webhookRequest));
+        final WebhookResponse webhook = blocking(defaultApi.webhooksClient().updateWebhook(webhookResponse.getId(), webhookRequest));
         assertEquals(webhookRequest.getUrl(), webhook.getUrl());
         assertEquals(webhookRequest.getEventTypes(), webhook.getEventTypes());
 
@@ -96,21 +96,21 @@ public class WebhooksTestIT extends SandboxTestFixture {
 
         final WebhookResponse webhookResponse = registerWebhook();
 
-        final List<WebhookResponse> responseBeforeRemoval = blocking(getApi().webhooksClient().retrieveWebhooks());
-        blocking(getApi().webhooksClient().removeWebhook(webhookResponse.getId()));
-        final List<WebhookResponse> responseAfterRemoval = blocking(getApi().webhooksClient().retrieveWebhooks());
+        final List<WebhookResponse> responseBeforeRemoval = blocking(defaultApi.webhooksClient().retrieveWebhooks());
+        blocking(defaultApi.webhooksClient().removeWebhook(webhookResponse.getId()));
+        final List<WebhookResponse> responseAfterRemoval = blocking(defaultApi.webhooksClient().retrieveWebhooks());
         assertEquals(responseBeforeRemoval.size() - 1, responseAfterRemoval.size());
 
         responseAfterRemoval.stream()
                 .map(WebhookResponse::getId)
                 .forEach(it -> {
                     try {
-                        getApi().webhooksClient().removeWebhook(it).get();
+                        defaultApi.webhooksClient().removeWebhook(it).get();
                     } catch (final Exception e) {
                         fail(e.getCause());
                     }
                 });
-        final List<WebhookResponse> emptyResponse = blocking(getApi().webhooksClient().retrieveWebhooks());
+        final List<WebhookResponse> emptyResponse = blocking(defaultApi.webhooksClient().retrieveWebhooks());
         assertTrue(emptyResponse.isEmpty());
 
     }
@@ -123,7 +123,7 @@ public class WebhooksTestIT extends SandboxTestFixture {
 
         webhookRequest.setEventTypes(GATEWAY_EVENT_TYPES);
 
-        return blocking(getApi().webhooksClient().registerWebhook(webhookRequest));
+        return blocking(defaultApi.webhooksClient().registerWebhook(webhookRequest));
 
     }
 

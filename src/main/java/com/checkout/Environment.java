@@ -19,14 +19,6 @@ public enum Environment {
         return uri;
     }
 
-    public static Environment lookup(final String environment) {
-        validateParams("environment", environment);
-        return Stream.of(values())
-                .filter(entry -> entry.name().equals(environment.toUpperCase()))
-                .findFirst()
-                .orElseThrow(() -> new CheckoutArgumentException("invalid environment property"));
-    }
-
     /**
      * @deprecated Will be removed in a future version
      */

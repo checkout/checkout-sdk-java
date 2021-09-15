@@ -1,8 +1,10 @@
 package com.checkout.reconciliation;
 
 import com.checkout.ApiClient;
-import com.checkout.ApiCredentials;
+import com.checkout.SdkAuthorization;
+import com.checkout.SdkAuthorizationType;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.SdkCredentials;
 import com.checkout.common.Currency;
 import com.checkout.common.QueryFilterDateRange;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +35,7 @@ class ReconciliationClientImplTest {
     private static final String PAYMENT_ID = "pay_nezg6bx2k22utmk4xm5s2ughxi";
     private static final String REFERENCE = "ORD-5023-4E89";
     private static final String ACTION_ID = "act_nezg6bx2k22utmk4xm5s2ughxi";
-    private static final String ACTION_TYPE = "Authorization";
+    private static final String ACTION_TYPE = "SdkAuthorization";
     private static final String BREAKDOWN_TYPE = "Gateway Fee Tax ARE USD/GBP@0.7640412612";
     private static final String STATEMENT_ID = "190110B107654";
 
@@ -44,6 +46,12 @@ class ReconciliationClientImplTest {
 
     @Mock
     private CheckoutConfiguration configuration;
+
+    @Mock
+    private SdkCredentials sdkCredentials;
+
+    @Mock
+    private SdkAuthorization authorization;
 
     @Mock
     private ReconciliationPaymentReportResponse reconciliationPaymentReportResponse;
@@ -77,6 +85,8 @@ class ReconciliationClientImplTest {
 
     @BeforeEach
     void setUp() {
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
         disputesQueryResponseFuture = CompletableFuture.completedFuture(reconciliationPaymentReportResponse);
         statementReportResponseFuture = CompletableFuture.completedFuture(statementReportResponse);
         client = new ReconciliationClientImpl(apiClient, configuration);
@@ -115,7 +125,7 @@ class ReconciliationClientImplTest {
         setUpPaymentReport();
         doReturn(disputesQueryResponseFuture)
                 .when(apiClient)
-                .queryAsync(eq("reporting/payments"), any(ApiCredentials.class),
+                .queryAsync(eq("reporting/payments"), any(SdkAuthorization.class),
                         any(ReconciliationQueryPaymentsFilter.class), eq(ReconciliationPaymentReportResponse.class));
         final ReconciliationQueryPaymentsFilter filter = ReconciliationQueryPaymentsFilter
                 .builder()
@@ -145,7 +155,7 @@ class ReconciliationClientImplTest {
         setUpPaymentReport();
         doReturn(disputesQueryResponseFuture)
                 .when(apiClient)
-                .getAsync(eq("reporting/payments/" + PAYMENT_ID), any(ApiCredentials.class),
+                .getAsync(eq("reporting/payments/" + PAYMENT_ID), any(SdkAuthorization.class),
                         eq(ReconciliationPaymentReportResponse.class));
         final ReconciliationPaymentReportResponse response = client.singlePaymentReportAsync(PAYMENT_ID).get();
         assertNotNull(response);
@@ -169,7 +179,7 @@ class ReconciliationClientImplTest {
         setUpStatementResponse();
         doReturn(statementReportResponseFuture)
                 .when(apiClient)
-                .queryAsync(eq("reporting/statements"), any(ApiCredentials.class),
+                .queryAsync(eq("reporting/statements"), any(SdkAuthorization.class),
                         any(QueryFilterDateRange.class), eq(StatementReportResponse.class));
         final QueryFilterDateRange filter = QueryFilterDateRange
                 .builder()
@@ -200,7 +210,7 @@ class ReconciliationClientImplTest {
         completableFileFuture = CompletableFuture.completedFuture(report);
         doReturn(completableFileFuture)
                 .when(apiClient)
-                .retrieveFileAsync(eq("reporting/payments/download"), any(ApiCredentials.class), eq(report));
+                .retrieveFileAsync(eq("reporting/payments/download"), any(SdkAuthorization.class), eq(report));
         final String file = client.retrieveCSVPaymentReport(report).get();
         assertNotNull(file);
         assertEquals(report, file);
@@ -213,7 +223,7 @@ class ReconciliationClientImplTest {
         doReturn(completableFileFuture)
                 .when(apiClient)
                 .retrieveFileAsync(eq(String.format("reporting/statements/%s/payments/download", STATEMENT_ID)),
-                        any(ApiCredentials.class), eq(report));
+                        any(SdkAuthorization.class), eq(report));
         final String file = client.retrieveCSVSingleStatementReport(STATEMENT_ID, report).get();
         assertNotNull(file);
         assertEquals(report, file);
@@ -226,7 +236,7 @@ class ReconciliationClientImplTest {
         doReturn(completableFileFuture)
                 .when(apiClient)
                 .retrieveFileAsync(eq("reporting/statements/download"),
-                        any(ApiCredentials.class), eq(report));
+                        any(SdkAuthorization.class), eq(report));
         final String file = client.retrieveCSVStatementsReport(report).get();
         assertNotNull(file);
         assertEquals(report, file);

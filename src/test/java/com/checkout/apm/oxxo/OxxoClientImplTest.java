@@ -1,8 +1,10 @@
 package com.checkout.apm.oxxo;
 
 import com.checkout.ApiClient;
+import com.checkout.SdkAuthorization;
+import com.checkout.SdkAuthorizationType;
 import com.checkout.CheckoutConfiguration;
-import com.checkout.SecretKeyCredentials;
+import com.checkout.SdkCredentials;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +16,6 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
@@ -27,7 +28,14 @@ class OxxoClientImplTest {
     private ApiClient apiClient;
 
     @Mock
-    private CheckoutConfiguration checkoutConfiguration;
+    private CheckoutConfiguration configuration;
+
+    @Mock
+    private SdkCredentials sdkCredentials;
+
+    @Mock
+    private SdkAuthorization authorization;
+
 
     @Mock
     private Void voidResponse;
@@ -36,13 +44,15 @@ class OxxoClientImplTest {
 
     @BeforeEach
     void setUp() {
-        this.oxxoClient = new OxxoClientImpl(apiClient, checkoutConfiguration);
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+        this.oxxoClient = new OxxoClientImpl(apiClient, configuration);
     }
 
     @Test
     void shouldSucceedPayment() throws ExecutionException, InterruptedException {
 
-        when(apiClient.postAsync(eq("/apms/oxxo/payments/payment_id/succeed"), any(SecretKeyCredentials.class), eq(Void.class), isNull(), isNull()))
+        when(apiClient.postAsync(eq("/apms/oxxo/payments/payment_id/succeed"), eq(authorization), eq(Void.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(voidResponse));
 
         final CompletableFuture<Void> future = oxxoClient.succeed("payment_id");
@@ -55,7 +65,7 @@ class OxxoClientImplTest {
     @Test
     void shouldExpirePayment() throws ExecutionException, InterruptedException {
 
-        when(apiClient.postAsync(eq("/apms/oxxo/payments/payment_id/expire"), any(SecretKeyCredentials.class), eq(Void.class), isNull(), isNull()))
+        when(apiClient.postAsync(eq("/apms/oxxo/payments/payment_id/expire"), eq(authorization), eq(Void.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(voidResponse));
 
         final CompletableFuture<Void> future = oxxoClient.expire("payment_id");

@@ -3,7 +3,7 @@ package com.checkout.apm.oxxo;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.CountryCode;
-import com.checkout.common.beta.Currency;
+import com.checkout.common.four.Currency;
 import com.checkout.payments.AlternativePaymentSourceResponse;
 import com.checkout.payments.GetPaymentResponse;
 import com.checkout.payments.PaymentPending;
@@ -28,9 +28,9 @@ class OxxoPaymentsTestIT extends SandboxTestFixture {
 
         final String paymentId = makePagoFacilPayment();
 
-        blocking(getApi().oxxoClient().succeed(paymentId));
+        blocking(defaultApi.oxxoClient().succeed(paymentId));
 
-        final GetPaymentResponse response = blocking(getApi().paymentsClient().getAsync(paymentId));
+        final GetPaymentResponse response = blocking(defaultApi.paymentsClient().getAsync(paymentId));
 
         assertNotNull(response);
         assertEquals("Captured", response.getStatus());
@@ -51,9 +51,9 @@ class OxxoPaymentsTestIT extends SandboxTestFixture {
 
         final String paymentId = makePagoFacilPayment();
 
-        blocking(getApi().oxxoClient().expire(paymentId));
+        blocking(defaultApi.oxxoClient().expire(paymentId));
 
-        final GetPaymentResponse response = blocking(getApi().paymentsClient().getAsync(paymentId));
+        final GetPaymentResponse response = blocking(defaultApi.paymentsClient().getAsync(paymentId));
 
         assertNotNull(response);
         assertEquals("Expired", response.getStatus());
@@ -79,7 +79,7 @@ class OxxoPaymentsTestIT extends SandboxTestFixture {
 
         final PaymentRequest<OxxoSource> request = PaymentRequest.oxxo(oxxoSource, Currency.MXN, 100000L);
 
-        final PaymentResponse response = blocking(getApi().paymentsClient().requestAsync(request));
+        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestAsync(request));
 
         assertNotNull(response);
 

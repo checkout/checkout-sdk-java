@@ -1,9 +1,11 @@
 package com.checkout.events;
 
 import com.checkout.ApiClient;
-import com.checkout.ApiCredentials;
 import com.checkout.CheckoutArgumentException;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.SdkAuthorization;
+import com.checkout.SdkAuthorizationType;
+import com.checkout.SdkCredentials;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,11 +20,9 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static com.checkout.TestHelper.mockDefaultConfiguration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
@@ -38,24 +38,35 @@ class EventsClientImplTest {
     private static final String WEBHOOKS = "webhooks";
 
     @Mock
+    private CheckoutConfiguration configuration;
+
+    @Mock
+    private SdkCredentials sdkCredentials;
+
+    @Mock
+    private SdkAuthorization authorization;
+
+    @Mock
     private ApiClient apiClient;
 
     private EventsClient eventsClient;
 
     @BeforeEach
     void setup() {
-        final CheckoutConfiguration checkoutConfiguration = mockDefaultConfiguration();
-        this.eventsClient = new EventsClientImpl(apiClient, checkoutConfiguration);
+        this.eventsClient = new EventsClientImpl(apiClient, configuration);
     }
 
     @Test
     void shouldRetrieveAllEventTypes_nullVersion() throws ExecutionException, InterruptedException {
 
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+
         final EventTypesResponse[] eventTypesResponses = new EventTypesResponse[2];
         eventTypesResponses[0] = mock(EventTypesResponse.class);
         eventTypesResponses[1] = mock(EventTypesResponse.class);
 
-        when(apiClient.getAsync(eq(EVENT_TYPES), any(ApiCredentials.class), eq(EventTypesResponse[].class)))
+        when(apiClient.getAsync(eq(EVENT_TYPES), eq(authorization), eq(EventTypesResponse[].class)))
                 .thenReturn(CompletableFuture.completedFuture(eventTypesResponses));
 
         final CompletableFuture<List<EventTypesResponse>> eventTypes = eventsClient.retrieveAllEventTypes(null);
@@ -69,11 +80,14 @@ class EventsClientImplTest {
     @Test
     void shouldRetrieveAllEventTypes_withVersion() throws ExecutionException, InterruptedException {
 
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+
         final EventTypesResponse[] eventTypesResponses = new EventTypesResponse[2];
         eventTypesResponses[0] = mock(EventTypesResponse.class);
         eventTypesResponses[1] = mock(EventTypesResponse.class);
 
-        when(apiClient.getAsync(eq(EVENT_TYPES + "?version=v2"), any(ApiCredentials.class), eq(EventTypesResponse[].class)))
+        when(apiClient.getAsync(eq(EVENT_TYPES + "?version=v2"), eq(authorization), eq(EventTypesResponse[].class)))
                 .thenReturn(CompletableFuture.completedFuture(eventTypesResponses));
 
         final CompletableFuture<List<EventTypesResponse>> eventTypes = eventsClient.retrieveAllEventTypes("v2");
@@ -87,7 +101,10 @@ class EventsClientImplTest {
     @Test
     void shouldRetrieveAllEventTypes_nullResponse() throws ExecutionException, InterruptedException {
 
-        when(apiClient.getAsync(eq(EVENT_TYPES), any(ApiCredentials.class), eq(EventTypesResponse[].class)))
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+
+        when(apiClient.getAsync(eq(EVENT_TYPES), eq(authorization), eq(EventTypesResponse[].class)))
                 .thenReturn(CompletableFuture.completedFuture(null));
 
         final CompletableFuture<List<EventTypesResponse>> eventTypes = eventsClient.retrieveAllEventTypes(null);
@@ -99,6 +116,9 @@ class EventsClientImplTest {
 
     @Test
     void shouldRetrieveEvents_deprecated() throws ExecutionException, InterruptedException {
+
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
 
         final Instant from = LocalDateTime.now().minusYears(2).toInstant(ZoneOffset.UTC);
         final Instant to = LocalDateTime.now().toInstant(ZoneOffset.UTC);
@@ -112,7 +132,7 @@ class EventsClientImplTest {
                 .build();
         final EventsPageResponse eventsPageResponse = mock(EventsPageResponse.class);
 
-        when(apiClient.queryAsync(eq(EVENTS), any(ApiCredentials.class), eq(retrieveEventsRequest), eq(EventsPageResponse.class)))
+        when(apiClient.queryAsync(eq(EVENTS), eq(authorization), eq(retrieveEventsRequest), eq(EventsPageResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(eventsPageResponse));
 
         final CompletableFuture<EventsPageResponse> response = eventsClient.retrieveEvents(from, to, 15, 0, "paymentId");
@@ -124,6 +144,9 @@ class EventsClientImplTest {
 
     @Test
     void shouldRetrieveEvents() throws ExecutionException, InterruptedException {
+
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
 
         final Instant from = LocalDateTime.now().minusYears(2).toInstant(ZoneOffset.UTC);
         final Instant to = LocalDateTime.now().toInstant(ZoneOffset.UTC);
@@ -141,7 +164,7 @@ class EventsClientImplTest {
 
         final EventsPageResponse eventsPageResponse = mock(EventsPageResponse.class);
 
-        when(apiClient.queryAsync(eq(EVENTS), any(ApiCredentials.class), eq(retrieveEventsRequest), eq(EventsPageResponse.class)))
+        when(apiClient.queryAsync(eq(EVENTS), eq(authorization), eq(retrieveEventsRequest), eq(EventsPageResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(eventsPageResponse));
 
         final CompletableFuture<EventsPageResponse> response = eventsClient.retrieveEvents(retrieveEventsRequest);
@@ -165,13 +188,15 @@ class EventsClientImplTest {
 
     }
 
-
     @Test
     void shouldRetrieveEvent() throws ExecutionException, InterruptedException {
 
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+
         final EventResponse eventResponse = mock(EventResponse.class);
 
-        when(apiClient.getAsync(eq(EVENTS + "/eventId"), any(ApiCredentials.class), eq(EventResponse.class)))
+        when(apiClient.getAsync(eq(EVENTS + "/eventId"), eq(authorization), eq(EventResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(eventResponse));
 
         final CompletableFuture<EventResponse> response = eventsClient.retrieveEvent("eventId");
@@ -227,9 +252,12 @@ class EventsClientImplTest {
     @Test
     void shouldRetrieveEventNotification() throws ExecutionException, InterruptedException {
 
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+
         final EventNotificationResponse eventNotificationResponse = mock(EventNotificationResponse.class);
 
-        when(apiClient.getAsync(eq(EVENTS + "/eventId/" + NOTIFICATIONS + "/notificationId"), any(ApiCredentials.class), eq(EventNotificationResponse.class)))
+        when(apiClient.getAsync(eq(EVENTS + "/eventId/" + NOTIFICATIONS + "/notificationId"), eq(authorization), eq(EventNotificationResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(eventNotificationResponse));
 
         final CompletableFuture<EventNotificationResponse> response = eventsClient.retrieveEventNotification("eventId", "notificationId");
@@ -242,7 +270,10 @@ class EventsClientImplTest {
     @Test
     void shouldRetryWebhook() throws ExecutionException, InterruptedException {
 
-        when(apiClient.postAsync(eq(EVENTS + "/eventId/" + WEBHOOKS + "/webhookId/retry"), any(ApiCredentials.class), eq(Void.class), isNull(), isNull()))
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+
+        when(apiClient.postAsync(eq(EVENTS + "/eventId/" + WEBHOOKS + "/webhookId/retry"), eq(authorization), eq(Void.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(mock(Void.class)));
 
         final CompletableFuture<Void> response = eventsClient.retryWebhook("eventId", "webhookId");
@@ -296,7 +327,10 @@ class EventsClientImplTest {
     @Test
     void shouldRetryWebhooks() throws ExecutionException, InterruptedException {
 
-        when(apiClient.postAsync(eq(EVENTS + "/eventId/" + WEBHOOKS + "/retry"), any(ApiCredentials.class),
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+
+        when(apiClient.postAsync(eq(EVENTS + "/eventId/" + WEBHOOKS + "/retry"), eq(authorization),
                 eq(Void.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(mock(Void.class)));
 

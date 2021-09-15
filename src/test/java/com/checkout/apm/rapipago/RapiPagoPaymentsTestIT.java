@@ -27,9 +27,9 @@ class RapiPagoPaymentsTestIT extends SandboxTestFixture {
 
         final String paymentId = makeRapiPagoPayment();
 
-        blocking(getApi().rapiPagoClient().succeed(paymentId));
+        blocking(defaultApi.rapiPagoClient().succeed(paymentId));
 
-        final GetPaymentResponse response = blocking(getApi().paymentsClient().getAsync(paymentId));
+        final GetPaymentResponse response = blocking(defaultApi.paymentsClient().getAsync(paymentId));
 
         assertNotNull(response);
         assertEquals("Captured", response.getStatus());
@@ -50,9 +50,9 @@ class RapiPagoPaymentsTestIT extends SandboxTestFixture {
 
         final String paymentId = makeRapiPagoPayment();
 
-        blocking(getApi().rapiPagoClient().expire(paymentId));
+        blocking(defaultApi.rapiPagoClient().expire(paymentId));
 
-        final GetPaymentResponse response = blocking(getApi().paymentsClient().getAsync(paymentId));
+        final GetPaymentResponse response = blocking(defaultApi.paymentsClient().getAsync(paymentId));
 
         assertNotNull(response);
         assertEquals("Expired", response.getStatus());
@@ -76,9 +76,9 @@ class RapiPagoPaymentsTestIT extends SandboxTestFixture {
                 .payer(Payer.builder().email("bruce@wayne-enterprises.com").name("Bruce Wayne").build())
                 .build();
 
-        final PaymentRequest<RapiPagoSource> request = PaymentRequest.rapiPago(rapiPagoSource, com.checkout.common.beta.Currency.ARS, 100000L);
+        final PaymentRequest<RapiPagoSource> request = PaymentRequest.rapiPago(rapiPagoSource, com.checkout.common.four.Currency.ARS, 100000L);
 
-        final PaymentResponse response = blocking(getApi().paymentsClient().requestAsync(request));
+        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestAsync(request));
 
         assertNotNull(response);
 

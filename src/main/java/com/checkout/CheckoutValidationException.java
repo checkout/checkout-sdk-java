@@ -6,14 +6,15 @@ import com.checkout.common.ErrorResponse;
 import java.util.Collections;
 
 public class CheckoutValidationException extends CheckoutApiException {
-    private ErrorResponse error;
 
-    public CheckoutValidationException(ErrorResponse error, ApiResponseInfo apiResponseInfo) {
+    private final ErrorResponse error;
+
+    public CheckoutValidationException(final ErrorResponse error, final ApiResponseInfo apiResponseInfo) {
         super(apiResponseInfo, generateDetailsMessage(error));
         this.error = error;
     }
 
-    private static String generateDetailsMessage(ErrorResponse error) {
+    private static String generateDetailsMessage(final ErrorResponse error) {
         if (error.getErrorCodes() == null) {
             error.setErrorCodes(Collections.emptyList());
         }

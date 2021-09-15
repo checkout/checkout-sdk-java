@@ -1,8 +1,10 @@
 package com.checkout.apm.klarna;
 
 import com.checkout.ApiClient;
+import com.checkout.SdkAuthorization;
+import com.checkout.SdkAuthorizationType;
 import com.checkout.CheckoutConfiguration;
-import com.checkout.PublicKeyCredentials;
+import com.checkout.SdkCredentials;
 import com.checkout.payments.VoidRequest;
 import com.checkout.payments.VoidResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +30,13 @@ class KlarnaClientImplTest {
     private ApiClient apiClient;
 
     @Mock
-    private CheckoutConfiguration checkoutConfiguration;
+    private CheckoutConfiguration configuration;
+
+    @Mock
+    private SdkCredentials sdkCredentials;
+
+    @Mock
+    private SdkAuthorization authorization;
 
     @Mock
     private CreditSessionResponse creditSessionResponse;
@@ -43,13 +51,15 @@ class KlarnaClientImplTest {
 
     @BeforeEach
     void setUp() {
-        this.klarnaClient = new KlarnaClientImpl(apiClient, checkoutConfiguration);
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.PUBLIC_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+        this.klarnaClient = new KlarnaClientImpl(apiClient, configuration);
     }
 
     @Test
     void shouldCreateSession() throws ExecutionException, InterruptedException {
 
-        when(apiClient.postAsync(eq("klarna/credit-sessions"), any(PublicKeyCredentials.class),
+        when(apiClient.postAsync(eq("klarna/credit-sessions"), eq(authorization),
                 eq(CreditSessionResponse.class), any(CreditSessionRequest.class), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(creditSessionResponse));
 
@@ -63,7 +73,7 @@ class KlarnaClientImplTest {
     @Test
     void shouldGetCreditSession() throws ExecutionException, InterruptedException {
 
-        when(apiClient.getAsync(eq("klarna/credit-sessions/session_id"), any(PublicKeyCredentials.class), eq(CreditSession.class)))
+        when(apiClient.getAsync(eq("klarna/credit-sessions/session_id"), eq(authorization), eq(CreditSession.class)))
                 .thenReturn(CompletableFuture.completedFuture(creditSession));
 
         final CompletableFuture<CreditSession> future = klarnaClient.getCreditSession("session_id");
@@ -76,7 +86,7 @@ class KlarnaClientImplTest {
     @Test
     void shouldCapturePayment() throws ExecutionException, InterruptedException {
 
-        when(apiClient.postAsync(eq("klarna/orders/payment_id/captures"), any(PublicKeyCredentials.class),
+        when(apiClient.postAsync(eq("klarna/orders/payment_id/captures"), eq(authorization),
                 eq(VoidResponse.class), any(OrderCaptureRequest.class), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(voidResponse));
 
@@ -90,7 +100,7 @@ class KlarnaClientImplTest {
     @Test
     void shouldVoidCapturePayment() throws ExecutionException, InterruptedException {
 
-        when(apiClient.postAsync(eq("klarna/orders/payment_id/voids"), any(PublicKeyCredentials.class),
+        when(apiClient.postAsync(eq("klarna/orders/payment_id/voids"), eq(authorization),
                 eq(VoidResponse.class), any(VoidRequest.class), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(voidResponse));
 

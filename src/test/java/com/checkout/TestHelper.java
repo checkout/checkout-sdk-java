@@ -17,8 +17,8 @@ import com.checkout.payments.SenderInformation;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
 import com.checkout.payments.TokenSource;
-import com.checkout.payments.beta.request.PaymentRecipient;
-import com.checkout.payments.beta.request.ProcessingSettings;
+import com.checkout.payments.four.request.PaymentRecipient;
+import com.checkout.payments.four.request.ProcessingSettings;
 import com.checkout.payments.hosted.HostedPaymentRequest;
 import com.checkout.payments.links.PaymentLinkRequest;
 import com.checkout.tokens.CardTokenRequest;
@@ -35,22 +35,17 @@ public final class TestHelper {
     private TestHelper() {
     }
 
+    // Default
     public static final String VALID_DEFAULT_SK = "sk_test_fde517a8-3f01-41ef-b4bd-4282384b0a64";
     public static final String VALID_DEFAULT_PK = "pk_test_fe70ff27-7c32-4ce1-ae90-5691a188ee7b";
     public static final String INVALID_DEFAULT_SK = "sk_test_asdsad3q4dq";
     public static final String INVALID_DEFAULT_PK = "pk_test_q414dasds";
+
+    // FOUR
     public static final String VALID_FOUR_SK = "sk_sbox_m73dzbpy7cf3gfd46xr4yj5xo4e";
     public static final String VALID_FOUR_PK = "pk_sbox_pkhpdtvmkgf7hdnpwnbhw7r2uic";
     public static final String INVALID_FOUR_SK = "sk_sbox_m73dzbpy7c-f3gfd46xr4yj5xo4e";
     public static final String INVALID_FOUR_PK = "pk_sbox_pkh";
-
-    public static CheckoutConfiguration mockDefaultConfiguration() {
-        return new CheckoutConfiguration(VALID_DEFAULT_SK, true, VALID_DEFAULT_PK);
-    }
-
-    public static CheckoutConfiguration mockFourConfiguration() {
-        return new CheckoutConfiguration(VALID_FOUR_PK, VALID_FOUR_SK, Environment.SANDBOX);
-    }
 
     public static PaymentRequest<CardSource> createCardPaymentRequest() {
         return createCardPaymentRequest(100L);
@@ -167,7 +162,7 @@ public final class TestHelper {
 
     public static Address createAddress() {
         return Address.builder()
-                .addressLine1("Checkout.com")
+                .addressLine1("CheckoutSdk.com")
                 .addressLine2("90 Tottenham Court Road")
                 .city("London")
                 .state("London")

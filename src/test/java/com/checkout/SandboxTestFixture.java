@@ -1,8 +1,9 @@
 package com.checkout;
 
-import com.checkout.beta.Checkout;
-import com.checkout.beta.CheckoutApi;
+import com.checkout.four.CheckoutApi;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -11,35 +12,46 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class SandboxTestFixture {
 
+    protected static final String OAUTH_AUTHORIZE_URL = "https://access.sandbox.checkout.com/connect/token";
+
     protected static final String SELF = "self";
 
-    private com.checkout.CheckoutApi api;
-    private CheckoutApi apiV2;
+    protected com.checkout.CheckoutApi defaultApi;
+    protected CheckoutApi fourApi;
 
     public SandboxTestFixture(final PlatformType platformType) {
-        final CheckoutConfiguration configuration = loadConfiguration(platformType);
         switch (platformType) {
             case DEFAULT:
-                this.api = new CheckoutApiImpl(configuration);
-                break;
-            case FOUR:
-                this.apiV2 = Checkout.staticKeys()
-                        .publicKey(configuration.getPublicKey())
-                        .secretKey(configuration.getSecretKey())
+                this.defaultApi = CheckoutSdk.defaultSdk()
+                        .staticKeys()
+                        .publicKey(requireNonNull(System.getenv("CHECKOUT_PUBLIC_KEY")))
+                        .secretKey(requireNonNull(System.getenv("CHECKOUT_SECRET_KEY")))
                         .environment(Environment.SANDBOX)
                         .build();
                 break;
-        }
-    }
-
-    private CheckoutConfiguration loadConfiguration(final PlatformType platformType) {
-        switch (platformType) {
-            case DEFAULT:
-                return new CheckoutConfiguration(requireNonNull(System.getenv("CHECKOUT_SECRET_KEY")), true, requireNonNull(System.getenv("CHECKOUT_PUBLIC_KEY")));
             case FOUR:
-                return new CheckoutConfiguration(requireNonNull(System.getenv("CHECKOUT_FOUR_PUBLIC_KEY")), requireNonNull(System.getenv("CHECKOUT_FOUR_SECRET_KEY")), Environment.SANDBOX);
-            default:
-                throw new CheckoutArgumentException("unsupported configuration");
+                this.fourApi = CheckoutSdk.fourSdk()
+                        .staticKeys()
+                        .publicKey(requireNonNull(System.getenv("CHECKOUT_FOUR_PUBLIC_KEY")))
+                        .secretKey(requireNonNull(System.getenv("CHECKOUT_FOUR_SECRET_KEY")))
+                        .environment(Environment.SANDBOX)
+                        .build();
+                break;
+            case FOUR_OAUTH:
+                try {
+                    this.fourApi = CheckoutSdk.fourSdk()
+                            .oAuth()
+                            .clientCredentials(
+                                    new URI(OAUTH_AUTHORIZE_URL),
+                                    requireNonNull(System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_ID")),
+                                    requireNonNull(System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_SECRET")))
+                            .scopes(FourOAuthScope.GATEWAY)
+                            .environment(Environment.SANDBOX)
+                            .build();
+                } catch (final URISyntaxException ignore) {
+                    fail();
+                }
+                break;
         }
     }
 
@@ -68,14 +80,6 @@ public abstract class SandboxTestFixture {
         } catch (final InterruptedException ignore) {
             fail();
         }
-    }
-
-    public com.checkout.CheckoutApi getApi() {
-        return api;
-    }
-
-    public CheckoutApi getApiV2() {
-        return apiV2;
     }
 
 }

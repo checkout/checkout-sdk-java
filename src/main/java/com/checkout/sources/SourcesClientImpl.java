@@ -1,9 +1,9 @@
 package com.checkout.sources;
 
+import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
-import com.checkout.SecretKeyCredentials;
-import com.checkout.AbstractClient;
+import com.checkout.SdkAuthorizationType;
 import com.checkout.common.Resource;
 
 import java.util.HashMap;
@@ -19,7 +19,7 @@ public class SourcesClientImpl extends AbstractClient implements SourcesClient {
     }
 
     public SourcesClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, SecretKeyCredentials.fromConfiguration(configuration));
+        super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class SourcesClientImpl extends AbstractClient implements SourcesClient {
 
     private CompletableFuture<SourceResponse> requestSourceAsync(final SourceRequest sourceRequest, final Map<Integer, Class<? extends Resource>> resultTypeMappings) {
         final String path = "sources";
-        return apiClient.postAsync(path, apiCredentials, resultTypeMappings, sourceRequest, null)
+        return apiClient.postAsync(path, sdkAuthorization(), resultTypeMappings, sourceRequest, null)
                 .thenApply(it -> {
                     if (it instanceof SourceProcessed) {
                         return SourceResponse.from((SourceProcessed) it);

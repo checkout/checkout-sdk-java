@@ -1,6 +1,6 @@
 package com.checkout.payments;
 
-import com.checkout.common.beta.Currency;
+import com.checkout.common.four.Currency;
 import com.checkout.payments.apm.BalotoSource;
 import com.checkout.payments.apm.BoletoSource;
 import com.checkout.payments.apm.FawrySource;

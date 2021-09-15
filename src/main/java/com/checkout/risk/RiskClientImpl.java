@@ -3,7 +3,7 @@ package com.checkout.risk;
 import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
-import com.checkout.SecretKeyCredentials;
+import com.checkout.SdkAuthorizationType;
 import com.checkout.risk.preauthentication.PreAuthenticationAssessmentRequest;
 import com.checkout.risk.preauthentication.PreAuthenticationAssessmentResponse;
 import com.checkout.risk.precapture.PreCaptureAssessmentRequest;
@@ -17,17 +17,17 @@ public class RiskClientImpl extends AbstractClient implements RiskClient {
     private static final String PRE_CAPTURE_PATH = "risk/assessments/pre-authentication";
 
     public RiskClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, SecretKeyCredentials.fromConfiguration(configuration));
+        super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY);
     }
 
     @Override
     public CompletableFuture<PreAuthenticationAssessmentResponse> requestPreAuthenticationRiskScan(final PreAuthenticationAssessmentRequest preAuthenticationAssessmentRequest) {
-        return apiClient.postAsync(PRE_AUTHENTICATION_PATH, apiCredentials, PreAuthenticationAssessmentResponse.class, preAuthenticationAssessmentRequest, null);
+        return apiClient.postAsync(PRE_AUTHENTICATION_PATH, sdkAuthorization(), PreAuthenticationAssessmentResponse.class, preAuthenticationAssessmentRequest, null);
     }
 
     @Override
     public CompletableFuture<PreCaptureAssessmentResponse> requestPreCaptureRiskScan(final PreCaptureAssessmentRequest preCaptureAssessmentRequest) {
-        return apiClient.postAsync(PRE_CAPTURE_PATH, apiCredentials, PreCaptureAssessmentResponse.class, preCaptureAssessmentRequest, null);
+        return apiClient.postAsync(PRE_CAPTURE_PATH, sdkAuthorization(), PreCaptureAssessmentResponse.class, preCaptureAssessmentRequest, null);
     }
 
 }

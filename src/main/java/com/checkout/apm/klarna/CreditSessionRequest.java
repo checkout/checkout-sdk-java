@@ -1,7 +1,7 @@
 package com.checkout.apm.klarna;
 
 import com.checkout.common.CountryCode;
-import com.checkout.common.beta.Currency;
+import com.checkout.common.four.Currency;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;

@@ -9,28 +9,28 @@ import java.util.concurrent.CompletableFuture;
 
 public interface ApiClient {
 
-    <T> CompletableFuture<T> getAsync(String path, ApiCredentials credentials, Class<T> responseType);
+    <T> CompletableFuture<T> getAsync(String path, SdkAuthorization authorization, Class<T> responseType);
 
-    <T> CompletableFuture<T> getAsync(String path, ApiCredentials credentials, Type responseType);
+    <T> CompletableFuture<T> getAsync(String path, SdkAuthorization authorization, Type responseType);
 
-    <T> CompletableFuture<T> putAsync(String path, ApiCredentials credentials, Class<T> responseType, Object request);
+    <T> CompletableFuture<T> putAsync(String path, SdkAuthorization authorization, Class<T> responseType, Object request);
 
-    CompletableFuture<Void> deleteAsync(String path, ApiCredentials credentials);
+    CompletableFuture<Void> deleteAsync(String path, SdkAuthorization authorization);
 
-    <T> CompletableFuture<T> postAsync(String path, ApiCredentials credentials, Class<T> responseType, Object request, String idempotencyKey);
+    <T> CompletableFuture<T> postAsync(String path, SdkAuthorization authorization, Class<T> responseType, Object request, String idempotencyKey);
 
-    <T> CompletableFuture<T> postAsync(String path, ApiCredentials credentials, Type responseType, Object request, String idempotencyKey);
+    <T> CompletableFuture<T> postAsync(String path, SdkAuthorization authorization, Type responseType, Object request, String idempotencyKey);
 
-    <T> CompletableFuture<T> patchAsync(String path, ApiCredentials credentials, Class<T> responseType, Object request, String idempotencyKey);
+    <T> CompletableFuture<T> patchAsync(String path, SdkAuthorization authorization, Class<T> responseType, Object request, String idempotencyKey);
 
-    <T> CompletableFuture<T> patchAsync(String path, ApiCredentials credentials, Type type, Object request, String idempotencyKey);
+    <T> CompletableFuture<T> patchAsync(String path, SdkAuthorization authorization, Type type, Object request, String idempotencyKey);
 
-    CompletableFuture<? extends Resource> postAsync(String path, ApiCredentials credentials, Map<Integer, Class<? extends Resource>> resultTypeMappings, Object request, String idempotencyKey);
+    CompletableFuture<? extends Resource> postAsync(String path, SdkAuthorization authorization, Map<Integer, Class<? extends Resource>> resultTypeMappings, Object request, String idempotencyKey);
 
-    <T> CompletableFuture<T> queryAsync(String path, ApiCredentials credentials, Object filter, Class<T> responseType);
+    <T> CompletableFuture<T> queryAsync(String path, SdkAuthorization authorization, Object filter, Class<T> responseType);
 
-    <T> CompletableFuture<T> submitFileAsync(String path, ApiCredentials credentials, FileRequest request, Class<T> responseType);
+    <T> CompletableFuture<T> submitFileAsync(String path, SdkAuthorization authorization, FileRequest request, Class<T> responseType);
 
-    CompletableFuture<String> retrieveFileAsync(String path, ApiCredentials credentials, String targetFile);
+    CompletableFuture<String> retrieveFileAsync(String path, SdkAuthorization authorization, String targetFile);
 
 }

@@ -22,7 +22,7 @@ class HostedPaymentsTestIT extends SandboxTestFixture {
     @Test
     void shouldCreateHostedPayments() throws ExecutionException, InterruptedException {
         final HostedPaymentRequest request = TestHelper.createHostedPaymentRequest(REFERENCE);
-        final HostedPaymentResponse response = getApi().hostedPaymentsClient().createAsync(request).get();
+        final HostedPaymentResponse response = defaultApi.hostedPaymentsClient().createAsync(request).get();
         assertNotNull(response);
         assertEquals(REFERENCE, response.getReference());
         assertNotNull(response.getLinks());
