@@ -1,7 +1,6 @@
 ---
 id: tokens
 title: Tokens
-sidebar_position: 6
 ---
 
 export const Highlight = ({children, color}) => (

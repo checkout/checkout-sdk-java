@@ -1,7 +1,6 @@
 ---
 id: sources
 title: Sources
-sidebar_position: 5
 ---
 
 export const Highlight = ({children, color}) => (
