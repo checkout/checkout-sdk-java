@@ -1,8 +1,10 @@
 package com.checkout.apm.ideal;
 
 import com.checkout.ApiClient;
+import com.checkout.SdkAuthorization;
+import com.checkout.SdkAuthorizationType;
 import com.checkout.CheckoutConfiguration;
-import com.checkout.SecretKeyCredentials;
+import com.checkout.SdkCredentials;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +16,6 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -25,7 +26,13 @@ class IdealClientImplTest {
     private ApiClient apiClient;
 
     @Mock
-    private CheckoutConfiguration checkoutConfiguration;
+    private CheckoutConfiguration configuration;
+
+    @Mock
+    private SdkCredentials sdkCredentials;
+
+    @Mock
+    private SdkAuthorization authorization;
 
     @Mock
     private IssuerResponse issuerResponse;
@@ -34,13 +41,15 @@ class IdealClientImplTest {
 
     @BeforeEach
     void setUp() {
-        this.idealClient = new IdealClientImpl(apiClient, checkoutConfiguration);
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+        this.idealClient = new IdealClientImpl(apiClient, configuration);
     }
 
     @Test
     void shouldGetIssuers() throws ExecutionException, InterruptedException {
 
-        when(apiClient.getAsync(eq("/ideal-external/issuers"), any(SecretKeyCredentials.class), eq(IssuerResponse.class)))
+        when(apiClient.getAsync(eq("/ideal-external/issuers"), eq(authorization), eq(IssuerResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(issuerResponse));
 
         final CompletableFuture<IssuerResponse> future = idealClient.getIssuers();

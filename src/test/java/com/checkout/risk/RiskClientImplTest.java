@@ -1,8 +1,10 @@
 package com.checkout.risk;
 
 import com.checkout.ApiClient;
-import com.checkout.ApiCredentials;
+import com.checkout.SdkAuthorization;
+import com.checkout.SdkAuthorizationType;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.SdkCredentials;
 import com.checkout.risk.preauthentication.PreAuthenticationAssessmentRequest;
 import com.checkout.risk.preauthentication.PreAuthenticationAssessmentResponse;
 import com.checkout.risk.precapture.PreCaptureAssessmentRequest;
@@ -16,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import static com.checkout.TestHelper.mockDefaultConfiguration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -34,12 +35,22 @@ public class RiskClientImplTest {
     @Mock
     private ApiClient apiClient;
 
+    @Mock
+    private CheckoutConfiguration configuration;
+
+    @Mock
+    private SdkCredentials sdkCredentials;
+
+    @Mock
+    private SdkAuthorization authorization;
+
     private RiskClient riskClient;
 
     @BeforeEach
     public void setup() {
-        final CheckoutConfiguration checkoutConfiguration = mockDefaultConfiguration();
-        this.riskClient = new RiskClientImpl(apiClient, checkoutConfiguration);
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+        this.riskClient = new RiskClientImpl(apiClient, configuration);
     }
 
     @Test
@@ -48,7 +59,7 @@ public class RiskClientImplTest {
         final PreAuthenticationAssessmentRequest request = mock(PreAuthenticationAssessmentRequest.class);
         final PreAuthenticationAssessmentResponse response = mock(PreAuthenticationAssessmentResponse.class);
 
-        when(apiClient.postAsync(eq(PRE_AUTHENTICATION_PATH), any(ApiCredentials.class), eq(PreAuthenticationAssessmentResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync(eq(PRE_AUTHENTICATION_PATH), any(SdkAuthorization.class), eq(PreAuthenticationAssessmentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<PreAuthenticationAssessmentResponse> preAuthenticationAssessmentResponse = riskClient.requestPreAuthenticationRiskScan(request);
@@ -64,7 +75,7 @@ public class RiskClientImplTest {
         final PreCaptureAssessmentRequest request = mock(PreCaptureAssessmentRequest.class);
         final PreCaptureAssessmentResponse response = mock(PreCaptureAssessmentResponse.class);
 
-        when(apiClient.postAsync(eq(PRE_CAPTURE_PATH), any(ApiCredentials.class), eq(PreCaptureAssessmentResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync(eq(PRE_CAPTURE_PATH), any(SdkAuthorization.class), eq(PreCaptureAssessmentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<PreCaptureAssessmentResponse> responseCompletableFuture = riskClient.requestPreCaptureRiskScan(request);

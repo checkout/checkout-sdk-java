@@ -8,10 +8,10 @@ import java.util.concurrent.CompletableFuture;
 
 public interface Transport {
 
-    CompletableFuture<Response> invoke(ClientOperation clientOperation, String path, ApiCredentials apiCredentials, String jsonRequest, String idempotencyKey);
+    CompletableFuture<Response> invoke(ClientOperation clientOperation, String path, SdkAuthorization authorization, String jsonRequest, String idempotencyKey);
 
-    CompletableFuture<Response> invokeQuery(String path, ApiCredentials apiCredentials, Map<String, String> queryParams);
+    CompletableFuture<Response> invokeQuery(String path, SdkAuthorization authorization, Map<String, String> queryParams);
 
-    CompletableFuture<Response> submitFile(String path, ApiCredentials apiCredentials, FileRequest fileRequest);
+    CompletableFuture<Response> submitFile(String path, SdkAuthorization authorization, FileRequest fileRequest);
 
 }

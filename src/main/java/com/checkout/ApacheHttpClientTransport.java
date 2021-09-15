@@ -74,7 +74,7 @@ public class ApacheHttpClientTransport implements Transport {
     }
 
     @Override
-    public CompletableFuture<Response> invoke(final ClientOperation clientOperation, final String path, final ApiCredentials apiCredentials, final String requestBody, final String idempotencyKey) {
+    public CompletableFuture<Response> invoke(final ClientOperation clientOperation, final String path, final SdkAuthorization authorization, final String requestBody, final String idempotencyKey) {
         return CompletableFuture.supplyAsync(() -> {
             final HttpUriRequest request;
             String accept = ACCEPT_JSON;
@@ -105,12 +105,12 @@ public class ApacheHttpClientTransport implements Transport {
                 request.setHeader(CKO_IDEMPOTENCY_KEY, idempotencyKey);
             }
             log.info("{}: {}", clientOperation, request.getURI());
-            return performCall(apiCredentials, requestBody, request, accept);
+            return performCall(authorization, requestBody, request, accept);
         });
     }
 
     @Override
-    public CompletableFuture<Response> invokeQuery(final String path, final ApiCredentials apiCredentials,
+    public CompletableFuture<Response> invokeQuery(final String path, final SdkAuthorization authorization,
                                                    final Map<String, String> queryParams) {
         return CompletableFuture.supplyAsync(() -> {
             final HttpUriRequest request;
@@ -120,7 +120,7 @@ public class ApacheHttpClientTransport implements Transport {
                         .collect(Collectors.toList());
                 request = new HttpGet(new URIBuilder(getRequestUrl(path)).addParameters(params).build());
                 log.info("GET: {}", request.getURI());
-                return performCall(apiCredentials, null, request, ACCEPT_JSON);
+                return performCall(authorization, null, request, ACCEPT_JSON);
             } catch (final URISyntaxException e) {
                 throw new CheckoutException(e);
             }
@@ -128,8 +128,7 @@ public class ApacheHttpClientTransport implements Transport {
     }
 
     @Override
-    public CompletableFuture<Response> submitFile(final String path, final ApiCredentials apiCredentials,
-                                                  final FileRequest fileRequest) {
+    public CompletableFuture<Response> submitFile(final String path, final SdkAuthorization authorization, final FileRequest fileRequest) {
         return CompletableFuture.supplyAsync(() -> {
             final HttpPost post = new HttpPost(getRequestUrl(path));
             final HttpEntity build = MultipartEntityBuilder.create()
@@ -137,19 +136,19 @@ public class ApacheHttpClientTransport implements Transport {
                     .addBinaryBody(FILE, fileRequest.getFile(), fileRequest.getContentType(), fileRequest.getFile().getName())
                     .addTextBody(PURPOSE, fileRequest.getPurpose().getPurpose(), ContentType.DEFAULT_BINARY).build();
             post.setEntity(build);
-            return performCall(apiCredentials, null, post, ACCEPT_JSON);
+            return performCall(authorization, null, post, ACCEPT_JSON);
         });
     }
 
-    private Response performCall(final ApiCredentials apiCredentials, final String requestBody, final HttpUriRequest request, final String accept) {
+    private Response performCall(final SdkAuthorization authorization, final String requestBody, final HttpUriRequest request, final String accept) {
         request.setHeader(USER_AGENT, "checkout-sdk-java/" + CheckoutUtils.getVersionFromManifest());
         request.setHeader(ACCEPT, accept);
-        request.setHeader(AUTHORIZATION, apiCredentials.getAuthorizationHeader());
+        request.setHeader(AUTHORIZATION, authorization.getAuthorizationHeader());
         log.info("Request: " + Arrays.toString(sanitiseHeaders(request.getAllHeaders())));
         if (requestBody != null && request instanceof HttpEntityEnclosingRequest) {
             ((HttpEntityEnclosingRequestBase) request).setEntity(new StringEntity(requestBody, ContentType.APPLICATION_JSON));
         }
-        try (CloseableHttpResponse response = httpClient.execute(request)) {
+        try (final CloseableHttpResponse response = httpClient.execute(request)) {
             log.info("Response: " + response.getStatusLine().getStatusCode() + " " + Arrays.toString(response.getAllHeaders()));
             final int statusCode = response.getStatusLine().getStatusCode();
             final String requestId = Optional.ofNullable(response.getFirstHeader(CKO_REQUEST_ID)).map(Header::getValue).orElse(NO_REQUEST_ID_SUPPLIED);
@@ -169,7 +168,7 @@ public class ApacheHttpClientTransport implements Transport {
                         .build();
             }
             return Response.builder().statusCode(statusCode).requestId(requestId).build();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             log.error("Exception occurred during the execution of the client...", e);
         }
         return Response.builder().statusCode(HttpStatus.SC_BAD_REQUEST).requestId(NO_REQUEST_ID_SUPPLIED).build();

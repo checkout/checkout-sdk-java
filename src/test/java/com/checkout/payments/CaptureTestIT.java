@@ -31,7 +31,7 @@ class CaptureTestIT extends SandboxTestFixture {
         captureRequest.setReference("Full Capture");
         captureRequest.setMetadata(metadata);
 
-        final CaptureResponse captureResponse = getApi().paymentsClient().captureAsync(payment.getId(), captureRequest).get();
+        final CaptureResponse captureResponse = defaultApi.paymentsClient().captureAsync(payment.getId(), captureRequest).get();
         assertNotNull(captureResponse);
         assertFalse(StringUtils.isEmpty(captureResponse.getActionId()));
         assertEquals(captureRequest.getReference(), captureResponse.getReference());
@@ -49,7 +49,7 @@ class CaptureTestIT extends SandboxTestFixture {
         captureRequest.setReference("Partial Capture");
         captureRequest.setMetadata(metadata);
 
-        final CaptureResponse captureResponse = getApi().paymentsClient().captureAsync(payment.getId(), captureRequest).get();
+        final CaptureResponse captureResponse = defaultApi.paymentsClient().captureAsync(payment.getId(), captureRequest).get();
         assertNotNull(captureResponse);
         assertFalse(StringUtils.isEmpty(captureResponse.getActionId()));
         assertEquals(captureRequest.getReference(), captureResponse.getReference());
@@ -59,7 +59,7 @@ class CaptureTestIT extends SandboxTestFixture {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest(1000L);
         paymentRequest.setCapture(false);
 
-        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
         assertTrue(paymentResponse.getPayment().canCapture());
 
         return paymentResponse.getPayment();

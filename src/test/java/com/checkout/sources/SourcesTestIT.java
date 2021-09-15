@@ -21,7 +21,7 @@ class SourcesTestIT extends SandboxTestFixture {
     @Test
     void can_request_sepa_source() throws Exception {
         final SourceRequest sourceRequest = createSepaSourceRequest();
-        final SourceResponse sourceResponse = getApi().sourcesClient().requestAsync(sourceRequest).get();
+        final SourceResponse sourceResponse = defaultApi.sourcesClient().requestAsync(sourceRequest).get();
 
         assertNotNull(sourceResponse);
         final SourceProcessed source = sourceResponse.getSource();
@@ -34,7 +34,7 @@ class SourcesTestIT extends SandboxTestFixture {
 
     private SourceRequest createSepaSourceRequest() {
         final Address billingAddress = new Address();
-        billingAddress.setAddressLine1("Checkout.com");
+        billingAddress.setAddressLine1("CheckoutSdk.com");
         billingAddress.setAddressLine2("90 Tottenham Court Road");
         billingAddress.setCity("London");
         billingAddress.setState("London");

@@ -1,7 +1,7 @@
 package com.checkout.risk.precapture;
 
 import com.checkout.common.CustomerRequest;
-import com.checkout.common.beta.Currency;
+import com.checkout.common.four.Currency;
 import com.checkout.risk.Device;
 import com.checkout.risk.RiskPayment;
 import com.checkout.risk.RiskShippingDetails;

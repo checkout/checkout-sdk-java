@@ -1,10 +1,10 @@
 package com.checkout.apm.fawry;
 
 import com.checkout.ApiClient;
+import com.checkout.SdkAuthorization;
+import com.checkout.SdkAuthorizationType;
 import com.checkout.CheckoutConfiguration;
-import com.checkout.SecretKeyCredentials;
-import com.checkout.apm.fawry.FawryClient;
-import com.checkout.apm.fawry.FawryClientImpl;
+import com.checkout.SdkCredentials;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +16,6 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
@@ -28,7 +27,13 @@ class FawryClientImplTest {
     private ApiClient apiClient;
 
     @Mock
-    private CheckoutConfiguration checkoutConfiguration;
+    private CheckoutConfiguration configuration;
+
+    @Mock
+    private SdkCredentials sdkCredentials;
+
+    @Mock
+    private SdkAuthorization authorization;
 
     @Mock
     private Void voidResponse;
@@ -37,13 +42,15 @@ class FawryClientImplTest {
 
     @BeforeEach
     void setUp() {
-        this.fawryClient = new FawryClientImpl(apiClient, checkoutConfiguration);
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+        this.fawryClient = new FawryClientImpl(apiClient, configuration);
     }
 
     @Test
     void shouldApprovePayment() throws ExecutionException, InterruptedException {
 
-        when(apiClient.putAsync(eq("/fawry/payments/reference/approval"), any(SecretKeyCredentials.class), eq(Void.class), isNull()))
+        when(apiClient.putAsync(eq("/fawry/payments/reference/approval"), eq(authorization), eq(Void.class), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(voidResponse));
 
         final CompletableFuture<Void> future = fawryClient.approve("reference");
@@ -56,7 +63,7 @@ class FawryClientImplTest {
     @Test
     void shouldCancelPayment() throws ExecutionException, InterruptedException {
 
-        when(apiClient.putAsync(eq("/fawry/payments/reference/cancellation"), any(SecretKeyCredentials.class), eq(Void.class), isNull()))
+        when(apiClient.putAsync(eq("/fawry/payments/reference/cancellation"), eq(authorization), eq(Void.class), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(voidResponse));
 
         final CompletableFuture<Void> future = fawryClient.cancel("reference");

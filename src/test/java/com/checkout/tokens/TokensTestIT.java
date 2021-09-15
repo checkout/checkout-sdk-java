@@ -25,7 +25,7 @@ class TokensTestIT extends SandboxTestFixture {
     void shouldRequestCardToken() {
 
         final Address billingAddress = Address.builder()
-                .addressLine1("Checkout.com")
+                .addressLine1("CheckoutSdk.com")
                 .addressLine2("90 Tottenham Court Road")
                 .city("London")
                 .state("London")
@@ -44,7 +44,7 @@ class TokensTestIT extends SandboxTestFixture {
                 .phone(phone)
                 .build();
 
-        final CardTokenResponse cardTokenResponse = blocking(getApi().tokensClient().requestAsync(request));
+        final CardTokenResponse cardTokenResponse = blocking(defaultApi.tokensClient().requestAsync(request));
 
         assertNotNull(cardTokenResponse);
         assertNotNull(cardTokenResponse.getToken());

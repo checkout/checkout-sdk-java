@@ -25,7 +25,7 @@ import com.checkout.tokens.TokensClientImpl;
 import com.checkout.webhooks.WebhooksClient;
 import com.checkout.webhooks.WebhooksClientImpl;
 
-public final class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutApi {
+public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutApi, CheckoutApiClient {
 
     private final PaymentsClient paymentsClient;
     private final SourcesClient sourcesClient;
@@ -56,30 +56,21 @@ public final class CheckoutApiImpl extends AbstractCheckoutApmApi implements Che
         this.riskClient = new RiskClientImpl(apiClient, configuration);
     }
 
-    public CheckoutApiImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, configuration);
-        this.paymentsClient = new PaymentsClientImpl(apiClient, configuration);
-        this.sourcesClient = new SourcesClientImpl(apiClient, configuration);
-        this.tokensClient = new TokensClientImpl(apiClient, configuration);
-        this.webhooksClient = new WebhooksClientImpl(apiClient, configuration);
-        this.eventsClient = new EventsClientImpl(apiClient, configuration);
-        this.instrumentsClient = new InstrumentsClientImpl(apiClient, configuration);
-        this.paymentLinksClient = new PaymentLinksClientImpl(apiClient, configuration);
-        this.hostedPaymentsClient = new HostedPaymentsClientImpl(apiClient, configuration);
-        this.customersClient = new CustomersClientImpl(apiClient, configuration);
-        this.disputesClient = new DisputesClientImpl(apiClient, configuration);
-        this.reconciliationClient = new ReconciliationClientImpl(apiClient, configuration);
-        this.riskClient = new RiskClientImpl(apiClient, configuration);
-    }
-
+    /**
+     * @deprecated Please use {@link CheckoutSdk} as the entrypoint to create new SDK instances.
+     */
+    @Deprecated
     public static CheckoutApi create(final String secretKey, final boolean useSandbox, final String publicKey) {
         final CheckoutConfiguration configuration = new CheckoutConfiguration(secretKey, useSandbox, publicKey);
         return new CheckoutApiImpl(configuration);
     }
 
+    /**
+     * @deprecated Please use {@link CheckoutSdk} as the entrypoint to create new SDK instances.
+     */
+    @Deprecated
     public static CheckoutApi create(final String secretKey, final String uri, final String publicKey) {
         final CheckoutConfiguration configuration = new CheckoutConfiguration(secretKey, uri);
-        configuration.setPublicKey(publicKey);
         return new CheckoutApiImpl(configuration);
     }
 

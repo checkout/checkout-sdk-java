@@ -8,12 +8,12 @@ import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.CustomerRequest;
 import com.checkout.common.Phone;
-import com.checkout.common.beta.AccountHolder;
-import com.checkout.common.beta.Currency;
-import com.checkout.instruments.beta.create.CreateCustomerInstrumentRequest;
-import com.checkout.instruments.beta.create.CreateInstrumentResponse;
-import com.checkout.instruments.beta.create.CreateInstrumentTokenRequest;
-import com.checkout.payments.beta.CardSourceHelper;
+import com.checkout.common.four.AccountHolder;
+import com.checkout.common.four.Currency;
+import com.checkout.instruments.four.create.CreateCustomerInstrumentRequest;
+import com.checkout.instruments.four.create.CreateInstrumentResponse;
+import com.checkout.instruments.four.create.CreateInstrumentTokenRequest;
+import com.checkout.payments.four.CardSourceHelper;
 import com.checkout.risk.Device;
 import com.checkout.risk.Location;
 import com.checkout.risk.RiskPayment;
@@ -28,8 +28,8 @@ import com.checkout.risk.source.CardSourcePrism;
 import com.checkout.risk.source.CustomerSourcePrism;
 import com.checkout.risk.source.IdSourcePrism;
 import com.checkout.risk.source.RiskPaymentRequestSource;
-import com.checkout.tokens.beta.request.CardTokenRequest;
-import com.checkout.tokens.beta.response.CardTokenResponse;
+import com.checkout.tokens.four.request.CardTokenRequest;
+import com.checkout.tokens.four.response.CardTokenResponse;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -74,7 +74,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
     @Test
     void shouldPreAuthenticate_customer() {
 
-        final com.checkout.customers.beta.CustomerRequest customerRequest = com.checkout.customers.beta.CustomerRequest.builder()
+        final com.checkout.customers.four.CustomerRequest customerRequest = com.checkout.customers.four.CustomerRequest.builder()
                 .email(generateRandomEmail())
                 .name("Testing")
                 .phone(Phone.builder()
@@ -83,7 +83,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final String customerId = blocking(getApiV2().customersClient().create(customerRequest)).getId();
+        final String customerId = blocking(fourApi.customersClient().create(customerRequest)).getId();
 
         final CustomerSourcePrism customerSourcePrism = CustomerSourcePrism.builder()
                 .id(customerId).build();
@@ -97,7 +97,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
     @Test
     void shouldPreAuthenticate_id() {
 
-        final com.checkout.customers.beta.CustomerRequest customerRequest = com.checkout.customers.beta.CustomerRequest.builder()
+        final com.checkout.customers.four.CustomerRequest customerRequest = com.checkout.customers.four.CustomerRequest.builder()
                 .email(generateRandomEmail())
                 .name("Testing")
                 .phone(Phone.builder()
@@ -106,7 +106,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final String customerId = blocking(getApiV2().customersClient().create(customerRequest)).getId();
+        final String customerId = blocking(fourApi.customersClient().create(customerRequest)).getId();
 
         final CardTokenRequest cardTokenRequest = CardTokenRequest.builder()
                 .number(CardSourceHelper.Visa.NUMBER)
@@ -114,7 +114,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
                 .build();
 
-        final CardTokenResponse cardTokenResponse = blocking(getApiV2().tokensClient().requestAsync(cardTokenRequest));
+        final CardTokenResponse cardTokenResponse = blocking(fourApi.tokensClient().requestAsync(cardTokenRequest));
 
         final CreateInstrumentTokenRequest createInstrumentTokenRequest = CreateInstrumentTokenRequest.builder()
                 .token(cardTokenResponse.getToken())
@@ -126,7 +126,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                                 .number("415 555 2671")
                                 .build())
                         .billingAddress(Address.builder()
-                                .addressLine1("Checkout.com")
+                                .addressLine1("CheckoutSdk.com")
                                 .addressLine2("90 Tottenham Court Road")
                                 .city("London")
                                 .state("London")
@@ -139,7 +139,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final CreateInstrumentResponse response = blocking(getApiV2().instrumentsClient().create(createInstrumentTokenRequest));
+        final CreateInstrumentResponse response = blocking(fourApi.instrumentsClient().create(createInstrumentTokenRequest));
 
         final IdSourcePrism idSourcePrism = IdSourcePrism.builder()
                 .id(response.getId()).cvv(TestCardSource.VISA.getCvv()).build();
@@ -156,10 +156,10 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                 .date(Instant.now())
                 .source(requestSource)
                 .customer(new CustomerRequest("id", TestHelper.generateRandomEmail(), "name"))
-                .payment(RiskPayment.builder().psp("Checkout.com").id("78453878").build())
+                .payment(RiskPayment.builder().psp("CheckoutSdk.com").id("78453878").build())
                 .shipping(RiskShippingDetails.builder().address(
                         Address.builder()
-                                .addressLine1("Checkout.com")
+                                .addressLine1("CheckoutSdk.com")
                                 .addressLine2("90 Tottenham Court Road")
                                 .city("London")
                                 .state("London")
@@ -188,7 +188,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
                 .build();
 
-        final PreAuthenticationAssessmentResponse response = blocking(getApiV2().riskClient().requestPreAuthenticationRiskScan(request));
+        final PreAuthenticationAssessmentResponse response = blocking(fourApi.riskClient().requestPreAuthenticationRiskScan(request));
 
         assertNotNull(response);
 
@@ -209,10 +209,10 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                 .date(Instant.now())
                 .source(requestSource)
                 .customer(new CustomerRequest("id", TestHelper.generateRandomEmail(), "name"))
-                .payment(RiskPayment.builder().psp("Checkout.com").id("78453878").build())
+                .payment(RiskPayment.builder().psp("CheckoutSdk.com").id("78453878").build())
                 .shipping(RiskShippingDetails.builder().address(
                         Address.builder()
-                                .addressLine1("Checkout.com")
+                                .addressLine1("CheckoutSdk.com")
                                 .addressLine2("90 Tottenham Court Road")
                                 .city("London")
                                 .state("London")
@@ -251,7 +251,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final PreCaptureAssessmentResponse response = blocking(getApiV2().riskClient().requestPreCaptureRiskScan(request));
+        final PreCaptureAssessmentResponse response = blocking(fourApi.riskClient().requestPreCaptureRiskScan(request));
 
         assertNotNull(response);
 

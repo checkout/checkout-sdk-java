@@ -30,7 +30,7 @@ class AlternativePaymentSourcePaymentsTestIT extends SandboxTestFixture {
     private void requestAlternativePayment(final AlternativePaymentSource alternativePaymentSource) throws Exception {
         final PaymentRequest<RequestSource> paymentRequest = TestHelper.createAlternativePaymentMethodRequest(alternativePaymentSource, Currency.EUR);
 
-        final PaymentResponse apiResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse apiResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
         assertTrue(apiResponse.isPending());
         assertNotNull(apiResponse.getPending());
 

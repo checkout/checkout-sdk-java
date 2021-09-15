@@ -35,13 +35,13 @@ class EventsTestIT extends SandboxTestFixture {
 
     @BeforeEach
     protected void cleanup() {
-        final List<WebhookResponse> webhookResponses = blocking(getApi().webhooksClient().retrieveWebhooks());
-        webhookResponses.forEach(webhookResponse -> blocking(getApi().webhooksClient().removeWebhook(webhookResponse.getId())));
+        final List<WebhookResponse> webhookResponses = blocking(defaultApi.webhooksClient().retrieveWebhooks());
+        webhookResponses.forEach(webhookResponse -> blocking(defaultApi.webhooksClient().removeWebhook(webhookResponse.getId())));
     }
 
     @Test
     void retrieveDefaultEventTypes() {
-        final List<EventTypesResponse> allEventTypesResponses = blocking(getApi().eventsClient().retrieveAllEventTypes(null));
+        final List<EventTypesResponse> allEventTypesResponses = blocking(defaultApi.eventsClient().retrieveAllEventTypes(null));
         assertNotNull(allEventTypesResponses);
         assertEquals(2, allEventTypesResponses.size());
     }
@@ -49,7 +49,7 @@ class EventsTestIT extends SandboxTestFixture {
     @Test
     void retrieveV1EventTypes() {
 
-        final List<EventTypesResponse> eventTypesResponses = blocking(getApi().eventsClient().retrieveAllEventTypes("1.0"));
+        final List<EventTypesResponse> eventTypesResponses = blocking(defaultApi.eventsClient().retrieveAllEventTypes("1.0"));
         assertNotNull(eventTypesResponses);
         assertEquals(1, eventTypesResponses.size());
 
@@ -63,7 +63,7 @@ class EventsTestIT extends SandboxTestFixture {
     @Test
     void retrieveV2EventTypes() {
 
-        final List<EventTypesResponse> eventTypesResponses = blocking(getApi().eventsClient().retrieveAllEventTypes("2.0"));
+        final List<EventTypesResponse> eventTypesResponses = blocking(defaultApi.eventsClient().retrieveAllEventTypes("2.0"));
         assertNotNull(eventTypesResponses);
         assertEquals(1, eventTypesResponses.size());
 
@@ -85,7 +85,7 @@ class EventsTestIT extends SandboxTestFixture {
         nap(15);
 
         final EventsPageResponse eventsPageResponse = blocking(
-                getApi().eventsClient().retrieveEvents(
+                defaultApi.eventsClient().retrieveEvents(
                         LocalDateTime.now().minusYears(2).toInstant(ZoneOffset.UTC),
                         LocalDateTime.now().toInstant(ZoneOffset.UTC),
                         10, 0, paymentId));
@@ -123,7 +123,7 @@ class EventsTestIT extends SandboxTestFixture {
                 .build();
 
         // Retrieve Events
-        final EventsPageResponse eventsPageResponse = blocking(getApi().eventsClient().retrieveEvents(retrieveEventsRequest));
+        final EventsPageResponse eventsPageResponse = blocking(defaultApi.eventsClient().retrieveEvents(retrieveEventsRequest));
 
         assertNotNull(eventsPageResponse);
         assertEquals(1, eventsPageResponse.getTotalCount());
@@ -139,7 +139,7 @@ class EventsTestIT extends SandboxTestFixture {
         assertNotNull(eventSummaryResponse.getLink("webhooks-retry"));
 
         // Retrieve Event
-        final EventResponse eventResponse = blocking(getApi().eventsClient().retrieveEvent(eventSummaryResponse.getId()));
+        final EventResponse eventResponse = blocking(defaultApi.eventsClient().retrieveEvent(eventSummaryResponse.getId()));
 
         assertNotNull(eventResponse);
         assertNotNull(eventResponse.getId());
@@ -150,7 +150,7 @@ class EventsTestIT extends SandboxTestFixture {
         assertNotNull(eventResponse.getLink("webhooks-retry"));
 
         // Get Notification
-        final EventNotificationResponse eventNotificationResponse = blocking(getApi().eventsClient()
+        final EventNotificationResponse eventNotificationResponse = blocking(defaultApi.eventsClient()
                 .retrieveEventNotification(eventSummaryResponse.getId(), eventResponse.getNotifications().get(0).getId()));
 
         assertNotNull(eventNotificationResponse);
@@ -181,20 +181,20 @@ class EventsTestIT extends SandboxTestFixture {
                 .build();
 
         // Retrieve Events
-        final EventsPageResponse eventsPageResponse = blocking(getApi().eventsClient().retrieveEvents(retrieveEventsRequest));
+        final EventsPageResponse eventsPageResponse = blocking(defaultApi.eventsClient().retrieveEvents(retrieveEventsRequest));
         assertNotNull(eventsPageResponse);
 
         final EventSummaryResponse eventSummaryResponse = eventsPageResponse.getData().get(0);
         assertNotNull(eventSummaryResponse.getId());
 
         // Retrieve Event
-        final EventResponse eventResponse = blocking(getApi().eventsClient().retrieveEvent(eventSummaryResponse.getId()));
+        final EventResponse eventResponse = blocking(defaultApi.eventsClient().retrieveEvent(eventSummaryResponse.getId()));
 
         // Retry Webhooks
         // Webhooks are not being re attempted. Adding the call to ensure.
-        blocking(getApi().eventsClient().retryWebhook(eventSummaryResponse.getId(), webhookResponse.getId()));
+        blocking(defaultApi.eventsClient().retryWebhook(eventSummaryResponse.getId(), webhookResponse.getId()));
 
-        blocking(getApi().eventsClient().retryAllWebhooks(eventSummaryResponse.getId()));
+        blocking(defaultApi.eventsClient().retryAllWebhooks(eventSummaryResponse.getId()));
 
     }
 
@@ -206,14 +206,14 @@ class EventsTestIT extends SandboxTestFixture {
 
         webhookRequest.setEventTypes(GATEWAY_EVENT_TYPES);
 
-        return blocking(getApi().webhooksClient().registerWebhook(webhookRequest));
+        return blocking(defaultApi.webhooksClient().registerWebhook(webhookRequest));
 
     }
 
     private PaymentProcessed makeCardPayment() {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setThreeDS(ThreeDSRequest.from(false));
-        final PaymentResponse paymentResponse = blocking(getApi().paymentsClient().requestAsync(paymentRequest));
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
         assertNotNull(paymentResponse.getPayment());
         return paymentResponse.getPayment();
 

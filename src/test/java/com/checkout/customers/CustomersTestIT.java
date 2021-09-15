@@ -24,9 +24,9 @@ class CustomersTestIT extends SandboxTestFixture {
                 .name("Customer")
                 .phone(TestHelper.createPhone())
                 .build();
-        final String customerId = blocking(getApi().customersClient().create(customerRequest)).getId();
+        final String customerId = blocking(defaultApi.customersClient().create(customerRequest)).getId();
         assertNotNull(customerId);
-        final CustomerDetailsResponse customerDetailsResponse = blocking(getApi().customersClient().get(customerId));
+        final CustomerDetailsResponse customerDetailsResponse = blocking(defaultApi.customersClient().get(customerId));
         assertNotNull(customerDetailsResponse);
         assertEquals(customerRequest.getEmail(), customerDetailsResponse.getEmail());
         assertEquals(customerRequest.getName(), customerDetailsResponse.getName());
@@ -43,14 +43,14 @@ class CustomersTestIT extends SandboxTestFixture {
                 .name("Customer")
                 .phone(TestHelper.createPhone())
                 .build();
-        final String customerId = blocking(getApi().customersClient().create(customerRequest)).getId();
+        final String customerId = blocking(defaultApi.customersClient().create(customerRequest)).getId();
         assertNotNull(customerId);
         //Update Customer
         customerRequest.setEmail(TestHelper.generateRandomEmail());
         customerRequest.setName("Customer Changed");
-        blocking(getApi().customersClient().update(customerId, customerRequest));
+        blocking(defaultApi.customersClient().update(customerId, customerRequest));
         //Verify changes were applied
-        final CustomerDetailsResponse customerDetailsResponse = blocking(getApi().customersClient().get(customerId));
+        final CustomerDetailsResponse customerDetailsResponse = blocking(defaultApi.customersClient().get(customerId));
         assertNotNull(customerDetailsResponse);
         assertEquals(customerRequest.getName(), customerDetailsResponse.getName());
         assertEquals(customerRequest.getEmail(), customerDetailsResponse.getEmail());
@@ -64,13 +64,13 @@ class CustomersTestIT extends SandboxTestFixture {
                 .name("Customer")
                 .phone(TestHelper.createPhone())
                 .build();
-        final String customerId = blocking(getApi().customersClient().create(customerRequest)).getId();
+        final String customerId = blocking(defaultApi.customersClient().create(customerRequest)).getId();
         assertNotNull(customerId);
         //Delete customer
-        blocking(getApi().customersClient().delete(customerId));
+        blocking(defaultApi.customersClient().delete(customerId));
         //Verify customer does not exist
         try {
-            getApi().customersClient().get(customerId).get();
+            defaultApi.customersClient().get(customerId).get();
         } catch (final Exception e) {
             assertTrue(e.getCause() instanceof CheckoutResourceNotFoundException);
         }

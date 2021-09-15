@@ -23,7 +23,7 @@ class DLocalSourcePaymentsTestIT extends SandboxTestFixture {
         final PaymentRequest<DLocalSource> paymentRequest = TestHelper.createDLocalPaymentRequest();
         paymentRequest.setThreeDS(ThreeDSRequest.from(false));
 
-        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
 
         assertNotNull(paymentResponse.getPayment());
         assertTrue(paymentResponse.getPayment().isApproved());

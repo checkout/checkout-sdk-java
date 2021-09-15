@@ -1,8 +1,10 @@
 package com.checkout.disputes;
 
 import com.checkout.ApiClient;
-import com.checkout.ApiCredentials;
+import com.checkout.SdkAuthorization;
+import com.checkout.SdkAuthorizationType;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.SdkCredentials;
 import com.checkout.common.FileDetailsResponse;
 import com.checkout.common.FilePurpose;
 import com.checkout.common.FileRequest;
@@ -37,9 +39,8 @@ class DisputesClientImplTest {
     private static final String PAYMENT_ARN = "802355416667";
     private static final String FILE_ID = "file_7kxknf5ftrgurfouydbbs74gvq";
     private static final String FILE_NAME = "my_evidence.jpg";
-    private static String PAYMENT_ID = "pay_3216549s87jhhjhguyt";
-    private static String DISPUTE_ID = "dsp_9ec11deafd679h77356a";
-    private static String TEXT_MESSAGE = "text_message";
+    private static final String PAYMENT_ID = "pay_3216549s87jhhjhguyt";
+    private static final String DISPUTE_ID = "dsp_9ec11deafd679h77356a";
 
     private DisputesClient client;
 
@@ -48,6 +49,12 @@ class DisputesClientImplTest {
 
     @Mock
     private CheckoutConfiguration configuration;
+
+    @Mock
+    private SdkCredentials sdkCredentials;
+
+    @Mock
+    private SdkAuthorization authorization;
 
     @Mock
     private Dispute dispute;
@@ -86,6 +93,8 @@ class DisputesClientImplTest {
 
     @BeforeEach
     void setUp() {
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
         disputesQueryResponseFuture = CompletableFuture.completedFuture(disputesQueryResponse);
         disputeDetailsFuture = CompletableFuture.completedFuture(disputeDetailsResponse);
         evidenceResponseFuture = CompletableFuture.completedFuture(evidenceResponse);
@@ -100,7 +109,7 @@ class DisputesClientImplTest {
         final DisputesQueryFilter request = DisputesQueryFilter.builder().paymentId(PAYMENT_ID).limit(250).build();
         doReturn(disputesQueryResponseFuture)
                 .when(apiClient)
-                .queryAsync(eq(DISPUTES), any(ApiCredentials.class),
+                .queryAsync(eq(DISPUTES), eq(authorization),
                         any(DisputesQueryFilter.class), eq(DisputesQueryResponse.class));
         when(disputesQueryResponse.getLimit()).thenReturn(request.getLimit());
         when(disputesQueryResponse.getTotalCount()).thenReturn(1);
@@ -123,7 +132,7 @@ class DisputesClientImplTest {
     void shouldGetDisputeDetails() throws ExecutionException, InterruptedException {
         doReturn(disputeDetailsFuture)
                 .when(apiClient)
-                .getAsync(eq(getPath(DISPUTES, DISPUTE_ID)), any(ApiCredentials.class), eq(DisputeDetailsResponse.class));
+                .getAsync(eq(getPath(DISPUTES, DISPUTE_ID)), eq(authorization), eq(DisputeDetailsResponse.class));
         when(disputeDetailsResponse.getId()).thenReturn(DISPUTE_ID);
         when(disputeDetailsResponse.getCategory()).thenReturn(DisputeCategory.FRAUDULENT);
         when(disputeDetailsResponse.getReasonCode()).thenReturn(REASON_CODE);
@@ -149,7 +158,7 @@ class DisputesClientImplTest {
                 .purpose(FilePurpose.DISPUTE_EVIDENCE).build();
         doReturn(idResponseFuture)
                 .when(apiClient)
-                .submitFileAsync(eq(FILES), any(ApiCredentials.class), any(FileRequest.class),
+                .submitFileAsync(eq(FILES), eq(authorization), any(FileRequest.class),
                         eq(IdResponse.class));
         when(idResponse.getId()).thenReturn(FILE_ID);
         final IdResponse response = client.uploadFile(request).get();
@@ -162,8 +171,9 @@ class DisputesClientImplTest {
         doReturn(evidenceResponseFuture)
                 .when(apiClient)
                 .getAsync(eq(getPath(getPath(DISPUTES, DISPUTE_ID), EVIDENCE)),
-                        any(ApiCredentials.class), eq(DisputeEvidenceResponse.class));
+                        eq(authorization), eq(DisputeEvidenceResponse.class));
         when(evidenceResponse.getProofOfDeliveryOrServiceFile()).thenReturn(FILE_NAME);
+        final String TEXT_MESSAGE = "text_message";
         when(evidenceResponse.getProofOfDeliveryOrServiceText()).thenReturn(TEXT_MESSAGE);
         when(evidenceResponse.getInvoiceOrReceiptFile()).thenReturn(FILE_NAME);
         when(evidenceResponse.getInvoiceOrReceiptText()).thenReturn(TEXT_MESSAGE);
@@ -205,7 +215,7 @@ class DisputesClientImplTest {
     void shouldGetFileDetails() throws ExecutionException, InterruptedException {
         doReturn(fileDetailsResponseFuture)
                 .when(apiClient)
-                .getAsync(eq(getPath(FILES, FILE_ID)), any(ApiCredentials.class), eq(FileDetailsResponse.class));
+                .getAsync(eq(getPath(FILES, FILE_ID)), eq(authorization), eq(FileDetailsResponse.class));
         when(fileDetailsResponse.getFilename()).thenReturn(FILE_NAME);
         when(fileDetailsResponse.getId()).thenReturn(FILE_ID);
         when(fileDetailsResponse.getPurpose()).thenReturn(FilePurpose.DISPUTE_EVIDENCE.getPurpose());

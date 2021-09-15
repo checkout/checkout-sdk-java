@@ -16,7 +16,7 @@ class CardVerificationTestIT extends SandboxTestFixture {
     @Test
     void shouldVerifyCard() throws Exception {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest(0L);
-        final PaymentResponse paymentResponse = getApi().paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
 
         assertEquals(PaymentStatus.CARD_VERIFIED, paymentResponse.getPayment().getStatus());
     }
