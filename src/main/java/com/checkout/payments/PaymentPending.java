@@ -11,18 +11,25 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class PaymentPending extends Resource {
+
+    private static final String REDIRECT = "redirect";
+
     private String id;
+
     private String status;
+
     private String reference;
+
     private CustomerResponse customer;
+
     @SerializedName("3ds")
     private ThreeDSEnrollment threeDS;
 
     public boolean requiresRedirect() {
-        return hasLink("redirect");
+        return getLinks().containsKey(REDIRECT);
     }
 
     public Link getRedirectLink() {
-        return getLink("redirect");
+        return getLink(REDIRECT);
     }
 }

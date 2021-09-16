@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GiropayPaymentsTestIT extends SandboxTestFixture {
 
@@ -38,8 +37,8 @@ class GiropayPaymentsTestIT extends SandboxTestFixture {
         assertNotNull(paymentPending);
         assertEquals("Pending", paymentPending.getStatus());
 
-        assertTrue(paymentPending.hasLink("self"));
-        assertTrue(paymentPending.hasLink("redirect"));
+        assertNotNull(paymentPending.getLink("self"));
+        assertNotNull(paymentPending.getLink("redirect"));
 
     }
 

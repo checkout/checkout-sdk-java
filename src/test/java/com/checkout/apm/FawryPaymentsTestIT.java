@@ -98,9 +98,9 @@ class FawryPaymentsTestIT extends SandboxTestFixture {
         assertNotNull(paymentPending);
         assertEquals("Pending", paymentPending.getStatus());
 
-        assertTrue(paymentPending.hasLink("self"));
-        assertTrue(paymentPending.hasLink("approve"));
-        assertTrue(paymentPending.hasLink("cancel"));
+        assertNotNull(paymentPending.getLink("self"));
+        assertNotNull(paymentPending.getLink("approve"));
+        assertNotNull(paymentPending.getLink("cancel"));
 
         return paymentPending.getId();
 

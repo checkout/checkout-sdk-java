@@ -12,7 +12,6 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CaptureTestIT extends AbstractPaymentsTestIT {
 
@@ -21,7 +20,7 @@ class CaptureTestIT extends AbstractPaymentsTestIT {
 
         final PaymentResponse<ResponseCardSource> paymentResponse = makeCardPayment(false);
 
-        assertTrue(paymentResponse.hasLink("capture"));
+        assertNotNull(paymentResponse.getLink("capture"));
 
         final Map<String, Object> metadata = new HashMap<>();
         metadata.put("CaptureTestIT", "shouldCapturePayment");
@@ -44,7 +43,7 @@ class CaptureTestIT extends AbstractPaymentsTestIT {
 
         final PaymentResponse<ResponseCardSource> paymentResponse = makeTokenPayment();
 
-        assertTrue(paymentResponse.hasLink("capture"));
+        assertNotNull(paymentResponse.getLink("capture"));
 
         final Map<String, Object> metadata = new HashMap<>();
         metadata.put("CaptureTestIT", "shouldCaptureTokenPayment");
@@ -67,7 +66,7 @@ class CaptureTestIT extends AbstractPaymentsTestIT {
 
         final PaymentResponse<ResponseCardSource> paymentResponse = makeCardPayment(false);
 
-        assertTrue(paymentResponse.hasLink("capture"));
+        assertNotNull(paymentResponse.getLink("capture"));
 
         final Map<String, Object> metadata = new HashMap<>();
         metadata.put("CaptureTestIT", "shouldCapturePaymentPartially");

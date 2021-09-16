@@ -38,7 +38,7 @@ public class PaymentProcessed extends Resource {
     }
 
     public boolean canCapture() {
-        return hasLink("capture");
+        return getLinks().containsKey("capture");
     }
 
     public Link getCaptureLink() {
@@ -46,7 +46,7 @@ public class PaymentProcessed extends Resource {
     }
 
     public boolean canVoid() {
-        return hasLink("void");
+        return getLinks().containsKey("void");
     }
 
     public Link getVoidLink() {

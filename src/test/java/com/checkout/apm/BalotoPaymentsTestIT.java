@@ -85,10 +85,10 @@ class BalotoPaymentsTestIT extends SandboxTestFixture {
         assertNotNull(paymentPending);
         assertEquals("Pending", paymentPending.getStatus());
 
-        assertTrue(paymentPending.hasLink("self"));
-        assertTrue(paymentPending.hasLink("redirect"));
-        assertTrue(paymentPending.hasLink("simulator:payment-succeed"));
-        assertTrue(paymentPending.hasLink("simulator:payment-expire"));
+        assertNotNull(paymentPending.getLink("self"));
+        assertNotNull(paymentPending.getLink("redirect"));
+        assertNotNull(paymentPending.getLink("simulator:payment-succeed"));
+        assertNotNull(paymentPending.getLink("simulator:payment-expire"));
 
         return paymentPending.getId();
 

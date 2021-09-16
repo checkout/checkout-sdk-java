@@ -34,7 +34,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
 
@@ -189,8 +188,8 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
         assertNotNull(response.getAssessmentId());
         assertNotNull(response.getResult());
         assertNotNull(response.getResult().getDecision());
-        assertTrue(response.hasLink("pre_capture"));
-        assertTrue(response.hasLink("self"));
+        assertNotNull(response.getLink("pre_capture"));
+        assertNotNull(response.getLink("self"));
         assertNotNull(response.getLink("pre_capture").getLink());
         assertNotNull(response.getLink("self").getLink());
 
@@ -250,8 +249,8 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
         assertNotNull(response);
 
         assertNotNull(response.getAssessmentId());
-        assertTrue(response.hasLink("pre_capture"));
-        assertTrue(response.hasLink("self"));
+        assertNotNull(response.getLink("pre_capture"));
+        assertNotNull(response.getLink("self"));
         assertNotNull(response.getLink("pre_capture").getLink());
         assertNotNull(response.getLink("self").getLink());
     }
