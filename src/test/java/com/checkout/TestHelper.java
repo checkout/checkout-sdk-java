@@ -14,12 +14,19 @@ import com.checkout.payments.Processing;
 import com.checkout.payments.RequestSource;
 import com.checkout.payments.RiskRequest;
 import com.checkout.payments.SenderInformation;
+import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
 import com.checkout.payments.TokenSource;
+import com.checkout.payments.beta.request.PaymentRecipient;
+import com.checkout.payments.beta.request.ProcessingSettings;
 import com.checkout.payments.hosted.HostedPaymentRequest;
 import com.checkout.payments.links.PaymentLinkRequest;
 import com.checkout.tokens.CardTokenRequest;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -185,6 +192,7 @@ public final class TestHelper {
     }
 
     public static PaymentLinkRequest createPaymentLinksRequest(final String reference) {
+        final Instant time = LocalDateTime.now().toInstant(ZoneOffset.UTC);
         return PaymentLinkRequest.builder()
                 .amount(200L)
                 .currency(Currency.GBP)
@@ -192,10 +200,20 @@ public final class TestHelper {
                 .description("Payment for Gold Necklace")
                 .expiresIn(604800)
                 .customer(createCustomer())
+                .shipping(ShippingDetails.builder()
+                        .address(createAddress())
+                        .phone(createPhone())
+                        .build())
                 .billing(BillingInformation.builder()
                         .address(createAddress())
                         .phone(createPhone())
                         .build())
+                .recipient(createRecipient())
+                .processing(ProcessingSettings.builder()
+                        .aft(true)
+                        .build())
+                .capture(true)
+                .captureOn(time)
                 .products(Collections.singletonList(createProduct()))
                 .threeDS(createThreeDS())
                 .risk(new RiskRequest(Boolean.FALSE))
@@ -205,15 +223,24 @@ public final class TestHelper {
     }
 
     public static HostedPaymentRequest createHostedPaymentRequest(final String reference) {
+        final Instant time = LocalDateTime.now().toInstant(ZoneOffset.UTC);
         return HostedPaymentRequest.builder()
                 .amount(1000L)
                 .reference(reference)
                 .currency(Currency.GBP)
                 .description("Payment for Gold Necklace")
                 .customer(createCustomer())
+                .shippingDetails(ShippingDetails.builder()
+                        .address(createAddress())
+                        .phone(createPhone())
+                        .build())
                 .billing(BillingInformation.builder()
                         .address(createAddress())
                         .phone(createPhone())
+                        .build())
+                .recipient(createRecipient())
+                .processing(ProcessingSettings.builder()
+                        .aft(true)
                         .build())
                 .products(Collections.singletonList(createProduct()))
                 .risk(new RiskRequest(Boolean.FALSE))
@@ -222,6 +249,19 @@ public final class TestHelper {
                 .failureUrl("https://example.com/payments/success")
                 .locale("en-GB")
                 .threeDS(createThreeDS())
+                .capture(true)
+                .captureOn(time)
+                .build();
+    }
+
+    public static PaymentRecipient createRecipient() {
+        return PaymentRecipient.builder()
+                .accountNumber("1234567")
+                .country(CountryCode.ES)
+                .dateOfBirth(LocalDate.of(1985, 5, 15))
+                .firstName("IT")
+                .lastName("TESTING")
+                .zip("12345")
                 .build();
     }
 
