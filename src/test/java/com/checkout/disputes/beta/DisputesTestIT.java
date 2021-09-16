@@ -105,7 +105,7 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
 
         // payment
         final PaymentResponse<ResponseCardSource> paymentResponse = makeCardPayment(request);
-        assertTrue(paymentResponse.hasLink("capture"));
+        assertNotNull(paymentResponse.getLink("capture"));
 
         // capture
         capturePayment(paymentResponse.getId());

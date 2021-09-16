@@ -17,34 +17,59 @@ import java.util.Map;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class GetPaymentResponse extends Resource {
+    private static final String REDIRECT = "redirect";
+
     private String id;
+
+    @SerializedName("requested_on")
     private Instant requestedOn;
+
     private ResponseSource source;
+
     private Long amount;
+
     private String currency;
+
+    @SerializedName("payment_type")
     private String paymentType;
+
     private String reference;
+
     private String description;
+
     private boolean approved;
+
     private String status;
+
     @SerializedName("3ds")
     private ThreeDSEnrollment threeDS;
+
     private RiskAssessment risk;
+
     private CustomerResponse customer;
+
+    @SerializedName("billing_descriptor")
     private BillingDescriptor billingDescriptor;
+
     private ShippingDetails shipping;
+
+    @SerializedName("payment_ip")
     private String paymentIp;
+
     private PaymentRecipient recipient;
+
     private Map<String, Object> metadata = new HashMap<>();
+
     private String eci;
+
     private List<PaymentActionSummary> actions = new ArrayList<>();
 
     public boolean requiresRedirect() {
-        return hasLink("redirect");
+        return getLinks().containsKey(REDIRECT);
     }
 
     public Link getRedirectLink() {
-        return getLink("redirect");
+        return getLink(REDIRECT);
     }
 
     public PaymentActionSummary getAuthorizationAction() {

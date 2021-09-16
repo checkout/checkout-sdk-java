@@ -45,8 +45,8 @@ class BoletoPaymentsTestIT extends SandboxTestFixture {
         assertNotNull(paymentPending);
         assertEquals("Pending", paymentPending.getStatus());
 
-        assertTrue(paymentPending.hasLink("self"));
-        assertTrue(paymentPending.hasLink("redirect"));
+        assertNotNull(paymentPending.getLink("self"));
+        assertNotNull(paymentPending.getLink("redirect"));
 
         // Get payment
 
@@ -90,8 +90,8 @@ class BoletoPaymentsTestIT extends SandboxTestFixture {
         assertNotNull(paymentProcessed);
         assertEquals("Declined", paymentProcessed.getStatus());
         assertEquals("Rejected", paymentProcessed.getResponseSummary());
-        assertTrue(paymentProcessed.hasLink("self"));
-        assertTrue(paymentProcessed.hasLink("actions"));
+        assertNotNull(paymentProcessed.getLink("self"));
+        assertNotNull(paymentProcessed.getLink("actions"));
 
         // Get payment
 

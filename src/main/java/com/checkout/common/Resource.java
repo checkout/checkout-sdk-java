@@ -22,14 +22,6 @@ public abstract class Resource {
         return getLink("self");
     }
 
-    /**
-     * Will be removed in a future version.
-     */
-    @Deprecated
-    public boolean hasLink(final String relation) {
-        return links.containsKey(relation);
-    }
-
     public Link getLink(final String relation) {
         return links.get(relation);
     }

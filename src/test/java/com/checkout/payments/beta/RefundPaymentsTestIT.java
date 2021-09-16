@@ -16,7 +16,6 @@ import static com.checkout.payments.beta.CardSourceHelper.getCorporateSender;
 import static com.checkout.payments.beta.CardSourceHelper.getRequestCardSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
 
@@ -29,7 +28,7 @@ class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
 
         // payment
         final PaymentResponse<ResponseCardSource> paymentResponse = makeCardPayment(request);
-        assertTrue(paymentResponse.hasLink("capture"));
+        assertNotNull(paymentResponse.getLink("capture"));
 
         // capture
         capturePayment(paymentResponse.getId());
@@ -55,7 +54,7 @@ class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
 
         // Make Payment
         final PaymentResponse<ResponseCardSource> paymentResponse = makeTokenPayment();
-        assertTrue(paymentResponse.hasLink("capture"));
+        assertNotNull(paymentResponse.getLink("capture"));
 
         // Capture Payment
         capturePayment(paymentResponse.getId());
