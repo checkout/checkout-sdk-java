@@ -2,6 +2,7 @@ package com.checkout.payments;
 
 import com.checkout.CheckoutArgumentException;
 import com.checkout.common.Address;
+import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 @AllArgsConstructor
 public class CardSource implements RequestSource {
 
-    private final String type = "card";
+    private final PaymentSourceType type = PaymentSourceType.CARD;
 
     private final String number;
 
@@ -44,11 +45,6 @@ public class CardSource implements RequestSource {
         this.number = number;
         this.expiryMonth = expiryMonth;
         this.expiryYear = expiryYear;
-    }
-
-    @Override
-    public String getType() {
-        return type;
     }
 
 }

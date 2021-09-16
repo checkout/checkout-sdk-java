@@ -1,4 +1,4 @@
-package com.checkout.apm.baloto;
+package com.checkout.apm.giropay;
 
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class GiropayClientTest {
+class GiropayClientImplTest {
 
     @Mock
     private ApiClient apiClient;

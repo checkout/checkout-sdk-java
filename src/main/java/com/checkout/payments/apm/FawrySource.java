@@ -1,5 +1,6 @@
 package com.checkout.payments.apm;
 
+import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.RequestSource;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
@@ -11,19 +12,21 @@ import java.util.List;
 
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public final class FawrySource implements RequestSource {
 
-    private final String type = "fawry";
+    private final PaymentSourceType type = PaymentSourceType.FAWRY;
 
-    private final String description;
+    private String description;
 
     @SerializedName("customer_mobile")
-    private final String customerMobile;
+    private String customerMobile;
 
     @SerializedName("customer_email")
-    private final String customerEmail;
+    private String customerEmail;
 
-    private final List<Product> products;
+    private List<Product> products;
 
     @Data
     @Builder
@@ -40,11 +43,6 @@ public final class FawrySource implements RequestSource {
 
         private String description;
 
-    }
-
-    @Override
-    public String getType() {
-        return type;
     }
 
 }

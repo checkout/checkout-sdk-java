@@ -21,7 +21,6 @@ public class AlternativePaymentSource extends HashMap<String, Object> implements
         setType(type);
     }
 
-    @Override
     public String getType() {
         return get(TYPE_FIELD).toString();
     }

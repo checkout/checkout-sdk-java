@@ -11,12 +11,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public final class GiropaySource implements RequestSource {
+public final class IdealSource implements RequestSource {
 
-    private final PaymentSourceType type = PaymentSourceType.GIROPAY;
+    private final PaymentSourceType type = PaymentSourceType.IDEAL;
 
     private String bic;
 
-    private String purpose;
+    private String description;
+
+    private String language;
 
 }

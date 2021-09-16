@@ -1,10 +1,8 @@
-package com.checkout.apm.baloto;
+package com.checkout.apm.oxxo;
 
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SecretKeyCredentials;
-import com.checkout.apm.fawry.FawryClient;
-import com.checkout.apm.fawry.FawryClientImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,8 +19,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 
+
 @ExtendWith(MockitoExtension.class)
-class FawryClientTest {
+class OxxoClientImplTest {
 
     @Mock
     private ApiClient apiClient;
@@ -33,20 +32,20 @@ class FawryClientTest {
     @Mock
     private Void voidResponse;
 
-    private FawryClient fawryClient;
+    private OxxoClient oxxoClient;
 
     @BeforeEach
     void setUp() {
-        this.fawryClient = new FawryClientImpl(apiClient, checkoutConfiguration);
+        this.oxxoClient = new OxxoClientImpl(apiClient, checkoutConfiguration);
     }
 
     @Test
-    void shouldApprovePayment() throws ExecutionException, InterruptedException {
+    void shouldSucceedPayment() throws ExecutionException, InterruptedException {
 
-        when(apiClient.putAsync(eq("/fawry/payments/reference/approval"), any(SecretKeyCredentials.class), eq(Void.class), isNull()))
+        when(apiClient.postAsync(eq("/apms/oxxo/payments/payment_id/succeed"), any(SecretKeyCredentials.class), eq(Void.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(voidResponse));
 
-        final CompletableFuture<Void> future = fawryClient.approve("reference");
+        final CompletableFuture<Void> future = oxxoClient.succeed("payment_id");
 
         assertNotNull(future.get());
         assertEquals(voidResponse, future.get());
@@ -54,12 +53,12 @@ class FawryClientTest {
     }
 
     @Test
-    void shouldCancelPayment() throws ExecutionException, InterruptedException {
+    void shouldExpirePayment() throws ExecutionException, InterruptedException {
 
-        when(apiClient.putAsync(eq("/fawry/payments/reference/cancellation"), any(SecretKeyCredentials.class), eq(Void.class), isNull()))
+        when(apiClient.postAsync(eq("/apms/oxxo/payments/payment_id/expire"), any(SecretKeyCredentials.class), eq(Void.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(voidResponse));
 
-        final CompletableFuture<Void> future = fawryClient.cancel("reference");
+        final CompletableFuture<Void> future = oxxoClient.expire("payment_id");
 
         assertNotNull(future.get());
         assertEquals(voidResponse, future.get());

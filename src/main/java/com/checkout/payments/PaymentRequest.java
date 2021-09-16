@@ -5,6 +5,12 @@ import com.checkout.payments.apm.BalotoSource;
 import com.checkout.payments.apm.BoletoSource;
 import com.checkout.payments.apm.FawrySource;
 import com.checkout.payments.apm.GiropaySource;
+import com.checkout.payments.apm.IdealSource;
+import com.checkout.payments.apm.KlarnaSource;
+import com.checkout.payments.apm.OxxoSource;
+import com.checkout.payments.apm.PagoFacilSource;
+import com.checkout.payments.apm.RapiPagoSource;
+import com.checkout.payments.apm.SepaSource;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -73,6 +79,24 @@ public class PaymentRequest<T extends RequestSource> {
         this.metadata = new HashMap<>();
     }
 
+    private PaymentRequest(final T sourceOrDestination, final Currency currency, final Long amount, final boolean isSource, final boolean capture) {
+        validateParams("sourceOrDestination", sourceOrDestination, "currency", currency, "amount", amount, "capture", capture);
+        this.source = isSource ? sourceOrDestination : null;
+        this.destination = isSource ? null : sourceOrDestination;
+        this.amount = amount;
+        this.currency = currency.name();
+        this.capture = capture;
+    }
+
+    private PaymentRequest(final T sourceOrDestination, final Currency currency, final Long amount, final boolean isSource, final String reference) {
+        validateParams("sourceOrDestination", sourceOrDestination, "currency", currency, "amount", amount, "reference", reference);
+        this.source = isSource ? sourceOrDestination : null;
+        this.destination = isSource ? null : sourceOrDestination;
+        this.amount = amount;
+        this.currency = currency.name();
+        this.reference = reference;
+    }
+
 
     public static <T extends RequestSource> PaymentRequest<T> fromSource(final T source, final String currency, final Long amount) {
         return new PaymentRequest<>(source, currency, amount, true);
@@ -96,6 +120,30 @@ public class PaymentRequest<T extends RequestSource> {
 
     public static PaymentRequest<GiropaySource> giropay(final GiropaySource giropaySource, final Currency currency, final Long amount) {
         return new PaymentRequest<>(giropaySource, currency, amount, true);
+    }
+
+    public static PaymentRequest<IdealSource> ideal(final IdealSource idealSource, final Currency currency, final Long amount) {
+        return new PaymentRequest<>(idealSource, currency, amount, true);
+    }
+
+    public static PaymentRequest<OxxoSource> oxxo(final OxxoSource oxxoSource, final Currency currency, final Long amount) {
+        return new PaymentRequest<>(oxxoSource, currency, amount, true);
+    }
+
+    public static PaymentRequest<PagoFacilSource> pagoFacil(final PagoFacilSource pagoFacilSource, final Currency currency, final Long amount) {
+        return new PaymentRequest<>(pagoFacilSource, currency, amount, true);
+    }
+
+    public static PaymentRequest<RapiPagoSource> rapiPago(final RapiPagoSource rapiPagoSource, final Currency currency, final Long amount) {
+        return new PaymentRequest<>(rapiPagoSource, currency, amount, true);
+    }
+
+    public static PaymentRequest<KlarnaSource> klarna(final KlarnaSource klarnaSource, final Currency currency, final Long amount) {
+        return new PaymentRequest<>(klarnaSource, currency, amount, true, false);
+    }
+
+    public static PaymentRequest<SepaSource> sepa(final SepaSource sepaSource, final Currency currency, final Long amount, final String reference) {
+        return new PaymentRequest<>(sepaSource, currency, amount, true, reference);
     }
 
 }
