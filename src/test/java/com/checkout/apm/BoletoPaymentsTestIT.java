@@ -11,6 +11,7 @@ import com.checkout.payments.PaymentRequest;
 import com.checkout.payments.PaymentResponse;
 import com.checkout.payments.apm.BoletoSource;
 import com.checkout.payments.apm.IntegrationType;
+import com.checkout.payments.apm.Payer;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +31,7 @@ class BoletoPaymentsTestIT extends SandboxTestFixture {
                 .country(CountryCode.BR)
                 .description("boleto payment")
                 .integrationType(IntegrationType.REDIRECT)
-                .payer(BoletoSource.Payer.builder().email("john@doe-enterprises.com").name("John Doe").document("53033315550").build())
+                .payer(Payer.builder().email("john@doe-enterprises.com").name("John Doe").document("53033315550").build())
                 .build();
 
         final PaymentRequest<BoletoSource> request = PaymentRequest.boleto(boletoSource, com.checkout.common.beta.Currency.BRL, 100L);
@@ -75,7 +76,7 @@ class BoletoPaymentsTestIT extends SandboxTestFixture {
                 .country(CountryCode.BR)
                 .description("boleto payment")
                 .integrationType(IntegrationType.DIRECT)
-                .payer(BoletoSource.Payer.builder().email("john@doe-enterprises.com").name("John Doe").document("53033315550").build())
+                .payer(Payer.builder().email("john@doe-enterprises.com").name("John Doe").document("53033315550").build())
                 .build();
 
         final PaymentRequest<BoletoSource> request = PaymentRequest.boleto(boletoSource, com.checkout.common.beta.Currency.BRL, 100L);

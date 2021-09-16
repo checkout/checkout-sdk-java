@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public final class BalotoSource implements RequestSource {
+public final class OxxoSource implements RequestSource {
 
-    private final PaymentSourceType type = PaymentSourceType.BALOTO;
+    private final PaymentSourceType type = PaymentSourceType.OXXO;
 
     @SerializedName("integration_type")
     private final IntegrationType integrationType = IntegrationType.REDIRECT;
@@ -25,14 +25,5 @@ public final class BalotoSource implements RequestSource {
     private Payer payer;
 
     private String description;
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Payer {
-        private String name;
-        private String email;
-    }
 
 }

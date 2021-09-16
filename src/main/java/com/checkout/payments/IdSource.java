@@ -1,5 +1,6 @@
 package com.checkout.payments;
 
+import com.checkout.common.PaymentSourceType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 @AllArgsConstructor
 public class IdSource implements RequestSource {
 
-    private final String type = "id";
+    private final PaymentSourceType type = PaymentSourceType.ID;
     private String id;
     private String cvv;
     private String firstName;
@@ -22,11 +23,6 @@ public class IdSource implements RequestSource {
     public IdSource(final String id) {
         validateParams("id", id);
         this.id = id;
-    }
-
-    @Override
-    public String getType() {
-        return type;
     }
 
 }

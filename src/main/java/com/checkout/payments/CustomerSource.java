@@ -1,13 +1,14 @@
 package com.checkout.payments;
 
 import com.checkout.CheckoutArgumentException;
+import com.checkout.common.PaymentSourceType;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
 @Data
 public class CustomerSource implements RequestSource {
 
-    private final String type = "customer";
+    private final PaymentSourceType type = PaymentSourceType.CUSTOMER;
 
     private final String id;
 
@@ -19,11 +20,6 @@ public class CustomerSource implements RequestSource {
         }
         this.email = email;
         this.id = id;
-    }
-
-    @Override
-    public String getType() {
-        return type;
     }
 
 }
