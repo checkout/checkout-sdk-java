@@ -5,14 +5,12 @@ import lombok.Data;
 @Data
 public abstract class PayoutRequestSource {
 
-    protected final PayoutSourceType type;
+    protected PayoutSourceType type;
 
-    protected final Long amount;
+    protected Long amount;
 
-    protected PayoutRequestSource(final PayoutSourceType type,
-                                  final Long amount) {
+    protected PayoutRequestSource(final PayoutSourceType type) {
         this.type = type;
-        this.amount = amount;
     }
 
 }

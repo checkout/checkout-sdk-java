@@ -1,8 +1,9 @@
 package com.checkout.payments.hosted;
 
+import com.checkout.common.CustomerRequest;
 import com.checkout.common.Product;
+import com.checkout.common.Currency;
 import com.checkout.payments.BillingInformation;
-import com.checkout.payments.CustomerRequest;
 import com.checkout.payments.RiskRequest;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
@@ -24,7 +25,7 @@ public final class HostedPaymentRequest {
     private Long amount;
 
     @NotEmpty
-    private String currency;
+    private Currency currency;
 
     private String reference;
 

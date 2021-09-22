@@ -13,7 +13,7 @@ GiropaySource giropaySource = GiropaySource.builder()
         .purpose("CKO Giropay test")
         .build();
 
-PaymentRequest<GiropaySource> request = PaymentRequest.giropay(giropaySource, com.checkout.common.beta.Currency.EUR, 1000L);
+PaymentRequest<GiropaySource> request = PaymentRequest.giropay(giropaySource, com.checkout.common.Currency.EUR, 1000L);
 
 PaymentResponse response = api.paymentsClient().requestAsync(request).get();
 

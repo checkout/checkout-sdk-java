@@ -7,27 +7,29 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class CardSourcePrism extends RiskPaymentRequestSource {
 
-    private final String number;
+    private String number;
 
     @SerializedName("expiry_month")
-    private final Integer expiryMonth;
+    private Integer expiryMonth;
 
     @SerializedName("expiry_year")
-    private final Integer expiryYear;
+    private Integer expiryYear;
 
-    private final String name;
+    private String name;
 
     @SerializedName("billing_address")
-    private final Address billingAddress;
+    private Address billingAddress;
 
-    private final Phone phone;
+    private Phone phone;
 
     @Builder
     protected CardSourcePrism(final String number,
@@ -43,6 +45,10 @@ public final class CardSourcePrism extends RiskPaymentRequestSource {
         this.name = name;
         this.billingAddress = billingAddress;
         this.phone = phone;
+    }
+
+    public CardSourcePrism() {
+        super(PaymentSourceType.CARD);
     }
 
 }

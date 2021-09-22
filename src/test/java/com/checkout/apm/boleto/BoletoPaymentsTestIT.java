@@ -3,6 +3,7 @@ package com.checkout.apm.boleto;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.CountryCode;
+import com.checkout.common.Currency;
 import com.checkout.payments.AlternativePaymentSourceResponse;
 import com.checkout.payments.GetPaymentResponse;
 import com.checkout.payments.PaymentPending;
@@ -36,7 +37,7 @@ class BoletoPaymentsTestIT extends SandboxTestFixture {
                 .payer(Payer.builder().email("john@doe-enterprises.com").name("John Doe").document("53033315550").build())
                 .build();
 
-        final PaymentRequest<BoletoSource> request = PaymentRequest.boleto(boletoSource, com.checkout.common.four.Currency.BRL, 100L);
+        final PaymentRequest<BoletoSource> request = PaymentRequest.boleto(boletoSource, Currency.BRL, 100L);
 
         nap();
 
@@ -81,7 +82,7 @@ class BoletoPaymentsTestIT extends SandboxTestFixture {
                 .payer(Payer.builder().email("john@doe-enterprises.com").name("John Doe").document("53033315550").build())
                 .build();
 
-        final PaymentRequest<BoletoSource> request = PaymentRequest.boleto(boletoSource, com.checkout.common.four.Currency.BRL, 100L);
+        final PaymentRequest<BoletoSource> request = PaymentRequest.boleto(boletoSource, Currency.BRL, 100L);
 
         nap();
 

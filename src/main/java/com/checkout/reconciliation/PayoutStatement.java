@@ -1,5 +1,6 @@
 package com.checkout.reconciliation;
 
+import com.checkout.common.Currency;
 import com.checkout.common.Resource;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
@@ -17,7 +18,7 @@ public final class PayoutStatement extends Resource {
 
     private String status;
 
-    private String currency;
+    private Currency currency;
 
     @SerializedName("payout_fee")
     private String payoutFee;

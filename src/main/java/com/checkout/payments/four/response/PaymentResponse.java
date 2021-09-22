@@ -1,7 +1,7 @@
 package com.checkout.payments.four.response;
 
+import com.checkout.common.Currency;
 import com.checkout.common.Resource;
-import com.checkout.common.four.Currency;
 import com.checkout.payments.four.Processing;
 import com.checkout.payments.four.request.PaymentRecipient;
 import com.checkout.payments.four.request.ShippingDetails;

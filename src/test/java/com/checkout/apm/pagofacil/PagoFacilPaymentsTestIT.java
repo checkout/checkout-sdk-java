@@ -3,6 +3,7 @@ package com.checkout.apm.pagofacil;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.CountryCode;
+import com.checkout.common.Currency;
 import com.checkout.payments.AlternativePaymentSourceResponse;
 import com.checkout.payments.GetPaymentResponse;
 import com.checkout.payments.PaymentPending;
@@ -76,7 +77,7 @@ class PagoFacilPaymentsTestIT extends SandboxTestFixture {
                 .payer(Payer.builder().email("bruce@wayne-enterprises.com").name("Bruce Wayne").build())
                 .build();
 
-        final PaymentRequest<PagoFacilSource> request = PaymentRequest.pagoFacil(pagoFacilSource, com.checkout.common.four.Currency.ARS, 100000L);
+        final PaymentRequest<PagoFacilSource> request = PaymentRequest.pagoFacil(pagoFacilSource, Currency.ARS, 100000L);
 
         final PaymentResponse response = blocking(defaultApi.paymentsClient().requestAsync(request));
 

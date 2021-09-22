@@ -22,7 +22,7 @@ FawrySource fawrySource = FawrySource.builder()
         ))
         .build();
 
-PaymentRequest<FawrySource> request = PaymentRequest.fawry(fawrySource, com.checkout.common.beta.Currency.EGP, 1000L);
+PaymentRequest<FawrySource> request = PaymentRequest.fawry(fawrySource, com.checkout.common.Currency.EGP, 1000L);
 
 PaymentResponse response = api.paymentsClient().requestAsync(request).get();
 

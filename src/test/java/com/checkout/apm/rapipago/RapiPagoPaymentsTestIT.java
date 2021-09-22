@@ -3,6 +3,7 @@ package com.checkout.apm.rapipago;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.CountryCode;
+import com.checkout.common.Currency;
 import com.checkout.payments.AlternativePaymentSourceResponse;
 import com.checkout.payments.GetPaymentResponse;
 import com.checkout.payments.PaymentPending;
@@ -76,7 +77,7 @@ class RapiPagoPaymentsTestIT extends SandboxTestFixture {
                 .payer(Payer.builder().email("bruce@wayne-enterprises.com").name("Bruce Wayne").build())
                 .build();
 
-        final PaymentRequest<RapiPagoSource> request = PaymentRequest.rapiPago(rapiPagoSource, com.checkout.common.four.Currency.ARS, 100000L);
+        final PaymentRequest<RapiPagoSource> request = PaymentRequest.rapiPago(rapiPagoSource, Currency.ARS, 100000L);
 
         final PaymentResponse response = blocking(defaultApi.paymentsClient().requestAsync(request));
 

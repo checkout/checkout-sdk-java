@@ -1,5 +1,6 @@
 package com.checkout.payments;
 
+import com.checkout.common.Currency;
 import com.checkout.common.Link;
 import com.checkout.common.Resource;
 import com.google.gson.annotations.SerializedName;
@@ -16,7 +17,7 @@ public class PaymentProcessed extends Resource {
     private String id;
     private String actionId;
     private long amount;
-    private String currency;
+    private Currency currency;
     private boolean approved;
     private String status;
     private String authCode;

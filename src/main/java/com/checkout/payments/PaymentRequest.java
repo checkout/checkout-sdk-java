@@ -1,6 +1,8 @@
 package com.checkout.payments;
 
-import com.checkout.common.four.Currency;
+import com.checkout.common.Currency;
+import com.checkout.common.CustomerRequest;
+import com.checkout.common.MarketplaceData;
 import com.checkout.payments.apm.BalotoSource;
 import com.checkout.payments.apm.BoletoSource;
 import com.checkout.payments.apm.FawrySource;
@@ -31,37 +33,43 @@ public class PaymentRequest<T extends RequestSource> {
     private final T destination;
     private final Long amount;
     @NonNull
-    private final String currency;
+    private final Currency currency;
+    @SerializedName("payment_type")
     private String paymentType;
+    @SerializedName("merchant_initiated")
     private Boolean merchantInitiated;
     private String reference;
     private String description;
     private Boolean capture;
     private CustomerRequest customer;
+    @SerializedName("capture_on")
     private Instant captureOn;
+    @SerializedName("billing_descriptor")
     private BillingDescriptor billingDescriptor;
     private ShippingDetails shipping;
     @SerializedName("3ds")
     private ThreeDSRequest threeDS;
+    @SerializedName("previous_payment_id")
     private String previousPaymentId;
     private RiskRequest risk;
+    @SerializedName("success_url")
     private String successUrl;
+    @SerializedName("failure_url")
     private String failureUrl;
+    @SerializedName("payment_ip")
     private String paymentIp;
     private PaymentRecipient recipient;
     private Processing processing;
     @Builder.Default
     private Map<String, Object> metadata = new HashMap<>();
     private String fundTransferType;
+    @SerializedName("processing_channel_id")
     private String processingChannelId;
+    @SerializedName("authorization_type")
     private AuthorizationType authorizationType;
     private MarketplaceData marketplace;
 
-    /**
-     * @deprecated Please use {@link PaymentRequest} constructor with {@link Currency} parameter enum type.
-     */
-    @Deprecated
-    private PaymentRequest(final T sourceOrDestination, final String currency, final Long amount, final boolean isSource) {
+    private PaymentRequest(final T sourceOrDestination, final Currency currency, final Long amount, final boolean isSource) {
         validateParams("sourceOrDestination", sourceOrDestination, "currency", currency, "amount", amount);
         this.source = isSource ? sourceOrDestination : null;
         this.destination = isSource ? null : sourceOrDestination;
@@ -70,21 +78,12 @@ public class PaymentRequest<T extends RequestSource> {
         this.metadata = new HashMap<>();
     }
 
-    private PaymentRequest(final T sourceOrDestination, final Currency currency, final Long amount, final boolean isSource) {
-        validateParams("sourceOrDestination", sourceOrDestination, "currency", currency, "amount", amount);
-        this.source = isSource ? sourceOrDestination : null;
-        this.destination = isSource ? null : sourceOrDestination;
-        this.amount = amount;
-        this.currency = currency.name();
-        this.metadata = new HashMap<>();
-    }
-
     private PaymentRequest(final T sourceOrDestination, final Currency currency, final Long amount, final boolean isSource, final boolean capture) {
         validateParams("sourceOrDestination", sourceOrDestination, "currency", currency, "amount", amount, "capture", capture);
         this.source = isSource ? sourceOrDestination : null;
         this.destination = isSource ? null : sourceOrDestination;
         this.amount = amount;
-        this.currency = currency.name();
+        this.currency = currency;
         this.capture = capture;
     }
 
@@ -93,16 +92,15 @@ public class PaymentRequest<T extends RequestSource> {
         this.source = isSource ? sourceOrDestination : null;
         this.destination = isSource ? null : sourceOrDestination;
         this.amount = amount;
-        this.currency = currency.name();
+        this.currency = currency;
         this.reference = reference;
     }
 
-
-    public static <T extends RequestSource> PaymentRequest<T> fromSource(final T source, final String currency, final Long amount) {
+    public static <T extends RequestSource> PaymentRequest<T> fromSource(final T source, final Currency currency, final Long amount) {
         return new PaymentRequest<>(source, currency, amount, true);
     }
 
-    public static <T extends RequestSource> PaymentRequest<T> fromDestination(final T destination, final String currency, final Long amount) {
+    public static <T extends RequestSource> PaymentRequest<T> fromDestination(final T destination, final Currency currency, final Long amount) {
         return new PaymentRequest<>(destination, currency, amount, false);
     }
 

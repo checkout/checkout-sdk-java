@@ -3,11 +3,11 @@ package com.checkout;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
+import com.checkout.common.CustomerRequest;
 import com.checkout.common.Phone;
 import com.checkout.common.Product;
 import com.checkout.payments.BillingInformation;
 import com.checkout.payments.CardSource;
-import com.checkout.payments.CustomerRequest;
 import com.checkout.payments.DLocalSource;
 import com.checkout.payments.PaymentRequest;
 import com.checkout.payments.Processing;
@@ -87,8 +87,7 @@ public final class TestHelper {
         cardSource.setCvv(TestCardSource.VISA.getCvv());
         cardSource.setStored(false);
 
-        final CustomerRequest customer = new CustomerRequest();
-        customer.setEmail(generateRandomEmail());
+        final CustomerRequest customer = new CustomerRequest(null, generateRandomEmail(), null);
 
         final PaymentRequest<CardSource> request = PaymentRequest.fromSource(cardSource, Currency.GBP, amount);
         request.setCapture(false);
@@ -103,8 +102,7 @@ public final class TestHelper {
         dlocalSource.setCvv(TestCardSource.VISA.getCvv());
         dlocalSource.setStored(false);
 
-        final CustomerRequest customer = new CustomerRequest();
-        customer.setEmail(generateRandomEmail());
+        final CustomerRequest customer = new CustomerRequest(null, generateRandomEmail(), null);
 
         final PaymentRequest<DLocalSource> request = PaymentRequest.fromSource(dlocalSource, Currency.GBP, amount);
         request.setCapture(false);
@@ -114,13 +112,13 @@ public final class TestHelper {
         return request;
     }
 
-    public static PaymentRequest<RequestSource> createAlternativePaymentMethodRequest(final RequestSource alternativePaymentMethodRequestSource, final String currency) {
+    public static PaymentRequest<RequestSource> createAlternativePaymentMethodRequest(final RequestSource alternativePaymentMethodRequestSource, final Currency currency) {
         return createAlternativePaymentMethodRequest(alternativePaymentMethodRequestSource, currency, 100);
     }
 
-    public static PaymentRequest<RequestSource> createAlternativePaymentMethodRequest(final RequestSource alternativePaymentMethodRequestSource, final String currency, final long amount) {
-        final CustomerRequest customer = new CustomerRequest();
-        customer.setEmail(generateRandomEmail());
+    public static PaymentRequest<RequestSource> createAlternativePaymentMethodRequest(final RequestSource alternativePaymentMethodRequestSource, final Currency currency, final long amount) {
+
+        final CustomerRequest customer = new CustomerRequest(null, generateRandomEmail(), null);
 
         final PaymentRequest<RequestSource> request = PaymentRequest.fromSource(alternativePaymentMethodRequestSource, currency, amount);
         request.setCapture(false);
@@ -147,10 +145,7 @@ public final class TestHelper {
     }
 
     public static CustomerRequest createCustomer() {
-        return CustomerRequest.builder()
-                .email(generateRandomEmail())
-                .name("Jack Napier")
-                .build();
+        return new CustomerRequest(null, generateRandomEmail(), "Jack Napier");
     }
 
     public static Phone createPhone() {

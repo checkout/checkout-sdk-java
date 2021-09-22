@@ -2,7 +2,7 @@ package com.checkout.apm.giropay;
 
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
-import com.checkout.apm.giropay.BanksResponse;
+import com.checkout.common.Currency;
 import com.checkout.payments.PaymentPending;
 import com.checkout.payments.PaymentRequest;
 import com.checkout.payments.PaymentResponse;
@@ -27,7 +27,7 @@ class GiropayPaymentsTestIT extends SandboxTestFixture {
                 .purpose("CKO Giropay test")
                 .build();
 
-        final PaymentRequest<GiropaySource> request = PaymentRequest.giropay(giropaySource, com.checkout.common.four.Currency.EUR, 1000L);
+        final PaymentRequest<GiropaySource> request = PaymentRequest.giropay(giropaySource, Currency.EUR, 1000L);
 
         final PaymentResponse response = blocking(defaultApi.paymentsClient().requestAsync(request));
 

@@ -12,6 +12,9 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class VoidRequest {
+
     private String reference;
+
     private Map<String, Object> metadata;
+    
 }

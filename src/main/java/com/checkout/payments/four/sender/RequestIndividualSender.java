@@ -5,20 +5,22 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class RequestIndividualSender extends RequestSender {
 
     @SerializedName("first_name")
-    private final String firstName;
+    private String firstName;
 
     @SerializedName("last_name")
-    private final String lastName;
+    private String lastName;
 
-    private final Address address;
+    private Address address;
 
     @Builder
     private RequestIndividualSender(final String firstName,
@@ -28,6 +30,10 @@ public final class RequestIndividualSender extends RequestSender {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
+    }
+
+    public RequestIndividualSender() {
+        super(RequestSenderType.INDIVIDUAL);
     }
 
 }

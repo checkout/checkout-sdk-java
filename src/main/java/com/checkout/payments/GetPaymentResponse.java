@@ -1,5 +1,6 @@
 package com.checkout.payments;
 
+import com.checkout.common.Currency;
 import com.checkout.common.Link;
 import com.checkout.common.Resource;
 import com.google.gson.annotations.SerializedName;
@@ -28,7 +29,7 @@ public class GetPaymentResponse extends Resource {
 
     private Long amount;
 
-    private String currency;
+    private Currency currency;
 
     @SerializedName("payment_type")
     private String paymentType;

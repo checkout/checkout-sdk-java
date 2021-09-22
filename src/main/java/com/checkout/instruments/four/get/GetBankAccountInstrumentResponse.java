@@ -1,16 +1,16 @@
 package com.checkout.instruments.four.get;
 
 import com.checkout.common.CountryCode;
+import com.checkout.common.Currency;
 import com.checkout.common.four.AccountType;
 import com.checkout.common.four.BankDetails;
-import com.checkout.common.four.Currency;
 import com.checkout.common.four.InstrumentType;
 import com.google.gson.annotations.SerializedName;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 
-@Getter
+@Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class GetBankAccountInstrumentResponse extends GetInstrumentResponse {

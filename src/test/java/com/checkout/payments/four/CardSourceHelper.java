@@ -2,7 +2,7 @@ package com.checkout.payments.four;
 
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
-import com.checkout.common.four.Currency;
+import com.checkout.common.Currency;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.Payments;
 import com.checkout.payments.four.request.ThreeDSRequest;

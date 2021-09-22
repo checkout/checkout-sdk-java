@@ -34,4 +34,5 @@ public enum DisputeStatus {
     DisputeStatus(final String status) {
         this.status = status;
     }
+
 }

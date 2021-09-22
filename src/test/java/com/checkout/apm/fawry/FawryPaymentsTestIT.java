@@ -2,6 +2,7 @@ package com.checkout.apm.fawry;
 
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
+import com.checkout.common.Currency;
 import com.checkout.payments.AlternativePaymentSourceResponse;
 import com.checkout.payments.GetPaymentResponse;
 import com.checkout.payments.PaymentPending;
@@ -88,7 +89,7 @@ class FawryPaymentsTestIT extends SandboxTestFixture {
                 ))
                 .build();
 
-        final PaymentRequest<FawrySource> request = PaymentRequest.fawry(fawrySource, com.checkout.common.four.Currency.EGP, 1000L);
+        final PaymentRequest<FawrySource> request = PaymentRequest.fawry(fawrySource, Currency.EGP, 1000L);
 
         final PaymentResponse response = blocking(defaultApi.paymentsClient().requestAsync(request));
 

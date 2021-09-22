@@ -11,7 +11,7 @@ import lombok.ToString;
 public final class RequestInstrumentSender extends RequestSender {
 
     @Builder
-    private RequestInstrumentSender() {
+    public RequestInstrumentSender() {
         super(RequestSenderType.INSTRUMENT);
     }
 
