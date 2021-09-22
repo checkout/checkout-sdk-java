@@ -6,38 +6,40 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 import static com.checkout.common.PaymentSourceType.NETWORK_TOKEN;
 
 @Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 public final class RequestNetworkTokenSource extends RequestSource {
 
-    private final String token;
+    private String token;
 
     @SerializedName("expiry_month")
-    private final Integer expiryMonth;
+    private Integer expiryMonth;
 
     @SerializedName("expiry_year")
-    private final Integer expiryYear;
+    private Integer expiryYear;
 
     @SerializedName("token_type")
-    private final NetworkTokenType tokenType;
+    private NetworkTokenType tokenType;
 
-    private final String cryptogram;
+    private String cryptogram;
 
-    private final String eci;
+    private String eci;
 
-    private final boolean stored;
+    private boolean stored;
 
-    private final String name;
+    private String name;
 
-    private final String cvv;
+    private String cvv;
 
     @SerializedName("billing_address")
-    private final Address billingAddress;
+    private Address billingAddress;
 
-    private final Phone phone;
+    private Phone phone;
 
     @Builder
     private RequestNetworkTokenSource(final String token,
@@ -63,6 +65,10 @@ public final class RequestNetworkTokenSource extends RequestSource {
         this.cvv = cvv;
         this.billingAddress = billingAddress;
         this.phone = phone;
+    }
+
+    public RequestNetworkTokenSource() {
+        super(NETWORK_TOKEN);
     }
 
 }

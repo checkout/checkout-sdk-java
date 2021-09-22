@@ -7,19 +7,21 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class RequestTokenSource extends RequestSource {
 
-    private final String token;
+    private String token;
 
     @SerializedName("billing_address")
-    private final Address billingAddress;
+    private Address billingAddress;
 
-    private final Phone phone;
+    private Phone phone;
 
     @Builder
     private RequestTokenSource(final String token,
@@ -29,6 +31,10 @@ public final class RequestTokenSource extends RequestSource {
         this.token = token;
         this.billingAddress = billingAddress;
         this.phone = phone;
+    }
+
+    public RequestTokenSource() {
+        super(PaymentSourceType.TOKEN);
     }
 
 }

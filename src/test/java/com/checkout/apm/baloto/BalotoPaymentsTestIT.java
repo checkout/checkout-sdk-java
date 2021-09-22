@@ -3,6 +3,7 @@ package com.checkout.apm.baloto;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.CountryCode;
+import com.checkout.common.Currency;
 import com.checkout.payments.AlternativePaymentSourceResponse;
 import com.checkout.payments.GetPaymentResponse;
 import com.checkout.payments.PaymentPending;
@@ -75,7 +76,7 @@ class BalotoPaymentsTestIT extends SandboxTestFixture {
                 .payer(BalotoSource.Payer.builder().email("bruce@wayne-enterprises.com").name("Bruce Wayne").build())
                 .build();
 
-        final PaymentRequest<BalotoSource> request = PaymentRequest.baloto(balotoSource, com.checkout.common.four.Currency.COP, 100000L);
+        final PaymentRequest<BalotoSource> request = PaymentRequest.baloto(balotoSource, Currency.COP, 100000L);
 
         final PaymentResponse response = blocking(defaultApi.paymentsClient().requestAsync(request));
 

@@ -1,5 +1,6 @@
 package com.checkout.sources;
 
+import com.checkout.common.CustomerResponse;
 import com.checkout.common.Resource;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

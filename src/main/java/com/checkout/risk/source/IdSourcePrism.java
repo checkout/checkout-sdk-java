@@ -4,22 +4,28 @@ import com.checkout.common.PaymentSourceType;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class IdSourcePrism extends RiskPaymentRequestSource {
 
-    private final String id;
+    private String id;
 
-    private final String cvv;
+    private String cvv;
 
     @Builder
-    protected IdSourcePrism(final String id, final String cvv) {
+    private IdSourcePrism(final String id, final String cvv) {
         super(PaymentSourceType.ID);
         this.id = id;
         this.cvv = cvv;
+    }
+
+    public IdSourcePrism() {
+        super(PaymentSourceType.ID);
     }
 
 }

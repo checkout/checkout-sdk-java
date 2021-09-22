@@ -1,6 +1,7 @@
 package com.checkout.sources;
 
 import com.checkout.common.Address;
+import com.checkout.common.CustomerRequest;
 import com.checkout.common.Phone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

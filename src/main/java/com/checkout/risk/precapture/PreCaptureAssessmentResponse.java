@@ -2,11 +2,11 @@ package com.checkout.risk.precapture;
 
 import com.checkout.common.Resource;
 import com.google.gson.annotations.SerializedName;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 
-@Getter
+@Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class PreCaptureAssessmentResponse extends Resource {
@@ -19,4 +19,3 @@ public final class PreCaptureAssessmentResponse extends Resource {
     private PreCaptureWarning warning;
 
 }
-

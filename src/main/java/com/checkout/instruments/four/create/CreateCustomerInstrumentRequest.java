@@ -4,19 +4,21 @@ import com.checkout.common.CustomerRequest;
 import com.checkout.common.Phone;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Getter
+@Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@NoArgsConstructor
 public final class CreateCustomerInstrumentRequest extends CustomerRequest {
 
-    private final Phone phone;
+    private Phone phone;
 
     @SerializedName("default")
-    private final boolean defaultInstrument;
+    private boolean defaultInstrument;
 
     @Builder
     public CreateCustomerInstrumentRequest(final String id,

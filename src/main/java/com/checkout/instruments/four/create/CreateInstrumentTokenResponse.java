@@ -1,16 +1,16 @@
 package com.checkout.instruments.four.create;
 
 import com.checkout.common.CountryCode;
+import com.checkout.common.CustomerResponse;
 import com.checkout.common.four.CardCategory;
 import com.checkout.common.four.CardType;
-import com.checkout.common.CustomerResponse;
 import com.checkout.common.four.InstrumentType;
 import com.google.gson.annotations.SerializedName;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 
-@Getter
+@Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class CreateInstrumentTokenResponse extends CreateInstrumentResponse {

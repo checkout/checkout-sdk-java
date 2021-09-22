@@ -4,6 +4,7 @@ import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
 import com.checkout.common.Currency;
+import com.checkout.common.CustomerRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
@@ -50,11 +51,7 @@ class IdSourcePaymentsTestIT extends SandboxTestFixture {
     }
 
     private CustomerRequest toRequest(final CustomerResponse customer) {
-        final CustomerRequest request = new CustomerRequest();
-        request.setId(customer.getId());
-        request.setEmail(customer.getEmail());
-        request.setName(customer.getName());
-        return request;
+        return new CustomerRequest(customer.getId(), customer.getEmail(), customer.getName());
     }
 
 }

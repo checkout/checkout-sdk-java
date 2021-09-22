@@ -7,31 +7,33 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class RequestCardSource extends RequestSource {
 
-    private final String number;
+    private String number;
 
     @SerializedName("expiry_month")
-    private final Integer expiryMonth;
+    private Integer expiryMonth;
 
     @SerializedName("expiry_year")
-    private final Integer expiryYear;
+    private Integer expiryYear;
 
-    private final String name;
+    private String name;
 
-    private final Integer ccv;
+    private Integer ccv;
 
-    private final boolean stored;
+    private boolean stored;
 
     @SerializedName("billing_address")
-    private final Address billingAddress;
+    private Address billingAddress;
 
-    private final Phone phone;
+    private Phone phone;
 
     @Builder
     private RequestCardSource(final String number,
@@ -51,6 +53,10 @@ public final class RequestCardSource extends RequestSource {
         this.stored = stored;
         this.billingAddress = billingAddress;
         this.phone = phone;
+    }
+
+    public RequestCardSource() {
+        super(PaymentSourceType.CARD);
     }
 
 }

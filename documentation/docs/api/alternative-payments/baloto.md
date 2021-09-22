@@ -17,7 +17,7 @@ BalotoSource balotoSource = BalotoSource.builder()
                .build())
         .build();
 
-PaymentRequest<BalotoSource> request = PaymentRequest.baloto(balotoSource, com.checkout.common.beta.Currency.COP, 100000L);
+PaymentRequest<BalotoSource> request = PaymentRequest.baloto(balotoSource, com.checkout.common.Currency.COP, 100000L);
 
 PaymentResponse response = api.paymentsClient().requestAsync(request).get();
 ```

@@ -1,6 +1,7 @@
 package com.checkout.reconciliation;
 
 import com.checkout.common.CountryCode;
+import com.checkout.common.Currency;
 import com.checkout.common.Resource;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
@@ -18,10 +19,11 @@ public final class PaymentReportData extends Resource {
 
     private String id;
 
-    private String processingCurrency;
+    @SerializedName("processing_currency")
+    private Currency processingCurrency;
 
     @SerializedName("payout_currency")
-    private String payoutCurrency;
+    private Currency payoutCurrency;
 
     @SerializedName("requested_on")
     private Instant requestedOn;

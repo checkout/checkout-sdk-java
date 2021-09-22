@@ -4,19 +4,25 @@ import com.checkout.common.four.InstrumentType;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class UpdateInstrumentTokenRequest extends UpdateInstrumentRequest {
 
-    private final String token;
+    private String token;
 
     @Builder
-    protected UpdateInstrumentTokenRequest(final String token) {
+    private UpdateInstrumentTokenRequest(final String token) {
         super(InstrumentType.TOKEN);
         this.token = token;
+    }
+
+    public UpdateInstrumentTokenRequest() {
+        super(InstrumentType.TOKEN);
     }
 
 }

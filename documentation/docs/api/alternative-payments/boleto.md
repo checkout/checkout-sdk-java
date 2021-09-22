@@ -18,7 +18,7 @@ BoletoSource boletoSource = BoletoSource.builder()
                     .document("53033315550").build())
         .build();
 
-PaymentRequest<BoletoSource> request = PaymentRequest.boleto(boletoSource, com.checkout.common.beta.Currency.BRL, 100L);
+PaymentRequest<BoletoSource> request = PaymentRequest.boleto(boletoSource, com.checkout.common.Currency.BRL, 100L);
 
 PaymentResponse response = api.paymentsClient().requestAsync(request).get();
 
@@ -38,7 +38,7 @@ BoletoSource boletoSource = BoletoSource.builder()
                     .document("53033315550").build())
         .build();
 
-PaymentRequest<BoletoSource> request = PaymentRequest.boleto(boletoSource, com.checkout.common.beta.Currency.BRL, 100L);
+PaymentRequest<BoletoSource> request = PaymentRequest.boleto(boletoSource, com.checkout.common.Currency.BRL, 100L);
 
 PaymentResponse response = api.paymentsClient().requestAsync(request).get();
 ```

@@ -1,14 +1,14 @@
 package com.checkout.instruments.four.create;
 
-import com.checkout.common.four.BankDetails;
 import com.checkout.common.CustomerResponse;
+import com.checkout.common.four.BankDetails;
 import com.checkout.common.four.InstrumentType;
 import com.google.gson.annotations.SerializedName;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 
-@Getter
+@Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class CreateInstrumentBankAccountResponse extends CreateInstrumentResponse {

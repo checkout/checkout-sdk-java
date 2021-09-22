@@ -1,69 +1,71 @@
 package com.checkout.instruments.four.create;
 
 import com.checkout.common.CountryCode;
+import com.checkout.common.Currency;
 import com.checkout.common.four.AccountHolder;
 import com.checkout.common.four.AccountType;
 import com.checkout.common.four.BankDetails;
-import com.checkout.common.four.Currency;
 import com.checkout.common.four.InstrumentType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class CreateInstrumentBankAccountRequest extends CreateInstrumentRequest {
 
     @SerializedName("account_type")
-    private final AccountType accountType;
+    private AccountType accountType;
 
     @SerializedName("account_number")
-    private final String accountNumber;
+    private String accountNumber;
 
     @SerializedName("bank_code")
-    private final String bankCode;
+    private String bankCode;
 
     @SerializedName("branch_code")
-    private final String branchCode;
+    private String branchCode;
 
-    private final String iban;
+    private String iban;
 
-    private final String bban;
+    private String bban;
 
     @SerializedName("swift_bic")
-    private final String swiftBic;
+    private String swiftBic;
 
-    private final Currency currency;
+    private Currency currency;
 
-    private final CountryCode country;
+    private CountryCode country;
 
     @SerializedName("processing_channel_id")
-    private final String processingChannelId;
+    private String processingChannelId;
 
     @SerializedName("account_holder")
-    private final AccountHolder accountHolder;
+    private AccountHolder accountHolder;
 
-    private final BankDetails bank;
+    private BankDetails bank;
 
-    private final CreateCustomerInstrumentRequest customer;
+    private CreateCustomerInstrumentRequest customer;
 
     @Builder
-    protected CreateInstrumentBankAccountRequest(final AccountType accountType,
-                                                 final String accountNumber,
-                                                 final String bankCode,
-                                                 final String branchCode,
-                                                 final String iban,
-                                                 final String bban,
-                                                 final String swiftBic,
-                                                 final Currency currency,
-                                                 final CountryCode country,
-                                                 final String processingChannelId,
-                                                 final AccountHolder accountHolder,
-                                                 final BankDetails bank,
-                                                 final CreateCustomerInstrumentRequest customer) {
+    private CreateInstrumentBankAccountRequest(final AccountType accountType,
+                                               final String accountNumber,
+                                               final String bankCode,
+                                               final String branchCode,
+                                               final String iban,
+                                               final String bban,
+                                               final String swiftBic,
+                                               final Currency currency,
+                                               final CountryCode country,
+                                               final String processingChannelId,
+                                               final AccountHolder accountHolder,
+                                               final BankDetails bank,
+                                               final CreateCustomerInstrumentRequest customer) {
         super(InstrumentType.BANK_ACCOUNT);
         this.accountType = accountType;
         this.accountNumber = accountNumber;
@@ -78,6 +80,10 @@ public final class CreateInstrumentBankAccountRequest extends CreateInstrumentRe
         this.accountHolder = accountHolder;
         this.bank = bank;
         this.customer = customer;
+    }
+
+    public CreateInstrumentBankAccountRequest() {
+        super(InstrumentType.BANK_ACCOUNT);
     }
 
 }
