@@ -50,7 +50,7 @@ public class InstrumentDetailsResponse {
     @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
-    private CustomerResponse customer;
+    private InstrumentCustomer customer;
 
     /**
      * @deprecated Will be removed on a future version

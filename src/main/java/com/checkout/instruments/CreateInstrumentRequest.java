@@ -19,4 +19,6 @@ public class CreateInstrumentRequest {
     @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
+    private InstrumentCustomer customer;
+
 }

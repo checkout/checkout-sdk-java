@@ -50,7 +50,12 @@ class InstrumentsTestIT extends SandboxTestFixture {
                 .type("token")
                 .token(cardToken.getToken())
                 .accountHolder(accountHolder)
+                .customer(InstrumentCustomer.builder()
+                        .email("instrumentcustomer@checkout.com")
+                        .name("Instrument Customer")
+                        .build())
                 .build();
+
         final CreateInstrumentResponse response = blocking(getApi().instrumentsClient().createInstrument(request));
 
         assertNotNull(response);
@@ -68,6 +73,9 @@ class InstrumentsTestIT extends SandboxTestFixture {
         assertNotNull(response.getCustomer());
         assertNotNull(response.getCustomer().getId());
         assertNotNull(response.getCustomer().getEmail());
+        assertNotNull(response.getCustomer());
+        assertEquals(request.getCustomer().getName(), response.getCustomer().getName());
+        assertEquals(request.getCustomer().getEmail(), response.getCustomer().getEmail());
     }
 
     @Test
