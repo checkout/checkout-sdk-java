@@ -45,7 +45,7 @@ public class CreateInstrumentResponse {
     @SerializedName("product_type")
     private String productType;
 
-    private CustomerResponse customer;
+    private InstrumentCustomer customer;
 
     /**
      * @deprecated Will be removed on a future version

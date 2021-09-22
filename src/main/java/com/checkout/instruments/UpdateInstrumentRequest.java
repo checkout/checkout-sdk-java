@@ -23,6 +23,18 @@ public class UpdateInstrumentRequest {
     @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
-    private CustomerRequest customer;
+    private Customer customer;
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Customer {
+
+        private String id;
+
+        @SerializedName("default")
+        private boolean isDefault;
+    }
 
 }
