@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateInstrumentRequest {
+public final class UpdateInstrumentRequest {
 
     @SerializedName("expiry_month")
     private int expiryMonth;

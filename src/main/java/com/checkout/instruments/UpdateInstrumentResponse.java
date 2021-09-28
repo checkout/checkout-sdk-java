@@ -3,7 +3,7 @@ package com.checkout.instruments;
 import lombok.Data;
 
 @Data
-public class UpdateInstrumentResponse {
+public final class UpdateInstrumentResponse {
 
     private String type;
 

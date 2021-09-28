@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountHolder {
+public final class AccountHolder {
 
     @SerializedName("billing_address")
     private Address billingAddress;

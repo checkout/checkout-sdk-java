@@ -1,13 +1,14 @@
 package com.checkout.instruments;
 
 import com.checkout.common.CountryCode;
+import com.checkout.common.CustomerResponse;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 import java.util.Optional;
 
 @Data
-public class CreateInstrumentResponse {
+public final class CreateInstrumentResponse {
 
     private String id;
 
@@ -45,7 +46,7 @@ public class CreateInstrumentResponse {
     @SerializedName("product_type")
     private String productType;
 
-    private InstrumentCustomer customer;
+    private CustomerResponse customer;
 
     /**
      * @deprecated Will be removed on a future version

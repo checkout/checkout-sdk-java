@@ -50,9 +50,11 @@ class InstrumentsTestIT extends SandboxTestFixture {
                 .type("token")
                 .token(cardToken.getToken())
                 .accountHolder(accountHolder)
-                .customer(InstrumentCustomer.builder()
+                .customer(InstrumentCustomerRequest.builder()
                         .email("instrumentcustomer@checkout.com")
                         .name("Instrument Customer")
+                        .phone(Phone.builder().countryCode("+1").number("4155552671").build())
+                        .isDefault(true)
                         .build())
                 .build();
 
@@ -74,12 +76,14 @@ class InstrumentsTestIT extends SandboxTestFixture {
         assertNotNull(response.getCustomer().getId());
         assertNotNull(response.getCustomer().getEmail());
         assertNotNull(response.getCustomer());
+        assertNotNull(response.getCustomer().getId());
         assertEquals(request.getCustomer().getName(), response.getCustomer().getName());
         assertEquals(request.getCustomer().getEmail(), response.getCustomer().getEmail());
     }
 
     @Test
     void shouldGetInstrument() {
+
         final CardTokenResponse cardToken = blocking(getApi().tokensClient().requestAsync(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
@@ -87,10 +91,17 @@ class InstrumentsTestIT extends SandboxTestFixture {
                 .token(cardToken.getToken())
                 .accountHolder(accountHolder)
                 .build();
+
         final CreateInstrumentResponse createInstrumentResponse = blocking(getApi().instrumentsClient().createInstrument(request));
 
         final InstrumentDetailsResponse instrument = blocking(getApi().instrumentsClient().getInstrument(createInstrumentResponse.getId()));
+
         assertNotNull(instrument);
+        assertNotNull(instrument.getCustomer());
+        assertNotNull(instrument.getCustomer().getId());
+        assertNotNull(instrument.getCustomer().getEmail());
+        assertTrue(instrument.getCustomer().isDefault());
+
         assertEquals(createInstrumentResponse.getBin(), instrument.getBin());
         assertEquals(createInstrumentResponse.getProductType(), instrument.getProductType());
         assertEquals(createInstrumentResponse.getProductId(), instrument.getProductId());
@@ -108,9 +119,6 @@ class InstrumentsTestIT extends SandboxTestFixture {
         assertNotNull(createInstrumentResponse.getCustomer());
         assertNotNull(createInstrumentResponse.getCustomer().getId());
         assertNotNull(createInstrumentResponse.getCustomer().getEmail());
-        assertNotNull(instrument.getFingerprint());
-        assertNotNull(instrument.getAccountHolder());
-        assertNotNull(instrument.getAccountHolder().getBillingAddress());
         assertEquals(accountHolder.getBillingAddress().getAddressLine1(), instrument.getAccountHolder().getBillingAddress().getAddressLine1());
         assertEquals(accountHolder.getBillingAddress().getAddressLine2(), instrument.getAccountHolder().getBillingAddress().getAddressLine2());
         assertEquals(accountHolder.getBillingAddress().getCity(), instrument.getAccountHolder().getBillingAddress().getCity());
@@ -123,7 +131,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
         assertNotNull(instrument.getCustomer());
         assertNotNull(instrument.getCustomer().getId());
         assertNotNull(instrument.getCustomer().getEmail());
-        assertTrue(instrument.getCustomer().isDefault());
+
     }
 
     @Test

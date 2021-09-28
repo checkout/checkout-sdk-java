@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Optional;
 
 @Data
-public class InstrumentDetailsResponse {
+public final class InstrumentDetailsResponse {
 
     private String id;
 
@@ -50,7 +50,7 @@ public class InstrumentDetailsResponse {
     @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
-    private InstrumentCustomer customer;
+    private InstrumentCustomerResponse customer;
 
     /**
      * @deprecated Will be removed on a future version
