@@ -3,7 +3,7 @@ package com.checkout.common;
 import lombok.Data;
 
 @Data
-public final class CustomerResponse {
+public class CustomerResponse {
 
     private String id;
 

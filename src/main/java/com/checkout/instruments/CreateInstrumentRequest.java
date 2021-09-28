@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateInstrumentRequest {
+public final class CreateInstrumentRequest {
 
     private String type;
 
@@ -19,6 +19,6 @@ public class CreateInstrumentRequest {
     @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
-    private InstrumentCustomer customer;
+    private InstrumentCustomerRequest customer;
 
 }
