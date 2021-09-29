@@ -6,6 +6,7 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
 
     private Environment environment;
     private URI uri;
+    private CheckoutFilesApiConfiguration filesApiConfiguration = CheckoutFilesApiConfiguration.disabled();
 
     public AbstractCheckoutSdkBuilder<T> environment(final Environment environment) {
         this.environment = environment;
@@ -14,6 +15,11 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
 
     public AbstractCheckoutSdkBuilder<T> uri(final URI uri) {
         this.uri = uri;
+        return this;
+    }
+
+    public AbstractCheckoutSdkBuilder<T> enableFilesApi(final Environment environment) {
+        this.filesApiConfiguration = CheckoutFilesApiConfiguration.enabled(environment);
         return this;
     }
 
@@ -33,9 +39,9 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
         }
         final SdkCredentials sdkCredentials = getSdkCredentials();
         if (uri == null) {
-            return new CheckoutConfiguration(sdkCredentials, getEnvironment());
+            return new CheckoutConfiguration(sdkCredentials, getEnvironment(), filesApiConfiguration);
         }
-        return new CheckoutConfiguration(sdkCredentials, getUri());
+        return new CheckoutConfiguration(sdkCredentials, getUri(), filesApiConfiguration);
     }
 
     public abstract T build();

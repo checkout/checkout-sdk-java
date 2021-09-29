@@ -1,22 +1,24 @@
 package com.checkout;
 
-import java.util.stream.Stream;
-
-import static com.checkout.common.CheckoutUtils.validateParams;
-
 public enum Environment {
 
-    SANDBOX("https://api.sandbox.checkout.com/"),
-    PRODUCTION("https://api.checkout.com/");
+    SANDBOX("https://api.sandbox.checkout.com/", "https://files.sandbox.checkout.com/"),
+    PRODUCTION("https://api.checkout.com/", "https://files.checkout.com/");
 
     private final String uri;
+    private final String filesApiURI;
 
-    Environment(final String uri) {
+    Environment(final String uri, final String filesApiURI) {
         this.uri = uri;
+        this.filesApiURI = filesApiURI;
     }
 
     public String getUri() {
         return uri;
+    }
+
+    public String getFilesApiURI() {
+        return filesApiURI;
     }
 
     /**
