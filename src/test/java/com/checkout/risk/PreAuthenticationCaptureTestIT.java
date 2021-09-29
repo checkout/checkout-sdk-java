@@ -12,7 +12,7 @@ import com.checkout.common.Phone;
 import com.checkout.instruments.AccountHolder;
 import com.checkout.instruments.CreateInstrumentRequest;
 import com.checkout.instruments.CreateInstrumentResponse;
-import com.checkout.payments.four.CardSourceHelper;
+import com.checkout.CardSourceHelper;
 import com.checkout.risk.preauthentication.PreAuthenticationAssessmentRequest;
 import com.checkout.risk.preauthentication.PreAuthenticationAssessmentResponse;
 import com.checkout.risk.precapture.AuthenticationResult;

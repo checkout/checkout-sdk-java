@@ -1,9 +1,10 @@
 package com.checkout.risk;
 
 import com.checkout.ApiClient;
+import com.checkout.CheckoutArgumentException;
+import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
-import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkCredentials;
 import com.checkout.risk.preauthentication.PreAuthenticationAssessmentRequest;
 import com.checkout.risk.preauthentication.PreAuthenticationAssessmentResponse;
@@ -20,14 +21,16 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class RiskClientImplTest {
+class RiskClientImplTest {
 
     private static final String PRE_AUTHENTICATION_PATH = "risk/assessments/pre-authentication";
     private static final String PRE_CAPTURE_PATH = "risk/assessments/pre-authentication";
@@ -47,19 +50,20 @@ public class RiskClientImplTest {
     private RiskClient riskClient;
 
     @BeforeEach
-    public void setup() {
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+    void setup() {
         this.riskClient = new RiskClientImpl(apiClient, configuration);
     }
 
     @Test
-    public void shouldRequestPreAuthenticationRiskScan() throws ExecutionException, InterruptedException {
+    void shouldRequestPreAuthenticationRiskScan() throws ExecutionException, InterruptedException {
+
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
 
         final PreAuthenticationAssessmentRequest request = mock(PreAuthenticationAssessmentRequest.class);
         final PreAuthenticationAssessmentResponse response = mock(PreAuthenticationAssessmentResponse.class);
 
-        when(apiClient.postAsync(eq(PRE_AUTHENTICATION_PATH), any(SdkAuthorization.class), eq(PreAuthenticationAssessmentResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync(eq(PRE_AUTHENTICATION_PATH), eq(authorization), eq(PreAuthenticationAssessmentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<PreAuthenticationAssessmentResponse> preAuthenticationAssessmentResponse = riskClient.requestPreAuthenticationRiskScan(request);
@@ -70,18 +74,51 @@ public class RiskClientImplTest {
     }
 
     @Test
-    public void shouldRequestPreCaptureRiskScan() throws ExecutionException, InterruptedException {
+    void preAuthenticationRiskScan_shouldThrowOnNullRequest() {
+
+        try {
+            riskClient.requestPreAuthenticationRiskScan(null);
+            fail();
+        } catch (final Exception e) {
+            assertTrue(e instanceof CheckoutArgumentException);
+            assertEquals("preAuthenticationAssessmentRequest cannot be null", e.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+
+    }
+
+    @Test
+    void shouldRequestPreCaptureRiskScan() throws ExecutionException, InterruptedException {
+
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
 
         final PreCaptureAssessmentRequest request = mock(PreCaptureAssessmentRequest.class);
         final PreCaptureAssessmentResponse response = mock(PreCaptureAssessmentResponse.class);
 
-        when(apiClient.postAsync(eq(PRE_CAPTURE_PATH), any(SdkAuthorization.class), eq(PreCaptureAssessmentResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync(eq(PRE_CAPTURE_PATH), eq(authorization), eq(PreCaptureAssessmentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<PreCaptureAssessmentResponse> responseCompletableFuture = riskClient.requestPreCaptureRiskScan(request);
 
         assertNotNull(responseCompletableFuture.get());
         assertEquals(response, responseCompletableFuture.get());
+
+    }
+
+    @Test
+    void preCaptureRiskScan_shouldThrowOnNullRequest() {
+
+        try {
+            riskClient.requestPreCaptureRiskScan(null);
+            fail();
+        } catch (final Exception e) {
+            assertTrue(e instanceof CheckoutArgumentException);
+            assertEquals("preCaptureAssessmentRequest cannot be null", e.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
 
     }
 

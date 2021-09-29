@@ -1,9 +1,9 @@
 package com.checkout.payments.four;
 
 import com.checkout.ApiClient;
+import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
-import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkCredentials;
 import com.checkout.payments.four.action.PaymentAction;
 import com.checkout.payments.four.capture.CaptureRequest;

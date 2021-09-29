@@ -6,6 +6,7 @@ import com.checkout.instruments.four.InstrumentsClient;
 import com.checkout.marketplace.MarketplaceClient;
 import com.checkout.payments.four.PaymentsClient;
 import com.checkout.risk.RiskClient;
+import com.checkout.sessions.SessionsClient;
 import com.checkout.tokens.four.TokensClient;
 import com.checkout.workflows.four.WorkflowsClient;
 
@@ -26,6 +27,8 @@ public interface CheckoutApi {
     WorkflowsClient workflowsClient();
 
     MarketplaceClient marketplaceClient();
+
+    SessionsClient sessionsClient();
 
 }
 

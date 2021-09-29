@@ -1,5 +1,6 @@
 package com.checkout.payments.four;
 
+import com.checkout.CardSourceHelper;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.Address;
@@ -24,10 +25,10 @@ import com.checkout.tokens.four.response.CardTokenResponse;
 
 import java.util.UUID;
 
-import static com.checkout.payments.four.CardSourceHelper.getCardSourcePayment;
-import static com.checkout.payments.four.CardSourceHelper.getCorporateSender;
-import static com.checkout.payments.four.CardSourceHelper.getIndividualSender;
-import static com.checkout.payments.four.CardSourceHelper.getRequestCardSource;
+import static com.checkout.CardSourceHelper.getCardSourcePayment;
+import static com.checkout.CardSourceHelper.getCorporateSender;
+import static com.checkout.CardSourceHelper.getIndividualSender;
+import static com.checkout.CardSourceHelper.getRequestCardSource;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {

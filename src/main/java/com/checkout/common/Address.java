@@ -12,7 +12,7 @@ import java.util.Optional;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class Address {
+public class Address {
 
     @SerializedName(value = "address_line1", alternate = {"addressLine1"})
     private String addressLine1;

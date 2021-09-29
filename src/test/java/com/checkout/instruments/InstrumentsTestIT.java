@@ -1,6 +1,5 @@
 package com.checkout.instruments;
 
-import com.checkout.CheckoutResourceNotFoundException;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestCardSource;
@@ -157,19 +156,19 @@ class InstrumentsTestIT extends SandboxTestFixture {
 
     @Test
     void shouldDeleteInstrument() {
+
         final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().requestAsync(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type("token")
                 .token(cardToken.getToken())
                 .build();
+
         final CreateInstrumentResponse response = blocking(defaultApi.instrumentsClient().createInstrument(request));
 
-        try {
-            defaultApi.instrumentsClient().getInstrument(response.getId()).get();
-        } catch (final Exception e) {
-            assertTrue(e.getCause() instanceof CheckoutResourceNotFoundException);
-        }
+        blocking(defaultApi.instrumentsClient().deleteInstrument(response.getId()));
+
+        assertNotFound(defaultApi.instrumentsClient().getInstrument(response.getId()));
 
     }
 

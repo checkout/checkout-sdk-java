@@ -11,6 +11,8 @@ import com.checkout.risk.precapture.PreCaptureAssessmentResponse;
 
 import java.util.concurrent.CompletableFuture;
 
+import static com.checkout.common.CheckoutUtils.validateParams;
+
 public class RiskClientImpl extends AbstractClient implements RiskClient {
 
     private static final String PRE_AUTHENTICATION_PATH = "risk/assessments/pre-authentication";
@@ -22,11 +24,13 @@ public class RiskClientImpl extends AbstractClient implements RiskClient {
 
     @Override
     public CompletableFuture<PreAuthenticationAssessmentResponse> requestPreAuthenticationRiskScan(final PreAuthenticationAssessmentRequest preAuthenticationAssessmentRequest) {
+        validateParams("preAuthenticationAssessmentRequest", preAuthenticationAssessmentRequest);
         return apiClient.postAsync(PRE_AUTHENTICATION_PATH, sdkAuthorization(), PreAuthenticationAssessmentResponse.class, preAuthenticationAssessmentRequest, null);
     }
 
     @Override
     public CompletableFuture<PreCaptureAssessmentResponse> requestPreCaptureRiskScan(final PreCaptureAssessmentRequest preCaptureAssessmentRequest) {
+        validateParams("preCaptureAssessmentRequest", preCaptureAssessmentRequest);
         return apiClient.postAsync(PRE_CAPTURE_PATH, sdkAuthorization(), PreCaptureAssessmentResponse.class, preCaptureAssessmentRequest, null);
     }
 

@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static com.checkout.payments.four.CardSourceHelper.getCardSourcePayment;
-import static com.checkout.payments.four.CardSourceHelper.getCorporateSender;
-import static com.checkout.payments.four.CardSourceHelper.getRequestCardSource;
+import static com.checkout.CardSourceHelper.getCardSourcePayment;
+import static com.checkout.CardSourceHelper.getCorporateSender;
+import static com.checkout.CardSourceHelper.getRequestCardSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

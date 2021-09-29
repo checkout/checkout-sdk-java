@@ -29,16 +29,20 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 
 import java.lang.reflect.Type;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 public class GsonSerializer implements Serializer {
 
     private static final String TYPE = "type";
+    private static final Type MAP_TYPE_TOKEN = new TypeToken<Map<String, Object>>() {
+    }.getType();
 
     private static final Gson DEFAULT_GSON = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -94,6 +98,11 @@ public class GsonSerializer implements Serializer {
     @Override
     public <T> T fromJson(final String json, final Type type) {
         return gson.fromJson(json, type);
+    }
+
+    @Override
+    public Map<String, Object> fromJson(final String json) {
+        return gson.fromJson(json, MAP_TYPE_TOKEN);
     }
 
     private static <E extends Enum<E>> String identifier(final E enumEntry) {

@@ -1,6 +1,5 @@
 package com.checkout.payments.four;
 
-import com.checkout.CheckoutResourceNotFoundException;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
@@ -24,29 +23,22 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import static com.checkout.payments.four.CardSourceHelper.getCardSourcePayment;
-import static com.checkout.payments.four.CardSourceHelper.getIndividualSender;
-import static com.checkout.payments.four.CardSourceHelper.getRequestCardSource;
+import static com.checkout.CardSourceHelper.getCardSourcePayment;
+import static com.checkout.CardSourceHelper.getIndividualSender;
+import static com.checkout.CardSourceHelper.getRequestCardSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class GetPaymentsTestIT extends AbstractPaymentsTestIT {
 
     @Test
-    void shouldHandleCorrectlyResourceNotFound() throws Exception {
-        try {
-            paymentsClient.getPayment("fake").get();
-            fail();
-        } catch (final ExecutionException e) {
-            assertTrue(e.getCause() instanceof CheckoutResourceNotFoundException);
-        }
+    void shouldHandleCorrectlyResourceNotFound() {
+        assertNotFound(paymentsClient.getPayment("fake"));
     }
 
     @Test

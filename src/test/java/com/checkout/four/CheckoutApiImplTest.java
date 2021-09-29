@@ -27,6 +27,7 @@ class CheckoutApiImplTest {
         assertNotNull(checkoutApi.riskClient());
         assertNotNull(checkoutApi.workflowsClient());
         assertNotNull(checkoutApi.marketplaceClient());
+        assertNotNull(checkoutApi.sessionsClient());
     }
 
 }

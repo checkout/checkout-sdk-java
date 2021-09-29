@@ -1,6 +1,6 @@
 package com.checkout.disputes;
 
-import com.checkout.CheckoutValidationException;
+import com.checkout.CheckoutApiException;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
@@ -17,6 +17,7 @@ import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
 import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -87,9 +88,9 @@ class DisputesTestIT extends SandboxTestFixture {
             try {
                 defaultApi.disputesClient().accept(dispute.getId()).get();
                 fail();
-            } catch (final Exception ex) {
-                assertTrue(ex.getCause() instanceof CheckoutValidationException);
-                assertTrue(ex.getMessage().contains("dispute_already_accepted"));
+            } catch (final Exception e) {
+                assertTrue(e instanceof CheckoutApiException);
+                assertTrue(e.getMessage().contains("dispute_already_accepted"));
             }
         }
     }

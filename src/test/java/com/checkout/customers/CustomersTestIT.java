@@ -1,6 +1,5 @@
 package com.checkout.customers;
 
-import com.checkout.CheckoutResourceNotFoundException;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
@@ -69,10 +68,7 @@ class CustomersTestIT extends SandboxTestFixture {
         //Delete customer
         blocking(defaultApi.customersClient().delete(customerId));
         //Verify customer does not exist
-        try {
-            defaultApi.customersClient().get(customerId).get();
-        } catch (final Exception e) {
-            assertTrue(e.getCause() instanceof CheckoutResourceNotFoundException);
-        }
+        assertNotFound(defaultApi.customersClient().get(customerId));
     }
+
 }
