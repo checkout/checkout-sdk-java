@@ -13,7 +13,7 @@ import com.checkout.common.four.AccountHolder;
 import com.checkout.instruments.four.create.CreateCustomerInstrumentRequest;
 import com.checkout.instruments.four.create.CreateInstrumentResponse;
 import com.checkout.instruments.four.create.CreateInstrumentTokenRequest;
-import com.checkout.payments.four.CardSourceHelper;
+import com.checkout.CardSourceHelper;
 import com.checkout.risk.Device;
 import com.checkout.risk.Location;
 import com.checkout.risk.RiskPayment;

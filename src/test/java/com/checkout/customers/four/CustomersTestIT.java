@@ -1,6 +1,5 @@
 package com.checkout.customers.four;
 
-import com.checkout.CheckoutResourceNotFoundException;
 import com.checkout.common.Phone;
 import com.checkout.instruments.four.CardTokenInstrumentsTestIT;
 import com.checkout.instruments.four.get.GetCardInstrumentResponse;
@@ -85,11 +84,8 @@ class CustomersTestIT extends CardTokenInstrumentsTestIT {
         //Delete customer
         blocking(fourApi.customersClient().delete(customerId));
         //Verify customer does not exist
-        try {
-            fourApi.customersClient().get(customerId).get();
-        } catch (final Exception e) {
-            assertTrue(e.getCause() instanceof CheckoutResourceNotFoundException);
-        }
+        assertNotFound(fourApi.customersClient().get(customerId));
+
     }
 
 }

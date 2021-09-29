@@ -1,6 +1,6 @@
 package com.checkout.disputes.four;
 
-import com.checkout.CheckoutValidationException;
+import com.checkout.CheckoutApiException;
 import com.checkout.common.FileDetailsResponse;
 import com.checkout.common.FilePurpose;
 import com.checkout.common.FileRequest;
@@ -13,14 +13,15 @@ import com.checkout.payments.four.response.source.ResponseCardSource;
 import com.checkout.payments.four.sender.RequestIndividualSender;
 import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import java.io.File;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-import static com.checkout.payments.four.CardSourceHelper.getCardSourcePaymentForDispute;
-import static com.checkout.payments.four.CardSourceHelper.getIndividualSender;
-import static com.checkout.payments.four.CardSourceHelper.getRequestCardSource;
+import static com.checkout.CardSourceHelper.getCardSourcePaymentForDispute;
+import static com.checkout.CardSourceHelper.getIndividualSender;
+import static com.checkout.CardSourceHelper.getRequestCardSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -76,17 +77,17 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
 
     @Test
     void shouldFailOnAcceptDisputeAlreadyAccepted() {
-        final DisputesQueryResponse queryResponse = blocking(fourApi.disputesClient().query(DisputesQueryFilter.builder()
-                .statuses(DisputeStatus.ACCEPTED.toString()).build()));
+        final DisputesQueryResponse queryResponse = blocking(fourApi.disputesClient()
+                .query(DisputesQueryFilter.builder().statuses(DisputeStatus.ACCEPTED.toString()).build()));
         assertNotNull(queryResponse);
         if (queryResponse.getTotalCount() > 0) {
             final Dispute dispute = queryResponse.getData().get(0);
             try {
                 fourApi.disputesClient().accept(dispute.getId()).get();
                 fail();
-            } catch (final Exception ex) {
-                assertTrue(ex.getCause() instanceof CheckoutValidationException);
-                assertTrue(ex.getMessage().contains("dispute_already_accepted"));
+            } catch (final Exception e) {
+                assertTrue(e.getCause() instanceof CheckoutApiException);
+                assertTrue(e.getMessage().contains("dispute_already_accepted"));
             }
         }
     }

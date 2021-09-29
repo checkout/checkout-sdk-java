@@ -1,4 +1,4 @@
-package com.checkout.payments.four;
+package com.checkout;
 
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
@@ -39,7 +39,7 @@ public class CardSourceHelper {
                 .build();
     }
 
-    static RequestCorporateSender getCorporateSender() {
+    public static RequestCorporateSender getCorporateSender() {
         return RequestCorporateSender.builder()
                 .companyName("CheckoutSdk")
                 .address(Address.builder()
@@ -61,7 +61,7 @@ public class CardSourceHelper {
                 .build();
     }
 
-    static PaymentRequest getCardSourcePayment(final RequestCardSource cardSource, final RequestSender sender, final boolean three3ds) {
+    public static PaymentRequest getCardSourcePayment(final RequestCardSource cardSource, final RequestSender sender, final boolean three3ds) {
         final ThreeDSRequest threeDSRequest = ThreeDSRequest.builder().enabled(three3ds).build();
         return Payments.card(cardSource).fromSender(sender)
                 .capture(false)

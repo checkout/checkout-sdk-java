@@ -1,32 +1,23 @@
 package com.checkout;
 
-import com.checkout.common.ApiResponseInfo;
-import org.apache.commons.lang3.StringUtils;
+import lombok.Getter;
+import lombok.ToString;
 
-public class CheckoutApiException extends CheckoutException {
+import java.util.Map;
 
-    private final ApiResponseInfo apiResponseInfo;
+@Getter
+@ToString
+public final class CheckoutApiException extends CheckoutException {
 
-    public CheckoutApiException(final ApiResponseInfo apiResponseInfo) {
-        this(apiResponseInfo, null);
-    }
+    private final String requestId;
+    private final int httpStatusCode;
+    private final Map<String, Object> errorDetails;
 
-    public CheckoutApiException(final ApiResponseInfo apiResponseInfo, final String additionalInformation) {
-        super(generateMessage(apiResponseInfo.getHttpStatusCode(), additionalInformation));
-        this.apiResponseInfo = apiResponseInfo;
-    }
-
-    public ApiResponseInfo getApiResponseInfo() {
-        return apiResponseInfo;
-    }
-
-    private static String generateMessage(final int httpStatusCode, final String additionalInformation) {
-        final String message = "The API response status code (" + httpStatusCode + ") does not indicate success.";
-        if (!StringUtils.isBlank(additionalInformation)) {
-            return message + " " + additionalInformation;
-        }
-        return message;
+    public CheckoutApiException(final String requestId, final int statusCode, final Map<String, Object> errorDetails) {
+        super("The API response status code (" + statusCode + ") does not indicate success.");
+        this.requestId = requestId;
+        this.httpStatusCode = statusCode;
+        this.errorDetails = errorDetails;
     }
 
 }
-

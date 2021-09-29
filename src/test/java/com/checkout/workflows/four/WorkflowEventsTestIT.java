@@ -49,7 +49,7 @@ class WorkflowEventsTestIT extends AbstractWorkflowTestIT {
 
         capturePayment(payment.getId());
 
-        nap(10);
+        nap(15);
 
         final SubjectEventsResponse subjectEventsResponse = blocking(fourApi.workflowsClient().getSubjectEvents(payment.getId()));
 

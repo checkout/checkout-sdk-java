@@ -1,6 +1,5 @@
 package com.checkout.instruments.four;
 
-import com.checkout.CheckoutResourceNotFoundException;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Phone;
@@ -21,8 +20,6 @@ import org.junit.jupiter.api.Test;
 import static com.checkout.TestHelper.generateRandomEmail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
 
@@ -127,12 +124,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
 
         blocking(fourApi.instrumentsClient().delete(response.getId()));
 
-        try {
-            fourApi.instrumentsClient().get(response.getId()).get();
-            fail();
-        } catch (final Exception e) {
-            assertTrue(e.getCause() instanceof CheckoutResourceNotFoundException);
-        }
+        assertNotFound(fourApi.instrumentsClient().get(response.getId()));
 
     }
 

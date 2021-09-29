@@ -3,7 +3,6 @@ package com.checkout;
 import com.checkout.client.ClientOperation;
 import com.checkout.common.ApiResponseInfo;
 import com.checkout.common.CheckoutUtils;
-import com.checkout.common.ErrorResponse;
 import com.checkout.common.FileRequest;
 import com.checkout.common.Resource;
 import com.checkout.marketplace.MarketplaceFileRequest;
@@ -24,8 +23,6 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 
 public class ApiClientImpl implements ApiClient {
 
-    private static final int UNPROCESSABLE = 422;
-    private static final int NOT_FOUND = 404;
     private static final String AUTHORIZATION = "authorization";
     private static final String PATH = "path";
 
@@ -149,15 +146,8 @@ public class ApiClientImpl implements ApiClient {
 
     private Response errorCheck(final Response response) {
         if (!CheckoutUtils.isSuccessHttpStatusCode(response.getStatusCode())) {
-            switch (response.getStatusCode()) {
-                case UNPROCESSABLE:
-                    final ErrorResponse error = serializer.fromJson(response.getBody(), ErrorResponse.class);
-                    throw new CheckoutValidationException(error, new ApiResponseInfo(response.getStatusCode(), response.getRequestId()));
-                case NOT_FOUND:
-                    throw new CheckoutResourceNotFoundException(response.getRequestId());
-                default:
-                    throw new CheckoutApiException(new ApiResponseInfo(response.getStatusCode(), response.getRequestId()));
-            }
+            final Map<String, Object> errorDetails = serializer.fromJson(response.getBody());
+            throw new CheckoutApiException(response.getRequestId(), response.getStatusCode(), errorDetails);
         }
         return response;
     }
@@ -175,12 +165,9 @@ public class ApiClientImpl implements ApiClient {
 
     private <T> T transform(final T result, final Response response) {
         if (result instanceof Resource) {
-            ((Resource) result).setApiResponseInfo(new ApiResponseInfo(response.getStatusCode(), response.getRequestId()));
+            ((Resource) result).setApiResponseInfo(ApiResponseInfo.fromResponse(response));
         } else if (result instanceof Resource[]) {
-            Arrays.stream(((Resource[]) result))
-                    .forEach(element ->
-                            element.setApiResponseInfo(new ApiResponseInfo(response.getStatusCode(), response.getRequestId()))
-                    );
+            Arrays.stream(((Resource[]) result)).forEach(element -> element.setApiResponseInfo(ApiResponseInfo.fromResponse(response)));
         }
         return result;
     }

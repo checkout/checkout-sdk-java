@@ -1,5 +1,6 @@
 package com.checkout.payments.four;
 
+import com.checkout.CardSourceHelper;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
@@ -24,8 +25,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static com.checkout.payments.four.CardSourceHelper.getCorporateSender;
-import static com.checkout.payments.four.CardSourceHelper.getIndividualSender;
+import static com.checkout.CardSourceHelper.getCorporateSender;
+import static com.checkout.CardSourceHelper.getIndividualSender;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

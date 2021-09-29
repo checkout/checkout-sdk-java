@@ -7,10 +7,12 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class Response {
+public final class Response {
 
-    private final int statusCode;
-    private final String body;
-    private final String requestId;
+    private int statusCode;
+
+    private String body;
+
+    private String requestId;
 
 }

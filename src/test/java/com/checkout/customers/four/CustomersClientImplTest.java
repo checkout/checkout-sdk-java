@@ -1,10 +1,10 @@
 package com.checkout.customers.four;
 
 import com.checkout.ApiClient;
+import com.checkout.CheckoutApiException;
+import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
-import com.checkout.CheckoutConfiguration;
-import com.checkout.CheckoutResourceNotFoundException;
 import com.checkout.SdkCredentials;
 import com.checkout.TestHelper;
 import com.checkout.common.Phone;
@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.concurrent.CompletableFuture;
@@ -148,7 +149,7 @@ class CustomersClientImplTest {
         doReturn(idAsync)
                 .when(apiClient).postAsync(eq(CustomersClientImpl.CUSTOMERS_PATH), eq(authorization),
                 eq(IdResponse.class), any(CustomerRequest.class), any());
-        doThrow(new CheckoutResourceNotFoundException("Customer not found"))
+        doThrow(Mockito.mock(CheckoutApiException.class))
                 .when(apiClient)
                 .getAsync(eq(CustomersClientImpl.CUSTOMERS_PATH + "/" + CUSTOMER_ID), eq(authorization),
                         eq(CustomerResponse.class));
@@ -172,7 +173,7 @@ class CustomersClientImplTest {
         try {
             client.get(customerId);
             fail();
-        } catch (final CheckoutResourceNotFoundException ex) {
+        } catch (final CheckoutApiException ignore) {
             //do nothing
         }
     }

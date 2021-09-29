@@ -13,4 +13,5 @@ public class CheckoutException extends RuntimeException {
     public CheckoutException(final String message, final Throwable cause) {
         super(message, cause);
     }
+
 }

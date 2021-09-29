@@ -134,8 +134,8 @@ public class PaymentRequest<T extends RequestSource> {
         return new PaymentRequest<>(balotoSource, currency, amount, true);
     }
 
-    public static PaymentRequest<BoletoSource> boleto(final BoletoSource balotoSource, final Currency currency, final Long amount) {
-        return new PaymentRequest<>(balotoSource, currency, amount, true);
+    public static PaymentRequest<BoletoSource> boleto(final BoletoSource boletoSource, final Currency currency, final Long amount) {
+        return new PaymentRequest<>(boletoSource, currency, amount, true);
     }
 
     public static PaymentRequest<FawrySource> fawry(final FawrySource fawrySource, final Currency currency, final Long amount) {

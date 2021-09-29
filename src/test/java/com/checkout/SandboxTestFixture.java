@@ -6,6 +6,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.Objects.requireNonNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class SandboxTestFixture {
@@ -51,9 +53,21 @@ public abstract class SandboxTestFixture {
         try {
             return future.get();
         } catch (final Exception e) {
-            fail(e.getMessage());
+            assertTrue(e.getCause() instanceof CheckoutApiException);
+            final CheckoutApiException checkoutException = (CheckoutApiException) e.getCause();
+            fail(checkoutException);
         }
         return null;
+    }
+
+    protected <T> void assertNotFound(final CompletableFuture<T> future) {
+        try {
+            future.get();
+            fail();
+        } catch (final Exception e) {
+            assertTrue(e.getCause() instanceof CheckoutApiException);
+            assertEquals("The API response status code (" + 404 + ") does not indicate success.", e.getCause().getMessage());
+        }
     }
 
     /**

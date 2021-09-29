@@ -5,5 +5,6 @@ public enum SdkAuthorizationType {
     PUBLIC_KEY,
     SECRET_KEY_OR_OAUTH,
     PUBLIC_KEY_OR_OAUTH,
-    OAUTH
+    OAUTH,
+    CUSTOM
 }

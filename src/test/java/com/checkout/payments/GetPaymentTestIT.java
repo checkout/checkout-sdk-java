@@ -1,6 +1,5 @@
 package com.checkout.payments;
 
-import com.checkout.CheckoutResourceNotFoundException;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
@@ -14,7 +13,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -24,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class GetPaymentTestIT extends SandboxTestFixture {
 
@@ -33,17 +30,12 @@ class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void resource_not_found_handled_correctly() throws Exception {
-        try {
-            defaultApi.paymentsClient().getAsync("not-found").get();
-            fail();
-        } catch (final ExecutionException e) {
-            assertTrue(e.getCause() instanceof CheckoutResourceNotFoundException);
-        }
+    void resourceNotFoundHandledCorrectly() {
+        assertNotFound(defaultApi.paymentsClient().getAsync("not-found"));
     }
 
     @Test
-    void handle_timeout() {
+    void shouldHandleTimeout() {
         assertThrows(TimeoutException.class, () ->
                 defaultApi.paymentsClient().getAsync("not-found").get(5, TimeUnit.MILLISECONDS));
     }

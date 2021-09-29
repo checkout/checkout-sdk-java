@@ -15,6 +15,8 @@ import com.checkout.payments.four.PaymentsClient;
 import com.checkout.payments.four.PaymentsClientImpl;
 import com.checkout.risk.RiskClient;
 import com.checkout.risk.RiskClientImpl;
+import com.checkout.sessions.SessionsClient;
+import com.checkout.sessions.SessionsClientImpl;
 import com.checkout.tokens.four.TokensClient;
 import com.checkout.tokens.four.TokensClientImpl;
 import com.checkout.workflows.four.WorkflowsClient;
@@ -30,6 +32,7 @@ public class CheckoutApiImpl implements CheckoutApi, CheckoutApiClient {
     private final RiskClient riskClient;
     private final WorkflowsClient workflowsClient;
     private final MarketplaceClient marketplaceClient;
+    private final SessionsClient sessionsClient;
 
     public CheckoutApiImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         this.tokensClient = new TokensClientImpl(apiClient, configuration);
@@ -40,6 +43,7 @@ public class CheckoutApiImpl implements CheckoutApi, CheckoutApiClient {
         this.riskClient = new RiskClientImpl(apiClient, configuration);
         this.workflowsClient = new WorkflowsClientImpl(apiClient, configuration);
         this.marketplaceClient = new MarketplaceClientImpl(apiClient, configuration);
+        this.sessionsClient = new SessionsClientImpl(apiClient, configuration);
     }
 
     @Override
@@ -80,6 +84,11 @@ public class CheckoutApiImpl implements CheckoutApi, CheckoutApiClient {
     @Override
     public MarketplaceClient marketplaceClient() {
         return marketplaceClient;
+    }
+
+    @Override
+    public SessionsClient sessionsClient() {
+        return sessionsClient;
     }
 
 }

@@ -13,7 +13,6 @@ import com.checkout.payments.PaymentResponse;
 import com.checkout.payments.apm.BoletoSource;
 import com.checkout.payments.apm.IntegrationType;
 import com.checkout.payments.apm.Payer;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,7 +26,6 @@ class BoletoPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    @Disabled
     void shouldSucceedBoletoRedirectPayment() {
 
         final BoletoSource boletoSource = BoletoSource.builder()

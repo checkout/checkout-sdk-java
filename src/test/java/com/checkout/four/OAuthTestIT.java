@@ -1,5 +1,6 @@
 package com.checkout.four;
 
+import com.checkout.CardSourceHelper;
 import com.checkout.CheckoutSdk;
 import com.checkout.Environment;
 import com.checkout.FourOAuthScope;
@@ -9,7 +10,6 @@ import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.MarketplaceData;
-import com.checkout.payments.four.CardSourceHelper;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.Payments;
 import com.checkout.payments.four.request.source.RequestCardSource;
