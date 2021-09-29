@@ -5,7 +5,7 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 public abstract class AbstractClient {
 
     protected final ApiClient apiClient;
-    private final CheckoutConfiguration configuration;
+    protected final CheckoutConfiguration configuration;
     private final SdkAuthorizationType authorizationType;
 
     protected AbstractClient(final ApiClient apiClient,

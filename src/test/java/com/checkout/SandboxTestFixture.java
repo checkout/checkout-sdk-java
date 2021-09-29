@@ -45,8 +45,9 @@ public abstract class SandboxTestFixture {
                                     new URI(OAUTH_AUTHORIZE_URL),
                                     requireNonNull(System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_ID")),
                                     requireNonNull(System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_SECRET")))
-                            .scopes(FourOAuthScope.GATEWAY)
+                            .scopes(FourOAuthScope.GATEWAY, FourOAuthScope.FILES, FourOAuthScope.MARKETPLACE)
                             .environment(Environment.SANDBOX)
+                            .enableFilesApi(Environment.SANDBOX)
                             .build();
                 } catch (final URISyntaxException ignore) {
                     fail();

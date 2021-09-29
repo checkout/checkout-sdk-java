@@ -6,6 +6,7 @@ import com.checkout.common.CheckoutUtils;
 import com.checkout.common.ErrorResponse;
 import com.checkout.common.FileRequest;
 import com.checkout.common.Resource;
+import com.checkout.marketplace.MarketplaceFileRequest;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -120,6 +121,14 @@ public class ApiClientImpl implements ApiClient {
                                                     final FileRequest request, final Class<T> responseType) {
         validateParams(PATH, path, AUTHORIZATION, authorization, "fileRequest", request);
         return transport.submitFile(path, authorization, request)
+                .thenApply(this::errorCheck)
+                .thenApply(response -> deserialize(response, responseType));
+    }
+
+    @Override
+    public <T> CompletableFuture<T> submitFileAsync(final FilesTransport filesTransport, final String path, final SdkAuthorization authorization, final MarketplaceFileRequest request, final Class<T> responseType) {
+        validateParams("filesTransport", filesTransport, PATH, path, AUTHORIZATION, authorization, "fileRequest", request);
+        return filesTransport.submitFile(path, authorization, request)
                 .thenApply(this::errorCheck)
                 .thenApply(response -> deserialize(response, responseType));
     }

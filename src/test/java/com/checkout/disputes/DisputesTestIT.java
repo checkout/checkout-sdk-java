@@ -19,6 +19,7 @@ import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -170,6 +171,21 @@ class DisputesTestIT extends SandboxTestFixture {
         assertEquals(evidenceRequest.getProofOfDeliveryOrServiceDateText(), evidenceResponse.getProofOfDeliveryOrServiceDateText());
         //Submit your dispute evidence
         blocking(defaultApi.disputesClient().submitEvidence(disputeDetails.getId()));
+    }
+
+    //@Test
+    void shouldUploadDisputeFile() throws URISyntaxException {
+        //Upload your dispute file evidence
+        final URL resource = getClass().getClassLoader().getResource("checkout.jpeg");
+        final File file = new File(resource.toURI());
+        final FileRequest fileRequest = FileRequest.builder()
+                .file(file)
+                .contentType(ContentType.IMAGE_JPEG)
+                .purpose(FilePurpose.DISPUTE_EVIDENCE)
+                .build();
+        final IdResponse fileResponse = blocking(defaultApi.disputesClient().uploadFile(fileRequest));
+        assertNotNull(fileResponse);
+        assertNotNull(fileResponse.getId());
     }
 
 }

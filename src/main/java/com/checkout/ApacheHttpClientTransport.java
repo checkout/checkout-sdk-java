@@ -1,8 +1,10 @@
 package com.checkout;
 
 import com.checkout.client.ClientOperation;
+import com.checkout.common.AbstractFileRequest;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.FileRequest;
+import com.checkout.marketplace.MarketplaceFileRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -55,6 +57,8 @@ public class ApacheHttpClientTransport implements Transport {
     private static final String ACCEPT = "Accept";
     private static final String CKO_REQUEST_ID = "Cko-Request-Id";
     private static final String NO_REQUEST_ID_SUPPLIED = "NO_REQUEST_ID_SUPPLIED";
+    private static final String PATH = "path";
+    private static final String TYPE = "type";
     private final URI baseUri;
     private final CloseableHttpClient httpClient;
 
@@ -128,16 +132,31 @@ public class ApacheHttpClientTransport implements Transport {
     }
 
     @Override
-    public CompletableFuture<Response> submitFile(final String path, final SdkAuthorization authorization, final FileRequest fileRequest) {
+    public CompletableFuture<Response> submitFile(final String path, final SdkAuthorization authorization, final AbstractFileRequest fileRequest) {
         return CompletableFuture.supplyAsync(() -> {
             final HttpPost post = new HttpPost(getRequestUrl(path));
-            final HttpEntity build = MultipartEntityBuilder.create()
-                    .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
-                    .addBinaryBody(FILE, fileRequest.getFile(), fileRequest.getContentType(), fileRequest.getFile().getName())
-                    .addTextBody(PURPOSE, fileRequest.getPurpose().getPurpose(), ContentType.DEFAULT_BINARY).build();
-            post.setEntity(build);
+            post.setEntity(getMultipartFileEntity(fileRequest));
             return performCall(authorization, null, post, ACCEPT_JSON);
         });
+    }
+
+    private HttpEntity getMultipartFileEntity(final AbstractFileRequest abstractFileRequest) {
+        final MultipartEntityBuilder builder = MultipartEntityBuilder.create().setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+        if (abstractFileRequest instanceof FileRequest) {
+            final FileRequest fileRequest = (FileRequest) abstractFileRequest;
+            builder.addBinaryBody(FILE, fileRequest.getFile(), fileRequest.getContentType(), fileRequest.getFile().getName())
+                    .addTextBody(PURPOSE, fileRequest.getPurpose().getPurpose(), ContentType.DEFAULT_BINARY)
+                    .build();
+        } else if (abstractFileRequest instanceof MarketplaceFileRequest) {
+            final MarketplaceFileRequest fileRequest = (MarketplaceFileRequest) abstractFileRequest;
+            builder.addBinaryBody(PATH, fileRequest.getFile(), fileRequest.getContentType(), fileRequest.getFile().getName())
+                    .addTextBody(PURPOSE, fileRequest.getPurpose().getPurpose(), ContentType.DEFAULT_TEXT)
+                    .addTextBody(TYPE, fileRequest.getType().getType(), ContentType.DEFAULT_TEXT)
+                    .build();
+        } else {
+            throw new CheckoutException("Not supported request object");
+        }
+        return builder.build();
     }
 
     private Response performCall(final SdkAuthorization authorization, final String requestBody, final HttpUriRequest request, final String accept) {
@@ -192,4 +211,5 @@ public class ApacheHttpClientTransport implements Transport {
             throw new CheckoutException("Unable to create file=" + targetFile);
         }
     }
+
 }

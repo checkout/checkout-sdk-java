@@ -1,26 +1,28 @@
 package com.checkout.common;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.http.entity.ContentType;
 
 import java.io.File;
 
-@Data
-@Builder
-@AllArgsConstructor
-public class FileRequest {
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public final class FileRequest extends AbstractFileRequest {
 
     @NonNull
-    private File file;
-    @NonNull
     private FilePurpose purpose;
-    /**
-     * For PDF we need to create manually ContentType.create("application/pdf"),
-     * for others you can use ContentType statics
-     */
-    private ContentType contentType;
+
+    @Builder
+    public FileRequest(final File file, final ContentType contentType, @NonNull final FilePurpose purpose) {
+        super(file, contentType);
+        this.purpose = purpose;
+    }
 
 }

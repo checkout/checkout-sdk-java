@@ -59,6 +59,7 @@ final class FourOAuthSdkCredentials extends SdkCredentials {
         switch (authorizationType) {
             case SECRET_KEY_OR_OAUTH:
             case PUBLIC_KEY_OR_OAUTH:
+            case OAUTH:
                 return new SdkAuthorization(platformType, getAccessToken().getToken());
             default:
                 throw CheckoutAuthorizationException.invalidAuthorization(authorizationType);

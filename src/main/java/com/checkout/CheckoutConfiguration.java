@@ -12,6 +12,7 @@ public final class CheckoutConfiguration {
     private final String uri;
     private final SdkCredentials sdkCredentials;
     private HttpClientBuilder httpClientBuilder;
+    private CheckoutFilesApiConfiguration filesApiConfiguration;
 
     public CheckoutConfiguration(final SdkCredentials sdkCredentials, final Environment environment) {
         validateParams("sdkCredentials", sdkCredentials, "environment", environment);
@@ -23,6 +24,24 @@ public final class CheckoutConfiguration {
         validateParams("sdkCredentials", sdkCredentials, "uri", uri);
         this.sdkCredentials = sdkCredentials;
         this.uri = uri.toString();
+    }
+
+    public CheckoutConfiguration(final SdkCredentials sdkCredentials,
+                                 final Environment environment,
+                                 final CheckoutFilesApiConfiguration filesApiConfiguration) {
+        validateParams("sdkCredentials", sdkCredentials, "environment", environment);
+        this.sdkCredentials = sdkCredentials;
+        this.uri = environment.getUri();
+        this.filesApiConfiguration = filesApiConfiguration;
+    }
+
+    public CheckoutConfiguration(final SdkCredentials sdkCredentials,
+                                 final URI uri,
+                                 final CheckoutFilesApiConfiguration filesApiConfiguration) {
+        validateParams("sdkCredentials", sdkCredentials, "uri", uri);
+        this.sdkCredentials = sdkCredentials;
+        this.uri = uri.toString();
+        this.filesApiConfiguration = filesApiConfiguration;
     }
 
     /**
@@ -73,6 +92,10 @@ public final class CheckoutConfiguration {
 
     public void setApacheHttpClientBuilder(final HttpClientBuilder httpClientBuilder) {
         this.httpClientBuilder = httpClientBuilder;
+    }
+
+    public CheckoutFilesApiConfiguration getFilesApiConfiguration() {
+        return filesApiConfiguration;
     }
 
 }

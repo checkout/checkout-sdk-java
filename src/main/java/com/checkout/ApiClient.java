@@ -2,6 +2,7 @@ package com.checkout;
 
 import com.checkout.common.FileRequest;
 import com.checkout.common.Resource;
+import com.checkout.marketplace.MarketplaceFileRequest;
 
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -32,5 +33,7 @@ public interface ApiClient {
     <T> CompletableFuture<T> submitFileAsync(String path, SdkAuthorization authorization, FileRequest request, Class<T> responseType);
 
     CompletableFuture<String> retrieveFileAsync(String path, SdkAuthorization authorization, String targetFile);
+
+    <T> CompletableFuture<T> submitFileAsync(FilesTransport transport, String path, SdkAuthorization authorization, MarketplaceFileRequest request, Class<T> responseType);
 
 }
