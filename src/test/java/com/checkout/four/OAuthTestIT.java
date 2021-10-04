@@ -17,6 +17,7 @@ import com.checkout.payments.four.sender.RequestIndividualSender;
 import org.junit.jupiter.api.Test;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class OAuthTestIT extends SandboxTestFixture {
+
+    private static final String OAUTH_AUTHORIZE_URL = "https://access.sandbox.checkout.com/connect/token";
 
     public OAuthTestIT() {
         super(PlatformType.FOUR_OAUTH);
@@ -81,6 +84,59 @@ public class OAuthTestIT extends SandboxTestFixture {
         } catch (final Exception e) {
             assertEquals("OAuth client_credentials authentication failed with error: invalid_client", e.getMessage());
         }
+
+    }
+
+    @Test
+    void shouldFailInitAuthorization() {
+
+        try {
+            CheckoutSdk.fourSdk()
+                    .oAuth()
+                    .clientCredentials(
+                            System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_ID"),
+                            System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_SECRET"))
+                    .scopes(FourOAuthScope.GATEWAY)
+                    .uri(URI.create("https://test.checkout.com"))
+                    .build();
+            fail();
+        } catch (final Exception e) {
+            assertEquals("Invalid configuration. Please specify an Environment or a specific OAuth authorizationURI.", e.getMessage());
+        }
+
+    }
+
+    @Test
+    void shouldInstantiateCheckoutApiWithOAuth_defaultAuthorizeUrl() {
+
+        final CheckoutApi checkoutApi = CheckoutSdk.fourSdk()
+                .oAuth()
+                .clientCredentials(
+                        System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_ID"),
+                        System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_SECRET"))
+                .scopes(FourOAuthScope.GATEWAY)
+                .environment(Environment.SANDBOX)
+                .build();
+
+        assertNotNull(checkoutApi);
+
+    }
+
+
+    @Test
+    void shouldInstantiateCheckoutApiWithOAuth_customAuthorizeUrl() throws URISyntaxException {
+
+        final CheckoutApi checkoutApi = CheckoutSdk.fourSdk()
+                .oAuth()
+                .clientCredentials(
+                        new URI(OAUTH_AUTHORIZE_URL),
+                        System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_ID"),
+                        System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_SECRET"))
+                .scopes(FourOAuthScope.GATEWAY)
+                .environment(Environment.SANDBOX)
+                .build();
+
+        assertNotNull(checkoutApi);
 
     }
 

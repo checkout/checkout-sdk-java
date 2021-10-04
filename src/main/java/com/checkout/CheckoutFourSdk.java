@@ -34,6 +34,13 @@ public final class CheckoutFourSdk {
             return this;
         }
 
+        public FourOAuthCheckoutSdkBuilder clientCredentials(final String clientId,
+                                                             final String clientSecret) {
+            this.clientId = clientId;
+            this.clientSecret = clientSecret;
+            return this;
+        }
+
         public FourOAuthCheckoutSdkBuilder scopes(final FourOAuthScope... scopes) {
             this.scopes.addAll(asList(scopes));
             return this;
@@ -41,6 +48,13 @@ public final class CheckoutFourSdk {
 
         @Override
         protected SdkCredentials getSdkCredentials() {
+            if (this.authorizationUri == null) {
+                final Environment environment = getEnvironment();
+                if (environment == null) {
+                    throw new CheckoutArgumentException("Invalid configuration. Please specify an Environment or a specific OAuth authorizationURI.");
+                }
+                this.authorizationUri = URI.create(environment.getOauthAuthorizeURI());
+            }
             final FourOAuthSdkCredentials credentials = new FourOAuthSdkCredentials(authorizationUri, clientId, clientSecret, scopes);
             credentials.initOAuthAccess();
             return credentials;
