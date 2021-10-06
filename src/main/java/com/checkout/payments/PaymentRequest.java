@@ -29,44 +29,70 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 @Builder
 @AllArgsConstructor
 public class PaymentRequest<T extends RequestSource> {
+
     private final T source;
+
     private final T destination;
+
     private final Long amount;
+
     @NonNull
     private final Currency currency;
+
     @SerializedName("payment_type")
     private String paymentType;
+
     @SerializedName("merchant_initiated")
     private Boolean merchantInitiated;
+
     private String reference;
+
     private String description;
+
     private Boolean capture;
+
     private CustomerRequest customer;
+
     @SerializedName("capture_on")
     private Instant captureOn;
+
     @SerializedName("billing_descriptor")
     private BillingDescriptor billingDescriptor;
+
     private ShippingDetails shipping;
+
     @SerializedName("3ds")
     private ThreeDSRequest threeDS;
+
     @SerializedName("previous_payment_id")
     private String previousPaymentId;
+
     private RiskRequest risk;
+
     @SerializedName("success_url")
     private String successUrl;
+
     @SerializedName("failure_url")
     private String failureUrl;
+
     @SerializedName("payment_ip")
     private String paymentIp;
+
     private PaymentRecipient recipient;
+
     private Processing processing;
+
     @Builder.Default
     private Map<String, Object> metadata = new HashMap<>();
+
     private String fundTransferType;
+
     @SerializedName("processing_channel_id")
     private String processingChannelId;
+
     @SerializedName("authorization_type")
     private AuthorizationType authorizationType;
+
     private MarketplaceData marketplace;
 
     private PaymentRequest(final T sourceOrDestination, final Currency currency, final Long amount, final boolean isSource) {

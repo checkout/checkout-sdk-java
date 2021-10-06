@@ -1,5 +1,6 @@
 package com.checkout.apm.klarna;
 
+import com.checkout.payments.CaptureResponse;
 import com.checkout.payments.VoidRequest;
 import com.checkout.payments.VoidResponse;
 
@@ -11,7 +12,7 @@ public interface KlarnaClient {
 
     CompletableFuture<CreditSession> getCreditSession(String sessionId);
 
-    CompletableFuture<VoidResponse> capturePayment(String paymentId, OrderCaptureRequest captureRequest);
+    CompletableFuture<CaptureResponse> capturePayment(String paymentId, OrderCaptureRequest captureRequest);
 
     CompletableFuture<VoidResponse> voidCapture(String paymentId, VoidRequest voidRequest);
 

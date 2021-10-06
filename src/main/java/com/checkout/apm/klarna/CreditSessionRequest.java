@@ -19,10 +19,10 @@ public final class CreditSessionRequest {
 
     private String locale;
 
-    private Integer amount;
+    private Long amount;
 
     @SerializedName("tax_amount")
-    private Integer taxAmount;
+    private Long taxAmount;
 
     private List<KlarnaProduct> products;
 

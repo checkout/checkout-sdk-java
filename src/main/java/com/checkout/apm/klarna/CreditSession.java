@@ -1,6 +1,5 @@
 package com.checkout.apm.klarna;
 
-import com.checkout.common.CountryCode;
 import com.checkout.common.Resource;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
@@ -18,13 +17,13 @@ public final class CreditSession extends Resource {
     private String clientToken;
 
     @SerializedName("purchase_country")
-    private CountryCode purchaseCountry;
+    private String purchaseCountry;
 
     private String currency;
 
     private String locale;
 
-    private Integer amount;
+    private Long amount;
 
     @SerializedName("tax_amount")
     private Integer taxAmount;
