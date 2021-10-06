@@ -9,15 +9,21 @@ import java.util.concurrent.CompletableFuture;
 
 public class IdealClientImpl extends AbstractClient implements IdealClient {
 
-    private static final String IDEAL_PATH = "/ideal-external/issuers";
+    private static final String IDEAL_EXTERNAL_PATH = "/ideal-external";
+    private static final String ISSUERS = "issuers";
 
     public IdealClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY);
     }
 
     @Override
+    public CompletableFuture<IdealInfo> getInfo() {
+        return apiClient.getAsync(buildPath(IDEAL_EXTERNAL_PATH), sdkAuthorization(), IdealInfo.class);
+    }
+
+    @Override
     public CompletableFuture<IssuerResponse> getIssuers() {
-        return apiClient.getAsync(IDEAL_PATH, sdkAuthorization(), IssuerResponse.class);
+        return apiClient.getAsync(buildPath(IDEAL_EXTERNAL_PATH, ISSUERS), sdkAuthorization(), IssuerResponse.class);
     }
 
 }
