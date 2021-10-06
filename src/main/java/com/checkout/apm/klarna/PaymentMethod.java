@@ -3,8 +3,6 @@ package com.checkout.apm.klarna;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 public final class PaymentMethod {
 
@@ -13,10 +11,10 @@ public final class PaymentMethod {
     private String name;
 
     @SerializedName("asset_urls")
-    private List<AssetUrl> assetUrls;
+    private AssetUrl assetUrls;
 
     @Data
-    public static class AssetUrl {
+    public static final class AssetUrl {
 
         private String descriptive;
 

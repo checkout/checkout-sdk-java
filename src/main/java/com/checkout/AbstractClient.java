@@ -25,4 +25,8 @@ public abstract class AbstractClient {
         return String.join("/", pathParams);
     }
 
+    protected boolean isSandbox() {
+        return Environment.SANDBOX.getUri().equals(configuration.getUri());
+    }
+
 }

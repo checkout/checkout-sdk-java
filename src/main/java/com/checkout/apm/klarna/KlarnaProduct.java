@@ -10,18 +10,18 @@ public final class KlarnaProduct {
 
     private String name;
 
-    private Integer quantity;
+    private Long quantity;
 
     @SerializedName("unit_price")
-    private Integer unitPrice;
+    private Long unitPrice;
 
     @SerializedName("tax_rate")
-    private Integer taxRate;
+    private Long taxRate;
 
     @SerializedName("total_amount")
-    private Integer totalAmount;
+    private Long totalAmount;
 
     @SerializedName("total_tax_amount")
-    private Integer totalTaxAmount;
+    private Long totalTaxAmount;
 
 }

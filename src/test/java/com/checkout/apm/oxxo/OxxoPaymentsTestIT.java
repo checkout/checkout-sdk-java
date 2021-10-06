@@ -26,7 +26,7 @@ class OxxoPaymentsTestIT extends SandboxTestFixture {
     @Test
     void shouldSucceedOxxoPayment() {
 
-        final String paymentId = makePagoFacilPayment();
+        final String paymentId = makeOxxoPayment();
 
         blocking(defaultApi.oxxoClient().succeed(paymentId));
 
@@ -49,7 +49,7 @@ class OxxoPaymentsTestIT extends SandboxTestFixture {
     @Test
     void shouldExpireOxxoPayment() {
 
-        final String paymentId = makePagoFacilPayment();
+        final String paymentId = makeOxxoPayment();
 
         blocking(defaultApi.oxxoClient().expire(paymentId));
 
@@ -69,7 +69,7 @@ class OxxoPaymentsTestIT extends SandboxTestFixture {
 
     }
 
-    private String makePagoFacilPayment() {
+    private String makeOxxoPayment() {
 
         final OxxoSource oxxoSource = OxxoSource.builder()
                 .country(CountryCode.MX)

@@ -14,10 +14,10 @@ import java.util.List;
 public final class CreditSessionResponse extends Resource {
 
     @SerializedName("session_id")
-    private String session_id;
+    private String sessionId;
 
     @SerializedName("client_token")
-    private String client_token;
+    private String clientToken;
 
     @SerializedName("payment_method_categories")
     private List<PaymentMethod> paymentMethodCategories;
