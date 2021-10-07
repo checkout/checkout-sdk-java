@@ -9,19 +9,21 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 
 public final class CheckoutConfiguration {
 
+    private static final String SDK_CREDENTIALS = "sdkCredentials";
+
     private final String uri;
     private final SdkCredentials sdkCredentials;
     private HttpClientBuilder httpClientBuilder;
     private CheckoutFilesApiConfiguration filesApiConfiguration;
 
     public CheckoutConfiguration(final SdkCredentials sdkCredentials, final Environment environment) {
-        validateParams("sdkCredentials", sdkCredentials, "environment", environment);
+        validateParams(SDK_CREDENTIALS, sdkCredentials, "environment", environment);
         this.sdkCredentials = sdkCredentials;
         this.uri = environment.getUri();
     }
 
     public CheckoutConfiguration(final SdkCredentials sdkCredentials, final URI uri) {
-        validateParams("sdkCredentials", sdkCredentials, "uri", uri);
+        validateParams(SDK_CREDENTIALS, sdkCredentials, "uri", uri);
         this.sdkCredentials = sdkCredentials;
         this.uri = uri.toString();
     }
@@ -29,7 +31,7 @@ public final class CheckoutConfiguration {
     public CheckoutConfiguration(final SdkCredentials sdkCredentials,
                                  final Environment environment,
                                  final CheckoutFilesApiConfiguration filesApiConfiguration) {
-        validateParams("sdkCredentials", sdkCredentials, "environment", environment);
+        validateParams(SDK_CREDENTIALS, sdkCredentials, "environment", environment);
         this.sdkCredentials = sdkCredentials;
         this.uri = environment.getUri();
         this.filesApiConfiguration = filesApiConfiguration;
@@ -38,7 +40,7 @@ public final class CheckoutConfiguration {
     public CheckoutConfiguration(final SdkCredentials sdkCredentials,
                                  final URI uri,
                                  final CheckoutFilesApiConfiguration filesApiConfiguration) {
-        validateParams("sdkCredentials", sdkCredentials, "uri", uri);
+        validateParams(SDK_CREDENTIALS, sdkCredentials, "uri", uri);
         this.sdkCredentials = sdkCredentials;
         this.uri = uri.toString();
         this.filesApiConfiguration = filesApiConfiguration;

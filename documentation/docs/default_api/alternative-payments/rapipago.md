@@ -3,18 +3,15 @@ id: rapipago
 title: Rapi Pago
 ---
 
-More information on this topic can be found in the [official docs](https://docs.checkout.com/payments/payment-methods/cash-and-atm-payment/rapipago).
+The full list of request body parameters and possible outcomes can be found [here](https://docs.checkout.com/payments/payment-methods/cash-and-atm-payment/rapipago).
 
 ## Request a "Redirect" Rapi Pago payment
 
 ```java
 RapiPagoSource source = RapiPagoSource.builder()
-        .country(CountryCode.AR)
-        .description("Simulate Via Rapi pago Demo Payment")
-        .payer(Payer.builder()
-        .email("bruce@wayne-enterprises.com")
-        .name("Bruce Wayne")
-        .build())
+        .country()
+        .description()
+        .payer(Payer.builder().build())
         .build();
 
 PaymentRequest<RapiPagoSource> request = PaymentRequest.rapiPago(source, Currency.ARS, 1000L);
@@ -25,6 +22,8 @@ String redirectURL = response.getPending().getRedirectLink().getHref()
 ```
 
 ## Succeed a Rapi pago payment
+
+This functionality only works in sandbox environment.
 
 ```java
 api.rapiPagoClient().succeed("payment_id");

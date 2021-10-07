@@ -31,7 +31,7 @@ public final class WebhookRequest {
     private List<String> eventTypes = new ArrayList<>();
 
     /**
-     * Will be removed in a future version.
+     * @deprecated Will be removed in a future version.
      */
     @Deprecated
     public WebhookRequest(final String url, final List<String> eventTypes) {

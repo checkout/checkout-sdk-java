@@ -7,6 +7,7 @@ import com.checkout.payments.PaymentPending;
 import com.checkout.payments.PaymentRequest;
 import com.checkout.payments.PaymentResponse;
 import com.checkout.payments.apm.GiropaySource;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,6 +44,7 @@ class GiropayPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled
     void shouldGetBanks() {
 
         final BanksResponse banksResponse = blocking(defaultApi.giropayClient().getBanks());
@@ -55,6 +57,7 @@ class GiropayPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled
     void shouldGetEpsBanks() {
 
         final BanksResponse banksResponse = blocking(defaultApi.giropayClient().getEpsBanks());

@@ -25,25 +25,36 @@ dependencies {
 </dependency>
 ```
 
-Please check in GitHub releases for all the versions available.
+Please check in [GitHub releases](https://github.com/checkout/checkout-sdk-java/releases) for all the versions available.
 
 ## How to use the SDK
 
 This SDK can be used with two different pair of API keys provided by Checkout. However, using different API keys imply using specific API features. Please find in the table below the types of keys that can be used within this SDK.
 
-| Account System | Public Key (example)                         | Secret Key (example)                         |
-| -------------- | -------------------------------------------- | -------------------------------------------- |
-| default        | pk_test_fe70ff27-7c42-4ce1-ae90-5691a188ee7b | sk_test_fde517a8-3z01-41ef-b4bd-4282384b0a64 |
-| Four           | pk_sbox_pkhpdtvmkgf7hdgpwnbhw7r2uic          | sk_sbox_m73dzypy7cf3gfd46xr4yj5xo4e          |
+| Account System | Public Key (example)                    | Secret Key (example)                    |
+| -------------- | --------------------------------------- | --------------------------------------- |
+| default        | pk_g650ff27-7c42-4ce1-ae90-5691a188ee7b | sk_gk3517a8-3z01-45fq-b4bd-4282384b0a64 |
+| Four           | pk_pkhpdtvabcf7hdgpwnbhw7r2uic          | sk_m73dzypy7cf3gf5d2xr4k7sxo4e          |
+
+Note: sandbox keys have a `test_` or `sbx_` identifier, for Default and Four accounts respectively.
 
 If you don't have your own API keys, you can sign up for a test account [here](https://www.checkout.com/get-test-account).
 
+## Default
+
+Default keys client instantiation can be done as follows:
+
 ```java
+import com.checkout.CheckoutApi;
+
 public static void main(String[] args) {
 
-    boolean useSandbox = true;
-
-    CheckoutApi checkoutApi = CheckoutApiImpl.create("secret_key", useSandbox, "public_key");
+    CheckoutApi checkoutApi = CheckoutSdk.defaultSdk()
+        .staticKeys()
+        .publicKey("public_key")
+        .secretKey("secret_key")
+        .environment(Environment.SANDBOX) // or .uri("")
+        .build();
 
     PaymentsClient paymentsClient = checkoutApi.paymentsClient();
     CompletableFuture<RefundResponse> refundResponse = paymentsClient.refundAsync("payment_id");
@@ -51,28 +62,79 @@ public static void main(String[] args) {
 }
 ```
 
-### Four (BETA)
+### Four
 
 If your pair of keys matches the Four type, this is how the SDK should be used:
 
 ```java
+import com.checkout.four.CheckoutApi;
+
 public static void main(String[] args) {
 
-    CheckoutApi checkoutApi = Checkout.staticKeys()
-                .environment(Environment.SANDBOX)
-                .build();
+    CheckoutApi checkoutApi = CheckoutSdk.fourSdk()
+        .staticKeys()
+        .publicKey("public_key")
+        .secretKey("secret_key")
+        .environment(Environment.SANDBOX) // or .uri("")
+        .build();
 
     PaymentsClient paymentsClient = checkoutApi.paymentsClient();
     CompletableFuture<RefundResponse> refundResponse = paymentsClient.refundPayment("payment_id");
 }
 ```
+The SDK supports client credentials OAuth, when initialized as follows:
 
-Please note that at the moment, support for Four API keys is quite limited. Future releases will provide a bigger feature set for this credential type.
+```java
+import com.checkout.four.CheckoutApi;
 
-More examples can be found in the following places:
+public static void main(String[] args) {
 
-* Samples available under [samples](/samples)
-* Integration tests in this repo, located under [src/test](/src/test)
+    CheckoutApi checkoutApi = CheckoutSdk.fourSdk()
+        .oAuth()
+        .clientCredentials("client_id", "client_secret")
+        // for a specific authorization endpoint
+        //.clientCredentials(new URI("https://access.sandbox.checkout.com/connect/token"), "client_id", "client_secret")
+        .scopes(FourOAuthScope.GATEWAY, FourOAuthScope.VAULT, FourOAuthScope.FX)
+        .environment(Environment.SANDBOX)
+        .build()
+
+    PaymentsClient paymentsClient = checkoutApi.paymentsClient();
+    CompletableFuture<RefundResponse> refundResponse = paymentsClient.refundPayment("payment_id");
+
+}
+```
+## Files API
+
+Some Marketplace operations require interaction with Checkout Files API. This feature must be enabled when the SDK is instantiated.
+
+```java
+import com.checkout.four.CheckoutApi;
+
+public static void main(String[] args) {
+
+    CheckoutApi checkoutApi = CheckoutSdk.fourSdk()
+        .oAuth()
+        .enableFilesApi(Environment.SANDBOX)
+        .build()
+
+    PaymentsClient paymentsClient = checkoutApi.paymentsClient();
+    CompletableFuture<RefundResponse> refundResponse = paymentsClient.refundPayment("payment_id");
+
+}
+```
+
+## Exception handling
+
+All the API responses that do not fall in the 2** status codes will cause a `CheckoutApiException`. The exception encapsulates 
+the `requestId`, `httpStatusCode` and a map of `errorDetails`, if available.
+
+More documentation related to Checkout API and the SDK is available at:
+
+* [Java SDK Docs (Default)](https://checkout.github.io/checkout-sdk-java/docs/introduction/)
+* [Official Docs (Default)](https://docs.checkout.com/)
+* [Official Docs (Four)](https://docs.checkout.com/four)
+* [API Reference (Default)](https://api-reference.checkout.com/)
+* [API Reference (Four)](https://api-reference.checkout.com/preview/crusoe/)
 
 ## Building from source
 
@@ -85,10 +147,11 @@ gradlew build
 gradlew build -x test
 ```
 
-Integration tests execution requires two pairs of keys, and the following environment variables set in your system:
+The execution of integration tests require the following environment variables set in your system:
 
-* For Classic account systems: `CHECKOUT_PUBLIC_KEY` & `CHECKOUT_SECRET_KEY`
+* For Default account systems: `CHECKOUT_PUBLIC_KEY` & `CHECKOUT_SECRET_KEY`
 * For Four account systems: `CHECKOUT_FOUR_PUBLIC_KEY` & `CHECKOUT_FOUR_SECRET_KEY`
+* For Four account systems (OAuth): `CHECKOUT_FOUR_OAUTH_CLIENT_ID` & `CHECKOUT_FOUR_OAUTH_CLIENT_SECRET`
 
 ## Code of Conduct
 
@@ -97,4 +160,3 @@ Please refer to [Code of Conduct](CODE_OF_CONDUCT.md)
 ## Licensing
 
 [MIT](https://github.com/checkout/checkout-sdk-java/blob/dev/LICENSE.md)
-

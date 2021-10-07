@@ -70,9 +70,9 @@ public class PaymentResponse<S extends ResponseSource> extends Resource implemen
     private String schemeId;
 
     @SerializedName("payment_ip")
-    private final String paymentIp;
+    private String paymentIp;
 
-    private final PaymentRecipient recipient;
+    private PaymentRecipient recipient;
 
     private ShippingDetails shipping;
 

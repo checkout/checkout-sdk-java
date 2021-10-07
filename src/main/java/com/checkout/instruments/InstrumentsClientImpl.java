@@ -12,6 +12,7 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 public class InstrumentsClientImpl extends AbstractClient implements InstrumentsClient {
 
     private static final String INSTRUMENTS = "instruments";
+    private static final String INSTRUMENT_ID = "instrumentId";
 
     public InstrumentsClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY);
@@ -25,19 +26,19 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
 
     @Override
     public CompletableFuture<InstrumentDetailsResponse> getInstrument(final String instrumentId) {
-        validateParams("instrumentId", instrumentId);
+        validateParams(INSTRUMENT_ID, instrumentId);
         return apiClient.getAsync(buildPath(INSTRUMENTS, instrumentId), sdkAuthorization(), InstrumentDetailsResponse.class);
     }
 
     @Override
     public CompletableFuture<UpdateInstrumentResponse> updateInstrument(final String instrumentId, final UpdateInstrumentRequest updateInstrumentRequest) {
-        validateParams("instrumentId", instrumentId, "updateInstrumentRequest", updateInstrumentRequest);
+        validateParams(INSTRUMENT_ID, instrumentId, "updateInstrumentRequest", updateInstrumentRequest);
         return apiClient.patchAsync(buildPath(INSTRUMENTS, instrumentId), sdkAuthorization(), UpdateInstrumentResponse.class, updateInstrumentRequest, null);
     }
 
     @Override
     public CompletableFuture<Void> deleteInstrument(final String instrumentId) {
-        validateParams("instrumentId", instrumentId);
+        validateParams(INSTRUMENT_ID, instrumentId);
         return apiClient.deleteAsync(buildPath(INSTRUMENTS, instrumentId), sdkAuthorization());
     }
 

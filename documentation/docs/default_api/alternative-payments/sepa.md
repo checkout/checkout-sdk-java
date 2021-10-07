@@ -3,12 +3,12 @@ id: sepa
 title: SEPA
 ---
 
-More information on this topic can be found in the [official docs](https://docs.checkout.com/payments/payment-methods/direct-debit/sepa-direct-debit).
+The full list of request body parameters and possible outcomes can be found [here](https://docs.checkout.com/payments/payment-methods/direct-debit/sepa-direct-debit).
 
 ## Request a SEPA payment
 
 ```java
-SepaSource source = new SepaSource("src_a3wfgafsyedefaobbqadqw34vy");
+SepaSource source = new SepaSource(sourceId);
 
 PaymentRequest<RapiPagoSource> request = PaymentRequest.sepa(source, Currency.ARS, 1000L, "referece");
 
@@ -20,23 +20,23 @@ String redirectURL = response.getPending().getRedirectLink().getHref()
 ## Cancel a mandate
 
 ```java
-api.sepaClient().cancelMandate("mandate_id");
+api.sepaClient().cancelMandate("mandateId");
 ```
 
 ## Get a mandate
 
 ```java
-api.sepaClient().getMandate("mandate_id");
+api.sepaClient().getMandate("mandateId");
 ```
 
 ## Cancel a mandate via PPRO
 
 ```java
-api.sepaClient().cancelMandateViaPPRO("mandate_id");
+api.sepaClient().cancelMandateViaPPRO("mandateId");
 ```
 
 ## Get a mandate via PPRO
 
 ```java
-api.sepaClient().getMandateViaPPRO("mandate_id");
+api.sepaClient().getMandateViaPPRO("mandateId");
 ```

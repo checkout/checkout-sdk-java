@@ -22,7 +22,7 @@ public final class OnboardEntityDetailsResponse extends Resource {
     private String status;
 
     @SerializedName("requirements_due")
-    private List<RequirementsDue> requirements_due;
+    private List<RequirementsDue> requirementsDue;
 
     @SerializedName("contact_details")
     private ContactDetails contactDetails;

@@ -6,8 +6,6 @@ import static java.time.LocalDateTime.now;
 
 final class OAuthAccessToken {
 
-    private static final long EXPIRATION_THRESHOLD_SECONDS = 10;
-
     private final String token;
     private final LocalDateTime expirationDate;
 
@@ -20,7 +18,7 @@ final class OAuthAccessToken {
         if (expirationDate == null) {
             return false;
         }
-        return expirationDate.isAfter(now().minusSeconds(EXPIRATION_THRESHOLD_SECONDS));
+        return expirationDate.isAfter(now());
     }
 
     String getToken() {
