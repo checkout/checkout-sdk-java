@@ -36,7 +36,6 @@ public class DisputesClientImpl extends AbstractClient implements DisputesClient
         return apiClient.postAsync(buildPath(DISPUTES, id, ACCEPT), sdkAuthorization(), Void.class, null, null);
     }
 
-
     @Override
     public CompletableFuture<Void> putEvidence(final String id, final DisputeEvidenceRequest disputeEvidence) {
         return apiClient.putAsync(buildPath(DISPUTES, id, EVIDENCE), sdkAuthorization(), Void.class, disputeEvidence);

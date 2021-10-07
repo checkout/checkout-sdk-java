@@ -25,11 +25,6 @@ public class PaymentsClientImpl extends AbstractClient implements PaymentsClient
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY);
     }
 
-    private static String getPaymentUrl(final String paymentId) {
-        final String path = "payments/";
-        return path + paymentId;
-    }
-
     @Override
     public <T extends RequestSource> CompletableFuture<PaymentResponse> requestAsync(final PaymentRequest<T> paymentRequest) {
         return requestPaymentAsync(paymentRequest, null);
@@ -131,4 +126,10 @@ public class PaymentsClientImpl extends AbstractClient implements PaymentsClient
                     }
                 });
     }
+
+    private static String getPaymentUrl(final String paymentId) {
+        final String path = "payments/";
+        return path + paymentId;
+    }
+
 }

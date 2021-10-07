@@ -3,19 +3,16 @@ id: boleto
 title: Boleto
 ---
 
-More information on this topic can be found in the [official docs](https://docs.checkout.com/payments/payment-methods/cash-and-atm-payment/boleto-bancario).
+The full list of request body parameters and possible outcomes can be found [here](https://docs.checkout.com/payments/payment-methods/cash-and-atm-payment/boleto-bancario).
 
 ## Request a "Redirect" Baloto payment
 
 ```java
 BoletoSource boletoSource = BoletoSource.builder()
-        .country("BR")
-        .description("boleto payment")
+        .country()
+        .description()
         .integrationType(IntegrationType.REDIRECT)
-        .payer(BoletoSource.Payer.builder()
-                    .email("john@doe-enterprises.com")
-                    .name("John Doe")
-                    .document("53033315550").build())
+        .payer(BoletoSource.Payer.builder().build())
         .build();
 
 PaymentRequest<BoletoSource> request = PaymentRequest.boleto(boletoSource, com.checkout.common.Currency.BRL, 100L);
@@ -29,13 +26,10 @@ String redirectURL = response.getPending().getRedirectLink().getHref()
 
 ```java
 BoletoSource boletoSource = BoletoSource.builder()
-        .country("BR")
-        .description("boleto payment")
+        .country()
+        .description()
         .integrationType(IntegrationType.DIRECT)
-        .payer(BoletoSource.Payer.builder()
-                    .email("john@doe-enterprises.com")
-                    .name("John Doe")
-                    .document("53033315550").build())
+        .payer(BoletoSource.Payer.builder().build())
         .build();
 
 PaymentRequest<BoletoSource> request = PaymentRequest.boleto(boletoSource, com.checkout.common.Currency.BRL, 100L);

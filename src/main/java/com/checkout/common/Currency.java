@@ -166,7 +166,7 @@ public enum Currency {
 
     public static Currency fromString(final String currency) {
         if (EnumUtils.isValidEnum(Currency.class, currency)) {
-            return Currency.valueOf(currency);
+            return Currency.valueOf(currency.toUpperCase());
         } else {
             return null;
         }

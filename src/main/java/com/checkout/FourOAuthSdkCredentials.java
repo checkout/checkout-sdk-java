@@ -121,7 +121,7 @@ final class FourOAuthSdkCredentials extends SdkCredentials {
         return accessToken;
     }
 
-    void setAccessToken(final OAuthAccessToken accessToken) {
+    synchronized void setAccessToken(final OAuthAccessToken accessToken) {
         this.accessToken = accessToken;
     }
 

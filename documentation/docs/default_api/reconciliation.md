@@ -3,17 +3,7 @@ id: reconciliation
 title: Reconciliation
 ---
 
-You can find a list of request body parameters and possible outcomes [here](https://api-reference.checkout.com/#tag/Reconciliation).
-
-export const Highlight = ({children, color}) => (
-<span
-style={{
-color: color,
-padding: '0.2rem',
-}}>
-{children}
-</span>
-);
+The full list of request body parameters and possible outcomes can be found [here](https://api-reference.checkout.com/#tag/Reconciliation).
 
 Quickly find all fees associated with each of your payments, so you can concentrate on the important stuff while streamlining your financial reporting.
 
@@ -25,10 +15,10 @@ Returns a JSON report containing all payments within your specified parameters. 
 //You can use multiple fields in filter object such as a query parameter request
 ReconciliationQueryPaymentsFilter filter = ReconciliationQueryPaymentsFilter
         .builder()
-        .from(2021-08-10T16:48:52Z)
-        .to(2021-08-17T16:48:52Z)
-        .reference("pay_123456789ASDQWEZC")
-        .limit(100)
+        .from()
+        .to()
+        .reference()
+        .limit()
         .build();
 
 ReconciliationPaymentReportResponse response = api.reconciliationClient().queryPaymentsReport(filter).get();
@@ -36,16 +26,16 @@ ReconciliationPaymentReportResponse response = api.reconciliationClient().queryP
 
 ## Get JSON single payment report
 
-Returns a JSON payment report containing all of the data related to a specific payment, based on the payment's identifier. Note: no payments from before 7 February 2019 at 00.00.00 UTC will appear when using the payments endpoint. To view earlier payments, please contact our support team.
+Returns a JSON payment report containing all the data related to a specific payment, based on the payment's identifier. Note: no payments from before 7 February 2019 at 00.00.00 UTC will appear when using the payments endpoint. To view earlier payments, please contact our support team.
 
 ```java
-ReconciliationPaymentReportResponse response = api.reconciliationClient().singlePaymentReportAsync("pay_123456789ASDQWEZC").get();
+ReconciliationPaymentReportResponse response = api.reconciliationClient().singlePaymentReportAsync(paymentId).get();
 ```
-
 
 ## Get CSV payments report
 
 In addition to the JSON format returned by the reporting/payments endpoint, you can also download a CSV report containing the same data. [Learn more about how to read your CSV report](https://docs.checkout.com/reporting-and-insights/reconciliation-api/payments-endpoint#Paymentsendpoint-HowtoreadtheCSVfile).
+
 ```java
 //The parameter and the response will be the absolute path for a file
 String file = api.reconciliationClient().retrieveCSVPaymentReport("/etc/foo/payment_report.csv").get();
@@ -58,8 +48,8 @@ Returns a JSON report containing all statements within your specified parameters
 ```java
 QueryFilterDateRange filter = QueryFilterDateRange
         .builder()
-        .from(2021-08-10T16:48:52Z)
-        .to(2021-08-17T16:48:52Z)
+        .from()
+        .to()
         .build();
 
 StatementReportResponse response = api.reconciliationClient().queryStatementsReport(filter).get();
@@ -82,4 +72,3 @@ In addition to the JSON format returned by the reporting/statements endpoint, yo
 //The parameter and the response will be the absolute path for a file
 String file = api.reconciliationClient().retrieveCSVStatementsReport("/etc/foo/statement_report.csv").get();
 ```
-

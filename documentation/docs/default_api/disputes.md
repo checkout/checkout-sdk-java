@@ -3,17 +3,7 @@ id: disputes
 title: Disputes
 ---
 
-You can find a list of request body parameters and possible outcomes [here](https://api-reference.checkout.com/#tag/Disputes).
-
-export const Highlight = ({children, color}) => (
-<span
-style={{
-color: color,
-padding: '0.2rem',
-}}>
-{children}
-</span>
-);
+The full list of request body parameters and possible outcomes can be found [here](https://api-reference.checkout.com/#tag/Disputes).
 
 ## Get disputes
 
@@ -23,8 +13,8 @@ Returns a list of all disputes against your business. The results will be return
 //You can use multiple fields in filter object such as a query parameter request
 DisputesQueryFilter query = DisputesQueryFilter
         .builder()
-        .paymentId("pay_123456789ASSDQWE")
-        .limit(250)
+        .paymentId()
+        .limit()
         .build();
 
 DisputesQueryResponse response = api.disputesClient().query(query).get();
@@ -35,16 +25,16 @@ DisputesQueryResponse response = api.disputesClient().query(query).get();
 Returns all the details of a dispute using the dispute identifier.
 
 ```java
-DisputeDetailsResponse response = api.disputesClient().getDisputeDetails("dsp_123456789ASDQWE").get();
+DisputeDetailsResponse response = api.disputesClient().getDisputeDetails(disputeId).get();
 ```
 
 
-## Accept dispute**
+## Accept dispute
 
 If a dispute is legitimate, you can choose to accept it. This will close it for you and remove it from your list of open disputes. There are no further financial implications.
 
 ```java
-Void response = api.disputesClient().accept("dsp_123456789ASDQWE").get();
+api.disputesClient().accept(disputeId).get();
 ```
 
 ## Provide dispute evidence
@@ -73,7 +63,7 @@ DisputeEvidenceRequest evidenceRequest = DisputeEvidenceRequest.builder()
                 .proofOfDeliveryOrServiceDateText("Copy of the customer receipt showing the merchandise was delivered on 2018-12-20")
                 .build();
 
-Void response = api.disputesClient().putEvidence("dsp_123456789ASDQWE").get();
+api.disputesClient().putEvidence(disputeId).get();
 ```
 
 ## Get dispute evidence
@@ -81,7 +71,7 @@ Void response = api.disputesClient().putEvidence("dsp_123456789ASDQWE").get();
 Retrieves a list of the evidence submitted in response to a specific dispute.
 
 ```java
-DisputeEvidenceResponse response = api.disputesClient().getEvidence("dsp_123456789ASDQWE").get();
+DisputeEvidenceResponse response = api.disputesClient().getEvidence(disputeId).get();
 ```
 
 ## Submit dispute evidence
@@ -89,7 +79,7 @@ DisputeEvidenceResponse response = api.disputesClient().getEvidence("dsp_1234567
 With this final request, you can submit the evidence that you have previously provided. Make sure you have provided all the relevant information before using this request. You will not be able to amend your evidence once you have submitted it.
 
 ```java
-Void response = api.disputesClient().submitEvidence("dsp_123456789ASDQWE").get();
+api.disputesClient().submitEvidence(disputeId).get();
 ```
 
 ## Upload file

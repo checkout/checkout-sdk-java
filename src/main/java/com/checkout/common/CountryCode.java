@@ -516,11 +516,10 @@ public enum CountryCode {
 
     public static CountryCode fromString(final String countryCode) {
         if (EnumUtils.isValidEnum(CountryCode.class, countryCode)) {
-            return CountryCode.valueOf(countryCode);
+            return CountryCode.valueOf(countryCode.toUpperCase());
         } else {
             return null;
         }
     }
 
 }
-

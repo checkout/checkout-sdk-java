@@ -21,6 +21,7 @@ public class SessionsClientImpl extends AbstractClient implements SessionsClient
     private static final String COLLECT_DATA = "collect-data";
     private static final String COMPLETE = "complete";
     private static final String ISSUER_FINGERPRINT = "issuer-fingerprint";
+    private static final String SESSION_ID = "sessionId";
 
     private static final Map<Integer, Class<? extends Resource>> SESSION_RESPONSE_MAPPINGS = new HashMap<>();
 
@@ -99,27 +100,27 @@ public class SessionsClientImpl extends AbstractClient implements SessionsClient
 
     private CompletableFuture<GetSessionResponse> getSessionDetails(final String sessionId,
                                                                     final SdkAuthorization sdkAuthorization) {
-        validateParams("sessionId", sessionId);
+        validateParams(SESSION_ID, sessionId);
         return apiClient.getAsync(buildPath(SESSIONS, sessionId), sdkAuthorization, GetSessionResponse.class);
     }
 
     private CompletableFuture<GetSessionResponse> updateSession(final String sessionId,
                                                                 final ChannelData channelData,
                                                                 final SdkAuthorization sdkAuthorization) {
-        validateParams("sessionId", sessionId, "channelData", channelData);
+        validateParams(SESSION_ID, sessionId, "channelData", channelData);
         return apiClient.putAsync(buildPath(SESSIONS, sessionId, COLLECT_DATA), sdkAuthorization, GetSessionResponse.class, channelData);
     }
 
     private CompletableFuture<Void> completeSession(final String sessionId,
                                                     final SdkAuthorization sdkAuthorization) {
-        validateParams("sessionId", sessionId);
+        validateParams(SESSION_ID, sessionId);
         return apiClient.postAsync(buildPath(SESSIONS, sessionId, COMPLETE), sdkAuthorization, Void.class, null, null);
     }
 
     private CompletableFuture<GetSessionResponseAfterChannelDataSupplied> update3dsMethodCompletionIndicator(final String sessionId,
                                                                                                              final ThreeDsMethodCompletionRequest threeDsMethodCompletionRequest,
                                                                                                              final SdkAuthorization sdkAuthorization) {
-        validateParams("sessionId", sessionId, "threeDsMethodCompletionRequest", threeDsMethodCompletionRequest);
+        validateParams(SESSION_ID, sessionId, "threeDsMethodCompletionRequest", threeDsMethodCompletionRequest);
         return apiClient.putAsync(buildPath(SESSIONS, sessionId, ISSUER_FINGERPRINT), sdkAuthorization, GetSessionResponseAfterChannelDataSupplied.class, threeDsMethodCompletionRequest);
     }
 

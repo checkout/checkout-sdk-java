@@ -18,6 +18,7 @@ public class EventsClientImpl extends AbstractClient implements EventsClient {
     private static final String EVENTS = "events";
     private static final String NOTIFICATIONS = "notifications";
     private static final String WEBHOOKS = "webhooks";
+    private static final String EVENT_ID = "eventId";
 
     public EventsClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY);
@@ -34,9 +35,16 @@ public class EventsClientImpl extends AbstractClient implements EventsClient {
                 .thenApply(Arrays::asList);
     }
 
+    /**
+     * @deprecated Please use {@link #retrieveEvents(RetrieveEventsRequest)}
+     */
     @Deprecated
     @Override
-    public CompletableFuture<EventsPageResponse> retrieveEvents(final Instant from, final Instant to, final Integer limit, final Integer skip, final String paymentId) {
+    public CompletableFuture<EventsPageResponse> retrieveEvents(final Instant from,
+                                                                final Instant to,
+                                                                final Integer limit,
+                                                                final Integer skip,
+                                                                final String paymentId) {
         final RetrieveEventsRequest retrieveEventsRequest = RetrieveEventsRequest.builder()
                 .from(from)
                 .to(to)
@@ -55,25 +63,25 @@ public class EventsClientImpl extends AbstractClient implements EventsClient {
 
     @Override
     public CompletableFuture<EventResponse> retrieveEvent(final String eventId) {
-        validateParams("eventId", eventId);
+        validateParams(EVENT_ID, eventId);
         return apiClient.getAsync(buildPath(EVENTS, eventId), sdkAuthorization(), EventResponse.class);
     }
 
     @Override
     public CompletableFuture<EventNotificationResponse> retrieveEventNotification(final String eventId, final String notificationId) {
-        validateParams("eventId", eventId, "notificationId", notificationId);
+        validateParams(EVENT_ID, eventId, "notificationId", notificationId);
         return apiClient.getAsync(buildPath(EVENTS, eventId, NOTIFICATIONS, notificationId), sdkAuthorization(), EventNotificationResponse.class);
     }
 
     @Override
     public CompletableFuture<Void> retryWebhook(final String eventId, final String webhookId) {
-        validateParams("eventId", eventId, "webhookId", webhookId);
+        validateParams(EVENT_ID, eventId, "webhookId", webhookId);
         return apiClient.postAsync(buildPath(EVENTS, eventId, WEBHOOKS, webhookId, "retry"), sdkAuthorization(), Void.class, null, null);
     }
 
     @Override
     public CompletableFuture<Void> retryAllWebhooks(final String eventId) {
-        validateParams("eventId", eventId);
+        validateParams(EVENT_ID, eventId);
         return apiClient.postAsync(buildPath(EVENTS, eventId, WEBHOOKS, "retry"), sdkAuthorization(), Void.class, null, null);
     }
 

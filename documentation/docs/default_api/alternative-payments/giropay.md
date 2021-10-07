@@ -3,21 +3,21 @@ id: giropay
 title: Giropay
 ---
 
-More information on this topic can be found in the [official docs](https://docs.checkout.com/payments/payment-methods/bank-transfers/giropay).
+The full list of request body parameters and possible outcomes can be found [here](https://docs.checkout.com/payments/payment-methods/bank-transfers/giropay).
 
 ## Request a Giropay payment
 
 ```java
 GiropaySource giropaySource = GiropaySource.builder()
-        .bic("TESTDETT421")
-        .purpose("CKO Giropay test")
+        .bic()
+        .purpose()
         .build();
 
 PaymentRequest<GiropaySource> request = PaymentRequest.giropay(giropaySource, com.checkout.common.Currency.EUR, 1000L);
 
 PaymentResponse response = api.paymentsClient().requestAsync(request).get();
 
-redirectURL = response.getPending().getRedirectLink().getHref()
+String redirectURL = response.getPending().getRedirectLink().getHref()
 ```
 ## Get Giropay list of supported Banks
 

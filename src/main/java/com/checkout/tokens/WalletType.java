@@ -21,7 +21,7 @@ public enum WalletType {
      * Will be removed in a future version.
      */
     @Deprecated
-    static public WalletType from(final String name) {
+    public static WalletType from(final String name) {
         return Arrays.stream(values())
                 .filter(it -> it.name.equals(name))
                 .findFirst()

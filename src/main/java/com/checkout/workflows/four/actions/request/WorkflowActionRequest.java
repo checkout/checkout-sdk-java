@@ -10,7 +10,7 @@ public abstract class WorkflowActionRequest {
 
     private WorkflowActionType type;
 
-    public WorkflowActionRequest(final WorkflowActionType type) {
+    protected WorkflowActionRequest(final WorkflowActionType type) {
         this.type = type;
     }
 

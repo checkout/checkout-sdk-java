@@ -29,6 +29,7 @@ public class WorkflowsClientImpl extends AbstractClient implements WorkflowsClie
     private static final String EVENTS = "events";
     private static final String REFLOW = "reflow";
     private static final String SUBJECT = "subject";
+    private static final String WORKFLOW_ID = "workflowId";
 
     private static final Type EVENT_TYPES_RESPONSE = new TypeToken<List<EventTypesResponse>>() {
     }.getType();
@@ -50,31 +51,31 @@ public class WorkflowsClientImpl extends AbstractClient implements WorkflowsClie
 
     @Override
     public CompletableFuture<GetWorkflowResponse> getWorkflow(final String workflowId) {
-        validateParams("workflowId", workflowId);
+        validateParams(WORKFLOW_ID, workflowId);
         return apiClient.getAsync(buildPath(WORKFLOWS, workflowId), sdkAuthorization(), GetWorkflowResponse.class);
     }
 
     @Override
     public CompletableFuture<UpdateWorkflowResponse> updateWorkflow(final String workflowId, final UpdateWorkflowRequest updateWorkflowRequest) {
-        validateParams("workflowId", workflowId, "updateWorkflowRequest", updateWorkflowRequest);
+        validateParams(WORKFLOW_ID, workflowId, "updateWorkflowRequest", updateWorkflowRequest);
         return apiClient.patchAsync(buildPath(WORKFLOWS, workflowId), sdkAuthorization(), UpdateWorkflowResponse.class, updateWorkflowRequest, null);
     }
 
     @Override
     public CompletableFuture<Void> removeWorkflow(final String workflowId) {
-        validateParams("workflowId", workflowId);
+        validateParams(WORKFLOW_ID, workflowId);
         return apiClient.deleteAsync(buildPath(WORKFLOWS, workflowId), sdkAuthorization());
     }
 
     @Override
     public CompletableFuture<Void> updateWorkflowAction(final String workflowId, final String actionId, final WorkflowActionRequest workflowActionRequest) {
-        validateParams("workflowId", workflowId, "actionId", actionId, "workflowActionRequest", workflowActionRequest);
+        validateParams(WORKFLOW_ID, workflowId, "actionId", actionId, "workflowActionRequest", workflowActionRequest);
         return apiClient.putAsync(buildPath(WORKFLOWS, workflowId, ACTIONS, actionId), sdkAuthorization(), Void.class, workflowActionRequest);
     }
 
     @Override
     public CompletableFuture<Void> updateWorkflowCondition(final String workflowId, final String conditionId, final WorkflowConditionRequest workflowConditionRequest) {
-        validateParams("workflowId", workflowId, "conditionId", conditionId, "workflowConditionRequest", workflowConditionRequest);
+        validateParams(WORKFLOW_ID, workflowId, "conditionId", conditionId, "workflowConditionRequest", workflowConditionRequest);
         return apiClient.putAsync(buildPath(WORKFLOWS, workflowId, CONDITIONS, conditionId), sdkAuthorization(), Void.class, workflowConditionRequest);
     }
 
@@ -109,13 +110,13 @@ public class WorkflowsClientImpl extends AbstractClient implements WorkflowsClie
 
     @Override
     public CompletableFuture<ReflowResponse> reflowByEventAndWorkflow(final String eventId, final String workflowId) {
-        validateParams("eventId", eventId, "workflowId", workflowId);
+        validateParams("eventId", eventId, WORKFLOW_ID, workflowId);
         return apiClient.postAsync(buildPath(WORKFLOWS, EVENTS, eventId, WORKFLOW, workflowId, REFLOW), sdkAuthorization(), ReflowResponse.class, null, null);
     }
 
     @Override
     public CompletableFuture<ReflowResponse> reflowBySubjectAndWorkflow(final String subjectId, final String workflowId) {
-        validateParams("subjectId", subjectId, "workflowId", workflowId);
+        validateParams("subjectId", subjectId, WORKFLOW_ID, workflowId);
         return apiClient.postAsync(buildPath(WORKFLOWS, EVENTS, SUBJECT, subjectId, WORKFLOW, workflowId, REFLOW), sdkAuthorization(), ReflowResponse.class, null, null);
     }
 

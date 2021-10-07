@@ -3,22 +3,17 @@ id: fawry
 title: Fawry
 ---
 
-More information on this topic can be found in the [official docs](https://docs.checkout.com/payments/payment-methods/cash-and-atm-payment/fawry).
+The full list of request body parameters and possible outcomes can be found [here](https://docs.checkout.com/payments/payment-methods/cash-and-atm-payment/fawry).
 
 ## Request a Fawry payment
 
 ```java
 FawrySource fawrySource = FawrySource.builder()
-        .description("Fawry Demo Payment")
-        .customerEmail("bruce@wayne-enterprises.com")
-        .customerMobile("01058375055")
+        .description()
+        .customerEmail()
+        .customerMobile()
         .products(Collections.singletonList(
-                FawrySource.Product.builder()
-                        .id("0123456789")
-                        .description("Fawry Demo Product")
-                        .price(1000L)
-                        .quantity(1L)
-                        .build()
+                FawrySource.Product.builder().build()
         ))
         .build();
 
@@ -31,11 +26,15 @@ String cancellationURL = response.getPending().getLink("cancel").getHref();
 ```
 ## Approve a Fawry payment
 
+This functionality only works in sandbox environment.
+
 ```java
 api.fawryClient().approve(paymentReference).get();
 ```
 
 ## Expire a Fawry payment
+
+This functionality only works in sandbox environment.
 
 ```java
 api.fawryClient().cancel(paymentReference).get();
