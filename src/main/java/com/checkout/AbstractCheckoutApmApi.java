@@ -55,6 +55,10 @@ public abstract class AbstractCheckoutApmApi {
         return fawryClient;
     }
 
+    /**
+     * @deprecated GiropayClient client will be removed in a future version.
+     */
+    @Deprecated
     public GiropayClient giropayClient() {
         return giropayClient;
     }

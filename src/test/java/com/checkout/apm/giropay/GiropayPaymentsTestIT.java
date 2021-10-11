@@ -24,7 +24,8 @@ class GiropayPaymentsTestIT extends SandboxTestFixture {
     void shouldMakeGiropayPayment() {
 
         final GiropaySource giropaySource = GiropaySource.builder()
-                .bic("TESTDETT421")
+                // TODO BIC doesn't need to be supplied anymore. Remove setter when deprecated attribute is deleted.
+                //.bic("TESTDETT421")
                 .purpose("CKO Giropay test")
                 .build();
 
