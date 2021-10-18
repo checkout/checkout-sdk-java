@@ -17,7 +17,7 @@ public final class CreateInstrumentRequest {
     private String token;
 
     @SerializedName("account_holder")
-    private AccountHolder accountHolder;
+    private InstrumentAccountHolder accountHolder;
 
     private InstrumentCustomerRequest customer;
 

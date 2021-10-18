@@ -6,21 +6,23 @@ import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @AllArgsConstructor
-public final class AccountHolder {
+@NoArgsConstructor
+public class AccountHolder {
 
     @SerializedName("first_name")
-    private final String firstName;
+    private String firstName;
 
     @SerializedName("last_name")
-    private final String lastName;
+    private String lastName;
 
     @SerializedName("billing_address")
-    private final Address billingAddress;
+    private Address billingAddress;
 
-    private final Phone phone;
+    private Phone phone;
 
 }

@@ -48,7 +48,7 @@ public final class InstrumentDetailsResponse {
     private String productType;
 
     @SerializedName("account_holder")
-    private AccountHolder accountHolder;
+    private InstrumentAccountHolder accountHolder;
 
     private InstrumentCustomerResponse customer;
 
