@@ -13,6 +13,7 @@ import com.checkout.payments.apm.OxxoSource;
 import com.checkout.payments.apm.PagoFacilSource;
 import com.checkout.payments.apm.RapiPagoSource;
 import com.checkout.payments.apm.SepaSource;
+import com.checkout.payments.apm.SofortSource;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -168,6 +169,10 @@ public class PaymentRequest<T extends RequestSource> {
 
     public static PaymentRequest<SepaSource> sepa(final SepaSource sepaSource, final Currency currency, final Long amount, final String reference) {
         return new PaymentRequest<>(sepaSource, currency, amount, true, reference);
+    }
+
+    public static PaymentRequest<SofortSource> sofort(final Currency currency, final Long amount) {
+        return new PaymentRequest<>(new SofortSource(), currency, amount, true);
     }
 
 }

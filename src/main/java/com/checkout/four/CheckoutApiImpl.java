@@ -1,5 +1,6 @@
 package com.checkout.four;
 
+import com.checkout.AbstractCheckoutApmApi;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutApiClient;
 import com.checkout.CheckoutConfiguration;
@@ -22,7 +23,7 @@ import com.checkout.tokens.four.TokensClientImpl;
 import com.checkout.workflows.four.WorkflowsClient;
 import com.checkout.workflows.four.WorkflowsClientImpl;
 
-public class CheckoutApiImpl implements CheckoutApi, CheckoutApiClient {
+public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutApi, CheckoutApiClient {
 
     private final TokensClient tokensClient;
     private final PaymentsClient paymentsClient;
@@ -35,6 +36,7 @@ public class CheckoutApiImpl implements CheckoutApi, CheckoutApiClient {
     private final SessionsClient sessionsClient;
 
     public CheckoutApiImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
+        super(apiClient, configuration);
         this.tokensClient = new TokensClientImpl(apiClient, configuration);
         this.paymentsClient = new PaymentsClientImpl(apiClient, configuration);
         this.customersClient = new CustomersClientImpl(apiClient, configuration);

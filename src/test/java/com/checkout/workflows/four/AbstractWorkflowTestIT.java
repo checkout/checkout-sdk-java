@@ -33,7 +33,6 @@ abstract class AbstractWorkflowTestIT extends AbstractPaymentsTestIT {
     private static final List<String> DISPUTE_EVENT_TYPES = Arrays.asList("dispute_evidence_required", "dispute_won",
             "dispute_expired", "dispute_lost", "dispute_resolved");
 
-
     protected final WebhookWorkflowActionRequest baseWorkflowActionRequest = WebhookWorkflowActionRequest.builder()
             .url("https://google.com/fail")
             .headers(new HashMap<>())

@@ -10,7 +10,7 @@ import com.checkout.sessions.SessionsClient;
 import com.checkout.tokens.four.TokensClient;
 import com.checkout.workflows.four.WorkflowsClient;
 
-public interface CheckoutApi {
+public interface CheckoutApi extends CheckoutApmApi {
 
     TokensClient tokensClient();
 
