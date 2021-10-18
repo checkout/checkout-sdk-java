@@ -29,7 +29,8 @@ public final class CheckoutDefaultSdk {
         @Override
         public CheckoutApiImpl build() {
             final CheckoutConfiguration configuration = getCheckoutConfiguration();
-            return new CheckoutApiImpl(configuration);
+            final ApiClient client = new ApiClientImpl(configuration);
+            return new CheckoutApiImpl(client, configuration);
         }
 
     }

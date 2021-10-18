@@ -12,8 +12,7 @@ class CheckoutApiImplTest {
 
     @Test
     void shouldInstantiateAndRetrieveClients() {
-        final CheckoutConfiguration configuration = new CheckoutConfiguration(mock(DefaultStaticKeysSdkCredentials.class), Environment.SANDBOX);
-        final CheckoutApi checkoutApi = new CheckoutApiImpl(configuration);
+        final CheckoutApi checkoutApi = new CheckoutApiImpl(mock(ApiClient.class), mock(CheckoutConfiguration.class));
         assertNotNull(checkoutApi.paymentsClient());
         assertNotNull(checkoutApi.sourcesClient());
         assertNotNull(checkoutApi.tokensClient());
@@ -26,6 +25,7 @@ class CheckoutApiImplTest {
         assertNotNull(checkoutApi.disputesClient());
         assertNotNull(checkoutApi.reconciliationClient());
         assertNotNull(checkoutApi.riskClient());
+        // APMs
         assertNotNull(checkoutApi.balotoClient());
         assertNotNull(checkoutApi.fawryClient());
         assertNotNull(checkoutApi.giropayClient());

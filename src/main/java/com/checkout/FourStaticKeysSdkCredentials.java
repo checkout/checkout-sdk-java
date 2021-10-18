@@ -1,6 +1,6 @@
 package com.checkout;
 
-final class FourStaticKeysSdkCredentials extends AbstractStaticKeysSdkCredentials {
+public final class FourStaticKeysSdkCredentials extends AbstractStaticKeysSdkCredentials {
 
     private static final String FOUR_SECRET_KEY_PATTERN = "^sk_(sbox_)?[a-z2-7]{26}[a-z2-7*#$=]$";
     private static final String FOUR_PUBLIC_KEY_PATTEN = "^pk_(sbox_)?[a-z2-7]{26}[a-z2-7*#$=]$";

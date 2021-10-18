@@ -40,8 +40,8 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final ReconciliationClient reconciliationClient;
     private final RiskClient riskClient;
 
-    public CheckoutApiImpl(final CheckoutConfiguration configuration) {
-        super(new ApiClientImpl(configuration), configuration);
+    public CheckoutApiImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
+        super(apiClient, configuration);
         this.paymentsClient = new PaymentsClientImpl(apiClient, configuration);
         this.sourcesClient = new SourcesClientImpl(apiClient, configuration);
         this.tokensClient = new TokensClientImpl(apiClient, configuration);
@@ -62,7 +62,8 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     @Deprecated
     public static CheckoutApi create(final String secretKey, final boolean useSandbox, final String publicKey) {
         final CheckoutConfiguration configuration = new CheckoutConfiguration(secretKey, useSandbox, publicKey);
-        return new CheckoutApiImpl(configuration);
+        final ApiClient client = new ApiClientImpl(configuration);
+        return new CheckoutApiImpl(client, configuration);
     }
 
     /**
@@ -71,7 +72,8 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     @Deprecated
     public static CheckoutApi create(final String secretKey, final String uri, final String publicKey) {
         final CheckoutConfiguration configuration = new CheckoutConfiguration(secretKey, uri);
-        return new CheckoutApiImpl(configuration);
+        final ApiClient client = new ApiClientImpl(configuration);
+        return new CheckoutApiImpl(client, configuration);
     }
 
     @Override

@@ -1,5 +1,8 @@
 package com.checkout.payments.four.request;
 
+import com.checkout.common.Currency;
+import com.checkout.payments.apm.IdealSource;
+import com.checkout.payments.apm.SofortSource;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.request.source.RequestIdSource;
 import com.checkout.payments.four.request.source.RequestNetworkTokenSource;
@@ -29,6 +32,17 @@ public final class Payments {
 
     public static NetworkTokenPaymentBuilder networkTokenSource(final RequestNetworkTokenSource source) {
         return new NetworkTokenPaymentBuilder(source);
+    }
+
+    public static IdealPaymentBuilder ideal(final IdealSource source,
+                                            final Currency currency,
+                                            final Long amount) {
+        return new IdealPaymentBuilder(source, currency, amount);
+    }
+
+    public static SofortPaymentBuilder sofort(final Currency currency,
+                                              final Long amount) {
+        return new SofortPaymentBuilder(currency, amount);
     }
 
     public static class CardPaymentBuilder extends PaymentsBuilder {
@@ -62,6 +76,45 @@ public final class Payments {
 
     }
 
+    public static class IdealPaymentBuilder extends PaymentsBuilder {
+
+        private final Currency currency;
+        private final Long amount;
+
+        public IdealPaymentBuilder(final IdealSource source,
+                                   final Currency currency,
+                                   final Long amount) {
+            super(source);
+            this.currency = currency;
+            this.amount = amount;
+        }
+
+        @Override
+        protected PaymentRequest.PaymentRequestBuilder builder(final RequestSender sender) {
+            return super.builder(sender).currency(this.currency).amount(amount);
+        }
+
+    }
+
+    public static class SofortPaymentBuilder extends PaymentsBuilder {
+
+        private final Currency currency;
+        private final Long amount;
+
+        public SofortPaymentBuilder(final Currency currency,
+                                    final Long amount) {
+            super(new SofortSource());
+            this.currency = currency;
+            this.amount = amount;
+        }
+
+        @Override
+        protected PaymentRequest.PaymentRequestBuilder builder(final RequestSender sender) {
+            return super.builder(sender).currency(currency).amount(amount);
+        }
+
+    }
+
     public abstract static class PaymentsBuilder {
 
         private final RequestSource source;
@@ -86,7 +139,7 @@ public final class Payments {
             return builder(instrumentSender);
         }
 
-        private PaymentRequest.PaymentRequestBuilder builder(final RequestSender sender) {
+        protected PaymentRequest.PaymentRequestBuilder builder(final RequestSender sender) {
             return new PaymentRequest.PaymentRequestBuilder().sender(sender).source(source);
         }
 

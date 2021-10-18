@@ -1,8 +1,8 @@
 package com.checkout.payments.four.request;
 
 import com.checkout.common.Currency;
-import com.checkout.common.MarketplaceData;
 import com.checkout.common.CustomerRequest;
+import com.checkout.common.MarketplaceData;
 import com.checkout.payments.four.BillingDescriptor;
 import com.checkout.payments.four.request.source.RequestSource;
 import com.checkout.payments.four.sender.RequestSender;
