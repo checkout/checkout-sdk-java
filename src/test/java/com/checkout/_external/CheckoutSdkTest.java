@@ -39,7 +39,6 @@ class CheckoutSdkTest {
         assertTrue(defaultCheckoutApi.riskClient() instanceof com.checkout.risk.RiskClientImpl);
         assertTrue(defaultCheckoutApi.balotoClient() instanceof com.checkout.apm.baloto.BalotoClientImpl);
         assertTrue(defaultCheckoutApi.fawryClient() instanceof com.checkout.apm.fawry.FawryClientImpl);
-        assertTrue(defaultCheckoutApi.giropayClient() instanceof com.checkout.apm.giropay.GiropayClientImpl);
         assertTrue(defaultCheckoutApi.idealClient() instanceof com.checkout.apm.ideal.IdealClientImpl);
         assertTrue(defaultCheckoutApi.klarnaClient() instanceof com.checkout.apm.klarna.KlarnaClientImpl);
         assertTrue(defaultCheckoutApi.oxxoClient() instanceof com.checkout.apm.oxxo.OxxoClientImpl);

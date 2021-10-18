@@ -2,7 +2,6 @@ package com.checkout;
 
 import com.checkout.apm.baloto.BalotoClient;
 import com.checkout.apm.fawry.FawryClient;
-import com.checkout.apm.giropay.GiropayClient;
 import com.checkout.apm.ideal.IdealClient;
 import com.checkout.apm.klarna.KlarnaClient;
 import com.checkout.apm.oxxo.OxxoClient;
@@ -15,8 +14,6 @@ public interface CheckoutApmApi {
     BalotoClient balotoClient();
 
     FawryClient fawryClient();
-
-    GiropayClient giropayClient();
 
     IdealClient idealClient();
 
