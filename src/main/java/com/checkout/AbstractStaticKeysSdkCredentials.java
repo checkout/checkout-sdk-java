@@ -39,11 +39,11 @@ abstract class AbstractStaticKeysSdkCredentials extends SdkCredentials {
         return key.matches(pattern);
     }
 
-    public String getSecretKey() {
+    String getSecretKey() {
         return secretKey;
     }
 
-    public String getPublicKey() {
+    String getPublicKey() {
         return publicKey;
     }
 
