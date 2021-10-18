@@ -24,7 +24,6 @@ public final class UpdateInstrumentCardRequest extends UpdateInstrumentRequest {
 
     private String name;
 
-    // TODO Implement specific UpdateCardAccountHolder domain when it's available
     @SerializedName("account_holder")
     private AccountHolder accountHolder;
 

@@ -21,7 +21,7 @@ public final class UpdateInstrumentRequest {
     private String name;
 
     @SerializedName("account_holder")
-    private AccountHolder accountHolder;
+    private InstrumentAccountHolder accountHolder;
 
     private Customer customer;
 

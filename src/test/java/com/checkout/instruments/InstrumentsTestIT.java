@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class InstrumentsTestIT extends SandboxTestFixture {
 
-    private AccountHolder accountHolder;
+    private InstrumentAccountHolder accountHolder;
 
     InstrumentsTestIT() {
         super(PlatformType.DEFAULT);
@@ -25,7 +25,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
 
     @BeforeEach
     void setUp() {
-        accountHolder = AccountHolder.builder()
+        accountHolder = InstrumentAccountHolder.builder()
                 .billingAddress(Address.builder()
                         .addressLine1("123 Street")
                         .addressLine2("Hollywood Avenue")
