@@ -4,8 +4,6 @@ import com.checkout.apm.baloto.BalotoClient;
 import com.checkout.apm.baloto.BalotoClientImpl;
 import com.checkout.apm.fawry.FawryClient;
 import com.checkout.apm.fawry.FawryClientImpl;
-import com.checkout.apm.giropay.GiropayClient;
-import com.checkout.apm.giropay.GiropayClientImpl;
 import com.checkout.apm.ideal.IdealClient;
 import com.checkout.apm.ideal.IdealClientImpl;
 import com.checkout.apm.klarna.KlarnaClient;
@@ -25,7 +23,6 @@ public abstract class AbstractCheckoutApmApi {
 
     private final BalotoClient balotoClient;
     private final FawryClient fawryClient;
-    private final GiropayClient giropayClient;
     private final IdealClient idealClient;
     private final KlarnaClient klarnaClient;
     private final OxxoClient oxxoClient;
@@ -38,7 +35,6 @@ public abstract class AbstractCheckoutApmApi {
         this.apiClient = apiClient;
         this.balotoClient = new BalotoClientImpl(apiClient, configuration);
         this.fawryClient = new FawryClientImpl(apiClient, configuration);
-        this.giropayClient = new GiropayClientImpl(apiClient, configuration);
         this.idealClient = new IdealClientImpl(apiClient, configuration);
         this.klarnaClient = new KlarnaClientImpl(apiClient, configuration);
         this.oxxoClient = new OxxoClientImpl(apiClient, configuration);
@@ -53,14 +49,6 @@ public abstract class AbstractCheckoutApmApi {
 
     public FawryClient fawryClient() {
         return fawryClient;
-    }
-
-    /**
-     * @deprecated GiropayClient client will be removed in a future version.
-     */
-    @Deprecated
-    public GiropayClient giropayClient() {
-        return giropayClient;
     }
 
     public IdealClient idealClient() {

@@ -28,7 +28,6 @@ class CheckoutApiImplTest {
         // APMs
         assertNotNull(checkoutApi.balotoClient());
         assertNotNull(checkoutApi.fawryClient());
-        assertNotNull(checkoutApi.giropayClient());
         assertNotNull(checkoutApi.idealClient());
         assertNotNull(checkoutApi.klarnaClient());
         assertNotNull(checkoutApi.oxxoClient());
