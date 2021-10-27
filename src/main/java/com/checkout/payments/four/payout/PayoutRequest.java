@@ -2,6 +2,7 @@ package com.checkout.payments.four.payout;
 
 import com.checkout.common.Currency;
 import com.checkout.payments.four.BillingDescriptor;
+import com.checkout.payments.four.payout.destination.PaymentDestination;
 import com.checkout.payments.four.payout.source.PayoutRequestSource;
 import com.checkout.payments.four.sender.RequestSender;
 import com.google.gson.annotations.SerializedName;
