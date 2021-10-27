@@ -159,4 +159,4 @@ Please refer to [Code of Conduct](CODE_OF_CONDUCT.md)
 
 ## Licensing
 
-[MIT](https://github.com/checkout/checkout-sdk-java/blob/dev/LICENSE.md)
+[MIT](LICENSE.md)
