@@ -15,8 +15,8 @@ allprojects {
     }
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 11
+targetCompatibility = 11
 
 dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
@@ -131,9 +131,7 @@ signing {
 }
 
 javadoc {
-    if (JavaVersion.current().isJava9Compatible()) {
-        options.addBooleanOption('html5', true)
-    }
+    options.addBooleanOption('html5', true)
 }
 
 jar {
