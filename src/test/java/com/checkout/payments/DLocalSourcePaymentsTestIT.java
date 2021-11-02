@@ -21,7 +21,7 @@ class DLocalSourcePaymentsTestIT extends SandboxTestFixture {
     void shouldRequestNon3dsCardPayment() throws Exception {
 
         final PaymentRequest<DLocalSource> paymentRequest = TestHelper.createDLocalPaymentRequest();
-        paymentRequest.setThreeDS(ThreeDSRequest.from(false));
+        paymentRequest.setThreeDS(new ThreeDSRequest());
 
         final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
 

@@ -212,7 +212,7 @@ class EventsTestIT extends SandboxTestFixture {
 
     private PaymentProcessed makeCardPayment() {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
-        paymentRequest.setThreeDS(ThreeDSRequest.from(false));
+        paymentRequest.setThreeDS(new ThreeDSRequest());
         final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
         assertNotNull(paymentResponse.getPayment());
         return paymentResponse.getPayment();

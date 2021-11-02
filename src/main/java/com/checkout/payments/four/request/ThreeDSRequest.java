@@ -1,5 +1,6 @@
 package com.checkout.payments.four.request;
 
+import com.checkout.payments.Exemption;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;

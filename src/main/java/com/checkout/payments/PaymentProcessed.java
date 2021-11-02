@@ -24,7 +24,7 @@ public class PaymentProcessed extends Resource {
     private String responseCode;
     private String responseSummary;
     @SerializedName("3ds")
-    private ThreeDSEnrollment threeDS;
+    private ThreeDSEnrollmentData threeDS;
     private RiskAssessment risk;
     private ResponseSource source;
     private CardDestinationResponse destination;

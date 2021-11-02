@@ -5,6 +5,7 @@ import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
 import com.checkout.common.Address;
 import com.checkout.common.Phone;
+import com.checkout.common.ThreeDSEnrollmentStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
@@ -73,7 +74,7 @@ class GetPaymentTestIT extends SandboxTestFixture {
     @Test
     void can_get_3ds_payment_before_auth() throws Exception {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
-        paymentRequest.setThreeDS(ThreeDSRequest.from(true));
+        paymentRequest.setThreeDS(ThreeDSRequest.builder().enabled(true).build());
 
         final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
         assertTrue(paymentResponse.isPending());
@@ -93,7 +94,7 @@ class GetPaymentTestIT extends SandboxTestFixture {
         assertTrue(paymentDetails.getRequestedOn().isAfter(Instant.MIN));
         assertNotNull(paymentDetails.getThreeDS());
         assertFalse(paymentDetails.getThreeDS().isDowngraded());
-        assertFalse(StringUtils.isBlank(paymentDetails.getThreeDS().getEnrolled()));
+        assertEquals(ThreeDSEnrollmentStatus.YES, paymentDetails.getThreeDS().getEnrolled());
         assertTrue(paymentDetails.requiresRedirect());
         assertNotNull(paymentDetails.getRedirectLink());
         assertNotNull(paymentDetails.getLinks());

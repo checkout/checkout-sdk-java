@@ -3,6 +3,7 @@ package com.checkout.payments;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
+import com.checkout.common.ThreeDSEnrollmentStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +24,7 @@ class CardSourcePaymentsTestIT extends SandboxTestFixture {
     void shouldRequestNon3dsCardPayment() throws Exception {
 
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
-        paymentRequest.setThreeDS(ThreeDSRequest.from(false));
+        paymentRequest.setThreeDS(new ThreeDSRequest());
 
         final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
 
@@ -45,18 +46,17 @@ class CardSourcePaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void shouldRequest3dsCardPayment() throws Exception {
+    void shouldRequest3dsCardPayment() {
 
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
-        paymentRequest.setThreeDS(ThreeDSRequest.from(true));
+        paymentRequest.setThreeDS(ThreeDSRequest.builder().enabled(true).build());
 
-        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
 
         assertTrue(paymentResponse.isPending());
         final PaymentPending pending = paymentResponse.getPending();
 
         assertNotNull(pending);
-
         assertFalse(StringUtils.isEmpty(pending.getId()));
         assertEquals(paymentRequest.getReference(), pending.getReference());
         assertNotNull(pending.getCustomer());
@@ -64,9 +64,18 @@ class CardSourcePaymentsTestIT extends SandboxTestFixture {
         assertEquals(paymentRequest.getCustomer().getEmail(), pending.getCustomer().getEmail());
         assertNotNull(pending.getThreeDS());
         assertFalse(pending.getThreeDS().isDowngraded());
-        assertFalse(StringUtils.isEmpty(pending.getThreeDS().getEnrolled()));
+        assertEquals(ThreeDSEnrollmentStatus.YES, pending.getThreeDS().getEnrolled());
         assertTrue(pending.requiresRedirect());
         assertNotNull(pending.getRedirectLink());
+
+        // Verify 3ds data
+        final GetPaymentResponse paymentDetails = blocking(defaultApi.paymentsClient().getAsync(pending.getId()));
+        assertNotNull(paymentDetails);
+        assertNotNull(paymentDetails.getThreeDS());
+        assertEquals(ThreeDSEnrollmentStatus.YES, paymentDetails.getThreeDS().getEnrolled());
+        assertFalse(paymentDetails.getThreeDS().isDowngraded());
+        assertNotNull(paymentDetails.getThreeDS().getVersion());
+
     }
 
     @Test

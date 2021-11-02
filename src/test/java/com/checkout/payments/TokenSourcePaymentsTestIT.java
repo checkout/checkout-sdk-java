@@ -3,6 +3,7 @@ package com.checkout.payments;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
+import com.checkout.common.ThreeDSEnrollmentStatus;
 import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +28,7 @@ class TokenSourcePaymentsTestIT extends SandboxTestFixture {
         final CardTokenRequest cardTokenRequest = TestHelper.createCardTokenRequest();
         final CardTokenResponse cardTokenResponse = defaultApi.tokensClient().requestAsync(cardTokenRequest).get();
         final PaymentRequest<TokenSource> paymentRequest = TestHelper.createTokenPaymentRequest(cardTokenResponse.getToken());
-        paymentRequest.setThreeDS(ThreeDSRequest.from(false));
+        paymentRequest.setThreeDS(new ThreeDSRequest());
 
         final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
 
@@ -49,7 +50,7 @@ class TokenSourcePaymentsTestIT extends SandboxTestFixture {
         final CardTokenRequest cardTokenRequest = TestHelper.createCardTokenRequest();
         final CardTokenResponse cardTokenResponse = defaultApi.tokensClient().requestAsync(cardTokenRequest).get();
         final PaymentRequest<TokenSource> paymentRequest = TestHelper.createTokenPaymentRequest(cardTokenResponse.getToken());
-        paymentRequest.setThreeDS(ThreeDSRequest.from(true));
+        paymentRequest.setThreeDS(ThreeDSRequest.builder().enabled(true).build());
 
         final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
 
@@ -62,7 +63,7 @@ class TokenSourcePaymentsTestIT extends SandboxTestFixture {
         assertEquals(paymentRequest.getReference(), pending.getReference());
         assertNotNull(pending.getThreeDS());
         assertFalse(pending.getThreeDS().isDowngraded());
-        assertFalse(StringUtils.isEmpty(pending.getThreeDS().getEnrolled()));
+        assertEquals(ThreeDSEnrollmentStatus.YES, pending.getThreeDS().getEnrolled());
         assertTrue(pending.requiresRedirect());
         assertNotNull(pending.getRedirectLink());
     }

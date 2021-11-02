@@ -1,6 +1,6 @@
 package com.checkout.disputes.four;
 
-import com.checkout.common.four.ThreeDSEnrollmentStatus;
+import com.checkout.common.ThreeDSEnrollmentStatus;
 import lombok.Builder;
 import lombok.Data;
 

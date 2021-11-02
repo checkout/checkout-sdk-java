@@ -4,12 +4,12 @@ import com.checkout.CardSourceHelper;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
+import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
-import com.checkout.common.four.ThreeDSEnrollmentStatus;
+import com.checkout.common.ThreeDSEnrollmentStatus;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.Payments;
 import com.checkout.payments.four.request.ThreeDSRequest;
-import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.request.source.RequestIdSource;
 import com.checkout.payments.four.request.source.RequestTokenSource;
@@ -149,6 +149,12 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
         final ResponseCardSource responseCardSource = paymentResponse.getSource();
         assertNull(responseCardSource);
 
+        final PaymentResponse paymentDetails = blocking(fourApi.paymentsClient().getPayment(paymentResponse.getId()));
+        assertNotNull(paymentDetails);
+        assertNotNull(paymentDetails.getThreeDSEnrollment());
+        assertEquals(ThreeDSEnrollmentStatus.YES, paymentDetails.getThreeDSEnrollment().getEnrolled());
+        assertFalse(paymentDetails.getThreeDSEnrollment().isDowngraded());
+        assertNotNull(paymentDetails.getThreeDSEnrollment().getVersion());
     }
 
     @Test
