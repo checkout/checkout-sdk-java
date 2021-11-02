@@ -29,12 +29,4 @@ public final class WebhookResponse extends Resource {
     @SerializedName("event_types")
     private List<String> eventTypes;
 
-    /**
-     * Will be removed in a future version.
-     */
-    @Deprecated
-    public WebhookRequest toRequest() {
-        return new WebhookRequest(url, active, headers, contentType, eventTypes);
-    }
-
 }
