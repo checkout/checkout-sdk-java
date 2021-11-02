@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,13 +28,5 @@ public final class WebhookRequest {
 
     @Builder.Default
     private List<String> eventTypes = new ArrayList<>();
-
-    /**
-     * @deprecated Will be removed in a future version.
-     */
-    @Deprecated
-    public WebhookRequest(final String url, final List<String> eventTypes) {
-        this(url, true, new HashMap<>(), "json", eventTypes);
-    }
 
 }
