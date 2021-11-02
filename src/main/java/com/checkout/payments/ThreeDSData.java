@@ -1,14 +1,11 @@
-package com.checkout.payments.four.response;
+package com.checkout.payments;
 
 import com.checkout.common.ThreeDSEnrollmentStatus;
-import com.checkout.payments.Exemption;
 import com.google.gson.annotations.SerializedName;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-public final class ThreeDSEnrollmentData {
+public final class ThreeDSData {
 
     private boolean downgraded;
 

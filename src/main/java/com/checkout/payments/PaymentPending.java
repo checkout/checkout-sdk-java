@@ -23,7 +23,7 @@ public class PaymentPending extends Resource {
     private CustomerResponse customer;
 
     @SerializedName("3ds")
-    private ThreeDSEnrollment threeDS;
+    private ThreeDSEnrollmentData threeDS;
 
     public boolean requiresRedirect() {
         return getLinks().containsKey(REDIRECT);

@@ -10,20 +10,21 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ThreeDSRequest {
+public final class ThreeDSRequest {
+
     private boolean enabled;
+
     @SerializedName("attempt_n3d")
     private Boolean attemptN3D;
-    private String eci;
-    private String cryptogram;
-    private String xid;
-    private String version;
-    private String exemption;
-    private String challengeIndicator;
 
-    public static ThreeDSRequest from(boolean enabled) {
-        ThreeDSRequest request = new ThreeDSRequest();
-        request.enabled = enabled;
-        return request;
-    }
+    private String eci;
+
+    private String cryptogram;
+
+    private String xid;
+
+    private String version;
+
+    private Exemption exemption;
+
 }

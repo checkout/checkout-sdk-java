@@ -43,7 +43,7 @@ public class GetPaymentResponse extends Resource {
     private String status;
 
     @SerializedName("3ds")
-    private ThreeDSEnrollment threeDS;
+    private ThreeDSData threeDS;
 
     private RiskAssessment risk;
 
@@ -73,6 +73,9 @@ public class GetPaymentResponse extends Resource {
         return getLink(REDIRECT);
     }
 
+    /**
+     * @deprecated Will be removed in a future version.
+     */
     public PaymentActionSummary getAuthorizationAction() {
         return actions.stream()
                 .filter(it -> ActionType.AUTHORIZATION.equalsIgnoreCase(it.getType()))
