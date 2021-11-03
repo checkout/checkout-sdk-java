@@ -1,21 +1,20 @@
 package com.checkout.payments;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class Processing {
-    private Boolean aft;
-    private String mid;
-    @SerializedName("senderInformation")
-    private SenderInformation senderInformation;
-    @SerializedName("skipExpiry")
-    private Boolean skipExpiry;
-    private DLocal dlocal;
+public final class Processing {
+
+    @SerializedName("retrieval_reference_number")
+    private final String retrievalReferenceNumber;
+
+    @SerializedName("acquirer_reference_number")
+    private final String acquirerReferenceNumber;
+
+    @SerializedName("acquirer_transaction_id")
+    private final String acquirerTransactionId;
+
 }

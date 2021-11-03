@@ -88,6 +88,9 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .totalVoided(0L)
                 .build(), paymentResponse.getBalances()
         );
+        assertNotNull(paymentResponse.getProcessing());
+        assertNotNull(paymentResponse.getProcessing().getAcquirerTransactionId());
+        assertNotNull(paymentResponse.getProcessing().getRetrievalReferenceNumber());
         final ResponseCardSource responseCardSource = paymentResponse.getSource();
         assertNotNull(responseCardSource);
         assertEquals(PaymentSourceType.CARD, responseCardSource.getType());

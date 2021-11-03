@@ -1,14 +1,14 @@
 package com.checkout.payments.hosted;
 
+import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
 import com.checkout.common.Product;
-import com.checkout.common.Currency;
 import com.checkout.payments.BillingInformation;
+import com.checkout.payments.ProcessingSettings;
 import com.checkout.payments.RiskRequest;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
 import com.checkout.payments.four.request.PaymentRecipient;
-import com.checkout.payments.four.request.ProcessingSettings;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;

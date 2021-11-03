@@ -22,6 +22,7 @@ class CaptureTestIT extends SandboxTestFixture {
 
     @Test
     void shouldFullyCapturePayment() throws Exception {
+
         final PaymentProcessed payment = makePayment();
 
         final Map<String, Object> metadata = new HashMap<>();
@@ -39,6 +40,7 @@ class CaptureTestIT extends SandboxTestFixture {
 
     @Test
     void shouldCapturePaymentPartially() throws Exception {
+
         final PaymentProcessed payment = makePayment();
 
         final Map<String, Object> metadata = new HashMap<>();
@@ -55,12 +57,16 @@ class CaptureTestIT extends SandboxTestFixture {
         assertEquals(captureRequest.getReference(), captureResponse.getReference());
     }
 
-    private PaymentProcessed makePayment() throws Exception {
+    private PaymentProcessed makePayment() {
+
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest(1000L);
         paymentRequest.setCapture(false);
 
-        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
-        assertTrue(paymentResponse.getPayment().canCapture());
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
+        assertTrue(paymentResponse.getPayment().getLinks().containsKey("capture"));
+        assertNotNull(paymentResponse.getPayment().getProcessing());
+        assertNotNull(paymentResponse.getPayment().getProcessing().getAcquirerTransactionId());
+        assertNotNull(paymentResponse.getPayment().getProcessing().getRetrievalReferenceNumber());
 
         return paymentResponse.getPayment();
     }

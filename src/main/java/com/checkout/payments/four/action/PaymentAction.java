@@ -1,8 +1,8 @@
 package com.checkout.payments.four.action;
 
 import com.checkout.common.Resource;
-import com.checkout.payments.four.Processing;
-import com.checkout.payments.four.request.AuthorizationType;
+import com.checkout.payments.Processing;
+import com.checkout.payments.four.AuthorizationType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
