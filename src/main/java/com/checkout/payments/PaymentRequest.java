@@ -18,6 +18,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.time.Instant;
@@ -28,17 +29,18 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 
 @Data
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class PaymentRequest<T extends RequestSource> {
 
-    private final T source;
+    private T source;
 
-    private final T destination;
+    private PaymentDestination destination;
 
-    private final Long amount;
+    private Long amount;
 
     @NonNull
-    private final Currency currency;
+    private Currency currency;
 
     @SerializedName("payment_type")
     private String paymentType;
@@ -81,7 +83,7 @@ public class PaymentRequest<T extends RequestSource> {
 
     private PaymentRecipient recipient;
 
-    private Processing processing;
+    private ProcessingSettings processing;
 
     @Builder.Default
     private Map<String, Object> metadata = new HashMap<>();
@@ -96,28 +98,19 @@ public class PaymentRequest<T extends RequestSource> {
 
     private MarketplaceData marketplace;
 
-    private PaymentRequest(final T sourceOrDestination, final Currency currency, final Long amount, final boolean isSource) {
-        validateParams("sourceOrDestination", sourceOrDestination, "currency", currency, "amount", amount);
-        this.source = isSource ? sourceOrDestination : null;
-        this.destination = isSource ? null : sourceOrDestination;
-        this.amount = amount;
-        this.currency = currency;
-        this.metadata = new HashMap<>();
-    }
+    private Purpose purpose;
 
-    private PaymentRequest(final T sourceOrDestination, final Currency currency, final Long amount, final boolean isSource, final boolean capture) {
-        validateParams("sourceOrDestination", sourceOrDestination, "currency", currency, "amount", amount, "capture", capture);
-        this.source = isSource ? sourceOrDestination : null;
-        this.destination = isSource ? null : sourceOrDestination;
+    private PaymentRequest(final T source, final Currency currency, final Long amount, final boolean capture) {
+        validateParams("source", source, "currency", currency, "amount", amount, "capture", capture);
+        this.source = source;
         this.amount = amount;
         this.currency = currency;
         this.capture = capture;
     }
 
-    private PaymentRequest(final T sourceOrDestination, final Currency currency, final Long amount, final boolean isSource, final String reference) {
-        validateParams("sourceOrDestination", sourceOrDestination, "currency", currency, "amount", amount, "reference", reference);
-        this.source = isSource ? sourceOrDestination : null;
-        this.destination = isSource ? null : sourceOrDestination;
+    private PaymentRequest(final T source, final Currency currency, final Long amount, final String reference) {
+        validateParams("source", source, "currency", currency, "amount", amount, "reference", reference);
+        this.source = source;
         this.amount = amount;
         this.currency = currency;
         this.reference = reference;
@@ -164,11 +157,11 @@ public class PaymentRequest<T extends RequestSource> {
     }
 
     public static PaymentRequest<KlarnaSource> klarna(final KlarnaSource klarnaSource, final Currency currency, final Long amount) {
-        return new PaymentRequest<>(klarnaSource, currency, amount, true, false);
+        return new PaymentRequest<>(klarnaSource, currency, amount, false);
     }
 
     public static PaymentRequest<SepaSource> sepa(final SepaSource sepaSource, final Currency currency, final Long amount, final String reference) {
-        return new PaymentRequest<>(sepaSource, currency, amount, true, reference);
+        return new PaymentRequest<>(sepaSource, currency, amount, reference);
     }
 
     public static PaymentRequest<SofortSource> sofort(final Currency currency, final Long amount) {

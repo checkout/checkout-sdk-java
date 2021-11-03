@@ -8,7 +8,6 @@ import com.checkout.payments.four.action.PaymentAction;
 import com.checkout.payments.four.action.PaymentActionType;
 import com.checkout.payments.four.capture.CaptureRequest;
 import com.checkout.payments.four.capture.CaptureResponse;
-import com.checkout.payments.four.request.AuthorizationType;
 import com.checkout.payments.four.request.PaymentRecipient;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.Payments;

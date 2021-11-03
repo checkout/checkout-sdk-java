@@ -1,4 +1,4 @@
-package com.checkout.payments.four.request;
+package com.checkout.payments.four.payout;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,8 +7,8 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public final class ProcessingSettings {
+public final class PayoutBillingDescriptor {
 
-    private boolean aft;
+    private String purpose;
 
 }

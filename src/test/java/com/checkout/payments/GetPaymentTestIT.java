@@ -4,6 +4,7 @@ import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
 import com.checkout.common.Address;
+import com.checkout.common.CountryCode;
 import com.checkout.common.Phone;
 import com.checkout.common.ThreeDSEnrollmentStatus;
 import org.apache.commons.lang3.StringUtils;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -42,13 +44,14 @@ class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void can_get_non_3ds_payment() throws Exception {
+    void shouldGetPayment() {
+
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setPaymentType(PaymentType.RECURRING);
 
-        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
 
-        final GetPaymentResponse paymentDetails = defaultApi.paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
+        final GetPaymentResponse paymentDetails = blocking(defaultApi.paymentsClient().getAsync(paymentResponse.getPayment().getId()));
 
         assertNotNull(paymentDetails);
         assertEquals(paymentResponse.getPayment().getId(), paymentDetails.getId());
@@ -72,14 +75,15 @@ class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void can_get_3ds_payment_before_auth() throws Exception {
+    void shouldGet3dsPayment() {
+
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setThreeDS(ThreeDSRequest.builder().enabled(true).build());
 
-        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
         assertTrue(paymentResponse.isPending());
 
-        final GetPaymentResponse paymentDetails = defaultApi.paymentsClient().getAsync(paymentResponse.getPending().getId()).get();
+        final GetPaymentResponse paymentDetails = blocking(defaultApi.paymentsClient().getAsync(paymentResponse.getPending().getId()));
 
         assertNotNull(paymentDetails);
         assertEquals(paymentResponse.getPending().getId(), paymentDetails.getId());
@@ -106,13 +110,14 @@ class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void can_get_payment_metadata() throws Exception {
+    void shouldGetPaymentMetadata() {
+
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
+        paymentRequest.setMetadata(new HashMap<>());
         paymentRequest.getMetadata().put("test", "1234");
 
-        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
-
-        final GetPaymentResponse paymentDetails = defaultApi.paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
+        final GetPaymentResponse paymentDetails = blocking(defaultApi.paymentsClient().getAsync(paymentResponse.getPayment().getId()));
 
         assertNotNull(paymentDetails.getMetadata());
         assertFalse(paymentDetails.getMetadata().isEmpty());
@@ -122,13 +127,13 @@ class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void can_get_payment_ip() throws Exception {
+    void shouldGetPaymentIp() {
+
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setPaymentIp("10.1.2.3");
 
-        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
-
-        final GetPaymentResponse paymentDetails = defaultApi.paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
+        final GetPaymentResponse paymentDetails = blocking(defaultApi.paymentsClient().getAsync(paymentResponse.getPayment().getId()));
 
         assertEquals(paymentRequest.getPaymentIp(), paymentDetails.getPaymentIp());
         assertNotNull(paymentDetails.getActions());
@@ -136,13 +141,13 @@ class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void can_get_payment_recipient() throws Exception {
+    void shouldGetRecipient() {
+
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setRecipient(new PaymentRecipient(LocalDate.of(1985, 5, 15), "4242424242", "W1T", null, "Wensle", null));
 
-        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
-
-        final GetPaymentResponse paymentDetails = defaultApi.paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
+        final GetPaymentResponse paymentDetails = blocking(defaultApi.paymentsClient().getAsync(paymentResponse.getPayment().getId()));
 
         assertNotNull(paymentDetails.getRecipient());
         assertEquals(paymentRequest.getRecipient().getAccountNumber(), paymentDetails.getRecipient().getAccountNumber());
@@ -154,12 +159,13 @@ class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void can_get_payment_shipping() throws Exception {
+    void shouldGetPaymentShipping() {
+
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         final Address address = new Address();
         address.setAddressLine1("221B Baker Street");
         address.setCity("London");
-        address.setCountry("UK");
+        address.setCountry(CountryCode.GB);
         address.setState("n/a");
         address.setZip("NW1 6XE");
         final Phone phone = new Phone();
@@ -170,9 +176,8 @@ class GetPaymentTestIT extends SandboxTestFixture {
         shippingDetails.setPhone(phone);
         paymentRequest.setShipping(shippingDetails);
 
-        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
-
-        final GetPaymentResponse paymentDetails = defaultApi.paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
+        final GetPaymentResponse paymentDetails = blocking(defaultApi.paymentsClient().getAsync(paymentResponse.getPayment().getId()));
 
         assertNotNull(paymentDetails.getShipping());
         assertNotNull(paymentDetails.getShipping().getAddress());
@@ -190,13 +195,14 @@ class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void can_get_payment_description() throws Exception {
+    void shouldGetPaymentDescription() {
+
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
         paymentRequest.setDescription("Too descriptive");
 
-        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
 
-        final GetPaymentResponse paymentDetails = defaultApi.paymentsClient().getAsync(paymentResponse.getPayment().getId()).get();
+        final GetPaymentResponse paymentDetails = blocking(defaultApi.paymentsClient().getAsync(paymentResponse.getPayment().getId()));
 
         assertEquals(paymentRequest.getDescription(), paymentDetails.getDescription());
         assertNotNull(paymentDetails.getActions());
@@ -204,12 +210,13 @@ class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void can_get_payment_action() throws Exception {
+    void shouldGetPaymentActions() {
+
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
 
-        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
 
-        final List<PaymentAction> actionsResponse = defaultApi.paymentsClient().getActionsAsync(paymentResponse.getPayment().getId()).get();
+        final List<PaymentAction> actionsResponse = blocking(defaultApi.paymentsClient().getActionsAsync(paymentResponse.getPayment().getId()));
 
         assertNotNull(actionsResponse);
         assertEquals(1, actionsResponse.size());
@@ -218,6 +225,9 @@ class GetPaymentTestIT extends SandboxTestFixture {
         final PaymentAction paymentAction = actionsResponse.get(0);
         assertNotNull(paymentAction);
         assertEquals(payment.getActionId(), paymentAction.getId());
+        assertNotNull(paymentAction.getProcessing());
+        assertNotNull(paymentAction.getProcessing().getAcquirerTransactionId());
+        assertNotNull(paymentAction.getProcessing().getRetrievalReferenceNumber());
         assertFalse(paymentAction.getProcessedOn().isBefore(payment.getProcessedOn()));
         assertTrue(paymentAction.isApproved());
         assertEquals(payment.isApproved(), paymentAction.isApproved());
@@ -230,16 +240,17 @@ class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void can_get_multiple_payment_actions() throws Exception {
+    void shouldGetMultiplePaymentActions() {
+
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
 
-        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
         final CaptureRequest captureRequest = new CaptureRequest();
         captureRequest.setReference(UUID.randomUUID().toString());
 
-        final CaptureResponse captureResponse = defaultApi.paymentsClient().captureAsync(paymentResponse.getPayment().getId(), captureRequest).get();
+        final CaptureResponse captureResponse = blocking(defaultApi.paymentsClient().captureAsync(paymentResponse.getPayment().getId(), captureRequest));
 
-        final List<PaymentAction> actionsResponse = defaultApi.paymentsClient().getActionsAsync(paymentResponse.getPayment().getId()).get();
+        final List<PaymentAction> actionsResponse = blocking(defaultApi.paymentsClient().getActionsAsync(paymentResponse.getPayment().getId()));
 
         assertNotNull(actionsResponse);
 
@@ -255,13 +266,15 @@ class GetPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void can_get_payment_action_metadata() throws Exception {
+    void shouldGetActionMetadata() {
+
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
+        paymentRequest.setMetadata(new HashMap<>());
         paymentRequest.getMetadata().put("test", "1234");
 
-        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
 
-        final List<PaymentAction> actionsResponse = defaultApi.paymentsClient().getActionsAsync(paymentResponse.getPayment().getId()).get();
+        final List<PaymentAction> actionsResponse = blocking(defaultApi.paymentsClient().getActionsAsync(paymentResponse.getPayment().getId()));
 
         assertNotNull(actionsResponse);
 

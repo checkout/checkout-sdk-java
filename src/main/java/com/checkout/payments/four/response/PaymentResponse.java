@@ -2,7 +2,7 @@ package com.checkout.payments.four.response;
 
 import com.checkout.common.Currency;
 import com.checkout.common.Resource;
-import com.checkout.payments.four.Processing;
+import com.checkout.payments.PaymentProcessing;
 import com.checkout.payments.four.request.PaymentRecipient;
 import com.checkout.payments.four.request.ShippingDetails;
 import com.checkout.payments.four.response.source.ResponseSource;
@@ -62,7 +62,7 @@ public class PaymentResponse<S extends ResponseSource> extends Resource implemen
 
     private String reference;
 
-    private Processing processing;
+    private PaymentProcessing processing;
 
     private String eci;
 

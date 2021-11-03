@@ -16,6 +16,6 @@ public final class PayoutResponse extends Resource {
 
     private String reference;
 
-    private PaymentInstruction instruction;
+    private PaymentInstructionResponse instruction;
 
 }

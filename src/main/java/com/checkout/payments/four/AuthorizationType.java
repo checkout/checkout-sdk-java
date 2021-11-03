@@ -1,4 +1,4 @@
-package com.checkout.payments.four.request;
+package com.checkout.payments.four;
 
 import com.google.gson.annotations.SerializedName;
 

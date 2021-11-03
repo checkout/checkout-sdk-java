@@ -16,17 +16,17 @@ class CardDestinationPaymentTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void canPerformCardPayout() throws Exception {
+    void canPerformCardPayout() {
         final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPayoutRequest();
-        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
-        assertNull(paymentResponse.getPayment());
-        assertNotNull(paymentResponse.getPending());
-        assertNotNull(paymentResponse.getPending().getId());
-        assertEquals("Pending", paymentResponse.getPending().getStatus());
-        assertNotNull(paymentResponse.getPending().getReference());
-        assertNotNull(paymentResponse.getPending().getCustomer());
-        assertNull(paymentResponse.getPending().getThreeDS());
-        assertNotNull(paymentResponse.getPending().getSelfLink());
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
+        assertNotNull(paymentResponse.getPayment());
+        final PaymentProcessed paymentProcessed = paymentResponse.getPayment();
+        assertNotNull(paymentProcessed.getId());
+        assertEquals("Authorized", paymentProcessed.getStatus());
+        assertNotNull(paymentProcessed.getReference());
+        assertNotNull(paymentProcessed.getCustomer());
+        assertNull(paymentProcessed.getThreeDS());
+        assertNotNull(paymentProcessed.getSelfLink());
     }
 
 }

@@ -10,7 +10,7 @@ import com.checkout.payments.BillingInformation;
 import com.checkout.payments.CardSource;
 import com.checkout.payments.DLocalSource;
 import com.checkout.payments.PaymentRequest;
-import com.checkout.payments.Processing;
+import com.checkout.payments.ProcessingSettings;
 import com.checkout.payments.RequestSource;
 import com.checkout.payments.RiskRequest;
 import com.checkout.payments.SenderInformation;
@@ -18,7 +18,6 @@ import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
 import com.checkout.payments.TokenSource;
 import com.checkout.payments.four.request.PaymentRecipient;
-import com.checkout.payments.four.request.ProcessingSettings;
 import com.checkout.payments.hosted.HostedPaymentRequest;
 import com.checkout.payments.links.PaymentLinkRequest;
 import com.checkout.tokens.CardTokenRequest;
@@ -63,7 +62,7 @@ public final class TestHelper {
 
         final PaymentRequest<CardSource> request = PaymentRequest.fromDestination(cardSource, Currency.GBP, 100L);
         request.setReference(UUID.randomUUID().toString());
-        final Processing processing = Processing.builder().senderInformation(
+        final ProcessingSettings processing = ProcessingSettings.builder().senderInformation(
                 SenderInformation.builder()
                         .firstName("Jane")
                         .lastName("Doe-Doe")
