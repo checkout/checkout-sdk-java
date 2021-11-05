@@ -45,14 +45,14 @@ class TokenSourcePaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void shouldRequest3dsCardPayment() throws Exception {
+    void shouldRequest3dsCardPayment() {
 
         final CardTokenRequest cardTokenRequest = TestHelper.createCardTokenRequest();
-        final CardTokenResponse cardTokenResponse = defaultApi.tokensClient().requestAsync(cardTokenRequest).get();
+        final CardTokenResponse cardTokenResponse = blocking(defaultApi.tokensClient().requestAsync(cardTokenRequest));
         final PaymentRequest<TokenSource> paymentRequest = TestHelper.createTokenPaymentRequest(cardTokenResponse.getToken());
         paymentRequest.setThreeDS(ThreeDSRequest.builder().enabled(true).build());
 
-        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(paymentRequest).get();
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
 
         assertTrue(paymentResponse.isPending());
         final PaymentPending pending = paymentResponse.getPending();

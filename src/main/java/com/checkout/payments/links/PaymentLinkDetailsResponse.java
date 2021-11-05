@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -38,5 +39,7 @@ public final class PaymentLinkDetailsResponse extends Resource {
     private BillingInformation billing;
 
     private List<Product> products;
+
+    private Map<String, Object> metadata;
 
 }

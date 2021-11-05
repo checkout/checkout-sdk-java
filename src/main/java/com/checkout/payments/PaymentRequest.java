@@ -2,7 +2,6 @@ package com.checkout.payments;
 
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
-import com.checkout.common.MarketplaceData;
 import com.checkout.payments.apm.BalotoSource;
 import com.checkout.payments.apm.BoletoSource;
 import com.checkout.payments.apm.FawrySource;
@@ -95,8 +94,6 @@ public class PaymentRequest<T extends RequestSource> {
 
     @SerializedName("authorization_type")
     private AuthorizationType authorizationType;
-
-    private MarketplaceData marketplace;
 
     private Purpose purpose;
 
