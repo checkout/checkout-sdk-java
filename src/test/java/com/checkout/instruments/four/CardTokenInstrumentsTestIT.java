@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import static com.checkout.TestHelper.generateRandomEmail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
 
@@ -114,6 +115,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
         assertEquals(2024, cardResponse.getExpiryYear());
         assertEquals("John", cardResponse.getAccountHolder().getFirstName());
         assertEquals("Doe", cardResponse.getAccountHolder().getLastName());
+        assertTrue(cardResponse.getCustomer().isDefault());
 
     }
 

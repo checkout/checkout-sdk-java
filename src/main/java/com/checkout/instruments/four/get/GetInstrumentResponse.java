@@ -1,7 +1,7 @@
 package com.checkout.instruments.four.get;
 
 import com.checkout.common.four.AccountHolder;
-import com.checkout.common.CustomerResponse;
+import com.checkout.instruments.InstrumentCustomerResponse;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
@@ -12,8 +12,7 @@ public abstract class GetInstrumentResponse {
 
     protected String fingerprint;
 
-    // TODO Implement specific CustomerResponse domain when it's available
-    protected CustomerResponse customer;
+    protected InstrumentCustomerResponse customer;
 
     @SerializedName("account_holder")
     protected AccountHolder accountHolder;
