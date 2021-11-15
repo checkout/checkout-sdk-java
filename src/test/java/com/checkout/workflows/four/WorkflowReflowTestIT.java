@@ -1,7 +1,6 @@
 package com.checkout.workflows.four;
 
 import com.checkout.payments.four.response.PaymentResponse;
-import com.checkout.payments.four.response.source.ResponseCardSource;
 import com.checkout.workflows.four.events.SubjectEvent;
 import com.checkout.workflows.four.events.SubjectEventsResponse;
 import com.checkout.workflows.four.reflow.ReflowByEventsRequest;
@@ -23,7 +22,7 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
         createWorkflow();
 
-        final PaymentResponse<ResponseCardSource> payment = makeCardPayment(false);
+        final PaymentResponse payment = makeCardPayment(false);
 
         nap(10);
 
@@ -41,7 +40,7 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
         createWorkflow();
 
-        final PaymentResponse<ResponseCardSource> payment = makeCardPayment(false);
+        final PaymentResponse payment = makeCardPayment(false);
 
         nap(10);
 
@@ -55,7 +54,7 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
         final CreateWorkflowResponse createWorkflowResponse = createWorkflow();
 
-        final PaymentResponse<ResponseCardSource> payment = makeCardPayment(false);
+        final PaymentResponse payment = makeCardPayment(false);
 
         nap(10);
 
@@ -74,7 +73,7 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
         final CreateWorkflowResponse createWorkflowResponse = createWorkflow();
 
-        final PaymentResponse<ResponseCardSource> payment = makeCardPayment(false);
+        final PaymentResponse payment = makeCardPayment(false);
 
         nap(10);
 
@@ -91,7 +90,7 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
         final CreateWorkflowResponse createWorkflowResponse = createWorkflow();
 
-        final PaymentResponse<ResponseCardSource> payment = makeCardPayment(false);
+        final PaymentResponse payment = makeCardPayment(false);
 
         nap(10);
 
@@ -111,7 +110,7 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
         final CreateWorkflowResponse createWorkflowResponse = createWorkflow();
 
-        final PaymentResponse<ResponseCardSource> payment = makeCardPayment(false);
+        final PaymentResponse payment = makeCardPayment(false);
 
         nap(10);
 

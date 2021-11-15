@@ -1,13 +1,16 @@
 package com.checkout.payments;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import com.google.gson.annotations.SerializedName;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class PaymentType {
+public enum PaymentType {
 
-    public static final String REGULAR = "Regular";
-    public static final String RECURRING = "Recurring";
-    public static final String MOTO = "Moto";
+    @SerializedName("Regular")
+    REGULAR,
+    @SerializedName("Recurring")
+    RECURRING,
+    @SerializedName("Moto")
+    MOTO,
+    @SerializedName("Installment")
+    INSTALLMENT
 
 }

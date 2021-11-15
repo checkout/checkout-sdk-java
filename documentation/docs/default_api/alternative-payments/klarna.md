@@ -7,19 +7,18 @@ The full list of request body parameters and possible outcomes can be found [her
 
 ## Request a Klarna payment
 
-Use the details below to set up your request.
 ```java
-KlarnaSource source = KlarnaSource.builder()
+RequestKlarnaSource source = RequestKlarnaSource.builder()
         .authorizationToken()
         .locale()
         .purchaseCountry()
         .taxAmount()
-        .billingAddress(KlarnaSource.BillingAddress.builder().build())
-        .customer(KlarnaSource.Customer.builder().build())
+        .billingAddress(RequestKlarnaSource.BillingAddress.builder().build())
+        .customer(RequestKlarnaSource.Customer.builder().build())
         .products(List.of(KlarnaProduct.builder().build()))
         .build();
 
-PaymentRequest<KlarnaSource> request = PaymentRequest.klarna(source, Currency.EUR, 1000L);
+PaymentRequest request = PaymentRequest.klarna(source, Currency.EUR, 10L);
 
 PaymentResponse response = api.paymentsClient().requestAsync(request).get();
 ```
@@ -80,5 +79,5 @@ VoidRequest voidRequest = VoidRequest.builder()
         .reference()
         .build();
 
-VoidResponse response = api.klarnaClient().voidCapture("payment_id", voidRequest).get();
+VoidResponse response = api.klarnaClient().voidPayment("payment_id", voidRequest).get();
 ```

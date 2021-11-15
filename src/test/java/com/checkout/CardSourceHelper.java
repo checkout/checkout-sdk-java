@@ -3,13 +3,13 @@ package com.checkout;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
+import com.checkout.payments.ThreeDSRequest;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.Payments;
-import com.checkout.payments.four.request.ThreeDSRequest;
 import com.checkout.payments.four.request.source.RequestCardSource;
-import com.checkout.payments.four.sender.RequestCorporateSender;
-import com.checkout.payments.four.sender.RequestIndividualSender;
-import com.checkout.payments.four.sender.RequestSender;
+import com.checkout.payments.four.sender.PaymentCorporateSender;
+import com.checkout.payments.four.sender.PaymentIndividualSender;
+import com.checkout.payments.four.sender.PaymentSender;
 
 import java.util.UUID;
 
@@ -19,15 +19,16 @@ public class CardSourceHelper {
 
     public static class Visa {
 
+        public static final String NAME = "Mr. Duke";
         public static final String NUMBER = "4242424242424242";
         public static final int EXPIRY_MONTH = 6;
         public static final int EXPIRY_YEAR = 2025;
-        public static final Integer CVV = 100;
+        public static final String CVV = "100";
 
     }
 
-    public static RequestIndividualSender getIndividualSender() {
-        return RequestIndividualSender.builder()
+    public static PaymentIndividualSender getIndividualSender() {
+        return PaymentIndividualSender.builder()
                 .firstName("John")
                 .lastName("Doe")
                 .address(Address.builder()
@@ -39,8 +40,8 @@ public class CardSourceHelper {
                 .build();
     }
 
-    public static RequestCorporateSender getCorporateSender() {
-        return RequestCorporateSender.builder()
+    public static PaymentCorporateSender getCorporateSender() {
+        return PaymentCorporateSender.builder()
                 .companyName("CheckoutSdk")
                 .address(Address.builder()
                         .addressLine1("Address Line 1")
@@ -56,25 +57,25 @@ public class CardSourceHelper {
                 .number(CardSourceHelper.Visa.NUMBER)
                 .expiryMonth(CardSourceHelper.Visa.EXPIRY_MONTH)
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
-                .cvv(CardSourceHelper.Visa.CVV)
+                .cvv(Visa.CVV)
                 .stored(false)
                 .build();
     }
 
-    public static PaymentRequest getCardSourcePayment(final RequestCardSource cardSource, final RequestSender sender, final boolean three3ds) {
+    public static PaymentRequest getCardSourcePayment(final RequestCardSource cardSource, final PaymentSender sender, final boolean three3ds) {
         final ThreeDSRequest threeDSRequest = ThreeDSRequest.builder().enabled(three3ds).build();
         return Payments.card(cardSource).fromSender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())
                 .amount(amount)
                 .currency(Currency.EUR)
-                .threeDSRequest(threeDSRequest)
+                .threeDS(threeDSRequest)
                 .successUrl(three3ds ? "https://test.checkout.com/success" : null)
                 .failureUrl(three3ds ? "https://test.checkout.com/failure" : null)
                 .build();
     }
 
-    public static PaymentRequest getCardSourcePaymentForDispute(final RequestCardSource cardSource, final RequestSender sender, final boolean three3ds) {
+    public static PaymentRequest getCardSourcePaymentForDispute(final RequestCardSource cardSource, final PaymentSender sender, final boolean three3ds) {
         amount = 1040L;
         return getCardSourcePayment(cardSource, sender, three3ds);
     }

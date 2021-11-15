@@ -4,12 +4,13 @@ import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
-import com.checkout.payments.AlternativePaymentSourceResponse;
-import com.checkout.payments.GetPaymentResponse;
-import com.checkout.payments.PaymentPending;
-import com.checkout.payments.PaymentRequest;
-import com.checkout.payments.PaymentResponse;
-import com.checkout.payments.apm.BalotoSource;
+import com.checkout.common.PaymentSourceType;
+import com.checkout.payments.PaymentStatus;
+import com.checkout.payments.request.PaymentRequest;
+import com.checkout.payments.request.source.apm.RequestBalotoSource;
+import com.checkout.payments.response.GetPaymentResponse;
+import com.checkout.payments.response.PaymentResponse;
+import com.checkout.payments.response.source.AlternativePaymentSourceResponse;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,19 +26,19 @@ class BalotoPaymentsTestIT extends SandboxTestFixture {
     @Test
     void shouldSucceedBalotoPayment() {
 
-        final String paymentId = makeBaletoPayment();
+        final String paymentId = makeBalotoPayment();
 
         blocking(defaultApi.balotoClient().succeed(paymentId));
 
-        final GetPaymentResponse response = blocking(defaultApi.paymentsClient().getAsync(paymentId));
+        final GetPaymentResponse response = blocking(defaultApi.paymentsClient().getPayment(paymentId));
 
         assertNotNull(response);
-        assertEquals("Captured", response.getStatus());
+        assertEquals(PaymentStatus.CAPTURED, response.getStatus());
 
         assertNotNull(response.getSource());
         assertTrue(response.getSource() instanceof AlternativePaymentSourceResponse);
         final AlternativePaymentSourceResponse source = (AlternativePaymentSourceResponse) response.getSource();
-        assertEquals("baloto", source.getType());
+        assertEquals(PaymentSourceType.BALOTO, source.getType());
         assertEquals("redirect", source.get("integration_type"));
         assertNotNull(source.get("dlocal_order_id"));
         assertNotNull(source.get("dlocal_payment_id"));
@@ -48,19 +49,19 @@ class BalotoPaymentsTestIT extends SandboxTestFixture {
     @Test
     void shouldExpireBalotoPayment() {
 
-        final String paymentId = makeBaletoPayment();
+        final String paymentId = makeBalotoPayment();
 
         blocking(defaultApi.balotoClient().expire(paymentId));
 
-        final GetPaymentResponse response = blocking(defaultApi.paymentsClient().getAsync(paymentId));
+        final GetPaymentResponse response = blocking(defaultApi.paymentsClient().getPayment(paymentId));
 
         assertNotNull(response);
-        assertEquals("Expired", response.getStatus());
+        assertEquals(PaymentStatus.EXPIRED, response.getStatus());
 
         assertNotNull(response.getSource());
         assertTrue(response.getSource() instanceof AlternativePaymentSourceResponse);
         final AlternativePaymentSourceResponse source = (AlternativePaymentSourceResponse) response.getSource();
-        assertEquals("baloto", source.getType());
+        assertEquals(PaymentSourceType.BALOTO, source.getType());
         assertEquals("redirect", source.get("integration_type"));
         assertNotNull(source.get("dlocal_order_id"));
         assertNotNull(source.get("dlocal_payment_id"));
@@ -68,30 +69,25 @@ class BalotoPaymentsTestIT extends SandboxTestFixture {
 
     }
 
-    private String makeBaletoPayment() {
+    private String makeBalotoPayment() {
 
-        final BalotoSource balotoSource = BalotoSource.builder()
+        final RequestBalotoSource balotoSource = RequestBalotoSource.builder()
                 .country(CountryCode.CO)
                 .description("simulate Via Baloto Demo Payment")
-                .payer(BalotoSource.Payer.builder().email("bruce@wayne-enterprises.com").name("Bruce Wayne").build())
+                .payer(RequestBalotoSource.Payer.builder().email("bruce@wayne-enterprises.com").name("Bruce Wayne").build())
                 .build();
 
-        final PaymentRequest<BalotoSource> request = PaymentRequest.baloto(balotoSource, Currency.COP, 100000L);
+        final PaymentRequest request = PaymentRequest.baloto(balotoSource, Currency.COP, 100000L);
 
-        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestAsync(request));
-
+        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);
+        assertEquals(PaymentStatus.PENDING, response.getStatus());
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("redirect"));
+        assertNotNull(response.getLink("simulator:payment-succeed"));
+        assertNotNull(response.getLink("simulator:payment-expire"));
 
-        final PaymentPending paymentPending = response.getPending();
-        assertNotNull(paymentPending);
-        assertEquals("Pending", paymentPending.getStatus());
-
-        assertNotNull(paymentPending.getLink("self"));
-        assertNotNull(paymentPending.getLink("redirect"));
-        assertNotNull(paymentPending.getLink("simulator:payment-succeed"));
-        assertNotNull(paymentPending.getLink("simulator:payment-expire"));
-
-        return paymentPending.getId();
+        return response.getId();
 
     }
 

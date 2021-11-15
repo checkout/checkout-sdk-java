@@ -7,13 +7,15 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import static com.checkout.common.PaymentSourceType.NETWORK_TOKEN;
 
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
-public final class RequestNetworkTokenSource extends RequestSource {
+@ToString(callSuper = true)
+public final class RequestNetworkTokenSource extends AbstractRequestSource {
 
     private String token;
 
@@ -30,7 +32,7 @@ public final class RequestNetworkTokenSource extends RequestSource {
 
     private String eci;
 
-    private boolean stored;
+    private Boolean stored;
 
     private String name;
 
@@ -48,7 +50,7 @@ public final class RequestNetworkTokenSource extends RequestSource {
                                       final NetworkTokenType tokenType,
                                       final String cryptogram,
                                       final String eci,
-                                      final boolean stored,
+                                      final Boolean stored,
                                       final String name,
                                       final String cvv,
                                       final Address billingAddress,

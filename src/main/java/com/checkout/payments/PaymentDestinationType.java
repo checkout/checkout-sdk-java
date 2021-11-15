@@ -9,6 +9,8 @@ public enum PaymentDestinationType {
     @SerializedName("id")
     ID,
     @SerializedName("token")
-    TOKEN
+    TOKEN,
+    @SerializedName("bank_account")
+    BANK_ACCOUNT;
 
 }

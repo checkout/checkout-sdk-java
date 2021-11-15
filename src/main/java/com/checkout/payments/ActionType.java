@@ -1,15 +1,22 @@
 package com.checkout.payments;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import com.google.gson.annotations.SerializedName;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public final class ActionType {
+public enum ActionType {
 
-    public static final String AUTHORIZATION = "Authorization";
-    public static final String CARD_VERIFICATION = "Card Verification";
-    public static final String VOID = "Void";
-    public static final String CAPTURE = "Capture";
-    public static final String REFUND = "Refund";
+    @SerializedName("Authorization")
+    AUTHORIZATION,
+    @SerializedName("Card Verification")
+    CARD_VERIFICATION,
+    @SerializedName("Void")
+    VOID,
+    @SerializedName("Capture")
+    CAPTURE,
+    @SerializedName("Refund")
+    REFUND,
+    @SerializedName("Payout")
+    PAYOUT,
+    @SerializedName("Return")
+    RETURN
 
 }

@@ -1,12 +1,11 @@
 package com.checkout.payments.links;
 
 import com.checkout.ApiClient;
+import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
-import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkCredentials;
 import com.checkout.TestHelper;
-import com.checkout.payments.PaymentStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -79,7 +78,7 @@ class PaymentLinksClientImplTest {
 
     private void setUpPaymentLinkDetailsResponse() {
         when(paymentLinkDetailsResponse.getReference()).thenReturn(REFERENCE);
-        when(paymentLinkDetailsResponse.getStatus()).thenReturn(PaymentStatus.ACTIVE);
+        when(paymentLinkDetailsResponse.getStatus()).thenReturn(PaymentLinkStatus.ACTIVE);
         when(paymentLinkDetailsResponse.getReturnUrl()).thenReturn(paymentLinksRequest.getReturnUrl());
         when(paymentLinkDetailsResponse.getAmount()).thenReturn(paymentLinksRequest.getAmount());
         when(paymentLinkDetailsResponse.getCurrency()).thenReturn(paymentLinksRequest.getCurrency());
@@ -101,7 +100,7 @@ class PaymentLinksClientImplTest {
         final PaymentLinkDetailsResponse response = client.getAsync(REFERENCE).get();
         assertNotNull(response);
         assertEquals(REFERENCE, response.getReference());
-        assertThat(response.getStatus(), anyOf(equalTo(PaymentStatus.ACTIVE), equalTo(PaymentStatus.PAYMENT_RECEIVED), equalTo(PaymentStatus.EXPIRED)));
+        assertThat(response.getStatus(), anyOf(equalTo(PaymentLinkStatus.ACTIVE), equalTo(PaymentLinkStatus.PAYMENT_RECEIVED), equalTo(PaymentLinkStatus.EXPIRED)));
         assertEquals(paymentLinksRequest.getReturnUrl(), response.getReturnUrl());
         assertEquals(paymentLinksRequest.getAmount(), response.getAmount());
         assertEquals(paymentLinksRequest.getCurrency(), response.getCurrency());

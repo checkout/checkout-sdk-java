@@ -1,9 +1,9 @@
 package com.checkout.payments.hosted;
 
 import com.checkout.ApiClient;
+import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
-import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkCredentials;
 import com.checkout.TestHelper;
 import org.junit.jupiter.api.BeforeEach;

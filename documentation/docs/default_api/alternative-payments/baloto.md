@@ -8,13 +8,13 @@ The full list of request body parameters and possible outcomes can be found [her
 ## Request a Baloto payment
 
 ```java
-BalotoSource balotoSource = BalotoSource.builder()
+RequestBalotoSource balotoSource = RequestBalotoSource.builder()
         .country()
         .description()
-        .payer(BalotoSource.Payer.builder().build())
+        .payer(RequestBalotoSource.Payer.builder().build())
         .build();
 
-PaymentRequest<BalotoSource> request = PaymentRequest.baloto(balotoSource, com.checkout.common.Currency.COP, 100000L);
+PaymentRequest request = PaymentRequest.baloto(balotoSource, Currency.COP, 10L);
 
 PaymentResponse response = api.paymentsClient().requestAsync(request).get();
 ```

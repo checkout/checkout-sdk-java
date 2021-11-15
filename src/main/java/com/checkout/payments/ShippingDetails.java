@@ -11,7 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ShippingDetails {
+public final class ShippingDetails {
+
     private Address address;
+
     private Phone phone;
+
 }

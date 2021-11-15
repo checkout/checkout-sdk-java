@@ -9,12 +9,12 @@ import lombok.Data;
 public final class Processing {
 
     @SerializedName("retrieval_reference_number")
-    private final String retrievalReferenceNumber;
+    private String retrievalReferenceNumber;
 
     @SerializedName("acquirer_reference_number")
-    private final String acquirerReferenceNumber;
+    private String acquirerReferenceNumber;
 
     @SerializedName("acquirer_transaction_id")
-    private final String acquirerTransactionId;
+    private String acquirerTransactionId;
 
 }

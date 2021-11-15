@@ -3,11 +3,16 @@ package com.checkout.payments.four.request;
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
 import com.checkout.common.MarketplaceData;
-import com.checkout.payments.four.ProcessingSettings;
+import com.checkout.payments.PaymentRecipient;
+import com.checkout.payments.PaymentType;
+import com.checkout.payments.ProcessingSettings;
+import com.checkout.payments.RiskRequest;
+import com.checkout.payments.ShippingDetails;
+import com.checkout.payments.ThreeDSRequest;
 import com.checkout.payments.four.AuthorizationType;
 import com.checkout.payments.four.BillingDescriptor;
-import com.checkout.payments.four.request.source.RequestSource;
-import com.checkout.payments.four.sender.RequestSender;
+import com.checkout.payments.four.request.source.AbstractRequestSource;
+import com.checkout.payments.four.sender.PaymentSender;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
@@ -17,68 +22,68 @@ import java.util.Map;
 
 @Data
 @Builder
-public class PaymentRequest {
+public final class PaymentRequest {
 
-    private final RequestSource source;
+    private AbstractRequestSource source;
 
-    private final RequestSender sender;
+    private Long amount;
 
-    private final Long amount;
-
-    private final Currency currency;
+    private Currency currency;
 
     @SerializedName("payment_type")
-    private final PaymentType paymentType;
+    private PaymentType paymentType;
 
     @SerializedName("merchant_initiated")
-    private final boolean merchantInitiated;
+    private Boolean merchantInitiated;
 
-    private final String reference;
+    private String reference;
 
-    private final String description;
+    private String description;
 
     @SerializedName("authorization_type")
-    private final AuthorizationType authorizationType;
+    private AuthorizationType authorizationType;
 
-    private final boolean capture;
+    private Boolean capture;
 
     @SerializedName("capture_on")
-    private final String captureOn;
+    private String captureOn;
+
+    private CustomerRequest customer;
 
     @SerializedName("billing_descriptor")
-    private final BillingDescriptor billingDescriptor;
+    private BillingDescriptor billingDescriptor;
 
-    private final ShippingDetails shipping;
+    private ShippingDetails shipping;
 
     @SerializedName("3ds")
-    private final ThreeDSRequest threeDSRequest;
+    private ThreeDSRequest threeDS;
 
     @SerializedName("processing_channel_id")
-    private final String processingChannelId;
+    private String processingChannelId;
 
     @SerializedName("previous_payment_id")
-    private final String previousPaymentId;
+    private String previousPaymentId;
 
-    private final Risk risk;
-
-    private final CustomerRequest customer;
+    private RiskRequest risk;
 
     @SerializedName("success_url")
-    private final String successUrl;
+    private String successUrl;
 
     @SerializedName("failure_url")
-    private final String failureUrl;
+    private String failureUrl;
 
     @SerializedName("payment_ip")
-    private final String paymentIp;
+    private String paymentIp;
 
-    private final PaymentRecipient recipient;
+    private PaymentSender sender;
 
-    private final MarketplaceData marketplace;
+    private PaymentRecipient recipient;
 
-    private final ProcessingSettings processing;
+    private MarketplaceData marketplace;
+
+    private ProcessingSettings processing;
 
     @Builder.Default
-    private final Map<String, Object> metadata = new HashMap<>();
+    private Map<String, Object> metadata = new HashMap<>();
 
 }

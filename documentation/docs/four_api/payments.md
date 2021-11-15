@@ -18,7 +18,7 @@ PaymentRequest request = Payments.card(source).individualSender(sender).build();
 
 //or PaymentRequest request = Payments.card(source).individualSender(sender).build();
 
-PaymentResponse<ResponseCardSource> response = fourApi.paymentsClient().requestPayment(request).get();
+PaymentResponse response = api.paymentsClient().requestPayment(request).get();
 ```
 
 ```java
@@ -26,7 +26,7 @@ RequestCurrencyAccountSource source = RequestCurrencyAccountSource.builder().bui
 RequestCorporateSender sender = RequestCorporateSender.builder().build(); // other sender types are also supported
 PayoutRequest request = Payouts.account(source).corporateSender(sender).build();
 
-PayoutResponse response = fourApi.paymentsClient().requestPayout(request).get();
+PayoutResponse response = api.paymentsClient().requestPayout(request).get();
 ```
 
 ## Get payment details
@@ -34,7 +34,7 @@ PayoutResponse response = fourApi.paymentsClient().requestPayout(request).get();
 Returns the details of the payment with the specified identifier string.
 
 ```java
-PaymentResponse<ResponseCardSource> response = paymentsClient.getPayment(id).get();
+PaymentResponse response = api.paymentsClient().getPayment(id).get();
 ```
 
 ## Get payment actions
@@ -42,7 +42,7 @@ PaymentResponse<ResponseCardSource> response = paymentsClient.getPayment(id).get
 Returns all the actions associated with a payment ordered by processing date in descending order (latest first).
 
 ```java
-List<PaymentAction> response = paymentsClient.getPaymentActions(paymentId).get();
+List<PaymentAction> response = api.paymentsClient().getPaymentActions(paymentId).get();
 ```
 
 ## Capture a payment
@@ -55,7 +55,7 @@ CaptureRequest captureRequest = CaptureRequest.builder()
     .metadata()
     .build();
 
-CaptureResponse response = fourApi.paymentsClient().capturePayment(paymentId, captureRequest).get();
+CaptureResponse response = api.paymentsClient().capturePayment(paymentId, captureRequest).get();
 ```
 ## Refund a payment
 
@@ -66,9 +66,9 @@ RefundRequest refundRequest = RefundRequest.builder()
     .reference(UUID.randomUUID().toString())
     .build();
 
-RefundResponse response = paymentsClient.refundPayment(paymentId, refundRequest).get();
+RefundResponse response = api.paymentsClient().refundPayment(paymentId, refundRequest).get();
 ```
-## Void a payment
+## Void a payment 
 
 Voids a payment if supported by the payment method.
 
@@ -77,6 +77,6 @@ VoidRequest voidRequest = VoidRequest.builder()
     .reference(UUID.randomUUID().toString())
     .build();
 
-VoidResponse response = paymentsClient.voidPayment(paymentResponse.getId(), voidRequest).get();
+VoidResponse response = api.paymentsClient().voidPayment(paymentId, voidRequest).get();
 ```
 

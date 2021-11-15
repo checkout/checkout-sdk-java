@@ -18,7 +18,7 @@ public final class PaymentLinkDetailsResponse extends Resource {
 
     private String id;
 
-    private String status;
+    private PaymentLinkStatus status;
 
     @SerializedName("expires_on")
     private String expiresOn;

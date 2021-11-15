@@ -14,7 +14,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class RequestTokenSource extends RequestSource {
+public final class RequestTokenSource extends AbstractRequestSource {
 
     private String token;
 

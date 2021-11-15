@@ -7,12 +7,11 @@ import com.checkout.apm.ideal.IssuerResponse;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
-import com.checkout.payments.apm.IdealSource;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.Payments;
+import com.checkout.payments.four.request.source.apm.RequestIdealSource;
 import com.checkout.payments.four.response.PaymentResponse;
-import com.checkout.payments.four.response.source.ResponseAlternativeSource;
-import com.checkout.payments.four.sender.RequestIndividualSender;
+import com.checkout.payments.four.sender.PaymentIndividualSender;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,7 +26,7 @@ class IdealPaymentsTestIT extends SandboxTestFixture {
     @Test
     void shouldMakeIdealPayment() {
 
-        final RequestIndividualSender sender = RequestIndividualSender.builder()
+        final PaymentIndividualSender sender = PaymentIndividualSender.builder()
                 .firstName("John")
                 .lastName("Doe")
                 .address(Address.builder()
@@ -38,7 +37,7 @@ class IdealPaymentsTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final IdealSource idealSource = IdealSource.builder()
+        final RequestIdealSource idealSource = RequestIdealSource.builder()
                 .bic("INGBNL2A")
                 .description("ORD50234E89")
                 .language("nl")
@@ -50,7 +49,7 @@ class IdealPaymentsTestIT extends SandboxTestFixture {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        final PaymentResponse<ResponseAlternativeSource> response = blocking(fourApi.paymentsClient().requestPayment(request));
+        final PaymentResponse response = blocking(fourApi.paymentsClient().requestPayment(request));
 
         assertNotNull(response);
 

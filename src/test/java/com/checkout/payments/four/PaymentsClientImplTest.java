@@ -5,26 +5,15 @@ import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
-import com.checkout.payments.four.action.PaymentAction;
-import com.checkout.payments.four.capture.CaptureRequest;
-import com.checkout.payments.four.capture.CaptureResponse;
-import com.checkout.payments.four.payout.PayoutRequest;
-import com.checkout.payments.four.payout.PayoutResponse;
-import com.checkout.payments.four.payout.source.RequestCurrencyAccountSource;
-import com.checkout.payments.four.refund.RefundRequest;
-import com.checkout.payments.four.refund.RefundResponse;
 import com.checkout.payments.four.request.PaymentRequest;
+import com.checkout.payments.four.request.PayoutRequest;
+import com.checkout.payments.four.request.source.PayoutRequestCurrencyAccountSource;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.request.source.RequestIdSource;
+import com.checkout.payments.four.response.GetPaymentResponse;
 import com.checkout.payments.four.response.PaymentResponse;
-import com.checkout.payments.four.response.source.ResponseCardSource;
-import com.checkout.payments.four.response.source.ResponseCurrencyAccountSource;
-import com.checkout.payments.four.response.source.ResponseIdSource;
-import com.checkout.payments.four.response.source.ResponseNetworkTokenSource;
-import com.checkout.payments.four.response.source.ResponseTokenSource;
-import com.checkout.payments.four.sender.RequestInstrumentSender;
-import com.checkout.payments.four.voids.VoidRequest;
-import com.checkout.payments.four.voids.VoidResponse;
+import com.checkout.payments.four.response.PayoutResponse;
+import com.checkout.payments.four.sender.PaymentInstrumentSender;
 import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,19 +38,11 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class PaymentsClientImplTest {
 
-    private static final String PAYMENTS_PATH = "/payments";
-    private static final String ACTIONS_PATH = "/actions";
-    private static final String CAPTURES_PATH = "/captures";
-    private static final String REFUNDS_PATH = "/refunds";
-    private static final String VOIDS_PATH = "/voids";
-
-    private static final Type PAYMENT_TYPE = TypeToken.getParameterized(PaymentResponse.class,
-            ResponseCardSource.class,
-            ResponseCurrencyAccountSource.class,
-            ResponseIdSource.class,
-            ResponseNetworkTokenSource.class,
-            ResponseTokenSource.class
-    ).getType();
+    private static final String PAYMENTS_PATH = "payments";
+    private static final String ACTIONS_PATH = "actions";
+    private static final String CAPTURES_PATH = "captures";
+    private static final String REFUNDS_PATH = "refunds";
+    private static final String VOIDS_PATH = "voids";
 
     private static final Type PAYMENT_ACTION_TYPE = new TypeToken<List<PaymentAction>>() {
     }.getType();
@@ -91,15 +72,15 @@ class PaymentsClientImplTest {
     void shouldRequestPayment() throws ExecutionException, InterruptedException {
 
         final RequestIdSource source = mock(RequestIdSource.class);
-        final RequestInstrumentSender sender = mock(RequestInstrumentSender.class);
-        final PaymentResponse<ResponseIdSource> response = (PaymentResponse<ResponseIdSource>) mock(PaymentResponse.class);
+        final PaymentInstrumentSender sender = mock(PaymentInstrumentSender.class);
+        final PaymentResponse response = mock(PaymentResponse.class);
 
         final PaymentRequest request = PaymentRequest.builder().sender(sender).source(source).build();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PAYMENT_TYPE), eq(request), isNull()))
+        when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<PaymentResponse<ResponseIdSource>> future = paymentsClient.requestPayment(request);
+        final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayment(request);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -110,15 +91,15 @@ class PaymentsClientImplTest {
     void shouldRequestPayment_idempotencyKey() throws ExecutionException, InterruptedException {
 
         final RequestCardSource source = mock(RequestCardSource.class);
-        final RequestInstrumentSender sender = mock(RequestInstrumentSender.class);
-        final PaymentResponse<ResponseCardSource> response = (PaymentResponse<ResponseCardSource>) mock(PaymentResponse.class);
+        final PaymentInstrumentSender sender = mock(PaymentInstrumentSender.class);
+        final PaymentResponse response = mock(PaymentResponse.class);
 
         final PaymentRequest request = PaymentRequest.builder().sender(sender).source(source).build();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PAYMENT_TYPE), eq(request), eq("1234")))
+        when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), eq("1234")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<PaymentResponse<ResponseCardSource>> future = paymentsClient.requestPayment(request, "1234");
+        final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayment(request, "1234");
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -128,8 +109,8 @@ class PaymentsClientImplTest {
     @Test
     void shouldRequestPayout() throws ExecutionException, InterruptedException {
 
-        final RequestCurrencyAccountSource source = mock(RequestCurrencyAccountSource.class);
-        final RequestInstrumentSender sender = mock(RequestInstrumentSender.class);
+        final PayoutRequestCurrencyAccountSource source = mock(PayoutRequestCurrencyAccountSource.class);
+        final PaymentInstrumentSender sender = mock(PaymentInstrumentSender.class);
         final PayoutResponse response = mock(PayoutResponse.class);
 
         final PayoutRequest request = PayoutRequest.builder().sender(sender).source(source).build();
@@ -147,8 +128,8 @@ class PaymentsClientImplTest {
     @Test
     void shouldRequestPayout_idempotencyKey() throws ExecutionException, InterruptedException {
 
-        final RequestCurrencyAccountSource source = mock(RequestCurrencyAccountSource.class);
-        final RequestInstrumentSender sender = mock(RequestInstrumentSender.class);
+        final PayoutRequestCurrencyAccountSource source = mock(PayoutRequestCurrencyAccountSource.class);
+        final PaymentInstrumentSender sender = mock(PaymentInstrumentSender.class);
         final PayoutResponse response = mock(PayoutResponse.class);
 
         final PayoutRequest request = PayoutRequest.builder().sender(sender).source(source).build();
@@ -166,12 +147,12 @@ class PaymentsClientImplTest {
     @Test
     void shouldGetPayment() throws ExecutionException, InterruptedException {
 
-        final PaymentResponse<ResponseIdSource> response = (PaymentResponse<ResponseIdSource>) mock(PaymentResponse.class);
+        final GetPaymentResponse response = mock(GetPaymentResponse.class);
 
-        when(apiClient.getAsync(eq(PAYMENTS_PATH + "/12345678"), any(SdkAuthorization.class), eq(PAYMENT_TYPE)))
+        when(apiClient.getAsync(eq(PAYMENTS_PATH + "/12345678"), any(SdkAuthorization.class), eq(GetPaymentResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<PaymentResponse<ResponseIdSource>> future = paymentsClient.getPayment("12345678");
+        final CompletableFuture<GetPaymentResponse> future = paymentsClient.getPayment("12345678");
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -183,7 +164,7 @@ class PaymentsClientImplTest {
 
         final List<PaymentAction> response = Arrays.asList(new PaymentAction(), new PaymentAction());
 
-        when(apiClient.getAsync(eq(PAYMENTS_PATH + "/5433211" + ACTIONS_PATH), any(SdkAuthorization.class), eq(PAYMENT_ACTION_TYPE)))
+        when(apiClient.getAsync(eq(PAYMENTS_PATH + "/5433211/" + ACTIONS_PATH), any(SdkAuthorization.class), eq(PAYMENT_ACTION_TYPE)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<List<PaymentAction>> future = paymentsClient.getPaymentActions("5433211");
@@ -198,7 +179,7 @@ class PaymentsClientImplTest {
 
         final CaptureResponse response = new CaptureResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456" + CAPTURES_PATH), any(SdkAuthorization.class), eq(CaptureResponse.class), isNull(), isNull()))
+        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + CAPTURES_PATH), any(SdkAuthorization.class), eq(CaptureResponse.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<CaptureResponse> future = paymentsClient.capturePayment("123456");
@@ -213,7 +194,7 @@ class PaymentsClientImplTest {
 
         final CaptureResponse response = new CaptureResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456" + CAPTURES_PATH), any(SdkAuthorization.class), eq(CaptureResponse.class), isNull(), eq("456789")))
+        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + CAPTURES_PATH), any(SdkAuthorization.class), eq(CaptureResponse.class), isNull(), eq("456789")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<CaptureResponse> future = paymentsClient.capturePayment("123456", "456789");
@@ -229,7 +210,7 @@ class PaymentsClientImplTest {
         final CaptureRequest request = CaptureRequest.builder().build();
         final CaptureResponse response = new CaptureResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456" + CAPTURES_PATH), any(SdkAuthorization.class), eq(CaptureResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + CAPTURES_PATH), any(SdkAuthorization.class), eq(CaptureResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<CaptureResponse> future = paymentsClient.capturePayment("123456", request);
@@ -245,7 +226,7 @@ class PaymentsClientImplTest {
         final CaptureRequest request = CaptureRequest.builder().build();
         final CaptureResponse response = new CaptureResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456" + CAPTURES_PATH), any(SdkAuthorization.class), eq(CaptureResponse.class), eq(request), eq("123")))
+        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + CAPTURES_PATH), any(SdkAuthorization.class), eq(CaptureResponse.class), eq(request), eq("123")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<CaptureResponse> future = paymentsClient.capturePayment("123456", request, "123");
@@ -260,7 +241,7 @@ class PaymentsClientImplTest {
 
         final RefundResponse response = new RefundResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456" + REFUNDS_PATH), any(SdkAuthorization.class), eq(RefundResponse.class), isNull(), isNull()))
+        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + REFUNDS_PATH), any(SdkAuthorization.class), eq(RefundResponse.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<RefundResponse> future = paymentsClient.refundPayment("123456");
@@ -275,7 +256,7 @@ class PaymentsClientImplTest {
 
         final RefundResponse response = new RefundResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456" + REFUNDS_PATH), any(SdkAuthorization.class), eq(RefundResponse.class), isNull(), eq("456789")))
+        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + REFUNDS_PATH), any(SdkAuthorization.class), eq(RefundResponse.class), isNull(), eq("456789")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<RefundResponse> future = paymentsClient.refundPayment("123456", "456789");
@@ -291,7 +272,7 @@ class PaymentsClientImplTest {
         final RefundRequest request = RefundRequest.builder().build();
         final RefundResponse response = new RefundResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456" + REFUNDS_PATH), any(SdkAuthorization.class), eq(RefundResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + REFUNDS_PATH), any(SdkAuthorization.class), eq(RefundResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<RefundResponse> future = paymentsClient.refundPayment("123456", request);
@@ -307,7 +288,7 @@ class PaymentsClientImplTest {
         final RefundRequest request = RefundRequest.builder().build();
         final RefundResponse response = new RefundResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456" + REFUNDS_PATH), any(SdkAuthorization.class), eq(RefundResponse.class), eq(request), eq("123")))
+        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + REFUNDS_PATH), any(SdkAuthorization.class), eq(RefundResponse.class), eq(request), eq("123")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<RefundResponse> future = paymentsClient.refundPayment("123456", request, "123");
@@ -322,7 +303,7 @@ class PaymentsClientImplTest {
 
         final VoidResponse response = new VoidResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456" + VOIDS_PATH), any(SdkAuthorization.class), eq(VoidResponse.class), isNull(), isNull()))
+        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + VOIDS_PATH), any(SdkAuthorization.class), eq(VoidResponse.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<VoidResponse> future = paymentsClient.voidPayment("123456");
@@ -337,7 +318,7 @@ class PaymentsClientImplTest {
 
         final VoidResponse response = new VoidResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456" + VOIDS_PATH), any(SdkAuthorization.class), eq(VoidResponse.class), isNull(), eq("456789")))
+        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + VOIDS_PATH), any(SdkAuthorization.class), eq(VoidResponse.class), isNull(), eq("456789")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<VoidResponse> future = paymentsClient.voidPayment("123456", "456789");
@@ -353,7 +334,7 @@ class PaymentsClientImplTest {
         final VoidRequest request = VoidRequest.builder().build();
         final VoidResponse response = new VoidResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456" + VOIDS_PATH), any(SdkAuthorization.class), eq(VoidResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + VOIDS_PATH), any(SdkAuthorization.class), eq(VoidResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<VoidResponse> future = paymentsClient.voidPayment("123456", request);
@@ -369,7 +350,7 @@ class PaymentsClientImplTest {
         final VoidRequest request = VoidRequest.builder().build();
         final VoidResponse response = new VoidResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456" + VOIDS_PATH), any(SdkAuthorization.class), eq(VoidResponse.class), eq(request), eq("123")))
+        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + VOIDS_PATH), any(SdkAuthorization.class), eq(VoidResponse.class), eq(request), eq("123")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<VoidResponse> future = paymentsClient.voidPayment("123456", request, "123");

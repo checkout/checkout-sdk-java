@@ -1,10 +1,6 @@
 package com.checkout.payments.four;
 
 import com.checkout.payments.four.response.PaymentResponse;
-import com.checkout.payments.four.response.source.ResponseCardSource;
-import com.checkout.payments.four.response.source.ResponseIdSource;
-import com.checkout.payments.four.voids.VoidRequest;
-import com.checkout.payments.four.voids.VoidResponse;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -17,7 +13,7 @@ class VoidPaymentsTestIT extends AbstractPaymentsTestIT {
     @Test
     void shouldVoidCardPayment() {
 
-        final PaymentResponse<ResponseCardSource> paymentResponse = makeCardPayment(false);
+        final PaymentResponse paymentResponse = makeCardPayment(false);
 
         final VoidRequest voidRequest = VoidRequest.builder()
                 .reference(UUID.randomUUID().toString())
@@ -35,7 +31,7 @@ class VoidPaymentsTestIT extends AbstractPaymentsTestIT {
     @Test
     void shouldVoidIdSourcePayment() {
 
-        final PaymentResponse<ResponseIdSource> paymentResponse = makeIdSourcePayment();
+        final PaymentResponse paymentResponse = makeIdSourcePayment();
 
         final VoidRequest voidRequest = VoidRequest.builder()
                 .reference(UUID.randomUUID().toString())
@@ -53,7 +49,7 @@ class VoidPaymentsTestIT extends AbstractPaymentsTestIT {
     @Test
     void shouldVoidTokenSourcePayment() {
 
-        final PaymentResponse<ResponseCardSource> paymentResponse = makeTokenPayment();
+        final PaymentResponse paymentResponse = makeTokenPayment();
 
         final VoidRequest voidRequest = VoidRequest.builder()
                 .reference(UUID.randomUUID().toString())

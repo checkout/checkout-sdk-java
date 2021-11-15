@@ -8,8 +8,7 @@ import com.checkout.common.Currency;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.Payments;
 import com.checkout.payments.four.response.PaymentResponse;
-import com.checkout.payments.four.response.source.ResponseAlternativeSource;
-import com.checkout.payments.four.sender.RequestIndividualSender;
+import com.checkout.payments.four.sender.PaymentIndividualSender;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -23,7 +22,7 @@ class SofortPaymentsTestIT extends SandboxTestFixture {
     @Test
     void shouldMakeSofortPayment() {
 
-        final RequestIndividualSender sender = RequestIndividualSender.builder()
+        final PaymentIndividualSender sender = PaymentIndividualSender.builder()
                 .firstName("John")
                 .lastName("Doe")
                 .address(Address.builder()
@@ -41,7 +40,7 @@ class SofortPaymentsTestIT extends SandboxTestFixture {
                 .sender(sender)
                 .build();
 
-        final PaymentResponse<ResponseAlternativeSource> response = blocking(fourApi.paymentsClient().requestPayment(request));
+        final PaymentResponse response = blocking(fourApi.paymentsClient().requestPayment(request));
 
         assertNotNull(response);
 

@@ -1,7 +1,6 @@
 package com.checkout.workflows.four;
 
 import com.checkout.payments.four.response.PaymentResponse;
-import com.checkout.payments.four.response.source.ResponseCardSource;
 import com.checkout.workflows.four.events.Event;
 import com.checkout.workflows.four.events.EventTypesResponse;
 import com.checkout.workflows.four.events.GetEventResponse;
@@ -45,7 +44,7 @@ class WorkflowEventsTestIT extends AbstractWorkflowTestIT {
 
         createWorkflow();
 
-        final PaymentResponse<ResponseCardSource> payment = makeCardPayment(false);
+        final PaymentResponse payment = makeCardPayment(false);
 
         nap(5);
 

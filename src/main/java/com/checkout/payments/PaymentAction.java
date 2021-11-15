@@ -17,12 +17,14 @@ public final class PaymentAction extends Resource {
 
     private String id;
 
-    private String type;
+    private ActionType type;
 
     @SerializedName("processed_on")
     private Instant processedOn;
 
-    private long amount;
+    private Long amount;
+
+    private Boolean approved;
 
     @SerializedName("auth_code")
     private String authCode;
@@ -39,5 +41,4 @@ public final class PaymentAction extends Resource {
 
     private Map<String, Object> metadata = new HashMap<>();
 
-    private boolean approved;
 }

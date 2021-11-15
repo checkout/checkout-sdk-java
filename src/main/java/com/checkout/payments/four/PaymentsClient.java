@@ -1,32 +1,25 @@
 package com.checkout.payments.four;
 
-import com.checkout.payments.four.action.PaymentAction;
-import com.checkout.payments.four.capture.CaptureRequest;
-import com.checkout.payments.four.capture.CaptureResponse;
-import com.checkout.payments.four.payout.PayoutRequest;
-import com.checkout.payments.four.payout.PayoutResponse;
-import com.checkout.payments.four.refund.RefundRequest;
-import com.checkout.payments.four.refund.RefundResponse;
 import com.checkout.payments.four.request.PaymentRequest;
+import com.checkout.payments.four.request.PayoutRequest;
+import com.checkout.payments.four.response.GetPaymentResponse;
 import com.checkout.payments.four.response.PaymentResponse;
-import com.checkout.payments.four.response.source.ResponseSource;
-import com.checkout.payments.four.voids.VoidRequest;
-import com.checkout.payments.four.voids.VoidResponse;
+import com.checkout.payments.four.response.PayoutResponse;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface PaymentsClient {
 
-    <P extends ResponseSource> CompletableFuture<PaymentResponse<P>> requestPayment(PaymentRequest paymentRequest);
+    CompletableFuture<PaymentResponse> requestPayment(PaymentRequest paymentRequest);
 
-    <P extends ResponseSource> CompletableFuture<PaymentResponse<P>> requestPayment(PaymentRequest paymentRequest, final String idempotencyKey);
+    CompletableFuture<PaymentResponse> requestPayment(PaymentRequest paymentRequest, final String idempotencyKey);
 
     CompletableFuture<PayoutResponse> requestPayout(PayoutRequest payoutRequest);
 
     CompletableFuture<PayoutResponse> requestPayout(PayoutRequest payoutRequest, final String idempotencyKey);
 
-    <P extends ResponseSource> CompletableFuture<PaymentResponse<P>> getPayment(String paymentId);
+    CompletableFuture<GetPaymentResponse> getPayment(String paymentId);
 
     CompletableFuture<List<PaymentAction>> getPaymentActions(String paymentId);
 

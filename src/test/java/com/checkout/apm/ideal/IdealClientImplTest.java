@@ -1,9 +1,9 @@
 package com.checkout.apm.ideal;
 
 import com.checkout.ApiClient;
+import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
-import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkCredentials;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

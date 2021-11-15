@@ -8,21 +8,18 @@ The full list of request body parameters and possible outcomes can be found [her
 ## Request a Fawry payment
 
 ```java
-FawrySource fawrySource = FawrySource.builder()
+RequestFawrySource fawrySource = RequestFawrySource.builder()
         .description()
         .customerEmail()
         .customerMobile()
         .products(Collections.singletonList(
-                FawrySource.Product.builder().build()
+                RequestFawrySource.Product.builder().build()
         ))
         .build();
 
-PaymentRequest<FawrySource> request = PaymentRequest.fawry(fawrySource, com.checkout.common.Currency.EGP, 1000L);
+PaymentRequest request = PaymentRequest.fawry(fawrySource, Currency.EGP, 10L);
 
 PaymentResponse response = api.paymentsClient().requestAsync(request).get();
-
-String approvalURL = response.getPending().getLink("approve").getHref();
-String cancellationURL = response.getPending().getLink("cancel").getHref();
 ```
 ## Approve a Fawry payment
 

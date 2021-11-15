@@ -3,7 +3,6 @@ package com.checkout.payments.links;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
-import com.checkout.payments.PaymentStatus;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ExecutionException;
@@ -42,7 +41,7 @@ class PaymentLinksTestIT extends SandboxTestFixture {
         final PaymentLinkDetailsResponse detailsResponse = defaultApi.paymentLinksClient().getAsync(paymentLinkResponse.getId()).get();
         assertNotNull(detailsResponse);
         assertEquals(paymentLinkResponse.getId(), detailsResponse.getId());
-        assertThat(detailsResponse.getStatus(), anyOf(equalTo(PaymentStatus.ACTIVE), equalTo(PaymentStatus.PAYMENT_RECEIVED), equalTo(PaymentStatus.EXPIRED)));
+        assertThat(detailsResponse.getStatus(), anyOf(equalTo(PaymentLinkStatus.ACTIVE), equalTo(PaymentLinkStatus.PAYMENT_RECEIVED), equalTo(PaymentLinkStatus.EXPIRED)));
         assertNotNull(detailsResponse.getExpiresOn());
         assertEquals(paymentLinksRequest.getReturnUrl(), detailsResponse.getReturnUrl());
         assertEquals(paymentLinksRequest.getAmount(), detailsResponse.getAmount());

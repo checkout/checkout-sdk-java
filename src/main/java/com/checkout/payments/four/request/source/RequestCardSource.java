@@ -14,7 +14,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class RequestCardSource extends RequestSource {
+public final class RequestCardSource extends AbstractRequestSource {
 
     private String number;
 
@@ -26,7 +26,7 @@ public final class RequestCardSource extends RequestSource {
 
     private String name;
 
-    private Integer cvv;
+    private String cvv;
 
     private boolean stored;
 
@@ -40,7 +40,7 @@ public final class RequestCardSource extends RequestSource {
                               final Integer expiryMonth,
                               final Integer expiryYear,
                               final String name,
-                              final Integer cvv,
+                              final String cvv,
                               final boolean stored,
                               final Address billingAddress,
                               final Phone phone) {

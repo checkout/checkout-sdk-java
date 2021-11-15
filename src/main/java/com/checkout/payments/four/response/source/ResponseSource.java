@@ -1,11 +1,9 @@
 package com.checkout.payments.four.response.source;
 
 import com.checkout.common.PaymentSourceType;
-import lombok.Data;
 
-@Data
-public abstract class ResponseSource {
+public interface ResponseSource {
 
-    protected PaymentSourceType type;
+    PaymentSourceType getType();
 
 }

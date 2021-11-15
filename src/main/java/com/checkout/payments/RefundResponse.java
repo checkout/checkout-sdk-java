@@ -8,7 +8,10 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class RefundResponse extends Resource {
+public final class RefundResponse extends Resource {
+
     private String actionId;
+
     private String reference;
+
 }

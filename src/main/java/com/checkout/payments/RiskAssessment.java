@@ -3,6 +3,7 @@ package com.checkout.payments;
 import lombok.Data;
 
 @Data
-public class RiskAssessment {
-    private boolean flagged;
+public final class RiskAssessment {
+
+    private Boolean flagged;
 }

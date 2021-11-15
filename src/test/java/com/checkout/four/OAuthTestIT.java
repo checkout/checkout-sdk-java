@@ -13,7 +13,7 @@ import com.checkout.common.MarketplaceData;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.Payments;
 import com.checkout.payments.four.request.source.RequestCardSource;
-import com.checkout.payments.four.sender.RequestIndividualSender;
+import com.checkout.payments.four.sender.PaymentIndividualSender;
 import org.junit.jupiter.api.Test;
 
 import java.net.URI;
@@ -43,7 +43,7 @@ public class OAuthTestIT extends SandboxTestFixture {
                 .stored(false)
                 .build();
 
-        final RequestIndividualSender sender = RequestIndividualSender.builder()
+        final PaymentIndividualSender sender = PaymentIndividualSender.builder()
                 .firstName("John")
                 .lastName("Doe")
                 .address(Address.builder()

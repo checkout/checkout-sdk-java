@@ -1,13 +1,7 @@
 package com.checkout.events;
 
-import com.checkout.PlatformType;
-import com.checkout.SandboxTestFixture;
-import com.checkout.TestHelper;
-import com.checkout.payments.CardSource;
-import com.checkout.payments.PaymentProcessed;
-import com.checkout.payments.PaymentRequest;
-import com.checkout.payments.PaymentResponse;
-import com.checkout.payments.ThreeDSRequest;
+import com.checkout.payments.AbstractPaymentsTestIT;
+import com.checkout.payments.response.PaymentResponse;
 import com.checkout.webhooks.WebhookRequest;
 import com.checkout.webhooks.WebhookResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,16 +16,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class EventsTestIT extends SandboxTestFixture {
+class EventsTestIT extends AbstractPaymentsTestIT {
 
     private static final List<String> GATEWAY_EVENT_TYPES = Arrays.asList("payment_approved", "payment_pending",
             "payment_declined", "payment_expired", "payment_canceled", "payment_voided", "payment_void_declined",
             "payment_captured", "payment_capture_declined", "payment_capture_pending", "payment_refunded",
             "payment_refund_declined", "payment_refund_pending");
-
-    public EventsTestIT() {
-        super(PlatformType.DEFAULT);
-    }
 
     @BeforeEach
     protected void cleanup() {
@@ -180,13 +170,8 @@ class EventsTestIT extends SandboxTestFixture {
 
     }
 
-    private PaymentProcessed makeCardPayment() {
-        final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest();
-        paymentRequest.setThreeDS(new ThreeDSRequest());
-        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
-        assertNotNull(paymentResponse.getPayment());
-        return paymentResponse.getPayment();
-
+    private PaymentResponse makeCardPayment() {
+        return makeCardPayment(false, 10L);
     }
 
 }

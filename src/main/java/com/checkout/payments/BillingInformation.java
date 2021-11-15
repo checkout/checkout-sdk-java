@@ -5,14 +5,16 @@ import com.checkout.common.Phone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import javax.validation.constraints.NotEmpty;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public final class BillingInformation {
-    @NotEmpty
+
     private Address address;
+
     private Phone phone;
+
 }

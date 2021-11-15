@@ -3,12 +3,12 @@ package com.checkout.apm.sofort;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.Currency;
-import com.checkout.payments.AlternativePaymentSourceResponse;
-import com.checkout.payments.GetPaymentResponse;
-import com.checkout.payments.PaymentPending;
-import com.checkout.payments.PaymentRequest;
-import com.checkout.payments.PaymentResponse;
-import com.checkout.payments.apm.SofortSource;
+import com.checkout.common.PaymentSourceType;
+import com.checkout.payments.PaymentStatus;
+import com.checkout.payments.request.PaymentRequest;
+import com.checkout.payments.response.GetPaymentResponse;
+import com.checkout.payments.response.PaymentResponse;
+import com.checkout.payments.response.source.AlternativePaymentSourceResponse;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,34 +24,30 @@ class SofortPaymentsTestIT extends SandboxTestFixture {
     @Test
     void shouldSucceedSofortPayment() {
 
-        final PaymentRequest<SofortSource> request = PaymentRequest.sofort(Currency.EUR, 100L);
+        final PaymentRequest request = PaymentRequest.sofort(Currency.EUR, 100L);
 
         nap();
 
-        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestAsync(request));
+        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestPayment(request));
 
         assertNotNull(response);
-
-        final PaymentPending paymentPending = response.getPending();
-        assertNotNull(paymentPending);
-        assertEquals("Pending", paymentPending.getStatus());
-
-        assertNotNull(paymentPending.getLink(SELF));
-        assertNotNull(paymentPending.getLink("redirect"));
+        assertEquals(PaymentStatus.PENDING, response.getStatus());
+        assertNotNull(response.getLink(SELF));
+        assertNotNull(response.getLink("redirect"));
 
         // Get payment
 
         nap();
 
-        final GetPaymentResponse getPaymentResponse = blocking(defaultApi.paymentsClient().getAsync(paymentPending.getId()));
+        final GetPaymentResponse getPaymentResponse = blocking(defaultApi.paymentsClient().getPayment(response.getId()));
 
         assertNotNull(response);
-        assertEquals("Pending", getPaymentResponse.getStatus());
+        assertEquals(PaymentStatus.PENDING, getPaymentResponse.getStatus());
 
         assertNotNull(getPaymentResponse.getSource());
         assertTrue(getPaymentResponse.getSource() instanceof AlternativePaymentSourceResponse);
         final AlternativePaymentSourceResponse source = (AlternativePaymentSourceResponse) getPaymentResponse.getSource();
-        assertEquals("sofort", source.getType());
+        assertEquals(PaymentSourceType.SOFORT, source.getType());
 
     }
 
