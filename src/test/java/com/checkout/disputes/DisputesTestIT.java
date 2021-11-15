@@ -4,11 +4,11 @@ import com.checkout.CheckoutApiException;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
+import com.checkout.common.Currency;
 import com.checkout.common.FileDetailsResponse;
 import com.checkout.common.FilePurpose;
 import com.checkout.common.FileRequest;
 import com.checkout.common.IdResponse;
-import com.checkout.common.Currency;
 import com.checkout.payments.CaptureRequest;
 import com.checkout.payments.PaymentRequest;
 import com.checkout.payments.PaymentResponse;
@@ -17,7 +17,6 @@ import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
 import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -89,7 +88,7 @@ class DisputesTestIT extends SandboxTestFixture {
                 defaultApi.disputesClient().accept(dispute.getId()).get();
                 fail();
             } catch (final Exception e) {
-                assertTrue(e instanceof CheckoutApiException);
+                assertTrue(e.getCause() instanceof CheckoutApiException);
                 assertTrue(e.getMessage().contains("dispute_already_accepted"));
             }
         }

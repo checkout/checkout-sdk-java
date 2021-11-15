@@ -1,5 +1,6 @@
 package com.checkout.tokens;
 
+import com.checkout.CheckoutArgumentException;
 import com.checkout.common.Address;
 import com.checkout.common.Phone;
 import com.google.gson.annotations.SerializedName;
@@ -36,7 +37,7 @@ public final class CardTokenRequest implements TokenRequest {
     public CardTokenRequest(final String number, final int expiryMonth, final int expiryYear) {
         validateParams("number", number);
         if (expiryMonth < 1 || expiryMonth > 12) {
-            throw new IllegalArgumentException("The expiry month must be between 1 and 12");
+            throw new CheckoutArgumentException("The expiry month must be between 1 and 12");
         }
         this.number = number;
         this.expiryMonth = expiryMonth;
