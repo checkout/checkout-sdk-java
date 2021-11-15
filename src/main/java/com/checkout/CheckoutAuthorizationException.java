@@ -2,7 +2,7 @@ package com.checkout;
 
 import static java.lang.String.format;
 
-public class CheckoutAuthorizationException extends IllegalArgumentException {
+public class CheckoutAuthorizationException extends CheckoutException {
 
     public CheckoutAuthorizationException(final String message) {
         super(message);
