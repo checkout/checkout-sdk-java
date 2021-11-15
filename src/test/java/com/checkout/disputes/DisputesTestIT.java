@@ -89,7 +89,7 @@ class DisputesTestIT extends SandboxTestFixture {
                 defaultApi.disputesClient().accept(dispute.getId()).get();
                 fail();
             } catch (final Exception e) {
-                assertTrue(e instanceof CheckoutApiException);
+                assertTrue(e.getCause() instanceof CheckoutApiException);
                 assertTrue(e.getMessage().contains("dispute_already_accepted"));
             }
         }

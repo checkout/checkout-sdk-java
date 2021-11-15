@@ -176,7 +176,7 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
 
         final ShippingDetails shippingDetails = paymentReturned.getShipping();
         assertEquals("City", shippingDetails.getAddress().getCity());
-        assertEquals(CountryCode.GB.name(), shippingDetails.getAddress().getCountry());
+        assertEquals(CountryCode.GB, shippingDetails.getAddress().getCountry());
         assertEquals(phone, shippingDetails.getPhone());
 
     }

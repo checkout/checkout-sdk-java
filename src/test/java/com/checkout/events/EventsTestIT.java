@@ -76,36 +76,6 @@ class EventsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void shouldRetrieveEventsByPaymentId_deprecated() {
-
-        registerWebhook();
-
-        final String paymentId = makeCardPayment().getId();
-
-        nap(15);
-
-        final EventsPageResponse eventsPageResponse = blocking(
-                defaultApi.eventsClient().retrieveEvents(
-                        LocalDateTime.now().minusYears(2).toInstant(ZoneOffset.UTC),
-                        LocalDateTime.now().toInstant(ZoneOffset.UTC),
-                        10, 0, paymentId));
-
-        assertNotNull(eventsPageResponse);
-        assertEquals(1, eventsPageResponse.getTotalCount());
-        assertEquals(10, eventsPageResponse.getLimit());
-        assertEquals(0, eventsPageResponse.getSkip());
-        assertEquals(1, eventsPageResponse.getData().size());
-
-        final EventSummaryResponse eventSummaryResponse = eventsPageResponse.getData().get(0);
-        assertNotNull(eventSummaryResponse.getId());
-        assertNotNull(eventSummaryResponse.getCreatedOn());
-        assertEquals("payment_approved", eventSummaryResponse.getType());
-        assertNotNull(eventSummaryResponse.getLink("self"));
-        assertNotNull(eventSummaryResponse.getLink("webhooks-retry"));
-
-    }
-
-    @Test
     void shouldRetrieveEventsByPaymentId_andRetrieveEventById_andGetNotification() {
 
         registerWebhook();

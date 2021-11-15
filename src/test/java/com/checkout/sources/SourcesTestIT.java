@@ -3,6 +3,7 @@ package com.checkout.sources;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.Address;
+import com.checkout.common.CountryCode;
 import com.checkout.common.Phone;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,7 @@ class SourcesTestIT extends SandboxTestFixture {
         billingAddress.setCity("London");
         billingAddress.setState("London");
         billingAddress.setZip("W1T 4TJ");
-        billingAddress.setCountry("GB");
+        billingAddress.setCountry(CountryCode.GB);
 
         final Phone phone = new Phone();
         phone.setCountryCode("+1");

@@ -9,8 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Optional;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -76,26 +74,6 @@ public class CardSourceResponse implements ResponseSource {
     @Override
     public String getType() {
         return type;
-    }
-
-    /**
-     * @deprecated Will be removed on a future version
-     */
-    @Deprecated
-    public String getIssuerCountry() {
-        return Optional.ofNullable(issuerCountry).map(CountryCode::name).orElse(null);
-    }
-
-    /**
-     * @deprecated Will be removed on a future version
-     */
-    @Deprecated
-    public void setIssuerCountry(final String issuerCountry) {
-        this.issuerCountry = CountryCode.fromString(issuerCountry);
-    }
-
-    public void setIssuerCountry(final CountryCode issuerCountry) {
-        this.issuerCountry = issuerCountry;
     }
 
 }
