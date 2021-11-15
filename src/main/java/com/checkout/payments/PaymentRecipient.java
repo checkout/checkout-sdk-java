@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 @Data
 public class PaymentRecipient {
@@ -18,25 +17,18 @@ public class PaymentRecipient {
     private final String lastName;
     private final CountryCode country;
 
-    public PaymentRecipient(LocalDate dateOfBirth,
-                            String accountNumber,
-                            String zip,
-                            String firstName,
-                            String lastName,
-                            String country) {
+    public PaymentRecipient(final LocalDate dateOfBirth,
+                            final String accountNumber,
+                            final String zip,
+                            final String firstName,
+                            final String lastName,
+                            final CountryCode country) {
         this.dateOfBirth = dateOfBirth;
         this.accountNumber = accountNumber;
         this.zip = zip;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.country = CountryCode.fromString(country);
+        this.country = country;
     }
 
-    /**
-     * @deprecated Will be removed on a future version
-     */
-    @Deprecated
-    public String getCountry() {
-        return Optional.ofNullable(country).map(CountryCode::name).orElse(null);
-    }
 }

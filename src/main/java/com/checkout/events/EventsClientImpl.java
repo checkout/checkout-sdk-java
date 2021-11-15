@@ -5,7 +5,6 @@ import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorizationType;
 
-import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -33,26 +32,6 @@ public class EventsClientImpl extends AbstractClient implements EventsClient {
         return apiClient.getAsync(path.toString(), sdkAuthorization(), EventTypesResponse[].class)
                 .thenApply(it -> it == null ? new EventTypesResponse[0] : it)
                 .thenApply(Arrays::asList);
-    }
-
-    /**
-     * @deprecated Please use {@link #retrieveEvents(RetrieveEventsRequest)}
-     */
-    @Deprecated
-    @Override
-    public CompletableFuture<EventsPageResponse> retrieveEvents(final Instant from,
-                                                                final Instant to,
-                                                                final Integer limit,
-                                                                final Integer skip,
-                                                                final String paymentId) {
-        final RetrieveEventsRequest retrieveEventsRequest = RetrieveEventsRequest.builder()
-                .from(from)
-                .to(to)
-                .limit(limit)
-                .skip(skip)
-                .paymentId(paymentId)
-                .build();
-        return apiClient.queryAsync(EVENTS, sdkAuthorization(), retrieveEventsRequest, EventsPageResponse.class);
     }
 
     @Override

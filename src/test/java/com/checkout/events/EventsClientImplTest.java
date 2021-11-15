@@ -115,34 +115,6 @@ class EventsClientImplTest {
     }
 
     @Test
-    void shouldRetrieveEvents_deprecated() throws ExecutionException, InterruptedException {
-
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
-
-        final Instant from = LocalDateTime.now().minusYears(2).toInstant(ZoneOffset.UTC);
-        final Instant to = LocalDateTime.now().toInstant(ZoneOffset.UTC);
-
-        final RetrieveEventsRequest retrieveEventsRequest = RetrieveEventsRequest.builder()
-                .from(from)
-                .to(to)
-                .limit(15)
-                .skip(0)
-                .paymentId("paymentId")
-                .build();
-        final EventsPageResponse eventsPageResponse = mock(EventsPageResponse.class);
-
-        when(apiClient.queryAsync(eq(EVENTS), eq(authorization), eq(retrieveEventsRequest), eq(EventsPageResponse.class)))
-                .thenReturn(CompletableFuture.completedFuture(eventsPageResponse));
-
-        final CompletableFuture<EventsPageResponse> response = eventsClient.retrieveEvents(from, to, 15, 0, "paymentId");
-
-        assertNotNull(response.get());
-        assertEquals(eventsPageResponse, response.get());
-
-    }
-
-    @Test
     void shouldRetrieveEvents() throws ExecutionException, InterruptedException {
 
         when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);

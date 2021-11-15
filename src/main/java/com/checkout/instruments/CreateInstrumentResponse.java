@@ -5,8 +5,6 @@ import com.checkout.common.CustomerResponse;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
-import java.util.Optional;
-
 @Data
 public final class CreateInstrumentResponse {
 
@@ -48,24 +46,5 @@ public final class CreateInstrumentResponse {
 
     private CustomerResponse customer;
 
-    /**
-     * @deprecated Will be removed on a future version
-     */
-    @Deprecated
-    public String getIssuerCountry() {
-        return Optional.ofNullable(issuerCountry).map(CountryCode::name).orElse(null);
-    }
-
-    /**
-     * @deprecated Will be removed on a future version
-     */
-    @Deprecated
-    public void setIssuerCountry(final String issuerCountry) {
-        this.issuerCountry = CountryCode.fromString(issuerCountry);
-    }
-
-    public void setIssuerCountry(final CountryCode issuerCountry) {
-        this.issuerCountry = issuerCountry;
-    }
-
 }
+

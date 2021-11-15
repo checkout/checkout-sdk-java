@@ -8,8 +8,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.Optional;
-
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -50,25 +48,5 @@ public final class CardTokenResponse extends TokenResponse {
 
     @SerializedName("product_type")
     private String productType;
-
-    /**
-     * @deprecated Will be removed on a future version
-     */
-    @Deprecated
-    public void setIssuerCountry(final String issuerCountry) {
-        this.issuerCountry = CountryCode.fromString(issuerCountry);
-    }
-
-    public void setIssuerCountry(final CountryCode issuerCountry) {
-        this.issuerCountry = issuerCountry;
-    }
-
-    /**
-     * @deprecated Will be removed on a future version
-     */
-    @Deprecated
-    public String getIssuerCountry() {
-        return Optional.ofNullable(issuerCountry).map(CountryCode::name).orElse(null);
-    }
 
 }
