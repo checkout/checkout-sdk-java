@@ -3,10 +3,10 @@ package com.checkout.apm.ideal;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.Currency;
-import com.checkout.payments.PaymentPending;
-import com.checkout.payments.PaymentRequest;
-import com.checkout.payments.PaymentResponse;
-import com.checkout.payments.apm.IdealSource;
+import com.checkout.payments.PaymentStatus;
+import com.checkout.payments.request.PaymentRequest;
+import com.checkout.payments.request.source.apm.RequestIdealSource;
+import com.checkout.payments.response.PaymentResponse;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,24 +21,19 @@ class IdealPaymentsTestIT extends SandboxTestFixture {
     @Test
     void shouldMakeIdealPayment() {
 
-        final IdealSource idealSource = IdealSource.builder()
+        final RequestIdealSource idealSource = RequestIdealSource.builder()
                 .bic("INGBNL2A")
                 .description("ORD50234E89")
                 .language("nl")
                 .build();
 
-        final PaymentRequest<IdealSource> request = PaymentRequest.ideal(idealSource, Currency.EUR, 1000L);
+        final PaymentRequest request = PaymentRequest.ideal(idealSource, Currency.EUR, 1000L);
 
-        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestAsync(request));
-
+        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);
-
-        final PaymentPending paymentPending = response.getPending();
-        assertNotNull(paymentPending);
-        assertEquals("Pending", paymentPending.getStatus());
-
-        assertNotNull(paymentPending.getLink("self"));
-        assertNotNull(paymentPending.getLink("redirect"));
+        assertEquals(PaymentStatus.PENDING, response.getStatus());
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("redirect"));
 
     }
 

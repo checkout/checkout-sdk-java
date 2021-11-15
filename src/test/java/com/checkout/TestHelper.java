@@ -7,20 +7,13 @@ import com.checkout.common.CustomerRequest;
 import com.checkout.common.Phone;
 import com.checkout.common.Product;
 import com.checkout.payments.BillingInformation;
-import com.checkout.payments.CardSource;
-import com.checkout.payments.DLocalSource;
-import com.checkout.payments.PaymentRequest;
+import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.ProcessingSettings;
-import com.checkout.payments.RequestSource;
 import com.checkout.payments.RiskRequest;
-import com.checkout.payments.SenderInformation;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
-import com.checkout.payments.TokenSource;
-import com.checkout.payments.four.request.PaymentRecipient;
 import com.checkout.payments.hosted.HostedPaymentRequest;
 import com.checkout.payments.links.PaymentLinkRequest;
-import com.checkout.tokens.CardTokenRequest;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -46,101 +39,8 @@ public final class TestHelper {
     public static final String INVALID_FOUR_SK = "sk_sbox_m73dzbpy7c-f3gfd46xr4yj5xo4e";
     public static final String INVALID_FOUR_PK = "pk_sbox_pkh";
 
-    public static PaymentRequest<CardSource> createCardPaymentRequest() {
-        return createCardPaymentRequest(100L);
-    }
-
-    public static PaymentRequest<DLocalSource> createDLocalPaymentRequest() {
-        return createDLocalPaymentRequest(100L);
-    }
-
-    public static PaymentRequest<CardSource> createCardPayoutRequest() {
-        final CardSource cardSource = new CardSource(TestCardSource.VISA.getNumber(), TestCardSource.VISA.getExpiryMonth(), TestCardSource.VISA.getExpiryYear());
-        cardSource.setFirstName("John");
-        cardSource.setLastName("Doe");
-
-
-        final PaymentRequest<CardSource> request = PaymentRequest.fromDestination(cardSource, Currency.GBP, 100L);
-        request.setReference(UUID.randomUUID().toString());
-        final ProcessingSettings processing = ProcessingSettings.builder().senderInformation(
-                SenderInformation.builder()
-                        .firstName("Jane")
-                        .lastName("Doe-Doe")
-                        .address("1 Random Ave.")
-                        .city("New York")
-                        .country(CountryCode.US)
-                        .postalCode("12345")
-                        .state("New York")
-                        .accountNumber("DE1234567890")
-                        .reference("U1234567890")
-                        .sourceOfFunds("Credit")
-                        .build()
-        ).build();
-        request.setProcessing(processing);
-
-        return request;
-    }
-
-    public static PaymentRequest<CardSource> createCardPaymentRequest(final Long amount) {
-        final CardSource cardSource = new CardSource(TestCardSource.VISA.getNumber(), TestCardSource.VISA.getExpiryMonth(), TestCardSource.VISA.getExpiryYear());
-        cardSource.setCvv(TestCardSource.VISA.getCvv());
-        cardSource.setStored(false);
-
-        final CustomerRequest customer = new CustomerRequest(null, generateRandomEmail(), null);
-
-        final PaymentRequest<CardSource> request = PaymentRequest.fromSource(cardSource, Currency.GBP, amount);
-        request.setCapture(false);
-        request.setCustomer(customer);
-        request.setReference(UUID.randomUUID().toString());
-
-        return request;
-    }
-
-    public static PaymentRequest<DLocalSource> createDLocalPaymentRequest(final Long amount) {
-        final DLocalSource dlocalSource = new DLocalSource(TestCardSource.VISA.getNumber(), TestCardSource.VISA.getExpiryMonth(), TestCardSource.VISA.getExpiryYear());
-        dlocalSource.setCvv(TestCardSource.VISA.getCvv());
-        dlocalSource.setStored(false);
-
-        final CustomerRequest customer = new CustomerRequest(null, generateRandomEmail(), null);
-
-        final PaymentRequest<DLocalSource> request = PaymentRequest.fromSource(dlocalSource, Currency.GBP, amount);
-        request.setCapture(false);
-        request.setCustomer(customer);
-        request.setReference(UUID.randomUUID().toString());
-
-        return request;
-    }
-
-    public static PaymentRequest<RequestSource> createAlternativePaymentMethodRequest(final RequestSource alternativePaymentMethodRequestSource, final Currency currency) {
-        return createAlternativePaymentMethodRequest(alternativePaymentMethodRequestSource, currency, 100);
-    }
-
-    public static PaymentRequest<RequestSource> createAlternativePaymentMethodRequest(final RequestSource alternativePaymentMethodRequestSource, final Currency currency, final long amount) {
-
-        final CustomerRequest customer = new CustomerRequest(null, generateRandomEmail(), null);
-
-        final PaymentRequest<RequestSource> request = PaymentRequest.fromSource(alternativePaymentMethodRequestSource, currency, amount);
-        request.setCapture(false);
-        request.setReference(UUID.randomUUID().toString());
-        request.setCustomer(customer);
-
-        return request;
-    }
-
-    public static CardTokenRequest createCardTokenRequest() {
-        final CardTokenRequest request = new CardTokenRequest(TestCardSource.VISA.getNumber(), TestCardSource.VISA.getExpiryMonth(), TestCardSource.VISA.getExpiryYear());
-        request.setCvv(TestCardSource.VISA.getCvv());
-        return request;
-    }
-
     public static String generateRandomEmail() {
         return UUID.randomUUID().toString() + "@checkout-sdk-java.com";
-    }
-
-    public static PaymentRequest<TokenSource> createTokenPaymentRequest(final String token) {
-        final PaymentRequest<TokenSource> request = PaymentRequest.fromSource(new TokenSource(token), Currency.GBP, 100L);
-        request.setCapture(false);
-        return request;
     }
 
     public static CustomerRequest createCustomer() {
@@ -247,7 +147,7 @@ public final class TestHelper {
         return PaymentRecipient.builder()
                 .accountNumber("1234567")
                 .country(CountryCode.ES)
-                .dateOfBirth(LocalDate.of(1985, 5, 15))
+                .dateOfBirth("1985-05-15")
                 .firstName("IT")
                 .lastName("TESTING")
                 .zip("12345")

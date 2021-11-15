@@ -1,10 +1,14 @@
 package com.checkout.payments.four.response;
 
 import com.checkout.common.Currency;
+import com.checkout.common.CustomerResponse;
 import com.checkout.common.Resource;
 import com.checkout.payments.PaymentProcessing;
-import com.checkout.payments.four.request.PaymentRecipient;
-import com.checkout.payments.four.request.ShippingDetails;
+import com.checkout.payments.PaymentRecipient;
+import com.checkout.payments.PaymentStatus;
+import com.checkout.payments.RiskAssessment;
+import com.checkout.payments.ShippingDetails;
+import com.checkout.payments.ThreeDSEnrollment;
 import com.checkout.payments.four.response.source.ResponseSource;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
@@ -19,9 +23,9 @@ import java.util.Map;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class PaymentResponse<S extends ResponseSource> extends Resource implements Serializable {
+public final class PaymentResponse extends Resource implements Serializable {
 
-    private S source;
+    private ResponseSource source;
 
     private String id;
 
@@ -49,7 +53,7 @@ public class PaymentResponse<S extends ResponseSource> extends Resource implemen
     private Instant expiresOn;
 
     @SerializedName("3ds")
-    private ThreeDSEnrollmentData threeDSEnrollment;
+    private ThreeDSEnrollment threeDSEnrollment;
 
     private RiskAssessment risk;
 

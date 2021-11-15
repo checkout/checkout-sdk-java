@@ -7,18 +7,15 @@ import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.Phone;
-import com.checkout.payments.four.capture.CaptureRequest;
-import com.checkout.payments.four.capture.CaptureResponse;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.Payments;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.request.source.RequestIdSource;
 import com.checkout.payments.four.request.source.RequestTokenSource;
 import com.checkout.payments.four.response.PaymentResponse;
-import com.checkout.payments.four.response.source.ResponseCardSource;
-import com.checkout.payments.four.response.source.ResponseIdSource;
-import com.checkout.payments.four.sender.RequestCorporateSender;
-import com.checkout.payments.four.sender.RequestIndividualSender;
+import com.checkout.payments.four.response.source.CardResponseSource;
+import com.checkout.payments.four.sender.PaymentCorporateSender;
+import com.checkout.payments.four.sender.PaymentIndividualSender;
 import com.checkout.tokens.four.TokensClient;
 import com.checkout.tokens.four.request.CardTokenRequest;
 import com.checkout.tokens.four.response.CardTokenResponse;
@@ -42,29 +39,29 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
         this.tokensClient = fourApi.tokensClient();
     }
 
-    protected PaymentResponse<ResponseCardSource> makeCardPayment(final boolean three3ds) {
+    protected PaymentResponse makeCardPayment(final boolean three3ds) {
 
         final RequestCardSource source = getRequestCardSource();
-        final RequestIndividualSender sender = getIndividualSender();
+        final PaymentIndividualSender sender = getIndividualSender();
 
         final PaymentRequest request = getCardSourcePayment(source, sender, three3ds);
-        final PaymentResponse<ResponseCardSource> paymentResponse = blocking(paymentsClient.requestPayment(request));
+        final PaymentResponse paymentResponse = blocking(paymentsClient.requestPayment(request));
 
         assertNotNull(paymentResponse);
 
         return paymentResponse;
     }
 
-    protected PaymentResponse<ResponseIdSource> makeIdSourcePayment() {
+    protected PaymentResponse makeIdSourcePayment() {
 
-        final PaymentResponse<ResponseCardSource> cardPaymentResponse = makeCardPayment(false);
+        final PaymentResponse cardPaymentResponse = makeCardPayment(false);
 
         final RequestIdSource idSource = RequestIdSource.builder()
-                .id(cardPaymentResponse.getSource().getId())
+                .id(((CardResponseSource) cardPaymentResponse.getSource()).getId())
                 .cvv(CardSourceHelper.Visa.CVV)
                 .build();
 
-        final RequestIndividualSender sender = getIndividualSender();
+        final PaymentIndividualSender sender = getIndividualSender();
 
         final PaymentRequest idSourceRequest = Payments.id(idSource).individualSender(sender)
                 .capture(false)
@@ -73,7 +70,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                 .currency(Currency.EUR)
                 .build();
 
-        final PaymentResponse<ResponseIdSource> response = blocking(fourApi.paymentsClient().requestPayment(idSourceRequest));
+        final PaymentResponse response = blocking(fourApi.paymentsClient().requestPayment(idSourceRequest));
 
         assertNotNull(response);
 
@@ -81,7 +78,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
 
     }
 
-    protected PaymentResponse<ResponseCardSource> makeTokenPayment() {
+    protected PaymentResponse makeTokenPayment() {
 
         final CardTokenResponse cardTokenResponse = requestToken();
 
@@ -96,7 +93,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                 .phone(Phone.builder().number("675676541").countryCode("+34").build())
                 .build();
 
-        final RequestCorporateSender sender = getCorporateSender();
+        final PaymentCorporateSender sender = getCorporateSender();
 
         final PaymentRequest tokenRequest = Payments.token(tokenSource).corporateSender(sender)
                 .capture(false)
@@ -105,7 +102,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                 .currency(Currency.USD)
                 .build();
 
-        final PaymentResponse<ResponseCardSource> paymentResponse = blocking(fourApi.paymentsClient().requestPayment(tokenRequest));
+        final PaymentResponse paymentResponse = blocking(fourApi.paymentsClient().requestPayment(tokenRequest));
 
         assertNotNull(paymentResponse);
 
@@ -113,8 +110,8 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
 
     }
 
-    protected PaymentResponse<ResponseCardSource> makeCardPayment(final PaymentRequest payment) {
-        final PaymentResponse<ResponseCardSource> paymentResponse = blocking(paymentsClient.requestPayment(payment));
+    protected PaymentResponse makeCardPayment(final PaymentRequest payment) {
+        final PaymentResponse paymentResponse = blocking(paymentsClient.requestPayment(payment));
         assertNotNull(paymentResponse);
         return paymentResponse;
     }

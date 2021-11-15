@@ -8,6 +8,8 @@ public enum PaymentSourceType {
     CARD,
     @SerializedName("id")
     ID,
+    @SerializedName("currency_account")
+    CURRENCY_ACCOUNT,
     @SerializedName("network_token")
     NETWORK_TOKEN,
     @SerializedName("token")
@@ -29,14 +31,14 @@ public enum PaymentSourceType {
     @SerializedName("oxxo")
     OXXO,
     @SerializedName("pagofacil")
-    PAGO_FACIL,
+    PAGOFACIL,
     @SerializedName("rapipago")
-    RAPI_PAGO,
+    RAPIPAGO,
     @SerializedName("klarna")
     KLARNA,
     @SerializedName("id")
     SEPA,
     @SerializedName("sofort")
-    SOFORT,
+    SOFORT;
 
 }

@@ -1,38 +1,48 @@
 package com.checkout.payments;
 
+import com.checkout.payments.request.PaymentRequest;
+import com.checkout.payments.request.PayoutRequest;
+import com.checkout.payments.response.GetPaymentResponse;
+import com.checkout.payments.response.PaymentResponse;
+
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface PaymentsClient {
-    <T extends RequestSource> CompletableFuture<PaymentResponse> requestAsync(PaymentRequest<T> paymentRequest);
 
-    <T extends RequestSource> CompletableFuture<PaymentResponse> requestAsync(PaymentRequest<T> paymentRequest, String idempotencyKey);
+    CompletableFuture<PaymentResponse> requestPayment(PaymentRequest paymentRequest);
 
-    CompletableFuture<GetPaymentResponse> getAsync(String paymentId);
+    CompletableFuture<PaymentResponse> requestPayment(PaymentRequest paymentRequest, String idempotencyKey);
 
-    CompletableFuture<List<PaymentAction>> getActionsAsync(String paymentId);
+    CompletableFuture<PaymentResponse> requestPayout(PayoutRequest payoutRequest);
 
-    CompletableFuture<CaptureResponse> captureAsync(String paymentId);
+    CompletableFuture<PaymentResponse> requestPayout(PayoutRequest payoutRequest, String idempotencyKey);
 
-    CompletableFuture<CaptureResponse> captureAsync(String paymentId, String idempotencyKey);
+    CompletableFuture<GetPaymentResponse> getPayment(String paymentId);
 
-    CompletableFuture<CaptureResponse> captureAsync(String paymentId, CaptureRequest captureRequest);
+    CompletableFuture<List<PaymentAction>> getPaymentActions(String paymentId);
 
-    CompletableFuture<CaptureResponse> captureAsync(String paymentId, CaptureRequest captureRequest, String idempotencyKey);
+    CompletableFuture<CaptureResponse> capturePayment(String paymentId);
 
-    CompletableFuture<RefundResponse> refundAsync(String paymentId);
+    CompletableFuture<CaptureResponse> capturePayment(String paymentId, String idempotencyKey);
 
-    CompletableFuture<RefundResponse> refundAsync(String paymentId, String idempotencyKey);
+    CompletableFuture<CaptureResponse> capturePayment(String paymentId, CaptureRequest captureRequest);
 
-    CompletableFuture<RefundResponse> refundAsync(String paymentId, RefundRequest refundRequest);
+    CompletableFuture<CaptureResponse> capturePayment(String paymentId, CaptureRequest captureRequest, String idempotencyKey);
 
-    CompletableFuture<RefundResponse> refundAsync(String paymentId, RefundRequest refundRequest, String idempotencyKey);
+    CompletableFuture<RefundResponse> refundPayment(String paymentId);
 
-    CompletableFuture<VoidResponse> voidAsync(String paymentId);
+    CompletableFuture<RefundResponse> refundPayment(String paymentId, String idempotencyKey);
 
-    CompletableFuture<VoidResponse> voidAsync(String paymentId, String idempotencyKey);
+    CompletableFuture<RefundResponse> refundPayment(String paymentId, RefundRequest refundRequest);
 
-    CompletableFuture<VoidResponse> voidAsync(String paymentId, VoidRequest voidRequest);
+    CompletableFuture<RefundResponse> refundPayment(String paymentId, RefundRequest refundRequest, String idempotencyKey);
 
-    CompletableFuture<VoidResponse> voidAsync(String paymentId, VoidRequest voidRequest, String idempotencyKey);
+    CompletableFuture<VoidResponse> voidPayment(String paymentId);
+
+    CompletableFuture<VoidResponse> voidPayment(String paymentId, String idempotencyKey);
+
+    CompletableFuture<VoidResponse> voidPayment(String paymentId, VoidRequest voidRequest);
+
+    CompletableFuture<VoidResponse> voidPayment(String paymentId, VoidRequest voidRequest, String idempotencyKey);
 }

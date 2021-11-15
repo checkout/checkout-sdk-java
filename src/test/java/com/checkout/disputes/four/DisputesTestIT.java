@@ -9,11 +9,9 @@ import com.checkout.payments.four.AbstractPaymentsTestIT;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.response.PaymentResponse;
-import com.checkout.payments.four.response.source.ResponseCardSource;
-import com.checkout.payments.four.sender.RequestIndividualSender;
+import com.checkout.payments.four.sender.PaymentIndividualSender;
 import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
 
 import java.io.File;
 import java.net.URL;
@@ -101,11 +99,11 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
     void shouldTestFullDisputesWorkFlow() throws Exception {
         //Create a payment who triggers a dispute
         final RequestCardSource source = getRequestCardSource();
-        final RequestIndividualSender sender = getIndividualSender();
+        final PaymentIndividualSender sender = getIndividualSender();
         final PaymentRequest request = getCardSourcePaymentForDispute(source, sender, false);
 
         // payment
-        final PaymentResponse<ResponseCardSource> paymentResponse = makeCardPayment(request);
+        final PaymentResponse paymentResponse = makeCardPayment(request);
         assertNotNull(paymentResponse.getLink("capture"));
 
         // capture

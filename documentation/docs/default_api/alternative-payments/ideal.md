@@ -7,15 +7,14 @@ The full list of request body parameters and possible outcomes can be found [her
 
 ## Request an Ideal payment
 
-Use the details below to set up your request.
 ```java
-IdealSource source = IdealSource.builder()
+RequestIdealSource source = RequestIdealSource.builder()
         .bic()
         .description()
         .language()
         .build();
 
-PaymentRequest<IdealSource> request = PaymentRequest.ideal(source, Currency.EUR, 1000L);
+PaymentRequest request = PaymentRequest.ideal(source, Currency.EUR, 10L);
 
 PaymentResponse response = api.paymentsClient().requestAsync(request).get();
 ```

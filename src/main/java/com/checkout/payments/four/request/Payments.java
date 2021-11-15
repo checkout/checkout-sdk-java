@@ -1,17 +1,17 @@
 package com.checkout.payments.four.request;
 
 import com.checkout.common.Currency;
-import com.checkout.payments.apm.IdealSource;
-import com.checkout.payments.apm.SofortSource;
+import com.checkout.payments.four.request.source.AbstractRequestSource;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.request.source.RequestIdSource;
 import com.checkout.payments.four.request.source.RequestNetworkTokenSource;
-import com.checkout.payments.four.request.source.RequestSource;
 import com.checkout.payments.four.request.source.RequestTokenSource;
-import com.checkout.payments.four.sender.RequestCorporateSender;
-import com.checkout.payments.four.sender.RequestIndividualSender;
-import com.checkout.payments.four.sender.RequestInstrumentSender;
-import com.checkout.payments.four.sender.RequestSender;
+import com.checkout.payments.four.request.source.apm.RequestIdealSource;
+import com.checkout.payments.four.request.source.apm.RequestSofortSource;
+import com.checkout.payments.four.sender.PaymentCorporateSender;
+import com.checkout.payments.four.sender.PaymentIndividualSender;
+import com.checkout.payments.four.sender.PaymentInstrumentSender;
+import com.checkout.payments.four.sender.PaymentSender;
 
 public final class Payments {
 
@@ -34,7 +34,7 @@ public final class Payments {
         return new NetworkTokenPaymentBuilder(source);
     }
 
-    public static IdealPaymentBuilder ideal(final IdealSource source,
+    public static IdealPaymentBuilder ideal(final RequestIdealSource source,
                                             final Currency currency,
                                             final Long amount) {
         return new IdealPaymentBuilder(source, currency, amount);
@@ -81,7 +81,7 @@ public final class Payments {
         private final Currency currency;
         private final Long amount;
 
-        public IdealPaymentBuilder(final IdealSource source,
+        public IdealPaymentBuilder(final RequestIdealSource source,
                                    final Currency currency,
                                    final Long amount) {
             super(source);
@@ -90,7 +90,7 @@ public final class Payments {
         }
 
         @Override
-        protected PaymentRequest.PaymentRequestBuilder builder(final RequestSender sender) {
+        protected PaymentRequest.PaymentRequestBuilder builder(final PaymentSender sender) {
             return super.builder(sender).currency(this.currency).amount(amount);
         }
 
@@ -103,13 +103,13 @@ public final class Payments {
 
         public SofortPaymentBuilder(final Currency currency,
                                     final Long amount) {
-            super(new SofortSource());
+            super(new RequestSofortSource());
             this.currency = currency;
             this.amount = amount;
         }
 
         @Override
-        protected PaymentRequest.PaymentRequestBuilder builder(final RequestSender sender) {
+        protected PaymentRequest.PaymentRequestBuilder builder(final PaymentSender sender) {
             return super.builder(sender).currency(currency).amount(amount);
         }
 
@@ -117,29 +117,29 @@ public final class Payments {
 
     public abstract static class PaymentsBuilder {
 
-        private final RequestSource source;
+        private final AbstractRequestSource source;
 
-        protected PaymentsBuilder(final RequestSource source) {
+        protected PaymentsBuilder(final AbstractRequestSource source) {
             this.source = source;
         }
 
-        public <S extends RequestSender> PaymentRequest.PaymentRequestBuilder fromSender(final S sender) {
+        public <S extends PaymentSender> PaymentRequest.PaymentRequestBuilder fromSender(final S sender) {
             return builder(sender);
         }
 
-        public PaymentRequest.PaymentRequestBuilder individualSender(final RequestIndividualSender individualSender) {
+        public PaymentRequest.PaymentRequestBuilder individualSender(final PaymentIndividualSender individualSender) {
             return builder(individualSender);
         }
 
-        public PaymentRequest.PaymentRequestBuilder corporateSender(final RequestCorporateSender corporateSender) {
+        public PaymentRequest.PaymentRequestBuilder corporateSender(final PaymentCorporateSender corporateSender) {
             return builder(corporateSender);
         }
 
-        public PaymentRequest.PaymentRequestBuilder instrumentSender(final RequestInstrumentSender instrumentSender) {
+        public PaymentRequest.PaymentRequestBuilder instrumentSender(final PaymentInstrumentSender instrumentSender) {
             return builder(instrumentSender);
         }
 
-        protected PaymentRequest.PaymentRequestBuilder builder(final RequestSender sender) {
+        protected PaymentRequest.PaymentRequestBuilder builder(final PaymentSender sender) {
             return new PaymentRequest.PaymentRequestBuilder().sender(sender).source(source);
         }
 

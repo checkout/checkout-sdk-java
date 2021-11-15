@@ -3,12 +3,13 @@ package com.checkout.apm.fawry;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.Currency;
-import com.checkout.payments.AlternativePaymentSourceResponse;
-import com.checkout.payments.GetPaymentResponse;
-import com.checkout.payments.PaymentPending;
-import com.checkout.payments.PaymentRequest;
-import com.checkout.payments.PaymentResponse;
-import com.checkout.payments.apm.FawrySource;
+import com.checkout.common.PaymentSourceType;
+import com.checkout.payments.PaymentStatus;
+import com.checkout.payments.request.PaymentRequest;
+import com.checkout.payments.request.source.apm.RequestFawrySource;
+import com.checkout.payments.response.GetPaymentResponse;
+import com.checkout.payments.response.PaymentResponse;
+import com.checkout.payments.response.source.AlternativePaymentSourceResponse;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -35,14 +36,14 @@ class FawryPaymentsTestIT extends SandboxTestFixture {
 
         nap();
 
-        final GetPaymentResponse paymentApproved = blocking(defaultApi.paymentsClient().getAsync(paymentId));
+        final GetPaymentResponse paymentApproved = blocking(defaultApi.paymentsClient().getPayment(paymentId));
         assertNotNull(paymentApproved);
-        assertEquals("Captured", paymentApproved.getStatus());
+        assertEquals(PaymentStatus.CAPTURED, paymentApproved.getStatus());
         assertNotNull(paymentApproved.getSource());
         assertTrue(paymentApproved.getSource() instanceof AlternativePaymentSourceResponse);
 
         final AlternativePaymentSourceResponse approvedSource = (AlternativePaymentSourceResponse) paymentApproved.getSource();
-        assertEquals("fawry", approvedSource.getType());
+        assertEquals(PaymentSourceType.FAWRY, approvedSource.getType());
         assertNotNull(approvedSource.get("reference_number"));
         assertEquals("Fawry Demo Payment", approvedSource.get("description"));
 
@@ -60,14 +61,14 @@ class FawryPaymentsTestIT extends SandboxTestFixture {
 
         nap();
 
-        final GetPaymentResponse paymentCanceled = blocking(defaultApi.paymentsClient().getAsync(paymentId));
+        final GetPaymentResponse paymentCanceled = blocking(defaultApi.paymentsClient().getPayment(paymentId));
         assertNotNull(paymentCanceled);
-        assertEquals("Canceled", paymentCanceled.getStatus());
+        assertEquals(PaymentStatus.CANCELED, paymentCanceled.getStatus());
         assertNotNull(paymentCanceled.getSource());
         assertTrue(paymentCanceled.getSource() instanceof AlternativePaymentSourceResponse);
 
         final AlternativePaymentSourceResponse approvedSource = (AlternativePaymentSourceResponse) paymentCanceled.getSource();
-        assertEquals("fawry", approvedSource.getType());
+        assertEquals(PaymentSourceType.FAWRY, approvedSource.getType());
         assertNotNull(approvedSource.get("reference_number"));
         assertEquals("Fawry Demo Payment", approvedSource.get("description"));
 
@@ -75,12 +76,12 @@ class FawryPaymentsTestIT extends SandboxTestFixture {
 
     private String makeFawryPayment() {
 
-        final FawrySource fawrySource = FawrySource.builder()
+        final RequestFawrySource fawrySource = RequestFawrySource.builder()
                 .description("Fawry Demo Payment")
                 .customerEmail("bruce@wayne-enterprises.com")
                 .customerMobile("01058375055")
                 .products(Collections.singletonList(
-                        FawrySource.Product.builder()
+                        RequestFawrySource.Product.builder()
                                 .id("0123456789")
                                 .description("Fawry Demo Product")
                                 .price(1000L)
@@ -89,34 +90,28 @@ class FawryPaymentsTestIT extends SandboxTestFixture {
                 ))
                 .build();
 
-        final PaymentRequest<FawrySource> request = PaymentRequest.fawry(fawrySource, Currency.EGP, 1000L);
+        final PaymentRequest request = PaymentRequest.fawry(fawrySource, Currency.EGP, 1000L);
 
-        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestAsync(request));
-
+        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);
-
-        final PaymentPending paymentPending = response.getPending();
-        assertNotNull(paymentPending);
-        assertEquals("Pending", paymentPending.getStatus());
-
-        assertNotNull(paymentPending.getLink("self"));
-        assertNotNull(paymentPending.getLink("approve"));
-        assertNotNull(paymentPending.getLink("cancel"));
-
-        return paymentPending.getId();
+        assertEquals(PaymentStatus.PENDING, response.getStatus());
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("approve"));
+        assertNotNull(response.getLink("cancel"));
+        return response.getId();
 
     }
 
     private String validatePaymentPending(final String paymentId) {
 
-        final GetPaymentResponse pendingPayment = blocking(defaultApi.paymentsClient().getAsync(paymentId));
+        final GetPaymentResponse pendingPayment = blocking(defaultApi.paymentsClient().getPayment(paymentId));
         assertNotNull(pendingPayment);
-        assertEquals("Pending", pendingPayment.getStatus());
+        assertEquals(PaymentStatus.PENDING, pendingPayment.getStatus());
         assertNotNull(pendingPayment.getSource());
         assertTrue(pendingPayment.getSource() instanceof AlternativePaymentSourceResponse);
 
         final AlternativePaymentSourceResponse source = (AlternativePaymentSourceResponse) pendingPayment.getSource();
-        assertEquals("fawry", source.getType());
+        assertEquals(PaymentSourceType.FAWRY, source.getType());
         assertNotNull(source.get("reference_number"));
         assertEquals("Fawry Demo Payment", source.get("description"));
 

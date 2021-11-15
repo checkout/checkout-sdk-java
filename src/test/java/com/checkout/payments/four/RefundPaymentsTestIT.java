@@ -1,12 +1,9 @@
 package com.checkout.payments.four;
 
-import com.checkout.payments.four.refund.RefundRequest;
-import com.checkout.payments.four.refund.RefundResponse;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.response.PaymentResponse;
-import com.checkout.payments.four.response.source.ResponseCardSource;
-import com.checkout.payments.four.sender.RequestCorporateSender;
+import com.checkout.payments.four.sender.PaymentCorporateSender;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -23,11 +20,11 @@ class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
     void shouldRefundCardPayment() {
 
         final RequestCardSource source = getRequestCardSource();
-        final RequestCorporateSender sender = getCorporateSender();
+        final PaymentCorporateSender sender = getCorporateSender();
         final PaymentRequest request = getCardSourcePayment(source, sender, false);
 
         // payment
-        final PaymentResponse<ResponseCardSource> paymentResponse = makeCardPayment(request);
+        final PaymentResponse paymentResponse = makeCardPayment(request);
         assertNotNull(paymentResponse.getLink("capture"));
 
         // capture
@@ -53,7 +50,7 @@ class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
     void shouldRefundTokenPayment() {
 
         // Make Payment
-        final PaymentResponse<ResponseCardSource> paymentResponse = makeTokenPayment();
+        final PaymentResponse paymentResponse = makeTokenPayment();
         assertNotNull(paymentResponse.getLink("capture"));
 
         // Capture Payment

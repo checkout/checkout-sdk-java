@@ -1,9 +1,6 @@
 package com.checkout.payments;
 
-import com.checkout.PlatformType;
-import com.checkout.SandboxTestFixture;
-import com.checkout.TestHelper;
-import org.apache.commons.lang3.StringUtils;
+import com.checkout.payments.response.PaymentResponse;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -12,63 +9,79 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class CaptureTestIT extends SandboxTestFixture {
+class CaptureTestIT extends AbstractPaymentsTestIT {
 
-    CaptureTestIT() {
-        super(PlatformType.DEFAULT);
+    @Test
+    void shouldCapturePayment() {
+
+        final PaymentResponse paymentResponse = makeCardPayment(false, 10L);
+
+        assertNotNull(paymentResponse.getLink("capture"));
+
+        final Map<String, Object> metadata = new HashMap<>();
+        metadata.put("CaptureTestIT", "shouldCapturePayment");
+
+        final CaptureRequest captureRequest = CaptureRequest.builder()
+                .reference("Full Capture")
+                .metadata(metadata)
+                .build();
+
+        final CaptureResponse captureResponse = blocking(defaultApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest));
+        assertNotNull(captureResponse);
+        assertNotNull(captureResponse.getActionId());
+        assertFalse(captureResponse.getActionId().isEmpty());
+        assertEquals(captureRequest.getReference(), captureResponse.getReference());
+
     }
 
     @Test
-    void shouldFullyCapturePayment() throws Exception {
+    void shouldCapturePaymentPartially() {
 
-        final PaymentProcessed payment = makePayment();
+        final PaymentResponse paymentResponse = makeCardPayment(false, 10L);
+
+        assertNotNull(paymentResponse.getLink("capture"));
 
         final Map<String, Object> metadata = new HashMap<>();
-        metadata.put("CaptureTests", "can_fully_capture_payment");
+        metadata.put("CaptureTestIT", "shouldCapturePaymentPartially");
 
-        final CaptureRequest captureRequest = new CaptureRequest();
-        captureRequest.setReference("Full Capture");
-        captureRequest.setMetadata(metadata);
+        final CaptureRequest captureRequest = CaptureRequest.builder()
+                .amount(5L)
+                .reference("Partial Capture")
+                .metadata(metadata)
+                .build();
 
-        final CaptureResponse captureResponse = defaultApi.paymentsClient().captureAsync(payment.getId(), captureRequest).get();
+        final CaptureResponse captureResponse = blocking(defaultApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest));
         assertNotNull(captureResponse);
-        assertFalse(StringUtils.isEmpty(captureResponse.getActionId()));
+        assertNotNull(captureResponse.getActionId());
+        assertFalse(captureResponse.getActionId().isEmpty());
         assertEquals(captureRequest.getReference(), captureResponse.getReference());
+
     }
 
     @Test
-    void shouldCapturePaymentPartially() throws Exception {
+    void shouldCapturePaymentIdempotently() {
 
-        final PaymentProcessed payment = makePayment();
+        final PaymentResponse paymentResponse = makeCardPayment(false, 10L);
+
+        assertNotNull(paymentResponse.getLink("capture"));
 
         final Map<String, Object> metadata = new HashMap<>();
-        metadata.put("CaptureTests", "can_partially_capture_payment");
+        metadata.put("CaptureTestIT", "shouldCapturePayment");
 
-        final CaptureRequest captureRequest = new CaptureRequest();
-        captureRequest.setAmount(500L);
-        captureRequest.setReference("Partial Capture");
-        captureRequest.setMetadata(metadata);
+        final CaptureRequest captureRequest = CaptureRequest.builder()
+                .reference("Full Capture")
+                .metadata(metadata)
+                .build();
 
-        final CaptureResponse captureResponse = defaultApi.paymentsClient().captureAsync(payment.getId(), captureRequest).get();
-        assertNotNull(captureResponse);
-        assertFalse(StringUtils.isEmpty(captureResponse.getActionId()));
-        assertEquals(captureRequest.getReference(), captureResponse.getReference());
-    }
+        final CaptureResponse captureResponse1 = blocking(defaultApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest, IDEMPOTENCY_KEY));
+        assertNotNull(captureResponse1);
 
-    private PaymentProcessed makePayment() {
+        final CaptureResponse captureResponse2 = blocking(defaultApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest, IDEMPOTENCY_KEY));
+        assertNotNull(captureResponse2);
 
-        final PaymentRequest<CardSource> paymentRequest = TestHelper.createCardPaymentRequest(1000L);
-        paymentRequest.setCapture(false);
+        assertEquals(captureResponse1.getActionId(), captureResponse2.getActionId());
 
-        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
-        assertTrue(paymentResponse.getPayment().getLinks().containsKey("capture"));
-        assertNotNull(paymentResponse.getPayment().getProcessing());
-        assertNotNull(paymentResponse.getPayment().getProcessing().getAcquirerTransactionId());
-        assertNotNull(paymentResponse.getPayment().getProcessing().getRetrievalReferenceNumber());
-
-        return paymentResponse.getPayment();
     }
 
 }

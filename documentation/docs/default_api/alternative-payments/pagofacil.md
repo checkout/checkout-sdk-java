@@ -8,17 +8,15 @@ The full list of request body parameters and possible outcomes can be found [her
 ## Request a "Redirect" Oxxo payment
 
 ```java
-PagoFacilSource source = PagoFacilSource.builder()
+RequestPagoFacilSource source = RequestPagoFacilSource.builder()
         .country()
         .description()
         .payer(Payer.builder().build())
         .build();
 
-PaymentRequest<PagoFacilSource> request = PaymentRequest.pagoFacil(source, Currency.ARS, 1000L);
+PaymentRequest request = PaymentRequest.pagoFacil(source, Currency.ARS, 10L);
 
 PaymentResponse response = api.paymentsClient().requestAsync(request).get();
-
-String redirectURL = response.getPending().getRedirectLink().getHref()
 ```
 
 ## Succeed a Pago facil payment

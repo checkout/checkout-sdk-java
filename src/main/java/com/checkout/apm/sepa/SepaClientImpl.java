@@ -4,7 +4,6 @@ import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorizationType;
-import com.checkout.common.Resource;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -13,7 +12,7 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 public class SepaClientImpl extends AbstractClient implements SepaClient {
 
     private static final String SEPA_MANDATES = "sepa/mandates";
-    private static final String PPRO = "/ppro";
+    private static final String PPRO = "ppro";
     private static final String CANCEL = "cancel";
     private static final String MANDATE_ID = "mandateId";
 
@@ -28,9 +27,9 @@ public class SepaClientImpl extends AbstractClient implements SepaClient {
     }
 
     @Override
-    public CompletableFuture<Resource> cancelMandate(final String mandateId) {
+    public CompletableFuture<SepaResource> cancelMandate(final String mandateId) {
         validateParams(MANDATE_ID, mandateId);
-        return apiClient.postAsync(buildPath(SEPA_MANDATES, mandateId, CANCEL), sdkAuthorization(), Resource.class, null, null);
+        return apiClient.postAsync(buildPath(SEPA_MANDATES, mandateId, CANCEL), sdkAuthorization(), SepaResource.class, null, null);
     }
 
     @Override
@@ -40,9 +39,9 @@ public class SepaClientImpl extends AbstractClient implements SepaClient {
     }
 
     @Override
-    public CompletableFuture<Resource> cancelMandateViaPPRO(final String mandateId) {
+    public CompletableFuture<SepaResource> cancelMandateViaPPRO(final String mandateId) {
         validateParams(MANDATE_ID, mandateId);
-        return apiClient.postAsync(buildPath(PPRO, SEPA_MANDATES, mandateId, CANCEL), sdkAuthorization(), Resource.class, null, null);
+        return apiClient.postAsync(buildPath(PPRO, SEPA_MANDATES, mandateId, CANCEL), sdkAuthorization(), SepaResource.class, null, null);
     }
 
 }

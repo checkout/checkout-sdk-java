@@ -7,19 +7,20 @@ import com.checkout.common.Currency;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
 import com.checkout.common.ThreeDSEnrollmentStatus;
+import com.checkout.payments.PaymentStatus;
+import com.checkout.payments.ThreeDSEnrollment;
+import com.checkout.payments.ThreeDSRequest;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.Payments;
-import com.checkout.payments.four.request.ThreeDSRequest;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.request.source.RequestIdSource;
 import com.checkout.payments.four.request.source.RequestTokenSource;
+import com.checkout.payments.four.response.GetPaymentResponse;
 import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.payments.four.response.PaymentResponseBalances;
-import com.checkout.payments.four.response.PaymentStatus;
-import com.checkout.payments.four.response.ThreeDSEnrollmentData;
-import com.checkout.payments.four.response.source.ResponseCardSource;
-import com.checkout.payments.four.sender.RequestCorporateSender;
-import com.checkout.payments.four.sender.RequestIndividualSender;
+import com.checkout.payments.four.response.source.CardResponseSource;
+import com.checkout.payments.four.sender.PaymentCorporateSender;
+import com.checkout.payments.four.sender.PaymentIndividualSender;
 import com.checkout.tokens.four.response.CardTokenResponse;
 import org.junit.jupiter.api.Test;
 
@@ -46,7 +47,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .stored(false)
                 .build();
 
-        final RequestIndividualSender sender = RequestIndividualSender.builder()
+        final PaymentIndividualSender sender = PaymentIndividualSender.builder()
                 .firstName("John")
                 .lastName("Doe")
                 .address(Address.builder()
@@ -64,7 +65,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .currency(Currency.EUR)
                 .build();
 
-        final PaymentResponse<ResponseCardSource> paymentResponse = blocking(fourApi.paymentsClient().requestPayment(request));
+        final PaymentResponse paymentResponse = blocking(fourApi.paymentsClient().requestPayment(request));
 
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getId());
@@ -91,7 +92,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
         assertNotNull(paymentResponse.getProcessing());
         assertNotNull(paymentResponse.getProcessing().getAcquirerTransactionId());
         assertNotNull(paymentResponse.getProcessing().getRetrievalReferenceNumber());
-        final ResponseCardSource responseCardSource = paymentResponse.getSource();
+        final CardResponseSource responseCardSource = (CardResponseSource) paymentResponse.getSource();
         assertNotNull(responseCardSource);
         assertEquals(PaymentSourceType.CARD, responseCardSource.getType());
         assertEquals(CardSourceHelper.Visa.EXPIRY_MONTH, (int) responseCardSource.getExpiryMonth());
@@ -111,7 +112,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .stored(false)
                 .build();
 
-        final RequestIndividualSender sender = RequestIndividualSender.builder()
+        final PaymentIndividualSender sender = PaymentIndividualSender.builder()
                 .firstName("John")
                 .lastName("Doe")
                 .address(Address.builder()
@@ -129,12 +130,12 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .reference(UUID.randomUUID().toString())
                 .amount(45L)
                 .currency(Currency.EUR)
-                .threeDSRequest(threeDSRequest)
+                .threeDS(threeDSRequest)
                 .successUrl("https://test.checkout.com/success")
                 .failureUrl("https://test.checkout.com/failure")
                 .build();
 
-        final PaymentResponse<ResponseCardSource> paymentResponse = blocking(fourApi.paymentsClient().requestPayment(request));
+        final PaymentResponse paymentResponse = blocking(fourApi.paymentsClient().requestPayment(request));
 
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getId());
@@ -143,21 +144,21 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
         assertFalse(paymentResponse.isApproved());
         assertEquals(PaymentStatus.PENDING, paymentResponse.getStatus());
         assertNull(paymentResponse.getResponseSummary());
-        assertEquals(ThreeDSEnrollmentData.builder().enrolled(ThreeDSEnrollmentStatus.YES).build(), paymentResponse.getThreeDSEnrollment());
+        assertEquals(ThreeDSEnrollment.builder().enrolled(ThreeDSEnrollmentStatus.YES).downgraded(false).build(), paymentResponse.getThreeDSEnrollment());
         assertNull(paymentResponse.getCustomer());
         assertNotNull(paymentResponse.getReference());
         assertNull(paymentResponse.getProcessing());
         assertEquals(3, paymentResponse.getLinks().size());
         assertNull(paymentResponse.getBalances());
-        final ResponseCardSource responseCardSource = paymentResponse.getSource();
+        final CardResponseSource responseCardSource = (CardResponseSource) paymentResponse.getSource();
         assertNull(responseCardSource);
 
-        final PaymentResponse paymentDetails = blocking(fourApi.paymentsClient().getPayment(paymentResponse.getId()));
+        final GetPaymentResponse paymentDetails = blocking(fourApi.paymentsClient().getPayment(paymentResponse.getId()));
         assertNotNull(paymentDetails);
-        assertNotNull(paymentDetails.getThreeDSEnrollment());
-        assertEquals(ThreeDSEnrollmentStatus.YES, paymentDetails.getThreeDSEnrollment().getEnrolled());
-        assertFalse(paymentDetails.getThreeDSEnrollment().isDowngraded());
-        assertNotNull(paymentDetails.getThreeDSEnrollment().getVersion());
+        assertNotNull(paymentDetails.getThreeDSData());
+        assertEquals(ThreeDSEnrollmentStatus.YES, paymentDetails.getThreeDSData().getEnrolled());
+        assertFalse(paymentDetails.getThreeDSData().getDowngraded());
+        assertNotNull(paymentDetails.getThreeDSData().getVersion());
     }
 
     @Test
@@ -171,7 +172,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .stored(false)
                 .build();
 
-        final RequestIndividualSender sender = RequestIndividualSender.builder()
+        final PaymentIndividualSender sender = PaymentIndividualSender.builder()
                 .firstName("John")
                 .lastName("Doe")
                 .address(Address.builder()
@@ -189,7 +190,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .currency(Currency.EUR)
                 .build();
 
-        final PaymentResponse<ResponseCardSource> paymentResponse = blocking(fourApi.paymentsClient().requestPayment(request));
+        final PaymentResponse paymentResponse = blocking(fourApi.paymentsClient().requestPayment(request));
 
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getId());
@@ -213,7 +214,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .totalVoided(0L)
                 .build(), paymentResponse.getBalances()
         );
-        final ResponseCardSource responseCardSource = paymentResponse.getSource();
+        final CardResponseSource responseCardSource = (CardResponseSource) paymentResponse.getSource();
         assertNotNull(responseCardSource);
         assertEquals(PaymentSourceType.CARD, responseCardSource.getType());
         assertEquals(CardSourceHelper.Visa.EXPIRY_MONTH, (int) responseCardSource.getExpiryMonth());
@@ -225,15 +226,15 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
     @Test
     void shouldMakeIdSourcePayment() {
 
-        final PaymentResponse<ResponseCardSource> cardPaymentResponse = makeCardPayment(false);
+        final PaymentResponse cardPaymentResponse = makeCardPayment(false);
 
         // id payment
         final RequestIdSource idSource = RequestIdSource.builder()
-                .id(cardPaymentResponse.getSource().getId())
+                .id(((CardResponseSource) cardPaymentResponse.getSource()).getId())
                 .cvv(CardSourceHelper.Visa.CVV)
                 .build();
 
-        final RequestIndividualSender sender = getIndividualSender();
+        final PaymentIndividualSender sender = getIndividualSender();
 
         final PaymentRequest idSourceRequest = Payments.id(idSource).individualSender(sender)
                 .capture(false)
@@ -242,7 +243,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .currency(Currency.EUR)
                 .build();
 
-        final PaymentResponse<ResponseCardSource> paymentResponse = blocking(fourApi.paymentsClient().requestPayment(idSourceRequest));
+        final PaymentResponse paymentResponse = blocking(fourApi.paymentsClient().requestPayment(idSourceRequest));
 
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getId());
@@ -266,7 +267,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .totalVoided(0L)
                 .build(), paymentResponse.getBalances()
         );
-        final ResponseCardSource responseCardSource = paymentResponse.getSource();
+        final CardResponseSource responseCardSource = (CardResponseSource) paymentResponse.getSource();
         assertNotNull(responseCardSource);
         assertEquals(PaymentSourceType.CARD, responseCardSource.getType());
         assertEquals(CardSourceHelper.Visa.EXPIRY_MONTH, (int) responseCardSource.getExpiryMonth());
@@ -291,7 +292,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .phone(Phone.builder().number("675676541").countryCode("+34").build())
                 .build();
 
-        final RequestCorporateSender sender = getCorporateSender();
+        final PaymentCorporateSender sender = getCorporateSender();
 
         final PaymentRequest tokenRequest = Payments.token(tokenSource).corporateSender(sender)
                 .capture(false)
@@ -300,7 +301,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .currency(Currency.USD)
                 .build();
 
-        final PaymentResponse<ResponseCardSource> paymentResponse = blocking(fourApi.paymentsClient().requestPayment(tokenRequest));
+        final PaymentResponse paymentResponse = blocking(fourApi.paymentsClient().requestPayment(tokenRequest));
 
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getId());
@@ -324,7 +325,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .totalVoided(0L)
                 .build(), paymentResponse.getBalances()
         );
-        final ResponseCardSource responseCardSource = paymentResponse.getSource();
+        final CardResponseSource responseCardSource = (CardResponseSource) paymentResponse.getSource();
         assertNotNull(responseCardSource);
         assertEquals(PaymentSourceType.CARD, responseCardSource.getType());
 
@@ -346,7 +347,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .phone(Phone.builder().number("675676541").countryCode("+34").build())
                 .build();
 
-        final RequestIndividualSender sender = getIndividualSender();
+        final PaymentIndividualSender sender = getIndividualSender();
 
         final ThreeDSRequest threeDSRequest = ThreeDSRequest.builder().enabled(true).build();
 
@@ -355,12 +356,12 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .reference(UUID.randomUUID().toString())
                 .amount(677777L)
                 .currency(Currency.USD)
-                .threeDSRequest(threeDSRequest)
+                .threeDS(threeDSRequest)
                 .successUrl("https://test.checkout.com/success")
                 .failureUrl("https://test.checkout.com/failure")
                 .build();
 
-        final PaymentResponse<ResponseCardSource> paymentResponse = blocking(fourApi.paymentsClient().requestPayment(tokenRequest));
+        final PaymentResponse paymentResponse = blocking(fourApi.paymentsClient().requestPayment(tokenRequest));
 
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getId());
@@ -369,13 +370,13 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
         assertFalse(paymentResponse.isApproved());
         assertEquals(PaymentStatus.PENDING, paymentResponse.getStatus());
         assertNull(paymentResponse.getResponseSummary());
-        assertEquals(ThreeDSEnrollmentData.builder().enrolled(ThreeDSEnrollmentStatus.YES).build(), paymentResponse.getThreeDSEnrollment());
+        assertEquals(ThreeDSEnrollment.builder().enrolled(ThreeDSEnrollmentStatus.YES).downgraded(false).build(), paymentResponse.getThreeDSEnrollment());
         assertNull(paymentResponse.getCustomer());
         assertNotNull(paymentResponse.getReference());
         assertNull(paymentResponse.getProcessing());
         assertEquals(3, paymentResponse.getLinks().size());
         assertNull(paymentResponse.getBalances());
-        final ResponseCardSource responseCardSource = paymentResponse.getSource();
+        final CardResponseSource responseCardSource = (CardResponseSource) paymentResponse.getSource();
         assertNull(responseCardSource);
 
     }

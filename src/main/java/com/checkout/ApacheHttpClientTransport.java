@@ -58,7 +58,6 @@ public class ApacheHttpClientTransport implements Transport {
     private static final String CKO_REQUEST_ID = "Cko-Request-Id";
     private static final String NO_REQUEST_ID_SUPPLIED = "NO_REQUEST_ID_SUPPLIED";
     private static final String PATH = "path";
-    private static final String TYPE = "type";
     private final URI baseUri;
     private final CloseableHttpClient httpClient;
 
@@ -151,7 +150,7 @@ public class ApacheHttpClientTransport implements Transport {
             final MarketplaceFileRequest fileRequest = (MarketplaceFileRequest) abstractFileRequest;
             builder.addBinaryBody(PATH, fileRequest.getFile(), fileRequest.getContentType(), fileRequest.getFile().getName())
                     .addTextBody(PURPOSE, fileRequest.getPurpose().getPurpose(), ContentType.DEFAULT_TEXT)
-                    .addTextBody(TYPE, fileRequest.getType().getType(), ContentType.DEFAULT_TEXT)
+                    .addTextBody(CheckoutUtils.TYPE, fileRequest.getType().getType(), ContentType.DEFAULT_TEXT)
                     .build();
         } else {
             throw new CheckoutException("Not supported request object");

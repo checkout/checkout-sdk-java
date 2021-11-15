@@ -28,3 +28,4 @@ public final class ThreeDSRequest {
     private Exemption exemption;
 
 }
+

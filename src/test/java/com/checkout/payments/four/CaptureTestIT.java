@@ -1,9 +1,6 @@
 package com.checkout.payments.four;
 
-import com.checkout.payments.four.capture.CaptureRequest;
-import com.checkout.payments.four.capture.CaptureResponse;
 import com.checkout.payments.four.response.PaymentResponse;
-import com.checkout.payments.four.response.source.ResponseCardSource;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -18,7 +15,7 @@ class CaptureTestIT extends AbstractPaymentsTestIT {
     @Test
     void shouldCaptureCardPayment() {
 
-        final PaymentResponse<ResponseCardSource> paymentResponse = makeCardPayment(false);
+        final PaymentResponse paymentResponse = makeCardPayment(false);
 
         assertNotNull(paymentResponse.getLink("capture"));
 
@@ -41,7 +38,7 @@ class CaptureTestIT extends AbstractPaymentsTestIT {
     @Test
     void shouldCaptureTokenPayment() {
 
-        final PaymentResponse<ResponseCardSource> paymentResponse = makeTokenPayment();
+        final PaymentResponse paymentResponse = makeTokenPayment();
 
         assertNotNull(paymentResponse.getLink("capture"));
 
@@ -64,7 +61,7 @@ class CaptureTestIT extends AbstractPaymentsTestIT {
     @Test
     void shouldCapturePaymentPartially() {
 
-        final PaymentResponse<ResponseCardSource> paymentResponse = makeCardPayment(false);
+        final PaymentResponse paymentResponse = makeCardPayment(false);
 
         assertNotNull(paymentResponse.getLink("capture"));
 
@@ -72,7 +69,7 @@ class CaptureTestIT extends AbstractPaymentsTestIT {
         metadata.put("CaptureTestIT", "shouldCapturePaymentPartially");
 
         final CaptureRequest captureRequest = CaptureRequest.builder()
-                .amount(5)
+                .amount(5L)
                 .reference("Partial Capture")
                 .metadata(metadata)
                 .build();

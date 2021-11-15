@@ -7,10 +7,14 @@ import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.Phone;
+import com.checkout.payments.request.PayoutRequest;
+import com.checkout.payments.request.destination.PaymentRequestCardDestination;
+import com.checkout.payments.response.PaymentResponse;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class RequestPayoutsTestIT extends SandboxTestFixture {
@@ -22,7 +26,7 @@ class RequestPayoutsTestIT extends SandboxTestFixture {
     @Test
     void shouldRequestPayout() throws Exception {
 
-        final PaymentCardDestination paymentCardDestination = PaymentCardDestination.builder()
+        final PaymentRequestCardDestination paymentCardDestination = PaymentRequestCardDestination.builder()
                 .billingAddress(Address.builder()
                         .addressLine1("CheckoutSdk.com")
                         .addressLine2("90 Tottenham Court Road")
@@ -43,18 +47,19 @@ class RequestPayoutsTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final PaymentRequest<CardSource> payoutRequest = new PaymentRequest<>();
-        payoutRequest.setDestination(paymentCardDestination);
-        payoutRequest.setCurrency(Currency.GBP);
-        payoutRequest.setAmount(10L);
-        payoutRequest.setCapture(false);
-        payoutRequest.setReference(UUID.randomUUID().toString());
-        payoutRequest.setDestination(paymentCardDestination);
-        payoutRequest.setPurpose(Purpose.EDUCATION);
+        final PayoutRequest payoutRequest = PayoutRequest.builder()
+                .destination(paymentCardDestination)
+                .capture(false)
+                .currency(Currency.GBP)
+                .amount(10L)
+                .reference(UUID.randomUUID().toString())
+                .purpose(Purpose.EDUCATION)
+                .build();
 
-        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestAsync(payoutRequest).get();
-
-        assertNotNull(paymentResponse.getPending());
+        final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestPayout(payoutRequest).get();
+        assertNotNull(paymentResponse);
+        assertNotNull(paymentResponse.getId());
+        assertEquals(PaymentStatus.PENDING, paymentResponse.getStatus());
 
     }
 }

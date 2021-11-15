@@ -4,15 +4,15 @@ import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
-import com.checkout.payments.AlternativePaymentSourceResponse;
-import com.checkout.payments.GetPaymentResponse;
-import com.checkout.payments.PaymentPending;
-import com.checkout.payments.PaymentProcessed;
-import com.checkout.payments.PaymentRequest;
-import com.checkout.payments.PaymentResponse;
-import com.checkout.payments.apm.BoletoSource;
-import com.checkout.payments.apm.IntegrationType;
-import com.checkout.payments.apm.Payer;
+import com.checkout.common.PaymentSourceType;
+import com.checkout.payments.PaymentStatus;
+import com.checkout.payments.request.PaymentRequest;
+import com.checkout.payments.request.source.apm.IntegrationType;
+import com.checkout.payments.request.source.apm.Payer;
+import com.checkout.payments.request.source.apm.RequestBoletoSource;
+import com.checkout.payments.response.GetPaymentResponse;
+import com.checkout.payments.response.PaymentResponse;
+import com.checkout.payments.response.source.AlternativePaymentSourceResponse;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,41 +28,36 @@ class BoletoPaymentsTestIT extends SandboxTestFixture {
     @Test
     void shouldSucceedBoletoRedirectPayment() {
 
-        final BoletoSource boletoSource = BoletoSource.builder()
+        final RequestBoletoSource boletoSource = RequestBoletoSource.builder()
                 .country(CountryCode.BR)
                 .description("boleto payment")
                 .integrationType(IntegrationType.REDIRECT)
                 .payer(Payer.builder().email("john@doe-enterprises.com").name("John Doe").document("53033315550").build())
                 .build();
 
-        final PaymentRequest<BoletoSource> request = PaymentRequest.boleto(boletoSource, Currency.BRL, 100L);
+        final PaymentRequest request = PaymentRequest.boleto(boletoSource, Currency.BRL, 100L);
 
         nap();
 
-        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestAsync(request));
-
+        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);
-
-        final PaymentPending paymentPending = response.getPending();
-        assertNotNull(paymentPending);
-        assertEquals("Pending", paymentPending.getStatus());
-
-        assertNotNull(paymentPending.getLink("self"));
-        assertNotNull(paymentPending.getLink("redirect"));
+        assertEquals(PaymentStatus.PENDING, response.getStatus());
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("redirect"));
 
         // Get payment
 
         nap();
 
-        final GetPaymentResponse getPaymentResponse = blocking(defaultApi.paymentsClient().getAsync(paymentPending.getId()));
+        final GetPaymentResponse getPaymentResponse = blocking(defaultApi.paymentsClient().getPayment(response.getId()));
 
         assertNotNull(response);
-        assertEquals("Pending", getPaymentResponse.getStatus());
+        assertEquals(PaymentStatus.PENDING, getPaymentResponse.getStatus());
 
         assertNotNull(getPaymentResponse.getSource());
         assertTrue(getPaymentResponse.getSource() instanceof AlternativePaymentSourceResponse);
         final AlternativePaymentSourceResponse source = (AlternativePaymentSourceResponse) getPaymentResponse.getSource();
-        assertEquals("boleto", source.getType());
+        assertEquals(PaymentSourceType.BOLETO, source.getType());
         assertEquals("redirect", source.get("integration_type"));
         assertNotNull(source.get("dlocal_order_id"));
         assertNotNull(source.get("dlocal_payment_id"));
@@ -73,41 +68,37 @@ class BoletoPaymentsTestIT extends SandboxTestFixture {
     @Test
     void shouldMakeBoletoDirectPayment_thirdPartyRejection() {
 
-        final BoletoSource boletoSource = BoletoSource.builder()
+        final RequestBoletoSource boletoSource = RequestBoletoSource.builder()
                 .country(CountryCode.BR)
                 .description("boleto payment")
                 .integrationType(IntegrationType.DIRECT)
                 .payer(Payer.builder().email("john@doe-enterprises.com").name("John Doe").document("53033315550").build())
                 .build();
 
-        final PaymentRequest<BoletoSource> request = PaymentRequest.boleto(boletoSource, Currency.BRL, 100L);
+        final PaymentRequest request = PaymentRequest.boleto(boletoSource, Currency.BRL, 100L);
 
         nap();
 
-        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestAsync(request));
-
+        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);
-
-        final PaymentProcessed paymentProcessed = response.getPayment();
-        assertNotNull(paymentProcessed);
-        assertEquals("Declined", paymentProcessed.getStatus());
-        assertEquals("Rejected", paymentProcessed.getResponseSummary());
-        assertNotNull(paymentProcessed.getLink("self"));
-        assertNotNull(paymentProcessed.getLink("actions"));
+        assertEquals(PaymentStatus.DECLINED, response.getStatus());
+        assertEquals("Rejected", response.getResponseSummary());
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("actions"));
 
         // Get payment
 
         nap();
 
-        final GetPaymentResponse getPaymentResponse = blocking(defaultApi.paymentsClient().getAsync(paymentProcessed.getId()));
+        final GetPaymentResponse getPaymentResponse = blocking(defaultApi.paymentsClient().getPayment(response.getId()));
 
         assertNotNull(response);
-        assertEquals("Declined", getPaymentResponse.getStatus());
+        assertEquals(PaymentStatus.DECLINED, getPaymentResponse.getStatus());
 
         assertNotNull(getPaymentResponse.getSource());
         assertTrue(getPaymentResponse.getSource() instanceof AlternativePaymentSourceResponse);
         final AlternativePaymentSourceResponse source = (AlternativePaymentSourceResponse) getPaymentResponse.getSource();
-        assertEquals("boleto", source.getType());
+        assertEquals(PaymentSourceType.BOLETO, source.getType());
         assertEquals("direct", source.get("integration_type"));
         assertEquals("third_party_rejected", source.get("failure_code"));
         assertNotNull(source.get("dlocal_order_id"));

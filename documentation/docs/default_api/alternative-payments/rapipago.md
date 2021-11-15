@@ -8,17 +8,15 @@ The full list of request body parameters and possible outcomes can be found [her
 ## Request a "Redirect" Rapi Pago payment
 
 ```java
-RapiPagoSource source = RapiPagoSource.builder()
+RequestRapiPagoSource source = RequestRapiPagoSource.builder()
         .country()
         .description()
         .payer(Payer.builder().build())
         .build();
 
-PaymentRequest<RapiPagoSource> request = PaymentRequest.rapiPago(source, Currency.ARS, 1000L);
+PaymentRequest request = PaymentRequest.rapiPago(source, Currency.ARS, 10L);
 
 PaymentResponse response = api.paymentsClient().requestAsync(request).get();
-
-String redirectURL = response.getPending().getRedirectLink().getHref()
 ```
 
 ## Succeed a Rapi pago payment

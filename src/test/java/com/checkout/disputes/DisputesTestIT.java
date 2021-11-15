@@ -3,16 +3,16 @@ package com.checkout.disputes;
 import com.checkout.CheckoutApiException;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
-import com.checkout.TestHelper;
+import com.checkout.TestCardSource;
 import com.checkout.common.Currency;
 import com.checkout.common.FileDetailsResponse;
 import com.checkout.common.FilePurpose;
 import com.checkout.common.FileRequest;
 import com.checkout.common.IdResponse;
 import com.checkout.payments.CaptureRequest;
-import com.checkout.payments.PaymentRequest;
-import com.checkout.payments.PaymentResponse;
-import com.checkout.payments.TokenSource;
+import com.checkout.payments.request.PaymentRequest;
+import com.checkout.payments.request.source.RequestTokenSource;
+import com.checkout.payments.response.PaymentResponse;
 import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
 import org.apache.http.entity.ContentType;
@@ -102,20 +102,23 @@ class DisputesTestIT extends SandboxTestFixture {
     //@Timeout(30)
     void shouldTestFullDisputesWorkFlow() throws Exception {
         //Create a payment who triggers a dispute
-        final CardTokenRequest cardTokenRequest = TestHelper.createCardTokenRequest();
+        final CardTokenRequest cardTokenRequest = createCardTokenRequest();
         final CardTokenResponse cardTokenResponse = blocking(defaultApi.tokensClient().requestAsync(cardTokenRequest));
-        final PaymentRequest<TokenSource> paymentRequest = PaymentRequest.fromSource(
-                new TokenSource(cardTokenResponse.getToken()), Currency.GBP, 1040L);
-        paymentRequest.setCapture(true);
-        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestAsync(paymentRequest));
-        assertTrue(paymentResponse.getPayment().canCapture());
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestTokenSource.builder().token(cardTokenResponse.getToken()).build())
+                .amount(1040L)
+                .currency(Currency.GBP)
+                .capture(true)
+                .build();
+        final PaymentResponse paymentResponse = blocking(defaultApi.paymentsClient().requestPayment(paymentRequest));
+        assertNotNull(paymentResponse.getLink("capture"));
         final CaptureRequest captureRequest = new CaptureRequest();
         captureRequest.setReference(UUID.randomUUID().toString());
-        blocking(defaultApi.paymentsClient().captureAsync(paymentResponse.getPayment().getId(), captureRequest));
+        blocking(defaultApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest));
         //Query for dispute
         DisputesQueryResponse queryResponse = null;
         final DisputesQueryFilter query = DisputesQueryFilter.builder()
-                .paymentId(paymentResponse.getPayment().getId())
+                .paymentId(paymentResponse.getId())
                 .statuses(DisputeStatus.EVIDENCE_REQUIRED.getStatus())
                 .build();
         while (queryResponse == null || queryResponse.getTotalCount() == 0) {
@@ -125,8 +128,8 @@ class DisputesTestIT extends SandboxTestFixture {
         //Get dispute details
         final DisputeDetailsResponse disputeDetails = blocking(defaultApi.disputesClient()
                 .getDisputeDetails(queryResponse.getData().get(0).getId()));
-        assertEquals(paymentResponse.getPayment().getId(), disputeDetails.getPayment().getId());
-        assertEquals(paymentResponse.getPayment().getAmount(), disputeDetails.getPayment().getAmount());
+        assertEquals(paymentResponse.getId(), disputeDetails.getPayment().getId());
+        assertEquals(paymentResponse.getAmount(), disputeDetails.getPayment().getAmount());
         assertNotNull(disputeDetails.getRelevantEvidence());
         //Upload your dispute file evidence
         final URL resource = getClass().getClassLoader().getResource("checkout.pdf");
@@ -186,6 +189,12 @@ class DisputesTestIT extends SandboxTestFixture {
         final IdResponse fileResponse = blocking(defaultApi.disputesClient().uploadFile(fileRequest));
         assertNotNull(fileResponse);
         assertNotNull(fileResponse.getId());
+    }
+
+    private static CardTokenRequest createCardTokenRequest() {
+        final CardTokenRequest request = new CardTokenRequest(TestCardSource.VISA.getNumber(), TestCardSource.VISA.getExpiryMonth(), TestCardSource.VISA.getExpiryYear());
+        request.setCvv(TestCardSource.VISA.getCvv());
+        return request;
     }
 
 }

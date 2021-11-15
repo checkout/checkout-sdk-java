@@ -1,8 +1,15 @@
 package com.checkout.payments;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class RiskRequest {
-    private final boolean enabled;
+@Builder
+@AllArgsConstructor
+public final class RiskRequest {
+
+    private boolean enabled;
+
 }
+

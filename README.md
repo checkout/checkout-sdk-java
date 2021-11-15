@@ -27,6 +27,12 @@ dependencies {
 
 Please check in [GitHub releases](https://github.com/checkout/checkout-sdk-java/releases) for all the versions available.
 
+##### Note
+
+Version 5.0.0 is shipped with new Payment Client implementations. The new approach focuses on a more standardized, easy and reliable way of making payment related operations. 
+
+If you're having problems migrating to the new version, please create an [issue](https://github.com/checkout/checkout-sdk-java/issues/new/choose).
+
 ## How to use the SDK
 
 This SDK can be used with two different pair of API keys provided by Checkout. However, using different API keys imply using specific API features. Please find in the table below the types of keys that can be used within this SDK.
@@ -57,7 +63,7 @@ public static void main(String[] args) {
         .build();
 
     PaymentsClient paymentsClient = checkoutApi.paymentsClient();
-    CompletableFuture<RefundResponse> refundResponse = paymentsClient.refundAsync("payment_id");
+    CompletableFuture<RefundResponse> refundResponse = paymentsClient.refundPayment("payment_id");
     
 }
 ```

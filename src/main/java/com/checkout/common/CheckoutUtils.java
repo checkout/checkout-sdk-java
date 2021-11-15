@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public final class CheckoutUtils {
 
+    public static String TYPE = "type";
+
     private CheckoutUtils() {
     }
 

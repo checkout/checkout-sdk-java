@@ -14,6 +14,6 @@ public interface KlarnaClient {
 
     CompletableFuture<CaptureResponse> capturePayment(String paymentId, OrderCaptureRequest captureRequest);
 
-    CompletableFuture<VoidResponse> voidCapture(String paymentId, VoidRequest voidRequest);
+    CompletableFuture<VoidResponse> voidPayment(String paymentId, VoidRequest voidRequest);
 
 }

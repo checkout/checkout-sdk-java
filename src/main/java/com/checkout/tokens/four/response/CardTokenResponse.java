@@ -1,5 +1,6 @@
 package com.checkout.tokens.four.response;
 
+import com.checkout.common.CardCategory;
 import com.checkout.common.CountryCode;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;

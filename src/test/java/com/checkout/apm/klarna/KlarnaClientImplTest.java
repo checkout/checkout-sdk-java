@@ -156,7 +156,7 @@ class KlarnaClientImplTest {
                 eq(VoidResponse.class), any(VoidRequest.class), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(voidResponse));
 
-        final CompletableFuture<VoidResponse> future = klarnaClient.voidCapture("payment_id", VoidRequest.builder().build());
+        final CompletableFuture<VoidResponse> future = klarnaClient.voidPayment("payment_id", VoidRequest.builder().build());
 
         assertNotNull(future.get());
         assertEquals(voidResponse, future.get());
@@ -172,7 +172,7 @@ class KlarnaClientImplTest {
                 eq(VoidResponse.class), any(VoidRequest.class), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(voidResponse));
 
-        final CompletableFuture<VoidResponse> future = klarnaClient.voidCapture("payment_id", VoidRequest.builder().build());
+        final CompletableFuture<VoidResponse> future = klarnaClient.voidPayment("payment_id", VoidRequest.builder().build());
 
         assertNotNull(future.get());
         assertEquals(voidResponse, future.get());

@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public final class ThreeDSData {
 
-    private boolean downgraded;
+    private Boolean downgraded;
 
     private ThreeDSEnrollmentStatus enrolled;
 

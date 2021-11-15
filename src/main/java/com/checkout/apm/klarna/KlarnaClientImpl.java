@@ -42,7 +42,7 @@ public class KlarnaClientImpl extends AbstractClient implements KlarnaClient {
     }
 
     @Override
-    public CompletableFuture<VoidResponse> voidCapture(final String paymentId, final VoidRequest voidRequest) {
+    public CompletableFuture<VoidResponse> voidPayment(final String paymentId, final VoidRequest voidRequest) {
         validateParams("paymentId", paymentId, "voidRequest", voidRequest);
         return apiClient.postAsync(buildPath(getBaseURL(), ORDERS, paymentId, VOIDS), sdkAuthorization(), VoidResponse.class, voidRequest, null);
     }

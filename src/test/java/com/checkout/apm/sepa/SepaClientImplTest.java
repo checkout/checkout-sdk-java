@@ -1,11 +1,10 @@
 package com.checkout.apm.sepa;
 
 import com.checkout.ApiClient;
+import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
-import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkCredentials;
-import com.checkout.common.Resource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +39,7 @@ class SepaClientImplTest {
     private MandateResponse mandateResponse;
 
     @Mock
-    private Resource resourceResponse;
+    private SepaResource resourceResponse;
 
     private SepaClient sepaClient;
 
@@ -67,10 +66,10 @@ class SepaClientImplTest {
     @Test
     void shouldCancelMandate() throws ExecutionException, InterruptedException {
 
-        when(apiClient.postAsync(eq("sepa/mandates/mandate_id/cancel"), eq(authorization), eq(Resource.class), isNull(), isNull()))
+        when(apiClient.postAsync(eq("sepa/mandates/mandate_id/cancel"), eq(authorization), eq(SepaResource.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(resourceResponse));
 
-        final CompletableFuture<Resource> future = sepaClient.cancelMandate("mandate_id");
+        final CompletableFuture<SepaResource> future = sepaClient.cancelMandate("mandate_id");
 
         assertNotNull(future.get());
         assertEquals(resourceResponse, future.get());
@@ -80,7 +79,7 @@ class SepaClientImplTest {
     @Test
     void shouldGetMandateViaPPRO() throws ExecutionException, InterruptedException {
 
-        when(apiClient.getAsync(eq("/ppro/sepa/mandates/mandate_id"), eq(authorization), eq(MandateResponse.class)))
+        when(apiClient.getAsync(eq("ppro/sepa/mandates/mandate_id"), eq(authorization), eq(MandateResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(mandateResponse));
 
         final CompletableFuture<MandateResponse> future = sepaClient.getMandateViaPPRO("mandate_id");
@@ -93,10 +92,10 @@ class SepaClientImplTest {
     @Test
     void shouldCancelMandateViaPPRO() throws ExecutionException, InterruptedException {
 
-        when(apiClient.postAsync(eq("/ppro/sepa/mandates/mandate_id/cancel"), eq(authorization), eq(Resource.class), isNull(), isNull()))
+        when(apiClient.postAsync(eq("ppro/sepa/mandates/mandate_id/cancel"), eq(authorization), eq(SepaResource.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(resourceResponse));
 
-        final CompletableFuture<Resource> future = sepaClient.cancelMandateViaPPRO("mandate_id");
+        final CompletableFuture<SepaResource> future = sepaClient.cancelMandateViaPPRO("mandate_id");
 
         assertNotNull(future.get());
         assertEquals(resourceResponse, future.get());
