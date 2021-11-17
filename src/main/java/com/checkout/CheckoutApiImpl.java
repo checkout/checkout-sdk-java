@@ -56,26 +56,6 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.riskClient = new RiskClientImpl(apiClient, configuration);
     }
 
-    /**
-     * @deprecated Please use {@link CheckoutSdk} as the entrypoint to create new SDK instances.
-     */
-    @Deprecated
-    public static CheckoutApi create(final String secretKey, final boolean useSandbox, final String publicKey) {
-        final CheckoutConfiguration configuration = new CheckoutConfiguration(secretKey, useSandbox, publicKey);
-        final ApiClient client = new ApiClientImpl(configuration);
-        return new CheckoutApiImpl(client, configuration);
-    }
-
-    /**
-     * @deprecated Please use {@link CheckoutSdk} as the entrypoint to create new SDK instances.
-     */
-    @Deprecated
-    public static CheckoutApi create(final String secretKey, final String uri, final String publicKey) {
-        final CheckoutConfiguration configuration = new CheckoutConfiguration(secretKey, uri);
-        final ApiClient client = new ApiClientImpl(configuration);
-        return new CheckoutApiImpl(client, configuration);
-    }
-
     @Override
     public PaymentsClient paymentsClient() {
         return paymentsClient;

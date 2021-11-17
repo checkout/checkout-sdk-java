@@ -29,12 +29,4 @@ public enum Environment {
         return oauthAuthorizeURI;
     }
 
-    /**
-     * @deprecated Will be removed in a future version
-     */
-    @Deprecated
-    public static Environment lookup(final boolean useSandbox) {
-        return useSandbox ? SANDBOX : PRODUCTION;
-    }
-
 }
