@@ -61,7 +61,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
 
         final RequestIdSource idSource = RequestIdSource.builder()
                 .id(cardPaymentResponse.getSource().getId())
-                .ccv(CardSourceHelper.Visa.CCV)
+                .cvv(CardSourceHelper.Visa.CVV)
                 .build();
 
         final RequestIndividualSender sender = getIndividualSender();

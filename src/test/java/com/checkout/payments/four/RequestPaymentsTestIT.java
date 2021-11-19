@@ -42,7 +42,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .number(CardSourceHelper.Visa.NUMBER)
                 .expiryMonth(CardSourceHelper.Visa.EXPIRY_MONTH)
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
-                .ccv(CardSourceHelper.Visa.CCV)
+                .cvv(CardSourceHelper.Visa.CVV)
                 .stored(false)
                 .build();
 
@@ -107,7 +107,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .number(CardSourceHelper.Visa.NUMBER)
                 .expiryMonth(CardSourceHelper.Visa.EXPIRY_MONTH)
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
-                .ccv(CardSourceHelper.Visa.CCV)
+                .cvv(CardSourceHelper.Visa.CVV)
                 .stored(false)
                 .build();
 
@@ -167,7 +167,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .number(CardSourceHelper.Visa.NUMBER)
                 .expiryMonth(CardSourceHelper.Visa.EXPIRY_MONTH)
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
-                .ccv(CardSourceHelper.Visa.CCV)
+                .cvv(CardSourceHelper.Visa.CVV)
                 .stored(false)
                 .build();
 
@@ -230,7 +230,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
         // id payment
         final RequestIdSource idSource = RequestIdSource.builder()
                 .id(cardPaymentResponse.getSource().getId())
-                .ccv(CardSourceHelper.Visa.CCV)
+                .cvv(CardSourceHelper.Visa.CVV)
                 .build();
 
         final RequestIndividualSender sender = getIndividualSender();

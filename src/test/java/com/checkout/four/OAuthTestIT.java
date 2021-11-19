@@ -39,7 +39,7 @@ public class OAuthTestIT extends SandboxTestFixture {
                 .number(CardSourceHelper.Visa.NUMBER)
                 .expiryMonth(CardSourceHelper.Visa.EXPIRY_MONTH)
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
-                .ccv(CardSourceHelper.Visa.CCV)
+                .cvv(CardSourceHelper.Visa.CVV)
                 .stored(false)
                 .build();
 
