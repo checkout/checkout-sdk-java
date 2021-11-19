@@ -1,7 +1,5 @@
 package com.checkout;
 
-import org.apache.commons.lang3.EnumUtils;
-
 public enum Environment {
 
     SANDBOX("https://api.sandbox.checkout.com/", "https://files.sandbox.checkout.com/", "https://access.sandbox.checkout.com/connect/token"),
@@ -29,14 +27,6 @@ public enum Environment {
 
     public String getOauthAuthorizeURI() {
         return oauthAuthorizeURI;
-    }
-
-    public static Environment fromString(final String environment) {
-        if (EnumUtils.isValidEnum(Environment.class, environment)) {
-            return Environment.valueOf(environment.toUpperCase());
-        } else {
-            return null;
-        }
     }
 
     /**

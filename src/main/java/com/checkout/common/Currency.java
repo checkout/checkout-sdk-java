@@ -1,7 +1,5 @@
 package com.checkout.common;
 
-import org.apache.commons.lang3.EnumUtils;
-
 public enum Currency {
     ALL,
     STN,
@@ -163,13 +161,5 @@ public enum Currency {
     ZAR,
     GEL,
     ZMW;
-
-    public static Currency fromString(final String currency) {
-        if (EnumUtils.isValidEnum(Currency.class, currency)) {
-            return Currency.valueOf(currency.toUpperCase());
-        } else {
-            return null;
-        }
-    }
 
 }
