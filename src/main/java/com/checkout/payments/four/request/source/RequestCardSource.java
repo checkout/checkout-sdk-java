@@ -26,7 +26,7 @@ public final class RequestCardSource extends RequestSource {
 
     private String name;
 
-    private Integer ccv;
+    private Integer cvv;
 
     private boolean stored;
 
@@ -40,7 +40,7 @@ public final class RequestCardSource extends RequestSource {
                               final Integer expiryMonth,
                               final Integer expiryYear,
                               final String name,
-                              final Integer ccv,
+                              final Integer cvv,
                               final boolean stored,
                               final Address billingAddress,
                               final Phone phone) {
@@ -49,7 +49,7 @@ public final class RequestCardSource extends RequestSource {
         this.expiryMonth = expiryMonth;
         this.expiryYear = expiryYear;
         this.name = name;
-        this.ccv = ccv;
+        this.cvv = cvv;
         this.stored = stored;
         this.billingAddress = billingAddress;
         this.phone = phone;

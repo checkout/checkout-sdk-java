@@ -23,7 +23,7 @@ public final class CardTokenRequest {
 
     private String name;
 
-    private String ccv;
+    private String cvv;
 
     @SerializedName("billing_address")
     private Address billingAddress;

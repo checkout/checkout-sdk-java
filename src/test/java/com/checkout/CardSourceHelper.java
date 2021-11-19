@@ -22,7 +22,7 @@ public class CardSourceHelper {
         public static final String NUMBER = "4242424242424242";
         public static final int EXPIRY_MONTH = 6;
         public static final int EXPIRY_YEAR = 2025;
-        public static final Integer CCV = 100;
+        public static final Integer CVV = 100;
 
     }
 
@@ -56,7 +56,7 @@ public class CardSourceHelper {
                 .number(CardSourceHelper.Visa.NUMBER)
                 .expiryMonth(CardSourceHelper.Visa.EXPIRY_MONTH)
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
-                .ccv(CardSourceHelper.Visa.CCV)
+                .cvv(CardSourceHelper.Visa.CVV)
                 .stored(false)
                 .build();
     }

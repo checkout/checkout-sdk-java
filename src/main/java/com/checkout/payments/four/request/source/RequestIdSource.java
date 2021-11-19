@@ -15,13 +15,13 @@ public final class RequestIdSource extends RequestSource {
 
     private String id;
 
-    private Integer ccv;
+    private Integer cvv;
 
     @Builder
-    private RequestIdSource(final String id, final Integer ccv) {
+    private RequestIdSource(final String id, final Integer cvv) {
         super(PaymentSourceType.ID);
         this.id = id;
-        this.ccv = ccv;
+        this.cvv = cvv;
     }
 
     public RequestIdSource() {
