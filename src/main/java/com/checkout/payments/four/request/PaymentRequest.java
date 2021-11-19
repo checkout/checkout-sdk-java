@@ -78,6 +78,7 @@ public class PaymentRequest {
 
     private final ProcessingSettings processing;
 
+    @Builder.Default
     private final Map<String, Object> metadata = new HashMap<>();
 
 }
