@@ -254,12 +254,9 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
         final PreCaptureAssessmentResponse response = blocking(fourApi.riskClient().requestPreCaptureRiskScan(request));
 
         assertNotNull(response);
-
         assertNotNull(response.getAssessmentId());
-        assertNotNull(response.getLink("pre_capture"));
-        assertNotNull(response.getLink("self"));
-        assertNotNull(response.getLink("pre_capture").getLink());
-        assertNotNull(response.getLink("self").getLink());
+        assertNotNull(response.getResult());
+        assertNotNull(response.getResult().getDecision());
     }
 
 }

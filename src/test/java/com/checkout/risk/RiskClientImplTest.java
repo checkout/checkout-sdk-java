@@ -33,7 +33,7 @@ import static org.mockito.Mockito.when;
 class RiskClientImplTest {
 
     private static final String PRE_AUTHENTICATION_PATH = "risk/assessments/pre-authentication";
-    private static final String PRE_CAPTURE_PATH = "risk/assessments/pre-authentication";
+    private static final String PRE_CAPTURE_PATH = "risk/assessments/pre-capture";
 
     @Mock
     private ApiClient apiClient;
