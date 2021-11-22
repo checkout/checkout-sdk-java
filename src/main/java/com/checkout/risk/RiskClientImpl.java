@@ -16,7 +16,7 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 public class RiskClientImpl extends AbstractClient implements RiskClient {
 
     private static final String PRE_AUTHENTICATION_PATH = "risk/assessments/pre-authentication";
-    private static final String PRE_CAPTURE_PATH = "risk/assessments/pre-authentication";
+    private static final String PRE_CAPTURE_PATH = "risk/assessments/pre-capture";
 
     public RiskClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY);
