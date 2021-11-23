@@ -13,7 +13,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class WalletTokenRequest implements TokenRequest {
+public final class WalletTokenRequest {
 
     private WalletType type;
 
@@ -23,35 +23,6 @@ public class WalletTokenRequest implements TokenRequest {
 
     public WalletTokenRequest(final WalletType type) {
         this.type = type;
-    }
-
-    @Override
-    public String getType() {
-        return type.getName();
-    }
-
-    public WalletType getWalletType() {
-        return type;
-    }
-
-    /**
-     * Will be removed in a future version.
-     * <p>
-     * Please initialize {@link WalletType} via builder or constructor.
-     */
-    @Deprecated
-    public void setType(final String type) {
-        this.type = WalletType.from(type);
-    }
-
-    /**
-     * Will be removed in a future version.
-     * <p>
-     * Please initialize {@link WalletType} via builder or constructor.
-     */
-    @Deprecated
-    public void setWalletType(final WalletType walletType) {
-        this.type = walletType;
     }
 
 }

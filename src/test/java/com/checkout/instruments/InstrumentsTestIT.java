@@ -187,11 +187,13 @@ class InstrumentsTestIT extends SandboxTestFixture {
                 .number("020 222333")
                 .build();
 
-        final CardTokenRequest request = new CardTokenRequest(TestCardSource.VISA.getNumber(), TestCardSource.VISA.getExpiryMonth(), TestCardSource.VISA.getExpiryYear());
-        request.setCvv(TestCardSource.VISA.getCvv());
-        request.setBillingAddress(billingAddress);
-        request.setPhone(phone);
-
-        return request;
+        return CardTokenRequest.builder()
+                .number(TestCardSource.VISA.getNumber())
+                .expiryMonth(TestCardSource.VISA.getExpiryMonth())
+                .expiryYear(TestCardSource.VISA.getExpiryYear())
+                .cvv(TestCardSource.VISA.getCvv())
+                .billingAddress(billingAddress)
+                .phone(phone)
+                .build();
     }
 }
