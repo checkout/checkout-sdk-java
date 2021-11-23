@@ -192,9 +192,12 @@ class DisputesTestIT extends SandboxTestFixture {
     }
 
     private static CardTokenRequest createCardTokenRequest() {
-        final CardTokenRequest request = new CardTokenRequest(TestCardSource.VISA.getNumber(), TestCardSource.VISA.getExpiryMonth(), TestCardSource.VISA.getExpiryYear());
-        request.setCvv(TestCardSource.VISA.getCvv());
-        return request;
+        return CardTokenRequest.builder()
+                .number(TestCardSource.VISA.getNumber())
+                .expiryMonth(TestCardSource.VISA.getExpiryMonth())
+                .expiryYear(TestCardSource.VISA.getExpiryYear())
+                .cvv(TestCardSource.VISA.getCvv())
+                .build();
     }
 
 }

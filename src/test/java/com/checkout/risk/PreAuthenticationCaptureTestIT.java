@@ -1,5 +1,6 @@
 package com.checkout.risk;
 
+import com.checkout.CardSourceHelper;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestCardSource;
@@ -9,10 +10,9 @@ import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
 import com.checkout.common.Phone;
-import com.checkout.instruments.InstrumentAccountHolder;
 import com.checkout.instruments.CreateInstrumentRequest;
 import com.checkout.instruments.CreateInstrumentResponse;
-import com.checkout.CardSourceHelper;
+import com.checkout.instruments.InstrumentAccountHolder;
 import com.checkout.risk.preauthentication.PreAuthenticationAssessmentRequest;
 import com.checkout.risk.preauthentication.PreAuthenticationAssessmentResponse;
 import com.checkout.risk.precapture.AuthenticationResult;
@@ -103,10 +103,13 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                 .number("020 222333")
                 .build();
 
-        final CardTokenRequest cardTokenRequest = new CardTokenRequest(
-                TestCardSource.VISA.getNumber(),
-                TestCardSource.VISA.getExpiryMonth(),
-                TestCardSource.VISA.getExpiryYear());
+        final CardTokenRequest cardTokenRequest = CardTokenRequest.builder()
+                .number(TestCardSource.VISA.getNumber())
+                .expiryMonth(TestCardSource.VISA.getExpiryMonth())
+                .expiryYear(TestCardSource.VISA.getExpiryYear())
+                .cvv(TestCardSource.VISA.getCvv())
+                .build();
+
         cardTokenRequest.setCvv(TestCardSource.VISA.getCvv());
         cardTokenRequest.setBillingAddress(billingAddress);
         cardTokenRequest.setPhone(phone);

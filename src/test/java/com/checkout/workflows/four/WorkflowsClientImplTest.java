@@ -23,6 +23,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -316,7 +317,7 @@ class WorkflowsClientImplTest {
         when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
         when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
 
-        final List<EventTypesResponse> response = Mockito.mock(List.class);
+        final List<EventTypesResponse> response = new ArrayList<>();
 
         when(apiClient.getAsync(eq(WORKFLOWS + "/" + EVENT_TYPES), eq(authorization), eq(EVENT_TYPES_RESPONSE)))
                 .thenReturn(CompletableFuture.completedFuture(response));
