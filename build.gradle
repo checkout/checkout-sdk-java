@@ -15,8 +15,8 @@ allprojects {
     }
 }
 
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
@@ -128,10 +128,6 @@ signing {
     required { signingKey != null && signingPassword != null && gradle.taskGraph.hasTask("publish") }
     useInMemoryPgpKeys(signingKey, signingPassword)
     sign publishing.publications.mavenJava
-}
-
-javadoc {
-    options.addBooleanOption('html5', true)
 }
 
 jar {
