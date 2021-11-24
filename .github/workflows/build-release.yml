@@ -1,8 +1,6 @@
 name: build-release
 on:
-  push:
-    paths:
-      - gradle.properties
+  workflow_dispatch:
 jobs:
   deploy:
     if: github.ref == 'refs/heads/master'
@@ -22,7 +20,7 @@ jobs:
       - id: print-version
         run: echo "Releasing $CURRENT_VERSION"
       - id: validate-wrapper
-        uses: gradle/wrapper-validation-action@v2
+        uses: gradle/wrapper-validation-action@v1
       - id: build
         env:
           CHECKOUT_SECRET_KEY: ${{ secrets.IT_CHECKOUT_SECRET_KEY }}
