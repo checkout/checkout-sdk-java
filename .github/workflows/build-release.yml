@@ -22,7 +22,7 @@ jobs:
       - id: print-version
         run: echo "Releasing $CURRENT_VERSION"
       - id: validate-wrapper
-        uses: gradle/wrapper-validation-action@v2
+        uses: gradle/wrapper-validation-action@v1
       - id: build
         env:
           CHECKOUT_SECRET_KEY: ${{ secrets.IT_CHECKOUT_SECRET_KEY }}
