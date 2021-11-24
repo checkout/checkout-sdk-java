@@ -42,8 +42,6 @@ public final class PaymentRequest {
 
     private AbstractRequestSource source;
 
-    private PaymentRequestDestination destination;
-
     private Long amount;
 
     private Currency currency;
