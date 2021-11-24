@@ -12,7 +12,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: '11'
+          java-version: '8'
       - id: read-version
         uses: HardNorth/github-version-generate@v1.1.1
         with:
@@ -22,7 +22,7 @@ jobs:
       - id: print-version
         run: echo "Releasing $CURRENT_VERSION"
       - id: validate-wrapper
-        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+        uses: gradle/wrapper-validation-action@v2
       - id: build
         env:
           CHECKOUT_SECRET_KEY: ${{ secrets.IT_CHECKOUT_SECRET_KEY }}

@@ -78,11 +78,12 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
                 .reference(UUID.randomUUID().toString())
                 .amount(10L)
                 .currency(Currency.GBP)
-                .metadata(Map.of("test", "1234"))
                 .paymentIp("1.2.3.4")
                 .description("description")
                 .shipping(shippingDetails)
                 .build();
+
+        paymentRequest.getMetadata().put("test", "1234");
 
         final PaymentResponse paymentResponse = blocking(paymentsClient.requestPayment(paymentRequest));
         assertNotNull(paymentResponse);

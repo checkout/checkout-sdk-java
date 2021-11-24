@@ -3,7 +3,6 @@ package com.checkout.payments;
 import com.checkout.payments.response.PaymentResponse;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,8 +20,9 @@ class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
         final RefundRequest refundRequest = RefundRequest.builder()
                 .reference(UUID.randomUUID().toString())
                 .amount(5L)
-                .metadata(Map.of("test", "1234"))
                 .build();
+
+        refundRequest.getMetadata().put("test", "1234");
 
         final RefundResponse refundResponse = blocking(paymentsClient.refundPayment(paymentResponse.getId(), refundRequest));
         assertNotNull(refundResponse);
@@ -43,8 +43,9 @@ class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
         final RefundRequest refundRequest = RefundRequest.builder()
                 .reference(UUID.randomUUID().toString())
                 .amount(3L)
-                .metadata(Map.of("test", "1234"))
                 .build();
+
+        refundRequest.getMetadata().put("test", "1234");
 
         final RefundResponse refundResponse1 = blocking(paymentsClient.refundPayment(paymentResponse.getId(), refundRequest, IDEMPOTENCY_KEY));
         assertNotNull(refundResponse1);
