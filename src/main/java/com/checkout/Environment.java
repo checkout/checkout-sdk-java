@@ -1,31 +1,35 @@
 package com.checkout;
 
+import java.net.URI;
+
+import static java.net.URI.create;
+
 public enum Environment {
 
-    SANDBOX("https://api.sandbox.checkout.com/", "https://files.sandbox.checkout.com/", "https://access.sandbox.checkout.com/connect/token"),
-    PRODUCTION("https://api.checkout.com/", "https://files.checkout.com/", "https://access.checkout.com/connect/token");
+    SANDBOX(create("https://api.sandbox.checkout.com/"), create("https://files.sandbox.checkout.com/"), create("https://access.sandbox.checkout.com/connect/token")),
+    PRODUCTION(create("https://api.checkout.com/"), create("https://files.checkout.com/"), create("https://access.checkout.com/connect/token"));
 
-    private final String uri;
-    private final String filesApiURI;
-    private final String oauthAuthorizeURI;
+    private final URI uri;
+    private final URI filesApiURI;
+    private final URI oauthAuthorizeURI;
 
-    Environment(final String uri,
-                final String filesApiURI,
-                final String oauthAuthorizeURI) {
+    Environment(final URI uri,
+                final URI filesApiURI,
+                final URI oauthAuthorizeURI) {
         this.uri = uri;
         this.filesApiURI = filesApiURI;
         this.oauthAuthorizeURI = oauthAuthorizeURI;
     }
 
-    public String getUri() {
+    public URI getUri() {
         return uri;
     }
 
-    public String getFilesApiURI() {
+    public URI getFilesApiUri() {
         return filesApiURI;
     }
 
-    public String getOauthAuthorizeURI() {
+    public URI getOAuthAuthorizeUri() {
         return oauthAuthorizeURI;
     }
 

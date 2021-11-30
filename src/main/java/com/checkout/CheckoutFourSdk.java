@@ -53,7 +53,7 @@ public final class CheckoutFourSdk {
                 if (environment == null) {
                     throw new CheckoutArgumentException("Invalid configuration. Please specify an Environment or a specific OAuth authorizationURI.");
                 }
-                this.authorizationUri = URI.create(environment.getOauthAuthorizeURI());
+                this.authorizationUri = environment.getOAuthAuthorizeUri();
             }
             final FourOAuthSdkCredentials credentials = new FourOAuthSdkCredentials(authorizationUri, clientId, clientSecret, scopes);
             credentials.initOAuthAccess();

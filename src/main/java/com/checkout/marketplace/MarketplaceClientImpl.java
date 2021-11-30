@@ -4,7 +4,6 @@ import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.CheckoutException;
-import com.checkout.CheckoutFilesApiConfiguration;
 import com.checkout.FilesTransport;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.common.IdResponse;
@@ -50,11 +49,10 @@ public class MarketplaceClientImpl extends AbstractClient implements Marketplace
 
     @Override
     public CompletableFuture<IdResponse> submitFile(final MarketplaceFileRequest marketplaceFileRequest) {
-        final CheckoutFilesApiConfiguration filesApiConfiguration = configuration.getFilesApiConfiguration();
-        if (!filesApiConfiguration.isEnabled()) {
-            throw new CheckoutException("Files API is not enabled in this client. It must be enabled in CheckoutFourSdk configuration.");
+        if (configuration.getFilesApiConfiguration() == null) {
+            throw new CheckoutException("Files API is not enabled. It must be initialized in the SDK.");
         }
-        return apiClient.submitFileAsync(new FilesTransport(filesApiConfiguration.getEnvironment().getUri()), FILES, sdkAuthorization(), marketplaceFileRequest, IdResponse.class);
+        return apiClient.submitFileAsync(new FilesTransport(configuration), FILES, sdkAuthorization(), marketplaceFileRequest, IdResponse.class);
     }
 
 }

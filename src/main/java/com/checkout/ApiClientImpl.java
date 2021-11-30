@@ -30,13 +30,8 @@ public class ApiClientImpl implements ApiClient {
     private final Transport transport;
 
     public ApiClientImpl(final CheckoutConfiguration configuration) {
-        this(new GsonSerializer(), new ApacheHttpClientTransport(configuration.getUri(), configuration.getApacheHttpClientBuilder()));
-    }
-
-    public ApiClientImpl(final Serializer serializer, final Transport transport) {
-        validateParams("serializer", serializer, "transport", transport);
-        this.serializer = serializer;
-        this.transport = transport;
+        this.serializer = new GsonSerializer();
+        this.transport = new ApacheHttpClientTransport(configuration.getBaseUri(), configuration.getHttpClientBuilder(), configuration.getExecutor());
     }
 
     @Override

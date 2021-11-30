@@ -3,21 +3,24 @@ package com.checkout.marketplace;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.CheckoutException;
-import com.checkout.CheckoutFilesApiConfiguration;
 import com.checkout.Environment;
+import com.checkout.FilesApiConfiguration;
 import com.checkout.FilesTransport;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
 import com.checkout.common.IdResponse;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -31,8 +34,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MarketplaceClientImplTest {
-
-    private static final CheckoutFilesApiConfiguration CHECKOUT_FILES_CONFIG_ENABLED = CheckoutFilesApiConfiguration.enabled(Environment.SANDBOX);
 
     @Mock
     private ApiClient apiClient;
@@ -64,6 +65,8 @@ class MarketplaceClientImplTest {
     void setUp() {
         lenient().when(sdkCredentials.getAuthorization(SdkAuthorizationType.OAUTH)).thenReturn(authorization);
         lenient().when(checkoutConfiguration.getSdkCredentials()).thenReturn(sdkCredentials);
+        lenient().when(checkoutConfiguration.getHttpClientBuilder()).thenReturn(HttpClientBuilder.create());
+        lenient().when(checkoutConfiguration.getExecutor()).thenReturn(Executors.newSingleThreadExecutor());
         this.marketplaceClient = new MarketplaceClientImpl(apiClient, checkoutConfiguration);
     }
 
@@ -122,7 +125,8 @@ class MarketplaceClientImplTest {
     @Test
     void shouldSubmitFile() throws ExecutionException, InterruptedException {
 
-        when(checkoutConfiguration.getFilesApiConfiguration()).thenReturn(CHECKOUT_FILES_CONFIG_ENABLED);
+        lenient().when(checkoutConfiguration.getFilesApiConfiguration()).thenReturn(new FilesApiConfiguration(Environment.SANDBOX));
+
         when(apiClient.submitFileAsync(any(FilesTransport.class), eq("files"), eq(authorization), any(MarketplaceFileRequest.class), eq(IdResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(idResponse));
 
@@ -135,13 +139,12 @@ class MarketplaceClientImplTest {
 
     @Test
     void shouldFailSubmitFile() {
-        when(checkoutConfiguration.getFilesApiConfiguration()).thenReturn(CheckoutFilesApiConfiguration.disabled());
         final CheckoutException checkoutException = assertThrows(
                 CheckoutException.class,
-                () -> marketplaceClient.submitFile(MarketplaceFileRequest.builder().build()),
+                () -> new MarketplaceClientImpl(apiClient, Mockito.mock(CheckoutConfiguration.class)).submitFile(MarketplaceFileRequest.builder().build()),
                 "Expected submitFile() to throw, but it didn't"
         );
-        assertTrue(checkoutException.getMessage().contains("Files API is not enabled in this client. It must be enabled in CheckoutFourSdk configuration."));
+        assertTrue(checkoutException.getMessage().contains("Files API is not enabled. It must be initialized in the SDK."));
     }
 
 }
