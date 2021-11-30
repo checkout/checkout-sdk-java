@@ -26,7 +26,7 @@ public abstract class AbstractClient {
     }
 
     protected boolean isSandbox() {
-        return Environment.SANDBOX.getUri().equals(configuration.getUri());
+        return Environment.SANDBOX.getUri().equals(configuration.getBaseUri());
     }
 
 }

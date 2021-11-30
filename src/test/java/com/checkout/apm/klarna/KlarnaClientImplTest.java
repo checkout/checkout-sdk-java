@@ -78,7 +78,7 @@ class KlarnaClientImplTest {
     @Test
     void shouldCreateSession_sandbox() throws ExecutionException, InterruptedException {
 
-        when(configuration.getUri()).thenReturn(Environment.SANDBOX.getUri());
+        when(configuration.getBaseUri()).thenReturn(Environment.SANDBOX.getUri());
 
         when(apiClient.postAsync(eq("klarna-external/credit-sessions"), eq(authorization),
                 eq(CreditSessionResponse.class), any(CreditSessionRequest.class), isNull()))
@@ -107,7 +107,7 @@ class KlarnaClientImplTest {
     @Test
     void shouldGetCreditSession_sandbox() throws ExecutionException, InterruptedException {
 
-        when(configuration.getUri()).thenReturn(Environment.SANDBOX.getUri());
+        when(configuration.getBaseUri()).thenReturn(Environment.SANDBOX.getUri());
 
         when(apiClient.getAsync(eq("klarna-external/credit-sessions/session_id"), eq(authorization), eq(CreditSession.class)))
                 .thenReturn(CompletableFuture.completedFuture(creditSession));
@@ -136,7 +136,7 @@ class KlarnaClientImplTest {
     @Test
     void shouldCapturePayment_sandbox() throws ExecutionException, InterruptedException {
 
-        when(configuration.getUri()).thenReturn(Environment.SANDBOX.getUri());
+        when(configuration.getBaseUri()).thenReturn(Environment.SANDBOX.getUri());
 
         when(apiClient.postAsync(eq("klarna-external/orders/payment_id/captures"), eq(authorization),
                 eq(CaptureResponse.class), any(OrderCaptureRequest.class), isNull()))
@@ -166,7 +166,7 @@ class KlarnaClientImplTest {
     @Test
     void shouldVoidCapturePayment_sandbox() throws ExecutionException, InterruptedException {
 
-        when(configuration.getUri()).thenReturn(Environment.SANDBOX.getUri());
+        when(configuration.getBaseUri()).thenReturn(Environment.SANDBOX.getUri());
 
         when(apiClient.postAsync(eq("klarna-external/orders/payment_id/voids"), eq(authorization),
                 eq(VoidResponse.class), any(VoidRequest.class), isNull()))

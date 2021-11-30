@@ -83,6 +83,8 @@ public static void main(String[] args) {
         .publicKey("public_key")
         .secretKey("secret_key")
         .environment(Environment.SANDBOX) // or .uri("")
+        .httpClientBuilder() // for a custom HTTP Client Builder
+        .executor() // for a custom Executor Service
         .build();
 
     PaymentsClient paymentsClient = checkoutApi.paymentsClient();
@@ -103,6 +105,8 @@ public static void main(String[] args) {
         //.clientCredentials(new URI("https://access.sandbox.checkout.com/connect/token"), "client_id", "client_secret")
         .scopes(FourOAuthScope.GATEWAY, FourOAuthScope.VAULT, FourOAuthScope.FX)
         .environment(Environment.SANDBOX)
+        .httpClientBuilder() // for a custom HTTP Client Builder
+        .executor() // for a custom Executor Service
         .build()
 
     PaymentsClient paymentsClient = checkoutApi.paymentsClient();

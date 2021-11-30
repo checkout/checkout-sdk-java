@@ -26,7 +26,6 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
@@ -42,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -60,14 +60,13 @@ public class ApacheHttpClientTransport implements Transport {
     private static final String PATH = "path";
     private final URI baseUri;
     private final CloseableHttpClient httpClient;
+    private final Executor executor;
 
-    public ApacheHttpClientTransport(final String baseUri, final HttpClientBuilder httpClientBuilder) {
-        this.baseUri = URI.create(baseUri);
-        if (httpClientBuilder != null) {
-            httpClient = httpClientBuilder.build();
-        } else {
-            httpClient = HttpClients.createDefault();
-        }
+    public ApacheHttpClientTransport(final URI baseUri, final HttpClientBuilder httpClientBuilder, final Executor executor) {
+        CheckoutUtils.validateParams("baseUri", baseUri, "httpClientBuilder", httpClientBuilder, "executor", executor);
+        this.baseUri = baseUri;
+        this.httpClient = httpClientBuilder.build();
+        this.executor = executor;
     }
 
     private Header[] sanitiseHeaders(final Header[] headers) {
@@ -109,7 +108,7 @@ public class ApacheHttpClientTransport implements Transport {
             }
             log.info("{}: {}", clientOperation, request.getURI());
             return performCall(authorization, requestBody, request, accept);
-        });
+        }, executor);
     }
 
     @Override
@@ -127,7 +126,7 @@ public class ApacheHttpClientTransport implements Transport {
             } catch (final URISyntaxException e) {
                 throw new CheckoutException(e);
             }
-        });
+        }, executor);
     }
 
     @Override
@@ -136,7 +135,7 @@ public class ApacheHttpClientTransport implements Transport {
             final HttpPost post = new HttpPost(getRequestUrl(path));
             post.setEntity(getMultipartFileEntity(fileRequest));
             return performCall(authorization, null, post, ACCEPT_JSON);
-        });
+        }, executor);
     }
 
     private HttpEntity getMultipartFileEntity(final AbstractFileRequest abstractFileRequest) {

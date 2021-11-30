@@ -1,8 +1,11 @@
 package com.checkout;
 
 import com.checkout.four.CheckoutApi;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.Objects.requireNonNull;
@@ -11,6 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class SandboxTestFixture {
+
+    private static final Executor CUSTOM_EXECUTOR = Executors.newSingleThreadExecutor();
+    private static final HttpClientBuilder CUSTOM_HTTP_BUILDER = HttpClientBuilder.create().setConnectionTimeToLive(3, TimeUnit.SECONDS);
 
     protected static final String SELF = "self";
 
@@ -25,6 +31,7 @@ public abstract class SandboxTestFixture {
                         .publicKey(requireNonNull(System.getenv("CHECKOUT_PUBLIC_KEY")))
                         .secretKey(requireNonNull(System.getenv("CHECKOUT_SECRET_KEY")))
                         .environment(Environment.SANDBOX)
+                        .httpClientBuilder(CUSTOM_HTTP_BUILDER)
                         .build();
                 break;
             case FOUR:
@@ -33,6 +40,7 @@ public abstract class SandboxTestFixture {
                         .publicKey(requireNonNull(System.getenv("CHECKOUT_FOUR_PUBLIC_KEY")))
                         .secretKey(requireNonNull(System.getenv("CHECKOUT_FOUR_SECRET_KEY")))
                         .environment(Environment.SANDBOX)
+                        .executor(CUSTOM_EXECUTOR)
                         .build();
                 break;
             case FOUR_OAUTH:
@@ -43,8 +51,8 @@ public abstract class SandboxTestFixture {
                                 requireNonNull(System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_SECRET")))
                         .environment(Environment.SANDBOX)
                         .enableFilesApi(Environment.SANDBOX)
+                        .executor(CUSTOM_EXECUTOR)
                         .build();
-
                 break;
         }
     }

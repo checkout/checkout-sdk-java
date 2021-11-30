@@ -17,9 +17,9 @@ import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class MarketPlaceTestIT extends SandboxTestFixture {
+class MarketplaceTestIT extends SandboxTestFixture {
 
-    MarketPlaceTestIT() {
+    MarketplaceTestIT() {
         super(PlatformType.FOUR_OAUTH);
     }
 
@@ -88,7 +88,7 @@ class MarketPlaceTestIT extends SandboxTestFixture {
 
     }
 
-    //@Test
+    @Test
     void shouldUploadMarketplaceFile() throws URISyntaxException {
         //Upload your dispute file evidence
         final URL resource = getClass().getClassLoader().getResource("checkout.jpeg");
