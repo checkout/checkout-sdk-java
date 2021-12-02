@@ -6,6 +6,8 @@ plugins {
     id 'io.codearte.nexus-staging' version '0.21.2'
     id 'com.gradle.build-scan' version '2.3'
     id 'io.freefair.lombok' version '3.8.1'
+    id "org.sonarqube" version "3.3"
+    id 'jacoco'
 }
 
 allprojects {
@@ -53,6 +55,14 @@ test {
     testLogging {
         events "passed", "failed", "skipped", "standardError"
         showStandardStreams = true
+    }
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.enabled true
     }
 }
 
@@ -134,5 +144,13 @@ jar {
     manifest {
         attributes 'Implementation-Title': 'checkout-sdk-java',
                 'Implementation-Version': archiveVersion.get()
+    }
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectKey", "checkout_checkout-sdk-java"
+        property "sonar.organization", "checkout-ltd"
+        property "sonar.host.url", "https://sonarcloud.io"
     }
 }
