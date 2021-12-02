@@ -5,6 +5,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -52,20 +54,23 @@ class CompleteSessionsTestIT extends AbstractSessionsTestIT {
     }
 
     private void tryComplete(final boolean usingSessionSecret, final String sessionId, final String sessionSecret) {
+        if (!usingSessionSecret) {
+            assertOperationNotAllowed(fourApi.sessionsClient().completeSession(sessionId));
+        } else {
+            assertOperationNotAllowed(fourApi.sessionsClient().completeSession(sessionSecret, sessionId));
+        }
+    }
+
+    private void assertOperationNotAllowed(final CompletableFuture<?> future) {
         try {
-            if (!usingSessionSecret) {
-                fourApi.sessionsClient().completeSession(sessionId).get();
-            } else {
-                fourApi.sessionsClient().completeSession(sessionSecret, sessionId).get();
-            }
+            future.get();
             fail();
-        } catch (final Exception e) {
+        } catch (final InterruptedException | ExecutionException e) {
             assertTrue(e.getCause() instanceof CheckoutApiException);
             final CheckoutApiException checkoutException = (CheckoutApiException) e.getCause();
             assertEquals("operation_not_allowed", checkoutException.getErrorDetails().get("error_type"));
             assertEquals(403, checkoutException.getHttpStatusCode());
         }
-
     }
 
 }
