@@ -24,10 +24,10 @@ jobs:
           CHECKOUT_FOUR_OAUTH_CLIENT_SECRET: ${{ secrets.IT_CHECKOUT_FOUR_OAUTH_CLIENT_SECRET }}
         run: ./gradlew build
       - id: setup-java-11-sonar-analysis
-          uses: actions/setup-java@v2
-          with:
-            distribution: 'temurin'
-            java-version: '11'
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '11'
       - id: cache-sonarcloud-packages
         uses: actions/cache@v1
         with:
