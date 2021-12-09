@@ -4,15 +4,15 @@ import com.google.gson.annotations.SerializedName;
 
 public enum CardType {
 
-    @SerializedName("Credit")
+    @SerializedName(value = "Credit", alternate = {"CREDIT"})
     CREDIT,
-    @SerializedName("Debit")
+    @SerializedName(value = "Debit", alternate = {"DEBIT"})
     DEBIT,
-    @SerializedName("Prepaid")
+    @SerializedName(value = "Prepaid", alternate = {"PREPAID"})
     PREPAID,
-    @SerializedName("Charge")
+    @SerializedName(value = "Charge", alternate = {"CHARGE"})
     CHARGE,
-    @SerializedName("Deferred Debit")
+    @SerializedName(value = "Deferred Debit", alternate = {"DEFERRED DEBIT"})
     DEFERRED_DEBIT
 
 }

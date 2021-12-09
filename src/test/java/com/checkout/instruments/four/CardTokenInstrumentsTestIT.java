@@ -49,6 +49,9 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
         assertNotNull(cardResponse.getAccountHolder());
         assertNotNull(cardResponse.getAccountHolder().getBillingAddress());
         assertNotNull(cardResponse.getAccountHolder().getPhone());
+        assertNotNull(cardResponse.getCardType());
+        assertNotNull(cardResponse.getCardCategory());
+
 
     }
 
@@ -116,6 +119,8 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
         assertEquals("John", cardResponse.getAccountHolder().getFirstName());
         assertEquals("Doe", cardResponse.getAccountHolder().getLastName());
         assertTrue(cardResponse.getCustomer().isDefault());
+        assertNotNull(cardResponse.getCardType());
+        assertNotNull(cardResponse.getCardCategory());
 
     }
 
@@ -189,6 +194,8 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
         assertNotNull(response.getProductId());
         assertNotNull(response.getProductType());
         assertNotNull(response.getCustomer());
+        assertNotNull(response.getCardType());
+        assertNotNull(response.getCardCategory());
 
         return response;
 
