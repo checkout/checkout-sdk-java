@@ -1,6 +1,5 @@
-package com.checkout.tokens.four.request;
+package com.checkout.tokens;
 
-import com.checkout.tokens.four.TokenType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

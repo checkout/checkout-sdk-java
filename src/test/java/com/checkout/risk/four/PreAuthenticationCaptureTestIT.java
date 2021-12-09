@@ -1,5 +1,6 @@
 package com.checkout.risk.four;
 
+import com.checkout.CardSourceHelper;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestCardSource;
@@ -13,7 +14,6 @@ import com.checkout.common.four.AccountHolder;
 import com.checkout.instruments.four.create.CreateCustomerInstrumentRequest;
 import com.checkout.instruments.four.create.CreateInstrumentResponse;
 import com.checkout.instruments.four.create.CreateInstrumentTokenRequest;
-import com.checkout.CardSourceHelper;
 import com.checkout.risk.Device;
 import com.checkout.risk.Location;
 import com.checkout.risk.RiskPayment;
@@ -28,8 +28,8 @@ import com.checkout.risk.source.CardSourcePrism;
 import com.checkout.risk.source.CustomerSourcePrism;
 import com.checkout.risk.source.IdSourcePrism;
 import com.checkout.risk.source.RiskPaymentRequestSource;
-import com.checkout.tokens.four.request.CardTokenRequest;
-import com.checkout.tokens.four.response.CardTokenResponse;
+import com.checkout.tokens.CardTokenRequest;
+import com.checkout.tokens.CardTokenResponse;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -114,7 +114,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
                 .build();
 
-        final CardTokenResponse cardTokenResponse = blocking(fourApi.tokensClient().requestAsync(cardTokenRequest));
+        final CardTokenResponse cardTokenResponse = blocking(fourApi.tokensClient().request(cardTokenRequest));
 
         final CreateInstrumentTokenRequest createInstrumentTokenRequest = CreateInstrumentTokenRequest.builder()
                 .token(cardTokenResponse.getToken())

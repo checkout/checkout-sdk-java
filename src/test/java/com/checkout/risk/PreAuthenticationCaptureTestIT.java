@@ -114,7 +114,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
         cardTokenRequest.setBillingAddress(billingAddress);
         cardTokenRequest.setPhone(phone);
 
-        final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().requestAsync(cardTokenRequest));
+        final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().request(cardTokenRequest));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type("token")

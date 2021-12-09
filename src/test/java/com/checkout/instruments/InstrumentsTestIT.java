@@ -43,7 +43,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
 
     @Test
     void shouldCreateInstrument() {
-        final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().requestAsync(createValidTokenRequest()));
+        final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().request(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type("token")
@@ -83,7 +83,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
     @Test
     void shouldGetInstrument() {
 
-        final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().requestAsync(createValidTokenRequest()));
+        final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().request(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type("token")
@@ -135,7 +135,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
 
     @Test
     void shouldUpdateInstrument() {
-        final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().requestAsync(createValidTokenRequest()));
+        final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().request(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type("token")
@@ -157,7 +157,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
     @Test
     void shouldDeleteInstrument() {
 
-        final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().requestAsync(createValidTokenRequest()));
+        final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().request(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type("token")

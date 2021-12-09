@@ -7,7 +7,7 @@ import com.checkout.marketplace.MarketplaceClient;
 import com.checkout.payments.four.PaymentsClient;
 import com.checkout.risk.RiskClient;
 import com.checkout.sessions.SessionsClient;
-import com.checkout.tokens.four.TokensClient;
+import com.checkout.tokens.TokensClient;
 import com.checkout.workflows.four.WorkflowsClient;
 
 public interface CheckoutApi extends CheckoutApmApi {

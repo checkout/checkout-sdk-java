@@ -16,9 +16,9 @@ import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.payments.four.response.source.CardResponseSource;
 import com.checkout.payments.four.sender.PaymentCorporateSender;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
-import com.checkout.tokens.four.TokensClient;
-import com.checkout.tokens.four.request.CardTokenRequest;
-import com.checkout.tokens.four.response.CardTokenResponse;
+import com.checkout.tokens.TokensClient;
+import com.checkout.tokens.CardTokenRequest;
+import com.checkout.tokens.CardTokenResponse;
 
 import java.util.UUID;
 
@@ -133,7 +133,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                 .expiryMonth(CardSourceHelper.Visa.EXPIRY_MONTH)
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
                 .build();
-        return blocking(tokensClient.requestAsync(request));
+        return blocking(tokensClient.request(request));
     }
 
 }

@@ -18,8 +18,8 @@ import com.checkout.risk.RiskClient;
 import com.checkout.risk.RiskClientImpl;
 import com.checkout.sessions.SessionsClient;
 import com.checkout.sessions.SessionsClientImpl;
-import com.checkout.tokens.four.TokensClient;
-import com.checkout.tokens.four.TokensClientImpl;
+import com.checkout.tokens.TokensClient;
+import com.checkout.tokens.TokensClientImpl;
 import com.checkout.workflows.four.WorkflowsClient;
 import com.checkout.workflows.four.WorkflowsClientImpl;
 

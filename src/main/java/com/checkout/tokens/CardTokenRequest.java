@@ -12,15 +12,15 @@ import lombok.Data;
 @AllArgsConstructor
 public final class CardTokenRequest {
 
-    private final String type = "card";
+    private final TokenType type = TokenType.CARD;
 
     private String number;
 
     @SerializedName("expiry_month")
-    private int expiryMonth;
+    private Integer expiryMonth;
 
     @SerializedName("expiry_year")
-    private int expiryYear;
+    private Integer expiryYear;
 
     private String name;
 

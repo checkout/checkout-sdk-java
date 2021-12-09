@@ -1,4 +1,4 @@
-package com.checkout.tokens.four.request;
+package com.checkout.tokens;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.checkout.tokens.four;
+package com.checkout.tokens;
 
 import com.google.gson.annotations.SerializedName;
 
