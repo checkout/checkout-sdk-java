@@ -15,7 +15,6 @@ import com.checkout.payments.response.PaymentResponse;
 import com.checkout.payments.response.source.CardResponseSource;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;

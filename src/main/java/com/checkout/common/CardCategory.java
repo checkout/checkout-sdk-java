@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 public enum CardCategory {
 
-    @SerializedName("Consumer")
+    @SerializedName(value = "Consumer", alternate = {"CONSUMER"})
     CONSUMER,
-    @SerializedName("Commercial")
+    @SerializedName(value = "Commercial", alternate = {"COMMERCIAL"})
     COMMERCIAL
 
 }
