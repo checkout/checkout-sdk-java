@@ -17,7 +17,6 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.verify;
@@ -62,7 +61,7 @@ class TokensClientImplTest {
     void shouldThrowException_whenRequestIsNull_cardToken() {
 
         try {
-            tokensClient.requestAsync((CardTokenRequest) null);
+            tokensClient.request((CardTokenRequest) null);
             fail();
         } catch (final CheckoutArgumentException checkoutArgumentException) {
             assertEquals("cardTokenRequest cannot be null", checkoutArgumentException.getMessage());
@@ -80,9 +79,9 @@ class TokensClientImplTest {
 
         final CardTokenRequest cardTokenRequest = CardTokenRequest.builder().number("123").expiryMonth(3).expiryYear(2024).build();
 
-        tokensClient.requestAsync(cardTokenRequest);
+        tokensClient.request(cardTokenRequest);
 
-        verify(apiClient).postAsync(eq("tokens"), any(SdkAuthorization.class), eq(CardTokenResponse.class), eq(cardTokenRequest), isNull());
+        verify(apiClient).postAsync(eq("tokens"), eq(authorization), eq(CardTokenResponse.class), eq(cardTokenRequest), isNull());
 
     }
 
@@ -90,7 +89,8 @@ class TokensClientImplTest {
     void shouldThrowException_whenRequestIsNull_walletToken() {
 
         try {
-            tokensClient.requestAsync((WalletTokenRequest) null);
+
+            tokensClient.request((WalletTokenRequest) null);
             fail();
         } catch (final CheckoutArgumentException checkoutArgumentException) {
             assertEquals("walletTokenRequest cannot be null", checkoutArgumentException.getMessage());
@@ -114,24 +114,25 @@ class TokensClientImplTest {
                 "RlbXMxEzARBgNVBAoMCkFwcGxlIEluYy4xCzAJBgNVBAYTAlVTMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQ" +
                 "gAEgjD9q8Oc914gLFDZm0US5jfiqQHdbLPgsc1LUmeY";
 
-        final TokenHeader tokenHeader = TokenHeader.builder()
-                .ephemeralPublicKey("MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEX1ievoT8DRB8T5zGkhHZHeDr0oBmYEgsDSxyT0MD0IZ2Mpfjz2LdWq6LUwSH9EmxdPEzMunsZKWMyOr3K")
-                .publicKeyHash("tqYV+tmG9aMh+l/K6cicUnPqkb1gUiLjSTM9gEz6Nl0=")
-                .transactionId("3cee89679130a4b2617c76118a1c62fd400cd45b49dc0916d5b951b560cd17b4")
+        final Map<String, String> tokenHeader = new HashMap<>();
+        tokenHeader.put("ephemeralPublicKey", "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEX1ievoT8DRB8T5zGkhHZHeDr0oBmYEgsDSxyT0MD0IZ2Mpfjz2LdWq6LUwSH9EmxdPEzMunsZKWMyOr3K");
+        tokenHeader.put("publicKeyHash", "tqYV+tmG9aMh+l/K6cicUnPqkb1gUiLjSTM9gEz6Nl0=");
+        tokenHeader.put("transactionId", "3cee89679130a4b2617c76118a1c62fd400cd45b49dc0916d5b951b560cd17b4");
+
+        final ApplePayTokenData applePayTokenData = ApplePayTokenData.builder()
+                .version("EC_v1")
+                .data("t7GeajLB9skXB6QSWfEpPA4WPhDqB7ekdd")
+                .tokenHeader(tokenHeader)
+                .signature(signature)
                 .build();
 
-        final Map<String, Object> tokenData = new HashMap<>();
-        tokenData.put("version", "EC_v1");
-        tokenData.put("data", "t7GeajLB9skXB6QSWfEpPA4WPhDqB7ekdd");
-        tokenData.put("signature", signature);
-        tokenData.put("header", tokenHeader);
+        final ApplePayTokenRequest applePayTokenRequest = ApplePayTokenRequest.builder()
+                .applePayTokenData(applePayTokenData)
+                .build();
 
-        final WalletTokenRequest walletTokenRequest = WalletTokenRequest.builder()
-                .tokenData(tokenData).build();
+        tokensClient.request(applePayTokenRequest);
 
-        tokensClient.requestAsync(walletTokenRequest);
-
-        verify(apiClient).postAsync(eq("tokens"), any(SdkAuthorization.class), eq(TokenResponse.class), eq(walletTokenRequest), isNull());
+        verify(apiClient).postAsync(eq("tokens"), eq(authorization), eq(TokenResponse.class), eq(applePayTokenRequest), isNull());
 
     }
 
@@ -141,20 +142,19 @@ class TokensClientImplTest {
         when(sdkCredentials.getAuthorization(SdkAuthorizationType.PUBLIC_KEY)).thenReturn(authorization);
         when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
 
-        final Map<String, Object> tokenData = new HashMap<>();
-        tokenData.put("protocolVersion", "EC_v1");
-        tokenData.put("signature", "t7GeajLB9skXB6QSWfEpPA4WPhDqB7ekdd");
-        tokenData.put("signedMessage", "'{\"encryptedMessage\":\n" +
-                "              \"ZW5jcnlwdGVkTWVzc2FnZQ==\",\n" +
-                "              \"ephemeralPublicKey\": \"ZXBoZW1lcmFsUHVibGljS2V5\",\n" +
-                "              \"tag\": \"c2lnbmF0dXJl\"}'");
+        final GooglePayTokenData googlePayTokenData = GooglePayTokenData.builder()
+                .signature("TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ")
+                .protocolVersion("ECv1")
+                .signedMessage("Signed Message")
+                .build();
 
-        final WalletTokenRequest walletTokenRequest = WalletTokenRequest.builder()
-                .tokenData(tokenData).build();
+        final GooglePayTokenRequest googlePayTokenRequest = GooglePayTokenRequest.builder()
+                .googlePayTokenData(googlePayTokenData)
+                .build();
 
-        tokensClient.requestAsync(walletTokenRequest);
+        tokensClient.request(googlePayTokenRequest);
 
-        verify(apiClient).postAsync(eq("tokens"), any(SdkAuthorization.class), eq(TokenResponse.class), eq(walletTokenRequest), isNull());
+        verify(apiClient).postAsync(eq("tokens"), eq(authorization), eq(TokenResponse.class), eq(googlePayTokenRequest), isNull());
 
     }
 

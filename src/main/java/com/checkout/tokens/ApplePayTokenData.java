@@ -1,10 +1,11 @@
-package com.checkout.tokens.four.request;
+package com.checkout.tokens;
 
-import com.checkout.tokens.TokenHeader;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.Map;
 
 @Data
 @Builder
@@ -18,6 +19,6 @@ public final class ApplePayTokenData {
     private String signature;
 
     @SerializedName("header")
-    private TokenHeader tokenHeader;
+    private Map<String, String> tokenHeader;
 
 }

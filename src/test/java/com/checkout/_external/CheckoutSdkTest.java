@@ -58,7 +58,7 @@ class CheckoutSdkTest {
                 .build();
 
         assertNotNull(fourCheckoutApi);
-        assertTrue(fourCheckoutApi.tokensClient() instanceof com.checkout.tokens.four.TokensClientImpl);
+        assertTrue(fourCheckoutApi.tokensClient() instanceof com.checkout.tokens.TokensClientImpl);
         assertTrue(fourCheckoutApi.paymentsClient() instanceof com.checkout.payments.four.PaymentsClientImpl);
         assertTrue(fourCheckoutApi.customersClient() instanceof com.checkout.customers.four.CustomersClientImpl);
         assertTrue(fourCheckoutApi.disputesClient() instanceof com.checkout.disputes.four.DisputesClientImpl);

@@ -21,7 +21,7 @@ import com.checkout.payments.four.response.PaymentResponseBalances;
 import com.checkout.payments.four.response.source.CardResponseSource;
 import com.checkout.payments.four.sender.PaymentCorporateSender;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
-import com.checkout.tokens.four.response.CardTokenResponse;
+import com.checkout.tokens.CardTokenResponse;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
