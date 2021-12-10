@@ -44,10 +44,6 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
         return environment;
     }
 
-    protected URI getUri() {
-        return uri;
-    }
-
     protected abstract SdkCredentials getSdkCredentials();
 
     protected CheckoutConfiguration getCheckoutConfiguration() {

@@ -12,7 +12,7 @@ public enum CardType {
     PREPAID,
     @SerializedName(value = "Charge", alternate = {"CHARGE"})
     CHARGE,
-    @SerializedName(value = "Deferred Debit", alternate = {"DEFERRED DEBIT"})
+    @SerializedName(value = "Deferred Debit", alternate = {"DEFERRED DEBIT", "DEFERRED_DEBIT"})
     DEFERRED_DEBIT
 
 }
