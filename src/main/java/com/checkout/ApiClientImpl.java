@@ -21,7 +21,7 @@ import static com.checkout.client.ClientOperation.POST;
 import static com.checkout.client.ClientOperation.PUT;
 import static com.checkout.common.CheckoutUtils.validateParams;
 
-public class ApiClientImpl implements ApiClient {
+class ApiClientImpl implements ApiClient {
 
     private static final String AUTHORIZATION = "authorization";
     private static final String PATH = "path";
@@ -29,7 +29,7 @@ public class ApiClientImpl implements ApiClient {
     private final Serializer serializer;
     private final Transport transport;
 
-    public ApiClientImpl(final CheckoutConfiguration configuration) {
+    ApiClientImpl(final CheckoutConfiguration configuration) {
         this.serializer = new GsonSerializer();
         this.transport = new ApacheHttpClientTransport(configuration.getBaseUri(), configuration.getHttpClientBuilder(), configuration.getExecutor());
     }

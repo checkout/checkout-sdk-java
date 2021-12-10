@@ -44,7 +44,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
-public class GsonSerializer implements Serializer {
+class GsonSerializer implements Serializer {
 
     private static final Type MAP_TYPE_TOKEN = new TypeToken<Map<String, Object>>() {
     }.getType();
@@ -92,11 +92,11 @@ public class GsonSerializer implements Serializer {
 
     private final Gson gson;
 
-    public GsonSerializer() {
+    GsonSerializer() {
         this(DEFAULT_GSON);
     }
 
-    public GsonSerializer(final Gson gson) {
+    GsonSerializer(final Gson gson) {
         this.gson = gson;
     }
 

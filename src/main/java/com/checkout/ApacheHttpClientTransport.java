@@ -45,7 +45,7 @@ import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class ApacheHttpClientTransport implements Transport {
+class ApacheHttpClientTransport implements Transport {
 
     private static final String ACCEPT_CSV = "text/csv";
     private static final String ACCEPT_JSON = "application/json;charset=UTF-8";
@@ -62,7 +62,7 @@ public class ApacheHttpClientTransport implements Transport {
     private final CloseableHttpClient httpClient;
     private final Executor executor;
 
-    public ApacheHttpClientTransport(final URI baseUri, final HttpClientBuilder httpClientBuilder, final Executor executor) {
+    ApacheHttpClientTransport(final URI baseUri, final HttpClientBuilder httpClientBuilder, final Executor executor) {
         CheckoutUtils.validateParams("baseUri", baseUri, "httpClientBuilder", httpClientBuilder, "executor", executor);
         this.baseUri = baseUri;
         this.httpClient = httpClientBuilder.build();
