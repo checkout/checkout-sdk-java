@@ -6,6 +6,7 @@ import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
 import com.checkout.TestHelper;
+import com.checkout.common.CustomerResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -83,7 +84,7 @@ class PaymentLinksClientImplTest {
         when(paymentLinkDetailsResponse.getAmount()).thenReturn(paymentLinksRequest.getAmount());
         when(paymentLinkDetailsResponse.getCurrency()).thenReturn(paymentLinksRequest.getCurrency());
         when(paymentLinkDetailsResponse.getDescription()).thenReturn(paymentLinksRequest.getDescription());
-        when(paymentLinkDetailsResponse.getCustomer()).thenReturn(paymentLinksRequest.getCustomer());
+        when(paymentLinkDetailsResponse.getCustomer()).thenReturn(new CustomerResponse());
         when(paymentLinkDetailsResponse.getBilling()).thenReturn(paymentLinksRequest.getBilling());
         when(paymentLinkDetailsResponse.getProducts()).thenReturn(paymentLinksRequest.getProducts());
         when(paymentLinkDetailsResponse.getAmount()).thenReturn(paymentLinksRequest.getAmount());
@@ -106,9 +107,9 @@ class PaymentLinksClientImplTest {
         assertEquals(paymentLinksRequest.getCurrency(), response.getCurrency());
         assertEquals(paymentLinksRequest.getReference(), response.getReference());
         assertEquals(paymentLinksRequest.getDescription(), response.getDescription());
-        assertEquals(paymentLinksRequest.getCustomer(), response.getCustomer());
         assertEquals(paymentLinksRequest.getBilling(), response.getBilling());
         assertEquals(paymentLinksRequest.getProducts(), response.getProducts());
+        assertNotNull(response.getCustomer());
     }
 
     @Test

@@ -1,7 +1,7 @@
 package com.checkout.payments.links;
 
 import com.checkout.common.Currency;
-import com.checkout.common.CustomerRequest;
+import com.checkout.common.CustomerResponse;
 import com.checkout.common.Product;
 import com.checkout.common.Resource;
 import com.checkout.payments.BillingInformation;
@@ -34,7 +34,7 @@ public final class PaymentLinkDetailsResponse extends Resource {
 
     private String description;
 
-    private CustomerRequest customer;
+    private CustomerResponse customer;
 
     private BillingInformation billing;
 

@@ -43,7 +43,7 @@ This SDK can be used with two different pair of API keys provided by Checkout. H
 | default        | pk_g650ff27-7c42-4ce1-ae90-5691a188ee7b | sk_gk3517a8-3z01-45fq-b4bd-4282384b0a64 |
 | Four           | pk_pkhpdtvabcf7hdgpwnbhw7r2uic          | sk_m73dzypy7cf3gf5d2xr4k7sxo4e          |
 
-Note: sandbox keys have a `test_` or `sbx_` identifier, for Default and Four accounts respectively.
+Note: sandbox keys have a `test_` or `sbox_` identifier, for Default and Four accounts respectively.
 
 If you don't have your own API keys, you can sign up for a test account [here](https://www.checkout.com/get-test-account).
 

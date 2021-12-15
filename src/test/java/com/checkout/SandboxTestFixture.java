@@ -49,6 +49,9 @@ public abstract class SandboxTestFixture {
                         .clientCredentials(
                                 requireNonNull(System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_ID")),
                                 requireNonNull(System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_SECRET")))
+                        .scopes(FourOAuthScope.FILES, FourOAuthScope.FLOW, FourOAuthScope.FX, FourOAuthScope.GATEWAY,
+                                FourOAuthScope.MARKETPLACE, FourOAuthScope.SESSIONS_APP, FourOAuthScope.SESSIONS_BROWSER,
+                                FourOAuthScope.VAULT)
                         .environment(Environment.SANDBOX)
                         .enableFilesApi(Environment.SANDBOX)
                         .executor(CUSTOM_EXECUTOR)
