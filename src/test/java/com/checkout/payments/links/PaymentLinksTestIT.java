@@ -5,8 +5,6 @@ import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.ExecutionException;
-
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,9 +21,9 @@ class PaymentLinksTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void shouldCreatePaymentsLink() throws ExecutionException, InterruptedException {
+    void shouldCreatePaymentsLink() {
         final PaymentLinkRequest paymentLinksRequest = TestHelper.createPaymentLinksRequest(REFERENCE);
-        final PaymentLinkResponse response = defaultApi.paymentLinksClient().createAsync(paymentLinksRequest).get();
+        final PaymentLinkResponse response = blocking(defaultApi.paymentLinksClient().createAsync(paymentLinksRequest));
         assertNotNull(response);
         assertEquals(REFERENCE, response.getReference());
         assertNotNull(response.getExpiresOn());
@@ -34,11 +32,11 @@ class PaymentLinksTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void shouldRetrievePaymentsLink() throws ExecutionException, InterruptedException {
+    void shouldRetrievePaymentsLink() {
         final PaymentLinkRequest paymentLinksRequest = TestHelper.createPaymentLinksRequest(REFERENCE);
-        final PaymentLinkResponse paymentLinkResponse = defaultApi.paymentLinksClient().createAsync(paymentLinksRequest).get();
+        final PaymentLinkResponse paymentLinkResponse = blocking(defaultApi.paymentLinksClient().createAsync(paymentLinksRequest));
         assertNotNull(paymentLinkResponse);
-        final PaymentLinkDetailsResponse detailsResponse = defaultApi.paymentLinksClient().getAsync(paymentLinkResponse.getId()).get();
+        final PaymentLinkDetailsResponse detailsResponse = blocking(defaultApi.paymentLinksClient().getAsync(paymentLinkResponse.getId()));
         assertNotNull(detailsResponse);
         assertEquals(paymentLinkResponse.getId(), detailsResponse.getId());
         assertThat(detailsResponse.getStatus(), anyOf(equalTo(PaymentLinkStatus.ACTIVE), equalTo(PaymentLinkStatus.PAYMENT_RECEIVED), equalTo(PaymentLinkStatus.EXPIRED)));
@@ -48,8 +46,8 @@ class PaymentLinksTestIT extends SandboxTestFixture {
         assertEquals(paymentLinksRequest.getCurrency(), detailsResponse.getCurrency());
         assertEquals(paymentLinksRequest.getReference(), detailsResponse.getReference());
         assertEquals(paymentLinksRequest.getDescription(), detailsResponse.getDescription());
-        assertEquals(paymentLinksRequest.getCustomer(), detailsResponse.getCustomer());
         assertEquals(paymentLinksRequest.getBilling(), detailsResponse.getBilling());
         assertEquals(paymentLinksRequest.getProducts(), detailsResponse.getProducts());
+        assertNotNull(detailsResponse.getCustomer());
     }
 }
