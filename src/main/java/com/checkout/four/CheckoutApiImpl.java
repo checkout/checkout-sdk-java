@@ -8,6 +8,8 @@ import com.checkout.customers.four.CustomersClient;
 import com.checkout.customers.four.CustomersClientImpl;
 import com.checkout.disputes.four.DisputesClient;
 import com.checkout.disputes.four.DisputesClientImpl;
+import com.checkout.forex.four.ForexClient;
+import com.checkout.forex.four.ForexClientImpl;
 import com.checkout.instruments.four.InstrumentsClient;
 import com.checkout.instruments.four.InstrumentsClientImpl;
 import com.checkout.marketplace.MarketplaceClient;
@@ -34,6 +36,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final WorkflowsClient workflowsClient;
     private final MarketplaceClient marketplaceClient;
     private final SessionsClient sessionsClient;
+    private final ForexClient forexClient;
 
     public CheckoutApiImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration);
@@ -46,6 +49,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.workflowsClient = new WorkflowsClientImpl(apiClient, configuration);
         this.marketplaceClient = new MarketplaceClientImpl(apiClient, configuration);
         this.sessionsClient = new SessionsClientImpl(apiClient, configuration);
+        this.forexClient = new ForexClientImpl(apiClient, configuration);
     }
 
     @Override
@@ -93,4 +97,8 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         return sessionsClient;
     }
 
+    @Override
+    public ForexClient forexClient() {
+        return forexClient;
+    }
 }
