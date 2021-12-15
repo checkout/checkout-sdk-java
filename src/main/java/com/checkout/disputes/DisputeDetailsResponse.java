@@ -12,7 +12,7 @@ public final class DisputeDetailsResponse extends Resource {
 
     private String id;
     private DisputeCategory category;
-    private Number amount;
+    private Double amount;
     private String currency;
     private String reasonCode;
     private DisputeStatus status;

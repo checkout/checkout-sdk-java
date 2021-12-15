@@ -15,7 +15,7 @@ public final class Dispute extends Resource {
     private String id;
     private DisputeCategory category;
     private DisputeStatus status;
-    private Number amount;
+    private Double amount;
     private String currency;
     private String reasonCode;
     private String paymentId;

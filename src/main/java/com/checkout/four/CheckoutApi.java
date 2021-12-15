@@ -2,6 +2,7 @@ package com.checkout.four;
 
 import com.checkout.customers.four.CustomersClient;
 import com.checkout.disputes.four.DisputesClient;
+import com.checkout.forex.four.ForexClient;
 import com.checkout.instruments.four.InstrumentsClient;
 import com.checkout.marketplace.MarketplaceClient;
 import com.checkout.payments.four.PaymentsClient;
@@ -29,6 +30,8 @@ public interface CheckoutApi extends CheckoutApmApi {
     MarketplaceClient marketplaceClient();
 
     SessionsClient sessionsClient();
+
+    ForexClient forexClient();
 
 }
 
