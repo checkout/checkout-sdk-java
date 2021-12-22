@@ -5,7 +5,6 @@ import com.checkout.workflows.four.events.SubjectEvent;
 import com.checkout.workflows.four.events.SubjectEventsResponse;
 import com.checkout.workflows.four.reflow.ReflowByEventsRequest;
 import com.checkout.workflows.four.reflow.ReflowBySubjectsRequest;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -16,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
-    @Disabled
     @Test
     void shouldReflowByEvent() {
 
@@ -34,7 +32,6 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
     }
 
-    @Disabled
     @Test
     void shouldReflowBySubject() {
 
@@ -48,7 +45,6 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
     }
 
-    @Disabled
     @Test
     void shouldReflowByEventAndWorkflow() {
 
@@ -67,7 +63,6 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
     }
 
-    @Disabled
     @Test
     void shouldReflowBySubjectAndWorkflow() {
 
@@ -84,7 +79,6 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
     }
 
-    @Disabled
     @Test
     void shouldReflowByEvents() {
 
@@ -104,7 +98,6 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
     }
 
-    @Disabled
     @Test
     void shouldReflowSubjects() {
 

@@ -6,7 +6,6 @@ import com.checkout.workflows.four.events.EventTypesResponse;
 import com.checkout.workflows.four.events.GetEventResponse;
 import com.checkout.workflows.four.events.SubjectEvent;
 import com.checkout.workflows.four.events.SubjectEventsResponse;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -38,7 +37,6 @@ class WorkflowEventsTestIT extends AbstractWorkflowTestIT {
 
     }
 
-    @Disabled
     @Test
     void shouldGetSubjectEventAndEvents() {
 
