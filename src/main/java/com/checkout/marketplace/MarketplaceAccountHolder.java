@@ -1,6 +1,7 @@
 package com.checkout.marketplace;
 
 import com.checkout.common.CountryCode;
+import com.checkout.common.four.AccountHolderType;
 import com.checkout.common.four.AccountHolder;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
@@ -12,7 +13,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class MarketplaceAccountHolder extends AccountHolder {
 
-    private MarketplaceAccountHolderType type;
+    private AccountHolderType type;
 
     @SerializedName("company_name")
     private String companyName;

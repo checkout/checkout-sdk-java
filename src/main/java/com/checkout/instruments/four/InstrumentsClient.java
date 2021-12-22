@@ -1,7 +1,11 @@
 package com.checkout.instruments.four;
 
+import com.checkout.common.CountryCode;
+import com.checkout.common.Currency;
 import com.checkout.instruments.four.create.CreateInstrumentRequest;
 import com.checkout.instruments.four.create.CreateInstrumentResponse;
+import com.checkout.instruments.four.get.BankAccountFieldQuery;
+import com.checkout.instruments.four.get.BankAccountFieldResponse;
 import com.checkout.instruments.four.get.GetInstrumentResponse;
 import com.checkout.instruments.four.update.UpdateInstrumentRequest;
 import com.checkout.instruments.four.update.UpdateInstrumentResponse;
@@ -17,4 +21,6 @@ public interface InstrumentsClient {
     <T extends UpdateInstrumentResponse> CompletableFuture<T> update(String instrumentId, UpdateInstrumentRequest updateInstrumentRequest);
 
     CompletableFuture<Void> delete(String instrumentId);
+
+    CompletableFuture<BankAccountFieldResponse> getBankAccountFieldFormatting(CountryCode country, Currency currency, BankAccountFieldQuery query);
 }

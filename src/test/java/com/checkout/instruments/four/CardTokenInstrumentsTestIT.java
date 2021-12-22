@@ -1,7 +1,9 @@
 package com.checkout.instruments.four;
 
+import com.checkout.CheckoutAuthorizationException;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
+import com.checkout.common.Currency;
 import com.checkout.common.Phone;
 import com.checkout.common.four.AccountHolder;
 import com.checkout.common.four.UpdateCustomerRequest;
@@ -9,6 +11,7 @@ import com.checkout.customers.four.CustomerRequest;
 import com.checkout.instruments.four.create.CreateCustomerInstrumentRequest;
 import com.checkout.instruments.four.create.CreateInstrumentTokenRequest;
 import com.checkout.instruments.four.create.CreateInstrumentTokenResponse;
+import com.checkout.instruments.four.get.BankAccountFieldQuery;
 import com.checkout.instruments.four.get.GetCardInstrumentResponse;
 import com.checkout.instruments.four.get.GetInstrumentResponse;
 import com.checkout.instruments.four.update.UpdateInstrumentCardRequest;
@@ -199,6 +202,16 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
 
         return response;
 
+    }
+
+    @Test
+    void shouldFailGetBankAccountFieldFormattingWhenNoOAuthIsProvided() {
+        try {
+            fourApi.instrumentsClient().getBankAccountFieldFormatting(CountryCode.GB, Currency.GBP, BankAccountFieldQuery.builder().build());
+        } catch (final Exception e) {
+            assertTrue(e instanceof CheckoutAuthorizationException);
+            assertEquals("Operation does not support OAUTH authorization type", e.getMessage());
+        }
     }
 
 }

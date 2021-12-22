@@ -5,9 +5,13 @@ import com.checkout.SdkAuthorizationType;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkCredentials;
+import com.checkout.common.CountryCode;
+import com.checkout.common.Currency;
 import com.checkout.instruments.four.create.CreateInstrumentBankAccountRequest;
 import com.checkout.instruments.four.create.CreateInstrumentBankAccountResponse;
 import com.checkout.instruments.four.create.CreateInstrumentResponse;
+import com.checkout.instruments.four.get.BankAccountFieldQuery;
+import com.checkout.instruments.four.get.BankAccountFieldResponse;
 import com.checkout.instruments.four.get.GetBankAccountInstrumentResponse;
 import com.checkout.instruments.four.get.GetInstrumentResponse;
 import com.checkout.instruments.four.update.UpdateInstrumentCardRequest;
@@ -30,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -57,7 +62,7 @@ class InstrumentsClientImplTest {
 
     @BeforeEach
     void setUp() {
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
+        lenient().when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
         when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
         this.instrumentsClient = new InstrumentsClientImpl(apiClient, configuration);
     }
@@ -120,6 +125,17 @@ class InstrumentsClientImplTest {
 
         assertNotNull(future.get());
 
+    }
+
+    @Test
+    void shouldGetBankAccountFieldFormatting() throws ExecutionException, InterruptedException {
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.OAUTH)).thenReturn(authorization);
+        when(apiClient.queryAsync(eq("validation/bank-accounts/GB/GBP"), any(SdkAuthorization.class), any(BankAccountFieldQuery.class), eq(BankAccountFieldResponse.class)))
+                .thenReturn(CompletableFuture.completedFuture(new BankAccountFieldResponse()));
+
+        final CompletableFuture<BankAccountFieldResponse> response = instrumentsClient.getBankAccountFieldFormatting(CountryCode.GB, Currency.GBP, BankAccountFieldQuery.builder().build());
+
+        assertNotNull(response.get());
     }
 
 }
