@@ -1,8 +1,8 @@
-package com.checkout.marketplace;
+package com.checkout.common.four;
 
 import com.google.gson.annotations.SerializedName;
 
-public enum MarketplaceAccountHolderType {
+public enum AccountHolderType {
 
     @SerializedName("individual")
     INDIVIDUAL,

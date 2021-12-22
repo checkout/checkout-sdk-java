@@ -17,6 +17,10 @@ public abstract class AbstractClient {
         this.authorizationType = authorizationType;
     }
 
+    protected SdkAuthorization sdkAuthorization(final SdkAuthorizationType authorizationType) {
+        return configuration.getSdkCredentials().getAuthorization(authorizationType);
+    }
+
     protected SdkAuthorization sdkAuthorization() {
         return configuration.getSdkCredentials().getAuthorization(authorizationType);
     }
