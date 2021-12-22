@@ -6,7 +6,6 @@ import com.checkout.workflows.four.conditions.WorkflowConditionType;
 import com.checkout.workflows.four.conditions.request.EventWorkflowConditionRequest;
 import com.checkout.workflows.four.conditions.response.EntityWorkflowConditionResponse;
 import com.checkout.workflows.four.conditions.response.EventWorkflowConditionResponse;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -23,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class WorkflowsTestIT extends AbstractWorkflowTestIT {
 
-    @Disabled
     @Test
     void shouldCreateAndGetWorkflows() {
 
@@ -71,7 +69,6 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
 
     }
 
-    @Disabled
     @Test
     void shouldCreateAndUpdateWorkflow() {
 
@@ -88,7 +85,6 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
 
     }
 
-    @Disabled
     @Test
     void shouldUpdateWorkflowAction() {
 
@@ -122,7 +118,6 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
 
     }
 
-    @Disabled
     @Test
     void shouldUpdateWorkflowCondition() {
 

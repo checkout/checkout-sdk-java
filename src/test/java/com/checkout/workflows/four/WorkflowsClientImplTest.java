@@ -15,7 +15,6 @@ import com.checkout.workflows.four.reflow.ReflowBySubjectsRequest;
 import com.checkout.workflows.four.reflow.ReflowResponse;
 import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -419,7 +418,6 @@ class WorkflowsClientImplTest {
         verifyNoInteractions(apiClient);
     }
 
-    @Disabled
     @Test
     void shouldReflowBySubject() throws ExecutionException, InterruptedException {
 
