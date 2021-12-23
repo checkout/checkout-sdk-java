@@ -54,7 +54,7 @@ class SessionSecretSdkCredentialsTest {
             credentials.getAuthorization(SdkAuthorizationType.OAUTH);
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutAuthorizationException);
-            assertEquals("Operation does not support OAUTH authorization type", e.getMessage());
+            assertEquals("Operation requires OAUTH authorization type", e.getMessage());
         }
 
     }

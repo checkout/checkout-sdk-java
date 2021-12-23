@@ -104,7 +104,7 @@ class DefaultStaticKeysSdkCredentialsTest {
             credentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutAuthorizationException);
-            assertEquals("Operation does not support SECRET_KEY_OR_OAUTH authorization type", e.getMessage());
+            assertEquals("Operation requires SECRET_KEY_OR_OAUTH authorization type", e.getMessage());
         }
 
     }
