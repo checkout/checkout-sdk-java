@@ -210,7 +210,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
             fourApi.instrumentsClient().getBankAccountFieldFormatting(CountryCode.GB, Currency.GBP, BankAccountFieldQuery.builder().build());
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutAuthorizationException);
-            assertEquals("Operation does not support OAUTH authorization type", e.getMessage());
+            assertEquals("Operation requires OAUTH authorization type", e.getMessage());
         }
     }
 
