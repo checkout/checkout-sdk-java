@@ -1,4 +1,4 @@
-package com.checkout.sessions;
+package com.checkout.common;
 
 import com.google.gson.annotations.SerializedName;
 

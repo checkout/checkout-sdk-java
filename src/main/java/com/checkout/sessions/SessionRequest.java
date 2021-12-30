@@ -1,5 +1,6 @@
 package com.checkout.sessions;
 
+import com.checkout.common.ChallengeIndicator;
 import com.checkout.common.Currency;
 import com.checkout.common.MarketplaceData;
 import com.checkout.sessions.channel.ChannelData;

@@ -45,7 +45,7 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
         assertNotNull(webhookWorkflowAction.getUrl());
 
         assertNotNull(getWorkflowResponse.getConditions());
-        assertEquals(2, getWorkflowResponse.getConditions().size());
+        assertEquals(3, getWorkflowResponse.getConditions().size());
         assertTrue(getWorkflowResponse.getConditions().get(0) instanceof EventWorkflowConditionResponse);
         assertEquals(events, ((EventWorkflowConditionResponse) getWorkflowResponse.getConditions().get(0)).getEvents());
 
@@ -125,7 +125,7 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
 
         final GetWorkflowResponse getWorkflowResponse = blocking(fourApi.workflowsClient().getWorkflow(createWorkflowResponse.getId()));
         assertNotNull(getWorkflowResponse);
-        assertEquals(2, getWorkflowResponse.getConditions().size());
+        assertEquals(3, getWorkflowResponse.getConditions().size());
 
         final EventWorkflowConditionResponse eventConditionResponse = getWorkflowResponse.getConditions().stream()
                 .filter(condition -> WorkflowConditionType.EVENT.equals(condition.getType()))
@@ -145,7 +145,7 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
 
         final GetWorkflowResponse updatedWorkflow = blocking(fourApi.workflowsClient().getWorkflow(createWorkflowResponse.getId()));
         assertNotNull(updatedWorkflow);
-        assertEquals(2, updatedWorkflow.getConditions().size());
+        assertEquals(3, updatedWorkflow.getConditions().size());
 
         final EventWorkflowConditionResponse updatedEventConditionResponse = getWorkflowResponse.getConditions().stream()
                 .filter(condition -> WorkflowConditionType.EVENT.equals(condition.getType()))
@@ -163,7 +163,7 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
         final CreateWorkflowRequest request = CreateWorkflowRequest.builder()
                 .name(TESTING)
                 .actions(Collections.singletonList(baseWorkflowActionRequest))
-                .conditions(Arrays.asList(baseEventWorkflowConditionRequest, baseEntityWorkflowConditionRequest))
+                .conditions(Arrays.asList(baseEventWorkflowConditionRequest, baseEntityWorkflowConditionRequest, processingChannelWorkflowConditionRequest))
                 .build();
 
         final CreateWorkflowResponse createWorkflowResponse = blocking(fourApi.workflowsClient().createWorkflow(request));
