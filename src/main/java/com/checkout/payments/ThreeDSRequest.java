@@ -1,5 +1,6 @@
 package com.checkout.payments;
 
+import com.checkout.common.ChallengeIndicator;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +27,9 @@ public final class ThreeDSRequest {
     private String version;
 
     private Exemption exemption;
+
+    @SerializedName("challenge_indicator")
+    private ChallengeIndicator challengeIndicator;
 
 }
 

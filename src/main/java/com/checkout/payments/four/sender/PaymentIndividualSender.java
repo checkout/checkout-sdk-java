@@ -22,14 +22,18 @@ public final class PaymentIndividualSender extends PaymentSender {
 
     private Address address;
 
+    private SenderIdentification identification;
+
     @Builder
     private PaymentIndividualSender(final String firstName,
                                     final String lastName,
-                                    final Address address) {
+                                    final Address address,
+                                    final SenderIdentification identification) {
         super(RequestSenderType.INDIVIDUAL);
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
+        this.identification = identification;
     }
 
     public PaymentIndividualSender() {

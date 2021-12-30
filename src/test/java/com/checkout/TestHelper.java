@@ -1,6 +1,7 @@
 package com.checkout;
 
 import com.checkout.common.Address;
+import com.checkout.common.ChallengeIndicator;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
@@ -16,7 +17,6 @@ import com.checkout.payments.hosted.HostedPaymentRequest;
 import com.checkout.payments.links.PaymentLinkRequest;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Collections;
@@ -77,6 +77,7 @@ public final class TestHelper {
         return ThreeDSRequest.builder()
                 .enabled(Boolean.FALSE)
                 .attemptN3D(Boolean.FALSE)
+                .challengeIndicator(ChallengeIndicator.NO_CHALLENGE_REQUESTED)
                 .build();
     }
 

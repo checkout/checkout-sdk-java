@@ -7,6 +7,8 @@ public enum WorkflowConditionType {
     @SerializedName("event")
     EVENT,
     @SerializedName("entity")
-    ENTITY
+    ENTITY,
+    @SerializedName("processing_channel")
+    PROCESSING_CHANNEL
 
 }

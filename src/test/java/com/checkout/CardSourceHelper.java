@@ -1,6 +1,7 @@
 package com.checkout;
 
 import com.checkout.common.Address;
+import com.checkout.common.ChallengeIndicator;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.payments.ThreeDSRequest;
@@ -10,6 +11,8 @@ import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.sender.PaymentCorporateSender;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
 import com.checkout.payments.four.sender.PaymentSender;
+import com.checkout.payments.four.sender.SenderIdentification;
+import com.checkout.payments.four.sender.SenderIdentificationType;
 
 import java.util.UUID;
 
@@ -37,6 +40,11 @@ public class CardSourceHelper {
                         .city("City")
                         .country(CountryCode.GB)
                         .build())
+                .identification(SenderIdentification.builder()
+                        .type(SenderIdentificationType.DRIVING_LICENCE)
+                        .number("1234")
+                        .issuingCountry(CountryCode.GB)
+                        .build())
                 .build();
     }
 
@@ -63,7 +71,7 @@ public class CardSourceHelper {
     }
 
     public static PaymentRequest getCardSourcePayment(final RequestCardSource cardSource, final PaymentSender sender, final boolean three3ds) {
-        final ThreeDSRequest threeDSRequest = ThreeDSRequest.builder().enabled(three3ds).build();
+        final ThreeDSRequest threeDSRequest = ThreeDSRequest.builder().enabled(three3ds).challengeIndicator(ChallengeIndicator.NO_CHALLENGE_REQUESTED).build();
         return Payments.card(cardSource).fromSender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())

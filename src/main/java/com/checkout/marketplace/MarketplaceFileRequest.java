@@ -16,14 +16,11 @@ import java.io.File;
 @ToString(callSuper = true)
 public class MarketplaceFileRequest extends AbstractFileRequest {
 
-    private MarketplaceFileType type;
-
     private MarketplaceFilePurpose purpose;
 
     @Builder
-    public MarketplaceFileRequest(final File file, final ContentType contentType, final MarketplaceFileType type, final MarketplaceFilePurpose purpose) {
+    public MarketplaceFileRequest(final File file, final ContentType contentType, final MarketplaceFilePurpose purpose) {
         super(file, contentType);
-        this.type = type;
         this.purpose = purpose;
     }
 

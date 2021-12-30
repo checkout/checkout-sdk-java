@@ -1,5 +1,6 @@
 package com.checkout.sessions;
 
+import com.checkout.common.ChallengeIndicator;
 import com.checkout.sessions.channel.ChannelData;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

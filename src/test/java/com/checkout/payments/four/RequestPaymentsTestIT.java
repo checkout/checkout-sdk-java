@@ -2,6 +2,7 @@ package com.checkout.payments.four;
 
 import com.checkout.CardSourceHelper;
 import com.checkout.common.Address;
+import com.checkout.common.ChallengeIndicator;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.PaymentSourceType;
@@ -21,6 +22,8 @@ import com.checkout.payments.four.response.PaymentResponseBalances;
 import com.checkout.payments.four.response.source.CardResponseSource;
 import com.checkout.payments.four.sender.PaymentCorporateSender;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
+import com.checkout.payments.four.sender.SenderIdentification;
+import com.checkout.payments.four.sender.SenderIdentificationType;
 import com.checkout.tokens.CardTokenResponse;
 import org.junit.jupiter.api.Test;
 
@@ -121,9 +124,14 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                         .city("City")
                         .country(CountryCode.GB)
                         .build())
+                .identification(SenderIdentification.builder()
+                        .type(SenderIdentificationType.DRIVING_LICENCE)
+                        .number("1234")
+                        .issuingCountry(CountryCode.GB)
+                        .build())
                 .build();
 
-        final ThreeDSRequest threeDSRequest = ThreeDSRequest.builder().enabled(true).build();
+        final ThreeDSRequest threeDSRequest = ThreeDSRequest.builder().enabled(true).challengeIndicator(ChallengeIndicator.NO_CHALLENGE_REQUESTED).build();
 
         final PaymentRequest request = Payments.card(source).individualSender(sender)
                 .capture(false)
@@ -180,6 +188,11 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                         .addressLine2("Address Line 2")
                         .city("City")
                         .country(CountryCode.GB)
+                        .build())
+                .identification(SenderIdentification.builder()
+                        .type(SenderIdentificationType.DRIVING_LICENCE)
+                        .number("1234")
+                        .issuingCountry(CountryCode.GB)
                         .build())
                 .build();
 
@@ -349,7 +362,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
 
         final PaymentIndividualSender sender = getIndividualSender();
 
-        final ThreeDSRequest threeDSRequest = ThreeDSRequest.builder().enabled(true).build();
+        final ThreeDSRequest threeDSRequest = ThreeDSRequest.builder().enabled(true).challengeIndicator(ChallengeIndicator.NO_CHALLENGE_REQUESTED).build();
 
         final PaymentRequest tokenRequest = Payments.token(tokenSource).individualSender(sender)
                 .capture(false)

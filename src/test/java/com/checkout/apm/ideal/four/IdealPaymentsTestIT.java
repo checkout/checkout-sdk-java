@@ -12,6 +12,8 @@ import com.checkout.payments.four.request.Payments;
 import com.checkout.payments.four.request.source.apm.RequestIdealSource;
 import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
+import com.checkout.payments.four.sender.SenderIdentification;
+import com.checkout.payments.four.sender.SenderIdentificationType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,6 +36,11 @@ class IdealPaymentsTestIT extends SandboxTestFixture {
                         .addressLine2("Address Line 2")
                         .city("City")
                         .country(CountryCode.GB)
+                        .build())
+                .identification(SenderIdentification.builder()
+                        .type(SenderIdentificationType.DRIVING_LICENCE)
+                        .number("1234")
+                        .issuingCountry(CountryCode.GB)
                         .build())
                 .build();
 

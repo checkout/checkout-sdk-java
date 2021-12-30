@@ -25,6 +25,7 @@ import com.checkout.workflows.four.actions.response.WorkflowActionResponse;
 import com.checkout.workflows.four.conditions.WorkflowConditionType;
 import com.checkout.workflows.four.conditions.response.EntityWorkflowConditionResponse;
 import com.checkout.workflows.four.conditions.response.EventWorkflowConditionResponse;
+import com.checkout.workflows.four.conditions.response.ProcessingChannelWorkflowConditionResponse;
 import com.checkout.workflows.four.conditions.response.WorkflowConditionResponse;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -87,7 +88,8 @@ class GsonSerializer implements Serializer {
                     .registerSubtype(WebhookWorkflowActionResponse.class, identifier(WorkflowActionType.WEBHOOK)))
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(WorkflowConditionResponse.class, CheckoutUtils.TYPE)
                     .registerSubtype(EventWorkflowConditionResponse.class, identifier(WorkflowConditionType.EVENT))
-                    .registerSubtype(EntityWorkflowConditionResponse.class, identifier(WorkflowConditionType.ENTITY)))
+                    .registerSubtype(EntityWorkflowConditionResponse.class, identifier(WorkflowConditionType.ENTITY))
+                    .registerSubtype(ProcessingChannelWorkflowConditionResponse.class, identifier(WorkflowConditionType.PROCESSING_CHANNEL)))
             .create();
 
     private final Gson gson;

@@ -5,6 +5,7 @@ import com.checkout.workflows.four.actions.WebhookSignature;
 import com.checkout.workflows.four.actions.request.WebhookWorkflowActionRequest;
 import com.checkout.workflows.four.conditions.request.EntityWorkflowConditionRequest;
 import com.checkout.workflows.four.conditions.request.EventWorkflowConditionRequest;
+import com.checkout.workflows.four.conditions.request.ProcessingChannelWorkflowConditionRequest;
 import org.junit.jupiter.api.AfterEach;
 
 import java.util.Arrays;
@@ -24,6 +25,7 @@ abstract class AbstractWorkflowTestIT extends AbstractPaymentsTestIT {
     protected static final String GATEWAY = "gateway";
     protected static final String PAYMENT_CAPTURED = "payment_captured";
     protected static final String PAYMENT_APPROVED = "payment_approved";
+    protected static final String PROCESSING_CHANNEL_ID = "pc_5jp2az55l3cuths25t5p3xhwru";
 
     protected static final List<String> GATEWAY_EVENT_TYPES = Arrays.asList(PAYMENT_APPROVED, "payment_declined",
             PAYMENT_CAPTURED, "payment_capture_declined", "payment_refunded", "payment_refund_declined", "payment_voided",
@@ -49,6 +51,10 @@ abstract class AbstractWorkflowTestIT extends AbstractPaymentsTestIT {
             .entities(Collections.singletonList(WORKFLOW_ENTITY_ID))
             .build();
 
+    protected final ProcessingChannelWorkflowConditionRequest processingChannelWorkflowConditionRequest = ProcessingChannelWorkflowConditionRequest.builder()
+            .processingChannels(Collections.singletonList(PROCESSING_CHANNEL_ID))
+            .build();
+
     private final Set<String> workflows = new HashSet<>();
 
     public AbstractWorkflowTestIT() {
@@ -70,7 +76,7 @@ abstract class AbstractWorkflowTestIT extends AbstractPaymentsTestIT {
         final CreateWorkflowRequest request = CreateWorkflowRequest.builder()
                 .name(TESTING)
                 .actions(Collections.singletonList(baseWorkflowActionRequest))
-                .conditions(Arrays.asList(baseEventWorkflowConditionRequest, baseEntityWorkflowConditionRequest))
+                .conditions(Arrays.asList(baseEventWorkflowConditionRequest, baseEntityWorkflowConditionRequest, processingChannelWorkflowConditionRequest))
                 .build();
 
         final CreateWorkflowResponse createWorkflowResponse = blocking(fourApi.workflowsClient().createWorkflow(request));
