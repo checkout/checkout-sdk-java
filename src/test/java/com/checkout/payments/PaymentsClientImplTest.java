@@ -1,12 +1,11 @@
 package com.checkout.payments;
 
-import com.checkout.ApiClient;
-import com.checkout.CheckoutConfiguration;
-import com.checkout.SdkAuthorization;
-import com.checkout.SdkAuthorizationType;
-import com.checkout.SdkCredentials;
+import com.checkout.*;
+import com.checkout.common.Currency;
+import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.PayoutRequest;
+import com.checkout.payments.request.source.AbstractRequestSource;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
 import com.google.gson.reflect.TypeToken;
@@ -24,9 +23,7 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -77,6 +74,41 @@ class PaymentsClientImplTest {
         assertNotNull(future.get());
         assertEquals(response, future.get());
 
+    }
+
+    @Test
+    void shouldRequestPayment_customSource() throws ExecutionException, InterruptedException {
+
+        CustomSource customSource = new CustomSource(10, Currency.USD);
+
+        final PaymentRequest request = mock(PaymentRequest.class);
+        request.setSource(customSource);
+
+        final PaymentResponse response = PaymentRequest.builder().source(customSource).build()
+
+        when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayment(request);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    private class CustomSource extends AbstractRequestSource {
+
+        private long amount;
+
+        private Currency currency;
+
+        protected CustomSource(final long amount,
+                               final Currency currency) {
+
+            super(PaymentSourceType.ALIPAY);
+            this.amount = amount;
+            this.currency = currency;
+        }
     }
 
     @Test

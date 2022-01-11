@@ -39,6 +39,23 @@ public enum PaymentSourceType {
     @SerializedName("id")
     SEPA,
     @SerializedName("sofort")
-    SOFORT;
-
+    SOFORT,
+    @SerializedName("qpay")
+    QPAY,
+    @SerializedName("alipay")
+    ALIPAY,
+    @SerializedName("paypal")
+    PAYPAL,
+    @SerializedName("multibanco")
+    MULTIBANCO,
+    @SerializedName("eps")
+    EPS,
+    @SerializedName("poli")
+    POLI,
+    @SerializedName("p24")
+    PRZELEWY24,
+    @SerializedName("benefitpay")
+    BENEFITPAY,
+    @SerializedName("bancontact")
+    BANCONTACT;
 }
