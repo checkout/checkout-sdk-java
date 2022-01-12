@@ -1,7 +1,7 @@
 package com.checkout.instruments.four.update;
 
+import com.checkout.common.InstrumentType;
 import com.checkout.common.four.AccountHolder;
-import com.checkout.common.four.InstrumentType;
 import com.checkout.common.four.UpdateCustomerRequest;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;

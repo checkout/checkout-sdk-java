@@ -2,7 +2,7 @@ package com.checkout.instruments.four.create;
 
 import com.checkout.common.CustomerResponse;
 import com.checkout.common.four.BankDetails;
-import com.checkout.common.four.InstrumentType;
+import com.checkout.common.InstrumentType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

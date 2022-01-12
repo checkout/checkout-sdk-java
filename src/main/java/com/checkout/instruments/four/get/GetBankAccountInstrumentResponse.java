@@ -2,9 +2,9 @@ package com.checkout.instruments.four.get;
 
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
+import com.checkout.common.InstrumentType;
 import com.checkout.common.four.AccountType;
 import com.checkout.common.four.BankDetails;
-import com.checkout.common.four.InstrumentType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

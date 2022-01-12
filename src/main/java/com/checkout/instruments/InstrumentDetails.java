@@ -1,6 +1,9 @@
 package com.checkout.instruments;
 
+import com.checkout.common.CardCategory;
+import com.checkout.common.CardType;
 import com.checkout.common.CountryCode;
+import com.checkout.common.InstrumentType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
@@ -9,7 +12,7 @@ public class InstrumentDetails {
 
     private String id;
 
-    private String type;
+    private InstrumentType type;
 
     private String fingerprint;
 
@@ -29,10 +32,10 @@ public class InstrumentDetails {
     private String bin;
 
     @SerializedName("card_type")
-    private String cardType;
+    private CardType cardType;
 
     @SerializedName("card_category")
-    private String cardCategory;
+    private CardCategory cardCategory;
 
     private String issuer;
 

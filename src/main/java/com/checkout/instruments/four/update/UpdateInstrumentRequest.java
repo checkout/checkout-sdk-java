@@ -1,6 +1,6 @@
 package com.checkout.instruments.four.update;
 
-import com.checkout.common.four.InstrumentType;
+import com.checkout.common.InstrumentType;
 import lombok.Data;
 
 @Data

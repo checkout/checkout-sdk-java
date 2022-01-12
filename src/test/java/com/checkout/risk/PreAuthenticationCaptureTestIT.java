@@ -9,6 +9,7 @@ import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
+import com.checkout.common.InstrumentType;
 import com.checkout.common.Phone;
 import com.checkout.instruments.CreateInstrumentRequest;
 import com.checkout.instruments.CreateInstrumentResponse;
@@ -117,7 +118,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
         final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().request(cardTokenRequest));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
-                .type("token")
+                .type(InstrumentType.TOKEN)
                 .token(cardToken.getToken())
                 .accountHolder(InstrumentAccountHolder.builder()
                         .billingAddress(Address.builder()

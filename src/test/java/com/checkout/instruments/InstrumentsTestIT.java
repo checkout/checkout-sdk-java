@@ -5,6 +5,7 @@ import com.checkout.SandboxTestFixture;
 import com.checkout.TestCardSource;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
+import com.checkout.common.InstrumentType;
 import com.checkout.common.Phone;
 import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
@@ -46,7 +47,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
         final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().request(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
-                .type("token")
+                .type(InstrumentType.TOKEN)
                 .token(cardToken.getToken())
                 .accountHolder(accountHolder)
                 .customer(InstrumentCustomerRequest.builder()
@@ -86,7 +87,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
         final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().request(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
-                .type("token")
+                .type(InstrumentType.TOKEN)
                 .token(cardToken.getToken())
                 .accountHolder(accountHolder)
                 .build();
@@ -138,7 +139,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
         final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().request(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
-                .type("token")
+                .type(InstrumentType.TOKEN)
                 .token(cardToken.getToken())
                 .build();
         final CreateInstrumentResponse response = blocking(defaultApi.instrumentsClient().createInstrument(request));
@@ -160,7 +161,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
         final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().request(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
-                .type("token")
+                .type(InstrumentType.TOKEN)
                 .token(cardToken.getToken())
                 .build();
 
