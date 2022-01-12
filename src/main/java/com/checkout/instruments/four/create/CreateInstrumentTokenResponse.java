@@ -4,7 +4,7 @@ import com.checkout.common.CountryCode;
 import com.checkout.common.CustomerResponse;
 import com.checkout.common.CardCategory;
 import com.checkout.common.CardType;
-import com.checkout.common.four.InstrumentType;
+import com.checkout.common.InstrumentType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

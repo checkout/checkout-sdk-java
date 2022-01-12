@@ -2,7 +2,7 @@ package com.checkout;
 
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.PaymentSourceType;
-import com.checkout.common.four.InstrumentType;
+import com.checkout.common.InstrumentType;
 import com.checkout.instruments.four.create.CreateInstrumentBankAccountResponse;
 import com.checkout.instruments.four.create.CreateInstrumentResponse;
 import com.checkout.instruments.four.create.CreateInstrumentTokenResponse;

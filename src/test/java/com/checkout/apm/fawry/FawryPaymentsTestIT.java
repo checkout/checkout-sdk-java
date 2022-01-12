@@ -10,6 +10,7 @@ import com.checkout.payments.request.source.apm.RequestFawrySource;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
 import com.checkout.payments.response.source.AlternativePaymentSourceResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -25,6 +26,7 @@ class FawryPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled
     void shouldApproveFawryPayment() {
 
         final String paymentId = makeFawryPayment();
@@ -50,6 +52,7 @@ class FawryPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled
     void shouldCancelFawryPayment() {
 
         final String paymentId = makeFawryPayment();

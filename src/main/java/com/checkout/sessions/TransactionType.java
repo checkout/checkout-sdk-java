@@ -13,6 +13,6 @@ public enum TransactionType {
     @SerializedName("quashi_card_transaction")
     QUASHI_CARD_TRANSACTION,
     @SerializedName("prepaid_activation_and_load")
-    PREPAID_ACTIVATION_AND_LOAN
+    PREPAID_ACTIVATION_AND_LOAD
 
 }

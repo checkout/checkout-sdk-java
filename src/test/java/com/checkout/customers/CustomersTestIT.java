@@ -6,6 +6,7 @@ import com.checkout.TestCardSource;
 import com.checkout.TestHelper;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
+import com.checkout.common.InstrumentType;
 import com.checkout.common.Phone;
 import com.checkout.instruments.CreateInstrumentRequest;
 import com.checkout.instruments.CreateInstrumentResponse;
@@ -82,11 +83,11 @@ class CustomersTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void shouldGetCustomerDetailsWithInstrument(){
+    void shouldGetCustomerDetailsWithInstrument() {
         final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().request(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
-                .type("token")
+                .type(InstrumentType.TOKEN)
                 .token(cardToken.getToken())
                 .customer(InstrumentCustomerRequest.builder()
                         .email("instrumentcustomer@checkout.com")

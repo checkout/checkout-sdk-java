@@ -52,7 +52,7 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
         final PaymentResponse payment = makeCardPayment(false);
 
-        nap(10);
+        nap(15);
 
         final SubjectEvent paymentApprovedEvent = getSubjectEvent(payment.getId());
 

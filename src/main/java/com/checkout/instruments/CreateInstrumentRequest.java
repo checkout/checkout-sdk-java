@@ -1,5 +1,6 @@
 package com.checkout.instruments;
 
+import com.checkout.common.InstrumentType;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public final class CreateInstrumentRequest {
 
-    private String type;
+    private InstrumentType type;
 
     private String token;
 

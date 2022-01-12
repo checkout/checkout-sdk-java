@@ -2,10 +2,10 @@ package com.checkout.instruments.four.update;
 
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
+import com.checkout.common.InstrumentType;
 import com.checkout.common.four.AccountHolder;
 import com.checkout.common.four.AccountType;
 import com.checkout.common.four.BankDetails;
-import com.checkout.common.four.InstrumentType;
 import com.checkout.common.four.UpdateCustomerRequest;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;

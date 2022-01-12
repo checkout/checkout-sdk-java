@@ -11,7 +11,7 @@ public enum SessionStatus {
     @SerializedName("challenged")
     CHALLENGED,
     @SerializedName("challenge_abandoned")
-    CHALLENGED_ABANDONED,
+    CHALLENGE_ABANDONED,
     @SerializedName("expired")
     EXPIRED,
     @SerializedName("approved")
