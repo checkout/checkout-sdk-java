@@ -57,5 +57,5 @@ public enum PaymentSourceType {
     @SerializedName("benefitpay")
     BENEFITPAY,
     @SerializedName("bancontact")
-    BANCONTACT;
+    BANCONTACT
 }
