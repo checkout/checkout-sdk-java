@@ -7,8 +7,10 @@ import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
 import com.checkout.common.Phone;
 import com.checkout.common.Product;
+import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.BillingInformation;
 import com.checkout.payments.PaymentRecipient;
+import com.checkout.payments.PaymentType;
 import com.checkout.payments.ProcessingSettings;
 import com.checkout.payments.RiskRequest;
 import com.checkout.payments.ShippingDetails;
@@ -109,6 +111,11 @@ public final class TestHelper {
                 .risk(new RiskRequest(Boolean.FALSE))
                 .returnUrl("https://example.com/success")
                 .locale("en-GB")
+                .paymentType(PaymentType.REGULAR)
+                .billingDescriptor(BillingDescriptor.builder()
+                        .city("London")
+                        .name("Awesome name")
+                        .build())
                 .build();
     }
 
@@ -141,6 +148,11 @@ public final class TestHelper {
                 .threeDS(createThreeDS())
                 .capture(true)
                 .captureOn(time)
+                .paymentType(PaymentType.REGULAR)
+                .billingDescriptor(BillingDescriptor.builder()
+                        .city("London")
+                        .name("Awesome name")
+                        .build())
                 .build();
     }
 
