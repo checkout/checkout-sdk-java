@@ -3,8 +3,10 @@ package com.checkout.payments.links;
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
 import com.checkout.common.Product;
+import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.BillingInformation;
 import com.checkout.payments.PaymentRecipient;
+import com.checkout.payments.PaymentType;
 import com.checkout.payments.ProcessingSettings;
 import com.checkout.payments.RiskRequest;
 import com.checkout.payments.ShippingDetails;
@@ -62,5 +64,14 @@ public final class PaymentLinkRequest {
 
     @SerializedName("capture_on")
     private Instant captureOn;
+
+    @SerializedName("payment_type")
+    private PaymentType paymentType;
+
+    @SerializedName("payment_ip")
+    public String paymentIp;
+
+    @SerializedName("billing_descriptor")
+    public BillingDescriptor billingDescriptor;
 
 }
