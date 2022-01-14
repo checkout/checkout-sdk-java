@@ -39,14 +39,19 @@ final class FourOAuthSdkCredentials extends SdkCredentials {
 
     private OAuthAccessToken accessToken;
 
-    FourOAuthSdkCredentials(final URI authorizationUri, final String clientId, final String clientSecret, final Set<FourOAuthScope> scopes) {
+    FourOAuthSdkCredentials(final HttpClientBuilder httpClientBuilder,
+                            final URI authorizationUri,
+                            final String clientId,
+                            final String clientSecret,
+                            final Set<FourOAuthScope> scopes) {
         super(PlatformType.FOUR_OAUTH);
-        validateParams("authorizationUri", authorizationUri, "clientId", clientId, "clientSecret", clientSecret, "scopes", scopes);
+        validateParams("httpClientBuilder", httpClientBuilder, "authorizationUri", authorizationUri,
+                "clientId", clientId, "clientSecret", clientSecret, "scopes", scopes);
+        this.client = httpClientBuilder.build();
         this.authorizationUri = authorizationUri;
         this.clientId = clientId;
         this.clientSecret = clientSecret;
         this.scopes = scopes;
-        this.client = HttpClientBuilder.create().build();
         this.serializer = new GsonSerializer();
     }
 

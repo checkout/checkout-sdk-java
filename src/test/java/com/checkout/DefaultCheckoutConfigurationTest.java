@@ -6,6 +6,7 @@ import org.mockito.Mockito;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
@@ -16,6 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 class DefaultCheckoutConfigurationTest {
+
+    private static final HttpClientBuilder DEFAULT_CLIENT_BUILDER = HttpClientBuilder.create();
+    private static final Executor DEFAULT_EXECUTOR = ForkJoinPool.commonPool();
 
     @Test
     void shouldFailCreatingConfiguration() {
@@ -46,7 +50,7 @@ class DefaultCheckoutConfigurationTest {
 
         final FourStaticKeysSdkCredentials credentials = Mockito.mock(FourStaticKeysSdkCredentials.class);
 
-        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, null, null, null);
+        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
         assertEquals(Environment.PRODUCTION.getUri(), configuration.getBaseUri());
 
         final CheckoutConfiguration configuration2 = new DefaultCheckoutConfiguration(credentials, new URI("https://www.test.checkout.com/"), null, null, null);
@@ -59,7 +63,7 @@ class DefaultCheckoutConfigurationTest {
 
         final FourStaticKeysSdkCredentials credentials = Mockito.mock(FourStaticKeysSdkCredentials.class);
 
-        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, null, null, null);
+        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
 
         assertEquals(Environment.PRODUCTION.getUri(), configuration.getBaseUri());
         assertNotNull(configuration.getHttpClientBuilder());
@@ -86,7 +90,7 @@ class DefaultCheckoutConfigurationTest {
 
         final FourStaticKeysSdkCredentials credentials = Mockito.mock(FourStaticKeysSdkCredentials.class);
 
-        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, null, null, null);
+        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
         assertEquals(Environment.PRODUCTION.getUri(), configuration.getBaseUri());
 
         final CheckoutConfiguration configuration2 = new DefaultCheckoutConfiguration(credentials, new URI("https://www.test.checkout.com/"), null, null, null);

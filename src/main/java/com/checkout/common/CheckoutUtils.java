@@ -40,6 +40,14 @@ public final class CheckoutUtils {
         validateMultipleRequires(new Object[][]{{p1, o1}, {p2, o2}, {p3, o3}, {p4, o4}});
     }
 
+    public static void validateParams(final String p1, final Object o1,
+                                      final String p2, final Object o2,
+                                      final String p3, final Object o3,
+                                      final String p4, final Object o4,
+                                      final String p5, final Object o5) {
+        validateMultipleRequires(new Object[][]{{p1, o1}, {p2, o2}, {p3, o3}, {p4, o4}, {p5, o5}});
+    }
+
     private static void validateMultipleRequires(final Object[][] params) {
         if (params.length == 0) {
             return;

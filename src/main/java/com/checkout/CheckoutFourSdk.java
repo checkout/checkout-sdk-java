@@ -55,7 +55,7 @@ public final class CheckoutFourSdk {
                 }
                 this.authorizationUri = environment.getOAuthAuthorizeUri();
             }
-            final FourOAuthSdkCredentials credentials = new FourOAuthSdkCredentials(authorizationUri, clientId, clientSecret, scopes);
+            final FourOAuthSdkCredentials credentials = new FourOAuthSdkCredentials(httpClientBuilder, authorizationUri, clientId, clientSecret, scopes);
             credentials.initOAuthAccess();
             return credentials;
         }
