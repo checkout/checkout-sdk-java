@@ -4,16 +4,17 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.net.URI;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ForkJoinPool;
 
 import static java.util.Optional.ofNullable;
 
 public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
 
+    protected HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
     private Environment environment;
     private Environment filesApiEnvironment;
     private URI uri;
-    private HttpClientBuilder httpClientBuilder;
-    private Executor executor;
+    private Executor executor = ForkJoinPool.commonPool();
 
     public AbstractCheckoutSdkBuilder<T> environment(final Environment environment) {
         this.environment = environment;

@@ -4,6 +4,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -31,6 +32,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class FourOAuthSdkCredentialsTest {
 
+    private static final HttpClientBuilder DEFAULT_CLIENT_BUILDER = HttpClientBuilder.create();
+
     private static final String BEARER = "Bearer ";
 
     @Mock
@@ -42,28 +45,28 @@ class FourOAuthSdkCredentialsTest {
     @Test
     void shouldFailCreatingFourOAuthFourSdkCredentials() {
         try {
-            new FourOAuthSdkCredentials(null, "client_id", "client_secret", EnumSet.allOf(FourOAuthScope.class));
+            new FourOAuthSdkCredentials(DEFAULT_CLIENT_BUILDER, null, "client_id", "client_secret", EnumSet.allOf(FourOAuthScope.class));
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
             assertEquals("authorizationUri cannot be null", e.getMessage());
         }
         try {
-            new FourOAuthSdkCredentials(Mockito.mock(URI.class), null, "client_secret", EnumSet.allOf(FourOAuthScope.class));
+            new FourOAuthSdkCredentials(DEFAULT_CLIENT_BUILDER, Mockito.mock(URI.class), null, "client_secret", EnumSet.allOf(FourOAuthScope.class));
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
             assertEquals("clientId cannot be null", e.getMessage());
         }
         try {
-            new FourOAuthSdkCredentials(Mockito.mock(URI.class), "client_id", " ", EnumSet.allOf(FourOAuthScope.class));
+            new FourOAuthSdkCredentials(DEFAULT_CLIENT_BUILDER, Mockito.mock(URI.class), "client_id", " ", EnumSet.allOf(FourOAuthScope.class));
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
             assertEquals("clientSecret cannot be blank", e.getMessage());
         }
         try {
-            new FourOAuthSdkCredentials(Mockito.mock(URI.class), "client_id", "client_secret", null);
+            new FourOAuthSdkCredentials(DEFAULT_CLIENT_BUILDER, Mockito.mock(URI.class), "client_id", "client_secret", null);
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
@@ -74,7 +77,7 @@ class FourOAuthSdkCredentialsTest {
     @Test
     void shouldCreateFourOAuthFourSdkCredentials() {
 
-        final SdkCredentials credentials = new FourOAuthSdkCredentials(Mockito.mock(URI.class), "client_id", "client_secret", EnumSet.allOf(FourOAuthScope.class));
+        final SdkCredentials credentials = new FourOAuthSdkCredentials(DEFAULT_CLIENT_BUILDER, Mockito.mock(URI.class), "client_id", "client_secret", EnumSet.allOf(FourOAuthScope.class));
         assertEquals(FOUR_OAUTH, credentials.getPlatformType());
 
     }
@@ -82,7 +85,7 @@ class FourOAuthSdkCredentialsTest {
     @Test
     void authorization_shouldNotGetWhenTheresAValidAccessToken() {
 
-        final FourOAuthSdkCredentials credentials = new FourOAuthSdkCredentials(Mockito.mock(URI.class), "client_id", "client_secret", EnumSet.allOf(FourOAuthScope.class));
+        final FourOAuthSdkCredentials credentials = new FourOAuthSdkCredentials(DEFAULT_CLIENT_BUILDER, Mockito.mock(URI.class), "client_id", "client_secret", EnumSet.allOf(FourOAuthScope.class));
         credentials.setAccessToken(new OAuthAccessToken("y123", LocalDateTime.now().plusMinutes(5)));
         credentials.setClient(client);
         credentials.setSerializer(serializer);
@@ -114,6 +117,7 @@ class FourOAuthSdkCredentialsTest {
         when(client.execute(any(HttpPost.class))).thenReturn(response);
 
         final FourOAuthSdkCredentials credentials = new FourOAuthSdkCredentials(
+                DEFAULT_CLIENT_BUILDER,
                 new URI("http://test.checkout.com/oauth/token"),
                 "client_id",
                 "client_secret",
@@ -151,6 +155,7 @@ class FourOAuthSdkCredentialsTest {
         when(client.execute(any(HttpPost.class))).thenReturn(response);
 
         final FourOAuthSdkCredentials credentials = new FourOAuthSdkCredentials(
+                DEFAULT_CLIENT_BUILDER,
                 new URI("http://test.checkout.com/oauth/token"),
                 "client_id",
                 "client_secret",
@@ -184,6 +189,7 @@ class FourOAuthSdkCredentialsTest {
         when(client.execute(any(HttpPost.class))).thenReturn(response);
 
         final FourOAuthSdkCredentials credentials = new FourOAuthSdkCredentials(
+                DEFAULT_CLIENT_BUILDER,
                 new URI("http://test.checkout.com/oauth/token"),
                 "fake",
                 "fake",

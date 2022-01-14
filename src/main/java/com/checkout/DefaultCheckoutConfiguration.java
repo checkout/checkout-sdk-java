@@ -4,14 +4,10 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.net.URI;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ForkJoinPool;
 
 import static com.checkout.common.CheckoutUtils.validateParams;
 
 class DefaultCheckoutConfiguration implements CheckoutConfiguration {
-
-    private static final HttpClientBuilder DEFAULT_CLIENT_BUILDER = HttpClientBuilder.create();
-    private static final Executor DEFAULT_EXECUTOR = ForkJoinPool.commonPool();
 
     private final SdkCredentials sdkCredentials;
     private final URI baseUri;
@@ -24,11 +20,11 @@ class DefaultCheckoutConfiguration implements CheckoutConfiguration {
                                  final HttpClientBuilder httpClientBuilder,
                                  final Executor executor,
                                  final FilesApiConfiguration filesApiConfiguration) {
-        validateParams("sdkCredentials", sdkCredentials, "environment", environment);
+        validateParams("sdkCredentials", sdkCredentials, "environment", environment, "httpClientBuilder", httpClientBuilder, "executor", executor);
         this.sdkCredentials = sdkCredentials;
         this.baseUri = environment.getUri();
-        this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : DEFAULT_CLIENT_BUILDER;
-        this.executor = executor != null ? executor : DEFAULT_EXECUTOR;
+        this.httpClientBuilder = httpClientBuilder;
+        this.executor = executor;
         this.filesApiConfiguration = filesApiConfiguration;
     }
 
@@ -40,8 +36,8 @@ class DefaultCheckoutConfiguration implements CheckoutConfiguration {
         validateParams("sdkCredentials", sdkCredentials, "uri", uri);
         this.sdkCredentials = sdkCredentials;
         this.baseUri = uri;
-        this.httpClientBuilder = httpClientBuilder != null ? httpClientBuilder : DEFAULT_CLIENT_BUILDER;
-        this.executor = executor != null ? executor : DEFAULT_EXECUTOR;
+        this.httpClientBuilder = httpClientBuilder;
+        this.executor = executor;
         this.filesApiConfiguration = filesApiConfiguration;
     }
 
