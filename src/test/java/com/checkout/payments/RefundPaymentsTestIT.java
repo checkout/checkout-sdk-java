@@ -1,6 +1,7 @@
 package com.checkout.payments;
 
 import com.checkout.payments.response.PaymentResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
 
     @Test
+    @Disabled("unstable")
     void shouldRefundPayment() {
 
         final PaymentResponse paymentResponse = makeCardPayment(true, 10);

@@ -5,6 +5,7 @@ import com.checkout.payments.response.PaymentResponse;
 import com.checkout.webhooks.WebhookRequest;
 import com.checkout.webhooks.WebhookResponse;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -66,6 +67,7 @@ class EventsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("unstable")
     void shouldRetrieveEventsByPaymentId_andRetrieveEventById_andGetNotification() {
 
         registerWebhook();
@@ -124,6 +126,7 @@ class EventsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("unstable")
     void shouldRetryWebhook() {
 
         final WebhookResponse webhookResponse = registerWebhook();

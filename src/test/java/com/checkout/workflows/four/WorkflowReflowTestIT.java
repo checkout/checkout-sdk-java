@@ -5,6 +5,7 @@ import com.checkout.workflows.four.events.SubjectEvent;
 import com.checkout.workflows.four.events.SubjectEventsResponse;
 import com.checkout.workflows.four.reflow.ReflowByEventsRequest;
 import com.checkout.workflows.four.reflow.ReflowBySubjectsRequest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -33,6 +34,7 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
     }
 
     @Test
+    @Disabled("unstable")
     void shouldReflowBySubject() {
 
         createWorkflow();
@@ -64,6 +66,7 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
     }
 
     @Test
+    @Disabled("unstable")
     void shouldReflowBySubjectAndWorkflow() {
 
         final CreateWorkflowResponse createWorkflowResponse = createWorkflow();
@@ -99,6 +102,7 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
     }
 
     @Test
+    @Disabled("unstable")
     void shouldReflowSubjects() {
 
         final CreateWorkflowResponse createWorkflowResponse = createWorkflow();
