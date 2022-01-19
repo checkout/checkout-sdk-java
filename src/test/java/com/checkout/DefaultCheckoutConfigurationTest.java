@@ -53,7 +53,7 @@ class DefaultCheckoutConfigurationTest {
         final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
         assertEquals(Environment.PRODUCTION.getUri(), configuration.getBaseUri());
 
-        final CheckoutConfiguration configuration2 = new DefaultCheckoutConfiguration(credentials, new URI("https://www.test.checkout.com/"), null, null, null);
+        final CheckoutConfiguration configuration2 = new DefaultCheckoutConfiguration(credentials, new URI("https://www.test.checkout.com/"), DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
         assertEquals(URI.create("https://www.test.checkout.com/"), configuration2.getBaseUri());
 
     }
@@ -93,7 +93,7 @@ class DefaultCheckoutConfigurationTest {
         final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
         assertEquals(Environment.PRODUCTION.getUri(), configuration.getBaseUri());
 
-        final CheckoutConfiguration configuration2 = new DefaultCheckoutConfiguration(credentials, new URI("https://www.test.checkout.com/"), null, null, null);
+        final CheckoutConfiguration configuration2 = new DefaultCheckoutConfiguration(credentials, new URI("https://www.test.checkout.com/"), DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
         assertEquals(URI.create("https://www.test.checkout.com/"), configuration2.getBaseUri());
 
     }

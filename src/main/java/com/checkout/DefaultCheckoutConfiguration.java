@@ -33,7 +33,7 @@ class DefaultCheckoutConfiguration implements CheckoutConfiguration {
                                  final HttpClientBuilder httpClientBuilder,
                                  final Executor executor,
                                  final FilesApiConfiguration filesApiConfiguration) {
-        validateParams("sdkCredentials", sdkCredentials, "uri", uri);
+        validateParams("sdkCredentials", sdkCredentials, "uri", uri, "httpClientBuilder", httpClientBuilder, "executor", executor);
         this.sdkCredentials = sdkCredentials;
         this.baseUri = uri;
         this.httpClientBuilder = httpClientBuilder;
