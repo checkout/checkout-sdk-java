@@ -7,6 +7,7 @@ import com.checkout.payments.PaymentStatus;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.source.apm.RequestIdealSource;
 import com.checkout.payments.response.PaymentResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,6 +39,7 @@ class IdealPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("unstable")
     void shouldGetInfo() {
 
         final IdealInfo idealInfo = blocking(defaultApi.idealClient().getInfo());

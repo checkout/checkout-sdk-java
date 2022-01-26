@@ -14,6 +14,7 @@ import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
 import com.checkout.payments.four.sender.SenderIdentification;
 import com.checkout.payments.four.sender.SenderIdentificationType;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -63,6 +64,7 @@ class IdealPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("unstable")
     void shouldGetInfo() {
 
         final IdealInfo idealInfo = blocking(fourApi.idealClient().getInfo());
