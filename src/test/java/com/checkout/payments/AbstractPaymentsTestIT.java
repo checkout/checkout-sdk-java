@@ -70,7 +70,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                 .currency(Currency.GBP)
                 .build();
 
-        final PaymentResponse paymentResponse = blocking(paymentsClient.requestPayment(paymentRequest));
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
         assertNotNull(paymentResponse);
 
         return paymentResponse;
@@ -102,7 +102,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                 .phone(phone)
                 .build();
 
-        final CardTokenResponse cardTokenResponse = blocking(defaultApi.tokensClient().request(cardTokenRequest));
+        final CardTokenResponse cardTokenResponse = blocking(() -> defaultApi.tokensClient().request(cardTokenRequest));
         assertNotNull(cardTokenResponse);
 
         final RequestTokenSource requestTokenSource = RequestTokenSource.builder()
@@ -117,7 +117,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                 .currency(Currency.GBP)
                 .build();
 
-        final PaymentResponse paymentResponse = blocking(paymentsClient.requestPayment(paymentRequest));
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
         assertNotNull(paymentResponse);
 
         return paymentResponse;
@@ -169,7 +169,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                 .threeDS(threeDSRequest)
                 .build();
 
-        final PaymentResponse paymentResponse = blocking(paymentsClient.requestPayment(paymentRequest));
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
         assertNotNull(paymentResponse);
 
         return paymentResponse;

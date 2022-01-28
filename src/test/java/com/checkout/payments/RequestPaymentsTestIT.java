@@ -119,7 +119,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .currency(Currency.GBP)
                 .build();
 
-        final PaymentResponse paymentResponse = blocking(paymentsClient.requestPayment(paymentRequest));
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
         assertNotNull(paymentResponse);
 
         assertNotNull(paymentResponse.getId());
@@ -351,10 +351,10 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .currency(Currency.GBP)
                 .build();
 
-        final PaymentResponse paymentResponse1 = blocking(paymentsClient.requestPayment(paymentRequest, IDEMPOTENCY_KEY));
+        final PaymentResponse paymentResponse1 = blocking(() -> paymentsClient.requestPayment(paymentRequest, IDEMPOTENCY_KEY));
         assertNotNull(paymentResponse1);
 
-        final PaymentResponse paymentResponse2 = blocking(paymentsClient.requestPayment(paymentRequest, IDEMPOTENCY_KEY));
+        final PaymentResponse paymentResponse2 = blocking(() -> paymentsClient.requestPayment(paymentRequest, IDEMPOTENCY_KEY));
         assertNotNull(paymentResponse2);
 
         assertEquals(paymentResponse1.getId(), paymentResponse2.getId());

@@ -26,7 +26,7 @@ class GiropayPaymentsTestIT extends SandboxTestFixture {
                 .build();
 
         final PaymentRequest request = PaymentRequest.giropay(giropaySource, Currency.EUR, 1000L);
-        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestPayment(request));
+        final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);
         assertEquals(PaymentStatus.PENDING, response.getStatus());
         assertNotNull(response.getLink("self"));

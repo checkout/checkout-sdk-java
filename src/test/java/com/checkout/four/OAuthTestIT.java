@@ -70,7 +70,7 @@ public class OAuthTestIT extends SandboxTestFixture {
                 .marketplace(MarketplaceData.builder().subEntityId("ent_ocw5i74vowfg2edpy66izhts2u").build())
                 .build();
 
-        assertNotNull(blocking(fourApi.paymentsClient().requestPayment(request)));
+        assertNotNull(blocking(() -> fourApi.paymentsClient().requestPayment(request)));
 
     }
 

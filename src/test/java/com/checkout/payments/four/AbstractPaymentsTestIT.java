@@ -16,9 +16,9 @@ import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.payments.four.response.source.CardResponseSource;
 import com.checkout.payments.four.sender.PaymentCorporateSender;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
-import com.checkout.tokens.TokensClient;
 import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
+import com.checkout.tokens.TokensClient;
 
 import java.util.UUID;
 
@@ -45,7 +45,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
         final PaymentIndividualSender sender = getIndividualSender();
 
         final PaymentRequest request = getCardSourcePayment(source, sender, three3ds);
-        final PaymentResponse paymentResponse = blocking(paymentsClient.requestPayment(request));
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(request));
 
         assertNotNull(paymentResponse);
 
@@ -70,7 +70,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                 .currency(Currency.EUR)
                 .build();
 
-        final PaymentResponse response = blocking(fourApi.paymentsClient().requestPayment(idSourceRequest));
+        final PaymentResponse response = blocking(() -> fourApi.paymentsClient().requestPayment(idSourceRequest));
 
         assertNotNull(response);
 
@@ -102,7 +102,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                 .currency(Currency.USD)
                 .build();
 
-        final PaymentResponse paymentResponse = blocking(fourApi.paymentsClient().requestPayment(tokenRequest));
+        final PaymentResponse paymentResponse = blocking(() -> fourApi.paymentsClient().requestPayment(tokenRequest));
 
         assertNotNull(paymentResponse);
 
@@ -111,18 +111,18 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
     }
 
     protected PaymentResponse makeCardPayment(final PaymentRequest payment) {
-        final PaymentResponse paymentResponse = blocking(paymentsClient.requestPayment(payment));
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(payment));
         assertNotNull(paymentResponse);
         return paymentResponse;
     }
 
     protected void capturePayment(final String paymentId) {
-        final CaptureResponse captureResponse = blocking(paymentsClient.capturePayment(paymentId));
+        final CaptureResponse captureResponse = blocking(() -> paymentsClient.capturePayment(paymentId));
         assertNotNull(captureResponse);
     }
 
     protected CaptureResponse capturePayment(final String paymentId, final CaptureRequest captureRequest) {
-        final CaptureResponse captureResponse = blocking(paymentsClient.capturePayment(paymentId, captureRequest));
+        final CaptureResponse captureResponse = blocking(() -> paymentsClient.capturePayment(paymentId, captureRequest));
         assertNotNull(captureResponse);
         return captureResponse;
     }
@@ -133,7 +133,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                 .expiryMonth(CardSourceHelper.Visa.EXPIRY_MONTH)
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
                 .build();
-        return blocking(tokensClient.request(request));
+        return blocking(() -> tokensClient.request(request));
     }
 
 }

@@ -19,7 +19,7 @@ class VoidPaymentsTestIT extends AbstractPaymentsTestIT {
                 .reference(UUID.randomUUID().toString())
                 .build();
 
-        final VoidResponse voidResponse = blocking(paymentsClient.voidPayment(paymentResponse.getId(), voidRequest));
+        final VoidResponse voidResponse = blocking(() -> paymentsClient.voidPayment(paymentResponse.getId(), voidRequest));
 
         assertNotNull(voidResponse);
         assertNotNull(voidResponse.getActionId());
@@ -37,10 +37,10 @@ class VoidPaymentsTestIT extends AbstractPaymentsTestIT {
                 .reference(UUID.randomUUID().toString())
                 .build();
 
-        final VoidResponse voidResponse1 = blocking(paymentsClient.voidPayment(paymentResponse.getId(), voidRequest, IDEMPOTENCY_KEY));
+        final VoidResponse voidResponse1 = blocking(() -> paymentsClient.voidPayment(paymentResponse.getId(), voidRequest, IDEMPOTENCY_KEY));
         assertNotNull(voidResponse1);
 
-        final VoidResponse voidResponse2 = blocking(paymentsClient.voidPayment(paymentResponse.getId(), voidRequest, IDEMPOTENCY_KEY));
+        final VoidResponse voidResponse2 = blocking(() -> paymentsClient.voidPayment(paymentResponse.getId(), voidRequest, IDEMPOTENCY_KEY));
         assertNotNull(voidResponse2);
 
         assertEquals(voidResponse1.getActionId(), voidResponse2.getActionId());

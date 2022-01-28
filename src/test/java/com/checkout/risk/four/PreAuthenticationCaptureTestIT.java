@@ -83,7 +83,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final String customerId = blocking(fourApi.customersClient().create(customerRequest)).getId();
+        final String customerId = blocking(() -> fourApi.customersClient().create(customerRequest)).getId();
 
         final CustomerSourcePrism customerSourcePrism = CustomerSourcePrism.builder()
                 .id(customerId).build();
@@ -106,7 +106,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final String customerId = blocking(fourApi.customersClient().create(customerRequest)).getId();
+        final String customerId = blocking(() -> fourApi.customersClient().create(customerRequest)).getId();
 
         final CardTokenRequest cardTokenRequest = CardTokenRequest.builder()
                 .number(CardSourceHelper.Visa.NUMBER)
@@ -114,7 +114,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
                 .build();
 
-        final CardTokenResponse cardTokenResponse = blocking(fourApi.tokensClient().request(cardTokenRequest));
+        final CardTokenResponse cardTokenResponse = blocking(() -> fourApi.tokensClient().request(cardTokenRequest));
 
         final CreateInstrumentTokenRequest createInstrumentTokenRequest = CreateInstrumentTokenRequest.builder()
                 .token(cardTokenResponse.getToken())
@@ -139,7 +139,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final CreateInstrumentResponse response = blocking(fourApi.instrumentsClient().create(createInstrumentTokenRequest));
+        final CreateInstrumentResponse response = blocking(() -> fourApi.instrumentsClient().create(createInstrumentTokenRequest));
 
         final IdSourcePrism idSourcePrism = IdSourcePrism.builder()
                 .id(response.getId()).cvv(TestCardSource.VISA.getCvv()).build();
@@ -188,7 +188,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
                 .build();
 
-        final PreAuthenticationAssessmentResponse response = blocking(fourApi.riskClient().requestPreAuthenticationRiskScan(request));
+        final PreAuthenticationAssessmentResponse response = blocking(() -> fourApi.riskClient().requestPreAuthenticationRiskScan(request));
 
         assertNotNull(response);
 
@@ -251,7 +251,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final PreCaptureAssessmentResponse response = blocking(fourApi.riskClient().requestPreCaptureRiskScan(request));
+        final PreCaptureAssessmentResponse response = blocking(() -> fourApi.riskClient().requestPreCaptureRiskScan(request));
 
         assertNotNull(response);
         assertNotNull(response.getAssessmentId());

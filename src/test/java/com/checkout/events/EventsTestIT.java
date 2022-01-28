@@ -4,8 +4,10 @@ import com.checkout.payments.AbstractPaymentsTestIT;
 import com.checkout.payments.response.PaymentResponse;
 import com.checkout.webhooks.WebhookRequest;
 import com.checkout.webhooks.WebhookResponse;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -26,13 +28,13 @@ class EventsTestIT extends AbstractPaymentsTestIT {
 
     @BeforeEach
     protected void cleanup() {
-        final List<WebhookResponse> webhookResponses = blocking(defaultApi.webhooksClient().retrieveWebhooks());
-        webhookResponses.forEach(webhookResponse -> blocking(defaultApi.webhooksClient().removeWebhook(webhookResponse.getId())));
+        final List<WebhookResponse> webhookResponses = blocking(() -> defaultApi.webhooksClient().retrieveWebhooks());
+        webhookResponses.forEach(webhookResponse -> blocking(() -> defaultApi.webhooksClient().removeWebhook(webhookResponse.getId())));
     }
 
     @Test
     void retrieveDefaultEventTypes() {
-        final List<EventTypesResponse> allEventTypesResponses = blocking(defaultApi.eventsClient().retrieveAllEventTypes(null));
+        final List<EventTypesResponse> allEventTypesResponses = blocking(() -> defaultApi.eventsClient().retrieveAllEventTypes(null));
         assertNotNull(allEventTypesResponses);
         assertEquals(2, allEventTypesResponses.size());
     }
@@ -40,7 +42,7 @@ class EventsTestIT extends AbstractPaymentsTestIT {
     @Test
     void retrieveV1EventTypes() {
 
-        final List<EventTypesResponse> eventTypesResponses = blocking(defaultApi.eventsClient().retrieveAllEventTypes("1.0"));
+        final List<EventTypesResponse> eventTypesResponses = blocking(() -> defaultApi.eventsClient().retrieveAllEventTypes("1.0"));
         assertNotNull(eventTypesResponses);
         assertEquals(1, eventTypesResponses.size());
 
@@ -54,7 +56,7 @@ class EventsTestIT extends AbstractPaymentsTestIT {
     @Test
     void retrieveV2EventTypes() {
 
-        final List<EventTypesResponse> eventTypesResponses = blocking(defaultApi.eventsClient().retrieveAllEventTypes("2.0"));
+        final List<EventTypesResponse> eventTypesResponses = blocking(() -> defaultApi.eventsClient().retrieveAllEventTypes("2.0"));
         assertNotNull(eventTypesResponses);
         assertEquals(1, eventTypesResponses.size());
 
@@ -67,31 +69,21 @@ class EventsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    @Disabled("unstable")
     void shouldRetrieveEventsByPaymentId_andRetrieveEventById_andGetNotification() {
 
         registerWebhook();
 
         final String paymentId = makeCardPayment().getId();
 
-        nap(15);
-
         final RetrieveEventsRequest retrieveEventsRequest = RetrieveEventsRequest.builder()
-                .from(LocalDateTime.now().minusYears(2).toInstant(ZoneOffset.UTC))
-                .to(LocalDateTime.now().toInstant(ZoneOffset.UTC))
-                .limit(15)
-                .skip(0)
                 .paymentId(paymentId)
                 .build();
 
         // Retrieve Events
-        final EventsPageResponse eventsPageResponse = blocking(defaultApi.eventsClient().retrieveEvents(retrieveEventsRequest));
+        final EventsPageResponse eventsPageResponse = blocking(() -> defaultApi.eventsClient().retrieveEvents(retrieveEventsRequest), IsNull.notNullValue(EventsPageResponse.class));
 
         assertNotNull(eventsPageResponse);
         assertEquals(1, eventsPageResponse.getTotalCount());
-        assertEquals(15, eventsPageResponse.getLimit());
-        assertEquals(0, eventsPageResponse.getSkip());
-        assertEquals(1, eventsPageResponse.getData().size());
 
         final EventSummaryResponse eventSummaryResponse = eventsPageResponse.getData().get(0);
         assertNotNull(eventSummaryResponse.getId());
@@ -101,7 +93,7 @@ class EventsTestIT extends AbstractPaymentsTestIT {
         assertNotNull(eventSummaryResponse.getLink("webhooks-retry"));
 
         // Retrieve Event
-        final EventResponse eventResponse = blocking(defaultApi.eventsClient().retrieveEvent(eventSummaryResponse.getId()));
+        final EventResponse eventResponse = blocking(() -> defaultApi.eventsClient().retrieveEvent(eventSummaryResponse.getId()), new HasNotifications(1));
 
         assertNotNull(eventResponse);
         assertNotNull(eventResponse.getId());
@@ -112,7 +104,7 @@ class EventsTestIT extends AbstractPaymentsTestIT {
         assertNotNull(eventResponse.getLink("webhooks-retry"));
 
         // Get Notification
-        final EventNotificationResponse eventNotificationResponse = blocking(defaultApi.eventsClient()
+        final EventNotificationResponse eventNotificationResponse = blocking(() -> defaultApi.eventsClient()
                 .retrieveEventNotification(eventSummaryResponse.getId(), eventResponse.getNotifications().get(0).getId()));
 
         assertNotNull(eventNotificationResponse);
@@ -125,15 +117,35 @@ class EventsTestIT extends AbstractPaymentsTestIT {
 
     }
 
+    protected static class HasNotifications extends BaseMatcher<EventResponse> {
+
+        private final int count;
+
+        public HasNotifications(final int count) {
+            this.count = count;
+        }
+
+        @Override
+        public boolean matches(final Object actual) {
+            if (!(actual instanceof EventResponse)) {
+                throw new IllegalStateException("not a EventResponse!");
+            }
+            return ((EventResponse) actual).getNotifications().size() == count;
+        }
+
+        @Override
+        public void describeTo(final Description description) {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
     @Test
-    @Disabled("unstable")
     void shouldRetryWebhook() {
 
         final WebhookResponse webhookResponse = registerWebhook();
 
         final String paymentId = makeCardPayment().getId();
-
-        nap(15);
 
         final RetrieveEventsRequest retrieveEventsRequest = RetrieveEventsRequest.builder()
                 .from(LocalDateTime.now().minusYears(2).toInstant(ZoneOffset.UTC))
@@ -144,20 +156,20 @@ class EventsTestIT extends AbstractPaymentsTestIT {
                 .build();
 
         // Retrieve Events
-        final EventsPageResponse eventsPageResponse = blocking(defaultApi.eventsClient().retrieveEvents(retrieveEventsRequest));
+        final EventsPageResponse eventsPageResponse = blocking(() -> defaultApi.eventsClient().retrieveEvents(retrieveEventsRequest), IsNull.notNullValue(EventsPageResponse.class));
         assertNotNull(eventsPageResponse);
 
         final EventSummaryResponse eventSummaryResponse = eventsPageResponse.getData().get(0);
         assertNotNull(eventSummaryResponse.getId());
 
         // Retrieve Event
-        final EventResponse eventResponse = blocking(defaultApi.eventsClient().retrieveEvent(eventSummaryResponse.getId()));
+        final EventResponse eventResponse = blocking(() -> defaultApi.eventsClient().retrieveEvent(eventSummaryResponse.getId()));
 
         // Retry Webhooks
         // Webhooks are not being re attempted. Adding the call to ensure.
-        blocking(defaultApi.eventsClient().retryWebhook(eventSummaryResponse.getId(), webhookResponse.getId()));
+        blocking(() -> defaultApi.eventsClient().retryWebhook(eventSummaryResponse.getId(), webhookResponse.getId()));
 
-        blocking(defaultApi.eventsClient().retryAllWebhooks(eventSummaryResponse.getId()));
+        blocking(() -> defaultApi.eventsClient().retryAllWebhooks(eventSummaryResponse.getId()));
 
     }
 
@@ -169,7 +181,7 @@ class EventsTestIT extends AbstractPaymentsTestIT {
 
         webhookRequest.setEventTypes(GATEWAY_EVENT_TYPES);
 
-        return blocking(defaultApi.webhooksClient().registerWebhook(webhookRequest));
+        return blocking(() -> defaultApi.webhooksClient().registerWebhook(webhookRequest));
 
     }
 

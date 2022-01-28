@@ -25,7 +25,7 @@ class ForexTestIT extends SandboxTestFixture {
                 .destinationCurrency(Currency.USD)
                 .processChannelId("pc_abcdefghijklmnopqrstuvwxyz")
                 .build();
-        final QuoteResponse response = blocking(fourApi.forexClient().requestQuote(request));
+        final QuoteResponse response = blocking(() -> fourApi.forexClient().requestQuote(request));
 
         assertNotNull(response);
         assertNotNull(response.getId());

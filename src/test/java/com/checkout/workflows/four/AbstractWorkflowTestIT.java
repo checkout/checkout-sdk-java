@@ -64,7 +64,7 @@ abstract class AbstractWorkflowTestIT extends AbstractPaymentsTestIT {
 
     @AfterEach
     protected void cleanup() {
-        workflows.forEach(workflow -> blocking(fourApi.workflowsClient().removeWorkflow(workflow)));
+        workflows.forEach(workflow -> blocking(() -> fourApi.workflowsClient().removeWorkflow(workflow)));
     }
 
     protected void queueWorkflowCleanup(final String workflowId) {
@@ -79,7 +79,7 @@ abstract class AbstractWorkflowTestIT extends AbstractPaymentsTestIT {
                 .conditions(Arrays.asList(baseEventWorkflowConditionRequest, baseEntityWorkflowConditionRequest, processingChannelWorkflowConditionRequest))
                 .build();
 
-        final CreateWorkflowResponse createWorkflowResponse = blocking(fourApi.workflowsClient().createWorkflow(request));
+        final CreateWorkflowResponse createWorkflowResponse = blocking(() -> fourApi.workflowsClient().createWorkflow(request));
         assertNotNull(createWorkflowResponse);
         assertNotNull(createWorkflowResponse);
         assertNotNull(createWorkflowResponse.getId());

@@ -16,9 +16,7 @@ class PaymentActionsTestIT extends AbstractPaymentsTestIT {
 
         final PaymentResponse paymentResponse = makeCardPayment(true, 10L);
 
-        nap();
-
-        final List<PaymentAction> paymentActions = blocking(defaultApi.paymentsClient().getPaymentActions(paymentResponse.getId()));
+        final List<PaymentAction> paymentActions = blocking(() -> defaultApi.paymentsClient().getPaymentActions(paymentResponse.getId()), new ListHasSize<>(2));
 
         assertNotNull(paymentActions);
         assertEquals(2, paymentActions.size());

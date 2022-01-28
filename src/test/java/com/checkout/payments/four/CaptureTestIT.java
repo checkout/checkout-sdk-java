@@ -27,7 +27,7 @@ class CaptureTestIT extends AbstractPaymentsTestIT {
                 .metadata(metadata)
                 .build();
 
-        final CaptureResponse captureResponse = blocking(fourApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest));
+        final CaptureResponse captureResponse = blocking(() -> fourApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest));
         assertNotNull(captureResponse);
         assertNotNull(captureResponse.getActionId());
         assertFalse(captureResponse.getActionId().isEmpty());
@@ -50,7 +50,7 @@ class CaptureTestIT extends AbstractPaymentsTestIT {
                 .metadata(metadata)
                 .build();
 
-        final CaptureResponse captureResponse = blocking(fourApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest));
+        final CaptureResponse captureResponse = blocking(() -> fourApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest));
         assertNotNull(captureResponse);
         assertNotNull(captureResponse.getActionId());
         assertFalse(captureResponse.getActionId().isEmpty());
@@ -74,7 +74,7 @@ class CaptureTestIT extends AbstractPaymentsTestIT {
                 .metadata(metadata)
                 .build();
 
-        final CaptureResponse captureResponse = blocking(fourApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest));
+        final CaptureResponse captureResponse = blocking(() -> fourApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest));
         assertNotNull(captureResponse);
         assertNotNull(captureResponse.getActionId());
         assertFalse(captureResponse.getActionId().isEmpty());

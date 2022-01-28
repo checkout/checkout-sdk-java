@@ -14,6 +14,7 @@ import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
 import com.checkout.payments.four.sender.SenderIdentification;
 import com.checkout.payments.four.sender.SenderIdentificationType;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -56,16 +57,17 @@ class IdealPaymentsTestIT extends SandboxTestFixture {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        final PaymentResponse response = blocking(fourApi.paymentsClient().requestPayment(request));
+        final PaymentResponse response = blocking(() -> fourApi.paymentsClient().requestPayment(request));
 
         assertNotNull(response);
 
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldGetInfo() {
 
-        final IdealInfo idealInfo = blocking(fourApi.idealClient().getInfo());
+        final IdealInfo idealInfo = blocking(() -> fourApi.idealClient().getInfo());
 
         assertNotNull(idealInfo);
         assertNotNull(idealInfo.getLinks().getSelf());
@@ -78,7 +80,7 @@ class IdealPaymentsTestIT extends SandboxTestFixture {
     @Test
     void shouldGetIssuers() {
 
-        final IssuerResponse issuerResponse = blocking(fourApi.idealClient().getIssuers());
+        final IssuerResponse issuerResponse = blocking(() -> fourApi.idealClient().getIssuers());
 
         assertNotNull(issuerResponse);
         assertNotNull(issuerResponse.getSelfLink());

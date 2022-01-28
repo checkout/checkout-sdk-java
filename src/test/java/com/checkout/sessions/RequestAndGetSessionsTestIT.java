@@ -66,7 +66,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         assertNotNull(response.getLink("callback_url"));
         assertFalse(response.getCompleted());
 
-        final GetSessionResponse getSessionResponse = blocking(fourApi.sessionsClient().getSessionDetails(response.getId()));
+        final GetSessionResponse getSessionResponse = blocking(() -> fourApi.sessionsClient().getSessionDetails(response.getId()));
 
         assertNotNull(getSessionResponse);
 
@@ -91,7 +91,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         assertNotNull(getSessionResponse.getLink("callback_url"));
         assertFalse(getSessionResponse.getCompleted());
 
-        final GetSessionResponse getSessionSecretSessionResponse = blocking(fourApi.sessionsClient().getSessionDetails(response.getSessionSecret(), response.getId()));
+        final GetSessionResponse getSessionSecretSessionResponse = blocking(() -> fourApi.sessionsClient().getSessionDetails(response.getSessionSecret(), response.getId()));
 
         assertNull(getSessionSecretSessionResponse.getCertificates());
         assertNull(getSessionSecretSessionResponse.getSessionSecret());
@@ -151,7 +151,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         assertNotNull(response.getLink("callback_url"));
         assertFalse(response.getCompleted());
 
-        final GetSessionResponse getSessionResponse = blocking(fourApi.sessionsClient().getSessionDetails(response.getId()));
+        final GetSessionResponse getSessionResponse = blocking(() -> fourApi.sessionsClient().getSessionDetails(response.getId()));
 
         assertNotNull(getSessionResponse);
 
@@ -176,7 +176,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         assertNotNull(getSessionResponse.getLink("callback_url"));
         assertFalse(getSessionResponse.getCompleted());
 
-        final GetSessionResponse getSessionSecretSessionResponse = blocking(fourApi.sessionsClient().getSessionDetails(response.getSessionSecret(), response.getId()));
+        final GetSessionResponse getSessionSecretSessionResponse = blocking(() -> fourApi.sessionsClient().getSessionDetails(response.getSessionSecret(), response.getId()));
 
         assertNull(getSessionSecretSessionResponse.getCertificates());
         assertNull(getSessionSecretSessionResponse.getSessionSecret());

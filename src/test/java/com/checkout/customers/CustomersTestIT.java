@@ -34,9 +34,9 @@ class CustomersTestIT extends SandboxTestFixture {
                 .name("Customer")
                 .phone(TestHelper.createPhone())
                 .build();
-        final String customerId = blocking(defaultApi.customersClient().create(customerRequest)).getId();
+        final String customerId = blocking(() -> defaultApi.customersClient().create(customerRequest)).getId();
         assertNotNull(customerId);
-        final CustomerDetailsResponse customerDetailsResponse = blocking(defaultApi.customersClient().get(customerId));
+        final CustomerDetailsResponse customerDetailsResponse = blocking(() -> defaultApi.customersClient().get(customerId));
         assertNotNull(customerDetailsResponse);
         assertEquals(customerRequest.getEmail(), customerDetailsResponse.getEmail());
         assertEquals(customerRequest.getName(), customerDetailsResponse.getName());
@@ -53,14 +53,14 @@ class CustomersTestIT extends SandboxTestFixture {
                 .name("Customer")
                 .phone(TestHelper.createPhone())
                 .build();
-        final String customerId = blocking(defaultApi.customersClient().create(customerRequest)).getId();
+        final String customerId = blocking(() -> defaultApi.customersClient().create(customerRequest)).getId();
         assertNotNull(customerId);
         //Update Customer
         customerRequest.setEmail(TestHelper.generateRandomEmail());
         customerRequest.setName("Customer Changed");
-        blocking(defaultApi.customersClient().update(customerId, customerRequest));
+        blocking(() -> defaultApi.customersClient().update(customerId, customerRequest));
         //Verify changes were applied
-        final CustomerDetailsResponse customerDetailsResponse = blocking(defaultApi.customersClient().get(customerId));
+        final CustomerDetailsResponse customerDetailsResponse = blocking(() -> defaultApi.customersClient().get(customerId));
         assertNotNull(customerDetailsResponse);
         assertEquals(customerRequest.getName(), customerDetailsResponse.getName());
         assertEquals(customerRequest.getEmail(), customerDetailsResponse.getEmail());
@@ -74,17 +74,17 @@ class CustomersTestIT extends SandboxTestFixture {
                 .name("Customer")
                 .phone(TestHelper.createPhone())
                 .build();
-        final String customerId = blocking(defaultApi.customersClient().create(customerRequest)).getId();
+        final String customerId = blocking(() -> defaultApi.customersClient().create(customerRequest)).getId();
         assertNotNull(customerId);
         //Delete customer
-        blocking(defaultApi.customersClient().delete(customerId));
+        blocking(() -> defaultApi.customersClient().delete(customerId));
         //Verify customer does not exist
         assertNotFound(defaultApi.customersClient().get(customerId));
     }
 
     @Test
     void shouldGetCustomerDetailsWithInstrument() {
-        final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().request(createValidTokenRequest()));
+        final CardTokenResponse cardToken = blocking(() -> defaultApi.tokensClient().request(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type(InstrumentType.TOKEN)
@@ -97,12 +97,12 @@ class CustomersTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final CreateInstrumentResponse instrumentResponse = blocking(defaultApi.instrumentsClient().createInstrument(request));
+        final CreateInstrumentResponse instrumentResponse = blocking(() -> defaultApi.instrumentsClient().createInstrument(request));
         assertNotNull(instrumentResponse);
         assertNotNull(instrumentResponse.getCustomer());
         assertNotNull(instrumentResponse.getCustomer().getId());
 
-        final CustomerDetailsResponse customerDetailsResponse = blocking(defaultApi.customersClient().get(instrumentResponse.getCustomer().getId()));
+        final CustomerDetailsResponse customerDetailsResponse = blocking(() -> defaultApi.customersClient().get(instrumentResponse.getCustomer().getId()));
         assertNotNull(customerDetailsResponse);
         assertEquals(1, customerDetailsResponse.getInstruments().size());
         final InstrumentDetails instrumentDetails = customerDetailsResponse.getInstruments().get(0);

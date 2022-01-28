@@ -26,7 +26,7 @@ class FawryPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    @Disabled
+    @Disabled("may_need_fix")
     void shouldApproveFawryPayment() {
 
         final String paymentId = makeFawryPayment();
@@ -34,11 +34,9 @@ class FawryPaymentsTestIT extends SandboxTestFixture {
         final String paymentReference = validatePaymentPending(paymentId);
 
         // Approve payment
-        blocking(defaultApi.fawryClient().approve(paymentReference));
+        blocking(() -> defaultApi.fawryClient().approve(paymentReference));
 
-        nap();
-
-        final GetPaymentResponse paymentApproved = blocking(defaultApi.paymentsClient().getPayment(paymentId));
+        final GetPaymentResponse paymentApproved = blocking(() -> defaultApi.paymentsClient().getPayment(paymentId));
         assertNotNull(paymentApproved);
         assertEquals(PaymentStatus.CAPTURED, paymentApproved.getStatus());
         assertNotNull(paymentApproved.getSource());
@@ -52,7 +50,7 @@ class FawryPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    @Disabled
+    @Disabled("may_need_fix")
     void shouldCancelFawryPayment() {
 
         final String paymentId = makeFawryPayment();
@@ -60,11 +58,9 @@ class FawryPaymentsTestIT extends SandboxTestFixture {
         final String paymentReference = validatePaymentPending(paymentId);
 
         // Cancel payment
-        blocking(defaultApi.fawryClient().cancel(paymentReference));
+        blocking(() -> defaultApi.fawryClient().cancel(paymentReference));
 
-        nap();
-
-        final GetPaymentResponse paymentCanceled = blocking(defaultApi.paymentsClient().getPayment(paymentId));
+        final GetPaymentResponse paymentCanceled = blocking(() -> defaultApi.paymentsClient().getPayment(paymentId));
         assertNotNull(paymentCanceled);
         assertEquals(PaymentStatus.CANCELED, paymentCanceled.getStatus());
         assertNotNull(paymentCanceled.getSource());
@@ -95,7 +91,7 @@ class FawryPaymentsTestIT extends SandboxTestFixture {
 
         final PaymentRequest request = PaymentRequest.fawry(fawrySource, Currency.EGP, 1000L);
 
-        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestPayment(request));
+        final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);
         assertEquals(PaymentStatus.PENDING, response.getStatus());
         assertNotNull(response.getLink("self"));
@@ -107,7 +103,7 @@ class FawryPaymentsTestIT extends SandboxTestFixture {
 
     private String validatePaymentPending(final String paymentId) {
 
-        final GetPaymentResponse pendingPayment = blocking(defaultApi.paymentsClient().getPayment(paymentId));
+        final GetPaymentResponse pendingPayment = blocking(() -> defaultApi.paymentsClient().getPayment(paymentId));
         assertNotNull(pendingPayment);
         assertEquals(PaymentStatus.PENDING, pendingPayment.getStatus());
         assertNotNull(pendingPayment.getSource());

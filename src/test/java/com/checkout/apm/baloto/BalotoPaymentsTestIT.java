@@ -28,9 +28,9 @@ class BalotoPaymentsTestIT extends SandboxTestFixture {
 
         final String paymentId = makeBalotoPayment();
 
-        blocking(defaultApi.balotoClient().succeed(paymentId));
+        blocking(() -> defaultApi.balotoClient().succeed(paymentId));
 
-        final GetPaymentResponse response = blocking(defaultApi.paymentsClient().getPayment(paymentId));
+        final GetPaymentResponse response = blocking(() -> defaultApi.paymentsClient().getPayment(paymentId), new PaymentIsInStatus(PaymentStatus.CAPTURED));
 
         assertNotNull(response);
         assertEquals(PaymentStatus.CAPTURED, response.getStatus());
@@ -51,9 +51,9 @@ class BalotoPaymentsTestIT extends SandboxTestFixture {
 
         final String paymentId = makeBalotoPayment();
 
-        blocking(defaultApi.balotoClient().expire(paymentId));
+        blocking(() -> defaultApi.balotoClient().expire(paymentId));
 
-        final GetPaymentResponse response = blocking(defaultApi.paymentsClient().getPayment(paymentId));
+        final GetPaymentResponse response = blocking(() -> defaultApi.paymentsClient().getPayment(paymentId), new PaymentIsInStatus(PaymentStatus.EXPIRED));
 
         assertNotNull(response);
         assertEquals(PaymentStatus.EXPIRED, response.getStatus());
@@ -79,7 +79,7 @@ class BalotoPaymentsTestIT extends SandboxTestFixture {
 
         final PaymentRequest request = PaymentRequest.baloto(balotoSource, Currency.COP, 100000L);
 
-        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestPayment(request));
+        final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);
         assertEquals(PaymentStatus.PENDING, response.getStatus());
         assertNotNull(response.getLink("self"));
