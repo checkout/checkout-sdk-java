@@ -23,7 +23,7 @@ class PaymentLinksTestIT extends SandboxTestFixture {
     @Test
     void shouldCreatePaymentsLink() {
         final PaymentLinkRequest paymentLinksRequest = TestHelper.createPaymentLinksRequest(REFERENCE);
-        final PaymentLinkResponse response = blocking(defaultApi.paymentLinksClient().createAsync(paymentLinksRequest));
+        final PaymentLinkResponse response = blocking(() -> defaultApi.paymentLinksClient().createAsync(paymentLinksRequest));
         assertNotNull(response);
         assertEquals(REFERENCE, response.getReference());
         assertNotNull(response.getExpiresOn());
@@ -34,9 +34,9 @@ class PaymentLinksTestIT extends SandboxTestFixture {
     @Test
     void shouldRetrievePaymentsLink() {
         final PaymentLinkRequest paymentLinksRequest = TestHelper.createPaymentLinksRequest(REFERENCE);
-        final PaymentLinkResponse paymentLinkResponse = blocking(defaultApi.paymentLinksClient().createAsync(paymentLinksRequest));
+        final PaymentLinkResponse paymentLinkResponse = blocking(() -> defaultApi.paymentLinksClient().createAsync(paymentLinksRequest));
         assertNotNull(paymentLinkResponse);
-        final PaymentLinkDetailsResponse detailsResponse = blocking(defaultApi.paymentLinksClient().getAsync(paymentLinkResponse.getId()));
+        final PaymentLinkDetailsResponse detailsResponse = blocking(() -> defaultApi.paymentLinksClient().getAsync(paymentLinkResponse.getId()));
         assertNotNull(detailsResponse);
         assertEquals(paymentLinkResponse.getId(), detailsResponse.getId());
         assertThat(detailsResponse.getStatus(), anyOf(equalTo(PaymentLinkStatus.ACTIVE), equalTo(PaymentLinkStatus.PAYMENT_RECEIVED), equalTo(PaymentLinkStatus.EXPIRED)));

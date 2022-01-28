@@ -16,7 +16,6 @@ import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -47,7 +46,7 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
 
         final PaymentResponse payment = makeCardPayment(false);
 
-        final GetPaymentResponse paymentReturned = blocking(paymentsClient.getPayment(payment.getId()));
+        final GetPaymentResponse paymentReturned = blocking(() -> paymentsClient.getPayment(payment.getId()));
 
         assertNotNull(paymentReturned);
         assertEquals(PaymentStatus.AUTHORIZED, paymentReturned.getStatus());
@@ -63,9 +62,9 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
         final PaymentRequest request = getCardSourcePayment(source, sender, false);
         request.getMetadata().put("test", "1234");
 
-        final PaymentResponse payment = blocking(paymentsClient.requestPayment(request));
+        final PaymentResponse payment = blocking(() -> paymentsClient.requestPayment(request));
 
-        final GetPaymentResponse paymentReturned = blocking(paymentsClient.getPayment(payment.getId()));
+        final GetPaymentResponse paymentReturned = blocking(() -> paymentsClient.getPayment(payment.getId()));
 
         assertNotNull(paymentReturned);
         assertEquals(PaymentStatus.AUTHORIZED, paymentReturned.getStatus());
@@ -88,9 +87,9 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
                 .description("description")
                 .build();
 
-        final PaymentResponse payment = blocking(paymentsClient.requestPayment(request));
+        final PaymentResponse payment = blocking(() -> paymentsClient.requestPayment(request));
 
-        final GetPaymentResponse paymentReturned = blocking(paymentsClient.getPayment(payment.getId()));
+        final GetPaymentResponse paymentReturned = blocking(() -> paymentsClient.getPayment(payment.getId()));
 
         assertNotNull(paymentReturned);
         assertEquals(PaymentStatus.CARD_VERIFIED, paymentReturned.getStatus());
@@ -122,9 +121,9 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
                 .recipient(recipient)
                 .build();
 
-        final PaymentResponse payment = blocking(paymentsClient.requestPayment(request));
+        final PaymentResponse payment = blocking(() -> paymentsClient.requestPayment(request));
 
-        final GetPaymentResponse paymentReturned = blocking(paymentsClient.getPayment(payment.getId()));
+        final GetPaymentResponse paymentReturned = blocking(() -> paymentsClient.getPayment(payment.getId()));
 
         assertNotNull(paymentReturned);
         assertNotNull(paymentReturned.getRecipient());
@@ -164,9 +163,9 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
                 .shipping(recipient)
                 .build();
 
-        final PaymentResponse payment = blocking(paymentsClient.requestPayment(request));
+        final PaymentResponse payment = blocking(() -> paymentsClient.requestPayment(request));
 
-        final GetPaymentResponse paymentReturned = blocking(paymentsClient.getPayment(payment.getId()));
+        final GetPaymentResponse paymentReturned = blocking(() -> paymentsClient.getPayment(payment.getId()));
 
         assertNotNull(paymentReturned);
         assertNotNull(paymentReturned.getShipping());
@@ -183,7 +182,7 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
 
         final PaymentResponse payment = makeCardPayment(true);
 
-        final GetPaymentResponse paymentReturned = blocking(paymentsClient.getPayment(payment.getId()));
+        final GetPaymentResponse paymentReturned = blocking(() -> paymentsClient.getPayment(payment.getId()));
 
         assertNotNull(paymentReturned);
         assertEquals(PaymentStatus.PENDING, paymentReturned.getStatus());
@@ -195,7 +194,7 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
 
         final PaymentResponse payment = makeTokenPayment();
 
-        final GetPaymentResponse paymentReturned = blocking(paymentsClient.getPayment(payment.getId()));
+        final GetPaymentResponse paymentReturned = blocking(() -> paymentsClient.getPayment(payment.getId()));
 
         assertNotNull(paymentReturned);
         assertEquals(PaymentStatus.AUTHORIZED, paymentReturned.getStatus());
@@ -207,7 +206,7 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
 
         final PaymentResponse payment = makeCardPayment(false);
 
-        final List<PaymentAction> paymentActions = blocking(paymentsClient.getPaymentActions(payment.getId()));
+        final List<PaymentAction> paymentActions = blocking(() -> paymentsClient.getPaymentActions(payment.getId()));
 
         assertNotNull(paymentActions);
         assertEquals(1, paymentActions.size());
@@ -244,17 +243,13 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
                 .reference(UUID.randomUUID().toString())
                 .build();
 
-        final PaymentResponse payment = blocking(paymentsClient.requestPayment(request));
+        final PaymentResponse payment = blocking(() -> paymentsClient.requestPayment(request));
 
         // capture
-
         final CaptureResponse captureResponse = capturePayment(payment.getId(), captureRequest);
 
-        nap();
-
         // capture
-
-        final List<PaymentAction> paymentActions = blocking(paymentsClient.getPaymentActions(payment.getId()));
+        final List<PaymentAction> paymentActions = blocking(() -> paymentsClient.getPaymentActions(payment.getId()), new ListHasSize<>(2));
 
         assertNotNull(paymentActions);
         assertEquals(2, paymentActions.size());

@@ -61,13 +61,13 @@ class MarketplaceTestIT extends SandboxTestFixture {
                         .build())
 
                 .build();
-        final OnboardEntityResponse entityResponse = blocking(fourApi.marketplaceClient().createEntity(onboardEntityRequest));
+        final OnboardEntityResponse entityResponse = blocking(() -> fourApi.marketplaceClient().createEntity(onboardEntityRequest));
         assertNotNull(entityResponse);
         final String entityId = entityResponse.getId();
         assertNotNull(entityId);
         assertEquals(randomReference, entityResponse.getReference());
 
-        final OnboardEntityDetailsResponse entityDetailsResponse = blocking(fourApi.marketplaceClient().getEntity(entityId));
+        final OnboardEntityDetailsResponse entityDetailsResponse = blocking(() -> fourApi.marketplaceClient().getEntity(entityId));
         assertNotNull(entityDetailsResponse);
         assertEquals(entityId, entityDetailsResponse.getId());
         assertEquals(randomReference, entityDetailsResponse.getReference());
@@ -79,10 +79,10 @@ class MarketplaceTestIT extends SandboxTestFixture {
         assertEquals(onboardEntityRequest.getIndividual().getDateOfBirth(), entityDetailsResponse.getIndividual().getDateOfBirth());
 
         onboardEntityRequest.getIndividual().setFirstName("Jhon");
-        final OnboardEntityResponse updatedEntityResponse = blocking(fourApi.marketplaceClient().updateEntity(onboardEntityRequest, entityId));
+        final OnboardEntityResponse updatedEntityResponse = blocking(() -> fourApi.marketplaceClient().updateEntity(onboardEntityRequest, entityId));
         assertNotNull(updatedEntityResponse);
 
-        final OnboardEntityDetailsResponse verifyUpdated = blocking(fourApi.marketplaceClient().getEntity(entityId));
+        final OnboardEntityDetailsResponse verifyUpdated = blocking(() -> fourApi.marketplaceClient().getEntity(entityId));
         assertNotNull(verifyUpdated);
         assertEquals(onboardEntityRequest.getIndividual().getFirstName(), verifyUpdated.getIndividual().getFirstName());
 
@@ -98,7 +98,7 @@ class MarketplaceTestIT extends SandboxTestFixture {
                 .contentType(ContentType.IMAGE_JPEG)
                 .purpose(MarketplaceFilePurpose.IDENTIFICATION)
                 .build();
-        final IdResponse fileResponse = blocking(fourApi.marketplaceClient().submitFile(fileRequest));
+        final IdResponse fileResponse = blocking(() -> fourApi.marketplaceClient().submitFile(fileRequest));
         assertNotNull(fileResponse);
         assertNotNull(fileResponse.getId());
     }

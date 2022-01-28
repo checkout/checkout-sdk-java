@@ -68,7 +68,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .currency(Currency.EUR)
                 .build();
 
-        final PaymentResponse paymentResponse = blocking(fourApi.paymentsClient().requestPayment(request));
+        final PaymentResponse paymentResponse = blocking(() -> fourApi.paymentsClient().requestPayment(request));
 
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getId());
@@ -143,7 +143,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://test.checkout.com/failure")
                 .build();
 
-        final PaymentResponse paymentResponse = blocking(fourApi.paymentsClient().requestPayment(request));
+        final PaymentResponse paymentResponse = blocking(() -> fourApi.paymentsClient().requestPayment(request));
 
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getId());
@@ -161,7 +161,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
         final CardResponseSource responseCardSource = (CardResponseSource) paymentResponse.getSource();
         assertNull(responseCardSource);
 
-        final GetPaymentResponse paymentDetails = blocking(fourApi.paymentsClient().getPayment(paymentResponse.getId()));
+        final GetPaymentResponse paymentDetails = blocking(() -> fourApi.paymentsClient().getPayment(paymentResponse.getId()));
         assertNotNull(paymentDetails);
         assertNotNull(paymentDetails.getThreeDSData());
         assertEquals(ThreeDSEnrollmentStatus.YES, paymentDetails.getThreeDSData().getEnrolled());
@@ -203,7 +203,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .currency(Currency.EUR)
                 .build();
 
-        final PaymentResponse paymentResponse = blocking(fourApi.paymentsClient().requestPayment(request));
+        final PaymentResponse paymentResponse = blocking(() -> fourApi.paymentsClient().requestPayment(request));
 
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getId());
@@ -256,7 +256,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .currency(Currency.EUR)
                 .build();
 
-        final PaymentResponse paymentResponse = blocking(fourApi.paymentsClient().requestPayment(idSourceRequest));
+        final PaymentResponse paymentResponse = blocking(() -> fourApi.paymentsClient().requestPayment(idSourceRequest));
 
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getId());
@@ -314,7 +314,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .currency(Currency.USD)
                 .build();
 
-        final PaymentResponse paymentResponse = blocking(fourApi.paymentsClient().requestPayment(tokenRequest));
+        final PaymentResponse paymentResponse = blocking(() -> fourApi.paymentsClient().requestPayment(tokenRequest));
 
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getId());
@@ -374,7 +374,7 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://test.checkout.com/failure")
                 .build();
 
-        final PaymentResponse paymentResponse = blocking(fourApi.paymentsClient().requestPayment(tokenRequest));
+        final PaymentResponse paymentResponse = blocking(() -> fourApi.paymentsClient().requestPayment(tokenRequest));
 
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getId());

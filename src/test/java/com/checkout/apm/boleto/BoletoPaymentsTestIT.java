@@ -37,19 +37,14 @@ class BoletoPaymentsTestIT extends SandboxTestFixture {
 
         final PaymentRequest request = PaymentRequest.boleto(boletoSource, Currency.BRL, 100L);
 
-        nap();
-
-        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestPayment(request));
+        final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);
         assertEquals(PaymentStatus.PENDING, response.getStatus());
         assertNotNull(response.getLink("self"));
         assertNotNull(response.getLink("redirect"));
 
         // Get payment
-
-        nap();
-
-        final GetPaymentResponse getPaymentResponse = blocking(defaultApi.paymentsClient().getPayment(response.getId()));
+        final GetPaymentResponse getPaymentResponse = blocking(() -> defaultApi.paymentsClient().getPayment(response.getId()));
 
         assertNotNull(response);
         assertEquals(PaymentStatus.PENDING, getPaymentResponse.getStatus());
@@ -77,9 +72,7 @@ class BoletoPaymentsTestIT extends SandboxTestFixture {
 
         final PaymentRequest request = PaymentRequest.boleto(boletoSource, Currency.BRL, 100L);
 
-        nap();
-
-        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestPayment(request));
+        final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);
         assertEquals(PaymentStatus.DECLINED, response.getStatus());
         assertEquals("Rejected", response.getResponseSummary());
@@ -87,10 +80,7 @@ class BoletoPaymentsTestIT extends SandboxTestFixture {
         assertNotNull(response.getLink("actions"));
 
         // Get payment
-
-        nap();
-
-        final GetPaymentResponse getPaymentResponse = blocking(defaultApi.paymentsClient().getPayment(response.getId()));
+        final GetPaymentResponse getPaymentResponse = blocking(() -> defaultApi.paymentsClient().getPayment(response.getId()));
 
         assertNotNull(response);
         assertEquals(PaymentStatus.DECLINED, getPaymentResponse.getStatus());

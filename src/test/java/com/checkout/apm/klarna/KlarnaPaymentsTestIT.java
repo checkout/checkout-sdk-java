@@ -37,7 +37,7 @@ class KlarnaPaymentsTestIT extends SandboxTestFixture {
                                 .build()
                 )).build();
 
-        final CreditSessionResponse creditSessionResponse = blocking(defaultApi.klarnaClient().createCreditSession(creditSessionRequest));
+        final CreditSessionResponse creditSessionResponse = blocking(() -> defaultApi.klarnaClient().createCreditSession(creditSessionRequest));
 
         assertNotNull(creditSessionResponse);
         assertNotNull(creditSessionResponse.getSessionId());
@@ -52,7 +52,7 @@ class KlarnaPaymentsTestIT extends SandboxTestFixture {
             assertNotNull(paymentMethodCategory.getAssetUrls().getStandard());
         }
 
-        final CreditSession creditSession = blocking(defaultApi.klarnaClient().getCreditSession(creditSessionResponse.getSessionId()));
+        final CreditSession creditSession = blocking(() -> defaultApi.klarnaClient().getCreditSession(creditSessionResponse.getSessionId()));
 
         assertNotNull(creditSession);
         assertNotNull(creditSession.getClientToken());

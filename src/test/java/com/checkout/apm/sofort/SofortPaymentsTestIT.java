@@ -26,9 +26,7 @@ class SofortPaymentsTestIT extends SandboxTestFixture {
 
         final PaymentRequest request = PaymentRequest.sofort(Currency.EUR, 100L);
 
-        nap();
-
-        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestPayment(request));
+        final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
 
         assertNotNull(response);
         assertEquals(PaymentStatus.PENDING, response.getStatus());
@@ -36,10 +34,7 @@ class SofortPaymentsTestIT extends SandboxTestFixture {
         assertNotNull(response.getLink("redirect"));
 
         // Get payment
-
-        nap();
-
-        final GetPaymentResponse getPaymentResponse = blocking(defaultApi.paymentsClient().getPayment(response.getId()));
+        final GetPaymentResponse getPaymentResponse = blocking(() -> defaultApi.paymentsClient().getPayment(response.getId()));
 
         assertNotNull(response);
         assertEquals(PaymentStatus.PENDING, getPaymentResponse.getStatus());

@@ -6,6 +6,8 @@ import com.checkout.workflows.four.events.EventTypesResponse;
 import com.checkout.workflows.four.events.GetEventResponse;
 import com.checkout.workflows.four.events.SubjectEvent;
 import com.checkout.workflows.four.events.SubjectEventsResponse;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -19,7 +21,7 @@ class WorkflowEventsTestIT extends AbstractWorkflowTestIT {
     @Test
     void shouldGetEventTypes() {
 
-        final List<EventTypesResponse> eventTypesResponse = blocking(fourApi.workflowsClient().getEventTypes());
+        final List<EventTypesResponse> eventTypesResponse = blocking(() -> fourApi.workflowsClient().getEventTypes());
 
         assertNotNull(eventTypesResponse);
         assertFalse(eventTypesResponse.isEmpty());
@@ -44,13 +46,9 @@ class WorkflowEventsTestIT extends AbstractWorkflowTestIT {
 
         final PaymentResponse payment = makeCardPayment(false);
 
-        nap(5);
-
         capturePayment(payment.getId());
 
-        nap(15);
-
-        final SubjectEventsResponse subjectEventsResponse = blocking(fourApi.workflowsClient().getSubjectEvents(payment.getId()));
+        final SubjectEventsResponse subjectEventsResponse = blocking(() -> fourApi.workflowsClient().getSubjectEvents(payment.getId()), new HasEvents(2));
 
         assertNotNull(subjectEventsResponse);
         assertEquals(2, subjectEventsResponse.getEvents().size());
@@ -76,7 +74,7 @@ class WorkflowEventsTestIT extends AbstractWorkflowTestIT {
         assertNotNull(paymentCapturedEvent.getLink(SELF));
 
         // Get event
-        final GetEventResponse getEventResponse = blocking(fourApi.workflowsClient().getEvent(paymentCapturedEvent.getId()));
+        final GetEventResponse getEventResponse = blocking(() -> fourApi.workflowsClient().getEvent(paymentCapturedEvent.getId()));
 
         assertNotNull(getEventResponse);
         assertNotNull(getEventResponse.getId());
@@ -86,6 +84,29 @@ class WorkflowEventsTestIT extends AbstractWorkflowTestIT {
         assertNotNull(getEventResponse.getVersion());
         assertNotNull(getEventResponse.getData());
         assertFalse(getEventResponse.getData().isEmpty());
+
+    }
+
+    protected static class HasEvents extends BaseMatcher<SubjectEventsResponse> {
+
+        private final int count;
+
+        public HasEvents(final int count) {
+            this.count = count;
+        }
+
+        @Override
+        public boolean matches(final Object actual) {
+            if (!(actual instanceof SubjectEventsResponse)) {
+                throw new IllegalStateException("not a SubjectEventsResponse!");
+            }
+            return ((SubjectEventsResponse) actual).getEvents().size() == count;
+        }
+
+        @Override
+        public void describeTo(final Description description) {
+            throw new UnsupportedOperationException();
+        }
 
     }
 

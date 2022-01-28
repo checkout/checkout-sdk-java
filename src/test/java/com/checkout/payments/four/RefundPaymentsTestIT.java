@@ -30,14 +30,12 @@ class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
         // capture
         capturePayment(paymentResponse.getId());
 
-        nap();
-
         // refund
         final RefundRequest refundRequest = RefundRequest.builder()
                 .reference(UUID.randomUUID().toString())
                 .build();
 
-        final RefundResponse refundResponse = blocking(paymentsClient.refundPayment(paymentResponse.getId(), refundRequest));
+        final RefundResponse refundResponse = blocking(() -> paymentsClient.refundPayment(paymentResponse.getId(), refundRequest));
 
         assertNotNull(refundResponse);
         assertNotNull(refundResponse.getActionId());
@@ -56,14 +54,12 @@ class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
         // Capture Payment
         capturePayment(paymentResponse.getId());
 
-        nap();
-
         // Refund
         final RefundRequest refundRequest = RefundRequest.builder()
                 .reference(UUID.randomUUID().toString())
                 .build();
 
-        final RefundResponse refundResponse = blocking(paymentsClient.refundPayment(paymentResponse.getId(), refundRequest));
+        final RefundResponse refundResponse = blocking(() -> paymentsClient.refundPayment(paymentResponse.getId(), refundRequest));
 
         assertNotNull(refundResponse);
         assertNotNull(refundResponse.getActionId());

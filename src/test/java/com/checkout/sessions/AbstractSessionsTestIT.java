@@ -76,7 +76,7 @@ abstract class AbstractSessionsTestIT extends SandboxTestFixture {
                 .channelData(channelData)
                 .build();
 
-        return blocking(fourApi.sessionsClient().requestSession(sessionRequest));
+        return blocking(() -> fourApi.sessionsClient().requestSession(sessionRequest));
 
     }
 
@@ -110,7 +110,7 @@ abstract class AbstractSessionsTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        return blocking(fourApi.sessionsClient().requestSession(sessionRequest));
+        return blocking(() -> fourApi.sessionsClient().requestSession(sessionRequest));
 
     }
 

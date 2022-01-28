@@ -29,9 +29,9 @@ class RapiPagoPaymentsTestIT extends SandboxTestFixture {
 
         final String paymentId = makeRapiPagoPayment();
 
-        blocking(defaultApi.rapiPagoClient().succeed(paymentId));
+        blocking(() -> defaultApi.rapiPagoClient().succeed(paymentId));
 
-        final GetPaymentResponse response = blocking(defaultApi.paymentsClient().getPayment(paymentId));
+        final GetPaymentResponse response = blocking(() -> defaultApi.paymentsClient().getPayment(paymentId));
 
         assertNotNull(response);
         assertEquals(PaymentStatus.CAPTURED, response.getStatus());
@@ -52,9 +52,9 @@ class RapiPagoPaymentsTestIT extends SandboxTestFixture {
 
         final String paymentId = makeRapiPagoPayment();
 
-        blocking(defaultApi.rapiPagoClient().expire(paymentId));
+        blocking(() -> defaultApi.rapiPagoClient().expire(paymentId));
 
-        final GetPaymentResponse response = blocking(defaultApi.paymentsClient().getPayment(paymentId));
+        final GetPaymentResponse response = blocking(() -> defaultApi.paymentsClient().getPayment(paymentId));
 
         assertNotNull(response);
         assertEquals(PaymentStatus.EXPIRED, response.getStatus());
@@ -80,7 +80,7 @@ class RapiPagoPaymentsTestIT extends SandboxTestFixture {
 
         final PaymentRequest request = PaymentRequest.rapiPago(rapiPagoSource, Currency.ARS, 100000L);
 
-        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestPayment(request));
+        final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
 
         assertNotNull(response);
         assertEquals(PaymentStatus.PENDING, response.getStatus());

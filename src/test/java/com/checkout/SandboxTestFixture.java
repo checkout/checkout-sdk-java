@@ -1,22 +1,33 @@
 package com.checkout;
 
 import com.checkout.four.CheckoutApi;
+import com.checkout.payments.PaymentStatus;
+import com.checkout.payments.response.GetPaymentResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.opentest4j.AssertionFailedError;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@Slf4j
 public abstract class SandboxTestFixture {
 
     private static final Executor CUSTOM_EXECUTOR = Executors.newSingleThreadExecutor();
     private static final HttpClientBuilder CUSTOM_HTTP_BUILDER = HttpClientBuilder.create().setConnectionTimeToLive(3, TimeUnit.SECONDS);
+    private static final int TRY_MAX_ATTEMPTS = 10;
 
     protected static final String SELF = "self";
 
@@ -60,15 +71,44 @@ public abstract class SandboxTestFixture {
         }
     }
 
-    protected <T> T blocking(final CompletableFuture<T> future) {
-        try {
-            return future.get();
-        } catch (final Exception e) {
-            assertTrue(e.getCause() instanceof CheckoutApiException);
-            final CheckoutApiException checkoutException = (CheckoutApiException) e.getCause();
-            fail(checkoutException);
+    protected <T> T blocking(final Supplier<CompletableFuture<T>> supplier) {
+        int attempts = 1;
+        while (attempts <= TRY_MAX_ATTEMPTS) {
+            try {
+                return supplier.get().get();
+            } catch (final Throwable e) {
+                log.warn("Request failed with error '{}' - retry {}/{}", e.getMessage(), attempts, TRY_MAX_ATTEMPTS);
+            }
+            attempts++;
+            nap();
         }
-        return null;
+        throw new AssertionFailedError("Max attempts reached!");
+    }
+
+    protected <T> T blocking(final Supplier<CompletableFuture<T>> supplier, final Matcher<T> matcher) {
+        int attempts = 1;
+        while (attempts <= TRY_MAX_ATTEMPTS) {
+            try {
+                final CompletableFuture<T> t = supplier.get();
+                if (!matcher.matches(t.get())) {
+                    throw new AssertionFailedError(matcher.toString());
+                }
+                return t.get();
+            } catch (final Throwable e) {
+                log.warn("Request/Matcher failed with error '{}' - retry {}/{}", e.getMessage(), attempts, TRY_MAX_ATTEMPTS);
+            }
+            attempts++;
+            nap();
+        }
+        throw new AssertionFailedError("Max attempts reached!");
+    }
+
+    private void nap() {
+        try {
+            TimeUnit.SECONDS.sleep(2L);
+        } catch (final InterruptedException ignore) {
+            fail();
+        }
     }
 
     protected <T> void assertNotFound(final CompletableFuture<T> future) {
@@ -81,22 +121,51 @@ public abstract class SandboxTestFixture {
         }
     }
 
-    /**
-     * Take a quick nap
-     */
-    protected void nap() {
-        nap(2);
+    // Hamcrest hasSize() doesn't seem to provide the type inference with generics needed
+    protected static class ListHasSize<T> extends BaseMatcher<List<T>> {
+
+        private final int count;
+
+        public ListHasSize(final int count) {
+            this.count = count;
+        }
+
+        @Override
+        public boolean matches(final Object actual) {
+            if (!(actual instanceof List)) {
+                throw new IllegalStateException("not a list!");
+            }
+            return ((List<T>) actual).size() == count;
+        }
+
+        @Override
+        public void describeTo(final Description description) {
+            throw new UnsupportedOperationException();
+        }
+
     }
 
-    /**
-     * Take a custom nap
-     */
-    protected void nap(final int seconds) {
-        try {
-            TimeUnit.SECONDS.sleep(seconds);
-        } catch (final InterruptedException ignore) {
-            fail();
+    protected static class PaymentIsInStatus extends BaseMatcher<GetPaymentResponse> {
+
+        private final PaymentStatus status;
+
+        public PaymentIsInStatus(final PaymentStatus status) {
+            this.status = status;
         }
+
+        @Override
+        public boolean matches(final Object actual) {
+            if (!(actual instanceof GetPaymentResponse)) {
+                throw new IllegalStateException("not a GetPaymentResponse!");
+            }
+            return ((GetPaymentResponse) actual).getStatus().equals(status);
+        }
+
+        @Override
+        public void describeTo(final Description description) {
+            throw new UnsupportedOperationException();
+        }
+
     }
 
 }

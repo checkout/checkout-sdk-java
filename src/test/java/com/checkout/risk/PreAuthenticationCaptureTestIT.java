@@ -75,7 +75,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                 .phone(TestHelper.createPhone())
                 .build();
 
-        final String customerId = blocking(defaultApi.customersClient().create(customerRequest)).getId();
+        final String customerId = blocking(() -> defaultApi.customersClient().create(customerRequest)).getId();
 
         final CustomerSourcePrism customerSourcePrism = CustomerSourcePrism.builder()
                 .id(customerId)
@@ -115,7 +115,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
         cardTokenRequest.setBillingAddress(billingAddress);
         cardTokenRequest.setPhone(phone);
 
-        final CardTokenResponse cardToken = blocking(defaultApi.tokensClient().request(cardTokenRequest));
+        final CardTokenResponse cardToken = blocking(() -> defaultApi.tokensClient().request(cardTokenRequest));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type(InstrumentType.TOKEN)
@@ -136,7 +136,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final CreateInstrumentResponse response = blocking(defaultApi.instrumentsClient().createInstrument(request));
+        final CreateInstrumentResponse response = blocking(() -> defaultApi.instrumentsClient().createInstrument(request));
 
         final IdSourcePrism idSourcePrism = IdSourcePrism.builder()
                 .id(response.getId()).cvv(TestCardSource.VISA.getCvv())
@@ -186,7 +186,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
                 .build();
 
-        final PreAuthenticationAssessmentResponse response = blocking(defaultApi.riskClient().requestPreAuthenticationRiskScan(request));
+        final PreAuthenticationAssessmentResponse response = blocking(() -> defaultApi.riskClient().requestPreAuthenticationRiskScan(request));
         assertNotNull(response);
 
         assertNotNull(response.getAssessmentId());
@@ -248,7 +248,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final PreCaptureAssessmentResponse response = blocking(defaultApi.riskClient().requestPreCaptureRiskScan(request));
+        final PreCaptureAssessmentResponse response = blocking(() -> defaultApi.riskClient().requestPreCaptureRiskScan(request));
 
         assertNotNull(response);
         assertNotNull(response.getAssessmentId());

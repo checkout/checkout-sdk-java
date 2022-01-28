@@ -47,7 +47,7 @@ class SofortPaymentsTestIT extends SandboxTestFixture {
                 .sender(sender)
                 .build();
 
-        final PaymentResponse response = blocking(fourApi.paymentsClient().requestPayment(request));
+        final PaymentResponse response = blocking(() -> fourApi.paymentsClient().requestPayment(request));
 
         assertNotNull(response);
 

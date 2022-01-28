@@ -26,7 +26,7 @@ class BankAccountFieldFormattingTestIT extends SandboxTestFixture {
                 .accountHolderType(AccountHolderType.INDIVIDUAL)
                 .paymentNetwork(PaymentNetwork.LOCAL)
                 .build();
-        final BankAccountFieldResponse response = blocking(fourApi.instrumentsClient().getBankAccountFieldFormatting(CountryCode.GB, Currency.GBP, query));
+        final BankAccountFieldResponse response = blocking(() -> fourApi.instrumentsClient().getBankAccountFieldFormatting(CountryCode.GB, Currency.GBP, query));
         assertNotNull(response);
         assertNotNull(response.getSections());
         assertFalse(response.getSections().isEmpty());

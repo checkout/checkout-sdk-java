@@ -11,11 +11,11 @@ import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
 import org.apache.http.entity.ContentType;
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.net.URL;
-import java.util.concurrent.TimeUnit;
 
 import static com.checkout.CardSourceHelper.getCardSourcePaymentForDispute;
 import static com.checkout.CardSourceHelper.getIndividualSender;
@@ -29,19 +29,19 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
 
     @Test
     void shouldQueryDisputes() {
-        DisputesQueryFilter query = DisputesQueryFilter
+        final DisputesQueryFilter query = DisputesQueryFilter
                 .builder()
                 .limit(100)
                 .thisChannelOnly(true)
                 .build();
-        final DisputesQueryResponse response = blocking(fourApi.disputesClient().query(query));
+        final DisputesQueryResponse response = blocking(() -> fourApi.disputesClient().query(query));
         assertNotNull(response);
         assertEquals(query.getLimit(), response.getLimit());
         assertEquals(query.isThisChannelOnly(), response.isThisChannelOnly());
         if (response.getTotalCount() > 0) {
             final Dispute dispute = response.getData().get(0);
-            query = DisputesQueryFilter.builder().id(dispute.getId()).build();
-            final DisputesQueryResponse responseDsp = blocking(fourApi.disputesClient().query(query));
+            final DisputesQueryFilter query2 = DisputesQueryFilter.builder().id(dispute.getId()).build();
+            final DisputesQueryResponse responseDsp = blocking(() -> fourApi.disputesClient().query(query2));
             assertNotNull(responseDsp);
             assertEquals(1, responseDsp.getTotalCount());
         }
@@ -49,11 +49,11 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
 
     @Test
     void shouldGetDisputeDetails() {
-        final DisputesQueryResponse queryResponse = blocking(fourApi.disputesClient().query(DisputesQueryFilter.builder().build()));
+        final DisputesQueryResponse queryResponse = blocking(() -> fourApi.disputesClient().query(DisputesQueryFilter.builder().build()));
         assertNotNull(queryResponse);
         if (queryResponse.getTotalCount() > 0) {
             final Dispute disputeQueried = queryResponse.getData().get(0);
-            final DisputeDetailsResponse detailsResponse = blocking(fourApi.disputesClient().getDisputeDetails(disputeQueried.getId()));
+            final DisputeDetailsResponse detailsResponse = blocking(() -> fourApi.disputesClient().getDisputeDetails(disputeQueried.getId()));
             assertNotNull(detailsResponse);
             assertEquals(disputeQueried.getId(), detailsResponse.getId());
             assertNotNull(detailsResponse.getStatus());
@@ -75,7 +75,7 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
 
     @Test
     void shouldFailOnAcceptDisputeAlreadyAccepted() {
-        final DisputesQueryResponse queryResponse = blocking(fourApi.disputesClient()
+        final DisputesQueryResponse queryResponse = blocking(() -> fourApi.disputesClient()
                 .query(DisputesQueryFilter.builder().statuses(DisputeStatus.ACCEPTED.toString()).build()));
         assertNotNull(queryResponse);
         if (queryResponse.getTotalCount() > 0) {
@@ -110,18 +110,14 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
         capturePayment(paymentResponse.getId());
 
         //Query for dispute
-        DisputesQueryResponse queryResponse = null;
         final DisputesQueryFilter query = DisputesQueryFilter.builder()
                 .paymentId(paymentResponse.getId())
                 .statuses("evidence_required")
                 .build();
-        while (queryResponse == null || queryResponse.getTotalCount() == 0) {
-            TimeUnit.SECONDS.sleep(20);
-            queryResponse = blocking(fourApi.disputesClient().query(query));
-        }
+        final DisputesQueryResponse queryResponse = blocking(() -> fourApi.disputesClient().query(query), IsNull.notNullValue(DisputesQueryResponse.class));
 
         //Get dispute details
-        final DisputeDetailsResponse disputeDetails = blocking(fourApi.disputesClient()
+        final DisputeDetailsResponse disputeDetails = blocking(() -> fourApi.disputesClient()
                 .getDisputeDetails(queryResponse.getData().get(0).getId()));
         assertEquals(paymentResponse.getId(), disputeDetails.getPayment().getId());
         assertEquals(paymentResponse.getAmount(), disputeDetails.getPayment().getAmount());
@@ -135,10 +131,10 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
                 .contentType(ContentType.create("application/pdf"))
                 .purpose(FilePurpose.DISPUTE_EVIDENCE)
                 .build();
-        final IdResponse fileResponse = blocking(fourApi.disputesClient().uploadFile(fileRequest));
+        final IdResponse fileResponse = blocking(() -> fourApi.disputesClient().uploadFile(fileRequest));
         assertNotNull(fileResponse);
         assertNotNull(fileResponse.getId());
-        final FileDetailsResponse fileDetailsResponse = blocking(fourApi.disputesClient().getFileDetails(fileResponse.getId()));
+        final FileDetailsResponse fileDetailsResponse = blocking(() -> fourApi.disputesClient().getFileDetails(fileResponse.getId()));
         assertNotNull(fileDetailsResponse);
         assertEquals(fileRequest.getFile().getName(), fileDetailsResponse.getFilename());
         assertEquals(fileRequest.getPurpose().getPurpose(), fileDetailsResponse.getPurpose());
@@ -162,17 +158,17 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
                 .proofOfDeliveryOrServiceDateFile(fileDetailsResponse.getId())
                 .proofOfDeliveryOrServiceDateText("Copy of the customer receipt showing the merchandise was delivered on 2018-12-20")
                 .build();
-        blocking(fourApi.disputesClient().putEvidence(disputeDetails.getId(), evidenceRequest));
+        blocking(() -> fourApi.disputesClient().putEvidence(disputeDetails.getId(), evidenceRequest));
 
         //Retrieve your dispute evidence details
-        final DisputeEvidenceResponse evidenceResponse = blocking(fourApi.disputesClient().getEvidence(disputeDetails.getId()));
+        final DisputeEvidenceResponse evidenceResponse = blocking(() -> fourApi.disputesClient().getEvidence(disputeDetails.getId()));
         assertNotNull(evidenceResponse);
         assertEquals(evidenceRequest.getProofOfDeliveryOrServiceFile(), evidenceResponse.getProofOfDeliveryOrServiceFile());
         assertEquals(evidenceRequest.getProofOfDeliveryOrServiceText(), evidenceResponse.getProofOfDeliveryOrServiceText());
         assertEquals(evidenceRequest.getProofOfDeliveryOrServiceDateText(), evidenceResponse.getProofOfDeliveryOrServiceDateText());
 
         //Submit your dispute evidence
-        blocking(fourApi.disputesClient().submitEvidence(disputeDetails.getId()));
+        blocking(() -> fourApi.disputesClient().submitEvidence(disputeDetails.getId()));
     }
 
 

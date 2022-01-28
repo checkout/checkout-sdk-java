@@ -23,27 +23,22 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
         final PaymentResponse payment = makeCardPayment(false);
 
-        nap(10);
-
         final SubjectEvent paymentApprovedEvent = getSubjectEvent(payment.getId());
 
         assertNotNull(paymentApprovedEvent);
 
-        assertNull(blocking(fourApi.workflowsClient().reflowByEvent(paymentApprovedEvent.getId())));
+        assertNull(blocking(() -> fourApi.workflowsClient().reflowByEvent(paymentApprovedEvent.getId())));
 
     }
 
     @Test
-    @Disabled("unstable")
     void shouldReflowBySubject() {
 
         createWorkflow();
 
         final PaymentResponse payment = makeCardPayment(false);
 
-        nap(10);
-
-        assertNull(blocking(fourApi.workflowsClient().reflowBySubject(payment.getId())));
+        assertNull(blocking(() -> fourApi.workflowsClient().reflowBySubject(payment.getId())));
 
     }
 
@@ -54,11 +49,9 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
         final PaymentResponse payment = makeCardPayment(false);
 
-        nap(15);
-
         final SubjectEvent paymentApprovedEvent = getSubjectEvent(payment.getId());
 
-        assertNull(blocking(fourApi.workflowsClient().reflowByEventAndWorkflow(
+        assertNull(blocking(() -> fourApi.workflowsClient().reflowByEventAndWorkflow(
                 paymentApprovedEvent.getId(),
                 createWorkflowResponse.getId()))
         );
@@ -66,16 +59,13 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
     }
 
     @Test
-    @Disabled("unstable")
     void shouldReflowBySubjectAndWorkflow() {
 
         final CreateWorkflowResponse createWorkflowResponse = createWorkflow();
 
         final PaymentResponse payment = makeCardPayment(false);
 
-        nap(10);
-
-        assertNull(blocking(fourApi.workflowsClient().reflowBySubjectAndWorkflow(
+        assertNull(blocking(() -> fourApi.workflowsClient().reflowBySubjectAndWorkflow(
                 payment.getId(),
                 createWorkflowResponse.getId()))
         );
@@ -89,39 +79,34 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
         final PaymentResponse payment = makeCardPayment(false);
 
-        nap(10);
-
         final SubjectEvent paymentApprovedEvent = getSubjectEvent(payment.getId());
 
         final ReflowByEventsRequest request = ReflowByEventsRequest.builder()
                 .events(Collections.singletonList(paymentApprovedEvent.getId()))
                 .workflows(Collections.singletonList(createWorkflowResponse.getId())).build();
 
-        assertNull(blocking(fourApi.workflowsClient().reflow(request)));
+        assertNull(blocking(() -> fourApi.workflowsClient().reflow(request)));
 
     }
 
     @Test
-    @Disabled("unstable")
     void shouldReflowSubjects() {
 
         final CreateWorkflowResponse createWorkflowResponse = createWorkflow();
 
         final PaymentResponse payment = makeCardPayment(false);
 
-        nap(10);
-
         final ReflowBySubjectsRequest request = ReflowBySubjectsRequest.builder()
                 .subjects(Collections.singletonList(payment.getId()))
                 .workflows(Collections.singletonList(createWorkflowResponse.getId())).build();
 
-        assertNull(blocking(fourApi.workflowsClient().reflow(request)));
+        assertNull(blocking(() -> fourApi.workflowsClient().reflow(request)));
 
     }
 
     private SubjectEvent getSubjectEvent(final String subjectId) {
 
-        final SubjectEventsResponse subjectEventsResponse = blocking(fourApi.workflowsClient().getSubjectEvents(subjectId));
+        final SubjectEventsResponse subjectEventsResponse = blocking(() -> fourApi.workflowsClient().getSubjectEvents(subjectId));
 
         assertNotNull(subjectEventsResponse);
         assertEquals(1, subjectEventsResponse.getEvents().size());

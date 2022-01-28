@@ -32,7 +32,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
 
         final CreateInstrumentTokenResponse tokenInstrument = createTokenInstrument();
 
-        final GetInstrumentResponse getResponse = blocking(fourApi.instrumentsClient().get(tokenInstrument.getId()));
+        final GetInstrumentResponse getResponse = blocking(() -> fourApi.instrumentsClient().get(tokenInstrument.getId()));
 
         final GetCardInstrumentResponse cardResponse = (GetCardInstrumentResponse) getResponse;
 
@@ -70,7 +70,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
                 .token(token)
                 .build();
 
-        final UpdateInstrumentCardResponse updateResponse = blocking(fourApi.instrumentsClient().update(tokenInstrument.getId(), updateRequest));
+        final UpdateInstrumentCardResponse updateResponse = blocking(() -> fourApi.instrumentsClient().update(tokenInstrument.getId(), updateRequest));
         assertNotNull(updateResponse);
         assertNotNull(updateResponse.getFingerprint());
 
@@ -107,11 +107,11 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
                         .build())
                 .build();
 
-        final UpdateInstrumentCardResponse updateResponse = blocking(fourApi.instrumentsClient().update(tokenInstrument.getId(), updateRequest));
+        final UpdateInstrumentCardResponse updateResponse = blocking(() -> fourApi.instrumentsClient().update(tokenInstrument.getId(), updateRequest));
         assertNotNull(updateResponse);
         assertNotNull(updateResponse.getFingerprint());
 
-        final GetInstrumentResponse getResponse = blocking(fourApi.instrumentsClient().get(tokenInstrument.getId()));
+        final GetInstrumentResponse getResponse = blocking(() -> fourApi.instrumentsClient().get(tokenInstrument.getId()));
         final GetCardInstrumentResponse cardResponse = (GetCardInstrumentResponse) getResponse;
 
         assertNotNull(cardResponse);
@@ -132,7 +132,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
 
         final CreateInstrumentTokenResponse response = createTokenInstrument();
 
-        blocking(fourApi.instrumentsClient().delete(response.getId()));
+        blocking(() -> fourApi.instrumentsClient().delete(response.getId()));
 
         assertNotFound(fourApi.instrumentsClient().get(response.getId()));
 
@@ -149,7 +149,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
                         .build())
                 .build();
 
-        final String customerId = blocking(fourApi.customersClient().create(customerRequest)).getId();
+        final String customerId = blocking(() -> fourApi.customersClient().create(customerRequest)).getId();
         assertNotNull(customerId);
 
         return createTokenInstrument(customerId);
@@ -183,7 +183,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
                         .build())
                 .build();
 
-        final CreateInstrumentTokenResponse response = blocking(fourApi.instrumentsClient().create(request));
+        final CreateInstrumentTokenResponse response = blocking(() -> fourApi.instrumentsClient().create(request));
         assertNotNull(response);
         assertNotNull(response.getId());
         assertNotNull(response.getFingerprint());

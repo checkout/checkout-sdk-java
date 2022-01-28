@@ -25,10 +25,10 @@ class CustomersTestIT extends CardTokenInstrumentsTestIT {
                         .build())
                 .build();
 
-        final String customerId = blocking(fourApi.customersClient().create(customerRequest)).getId();
+        final String customerId = blocking(() -> fourApi.customersClient().create(customerRequest)).getId();
         assertNotNull(customerId);
 
-        final CustomerResponse customerResponse = blocking(fourApi.customersClient().get(customerId));
+        final CustomerResponse customerResponse = blocking(() -> fourApi.customersClient().get(customerId));
         assertNotNull(customerResponse);
         assertEquals(customerRequest.getEmail(), customerResponse.getEmail());
         assertEquals(customerRequest.getName(), customerResponse.getName());
@@ -38,7 +38,7 @@ class CustomersTestIT extends CardTokenInstrumentsTestIT {
 
         super.createTokenInstrument(customerId);
 
-        final CustomerResponse customerWithInstruments = blocking(fourApi.customersClient().get(customerId));
+        final CustomerResponse customerWithInstruments = blocking(() -> fourApi.customersClient().get(customerId));
         assertEquals(1, customerWithInstruments.getInstruments().size());
         assertTrue(customerWithInstruments.getInstruments().get(0) instanceof GetCardInstrumentResponse);
 
@@ -55,14 +55,14 @@ class CustomersTestIT extends CardTokenInstrumentsTestIT {
                         .number("4155552671")
                         .build())
                 .build();
-        final String customerId = blocking(fourApi.customersClient().create(customerRequest)).getId();
+        final String customerId = blocking(() -> fourApi.customersClient().create(customerRequest)).getId();
         assertNotNull(customerId);
         //Update Customer
         customerRequest.setEmail(generateRandomEmail());
         customerRequest.setName("Testing New");
-        blocking(fourApi.customersClient().update(customerId, customerRequest));
+        blocking(() -> fourApi.customersClient().update(customerId, customerRequest));
         //Verify changes were applied
-        final CustomerResponse customerResponse = blocking(fourApi.customersClient().get(customerId));
+        final CustomerResponse customerResponse = blocking(() -> fourApi.customersClient().get(customerId));
         assertNotNull(customerResponse);
         assertEquals(customerRequest.getName(), customerResponse.getName());
         assertEquals(customerRequest.getEmail(), customerResponse.getEmail());
@@ -79,10 +79,10 @@ class CustomersTestIT extends CardTokenInstrumentsTestIT {
                         .number("4155552671")
                         .build())
                 .build();
-        final String customerId = blocking(fourApi.customersClient().create(customerRequest)).getId();
+        final String customerId = blocking(() -> fourApi.customersClient().create(customerRequest)).getId();
         assertNotNull(customerId);
         //Delete customer
-        blocking(fourApi.customersClient().delete(customerId));
+        blocking(() -> fourApi.customersClient().delete(customerId));
         //Verify customer does not exist
         assertNotFound(fourApi.customersClient().get(customerId));
 

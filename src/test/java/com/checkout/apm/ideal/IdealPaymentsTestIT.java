@@ -7,6 +7,7 @@ import com.checkout.payments.PaymentStatus;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.source.apm.RequestIdealSource;
 import com.checkout.payments.response.PaymentResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,7 +30,7 @@ class IdealPaymentsTestIT extends SandboxTestFixture {
 
         final PaymentRequest request = PaymentRequest.ideal(idealSource, Currency.EUR, 1000L);
 
-        final PaymentResponse response = blocking(defaultApi.paymentsClient().requestPayment(request));
+        final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);
         assertEquals(PaymentStatus.PENDING, response.getStatus());
         assertNotNull(response.getLink("self"));
@@ -38,9 +39,10 @@ class IdealPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldGetInfo() {
 
-        final IdealInfo idealInfo = blocking(defaultApi.idealClient().getInfo());
+        final IdealInfo idealInfo = blocking(() -> defaultApi.idealClient().getInfo());
 
         assertNotNull(idealInfo);
         assertNotNull(idealInfo.getLinks().getSelf());
@@ -53,7 +55,7 @@ class IdealPaymentsTestIT extends SandboxTestFixture {
     @Test
     void shouldGetIssuers() {
 
-        final IssuerResponse issuerResponse = blocking(defaultApi.idealClient().getIssuers());
+        final IssuerResponse issuerResponse = blocking(() -> defaultApi.idealClient().getIssuers());
 
         assertNotNull(issuerResponse);
         assertNotNull(issuerResponse.getSelfLink());

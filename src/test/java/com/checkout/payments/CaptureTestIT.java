@@ -27,7 +27,7 @@ class CaptureTestIT extends AbstractPaymentsTestIT {
                 .metadata(metadata)
                 .build();
 
-        final CaptureResponse captureResponse = blocking(defaultApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest));
+        final CaptureResponse captureResponse = blocking(() -> defaultApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest));
         assertNotNull(captureResponse);
         assertNotNull(captureResponse.getActionId());
         assertFalse(captureResponse.getActionId().isEmpty());
@@ -51,7 +51,7 @@ class CaptureTestIT extends AbstractPaymentsTestIT {
                 .metadata(metadata)
                 .build();
 
-        final CaptureResponse captureResponse = blocking(defaultApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest));
+        final CaptureResponse captureResponse = blocking(() -> defaultApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest));
         assertNotNull(captureResponse);
         assertNotNull(captureResponse.getActionId());
         assertFalse(captureResponse.getActionId().isEmpty());
@@ -74,10 +74,10 @@ class CaptureTestIT extends AbstractPaymentsTestIT {
                 .metadata(metadata)
                 .build();
 
-        final CaptureResponse captureResponse1 = blocking(defaultApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest, IDEMPOTENCY_KEY));
+        final CaptureResponse captureResponse1 = blocking(() -> defaultApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest, IDEMPOTENCY_KEY));
         assertNotNull(captureResponse1);
 
-        final CaptureResponse captureResponse2 = blocking(defaultApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest, IDEMPOTENCY_KEY));
+        final CaptureResponse captureResponse2 = blocking(() -> defaultApi.paymentsClient().capturePayment(paymentResponse.getId(), captureRequest, IDEMPOTENCY_KEY));
         assertNotNull(captureResponse2);
 
         assertEquals(captureResponse1.getActionId(), captureResponse2.getActionId());

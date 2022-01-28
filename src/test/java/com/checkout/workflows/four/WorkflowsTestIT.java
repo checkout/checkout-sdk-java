@@ -28,7 +28,7 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
         final CreateWorkflowResponse createWorkflowResponse = createWorkflow();
 
         // Get by Id
-        final GetWorkflowResponse getWorkflowResponse = blocking(fourApi.workflowsClient().getWorkflow(createWorkflowResponse.getId()));
+        final GetWorkflowResponse getWorkflowResponse = blocking(() -> fourApi.workflowsClient().getWorkflow(createWorkflowResponse.getId()));
 
         assertNotNull(getWorkflowResponse);
         assertNotNull(getWorkflowResponse.getId());
@@ -55,7 +55,7 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
         assertNotNull(getWorkflowResponse.getLink(SELF));
 
         // Get all
-        final GetWorkflowsResponse getWorkflowsResponse = blocking(fourApi.workflowsClient().getWorkflows());
+        final GetWorkflowsResponse getWorkflowsResponse = blocking(() -> fourApi.workflowsClient().getWorkflows());
 
         assertNotNull(getWorkflowsResponse);
         assertNotNull(getWorkflowsResponse.getWorkflows());
@@ -78,7 +78,7 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
                 .name("testing_2")
                 .build();
 
-        final UpdateWorkflowResponse updateWorkflowResponse = blocking(fourApi.workflowsClient().updateWorkflow(createWorkflowResponse.getId(), updateWorkflowRequest));
+        final UpdateWorkflowResponse updateWorkflowResponse = blocking(() -> fourApi.workflowsClient().updateWorkflow(createWorkflowResponse.getId(), updateWorkflowRequest));
 
         assertNotNull(updateWorkflowResponse);
         assertEquals("testing_2", updateWorkflowResponse.getName());
@@ -90,7 +90,7 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
 
         final CreateWorkflowResponse createWorkflowResponse = createWorkflow();
 
-        final GetWorkflowResponse getWorkflowResponse1 = blocking(fourApi.workflowsClient().getWorkflow(createWorkflowResponse.getId()));
+        final GetWorkflowResponse getWorkflowResponse1 = blocking(() -> fourApi.workflowsClient().getWorkflow(createWorkflowResponse.getId()));
         assertNotNull(getWorkflowResponse1);
         assertEquals(1, getWorkflowResponse1.getActions().size());
 
@@ -102,9 +102,9 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
                 .url(baseWorkflowActionRequest.getUrl() + "/fake")
                 .build();
 
-        blocking(fourApi.workflowsClient().updateWorkflowAction(getWorkflowResponse1.getId(), actionId, updateAction));
+        blocking(() -> fourApi.workflowsClient().updateWorkflowAction(getWorkflowResponse1.getId(), actionId, updateAction));
 
-        final GetWorkflowResponse getWorkflowResponse2 = blocking(fourApi.workflowsClient().getWorkflow(createWorkflowResponse.getId()));
+        final GetWorkflowResponse getWorkflowResponse2 = blocking(() -> fourApi.workflowsClient().getWorkflow(createWorkflowResponse.getId()));
         assertNotNull(getWorkflowResponse2);
         assertNotNull(getWorkflowResponse2.getActions());
         assertEquals(1, getWorkflowResponse2.getActions().size());
@@ -123,7 +123,7 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
 
         final CreateWorkflowResponse createWorkflowResponse = createWorkflow();
 
-        final GetWorkflowResponse getWorkflowResponse = blocking(fourApi.workflowsClient().getWorkflow(createWorkflowResponse.getId()));
+        final GetWorkflowResponse getWorkflowResponse = blocking(() -> fourApi.workflowsClient().getWorkflow(createWorkflowResponse.getId()));
         assertNotNull(getWorkflowResponse);
         assertEquals(3, getWorkflowResponse.getConditions().size());
 
@@ -141,9 +141,9 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
                 .events(events)
                 .build();
 
-        blocking(fourApi.workflowsClient().updateWorkflowCondition(getWorkflowResponse.getId(), eventConditionResponse.getId(), updateEventCondition));
+        blocking(() -> fourApi.workflowsClient().updateWorkflowCondition(getWorkflowResponse.getId(), eventConditionResponse.getId(), updateEventCondition));
 
-        final GetWorkflowResponse updatedWorkflow = blocking(fourApi.workflowsClient().getWorkflow(createWorkflowResponse.getId()));
+        final GetWorkflowResponse updatedWorkflow = blocking(() -> fourApi.workflowsClient().getWorkflow(createWorkflowResponse.getId()));
         assertNotNull(updatedWorkflow);
         assertEquals(3, updatedWorkflow.getConditions().size());
 
@@ -166,7 +166,7 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
                 .conditions(Arrays.asList(baseEventWorkflowConditionRequest, baseEntityWorkflowConditionRequest, processingChannelWorkflowConditionRequest))
                 .build();
 
-        final CreateWorkflowResponse createWorkflowResponse = blocking(fourApi.workflowsClient().createWorkflow(request));
+        final CreateWorkflowResponse createWorkflowResponse = blocking(() -> fourApi.workflowsClient().createWorkflow(request));
         assertNotNull(createWorkflowResponse);
         assertNotNull(createWorkflowResponse);
         assertNotNull(createWorkflowResponse.getId());
