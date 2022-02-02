@@ -51,7 +51,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.paymentLinksClient = new PaymentLinksClientImpl(apiClient, configuration);
         this.hostedPaymentsClient = new HostedPaymentsClientImpl(apiClient, configuration);
         this.customersClient = new CustomersClientImpl(apiClient, configuration);
-        this.disputesClient = new DisputesClientImpl(apiClient, configuration);
+        this.disputesClient = new DisputesClientImpl(apiClient, configuration, SdkAuthorizationType.SECRET_KEY);
         this.reconciliationClient = new ReconciliationClientImpl(apiClient, configuration);
         this.riskClient = new RiskClientImpl(apiClient, configuration);
     }

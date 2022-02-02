@@ -12,13 +12,13 @@ import java.util.concurrent.CompletableFuture;
 
 public class DisputesClientImpl extends AbstractClient implements DisputesClient {
 
-    private static final String DISPUTES = "/disputes";
-    private static final String FILES = "/files";
+    private static final String DISPUTES = "disputes";
+    private static final String FILES = "files";
     private static final String ACCEPT = "accept";
     private static final String EVIDENCE = "evidence";
 
-    public DisputesClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY);
+    public DisputesClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration, final SdkAuthorizationType sdkAuthorizationType) {
+        super(apiClient, configuration, sdkAuthorizationType);
     }
 
     @Override

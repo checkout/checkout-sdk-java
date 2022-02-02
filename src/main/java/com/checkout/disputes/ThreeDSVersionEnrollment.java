@@ -1,4 +1,4 @@
-package com.checkout.disputes.four;
+package com.checkout.disputes;
 
 import com.checkout.common.ThreeDSEnrollmentStatus;
 import lombok.Builder;

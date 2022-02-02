@@ -10,15 +10,15 @@ public interface DisputesClient {
 
     CompletableFuture<DisputesQueryResponse> query(DisputesQueryFilter queryFilter);
 
-    CompletableFuture<DisputeDetailsResponse> getDisputeDetails(String id);
+    CompletableFuture<DisputeDetailsResponse> getDisputeDetails(String disputeId);
 
-    CompletableFuture<Void> accept(String id);
+    CompletableFuture<Void> accept(String disputeId);
 
     CompletableFuture<Void> putEvidence(String id, DisputeEvidenceRequest disputeEvidence);
 
-    CompletableFuture<DisputeEvidenceResponse> getEvidence(String id);
+    CompletableFuture<DisputeEvidenceResponse> getEvidence(String disputeId);
 
-    CompletableFuture<Void> submitEvidence(String id);
+    CompletableFuture<Void> submitEvidence(String disputeId);
 
     CompletableFuture<IdResponse> uploadFile(FileRequest request);
 

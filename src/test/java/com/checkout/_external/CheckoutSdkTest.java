@@ -61,7 +61,7 @@ class CheckoutSdkTest {
         assertTrue(fourCheckoutApi.tokensClient() instanceof com.checkout.tokens.TokensClientImpl);
         assertTrue(fourCheckoutApi.paymentsClient() instanceof com.checkout.payments.four.PaymentsClientImpl);
         assertTrue(fourCheckoutApi.customersClient() instanceof com.checkout.customers.four.CustomersClientImpl);
-        assertTrue(fourCheckoutApi.disputesClient() instanceof com.checkout.disputes.four.DisputesClientImpl);
+        assertTrue(fourCheckoutApi.disputesClient() instanceof com.checkout.disputes.DisputesClientImpl);
         assertTrue(fourCheckoutApi.instrumentsClient() instanceof com.checkout.instruments.four.InstrumentsClientImpl);
         assertTrue(fourCheckoutApi.riskClient() instanceof com.checkout.risk.RiskClientImpl);
         assertTrue(fourCheckoutApi.workflowsClient() instanceof com.checkout.workflows.four.WorkflowsClientImpl);
