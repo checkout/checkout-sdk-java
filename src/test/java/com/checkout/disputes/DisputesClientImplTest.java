@@ -31,8 +31,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class DisputesClientImplTest {
 
-    private static final String DISPUTES = "/disputes";
-    private static final String FILES = "/files";
+    private static final String DISPUTES = "disputes";
+    private static final String FILES = "files";
     private static final String EVIDENCE = "evidence";
     private static final String REASON_CODE = "10.4";
     private static final long PAYMENT_AMOUNT = 1040L;
@@ -100,7 +100,7 @@ class DisputesClientImplTest {
         evidenceResponseFuture = CompletableFuture.completedFuture(evidenceResponse);
         idResponseFuture = CompletableFuture.completedFuture(idResponse);
         fileDetailsResponseFuture = CompletableFuture.completedFuture(fileDetailsResponse);
-        client = new DisputesClientImpl(apiClient, configuration);
+        client = new DisputesClientImpl(apiClient, configuration, SdkAuthorizationType.SECRET_KEY);
         paymentDispute = PaymentDispute.builder().id(PAYMENT_ID).amount(PAYMENT_AMOUNT).arn(PAYMENT_ARN).build();
     }
 

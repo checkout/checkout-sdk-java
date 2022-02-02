@@ -1,9 +1,12 @@
 package com.checkout.disputes;
 
+import com.checkout.common.Currency;
 import com.checkout.common.Resource;
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -11,16 +14,43 @@ import java.util.List;
 public final class DisputeDetailsResponse extends Resource {
 
     private String id;
+
     private DisputeCategory category;
-    private Double amount;
-    private String currency;
+
+    private Long amount;
+
+    private Currency currency;
+
+    @SerializedName("reason_code")
     private String reasonCode;
+
     private DisputeStatus status;
+
+    @SerializedName("resolved_reason")
     private DisputeResolvedReason resolvedReason;
+
+    @SerializedName("relevant_evidence")
     private List<DisputeRelevantEvidence> relevantEvidence;
-    private String evidenceRequiredBy;
-    private String receivedOn;
-    private String lastUpdate;
+
+    @SerializedName("evidence_required_by")
+    private Instant evidenceRequiredBy;
+
+    @SerializedName("received_on")
+    private Instant receivedOn;
+
+    @SerializedName("last_update")
+    private Instant lastUpdate;
+
     private PaymentDispute payment;
+
+    /**
+     * Available only on Four
+     */
+
+    @SerializedName("entity_id")
+    private String entityId;
+
+    @SerializedName("sub_entity_id")
+    private String subEntityId;
 
 }

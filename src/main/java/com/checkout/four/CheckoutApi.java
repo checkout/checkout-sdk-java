@@ -1,7 +1,7 @@
 package com.checkout.four;
 
 import com.checkout.customers.four.CustomersClient;
-import com.checkout.disputes.four.DisputesClient;
+import com.checkout.disputes.DisputesClient;
 import com.checkout.forex.four.ForexClient;
 import com.checkout.instruments.four.InstrumentsClient;
 import com.checkout.marketplace.MarketplaceClient;

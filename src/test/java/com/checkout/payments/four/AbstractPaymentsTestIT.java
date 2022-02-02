@@ -34,7 +34,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
     protected final TokensClient tokensClient;
 
     public AbstractPaymentsTestIT() {
-        super(PlatformType.FOUR);
+        super(PlatformType.FOUR_OAUTH);
         this.paymentsClient = fourApi.paymentsClient();
         this.tokensClient = fourApi.tokensClient();
     }
