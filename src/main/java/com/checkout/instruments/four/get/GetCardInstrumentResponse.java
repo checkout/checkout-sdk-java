@@ -28,6 +28,8 @@ public final class GetCardInstrumentResponse extends GetInstrumentResponse {
 
     private String bin;
 
+    private String name;
+
     @SerializedName("card_type")
     private CardType cardType;
 
