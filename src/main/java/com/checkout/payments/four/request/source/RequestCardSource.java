@@ -28,7 +28,7 @@ public final class RequestCardSource extends AbstractRequestSource {
 
     private String cvv;
 
-    private boolean stored;
+    private Boolean stored;
 
     @SerializedName("billing_address")
     private Address billingAddress;
@@ -41,7 +41,7 @@ public final class RequestCardSource extends AbstractRequestSource {
                               final Integer expiryYear,
                               final String name,
                               final String cvv,
-                              final boolean stored,
+                              final Boolean stored,
                               final Address billingAddress,
                               final Phone phone) {
         super(PaymentSourceType.CARD);

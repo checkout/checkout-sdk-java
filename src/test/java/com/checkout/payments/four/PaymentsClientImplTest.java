@@ -5,11 +5,13 @@ import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
+import com.checkout.payments.four.request.AuthorizationRequest;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.PayoutRequest;
 import com.checkout.payments.four.request.source.PayoutRequestCurrencyAccountSource;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.request.source.RequestIdSource;
+import com.checkout.payments.four.response.AuthorizationResponse;
 import com.checkout.payments.four.response.GetPaymentResponse;
 import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.payments.four.response.PayoutResponse;
@@ -40,6 +42,7 @@ class PaymentsClientImplTest {
 
     private static final String PAYMENTS_PATH = "payments";
     private static final String ACTIONS_PATH = "actions";
+    private static final String AUTHORIZATIONS_PATH = "authorizations";
     private static final String CAPTURES_PATH = "captures";
     private static final String REFUNDS_PATH = "refunds";
     private static final String VOIDS_PATH = "voids";
@@ -168,6 +171,38 @@ class PaymentsClientImplTest {
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<List<PaymentAction>> future = paymentsClient.getPaymentActions("5433211");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
+    void shouldIncrementPaymentAuthorization() throws ExecutionException, InterruptedException {
+
+        final AuthorizationRequest request = mock(AuthorizationRequest.class);
+        final AuthorizationResponse response = mock(AuthorizationResponse.class);
+
+        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/payment_id/" + AUTHORIZATIONS_PATH), any(SdkAuthorization.class), eq(AuthorizationResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<AuthorizationResponse> future = paymentsClient.incrementPaymentAuthorization("payment_id", request);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
+    void shouldIncrementPaymentAuthorization_idempotencyKey() throws ExecutionException, InterruptedException {
+
+        final AuthorizationRequest request = mock(AuthorizationRequest.class);
+        final AuthorizationResponse response = mock(AuthorizationResponse.class);
+
+        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/payment_id/" + AUTHORIZATIONS_PATH), any(SdkAuthorization.class), eq(AuthorizationResponse.class), eq(request), eq("idempotency_key")))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<AuthorizationResponse> future = paymentsClient.incrementPaymentAuthorization("payment_id", request, "idempotency_key");
 
         assertNotNull(future.get());
         assertEquals(response, future.get());

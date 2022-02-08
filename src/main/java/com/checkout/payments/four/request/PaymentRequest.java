@@ -17,6 +17,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,7 +47,7 @@ public final class PaymentRequest {
     private Boolean capture;
 
     @SerializedName("capture_on")
-    private String captureOn;
+    private Instant captureOn;
 
     private CustomerRequest customer;
 

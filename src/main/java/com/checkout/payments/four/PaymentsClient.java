@@ -1,7 +1,9 @@
 package com.checkout.payments.four;
 
+import com.checkout.payments.four.request.AuthorizationRequest;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.PayoutRequest;
+import com.checkout.payments.four.response.AuthorizationResponse;
 import com.checkout.payments.four.response.GetPaymentResponse;
 import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.payments.four.response.PayoutResponse;
@@ -22,6 +24,10 @@ public interface PaymentsClient {
     CompletableFuture<GetPaymentResponse> getPayment(String paymentId);
 
     CompletableFuture<List<PaymentAction>> getPaymentActions(String paymentId);
+
+    CompletableFuture<AuthorizationResponse> incrementPaymentAuthorization(String paymentId, AuthorizationRequest authorizationRequest);
+
+    CompletableFuture<AuthorizationResponse> incrementPaymentAuthorization(String paymentId, AuthorizationRequest authorizationRequest, String idempotencyKey);
 
     CompletableFuture<CaptureResponse> capturePayment(String paymentId);
 
