@@ -40,9 +40,7 @@ public class DisputesQueryFilter {
     @SerializedName("this_channel_only")
     private boolean thisChannelOnly;
 
-    /**
-     * Available only on Four
-     */
+    //Available only on Four
 
     /**
      * One or more comma-separated client entities. This works like a logical OR operator

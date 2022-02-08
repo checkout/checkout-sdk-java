@@ -23,6 +23,10 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.net.URL;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 
 import static com.checkout.CardSourceHelper.getCardSourcePaymentForDispute;
 import static com.checkout.CardSourceHelper.getIndividualSender;
@@ -38,6 +42,8 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
     void shouldQueryDisputes() {
         final DisputesQueryFilter query = DisputesQueryFilter
                 .builder()
+                .to(Instant.now())
+                .from(LocalDateTime.now().minusMonths(6).toInstant(ZoneOffset.UTC))
                 .limit(100)
                 .thisChannelOnly(true)
                 .build();
@@ -45,6 +51,8 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
         assertNotNull(response);
         assertEquals(query.getLimit(), response.getLimit());
         assertEquals(query.isThisChannelOnly(), response.isThisChannelOnly());
+        assertEquals(query.getTo().truncatedTo(ChronoUnit.SECONDS), response.getTo());
+        assertEquals(query.getFrom().truncatedTo(ChronoUnit.SECONDS), response.getFrom());
         if (response.getTotalCount() > 0) {
             final Dispute dispute = response.getData().get(0);
             final DisputesQueryFilter query2 = DisputesQueryFilter.builder().id(dispute.getId()).build();

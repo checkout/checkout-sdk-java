@@ -43,9 +43,7 @@ public final class DisputeDetailsResponse extends Resource {
 
     private PaymentDispute payment;
 
-    /**
-     * Available only on Four
-     */
+    // Available only on Four
 
     @SerializedName("entity_id")
     private String entityId;

@@ -22,6 +22,10 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,9 +41,15 @@ class DisputesTestIT extends SandboxTestFixture {
 
     @Test
     void shouldQueryDisputes() {
-        final DisputesQueryFilter query = DisputesQueryFilter.builder().limit(250).build();
+        final DisputesQueryFilter query = DisputesQueryFilter.builder()
+                .limit(250)
+                .to(Instant.now())
+                .from(LocalDateTime.now().minusMonths(6).toInstant(ZoneOffset.UTC))
+                .build();
         DisputesQueryResponse response = blocking(() -> defaultApi.disputesClient().query(query));
         assertNotNull(response);
+        assertEquals(query.getTo().truncatedTo(ChronoUnit.SECONDS), response.getTo());
+        assertEquals(query.getFrom().truncatedTo(ChronoUnit.SECONDS), response.getFrom());
         assertEquals(query.getLimit(), response.getLimit());
         if (response.getTotalCount() > 0) {
             final Dispute dispute = response.getData().get(0);
