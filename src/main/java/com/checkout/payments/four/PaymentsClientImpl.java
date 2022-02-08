@@ -4,8 +4,10 @@ import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorizationType;
+import com.checkout.payments.four.request.AuthorizationRequest;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.PayoutRequest;
+import com.checkout.payments.four.response.AuthorizationResponse;
 import com.checkout.payments.four.response.GetPaymentResponse;
 import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.payments.four.response.PayoutResponse;
@@ -22,6 +24,7 @@ public final class PaymentsClientImpl extends AbstractClient implements Payments
     private static final String PAYMENTS_PATH = "payments";
     private static final String ACTIONS_PATH = "actions";
     private static final String CAPTURES_PATH = "captures";
+    private static final String AUTHORIZATIONS_PATH = "authorizations";
     private static final String REFUNDS_PATH = "refunds";
     private static final String VOIDS_PATH = "voids";
 
@@ -66,6 +69,18 @@ public final class PaymentsClientImpl extends AbstractClient implements Payments
     public CompletableFuture<List<PaymentAction>> getPaymentActions(final String paymentId) {
         validateParams("paymentId", paymentId);
         return apiClient.getAsync(buildPath(PAYMENTS_PATH, paymentId, ACTIONS_PATH), sdkAuthorization(), PAYMENT_ACTION_TYPE);
+    }
+
+    @Override
+    public CompletableFuture<AuthorizationResponse> incrementPaymentAuthorization(final String paymentId, final AuthorizationRequest authorizationRequest) {
+        validateParams("paymentId", paymentId);
+        return apiClient.postAsync(buildPath(PAYMENTS_PATH, paymentId, AUTHORIZATIONS_PATH), sdkAuthorization(), AuthorizationResponse.class, authorizationRequest, null);
+    }
+
+    @Override
+    public CompletableFuture<AuthorizationResponse> incrementPaymentAuthorization(final String paymentId, final AuthorizationRequest authorizationRequest, final String idempotencyKey) {
+        validateParams("paymentId", paymentId, "idempotencyKey", idempotencyKey);
+        return apiClient.postAsync(buildPath(PAYMENTS_PATH, paymentId, AUTHORIZATIONS_PATH), sdkAuthorization(), AuthorizationResponse.class, authorizationRequest, idempotencyKey);
     }
 
     @Override
