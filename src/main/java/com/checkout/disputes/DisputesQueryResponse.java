@@ -38,9 +38,7 @@ public final class DisputesQueryResponse {
 
     private List<Dispute> data;
 
-    /**
-     * Available only on Four
-     */
+    //Available only on Four
 
     @SerializedName("entity_ids")
     private String entityIds;

@@ -32,9 +32,7 @@ public class PaymentDispute extends Resource {
     @SerializedName("processed_on")
     private Instant processedOn;
 
-    /**
-     * Available only on Four
-     */
+    //Available only on Four
 
     @SerializedName("processing_channel_id")
     private String processingChannelId;
@@ -47,6 +45,6 @@ public class PaymentDispute extends Resource {
     private String eci;
 
     @SerializedName("has_refund")
-    private boolean hasRefund;
+    private Boolean hasRefund;
 
 }

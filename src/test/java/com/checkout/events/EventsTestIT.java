@@ -10,8 +10,10 @@ import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 
@@ -148,8 +150,8 @@ class EventsTestIT extends AbstractPaymentsTestIT {
         final String paymentId = makeCardPayment().getId();
 
         final RetrieveEventsRequest retrieveEventsRequest = RetrieveEventsRequest.builder()
-                .from(LocalDateTime.now().minusYears(2).toInstant(ZoneOffset.UTC))
-                .to(LocalDateTime.now().toInstant(ZoneOffset.UTC))
+                .to(Instant.now().plus(5, ChronoUnit.SECONDS))
+                .from(LocalDateTime.now().minusMonths(6).toInstant(ZoneOffset.UTC))
                 .limit(15)
                 .skip(0)
                 .paymentId(paymentId)
@@ -158,6 +160,8 @@ class EventsTestIT extends AbstractPaymentsTestIT {
         // Retrieve Events
         final EventsPageResponse eventsPageResponse = blocking(() -> defaultApi.eventsClient().retrieveEvents(retrieveEventsRequest), IsNull.notNullValue(EventsPageResponse.class));
         assertNotNull(eventsPageResponse);
+        assertEquals(eventsPageResponse.getTo().truncatedTo(ChronoUnit.SECONDS), eventsPageResponse.getTo());
+        assertEquals(eventsPageResponse.getFrom().truncatedTo(ChronoUnit.SECONDS), eventsPageResponse.getFrom());
 
         final EventSummaryResponse eventSummaryResponse = eventsPageResponse.getData().get(0);
         assertNotNull(eventSummaryResponse.getId());

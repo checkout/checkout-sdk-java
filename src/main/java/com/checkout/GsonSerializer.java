@@ -1,8 +1,8 @@
 package com.checkout;
 
 import com.checkout.common.CheckoutUtils;
-import com.checkout.common.PaymentSourceType;
 import com.checkout.common.InstrumentType;
+import com.checkout.common.PaymentSourceType;
 import com.checkout.instruments.four.create.CreateInstrumentBankAccountResponse;
 import com.checkout.instruments.four.create.CreateInstrumentResponse;
 import com.checkout.instruments.four.create.CreateInstrumentTokenResponse;
@@ -41,8 +41,7 @@ import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 
 import java.lang.reflect.Type;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 class GsonSerializer implements Serializer {
@@ -52,12 +51,9 @@ class GsonSerializer implements Serializer {
 
     private static final Gson DEFAULT_GSON = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-            .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (LocalDate date, Type typeOfSrc, JsonSerializationContext context) ->
-                    new JsonPrimitive(date.format(DateTimeFormatter.ISO_LOCAL_DATE)))
+            // Instant type adapters
             .registerTypeAdapter(Instant.class, (JsonSerializer<Instant>) (Instant date, Type typeOfSrc, JsonSerializationContext context) ->
-                    new JsonPrimitive(date.toString()))
-            .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (JsonElement json, Type typeOfSrc, JsonDeserializationContext context) ->
-                    LocalDate.parse(json.getAsString(), DateTimeFormatter.ISO_LOCAL_DATE))
+                    new JsonPrimitive(date.truncatedTo(ChronoUnit.SECONDS).toString()))
             .registerTypeAdapter(Instant.class, (JsonDeserializer<Instant>) (JsonElement json, Type typeOfSrc, JsonDeserializationContext context) ->
                     Instant.parse(json.getAsString()))
             // Payments DEFAULT - source
