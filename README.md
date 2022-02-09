@@ -1,6 +1,8 @@
 # Checkout.com Java SDK
 
-![build-status](https://github.com/checkout/checkout-sdk-java/workflows/build-master/badge.svg) [![GitHub license](https://img.shields.io/github/license/checkout/checkout-sdk-java.svg)](https://github.com/checkout/checkout-sdk-java/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/checkout/checkout-sdk-java.svg)](https://GitHub.com/checkout/checkout-sdk-java/releases/)
+![build-status](https://github.com/checkout/checkout-sdk-java/workflows/build-master/badge.svg) 
+[![GitHub license](https://img.shields.io/github/license/checkout/checkout-sdk-java.svg)](https://github.com/checkout/checkout-sdk-java/blob/master/LICENSE) 
+[![GitHub release](https://img.shields.io/github/release/checkout/checkout-sdk-java.svg)](https://GitHub.com/checkout/checkout-sdk-java/releases/)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=checkout_checkout-sdk-java&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=checkout_checkout-sdk-java)
 
 <p><img src="https://i.ibb.co/6FrwfWt/Screenshot-2020-07-17-at-18-13-39.png" width="20%"></p>
@@ -141,11 +143,10 @@ the `requestId`, `httpStatusCode` and a map of `errorDetails`, if available.
 
 More documentation related to Checkout API and the SDK is available at:
 
-* [Java SDK Docs (Default)](https://checkout.github.io/checkout-sdk-java/docs/introduction/)
-* [Official Docs (Default)](https://docs.checkout.com/)
-* [Official Docs (Four)](https://docs.checkout.com/four)
 * [API Reference (Default)](https://api-reference.checkout.com/)
 * [API Reference (Four)](https://api-reference.checkout.com/preview/crusoe/)
+* [Official Docs (Default)](https://docs.checkout.com/)
+* [Official Docs (Four)](https://docs.checkout.com/four)
 
 ## Building from source
 
