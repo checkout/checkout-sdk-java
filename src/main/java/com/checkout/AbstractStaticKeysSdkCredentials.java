@@ -1,5 +1,7 @@
 package com.checkout;
 
+import com.checkout.common.CheckoutUtils;
+
 abstract class AbstractStaticKeysSdkCredentials extends SdkCredentials {
 
     protected final String secretKey;
@@ -18,6 +20,7 @@ abstract class AbstractStaticKeysSdkCredentials extends SdkCredentials {
     }
 
     protected void validateSecretKey(final String secretKey, final String secretKeyPattern) {
+        CheckoutUtils.validateParams("secretKey", secretKey);
         if (validKey(secretKey, secretKeyPattern)) {
             return;
         }
