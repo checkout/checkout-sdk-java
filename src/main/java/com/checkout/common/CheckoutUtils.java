@@ -5,7 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 
 public final class CheckoutUtils {
 
-    public static String TYPE = "type";
+    public static final String PROJECT_NAME = "checkout-sdk-java";
+    public static final String TYPE = "type";
 
     private CheckoutUtils() {
     }

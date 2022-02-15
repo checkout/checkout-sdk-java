@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -18,12 +17,12 @@ public final class StatementData extends Resource {
     private String id;
 
     @SerializedName("period_start")
-    private Instant periodStart;
+    private String periodStart;
 
     @SerializedName("period_end")
-    private Instant periodEnd;
+    private String periodEnd;
 
-    private Instant date;
+    private String date;
 
     private List<PayoutStatement> payouts;
 

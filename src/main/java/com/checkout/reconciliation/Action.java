@@ -4,7 +4,6 @@ package com.checkout.reconciliation;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
-import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -15,7 +14,7 @@ public final class Action {
     private String id;
 
     @SerializedName("processed_on")
-    private Instant processedOn;
+    private String processedOn;
 
     @SerializedName("response_code")
     private String responseCode;

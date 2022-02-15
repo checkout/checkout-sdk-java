@@ -8,7 +8,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -25,7 +24,7 @@ public final class PaymentReportData extends Resource {
     private Currency payoutCurrency;
 
     @SerializedName("requested_on")
-    private Instant requestedOn;
+    private String requestedOn;
 
     @SerializedName("channel_name")
     private String channelName;
@@ -46,6 +45,8 @@ public final class PaymentReportData extends Resource {
 
     @SerializedName("merchant_country")
     private CountryCode merchantCountry;
+
+    private String region;
 
     private String mid;
 

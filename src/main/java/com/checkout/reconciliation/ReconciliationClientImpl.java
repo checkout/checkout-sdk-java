@@ -35,18 +35,19 @@ public class ReconciliationClientImpl extends AbstractClient implements Reconcil
     }
 
     @Override
-    public CompletableFuture<String> retrieveCSVPaymentReport(final String targetFile) {
-        return apiClient.retrieveFileAsync(buildPath(REPORTING, PAYMENTS, DOWNLOAD), sdkAuthorization(), targetFile);
+    public CompletableFuture<String> retrieveCSVPaymentReport(final QueryFilterDateRange filter, final String targetFile) {
+        return apiClient.queryCsvContentAsync(buildPath(REPORTING, PAYMENTS, DOWNLOAD), sdkAuthorization(), filter, targetFile);
+
     }
 
     @Override
     public CompletableFuture<String> retrieveCSVSingleStatementReport(final String statementId, final String targetFile) {
-        return apiClient.retrieveFileAsync(buildPath(REPORTING, STATEMENTS, statementId, PAYMENTS, DOWNLOAD), sdkAuthorization(), targetFile);
+        return apiClient.queryCsvContentAsync(buildPath(REPORTING, STATEMENTS, statementId, PAYMENTS, DOWNLOAD), sdkAuthorization(), null, targetFile);
     }
 
     @Override
-    public CompletableFuture<String> retrieveCSVStatementsReport(final String targetFile) {
-        return apiClient.retrieveFileAsync(buildPath(REPORTING, STATEMENTS, DOWNLOAD), sdkAuthorization(), targetFile);
+    public CompletableFuture<String> retrieveCSVStatementsReport(final QueryFilterDateRange filter, final String targetFile) {
+        return apiClient.queryCsvContentAsync(buildPath(REPORTING, STATEMENTS, DOWNLOAD), sdkAuthorization(), filter, targetFile);
     }
 
 }

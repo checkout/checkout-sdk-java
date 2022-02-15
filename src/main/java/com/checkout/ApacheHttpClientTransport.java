@@ -1,6 +1,5 @@
 package com.checkout;
 
-import com.checkout.client.ClientOperation;
 import com.checkout.common.AbstractFileRequest;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.FileRequest;
@@ -29,13 +28,9 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +38,10 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
+
+import static com.checkout.ClientOperation.POST;
+import static com.checkout.common.CheckoutUtils.PROJECT_NAME;
+import static com.checkout.common.CheckoutUtils.getVersionFromManifest;
 
 @Slf4j
 class ApacheHttpClientTransport implements Transport {
@@ -76,12 +75,16 @@ class ApacheHttpClientTransport implements Transport {
     }
 
     @Override
-    public CompletableFuture<Response> invoke(final ClientOperation clientOperation, final String path, final SdkAuthorization authorization, final String requestBody, final String idempotencyKey) {
+    public CompletableFuture<Response> invoke(final ClientOperation clientOperation,
+                                              final String path,
+                                              final SdkAuthorization authorization,
+                                              final String requestBody,
+                                              final String idempotencyKey) {
         return CompletableFuture.supplyAsync(() -> {
             final HttpUriRequest request;
-            String accept = ACCEPT_JSON;
             switch (clientOperation) {
                 case GET:
+                case GET_CSV_CONTENT:
                     request = new HttpGet(getRequestUrl(path));
                     break;
                 case PUT:
@@ -96,10 +99,6 @@ class ApacheHttpClientTransport implements Transport {
                 case PATCH:
                     request = new HttpPatch(getRequestUrl(path));
                     break;
-                case GET_FILE:
-                    request = new HttpGet(getRequestUrl(path));
-                    accept = ACCEPT_CSV;
-                    break;
                 default:
                     throw new UnsupportedOperationException("Unsupported HTTP Method: " + clientOperation);
             }
@@ -107,12 +106,14 @@ class ApacheHttpClientTransport implements Transport {
                 request.setHeader(CKO_IDEMPOTENCY_KEY, idempotencyKey);
             }
             log.info("{}: {}", clientOperation, request.getURI());
-            return performCall(authorization, requestBody, request, accept);
+            return performCall(authorization, requestBody, request, clientOperation);
         }, executor);
     }
 
     @Override
-    public CompletableFuture<Response> invokeQuery(final String path, final SdkAuthorization authorization,
+    public CompletableFuture<Response> invokeQuery(final ClientOperation clientOperation,
+                                                   final String path,
+                                                   final SdkAuthorization authorization,
                                                    final Map<String, String> queryParams) {
         return CompletableFuture.supplyAsync(() -> {
             final HttpUriRequest request;
@@ -122,7 +123,7 @@ class ApacheHttpClientTransport implements Transport {
                         .collect(Collectors.toList());
                 request = new HttpGet(new URIBuilder(getRequestUrl(path)).addParameters(params).build());
                 log.info("GET: {}", request.getURI());
-                return performCall(authorization, null, request, ACCEPT_JSON);
+                return performCall(authorization, null, request, clientOperation);
             } catch (final URISyntaxException e) {
                 throw new CheckoutException(e);
             }
@@ -134,7 +135,7 @@ class ApacheHttpClientTransport implements Transport {
         return CompletableFuture.supplyAsync(() -> {
             final HttpPost post = new HttpPost(getRequestUrl(path));
             post.setEntity(getMultipartFileEntity(fileRequest));
-            return performCall(authorization, null, post, ACCEPT_JSON);
+            return performCall(authorization, null, post, POST);
         }, executor);
     }
 
@@ -156,9 +157,12 @@ class ApacheHttpClientTransport implements Transport {
         return builder.build();
     }
 
-    private Response performCall(final SdkAuthorization authorization, final String requestBody, final HttpUriRequest request, final String accept) {
-        request.setHeader(USER_AGENT, "checkout-sdk-java/" + CheckoutUtils.getVersionFromManifest());
-        request.setHeader(ACCEPT, accept);
+    private Response performCall(final SdkAuthorization authorization,
+                                 final String requestBody,
+                                 final HttpUriRequest request,
+                                 final ClientOperation clientOperation) {
+        request.setHeader(USER_AGENT, PROJECT_NAME + "/" + getVersionFromManifest());
+        request.setHeader(ACCEPT, getAcceptHeader(clientOperation));
         request.setHeader(AUTHORIZATION, authorization.getAuthorizationHeader());
         log.info("Request: " + Arrays.toString(sanitiseHeaders(request.getAllHeaders())));
         if (requestBody != null && request instanceof HttpEntityEnclosingRequest) {
@@ -169,14 +173,6 @@ class ApacheHttpClientTransport implements Transport {
             final int statusCode = response.getStatusLine().getStatusCode();
             final String requestId = Optional.ofNullable(response.getFirstHeader(CKO_REQUEST_ID)).map(Header::getValue).orElse(NO_REQUEST_ID_SUPPLIED);
             if (statusCode != HttpStatus.SC_NOT_FOUND && response.getEntity() != null && response.getEntity().getContent() != null) {
-                if (ACCEPT_CSV.equalsIgnoreCase(accept)) {
-                    createFile(requestBody, response);
-                    return Response.builder()
-                            .statusCode(statusCode)
-                            .requestId(requestId)
-                            .body(requestBody)
-                            .build();
-                }
                 return Response.builder()
                         .statusCode(statusCode)
                         .requestId(requestId)
@@ -190,22 +186,26 @@ class ApacheHttpClientTransport implements Transport {
         return Response.builder().statusCode(HttpStatus.SC_BAD_REQUEST).requestId(NO_REQUEST_ID_SUPPLIED).build();
     }
 
+    private String getAcceptHeader(final ClientOperation clientOperation) {
+        switch (clientOperation) {
+            case GET:
+            case PUT:
+            case POST:
+            case DELETE:
+            case PATCH:
+                return ACCEPT_JSON;
+            case GET_CSV_CONTENT:
+                return ACCEPT_CSV;
+            default:
+                throw new IllegalStateException(String.format("Accept header not configured for client operation %s", clientOperation));
+        }
+    }
+
     private String getRequestUrl(final String path) {
         try {
             return baseUri.resolve(path).toURL().toString();
         } catch (final MalformedURLException e) {
             throw new CheckoutException(e);
-        }
-    }
-
-    private void createFile(final String targetFile, final CloseableHttpResponse response) throws IOException {
-        final File file = new File(targetFile);
-        Files.copy(
-                response.getEntity().getContent(),
-                file.toPath(),
-                StandardCopyOption.REPLACE_EXISTING);
-        if (!file.exists()) {
-            throw new CheckoutException("Unable to create file=" + targetFile);
         }
     }
 

@@ -30,9 +30,9 @@ public interface ApiClient {
 
     <T> CompletableFuture<T> queryAsync(String path, SdkAuthorization authorization, Object filter, Class<T> responseType);
 
-    <T> CompletableFuture<T> submitFileAsync(String path, SdkAuthorization authorization, FileRequest request, Class<T> responseType);
+    CompletableFuture<String> queryCsvContentAsync(String path, SdkAuthorization authorization, Object filter, String targetFile);
 
-    CompletableFuture<String> retrieveFileAsync(String path, SdkAuthorization authorization, String targetFile);
+    <T> CompletableFuture<T> submitFileAsync(String path, SdkAuthorization authorization, FileRequest request, Class<T> responseType);
 
     <T> CompletableFuture<T> submitFileAsync(FilesTransport transport, String path, SdkAuthorization authorization, MarketplaceFileRequest request, Class<T> responseType);
 

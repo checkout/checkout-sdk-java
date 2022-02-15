@@ -4,13 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.Instant;
+
 @Data
 @Builder
 @AllArgsConstructor
 public final class QueryFilterDateRange {
 
-    private String from;
+    private Instant from;
 
-    private String to;
+    private Instant to;
 
 }

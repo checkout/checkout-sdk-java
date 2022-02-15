@@ -1,24 +1,29 @@
 package com.checkout;
 
-import com.checkout.client.ClientOperation;
 import com.checkout.common.ApiResponseInfo;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.FileRequest;
 import com.checkout.common.Resource;
 import com.checkout.marketplace.MarketplaceFileRequest;
 import com.google.gson.reflect.TypeToken;
+import org.apache.commons.lang3.StringUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import static com.checkout.client.ClientOperation.DELETE;
-import static com.checkout.client.ClientOperation.GET;
-import static com.checkout.client.ClientOperation.GET_FILE;
-import static com.checkout.client.ClientOperation.PATCH;
-import static com.checkout.client.ClientOperation.POST;
-import static com.checkout.client.ClientOperation.PUT;
+import static com.checkout.ClientOperation.DELETE;
+import static com.checkout.ClientOperation.GET;
+import static com.checkout.ClientOperation.PATCH;
+import static com.checkout.ClientOperation.POST;
+import static com.checkout.ClientOperation.PUT;
 import static com.checkout.common.CheckoutUtils.validateParams;
 
 class ApiClientImpl implements ApiClient {
@@ -97,15 +102,59 @@ class ApiClientImpl implements ApiClient {
     }
 
     @Override
-    public <T> CompletableFuture<T> queryAsync(final String path, final SdkAuthorization authorization, final Object filter,
+    public <T> CompletableFuture<T> queryAsync(final String path,
+                                               final SdkAuthorization authorization,
+                                               final Object filter,
                                                final Class<T> responseType) {
         validateParams(PATH, path, AUTHORIZATION, authorization, "filter", filter);
         final Map<String, String> params = serializer.fromJson(serializer.toJson(filter),
                 new TypeToken<Map<String, String>>() {
                 }.getType());
-        return transport.invokeQuery(path, authorization, params)
+        return transport.invokeQuery(GET, path, authorization, params)
                 .thenApply(this::errorCheck)
                 .thenApply(response -> deserialize(response, responseType));
+    }
+
+    @Override
+    public CompletableFuture<String> queryCsvContentAsync(final String path,
+                                                          final SdkAuthorization authorization,
+                                                          final Object filter,
+                                                          final String targetFile) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        Map<String, String> params = new HashMap<>();
+        if (filter != null) {
+            params = serializer.fromJson(serializer.toJson(filter),
+                    new TypeToken<Map<String, String>>() {
+                    }.getType());
+        }
+        return transport.invokeQuery(ClientOperation.GET_CSV_CONTENT, path, authorization, params)
+                .thenApply(this::errorCheck)
+                .thenApply(body -> processAndGetContent(targetFile, body));
+    }
+
+    @SuppressWarnings("squid:S3516")
+    private String processAndGetContent(final String targetFile, final Response response) {
+        final String content = response.getBody();
+        if (StringUtils.isBlank(targetFile) || StringUtils.isBlank(content)) {
+            return content;
+        }
+        final File file = new File(targetFile);
+        if (!file.exists()) {
+            try {
+                final boolean ignore = file.createNewFile(); //NOSONAR
+            } catch (final IOException e) {
+                throw new CheckoutException(String.format("Failed creating file %s", targetFile));
+            }
+        }
+        try {
+            Files.copy(
+                    new ByteArrayInputStream(content.getBytes()),
+                    file.toPath(),
+                    StandardCopyOption.REPLACE_EXISTING);
+        } catch (final IOException e) {
+            throw new CheckoutException(String.format("Failed writing file %s", targetFile), e);
+        }
+        return content;
     }
 
     @Override
@@ -123,14 +172,6 @@ class ApiClientImpl implements ApiClient {
         return filesTransport.submitFile(path, authorization, request)
                 .thenApply(this::errorCheck)
                 .thenApply(response -> deserialize(response, responseType));
-    }
-
-    @Override
-    public CompletableFuture<String> retrieveFileAsync(final String path, final SdkAuthorization authorization, final String targetFile) {
-        validateParams(PATH, path, AUTHORIZATION, authorization);
-        return transport.invoke(GET_FILE, path, authorization, targetFile, null)
-                .thenApply(this::errorCheck)
-                .thenApply(Response::getBody);
     }
 
     private <T> CompletableFuture<T> sendRequestAsync(final ClientOperation clientOperation, final String path, final SdkAuthorization authorization, final Object request, final String idempotencyKey, final Type responseType) {

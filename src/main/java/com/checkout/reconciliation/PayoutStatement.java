@@ -7,8 +7,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.time.Instant;
-
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -32,12 +30,12 @@ public final class PayoutStatement extends Resource {
     @SerializedName("current_period_amount")
     private String currentPeriodAmount;
 
-    private Instant date;
+    private String date;
 
     @SerializedName("period_start")
-    private Instant periodStart;
+    private String periodStart;
 
     @SerializedName("period_end")
-    private Instant periodEnd;
+    private String periodEnd;
 
 }

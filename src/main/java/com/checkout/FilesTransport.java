@@ -1,6 +1,5 @@
 package com.checkout;
 
-import com.checkout.client.ClientOperation;
 import com.checkout.common.AbstractFileRequest;
 
 import java.util.Map;
@@ -23,7 +22,7 @@ public final class FilesTransport extends ApacheHttpClientTransport {
     }
 
     @Override
-    public CompletableFuture<Response> invokeQuery(final String path, final SdkAuthorization authorization, final Map<String, String> queryParams) {
+    public CompletableFuture<Response> invokeQuery(final ClientOperation clientOperation, final String path, final SdkAuthorization authorization, final Map<String, String> queryParams) {
         throw new UnsupportedOperationException();
     }
 

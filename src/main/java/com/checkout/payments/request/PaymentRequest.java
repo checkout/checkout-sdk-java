@@ -9,7 +9,6 @@ import com.checkout.payments.ProcessingSettings;
 import com.checkout.payments.RiskRequest;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
-import com.checkout.payments.request.destination.PaymentRequestDestination;
 import com.checkout.payments.request.source.AbstractRequestSource;
 import com.checkout.payments.request.source.apm.RequestBalotoSource;
 import com.checkout.payments.request.source.apm.RequestBoletoSource;
