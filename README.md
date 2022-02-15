@@ -49,6 +49,8 @@ Note: sandbox keys have a `test_` or `sbox_` identifier, for Default and Four ac
 
 If you don't have your own API keys, you can sign up for a test account [here](https://www.checkout.com/get-test-account).
 
+**PLEASE NEVER SHARE OR PUBLISH YOUR CHECKOUT CREDENTIALS.**
+
 ## Default
 
 Default keys client instantiation can be done as follows:
