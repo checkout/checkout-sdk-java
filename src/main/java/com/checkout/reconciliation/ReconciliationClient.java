@@ -13,11 +13,28 @@ public interface ReconciliationClient {
 
     CompletableFuture<StatementReportResponse> queryStatementsReport(QueryFilterDateRange filter);
 
-    CompletableFuture<String> retrieveCSVPaymentReport(String targetFile);
+    /**
+     * @param targetFile Optional parameter that specifies the path where a file with the content returned is saved. If
+     *                   the file does not exist, the client will attempt to create a new one, otherwise the existing
+     *                   file will be rewritten.
+     * @return CSV content
+     */
+    CompletableFuture<String> retrieveCSVPaymentReport(final QueryFilterDateRange filter, final String targetFile);
 
-    CompletableFuture<String> retrieveCSVSingleStatementReport(String statementId, String targetFile);
+    /**
+     * @param targetFile Optional parameter that specifies the path where a file with the content returned is saved. If
+     *                   the file does not exist, the client will attempt to create a new one, otherwise the existing
+     *                   file will be rewritten.
+     * @return CSV content
+     */
+    CompletableFuture<String> retrieveCSVSingleStatementReport(final String statementId, final String targetFile);
 
-    CompletableFuture<String> retrieveCSVStatementsReport(String targetFile);
-
+    /**
+     * @param targetFile Optional parameter that specifies the path where a file with the content returned is saved. If
+     *                   the file does not exist, the client will attempt to create a new one, otherwise the existing
+     *                   file will be rewritten.
+     * @return CSV content
+     */
+    CompletableFuture<String> retrieveCSVStatementsReport(final QueryFilterDateRange filter, final String targetFile);
 
 }

@@ -3,14 +3,12 @@ package com.checkout.reconciliation;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
-import java.time.Instant;
-
 @Data
 public final class Breakdown {
 
     private String type;
 
-    private Instant date;
+    private String date;
 
     @SerializedName("processing_currency_amount")
     private String processingCurrencyAmount;

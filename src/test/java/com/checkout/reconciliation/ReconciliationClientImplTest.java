@@ -1,9 +1,9 @@
 package com.checkout.reconciliation;
 
 import com.checkout.ApiClient;
+import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
-import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkCredentials;
 import com.checkout.common.Currency;
 import com.checkout.common.QueryFilterDateRange;
@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
@@ -111,13 +112,13 @@ class ReconciliationClientImplTest {
         when(statementReportResponse.getCount()).thenReturn(1);
         when(statementReportResponse.getData()).thenReturn(Collections.singletonList(statementData));
         when(statementData.getId()).thenReturn(STATEMENT_ID);
-        when(statementData.getPeriodStart()).thenReturn(FROM);
-        when(statementData.getPeriodEnd()).thenReturn(TO);
-        when(statementData.getDate()).thenReturn(TO);
+        when(statementData.getPeriodStart()).thenReturn(FROM.toString());
+        when(statementData.getPeriodEnd()).thenReturn(TO.toString());
+        when(statementData.getDate()).thenReturn(TO.toString());
         when(statementData.getPayouts()).thenReturn(Collections.singletonList(payout));
         when(payout.getCurrency()).thenReturn(Currency.GBP);
-        when(payout.getPeriodStart()).thenReturn(FROM);
-        when(payout.getPeriodEnd()).thenReturn(TO);
+        when(payout.getPeriodStart()).thenReturn(FROM.toString());
+        when(payout.getPeriodEnd()).thenReturn(TO.toString());
     }
 
     @Test
@@ -129,8 +130,8 @@ class ReconciliationClientImplTest {
                         any(ReconciliationQueryPaymentsFilter.class), eq(ReconciliationPaymentReportResponse.class));
         final ReconciliationQueryPaymentsFilter filter = ReconciliationQueryPaymentsFilter
                 .builder()
-                .from(FROM.toString())
-                .to(TO.toString())
+                .from(FROM)
+                .to(TO)
                 .reference(PAYMENT_ID)
                 .build();
         final ReconciliationPaymentReportResponse response = client.queryPaymentsReport(filter).get();
@@ -183,8 +184,8 @@ class ReconciliationClientImplTest {
                         any(QueryFilterDateRange.class), eq(StatementReportResponse.class));
         final QueryFilterDateRange filter = QueryFilterDateRange
                 .builder()
-                .from(FROM.toString())
-                .to(TO.toString())
+                .from(FROM)
+                .to(TO)
                 .build();
         final StatementReportResponse response = client.queryStatementsReport(filter).get();
         assertNotNull(response);
@@ -193,25 +194,26 @@ class ReconciliationClientImplTest {
         final StatementData statementData = statementReportResponse.getData().get(0);
         assertNotNull(statementData);
         assertEquals(STATEMENT_ID, statementData.getId());
-        assertEquals(FROM, statementData.getPeriodStart());
-        assertEquals(TO, statementData.getPeriodEnd());
-        assertEquals(TO, statementData.getDate());
+        assertEquals(FROM.toString(), statementData.getPeriodStart());
+        assertEquals(TO.toString(), statementData.getPeriodEnd());
+        assertEquals(TO.toString(), statementData.getDate());
         assertNotNull(statementData.getPayouts());
         final PayoutStatement payout = statementData.getPayouts().get(0);
         assertNotNull(payout);
         assertEquals(Currency.GBP, payout.getCurrency());
-        assertEquals(FROM, payout.getPeriodStart());
-        assertEquals(TO, payout.getPeriodEnd());
+        assertEquals(FROM.toString(), payout.getPeriodStart());
+        assertEquals(TO.toString(), payout.getPeriodEnd());
     }
 
     @Test
     void shouldRetrieveCSVPaymentReport() throws ExecutionException, InterruptedException {
         final String report = "/etc/foo/payment_report.csv";
+        final QueryFilterDateRange queryFilterDateRange = QueryFilterDateRange.builder().build();
         completableFileFuture = CompletableFuture.completedFuture(report);
         doReturn(completableFileFuture)
                 .when(apiClient)
-                .retrieveFileAsync(eq("reporting/payments/download"), any(SdkAuthorization.class), eq(report));
-        final String file = client.retrieveCSVPaymentReport(report).get();
+                .queryCsvContentAsync(eq("reporting/payments/download"), any(SdkAuthorization.class), eq(queryFilterDateRange), eq(report));
+        final String file = client.retrieveCSVPaymentReport(queryFilterDateRange, report).get();
         assertNotNull(file);
         assertEquals(report, file);
     }
@@ -222,8 +224,8 @@ class ReconciliationClientImplTest {
         completableFileFuture = CompletableFuture.completedFuture(report);
         doReturn(completableFileFuture)
                 .when(apiClient)
-                .retrieveFileAsync(eq(String.format("reporting/statements/%s/payments/download", STATEMENT_ID)),
-                        any(SdkAuthorization.class), eq(report));
+                .queryCsvContentAsync(eq(String.format("reporting/statements/%s/payments/download", STATEMENT_ID)),
+                        any(SdkAuthorization.class), isNull(), eq(report));
         final String file = client.retrieveCSVSingleStatementReport(STATEMENT_ID, report).get();
         assertNotNull(file);
         assertEquals(report, file);
@@ -232,12 +234,13 @@ class ReconciliationClientImplTest {
     @Test
     void shouldRetrieveCSVStatementsReport() throws ExecutionException, InterruptedException {
         final String report = "/etc/foo/statement_report.csv";
+        final QueryFilterDateRange queryFilterDateRange = QueryFilterDateRange.builder().build();
         completableFileFuture = CompletableFuture.completedFuture(report);
         doReturn(completableFileFuture)
                 .when(apiClient)
-                .retrieveFileAsync(eq("reporting/statements/download"),
-                        any(SdkAuthorization.class), eq(report));
-        final String file = client.retrieveCSVStatementsReport(report).get();
+                .queryCsvContentAsync(eq("reporting/statements/download"),
+                        any(SdkAuthorization.class), eq(queryFilterDateRange), eq(report));
+        final String file = client.retrieveCSVStatementsReport(queryFilterDateRange, report).get();
         assertNotNull(file);
         assertEquals(report, file);
     }
