@@ -35,7 +35,7 @@ public final class HostedPaymentRequest {
 
     private CustomerRequest customer;
 
-    private ShippingDetails shippingDetails;
+    private ShippingDetails shipping;
 
     @NotEmpty
     private BillingInformation billing;

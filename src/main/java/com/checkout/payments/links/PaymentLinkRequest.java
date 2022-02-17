@@ -34,6 +34,7 @@ public final class PaymentLinkRequest {
 
     private String description;
 
+    @SerializedName("expires_in")
     private Integer expiresIn;
 
     private CustomerRequest customer;
@@ -56,6 +57,7 @@ public final class PaymentLinkRequest {
 
     private RiskRequest risk;
 
+    @SerializedName("return_url")
     private String returnUrl;
 
     private String locale;
