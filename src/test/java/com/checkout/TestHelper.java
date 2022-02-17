@@ -127,7 +127,7 @@ public final class TestHelper {
                 .currency(Currency.GBP)
                 .description("Payment for Gold Necklace")
                 .customer(createCustomer())
-                .shippingDetails(ShippingDetails.builder()
+                .shipping(ShippingDetails.builder()
                         .address(createAddress())
                         .phone(createPhone())
                         .build())
