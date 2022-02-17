@@ -3,7 +3,7 @@
 ![build-status](https://github.com/checkout/checkout-sdk-java/workflows/build-master/badge.svg) 
 [![GitHub license](https://img.shields.io/github/license/checkout/checkout-sdk-java.svg)](https://github.com/checkout/checkout-sdk-java/blob/master/LICENSE) 
 [![GitHub release](https://img.shields.io/github/release/checkout/checkout-sdk-java.svg)](https://GitHub.com/checkout/checkout-sdk-java/releases/)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=checkout_checkout-sdk-java&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=checkout_checkout-sdk-java)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=checkout_checkout-sdk-java&metric=alert_status)](https://sonarcloud.io/summary/overall?id=checkout_checkout-sdk-java)
 
 <p><img src="https://i.ibb.co/6FrwfWt/Screenshot-2020-07-17-at-18-13-39.png" width="20%"></p>
 
