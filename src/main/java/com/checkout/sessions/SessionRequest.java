@@ -2,7 +2,6 @@ package com.checkout.sessions;
 
 import com.checkout.common.ChallengeIndicator;
 import com.checkout.common.Currency;
-import com.checkout.common.MarketplaceData;
 import com.checkout.sessions.channel.ChannelData;
 import com.checkout.sessions.completion.CompletionInfo;
 import com.checkout.sessions.source.SessionSource;
@@ -24,7 +23,7 @@ public final class SessionRequest {
     private String processingChannelId;
 
     @SerializedName("marketplace")
-    private MarketplaceData marketplace;
+    private SessionMarketplaceData marketplace;
 
     @SerializedName("authentication_type")
     private AuthenticationType authenticationType;
