@@ -7,7 +7,6 @@ import com.checkout.TestHelper;
 import com.checkout.common.ChallengeIndicator;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
-import com.checkout.common.MarketplaceData;
 import com.checkout.common.Phone;
 import com.checkout.sessions.channel.AppSession;
 import com.checkout.sessions.channel.BrowserSession;
@@ -53,7 +52,7 @@ abstract class AbstractSessionsTestIT extends SandboxTestFixture {
                 .amount(6540L)
                 .currency(Currency.USD)
                 .processingChannelId("pc_5jp2az55l3cuths25t5p3xhwru")
-                .marketplace(MarketplaceData.builder().subEntityId("ent_ocw5i74vowfg2edpy66izhts2u").build())
+                .marketplace(SessionMarketplaceData.builder().subEntityId("ent_ocw5i74vowfg2edpy66izhts2u").build())
                 .authenticationType(AuthenticationType.REGULAR)
                 .authenticationCategory(authenticationCategory)
                 .challengeIndicator(challengeIndicator)
