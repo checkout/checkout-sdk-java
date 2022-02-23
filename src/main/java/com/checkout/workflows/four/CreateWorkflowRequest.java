@@ -16,6 +16,8 @@ public final class CreateWorkflowRequest {
 
     private String name;
 
+    private Boolean active;
+
     @Builder.Default
     private List<WorkflowConditionRequest> conditions = new ArrayList<>();
 

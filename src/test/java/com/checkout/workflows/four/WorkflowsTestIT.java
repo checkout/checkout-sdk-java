@@ -32,6 +32,7 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
 
         assertNotNull(getWorkflowResponse);
         assertNotNull(getWorkflowResponse.getId());
+        assertTrue(getWorkflowResponse.getActive());
         assertEquals(TESTING, getWorkflowResponse.getName());
 
         assertNotNull(getWorkflowResponse.getActions());
@@ -64,6 +65,7 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
             assertEquals(TESTING, workflow.getName());
             assertNotNull(workflow.getId());
             assertNotNull(workflow.getLink(SELF));
+            assertTrue(workflow.getActive());
             queueWorkflowCleanup(workflow.getId());
         }
 
@@ -76,12 +78,14 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
 
         final UpdateWorkflowRequest updateWorkflowRequest = UpdateWorkflowRequest.builder()
                 .name("testing_2")
+                .active(Boolean.FALSE)
                 .build();
 
         final UpdateWorkflowResponse updateWorkflowResponse = blocking(() -> fourApi.workflowsClient().updateWorkflow(createWorkflowResponse.getId(), updateWorkflowRequest));
 
         assertNotNull(updateWorkflowResponse);
         assertEquals("testing_2", updateWorkflowResponse.getName());
+        assertFalse(updateWorkflowResponse.getActive());
 
     }
 
@@ -162,12 +166,12 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
 
         final CreateWorkflowRequest request = CreateWorkflowRequest.builder()
                 .name(TESTING)
+                .active(Boolean.TRUE)
                 .actions(Collections.singletonList(baseWorkflowActionRequest))
                 .conditions(Arrays.asList(baseEventWorkflowConditionRequest, baseEntityWorkflowConditionRequest, processingChannelWorkflowConditionRequest))
                 .build();
 
         final CreateWorkflowResponse createWorkflowResponse = blocking(() -> fourApi.workflowsClient().createWorkflow(request));
-        assertNotNull(createWorkflowResponse);
         assertNotNull(createWorkflowResponse);
         assertNotNull(createWorkflowResponse.getId());
         assertNotNull(createWorkflowResponse.getLink(SELF));
