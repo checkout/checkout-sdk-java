@@ -11,4 +11,6 @@ public final class UpdateWorkflowRequest {
 
     private String name;
 
+    private Boolean active;
+
 }

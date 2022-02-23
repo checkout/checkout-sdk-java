@@ -7,4 +7,6 @@ public final class UpdateWorkflowResponse {
 
     private String name;
 
+    private Boolean active;
+
 }

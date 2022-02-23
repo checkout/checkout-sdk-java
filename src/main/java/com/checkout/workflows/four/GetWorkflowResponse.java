@@ -19,6 +19,8 @@ public final class GetWorkflowResponse extends Resource {
 
     private String name;
 
+    private Boolean active;
+
     private List<WorkflowConditionResponse> conditions = new ArrayList<>();
 
     private List<WorkflowActionResponse> actions = new ArrayList<>();

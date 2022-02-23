@@ -14,4 +14,6 @@ public final class Workflow extends Resource {
 
     private String name;
 
+    private Boolean active;
+
 }
