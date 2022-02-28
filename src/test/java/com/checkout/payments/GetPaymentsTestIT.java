@@ -92,7 +92,7 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
         assertNotNull(paymentReturned.getRequestedOn());
         assertNotNull(paymentReturned.getReference());
         assertNotNull(paymentReturned.getSchemeId());
-        assertNotNull(paymentReturned.getEci());
+        //assertNotNull(paymentReturned.getEci());
         //assertEquals(PaymentStatus.CAPTURED, paymentReturned.getStatus());
         assertEquals(10, paymentReturned.getAmount());
         assertTrue(paymentReturned.getApproved());
