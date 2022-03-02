@@ -15,4 +15,8 @@ public final class BillingDescriptor {
 
     private String city;
 
+    // Only available in Four
+
+    private String reference;
+
 }
