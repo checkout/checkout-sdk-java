@@ -7,6 +7,7 @@ import com.checkout.common.CountryCode;
 import com.checkout.common.IdResponse;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.entity.ContentType;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -101,6 +102,26 @@ class MarketplaceTestIT extends SandboxTestFixture {
         final IdResponse fileResponse = blocking(() -> fourApi.marketplaceClient().submitFile(fileRequest));
         assertNotNull(fileResponse);
         assertNotNull(fileResponse.getId());
+    }
+
+    @Test()
+    @Disabled("Unavailable in Sandbox")
+    void shouldTransferOfFunds() {
+        final CreateTransferRequest transferRequest = CreateTransferRequest.builder()
+                .transferType(TransferType.COMMISSION)
+                .source(TransferSource.builder()
+                        .id("ent_kidtcgc3ge5unf4a5i6enhnr5m")
+                        .amount(100L)
+                        .build())
+                .destination(TransferDestination.builder()
+                        .id("ent_w4jelhppmfiufdnatam37wrfc4")
+                        .build())
+                .build();
+
+        final CreateTransferResponse response = blocking(() -> fourApi.marketplaceClient().initiateTransferOfFunds(transferRequest));
+        assertNotNull(response);
+        assertNotNull(response.getId());
+        assertNotNull(response.getStatus());
     }
 
 }

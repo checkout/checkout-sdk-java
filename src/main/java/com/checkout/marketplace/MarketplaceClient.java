@@ -16,4 +16,6 @@ public interface MarketplaceClient {
 
     CompletableFuture<IdResponse> submitFile(MarketplaceFileRequest marketplaceFileRequest);
 
+    CompletableFuture<CreateTransferResponse> initiateTransferOfFunds(CreateTransferRequest createTransferRequest);
+
 }

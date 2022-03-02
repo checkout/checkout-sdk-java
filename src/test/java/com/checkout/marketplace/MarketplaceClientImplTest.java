@@ -51,6 +51,9 @@ class MarketplaceClientImplTest {
     private OnboardEntityResponse onboardEntityResponse;
 
     @Mock
+    private CreateTransferResponse createTransferResponse;
+
+    @Mock
     private Void aVoid;
 
     @Mock
@@ -145,6 +148,17 @@ class MarketplaceClientImplTest {
                 "Expected submitFile() to throw, but it didn't"
         );
         assertTrue(checkoutException.getMessage().contains("Files API is not enabled. It must be initialized in the SDK."));
+    }
+
+    @Test
+    void shouldTransferOfFunds() throws ExecutionException, InterruptedException {
+        when(apiClient.postAsync(eq("transfers"), eq(authorization), eq(CreateTransferResponse.class), any(CreateTransferRequest.class), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(createTransferResponse));
+
+        final CompletableFuture<CreateTransferResponse> future = marketplaceClient.initiateTransferOfFunds(CreateTransferRequest.builder().build());
+
+        assertNotNull(future.get());
+        assertEquals(createTransferResponse, future.get());
     }
 
 }
