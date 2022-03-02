@@ -2,6 +2,7 @@ package com.checkout.payments.links;
 
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerResponse;
+import com.checkout.common.MarketplaceData;
 import com.checkout.common.Product;
 import com.checkout.common.Resource;
 import com.checkout.payments.BillingInformation;
@@ -41,5 +42,12 @@ public final class PaymentLinkDetailsResponse extends Resource {
     private List<Product> products;
 
     private Map<String, Object> metadata;
+
+    // Only available in Four
+
+    @SerializedName("processing_channel_id")
+    private String processingChannelId;
+
+    private MarketplaceData marketplace;
 
 }

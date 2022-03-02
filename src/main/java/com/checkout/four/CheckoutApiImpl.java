@@ -17,6 +17,10 @@ import com.checkout.marketplace.MarketplaceClient;
 import com.checkout.marketplace.MarketplaceClientImpl;
 import com.checkout.payments.four.PaymentsClient;
 import com.checkout.payments.four.PaymentsClientImpl;
+import com.checkout.payments.hosted.HostedPaymentsClient;
+import com.checkout.payments.hosted.HostedPaymentsClientImpl;
+import com.checkout.payments.links.PaymentLinksClient;
+import com.checkout.payments.links.PaymentLinksClientImpl;
 import com.checkout.risk.RiskClient;
 import com.checkout.risk.RiskClientImpl;
 import com.checkout.sessions.SessionsClient;
@@ -38,6 +42,8 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final MarketplaceClient marketplaceClient;
     private final SessionsClient sessionsClient;
     private final ForexClient forexClient;
+    private final PaymentLinksClient paymentLinksClient;
+    private final HostedPaymentsClient hostedPaymentsClient;
 
     public CheckoutApiImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration);
@@ -51,6 +57,9 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.marketplaceClient = new MarketplaceClientImpl(apiClient, configuration);
         this.sessionsClient = new SessionsClientImpl(apiClient, configuration);
         this.forexClient = new ForexClientImpl(apiClient, configuration);
+        this.paymentLinksClient = new PaymentLinksClientImpl(apiClient, configuration);
+        this.hostedPaymentsClient = new HostedPaymentsClientImpl(apiClient, configuration);
+
     }
 
     @Override
@@ -102,4 +111,15 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     public ForexClient forexClient() {
         return forexClient;
     }
+
+    @Override
+    public PaymentLinksClient paymentLinksClient() {
+        return paymentLinksClient;
+    }
+
+    @Override
+    public HostedPaymentsClient hostedPaymentsClient() {
+        return hostedPaymentsClient;
+    }
+
 }

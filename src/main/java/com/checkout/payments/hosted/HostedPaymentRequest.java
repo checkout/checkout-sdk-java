@@ -2,6 +2,8 @@ package com.checkout.payments.hosted;
 
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
+import com.checkout.common.MarketplaceData;
+import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Product;
 import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.BillingInformation;
@@ -15,7 +17,6 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,6 @@ public final class HostedPaymentRequest {
 
     private Long amount;
 
-    @NotEmpty
     private Currency currency;
 
     private String reference;
@@ -37,7 +37,6 @@ public final class HostedPaymentRequest {
 
     private ShippingDetails shipping;
 
-    @NotEmpty
     private BillingInformation billing;
 
     private PaymentRecipient recipient;
@@ -48,15 +47,12 @@ public final class HostedPaymentRequest {
 
     private RiskRequest risk;
 
-    @NotEmpty
     @SerializedName("success_url")
     private String successUrl;
 
-    @NotEmpty
     @SerializedName("cancel_url")
     private String cancelUrl;
 
-    @NotEmpty
     @SerializedName("failure_url")
     private String failureUrl;
 
@@ -76,9 +72,19 @@ public final class HostedPaymentRequest {
     private PaymentType paymentType;
 
     @SerializedName("payment_ip")
-    public String paymentIp;
+    private String paymentIp;
 
     @SerializedName("billing_descriptor")
-    public BillingDescriptor billingDescriptor;
+    private BillingDescriptor billingDescriptor;
+
+    @SerializedName("allow_payment_methods")
+    private List<PaymentSourceType> allowPaymentMethods;
+
+    // Only available in Four
+
+    @SerializedName("processing_channel_id")
+    private String processingChannelId;
+
+    private MarketplaceData marketplace;
 
 }

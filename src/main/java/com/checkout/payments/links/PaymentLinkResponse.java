@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 @Data
 @EqualsAndHashCode(callSuper = true)
 public final class PaymentLinkResponse extends Resource {
@@ -15,5 +17,7 @@ public final class PaymentLinkResponse extends Resource {
     private String expiresOn;
 
     private String reference;
+
+    private List<Object> warnings;
 
 }
