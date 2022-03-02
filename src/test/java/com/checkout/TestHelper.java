@@ -5,6 +5,7 @@ import com.checkout.common.ChallengeIndicator;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
+import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
 import com.checkout.common.Product;
 import com.checkout.payments.BillingDescriptor;
@@ -21,6 +22,7 @@ import com.checkout.payments.links.PaymentLinkRequest;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -116,6 +118,7 @@ public final class TestHelper {
                         .city("London")
                         .name("Awesome name")
                         .build())
+                .allowPaymentMethods(Arrays.asList(PaymentSourceType.CARD, PaymentSourceType.IDEAL))
                 .build();
     }
 
@@ -153,6 +156,7 @@ public final class TestHelper {
                         .city("London")
                         .name("Awesome name")
                         .build())
+                .allowPaymentMethods(Arrays.asList(PaymentSourceType.CARD, PaymentSourceType.IDEAL))
                 .build();
     }
 

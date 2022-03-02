@@ -25,6 +25,9 @@ class CheckoutApiImplTest {
         assertNotNull(checkoutApi.marketplaceClient());
         assertNotNull(checkoutApi.sessionsClient());
         assertNotNull(checkoutApi.forexClient());
+        assertNotNull(checkoutApi.hostedPaymentsClient());
+        assertNotNull(checkoutApi.paymentLinksClient());
+        assertNotNull(checkoutApi.forexClient());
         // APMs
         assertNotNull(checkoutApi.idealClient());
     }

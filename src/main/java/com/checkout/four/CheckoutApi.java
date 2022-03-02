@@ -6,6 +6,8 @@ import com.checkout.forex.four.ForexClient;
 import com.checkout.instruments.four.InstrumentsClient;
 import com.checkout.marketplace.MarketplaceClient;
 import com.checkout.payments.four.PaymentsClient;
+import com.checkout.payments.hosted.HostedPaymentsClient;
+import com.checkout.payments.links.PaymentLinksClient;
 import com.checkout.risk.RiskClient;
 import com.checkout.sessions.SessionsClient;
 import com.checkout.tokens.TokensClient;
@@ -32,6 +34,10 @@ public interface CheckoutApi extends CheckoutApmApi {
     SessionsClient sessionsClient();
 
     ForexClient forexClient();
+
+    PaymentLinksClient paymentLinksClient();
+
+    HostedPaymentsClient hostedPaymentsClient();
 
 }
 
