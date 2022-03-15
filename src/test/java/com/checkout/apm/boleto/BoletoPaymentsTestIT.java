@@ -13,6 +13,7 @@ import com.checkout.payments.request.source.apm.RequestBoletoSource;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
 import com.checkout.payments.response.source.AlternativePaymentSourceResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,6 +27,7 @@ class BoletoPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("not available")
     void shouldSucceedBoletoRedirectPayment() {
 
         final RequestBoletoSource boletoSource = RequestBoletoSource.builder()
@@ -61,6 +63,7 @@ class BoletoPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("not available")
     void shouldMakeBoletoDirectPayment_thirdPartyRejection() {
 
         final RequestBoletoSource boletoSource = RequestBoletoSource.builder()

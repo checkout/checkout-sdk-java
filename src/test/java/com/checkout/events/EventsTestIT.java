@@ -8,6 +8,7 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -71,6 +72,7 @@ class EventsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("unstable")
     void shouldRetrieveEventsByPaymentId_andRetrieveEventById_andGetNotification() {
 
         registerWebhook();
