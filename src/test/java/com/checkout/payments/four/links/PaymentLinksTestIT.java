@@ -7,7 +7,6 @@ import com.checkout.payments.links.PaymentLinkDetailsResponse;
 import com.checkout.payments.links.PaymentLinkRequest;
 import com.checkout.payments.links.PaymentLinkResponse;
 import com.checkout.payments.links.PaymentLinkStatus;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.anyOf;
@@ -26,7 +25,6 @@ class PaymentLinksTestIT extends SandboxTestFixture {
     }
 
     @Test
-    @Disabled("not available")
     void shouldCreateAndGetPaymentsLink() {
 
         final PaymentLinkRequest paymentLinksRequest = TestHelper.createPaymentLinksRequest(REFERENCE);

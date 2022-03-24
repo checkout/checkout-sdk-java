@@ -8,7 +8,6 @@ import com.checkout.payments.hosted.HostedPaymentDetailsResponse;
 import com.checkout.payments.hosted.HostedPaymentRequest;
 import com.checkout.payments.hosted.HostedPaymentResponse;
 import com.checkout.payments.hosted.HostedPaymentStatus;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,7 +23,6 @@ class HostedPaymentsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    @Disabled("not available")
     void shouldCreateAndGetHostedPayments() {
         final HostedPaymentRequest request = TestHelper.createHostedPaymentRequest(REFERENCE);
         final HostedPaymentResponse response = blocking(() -> fourApi.hostedPaymentsClient().createAsync(request));

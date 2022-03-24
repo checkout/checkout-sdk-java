@@ -48,7 +48,7 @@ public final class TestHelper {
     }
 
     public static CustomerRequest createCustomer() {
-        return new CustomerRequest(null, generateRandomEmail(), "Jack Napier");
+        return new CustomerRequest(null, generateRandomEmail(), "Jack Napier", null);
     }
 
     public static Phone createPhone() {
