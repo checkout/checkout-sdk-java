@@ -13,6 +13,10 @@ import com.checkout.payments.four.sender.PaymentIndividualSender;
 import com.checkout.payments.four.sender.PaymentInstrumentSender;
 import com.checkout.payments.four.sender.PaymentSender;
 
+/**
+ * @deprecated Won't be supported anymore from version 6.0.0 in favor of setting properties directly in the {@link PaymentRequest}
+ */
+@Deprecated
 public final class Payments {
 
     private Payments() {

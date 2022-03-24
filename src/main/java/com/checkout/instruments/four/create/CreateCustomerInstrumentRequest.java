@@ -15,8 +15,6 @@ import lombok.ToString;
 @NoArgsConstructor
 public final class CreateCustomerInstrumentRequest extends CustomerRequest {
 
-    private Phone phone;
-
     @SerializedName("default")
     private boolean defaultInstrument;
 
@@ -26,8 +24,7 @@ public final class CreateCustomerInstrumentRequest extends CustomerRequest {
                                            final String name,
                                            final Phone phone,
                                            final boolean defaultInstrument) {
-        super(id, email, name);
-        this.phone = phone;
+        super(id, email, name, phone);
         this.defaultInstrument = defaultInstrument;
     }
 

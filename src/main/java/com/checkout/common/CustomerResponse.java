@@ -11,4 +11,6 @@ public class CustomerResponse {
 
     private String name;
 
+    private Phone phone;
+
 }

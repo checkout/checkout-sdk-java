@@ -15,4 +15,6 @@ public class CustomerRequest {
 
     private String name;
 
+    private Phone phone;
+
 }

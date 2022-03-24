@@ -107,46 +107,90 @@ public final class PaymentRequest {
         this.reference = reference;
     }
 
+    /**
+     * @deprecated Won't be supported anymore from version 6.0.0 in favor of setting properties directly in the {@link PaymentRequest}
+     */
+    @Deprecated
     public static PaymentRequest baloto(final RequestBalotoSource balotoSource, final Currency currency, final Long amount) {
         return new PaymentRequest(balotoSource, currency, amount, true);
     }
 
+    /**
+     * @deprecated Won't be supported anymore from version 6.0.0 in favor of setting properties directly in the {@link PaymentRequest}
+     */
+    @Deprecated
     public static PaymentRequest boleto(final RequestBoletoSource boletoSource, final Currency currency, final Long amount) {
         return new PaymentRequest(boletoSource, currency, amount, true);
     }
 
+    /**
+     * @deprecated Won't be supported anymore from version 6.0.0 in favor of setting properties directly in the {@link PaymentRequest}
+     */
+    @Deprecated
     public static PaymentRequest fawry(final RequestFawrySource fawrySource, final Currency currency, final Long amount) {
         return new PaymentRequest(fawrySource, currency, amount, true);
     }
 
+    /**
+     * @deprecated Won't be supported anymore from version 6.0.0 in favor of setting properties directly in the {@link PaymentRequest}
+     */
+    @Deprecated
     public static PaymentRequest giropay(final RequestGiropaySource giropaySource, final Currency currency, final Long amount) {
         return new PaymentRequest(giropaySource, currency, amount, true);
     }
 
+    /**
+     * @deprecated Won't be supported anymore from version 6.0.0 in favor of setting properties directly in the {@link PaymentRequest}
+     */
+    @Deprecated
     public static PaymentRequest ideal(final RequestIdealSource idealSource, final Currency currency, final Long amount) {
         return new PaymentRequest(idealSource, currency, amount, true);
     }
 
+    /**
+     * @deprecated Won't be supported anymore from version 6.0.0 in favor of setting properties directly in the {@link PaymentRequest}
+     */
+    @Deprecated
     public static PaymentRequest oxxo(final RequestOxxoSource oxxoSource, final Currency currency, final Long amount) {
         return new PaymentRequest(oxxoSource, currency, amount, true);
     }
 
+    /**
+     * @deprecated Won't be supported anymore from version 6.0.0 in favor of setting properties directly in the {@link PaymentRequest}
+     */
+    @Deprecated
     public static PaymentRequest pagoFacil(final RequestPagoFacilSource pagoFacilSource, final Currency currency, final Long amount) {
         return new PaymentRequest(pagoFacilSource, currency, amount, true);
     }
 
+    /**
+     * @deprecated Won't be supported anymore from version 6.0.0 in favor of setting properties directly in the {@link PaymentRequest}
+     */
+    @Deprecated
     public static PaymentRequest rapiPago(final RequestRapiPagoSource rapiPagoSource, final Currency currency, final Long amount) {
         return new PaymentRequest(rapiPagoSource, currency, amount, true);
     }
 
+    /**
+     * @deprecated Won't be supported anymore from version 6.0.0 in favor of setting properties directly in the {@link PaymentRequest}
+     */
+    @Deprecated
     public static PaymentRequest klarna(final RequestKlarnaSource klarnaSource, final Currency currency, final Long amount) {
         return new PaymentRequest(klarnaSource, currency, amount, false);
     }
 
+    /**
+     * @deprecated Won't be supported anymore from version 6.0.0 in favor of setting properties directly in the {@link PaymentRequest}
+     */
+    @Deprecated
     public static PaymentRequest sepa(final RequestSepaSource sepaSource, final Currency currency, final Long amount, final String reference) {
         return new PaymentRequest(sepaSource, currency, amount, reference);
     }
 
+    /**
+     * @deprecated Won't be supported anymore from version 6.0.0 in favor of setting properties directly in the {@link PaymentRequest}
+     */
+    @Deprecated
     public static PaymentRequest sofort(final Currency currency, final Long amount) {
         return new PaymentRequest(new RequestSofortSource(), currency, amount, true);
     }

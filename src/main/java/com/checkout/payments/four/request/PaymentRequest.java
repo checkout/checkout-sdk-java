@@ -3,6 +3,7 @@ package com.checkout.payments.four.request;
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
 import com.checkout.common.MarketplaceData;
+import com.checkout.common.four.Product;
 import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.PaymentType;
@@ -19,6 +20,7 @@ import lombok.Data;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -83,6 +85,8 @@ public final class PaymentRequest {
     private MarketplaceData marketplace;
 
     private ProcessingSettings processing;
+
+    private List<Product> items;
 
     @Builder.Default
     private Map<String, Object> metadata = new HashMap<>();

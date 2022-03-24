@@ -5,12 +5,18 @@ import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
+import com.checkout.common.Address;
+import com.checkout.common.CountryCode;
+import com.checkout.common.CustomerResponse;
+import com.checkout.common.Phone;
+import com.checkout.common.four.Product;
 import com.checkout.payments.four.request.AuthorizationRequest;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.PayoutRequest;
 import com.checkout.payments.four.request.source.PayoutRequestCurrencyAccountSource;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.request.source.RequestIdSource;
+import com.checkout.payments.four.request.source.apm.RequestTamaraSource;
 import com.checkout.payments.four.response.AuthorizationResponse;
 import com.checkout.payments.four.response.GetPaymentResponse;
 import com.checkout.payments.four.response.PaymentResponse;
@@ -25,6 +31,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -79,6 +86,52 @@ class PaymentsClientImplTest {
         final PaymentResponse response = mock(PaymentResponse.class);
 
         final PaymentRequest request = PaymentRequest.builder().sender(sender).source(source).build();
+
+        when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayment(request);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
+    void shouldRequestPaymentWithCustomApmSource() throws ExecutionException, InterruptedException {
+
+        final Address billingAddress = new Address();
+        billingAddress.setAddressLine1("CheckoutSdk.com");
+        billingAddress.setAddressLine2("90 Tottenham Court Road");
+        billingAddress.setCity("London");
+        billingAddress.setState("London");
+        billingAddress.setZip("W1T 4TJ");
+        billingAddress.setCountry(CountryCode.GB);
+
+        final RequestTamaraSource source = new RequestTamaraSource();
+        source.setBillingAddress(billingAddress);
+        final PaymentInstrumentSender sender = mock(PaymentInstrumentSender.class);
+        final PaymentRequest request = PaymentRequest.builder().sender(sender).source(source).build();
+        request.setItems(Collections.singletonList(Product.builder()
+                .name("Item name")
+                .quantity(3L)
+                .unitPrice(100L)
+                .totalAmount(100L)
+                .taxAmount(19L)
+                .discountAmount(2L)
+                .reference("some description about item")
+                .imageUrl("https://some_s3bucket.com")
+                .url("https://some.website.com/item")
+                .sku("123687000111")
+                .build()));
+
+        final CustomerResponse customerResponse = new CustomerResponse();
+        customerResponse.setEmail("email");
+        customerResponse.setId("id");
+        customerResponse.setName("name");
+        customerResponse.setPhone(Phone.builder().build());
+        final PaymentResponse response = mock(PaymentResponse.class);
+        response.setCustomer(customerResponse);
 
         when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
