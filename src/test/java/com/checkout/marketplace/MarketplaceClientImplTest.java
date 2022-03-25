@@ -6,6 +6,8 @@ import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
 import com.checkout.common.IdResponse;
+import com.checkout.marketplace.balances.BalancesQuery;
+import com.checkout.marketplace.balances.BalancesResponse;
 import com.checkout.marketplace.transfers.CreateTransferRequest;
 import com.checkout.marketplace.transfers.CreateTransferResponse;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -25,6 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,7 +68,8 @@ class MarketplaceClientImplTest {
         lenient().when(checkoutConfiguration.getSdkCredentials()).thenReturn(sdkCredentials);
         lenient().when(checkoutConfiguration.getHttpClientBuilder()).thenReturn(HttpClientBuilder.create());
         lenient().when(checkoutConfiguration.getExecutor()).thenReturn(Executors.newSingleThreadExecutor());
-        this.marketplaceClient = new MarketplaceClientImpl(apiClient, apiClient, apiClient, checkoutConfiguration);
+        this.marketplaceClient = new MarketplaceClientImpl(apiClient, apiClient, apiClient, apiClient,
+                checkoutConfiguration);
     }
 
     @Test
@@ -143,6 +147,20 @@ class MarketplaceClientImplTest {
 
         assertNotNull(future.get());
         assertEquals(createTransferResponse, future.get());
+
+    }
+
+    @Test
+    void shouldRetrieveEntityBalances() throws ExecutionException, InterruptedException {
+
+        final BalancesResponse balancesResponse = mock(BalancesResponse.class);
+        when(apiClient.queryAsync(eq("balances/entity_id"), any(SdkAuthorization.class), any(BalancesQuery.class), eq(BalancesResponse.class)))
+                .thenReturn(CompletableFuture.completedFuture(balancesResponse));
+
+        final CompletableFuture<BalancesResponse> future = marketplaceClient.retrieveEntityBalances("entity_id", BalancesQuery.builder().build());
+
+        assertNotNull(future.get());
+        assertEquals(balancesResponse, future.get());
 
     }
 

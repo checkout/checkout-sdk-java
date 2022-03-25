@@ -35,7 +35,9 @@ public enum FourOAuthScope {
     RISK_SETTINGS("risk:settings"),
     TRANSFERS("transfers"),
     TRANSFERS_CREATE("transfers:create"),
-    TRANSFERS_VIEW("transfers:view");
+    TRANSFERS_VIEW("transfers:view"),
+    BALANCES("balances"),
+    BALANCES_VIEW("balances:view");
 
     private final String scope;
 

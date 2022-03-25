@@ -1,6 +1,8 @@
 package com.checkout.marketplace;
 
 import com.checkout.common.IdResponse;
+import com.checkout.marketplace.balances.BalancesQuery;
+import com.checkout.marketplace.balances.BalancesResponse;
 import com.checkout.marketplace.transfers.CreateTransferRequest;
 import com.checkout.marketplace.transfers.CreateTransferResponse;
 
@@ -19,5 +21,7 @@ public interface MarketplaceClient {
     CompletableFuture<IdResponse> submitFile(MarketplaceFileRequest marketplaceFileRequest);
 
     CompletableFuture<CreateTransferResponse> initiateTransferOfFunds(CreateTransferRequest createTransferRequest);
+
+    CompletableFuture<BalancesResponse> retrieveEntityBalances(String entityId, BalancesQuery balancesQuery);
 
 }
