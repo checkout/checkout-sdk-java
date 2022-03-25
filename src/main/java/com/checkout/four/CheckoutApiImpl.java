@@ -67,6 +67,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.marketplaceClient = new MarketplaceClientImpl(this.apiClient,
                 getFilesClient(configuration),
                 getTransfersClient(configuration),
+                getBalancesClient(configuration),
                 configuration);
 
     }
@@ -139,6 +140,10 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         return new ApiClientImpl(configuration, new TransfersApiUriStrategy(configuration));
     }
 
+    private ApiClient getBalancesClient(final CheckoutConfiguration configuration) {
+        return new ApiClientImpl(configuration, new BalancesApiUriStrategy(configuration));
+    }
+
     private static class FilesApiUriStrategy implements UriStrategy {
 
         private final CheckoutConfiguration configuration;
@@ -167,6 +172,20 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         @Override
         public URI getUri() {
             return configuration.getEnvironment().getTransfersApiURI();
+        }
+    }
+
+    private static class BalancesApiUriStrategy implements UriStrategy {
+
+        private final CheckoutConfiguration configuration;
+
+        private BalancesApiUriStrategy(final CheckoutConfiguration configuration) {
+            this.configuration = configuration;
+        }
+
+        @Override
+        public URI getUri() {
+            return configuration.getEnvironment().getBalancesApiURI();
         }
     }
 

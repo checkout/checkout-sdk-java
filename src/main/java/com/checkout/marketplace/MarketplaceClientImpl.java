@@ -5,6 +5,8 @@ import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.common.IdResponse;
+import com.checkout.marketplace.balances.BalancesQuery;
+import com.checkout.marketplace.balances.BalancesResponse;
 import com.checkout.marketplace.transfers.CreateTransferRequest;
 import com.checkout.marketplace.transfers.CreateTransferResponse;
 
@@ -19,18 +21,21 @@ public class MarketplaceClientImpl extends AbstractClient implements Marketplace
     private static final String INSTRUMENTS_PATH = "instruments";
     private static final String FILES_PATH = "files";
     private static final String TRANSFERS_PATH = "transfers";
+    private static final String BALANCES_PATH = "balances";
 
     private final ApiClient filesClient;
-
     private final ApiClient transfersClient;
+    private final ApiClient balancesAClient;
 
     public MarketplaceClientImpl(final ApiClient apiClient,
                                  final ApiClient filesClient,
                                  final ApiClient transfersClient,
+                                 final ApiClient balancesAClient,
                                  final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.OAUTH);
         this.filesClient = filesClient;
         this.transfersClient = transfersClient;
+        this.balancesAClient = balancesAClient;
     }
 
     @Override
@@ -67,6 +72,12 @@ public class MarketplaceClientImpl extends AbstractClient implements Marketplace
     public CompletableFuture<CreateTransferResponse> initiateTransferOfFunds(final CreateTransferRequest createTransferRequest) {
         validateParams("createTransferRequest", createTransferRequest);
         return transfersClient.postAsync(TRANSFERS_PATH, sdkAuthorization(), CreateTransferResponse.class, createTransferRequest, null);
+    }
+
+    @Override
+    public CompletableFuture<BalancesResponse> retrieveEntityBalances(final String entityId, final BalancesQuery balancesQuery) {
+        validateParams("entityId", entityId, "balancesQuery", balancesQuery);
+        return balancesAClient.queryAsync(buildPath(BALANCES_PATH, entityId), sdkAuthorization(), balancesQuery, BalancesResponse.class);
     }
 
 }

@@ -4,7 +4,11 @@ import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
+import com.checkout.common.Currency;
 import com.checkout.common.IdResponse;
+import com.checkout.marketplace.balances.BalancesQuery;
+import com.checkout.marketplace.balances.BalancesResponse;
+import com.checkout.marketplace.balances.CurrencyAccountBalance;
 import com.checkout.marketplace.transfers.CreateTransferRequest;
 import com.checkout.marketplace.transfers.CreateTransferResponse;
 import com.checkout.marketplace.transfers.TransferDestination;
@@ -125,6 +129,22 @@ class MarketplaceTestIT extends SandboxTestFixture {
         final CreateTransferResponse response = blocking(() -> fourApi.marketplaceClient().initiateTransferOfFunds(transferRequest));
         assertNotNull(response.getId());
         assertNotNull(response.getStatus());
+    }
+
+    @Test
+    void shouldRetrieveEntityBalances() {
+        final BalancesQuery query = BalancesQuery.builder()
+                .query("currency:" + Currency.GBP)
+                .build();
+
+        final BalancesResponse balancesResponse = blocking(() -> fourApi.marketplaceClient().retrieveEntityBalances("ent_kidtcgc3ge5unf4a5i6enhnr5m", query));
+        assertNotNull(balancesResponse);
+        assertNotNull(balancesResponse.getData());
+        for (final CurrencyAccountBalance balance : balancesResponse.getData()) {
+            assertNotNull(balance.getDescriptor());
+            assertNotNull(balance.getHoldingCurrency());
+            assertNotNull(balance.getBalances());
+        }
     }
 
 }
