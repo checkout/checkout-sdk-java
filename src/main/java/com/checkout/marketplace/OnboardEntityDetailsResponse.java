@@ -19,7 +19,7 @@ public final class OnboardEntityDetailsResponse extends Resource {
 
     private Capabilities capabilities;
 
-    private String status;
+    private OnboardingStatus status;
 
     @SerializedName("requirements_due")
     private List<RequirementsDue> requirementsDue;

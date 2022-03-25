@@ -64,7 +64,8 @@ public static void main(String[] args) {
         .staticKeys()
         .publicKey("public_key")
         .secretKey("secret_key")
-        .environment(Environment.SANDBOX) // or .uri("")
+        .environment(Environment.SANDBOX) // required
+        .uri() // deprecated, will be removed in version 6.0.0
         .build();
 
     PaymentsClient paymentsClient = checkoutApi.paymentsClient();
@@ -86,7 +87,9 @@ public static void main(String[] args) {
         .staticKeys()
         .publicKey("public_key")
         .secretKey("secret_key")
-        .environment(Environment.SANDBOX) // or .uri("")
+        .environment(Environment.SANDBOX) // required
+        .uri() // deprecated, will be removed in version 6.0.0
+        .enableFilesApi(Environment.SANDBOX)  // deprecated, will be removed in version 6.0.0
         .httpClientBuilder() // for a custom HTTP Client Builder
         .executor() // for a custom Executor Service
         .build();
@@ -108,7 +111,8 @@ public static void main(String[] args) {
         // for a specific authorization endpoint
         //.clientCredentials(new URI("https://access.sandbox.checkout.com/connect/token"), "client_id", "client_secret")
         .scopes(FourOAuthScope.GATEWAY, FourOAuthScope.VAULT, FourOAuthScope.FX)
-        .environment(Environment.SANDBOX)
+        .environment(Environment.SANDBOX) // required
+        .enableFilesApi(Environment.SANDBOX)  // deprecated, will be removed in version 6.0.0
         .httpClientBuilder() // for a custom HTTP Client Builder
         .executor() // for a custom Executor Service
         .build()
@@ -121,7 +125,7 @@ public static void main(String[] args) {
 ## Files API
 
 Some Marketplace operations require interaction with Checkout Files API. This feature must be enabled when the SDK is instantiated.
-
+> :warning: **This configuration is deprecated and will be removed in version 6.0.0**. Default environment will be used.
 ```java
 import com.checkout.four.CheckoutApi;
 

@@ -13,7 +13,7 @@ import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.response.AuthorizationResponse;
 import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
-import com.checkout.payments.four.sender.SenderIdentification;
+import com.checkout.common.four.SenderIdentification;
 import com.checkout.payments.four.sender.SenderIdentificationType;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class PaymentAuthorizationsTestIT extends SandboxTestFixture {
+class PaymentAuthorizationsTestIT extends SandboxTestFixture {
 
     public PaymentAuthorizationsTestIT() {
         super(PlatformType.FOUR);

@@ -39,6 +39,7 @@ class CheckoutFourSdkTest {
                 .publicKey(VALID_FOUR_PK)
                 .secretKey(VALID_FOUR_SK)
                 .uri(new URI("https://test.checkout.com"))
+                .environment(Environment.SANDBOX)
                 .build();
 
         assertNotNull(checkoutApi3);
@@ -93,7 +94,7 @@ class CheckoutFourSdkTest {
                     .build();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("environment or URI must be specified", e.getMessage());
+            assertEquals("environment must be specified", e.getMessage());
         }
 
     }

@@ -1,6 +1,7 @@
-package com.checkout.payments.four.sender;
+package com.checkout.common.four;
 
 import com.checkout.common.CountryCode;
+import com.checkout.payments.four.sender.SenderIdentificationType;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

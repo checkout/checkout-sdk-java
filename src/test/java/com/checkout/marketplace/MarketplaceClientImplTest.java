@@ -2,20 +2,17 @@ package com.checkout.marketplace;
 
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
-import com.checkout.CheckoutException;
-import com.checkout.Environment;
-import com.checkout.FilesApiConfiguration;
-import com.checkout.FilesTransport;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
 import com.checkout.common.IdResponse;
+import com.checkout.marketplace.transfers.CreateTransferRequest;
+import com.checkout.marketplace.transfers.CreateTransferResponse;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.concurrent.CompletableFuture;
@@ -24,8 +21,6 @@ import java.util.concurrent.Executors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
@@ -59,6 +54,9 @@ class MarketplaceClientImplTest {
     @Mock
     private OnboardEntityDetailsResponse onboardEntityDetailsResponse;
 
+    @Mock
+    private CreateTransferResponse createTransferResponse;
+
     private MarketplaceClient marketplaceClient;
 
     @BeforeEach
@@ -67,7 +65,7 @@ class MarketplaceClientImplTest {
         lenient().when(checkoutConfiguration.getSdkCredentials()).thenReturn(sdkCredentials);
         lenient().when(checkoutConfiguration.getHttpClientBuilder()).thenReturn(HttpClientBuilder.create());
         lenient().when(checkoutConfiguration.getExecutor()).thenReturn(Executors.newSingleThreadExecutor());
-        this.marketplaceClient = new MarketplaceClientImpl(apiClient, checkoutConfiguration);
+        this.marketplaceClient = new MarketplaceClientImpl(apiClient, apiClient, apiClient, checkoutConfiguration);
     }
 
     @Test
@@ -125,9 +123,7 @@ class MarketplaceClientImplTest {
     @Test
     void shouldSubmitFile() throws ExecutionException, InterruptedException {
 
-        lenient().when(checkoutConfiguration.getFilesApiConfiguration()).thenReturn(new FilesApiConfiguration(Environment.SANDBOX));
-
-        when(apiClient.submitFileAsync(any(FilesTransport.class), eq("files"), eq(authorization), any(MarketplaceFileRequest.class), eq(IdResponse.class)))
+        when(apiClient.submitFileAsync(eq("files"), eq(authorization), any(MarketplaceFileRequest.class), eq(IdResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(idResponse));
 
         final CompletableFuture<IdResponse> future = marketplaceClient.submitFile(MarketplaceFileRequest.builder().build());
@@ -138,13 +134,16 @@ class MarketplaceClientImplTest {
     }
 
     @Test
-    void shouldFailSubmitFile() {
-        final CheckoutException checkoutException = assertThrows(
-                CheckoutException.class,
-                () -> new MarketplaceClientImpl(apiClient, Mockito.mock(CheckoutConfiguration.class)).submitFile(MarketplaceFileRequest.builder().build()),
-                "Expected submitFile() to throw, but it didn't"
-        );
-        assertTrue(checkoutException.getMessage().contains("Files API is not enabled. It must be initialized in the SDK."));
+    void shouldInitiateTransferOfFunds() throws ExecutionException, InterruptedException {
+
+        when(apiClient.postAsync(eq("transfers"), eq(authorization), eq(CreateTransferResponse.class), any(CreateTransferRequest.class), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(createTransferResponse));
+
+        final CompletableFuture<CreateTransferResponse> future = marketplaceClient.initiateTransferOfFunds(CreateTransferRequest.builder().build());
+
+        assertNotNull(future.get());
+        assertEquals(createTransferResponse, future.get());
+
     }
 
 }

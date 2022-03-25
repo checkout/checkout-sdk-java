@@ -9,8 +9,6 @@ import lombok.Data;
 @Builder
 public final class Representative {
 
-    private String id;
-
     @SerializedName("first_name")
     private String firstName;
 

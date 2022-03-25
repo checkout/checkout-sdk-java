@@ -17,6 +17,8 @@ import com.checkout.apm.rapipago.RapiPagoClientImpl;
 import com.checkout.apm.sepa.SepaClient;
 import com.checkout.apm.sepa.SepaClientImpl;
 
+import java.net.URI;
+
 public abstract class AbstractCheckoutApmApi {
 
     protected final ApiClient apiClient;
@@ -30,9 +32,8 @@ public abstract class AbstractCheckoutApmApi {
     private final RapiPagoClient rapiPagoClient;
     private final SepaClient sepaClient;
 
-    protected AbstractCheckoutApmApi(final ApiClient apiClient,
-                                     final CheckoutConfiguration configuration) {
-        this.apiClient = apiClient;
+    protected AbstractCheckoutApmApi(final CheckoutConfiguration configuration) {
+        this.apiClient = getBaseApiClient(configuration);
         this.balotoClient = new BalotoClientImpl(apiClient, configuration);
         this.fawryClient = new FawryClientImpl(apiClient, configuration);
         this.idealClient = new IdealClientImpl(apiClient, configuration);
@@ -73,6 +74,24 @@ public abstract class AbstractCheckoutApmApi {
 
     public SepaClient sepaClient() {
         return sepaClient;
+    }
+
+    private ApiClient getBaseApiClient(final CheckoutConfiguration configuration) {
+        return new ApiClientImpl(configuration, new BaseUriStrategy(configuration));
+    }
+
+    private static class BaseUriStrategy implements UriStrategy {
+
+        private final CheckoutConfiguration configuration;
+
+        private BaseUriStrategy(final CheckoutConfiguration configuration) {
+            this.configuration = configuration;
+        }
+
+        @Override
+        public URI getUri() {
+            return configuration.getBaseUri();
+        }
     }
 
 }

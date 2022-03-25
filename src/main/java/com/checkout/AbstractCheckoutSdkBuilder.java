@@ -21,11 +21,19 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
         return this;
     }
 
+    /**
+     * @deprecated Won't be supported anymore from version 6.0.0 in favor of using defined URI's in Environment
+     */
+    @Deprecated
     public AbstractCheckoutSdkBuilder<T> uri(final URI uri) {
         this.uri = uri;
         return this;
     }
 
+    /**
+     * @deprecated Won't be supported anymore from version 6.0.0 in favor of using defined URI's in Environment
+     */
+    @Deprecated
     public AbstractCheckoutSdkBuilder<T> enableFilesApi(final Environment filesApiEnvironment) {
         this.filesApiEnvironment = filesApiEnvironment;
         return this;
@@ -48,8 +56,8 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
     protected abstract SdkCredentials getSdkCredentials();
 
     protected CheckoutConfiguration getCheckoutConfiguration() {
-        if (environment == null && uri == null) {
-            throw new CheckoutArgumentException("environment or URI must be specified");
+        if (environment == null) {
+            throw new CheckoutArgumentException("environment must be specified");
         }
         final SdkCredentials sdkCredentials = getSdkCredentials();
         return buildCheckoutConfiguration(sdkCredentials);
@@ -60,7 +68,7 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
         if (uri == null) {
             return new DefaultCheckoutConfiguration(sdkCredentials, getEnvironment(), httpClientBuilder, executor, filesApiConfiguration);
         }
-        return new DefaultCheckoutConfiguration(sdkCredentials, uri, httpClientBuilder, executor, filesApiConfiguration);
+        return new DefaultCheckoutConfiguration(sdkCredentials, environment, uri, httpClientBuilder, executor, filesApiConfiguration);
     }
 
     public abstract T build();

@@ -37,7 +37,7 @@ class DefaultCheckoutConfigurationTest {
     void shouldFailCreatingConfiguration_invalidURI() {
         try {
             final FourStaticKeysSdkCredentials credentials = Mockito.mock(FourStaticKeysSdkCredentials.class);
-            new DefaultCheckoutConfiguration(credentials, (URI) null, null, null, null);
+            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, (URI) null, null, null, null);
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
@@ -53,7 +53,7 @@ class DefaultCheckoutConfigurationTest {
         final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
         assertEquals(Environment.PRODUCTION.getUri(), configuration.getBaseUri());
 
-        final CheckoutConfiguration configuration2 = new DefaultCheckoutConfiguration(credentials, new URI("https://www.test.checkout.com/"), DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
+        final CheckoutConfiguration configuration2 = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, new URI("https://www.test.checkout.com/"), DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
         assertEquals(URI.create("https://www.test.checkout.com/"), configuration2.getBaseUri());
 
     }
@@ -93,7 +93,7 @@ class DefaultCheckoutConfigurationTest {
         final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
         assertEquals(Environment.PRODUCTION.getUri(), configuration.getBaseUri());
 
-        final CheckoutConfiguration configuration2 = new DefaultCheckoutConfiguration(credentials, new URI("https://www.test.checkout.com/"), DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
+        final CheckoutConfiguration configuration2 = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, new URI("https://www.test.checkout.com/"), DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
         assertEquals(URI.create("https://www.test.checkout.com/"), configuration2.getBaseUri());
 
     }

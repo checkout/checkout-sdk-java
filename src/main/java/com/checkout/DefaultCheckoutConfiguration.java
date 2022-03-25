@@ -14,6 +14,7 @@ class DefaultCheckoutConfiguration implements CheckoutConfiguration {
     private final HttpClientBuilder httpClientBuilder;
     private final Executor executor;
     private final FilesApiConfiguration filesApiConfiguration;
+    private Environment environment;
 
     DefaultCheckoutConfiguration(final SdkCredentials sdkCredentials,
                                  final Environment environment,
@@ -26,15 +27,18 @@ class DefaultCheckoutConfiguration implements CheckoutConfiguration {
         this.httpClientBuilder = httpClientBuilder;
         this.executor = executor;
         this.filesApiConfiguration = filesApiConfiguration;
+        this.environment = environment;
     }
 
     DefaultCheckoutConfiguration(final SdkCredentials sdkCredentials,
+                                 final Environment environment,
                                  final URI uri,
                                  final HttpClientBuilder httpClientBuilder,
                                  final Executor executor,
                                  final FilesApiConfiguration filesApiConfiguration) {
-        validateParams("sdkCredentials", sdkCredentials, "uri", uri, "httpClientBuilder", httpClientBuilder, "executor", executor);
+        validateParams("sdkCredentials", sdkCredentials, "environment", environment, "uri", uri, "httpClientBuilder", httpClientBuilder, "executor", executor);
         this.sdkCredentials = sdkCredentials;
+        this.environment = environment;
         this.baseUri = uri;
         this.httpClientBuilder = httpClientBuilder;
         this.executor = executor;
@@ -66,4 +70,8 @@ class DefaultCheckoutConfiguration implements CheckoutConfiguration {
         return filesApiConfiguration;
     }
 
+    @Override
+    public Environment getEnvironment() {
+        return environment;
+    }
 }

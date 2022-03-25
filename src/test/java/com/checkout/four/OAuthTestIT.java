@@ -14,7 +14,7 @@ import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.Payments;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
-import com.checkout.payments.four.sender.SenderIdentification;
+import com.checkout.common.four.SenderIdentification;
 import com.checkout.payments.four.sender.SenderIdentificationType;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class OAuthTestIT extends SandboxTestFixture {
+class OAuthTestIT extends SandboxTestFixture {
 
     private static final String OAUTH_AUTHORIZE_URL = "https://access.sandbox.checkout.com/connect/token";
 
@@ -105,10 +105,11 @@ public class OAuthTestIT extends SandboxTestFixture {
                             System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_SECRET"))
                     .scopes(FourOAuthScope.GATEWAY)
                     .uri(URI.create("https://test.checkout.com"))
+
                     .build();
             fail();
         } catch (final Exception e) {
-            assertEquals("Invalid configuration. Please specify an Environment or a specific OAuth authorizationURI.", e.getMessage());
+            assertEquals("environment must be specified", e.getMessage());
         }
 
     }

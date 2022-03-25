@@ -3,6 +3,7 @@ package com.checkout.marketplace;
 import com.checkout.common.CountryCode;
 import com.checkout.common.four.AccountHolderType;
 import com.checkout.common.four.AccountHolder;
+import com.checkout.common.four.SenderIdentification;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,7 +31,7 @@ public final class MarketplaceAccountHolder extends AccountHolder {
     @SerializedName("residential_status")
     private String residentialStatus;
 
-    private Identification identification;
+    private SenderIdentification identification;
 
     private String email;
 

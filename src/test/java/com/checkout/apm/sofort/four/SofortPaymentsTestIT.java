@@ -9,7 +9,7 @@ import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.Payments;
 import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
-import com.checkout.payments.four.sender.SenderIdentification;
+import com.checkout.common.four.SenderIdentification;
 import com.checkout.payments.four.sender.SenderIdentificationType;
 import org.junit.jupiter.api.Test;
 

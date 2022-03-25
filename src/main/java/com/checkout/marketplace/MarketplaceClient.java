@@ -1,6 +1,8 @@
 package com.checkout.marketplace;
 
 import com.checkout.common.IdResponse;
+import com.checkout.marketplace.transfers.CreateTransferRequest;
+import com.checkout.marketplace.transfers.CreateTransferResponse;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -15,5 +17,7 @@ public interface MarketplaceClient {
     CompletableFuture<Void> createPaymentInstrument(MarketplacePaymentInstrument marketplacePaymentInstrument, String entityId);
 
     CompletableFuture<IdResponse> submitFile(MarketplaceFileRequest marketplaceFileRequest);
+
+    CompletableFuture<CreateTransferResponse> initiateTransferOfFunds(CreateTransferRequest createTransferRequest);
 
 }

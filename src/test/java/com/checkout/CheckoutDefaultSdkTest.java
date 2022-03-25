@@ -38,6 +38,7 @@ class CheckoutDefaultSdkTest {
                 .publicKey(VALID_DEFAULT_PK)
                 .secretKey(VALID_DEFAULT_SK)
                 .uri(new URI("https://test.checkout.com"))
+                .environment(Environment.SANDBOX)
                 .build();
 
         assertNotNull(checkoutApi3.tokensClient());
@@ -76,7 +77,7 @@ class CheckoutDefaultSdkTest {
                     .build();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("environment or URI must be specified", e.getMessage());
+            assertEquals("environment must be specified", e.getMessage());
         }
 
     }
