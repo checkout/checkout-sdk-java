@@ -1,6 +1,7 @@
 package com.checkout.payments.four.sender;
 
 import com.checkout.common.Address;
+import com.checkout.common.four.SenderIdentification;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

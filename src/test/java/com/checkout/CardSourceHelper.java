@@ -11,7 +11,7 @@ import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.sender.PaymentCorporateSender;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
 import com.checkout.payments.four.sender.PaymentSender;
-import com.checkout.payments.four.sender.SenderIdentification;
+import com.checkout.common.four.SenderIdentification;
 import com.checkout.payments.four.sender.SenderIdentificationType;
 
 import java.util.UUID;

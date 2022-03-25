@@ -1,10 +1,9 @@
 package com.checkout;
 
+import com.checkout.common.AbstractFileRequest;
 import com.checkout.common.ApiResponseInfo;
 import com.checkout.common.CheckoutUtils;
-import com.checkout.common.FileRequest;
 import com.checkout.common.Resource;
-import com.checkout.marketplace.MarketplaceFileRequest;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,7 +25,7 @@ import static com.checkout.ClientOperation.POST;
 import static com.checkout.ClientOperation.PUT;
 import static com.checkout.common.CheckoutUtils.validateParams;
 
-class ApiClientImpl implements ApiClient {
+public class ApiClientImpl implements ApiClient {
 
     private static final String AUTHORIZATION = "authorization";
     private static final String PATH = "path";
@@ -34,9 +33,9 @@ class ApiClientImpl implements ApiClient {
     private final Serializer serializer;
     private final Transport transport;
 
-    ApiClientImpl(final CheckoutConfiguration configuration) {
+    public ApiClientImpl(final CheckoutConfiguration configuration, final UriStrategy uriStrategy) {
         this.serializer = new GsonSerializer();
-        this.transport = new ApacheHttpClientTransport(configuration.getBaseUri(), configuration.getHttpClientBuilder(), configuration.getExecutor());
+        this.transport = new ApacheHttpClientTransport(uriStrategy.getUri(), configuration.getHttpClientBuilder(), configuration.getExecutor());
     }
 
     @Override
@@ -159,17 +158,9 @@ class ApiClientImpl implements ApiClient {
 
     @Override
     public <T> CompletableFuture<T> submitFileAsync(final String path, final SdkAuthorization authorization,
-                                                    final FileRequest request, final Class<T> responseType) {
+                                                    final AbstractFileRequest request, final Class<T> responseType) {
         validateParams(PATH, path, AUTHORIZATION, authorization, "fileRequest", request);
         return transport.submitFile(path, authorization, request)
-                .thenApply(this::errorCheck)
-                .thenApply(response -> deserialize(response, responseType));
-    }
-
-    @Override
-    public <T> CompletableFuture<T> submitFileAsync(final FilesTransport filesTransport, final String path, final SdkAuthorization authorization, final MarketplaceFileRequest request, final Class<T> responseType) {
-        validateParams("filesTransport", filesTransport, PATH, path, AUTHORIZATION, authorization, "fileRequest", request);
-        return filesTransport.submitFile(path, authorization, request)
                 .thenApply(this::errorCheck)
                 .thenApply(response -> deserialize(response, responseType));
     }

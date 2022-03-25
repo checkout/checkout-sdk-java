@@ -18,9 +18,6 @@ public final class Individual {
     @SerializedName("last_name")
     private String lastName;
 
-    @SerializedName("legal_name")
-    private String legalName;
-
     @SerializedName("trading_name")
     private String tradingName;
 

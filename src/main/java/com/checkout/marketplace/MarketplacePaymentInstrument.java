@@ -42,6 +42,9 @@ public final class MarketplacePaymentInstrument {
 
     private InstrumentDocument document;
 
+    @SerializedName("account_holder")
+    private MarketplaceAccountHolder accountHolder;
+
     private BankDetails bank;
 
 }

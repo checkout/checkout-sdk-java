@@ -5,6 +5,11 @@ import com.checkout.SandboxTestFixture;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.IdResponse;
+import com.checkout.marketplace.transfers.CreateTransferRequest;
+import com.checkout.marketplace.transfers.CreateTransferResponse;
+import com.checkout.marketplace.transfers.TransferDestination;
+import com.checkout.marketplace.transfers.TransferSource;
+import com.checkout.marketplace.transfers.TransferType;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.entity.ContentType;
 import org.junit.jupiter.api.Test;
@@ -101,6 +106,25 @@ class MarketplaceTestIT extends SandboxTestFixture {
         final IdResponse fileResponse = blocking(() -> fourApi.marketplaceClient().submitFile(fileRequest));
         assertNotNull(fileResponse);
         assertNotNull(fileResponse.getId());
+    }
+
+    @Test
+    void shouldInitiateTransferOfFunds() {
+
+        final CreateTransferRequest transferRequest = CreateTransferRequest.builder()
+                .transferType(TransferType.COMMISSION)
+                .source(TransferSource.builder()
+                        .id("ent_kidtcgc3ge5unf4a5i6enhnr5m")
+                        .amount(100L)
+                        .build())
+                .destination(TransferDestination.builder()
+                        .id("ent_w4jelhppmfiufdnatam37wrfc4")
+                        .build())
+                .build();
+
+        final CreateTransferResponse response = blocking(() -> fourApi.marketplaceClient().initiateTransferOfFunds(transferRequest));
+        assertNotNull(response.getId());
+        assertNotNull(response.getStatus());
     }
 
 }

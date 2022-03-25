@@ -183,7 +183,7 @@ class DisputesTestIT extends SandboxTestFixture {
         blocking(() -> defaultApi.disputesClient().submitEvidence(disputeDetails.getId()));
     }
 
-    //@Test
+    @Test
     void shouldUploadDisputeFile() throws URISyntaxException {
         //Upload your dispute file evidence
         final URL resource = getClass().getClassLoader().getResource("checkout.jpeg");

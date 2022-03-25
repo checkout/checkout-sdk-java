@@ -22,7 +22,7 @@ import com.checkout.payments.four.response.PaymentResponseBalances;
 import com.checkout.payments.four.response.source.CardResponseSource;
 import com.checkout.payments.four.sender.PaymentCorporateSender;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
-import com.checkout.payments.four.sender.SenderIdentification;
+import com.checkout.common.four.SenderIdentification;
 import com.checkout.payments.four.sender.SenderIdentificationType;
 import com.checkout.tokens.CardTokenResponse;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
+class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
 
     @Test
     void shouldMakeCardPayment() {

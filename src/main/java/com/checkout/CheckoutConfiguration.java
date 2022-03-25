@@ -9,6 +9,8 @@ public interface CheckoutConfiguration {
 
     URI getBaseUri();
 
+    Environment getEnvironment();
+
     SdkCredentials getSdkCredentials();
 
     HttpClientBuilder getHttpClientBuilder();

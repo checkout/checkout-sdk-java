@@ -2,9 +2,12 @@ package com.checkout.four;
 
 import com.checkout.AbstractCheckoutApmApi;
 import com.checkout.ApiClient;
+import com.checkout.ApiClientImpl;
 import com.checkout.CheckoutApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.FilesApiConfiguration;
 import com.checkout.SdkAuthorizationType;
+import com.checkout.UriStrategy;
 import com.checkout.customers.four.CustomersClient;
 import com.checkout.customers.four.CustomersClientImpl;
 import com.checkout.disputes.DisputesClient;
@@ -30,6 +33,9 @@ import com.checkout.tokens.TokensClientImpl;
 import com.checkout.workflows.four.WorkflowsClient;
 import com.checkout.workflows.four.WorkflowsClientImpl;
 
+import java.net.URI;
+import java.util.Optional;
+
 public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutApi, CheckoutApiClient {
 
     private final TokensClient tokensClient;
@@ -45,20 +51,23 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final PaymentLinksClient paymentLinksClient;
     private final HostedPaymentsClient hostedPaymentsClient;
 
-    public CheckoutApiImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, configuration);
-        this.tokensClient = new TokensClientImpl(apiClient, configuration);
-        this.paymentsClient = new PaymentsClientImpl(apiClient, configuration);
-        this.customersClient = new CustomersClientImpl(apiClient, configuration);
-        this.disputesClient = new DisputesClientImpl(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
-        this.instrumentsClient = new InstrumentsClientImpl(apiClient, configuration);
-        this.riskClient = new RiskClientImpl(apiClient, configuration);
-        this.workflowsClient = new WorkflowsClientImpl(apiClient, configuration);
-        this.marketplaceClient = new MarketplaceClientImpl(apiClient, configuration);
-        this.sessionsClient = new SessionsClientImpl(apiClient, configuration);
-        this.forexClient = new ForexClientImpl(apiClient, configuration);
-        this.paymentLinksClient = new PaymentLinksClientImpl(apiClient, configuration);
-        this.hostedPaymentsClient = new HostedPaymentsClientImpl(apiClient, configuration);
+    public CheckoutApiImpl(final CheckoutConfiguration configuration) {
+        super(configuration);
+        this.tokensClient = new TokensClientImpl(this.apiClient, configuration);
+        this.paymentsClient = new PaymentsClientImpl(this.apiClient, configuration);
+        this.customersClient = new CustomersClientImpl(this.apiClient, configuration);
+        this.disputesClient = new DisputesClientImpl(this.apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
+        this.instrumentsClient = new InstrumentsClientImpl(this.apiClient, configuration);
+        this.riskClient = new RiskClientImpl(this.apiClient, configuration);
+        this.workflowsClient = new WorkflowsClientImpl(this.apiClient, configuration);
+        this.sessionsClient = new SessionsClientImpl(this.apiClient, configuration);
+        this.forexClient = new ForexClientImpl(this.apiClient, configuration);
+        this.paymentLinksClient = new PaymentLinksClientImpl(this.apiClient, configuration);
+        this.hostedPaymentsClient = new HostedPaymentsClientImpl(this.apiClient, configuration);
+        this.marketplaceClient = new MarketplaceClientImpl(this.apiClient,
+                getFilesClient(configuration),
+                getTransfersClient(configuration),
+                configuration);
 
     }
 
@@ -120,6 +129,45 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     @Override
     public HostedPaymentsClient hostedPaymentsClient() {
         return hostedPaymentsClient;
+    }
+
+    private ApiClient getFilesClient(final CheckoutConfiguration configuration) {
+        return new ApiClientImpl(configuration, new FilesApiUriStrategy(configuration));
+    }
+
+    private ApiClient getTransfersClient(final CheckoutConfiguration configuration) {
+        return new ApiClientImpl(configuration, new TransfersApiUriStrategy(configuration));
+    }
+
+    private static class FilesApiUriStrategy implements UriStrategy {
+
+        private final CheckoutConfiguration configuration;
+
+        private FilesApiUriStrategy(final CheckoutConfiguration configuration) {
+            this.configuration = configuration;
+        }
+
+        @Override
+        public URI getUri() {
+            return Optional.ofNullable(configuration.getFilesApiConfiguration())
+                    .map(FilesApiConfiguration::getFilesApiEnvironment)
+                    .orElse(configuration.getEnvironment())
+                    .getFilesApiUri();
+        }
+    }
+
+    private static class TransfersApiUriStrategy implements UriStrategy {
+
+        private final CheckoutConfiguration configuration;
+
+        private TransfersApiUriStrategy(final CheckoutConfiguration configuration) {
+            this.configuration = configuration;
+        }
+
+        @Override
+        public URI getUri() {
+            return configuration.getEnvironment().getTransfersApiURI();
+        }
     }
 
 }

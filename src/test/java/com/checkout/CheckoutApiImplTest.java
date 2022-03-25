@@ -1,18 +1,26 @@
 package com.checkout;
 
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.concurrent.Executor;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CheckoutApiImplTest {
 
     @Test
     void shouldInstantiateAndRetrieveClients() {
-        final CheckoutApi checkoutApi = new CheckoutApiImpl(mock(ApiClient.class), mock(CheckoutConfiguration.class));
+        final CheckoutConfiguration configuration = mock(CheckoutConfiguration.class);
+        when(configuration.getHttpClientBuilder()).thenReturn(mock(HttpClientBuilder.class));
+        when(configuration.getExecutor()).thenReturn(mock(Executor.class));
+        when(configuration.getBaseUri()).thenReturn(Environment.SANDBOX.getUri());
+        final CheckoutApi checkoutApi = new CheckoutApiImpl(configuration);
         assertNotNull(checkoutApi.paymentsClient());
         assertNotNull(checkoutApi.sourcesClient());
         assertNotNull(checkoutApi.tokensClient());

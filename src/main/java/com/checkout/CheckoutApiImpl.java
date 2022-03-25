@@ -40,8 +40,8 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final ReconciliationClient reconciliationClient;
     private final RiskClient riskClient;
 
-    public CheckoutApiImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, configuration);
+    public CheckoutApiImpl(final CheckoutConfiguration configuration) {
+        super(configuration);
         this.paymentsClient = new PaymentsClientImpl(apiClient, configuration);
         this.sourcesClient = new SourcesClientImpl(apiClient, configuration);
         this.tokensClient = new TokensClientImpl(apiClient, configuration);
