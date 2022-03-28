@@ -10,6 +10,7 @@ import com.checkout.common.CountryCode;
 import com.checkout.common.CustomerResponse;
 import com.checkout.common.Phone;
 import com.checkout.common.four.Product;
+import com.checkout.payments.PaymentProcessing;
 import com.checkout.payments.four.request.AuthorizationRequest;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.PayoutRequest;
@@ -130,8 +131,13 @@ class PaymentsClientImplTest {
         customerResponse.setId("id");
         customerResponse.setName("name");
         customerResponse.setPhone(Phone.builder().build());
-        final PaymentResponse response = mock(PaymentResponse.class);
+
+        final PaymentProcessing paymentProcessing = new PaymentProcessing();
+        paymentProcessing.setPartnerPaymentId("1234567");
+
+        final PaymentResponse response = new PaymentResponse();
         response.setCustomer(customerResponse);
+        response.setProcessing(paymentProcessing);
 
         when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));

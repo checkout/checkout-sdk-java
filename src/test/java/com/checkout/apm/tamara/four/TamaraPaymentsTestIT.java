@@ -90,6 +90,7 @@ class TamaraPaymentsTestIT extends SandboxTestFixture {
         assertNotNull(response.getCustomer().getName());
         assertNotNull(response.getCustomer().getEmail());
         assertNotNull(response.getCustomer().getPhone());
+        assertNotNull(response.getProcessing().getPartnerPaymentId());
         assertEquals(PaymentStatus.PENDING, response.getStatus());
 
     }

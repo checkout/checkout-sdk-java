@@ -15,4 +15,7 @@ public final class PaymentProcessing {
     @SerializedName("recommendation_code")
     private String recommendationCode;
 
+    @SerializedName("partner_payment_id")
+    private String partnerPaymentId;
+
 }
