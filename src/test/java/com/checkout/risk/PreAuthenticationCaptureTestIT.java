@@ -26,6 +26,7 @@ import com.checkout.risk.source.IdSourcePrism;
 import com.checkout.risk.source.RiskPaymentRequestSource;
 import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -42,6 +43,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
         super(PlatformType.DEFAULT);
     }
 
+    @Disabled("unavailable")
     @Test
     void shouldPreAuthenticate_card() {
 
@@ -66,6 +68,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
 
     }
 
+    @Disabled("unavailable")
     @Test
     void shouldPreAuthenticate_customer() {
 
@@ -87,6 +90,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
 
     }
 
+    @Disabled("unvailable")
     @Test
     void shouldPreAuthenticate_id() {
 

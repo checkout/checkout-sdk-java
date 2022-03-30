@@ -128,7 +128,7 @@ class MarketplaceTestIT extends SandboxTestFixture {
 
         final CreateTransferResponse response = blocking(() -> fourApi.marketplaceClient().initiateTransferOfFunds(transferRequest));
         assertNotNull(response.getId());
-        assertNotNull(response.getStatus());
+        assertEquals("pending", response.getStatus());
     }
 
     @Test
