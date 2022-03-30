@@ -7,6 +7,6 @@ public final class CreateTransferResponse {
 
     private String id;
 
-    private TransferStatus status;
+    private String status;
 
 }
