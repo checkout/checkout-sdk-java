@@ -3,6 +3,7 @@ package com.checkout.payments.request;
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
 import com.checkout.payments.BillingDescriptor;
+import com.checkout.payments.FundTransferType;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.PaymentType;
 import com.checkout.payments.Purpose;
@@ -24,6 +25,9 @@ public final class PayoutRequest {
     private PaymentRequestDestination destination;
 
     private Long amount;
+
+    @SerializedName("fund_transfer_type")
+    private FundTransferType fundTransferType;
 
     private Currency currency;
 
