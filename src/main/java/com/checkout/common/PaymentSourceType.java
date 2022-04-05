@@ -59,5 +59,7 @@ public enum PaymentSourceType {
     @SerializedName("bancontact")
     BANCONTACT,
     @SerializedName("tamara")
-    TAMARA
+    TAMARA,
+    @SerializedName("provider_token")
+    PROVIDER_TOKEN
 }
