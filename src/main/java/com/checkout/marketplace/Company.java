@@ -26,7 +26,7 @@ public final class Company {
     @SerializedName("registered_address")
     private Address registeredAddress;
 
-    private InstrumentDocument document;
+    private EntityDocument document;
 
     private List<Representative> representatives;
 
