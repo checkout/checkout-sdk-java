@@ -5,6 +5,7 @@ import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.workflows.four.actions.request.WorkflowActionRequest;
+import com.checkout.workflows.four.actions.response.WorkflowActionInvocationsResponse;
 import com.checkout.workflows.four.conditions.request.WorkflowConditionRequest;
 import com.checkout.workflows.four.events.EventTypesResponse;
 import com.checkout.workflows.four.events.GetEventResponse;
@@ -126,4 +127,9 @@ public class WorkflowsClientImpl extends AbstractClient implements WorkflowsClie
         return apiClient.postAsync(buildPath(WORKFLOWS, EVENTS, REFLOW), sdkAuthorization(), ReflowResponse.class, reflowRequest, null);
     }
 
+    @Override
+    public CompletableFuture<WorkflowActionInvocationsResponse> getActionInvocations(final String eventId, final String actionId) {
+        validateParams("eventId", eventId, "actionId", actionId);
+        return apiClient.getAsync(buildPath(WORKFLOWS, EVENTS, eventId, ACTIONS, actionId), sdkAuthorization(), WorkflowActionInvocationsResponse.class);
+    }
 }

@@ -6,6 +6,8 @@ import com.checkout.workflows.four.actions.request.WebhookWorkflowActionRequest;
 import com.checkout.workflows.four.conditions.request.EntityWorkflowConditionRequest;
 import com.checkout.workflows.four.conditions.request.EventWorkflowConditionRequest;
 import com.checkout.workflows.four.conditions.request.ProcessingChannelWorkflowConditionRequest;
+import com.checkout.workflows.four.events.SubjectEvent;
+import com.checkout.workflows.four.events.SubjectEventsResponse;
 import org.junit.jupiter.api.AfterEach;
 
 import java.util.Arrays;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 abstract class AbstractWorkflowTestIT extends AbstractPaymentsTestIT {
@@ -89,6 +92,23 @@ abstract class AbstractWorkflowTestIT extends AbstractPaymentsTestIT {
 
         return createWorkflowResponse;
 
+    }
+
+    protected SubjectEvent getSubjectEvent(final String subjectId) {
+
+        final SubjectEventsResponse subjectEventsResponse = blocking(() -> fourApi.workflowsClient().getSubjectEvents(subjectId));
+
+        assertNotNull(subjectEventsResponse);
+        assertEquals(1, subjectEventsResponse.getEvents().size());
+
+        final SubjectEvent paymentApprovedEvent = subjectEventsResponse.getEvents().stream()
+                .filter(event -> event.getType().equals(PAYMENT_APPROVED))
+                .findFirst()
+                .orElse(null);
+
+        assertNotNull(paymentApprovedEvent);
+
+        return paymentApprovedEvent;
     }
 
 }

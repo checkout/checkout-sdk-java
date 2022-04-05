@@ -2,15 +2,12 @@ package com.checkout.workflows.four;
 
 import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.workflows.four.events.SubjectEvent;
-import com.checkout.workflows.four.events.SubjectEventsResponse;
 import com.checkout.workflows.four.reflow.ReflowByEventsRequest;
 import com.checkout.workflows.four.reflow.ReflowBySubjectsRequest;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -102,23 +99,6 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
         assertNull(blocking(() -> fourApi.workflowsClient().reflow(request)));
 
-    }
-
-    private SubjectEvent getSubjectEvent(final String subjectId) {
-
-        final SubjectEventsResponse subjectEventsResponse = blocking(() -> fourApi.workflowsClient().getSubjectEvents(subjectId));
-
-        assertNotNull(subjectEventsResponse);
-        assertEquals(1, subjectEventsResponse.getEvents().size());
-
-        final SubjectEvent paymentApprovedEvent = subjectEventsResponse.getEvents().stream()
-                .filter(event -> event.getType().equals(PAYMENT_APPROVED))
-                .findFirst()
-                .orElse(null);
-
-        assertNotNull(paymentApprovedEvent);
-
-        return paymentApprovedEvent;
     }
 
 }
