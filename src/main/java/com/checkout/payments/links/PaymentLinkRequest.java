@@ -2,6 +2,7 @@ package com.checkout.payments.links;
 
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
+import com.checkout.common.MarketplaceData;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Product;
 import com.checkout.payments.BillingDescriptor;
@@ -75,5 +76,12 @@ public final class PaymentLinkRequest {
 
     @SerializedName("allow_payment_methods")
     private List<PaymentSourceType> allowPaymentMethods;
+
+    // Only available in Four
+
+    @SerializedName("processing_channel_id")
+    private String processingChannelId;
+
+    private MarketplaceData marketplace;
 
 }
