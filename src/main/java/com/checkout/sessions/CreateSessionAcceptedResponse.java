@@ -1,5 +1,6 @@
 package com.checkout.sessions;
 
+import com.checkout.common.ChallengeIndicator;
 import com.checkout.common.Currency;
 import com.checkout.common.Resource;
 import com.google.gson.annotations.SerializedName;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -36,7 +38,8 @@ public final class CreateSessionAcceptedResponse extends Resource {
 
     private SessionStatus status;
 
-    private StatusReason reason;
+    @SerializedName("status_reason")
+    private StatusReason statusReason;
 
     @SerializedName("next_actions")
     private List<NextAction> nextActions;
@@ -47,5 +50,11 @@ public final class CreateSessionAcceptedResponse extends Resource {
     private String reference;
 
     private CardInfo card;
+
+    @SerializedName("authentication_date")
+    private Instant authenticationDate;
+
+    @SerializedName("challenge_indicator")
+    private ChallengeIndicator challengeIndicator;
 
 }

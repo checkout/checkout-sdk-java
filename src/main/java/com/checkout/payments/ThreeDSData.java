@@ -1,5 +1,6 @@
 package com.checkout.payments;
 
+import com.checkout.common.Exemption;
 import com.checkout.common.ThreeDSEnrollmentStatus;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;

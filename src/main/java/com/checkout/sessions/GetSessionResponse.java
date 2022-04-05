@@ -1,5 +1,6 @@
 package com.checkout.sessions;
 
+import com.checkout.common.ChallengeIndicator;
 import com.checkout.common.Currency;
 import com.checkout.common.Resource;
 import com.google.gson.annotations.SerializedName;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -42,7 +44,8 @@ public class GetSessionResponse extends Resource {
 
     private SessionStatus status;
 
-    private StatusReason reason;
+    @SerializedName("status_reason")
+    private StatusReason statusReason;
 
     private Boolean approved;
 
@@ -79,5 +82,19 @@ public class GetSessionResponse extends Resource {
     private String cardholderInfo;
 
     private CardInfo card;
+
+    @SerializedName("authentication_date")
+    private Instant authenticationDate;
+
+    private ThreeDSExemption exemption;
+
+    @SerializedName("flow_type")
+    private ThreeDSFlowType flowType;
+
+    @SerializedName("challenge_indicator")
+    private ChallengeIndicator challengeIndicator;
+
+    @SerializedName("scheme_info")
+    private SchemeInfo schemeInfo;
 
 }

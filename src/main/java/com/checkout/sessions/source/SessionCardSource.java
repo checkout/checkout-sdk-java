@@ -2,6 +2,7 @@ package com.checkout.sessions.source;
 
 import com.checkout.common.Phone;
 import com.checkout.sessions.SessionAddress;
+import com.checkout.sessions.SessionScheme;
 import com.checkout.sessions.SessionSourceType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
@@ -35,8 +36,9 @@ public final class SessionCardSource extends SessionSource {
                               final SessionAddress billingAddress,
                               final Phone homePhone,
                               final Phone mobilePhone,
-                              final Phone workPhone) {
-        super(SessionSourceType.CARD, billingAddress, homePhone, mobilePhone, workPhone);
+                              final Phone workPhone,
+                              final SessionScheme scheme) {
+        super(SessionSourceType.CARD, billingAddress, homePhone, mobilePhone, workPhone, scheme);
         this.number = number;
         this.expiryMonth = expiryMonth;
         this.expiryYear = expiryYear;
