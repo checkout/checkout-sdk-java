@@ -9,6 +9,7 @@ import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.CustomerResponse;
 import com.checkout.common.Phone;
+import com.checkout.common.four.AccountHolder;
 import com.checkout.common.four.Product;
 import com.checkout.payments.PaymentProcessing;
 import com.checkout.payments.four.request.AuthorizationRequest;
@@ -17,6 +18,7 @@ import com.checkout.payments.four.request.PayoutRequest;
 import com.checkout.payments.four.request.source.PayoutRequestCurrencyAccountSource;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.request.source.RequestIdSource;
+import com.checkout.payments.four.request.source.RequestProviderTokenSource;
 import com.checkout.payments.four.request.source.apm.RequestTamaraSource;
 import com.checkout.payments.four.response.AuthorizationResponse;
 import com.checkout.payments.four.response.GetPaymentResponse;
@@ -448,6 +450,30 @@ class PaymentsClientImplTest {
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<VoidResponse> future = paymentsClient.voidPayment("123456", request, "123");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
+    void shouldRequestProviderTokenSourcePayment() throws ExecutionException, InterruptedException {
+
+        final PaymentInstrumentSender sender = mock(PaymentInstrumentSender.class);
+        final PaymentResponse response = mock(PaymentResponse.class);
+
+        final RequestProviderTokenSource source = RequestProviderTokenSource.builder()
+                .token("token")
+                .payment_method("method")
+                .accountHolder(mock(AccountHolder.class))
+                .build();
+
+        final PaymentRequest request = PaymentRequest.builder().sender(sender).source(source).build();
+
+        when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayment(request);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
