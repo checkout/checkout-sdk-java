@@ -1,6 +1,7 @@
 package com.checkout.workflows.four;
 
 import com.checkout.workflows.four.actions.request.WorkflowActionRequest;
+import com.checkout.workflows.four.actions.response.WorkflowActionInvocationsResponse;
 import com.checkout.workflows.four.conditions.request.WorkflowConditionRequest;
 import com.checkout.workflows.four.events.EventTypesResponse;
 import com.checkout.workflows.four.events.GetEventResponse;
@@ -42,5 +43,7 @@ public interface WorkflowsClient {
     CompletableFuture<ReflowResponse> reflowBySubjectAndWorkflow(String subjectId, String workflowId);
 
     CompletableFuture<ReflowResponse> reflow(ReflowRequest reflowRequest);
+
+    CompletableFuture<WorkflowActionInvocationsResponse> getActionInvocations(String eventId, String actionId);
 
 }

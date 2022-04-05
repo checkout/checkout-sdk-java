@@ -7,6 +7,7 @@ import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
 import com.checkout.workflows.four.actions.request.WorkflowActionRequest;
+import com.checkout.workflows.four.actions.response.WorkflowActionInvocationsResponse;
 import com.checkout.workflows.four.conditions.request.WorkflowConditionRequest;
 import com.checkout.workflows.four.events.EventTypesResponse;
 import com.checkout.workflows.four.events.GetEventResponse;
@@ -33,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
@@ -551,6 +553,23 @@ class WorkflowsClientImplTest {
             assertEquals("reflowRequest cannot be null", e.getMessage());
         }
         verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldGetActionInvocations() throws ExecutionException, InterruptedException {
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+
+        final WorkflowActionInvocationsResponse response = mock(WorkflowActionInvocationsResponse.class);
+
+        when(apiClient.getAsync(eq("workflows/events/event_id/actions/action_id"), eq(authorization), eq(WorkflowActionInvocationsResponse.class)))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<WorkflowActionInvocationsResponse> future = workflowsClient.getActionInvocations("event_id", "action_id");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
     }
 
 }
