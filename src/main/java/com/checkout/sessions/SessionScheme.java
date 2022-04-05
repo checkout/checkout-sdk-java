@@ -13,6 +13,8 @@ public enum SessionScheme {
     @SerializedName("amex")
     AMEX,
     @SerializedName("diners")
-    DINERS
+    DINERS,
+    @SerializedName("cartes_bancaires")
+    CARTES_BANCAIRES
 
 }
