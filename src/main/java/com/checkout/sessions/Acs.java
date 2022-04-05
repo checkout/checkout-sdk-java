@@ -33,4 +33,7 @@ public final class Acs {
     @SerializedName("ui_template")
     private UIElements uiTemplate;
 
+    @SerializedName("challenge_cancel_reason_code")
+    private String challengeCancelReasonCode;
+
 }

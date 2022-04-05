@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 public enum AuthenticationType {
 
     @SerializedName("regular")
-    REGULAR
+    REGULAR,
+    @SerializedName("recurring")
+    RECURRING,
 
 }

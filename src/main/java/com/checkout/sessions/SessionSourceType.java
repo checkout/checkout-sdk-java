@@ -10,5 +10,6 @@ public enum SessionSourceType {
     ID,
     @SerializedName("token")
     TOKEN,
-
+    @SerializedName("network_token")
+    NETWORK_TOKEN
 }

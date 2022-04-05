@@ -1,6 +1,7 @@
 package com.checkout.payments;
 
 import com.checkout.common.ChallengeIndicator;
+import com.checkout.common.Exemption;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
