@@ -18,7 +18,10 @@ import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
 import com.checkout.payments.hosted.HostedPaymentRequest;
 import com.checkout.payments.links.PaymentLinkRequest;
+import lombok.SneakyThrows;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -42,6 +45,11 @@ public final class TestHelper {
     public static final String VALID_FOUR_PK = "pk_sbox_pkhpdtvmkgf7hdnpwnbhw7r2uic";
     public static final String INVALID_FOUR_SK = "sk_sbox_m73dzbpy7c-f3gfd46xr4yj5xo4e";
     public static final String INVALID_FOUR_PK = "pk_sbox_pkh";
+
+    @SneakyThrows
+    public static String getMock(final String mock) {
+        return new String(Files.readAllBytes(Paths.get(TestHelper.class.getResource(mock).toURI())));
+    }
 
     public static String generateRandomEmail() {
         return UUID.randomUUID().toString() + "@checkout-sdk-java.com";
