@@ -5,10 +5,12 @@ import com.checkout.workflows.four.actions.WorkflowActionStatus;
 import com.checkout.workflows.four.actions.WorkflowActionType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class WorkflowActionInvocationsResponse extends Resource {
 
     @SerializedName("workflow_id")

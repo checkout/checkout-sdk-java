@@ -3,30 +3,9 @@ package com.checkout;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.InstrumentType;
 import com.checkout.common.PaymentSourceType;
-import com.checkout.instruments.four.create.CreateInstrumentBankAccountResponse;
-import com.checkout.instruments.four.create.CreateInstrumentResponse;
-import com.checkout.instruments.four.create.CreateInstrumentTokenResponse;
-import com.checkout.instruments.four.get.GetBankAccountInstrumentResponse;
-import com.checkout.instruments.four.get.GetCardInstrumentResponse;
-import com.checkout.instruments.four.get.GetInstrumentResponse;
-import com.checkout.instruments.four.update.UpdateInstrumentBankAccountResponse;
-import com.checkout.instruments.four.update.UpdateInstrumentCardResponse;
-import com.checkout.instruments.four.update.UpdateInstrumentResponse;
 import com.checkout.payments.PaymentDestinationType;
-import com.checkout.payments.four.response.destination.PaymentResponseAlternativeDestination;
-import com.checkout.payments.four.response.destination.PaymentResponseBankAccountDestination;
-import com.checkout.payments.four.response.destination.PaymentResponseDestination;
-import com.checkout.payments.four.response.source.CurrencyAccountResponseSource;
-import com.checkout.payments.response.source.AlternativePaymentSourceResponse;
-import com.checkout.payments.response.source.ResponseSource;
 import com.checkout.workflows.four.actions.WorkflowActionType;
-import com.checkout.workflows.four.actions.response.WebhookWorkflowActionResponse;
-import com.checkout.workflows.four.actions.response.WorkflowActionResponse;
 import com.checkout.workflows.four.conditions.WorkflowConditionType;
-import com.checkout.workflows.four.conditions.response.EntityWorkflowConditionResponse;
-import com.checkout.workflows.four.conditions.response.EventWorkflowConditionResponse;
-import com.checkout.workflows.four.conditions.response.ProcessingChannelWorkflowConditionResponse;
-import com.checkout.workflows.four.conditions.response.WorkflowConditionResponse;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -57,35 +36,35 @@ class GsonSerializer implements Serializer {
             .registerTypeAdapter(Instant.class, (JsonDeserializer<Instant>) (JsonElement json, Type typeOfSrc, JsonDeserializationContext context) ->
                     Instant.parse(json.getAsString()))
             // Payments DEFAULT - source
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(ResponseSource.class, CheckoutUtils.TYPE, true, AlternativePaymentSourceResponse.class)
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.payments.response.source.ResponseSource.class, CheckoutUtils.TYPE, true, com.checkout.payments.response.source.AlternativePaymentSourceResponse.class)
                     .registerSubtype(com.checkout.payments.response.source.CardResponseSource.class, identifier(PaymentSourceType.CARD)))
             // Payments DEFAULT - destination
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(PaymentResponseDestination.class, CheckoutUtils.TYPE, true, PaymentResponseAlternativeDestination.class)
-                    .registerSubtype(PaymentResponseBankAccountDestination.class, identifier(PaymentDestinationType.BANK_ACCOUNT)))
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.payments.response.destination.PaymentResponseDestination.class, CheckoutUtils.TYPE, true, com.checkout.payments.response.destination.PaymentResponseAlternativeDestination.class)
+                    .registerSubtype(com.checkout.payments.response.destination.PaymentResponseCardDestination.class, identifier(PaymentDestinationType.CARD)))
             // Payments FOUR - source
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.payments.four.response.source.ResponseSource.class, CheckoutUtils.TYPE, true, com.checkout.payments.four.response.source.AlternativePaymentSourceResponse.class)
                     .registerSubtype(com.checkout.payments.four.response.source.CardResponseSource.class, identifier(PaymentSourceType.CARD))
-                    .registerSubtype(CurrencyAccountResponseSource.class, identifier(PaymentSourceType.CURRENCY_ACCOUNT)))
+                    .registerSubtype(com.checkout.payments.four.response.source.CurrencyAccountResponseSource.class, identifier(PaymentSourceType.CURRENCY_ACCOUNT)))
             // Payments FOUR - destination
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.payments.four.response.destination.PaymentResponseDestination.class, CheckoutUtils.TYPE, true, com.checkout.payments.four.response.destination.PaymentResponseAlternativeDestination.class)
-                    .registerSubtype(PaymentResponseBankAccountDestination.class, identifier(PaymentDestinationType.BANK_ACCOUNT)))
+                    .registerSubtype(com.checkout.payments.four.response.destination.PaymentResponseBankAccountDestination.class, identifier(PaymentDestinationType.BANK_ACCOUNT)))
             // Instruments CS2
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(CreateInstrumentResponse.class, CheckoutUtils.TYPE)
-                    .registerSubtype(CreateInstrumentBankAccountResponse.class, identifier(InstrumentType.BANK_ACCOUNT))
-                    .registerSubtype(CreateInstrumentTokenResponse.class, identifier(InstrumentType.CARD)))
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(GetInstrumentResponse.class, CheckoutUtils.TYPE)
-                    .registerSubtype(GetBankAccountInstrumentResponse.class, identifier(InstrumentType.BANK_ACCOUNT))
-                    .registerSubtype(GetCardInstrumentResponse.class, identifier(InstrumentType.CARD)))
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(UpdateInstrumentResponse.class, CheckoutUtils.TYPE)
-                    .registerSubtype(UpdateInstrumentBankAccountResponse.class, identifier(InstrumentType.BANK_ACCOUNT))
-                    .registerSubtype(UpdateInstrumentCardResponse.class, identifier(InstrumentType.CARD)))
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.instruments.four.create.CreateInstrumentResponse.class, CheckoutUtils.TYPE)
+                    .registerSubtype(com.checkout.instruments.four.create.CreateInstrumentBankAccountResponse.class, identifier(InstrumentType.BANK_ACCOUNT))
+                    .registerSubtype(com.checkout.instruments.four.create.CreateInstrumentTokenResponse.class, identifier(InstrumentType.CARD)))
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.instruments.four.get.GetInstrumentResponse.class, CheckoutUtils.TYPE)
+                    .registerSubtype(com.checkout.instruments.four.get.GetBankAccountInstrumentResponse.class, identifier(InstrumentType.BANK_ACCOUNT))
+                    .registerSubtype(com.checkout.instruments.four.get.GetCardInstrumentResponse.class, identifier(InstrumentType.CARD)))
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.instruments.four.update.UpdateInstrumentResponse.class, CheckoutUtils.TYPE)
+                    .registerSubtype(com.checkout.instruments.four.update.UpdateInstrumentBankAccountResponse.class, identifier(InstrumentType.BANK_ACCOUNT))
+                    .registerSubtype(com.checkout.instruments.four.update.UpdateInstrumentCardResponse.class, identifier(InstrumentType.CARD)))
             // Workflows CS2
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(WorkflowActionResponse.class, CheckoutUtils.TYPE)
-                    .registerSubtype(WebhookWorkflowActionResponse.class, identifier(WorkflowActionType.WEBHOOK)))
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(WorkflowConditionResponse.class, CheckoutUtils.TYPE)
-                    .registerSubtype(EventWorkflowConditionResponse.class, identifier(WorkflowConditionType.EVENT))
-                    .registerSubtype(EntityWorkflowConditionResponse.class, identifier(WorkflowConditionType.ENTITY))
-                    .registerSubtype(ProcessingChannelWorkflowConditionResponse.class, identifier(WorkflowConditionType.PROCESSING_CHANNEL)))
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.workflows.four.actions.response.WorkflowActionResponse.class, CheckoutUtils.TYPE)
+                    .registerSubtype(com.checkout.workflows.four.actions.response.WebhookWorkflowActionResponse.class, identifier(WorkflowActionType.WEBHOOK)))
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.workflows.four.conditions.response.WorkflowConditionResponse.class, CheckoutUtils.TYPE)
+                    .registerSubtype(com.checkout.workflows.four.conditions.response.EventWorkflowConditionResponse.class, identifier(WorkflowConditionType.EVENT))
+                    .registerSubtype(com.checkout.workflows.four.conditions.response.EntityWorkflowConditionResponse.class, identifier(WorkflowConditionType.ENTITY))
+                    .registerSubtype(com.checkout.workflows.four.conditions.response.ProcessingChannelWorkflowConditionResponse.class, identifier(WorkflowConditionType.PROCESSING_CHANNEL)))
             .create();
 
     private final Gson gson;

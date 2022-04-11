@@ -2,7 +2,6 @@ package com.checkout.payments.response.destination;
 
 import com.checkout.common.CheckoutUtils;
 import com.checkout.payments.PaymentDestinationType;
-import com.checkout.payments.four.response.destination.PaymentResponseDestination;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
