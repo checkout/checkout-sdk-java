@@ -20,8 +20,6 @@ public final class CardResponseSource extends AbstractResponseSource implements 
 
     private Phone phone;
 
-    private String number;
-
     @SerializedName("expiry_month")
     private Integer expiryMonth;
 
@@ -31,6 +29,9 @@ public final class CardResponseSource extends AbstractResponseSource implements 
     private String name;
 
     private String scheme;
+
+    @SerializedName("scheme_local")
+    private String schemeLocal;
 
     private String last4;
 

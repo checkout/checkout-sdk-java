@@ -22,13 +22,16 @@ public final class GetCardInstrumentResponse extends GetInstrumentResponse {
     @SerializedName("expiry_year")
     private Integer expiryYear;
 
+    private String name;
+
     private String scheme;
+
+    @SerializedName("scheme_local")
+    private String schemeLocal;
 
     private String last4;
 
     private String bin;
-
-    private String name;
 
     @SerializedName("card_type")
     private CardType cardType;

@@ -1,9 +1,8 @@
 package com.checkout.instruments.four.create;
 
-import com.checkout.common.CountryCode;
-import com.checkout.common.CustomerResponse;
 import com.checkout.common.CardCategory;
 import com.checkout.common.CardType;
+import com.checkout.common.CountryCode;
 import com.checkout.common.InstrumentType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
@@ -17,8 +16,6 @@ public final class CreateInstrumentTokenResponse extends CreateInstrumentRespons
 
     private final InstrumentType type = InstrumentType.CARD;
 
-    private String fingerprint;
-
     @SerializedName("expiry_month")
     private Integer expiryMonth;
 
@@ -26,6 +23,9 @@ public final class CreateInstrumentTokenResponse extends CreateInstrumentRespons
     private Integer expiryYear;
 
     private String scheme;
+
+    @SerializedName("scheme_local")
+    private String schemeLocal;
 
     private String last4;
 
@@ -47,8 +47,5 @@ public final class CreateInstrumentTokenResponse extends CreateInstrumentRespons
 
     @SerializedName("product_type")
     private String productType;
-
-    @SerializedName("customer")
-    private CustomerResponse customer;
 
 }
