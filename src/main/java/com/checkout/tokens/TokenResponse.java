@@ -50,4 +50,9 @@ public class TokenResponse {
     @SerializedName("token_format")
     private String tokenFormat;
 
+    //Only available in CS2
+
+    @SerializedName("scheme_local")
+    private String schemeLocal;
+
 }

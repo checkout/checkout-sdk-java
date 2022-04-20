@@ -1,8 +1,7 @@
 package com.checkout.instruments.four.create;
 
-import com.checkout.common.CustomerResponse;
-import com.checkout.common.four.BankDetails;
 import com.checkout.common.InstrumentType;
+import com.checkout.common.four.BankDetails;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,10 +13,6 @@ import lombok.ToString;
 public final class CreateInstrumentBankAccountResponse extends CreateInstrumentResponse {
 
     private final InstrumentType type = InstrumentType.BANK_ACCOUNT;
-
-    private String fingerprint;
-
-    private CustomerResponse customerResponse;
 
     private BankDetails bank;
 
