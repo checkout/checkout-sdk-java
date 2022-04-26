@@ -6,7 +6,6 @@ import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.FundTransferType;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.PaymentType;
-import com.checkout.payments.Purpose;
 import com.checkout.payments.RiskRequest;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.request.destination.PaymentRequestDestination;
@@ -65,8 +64,6 @@ public final class PayoutRequest {
     private String paymentIp;
 
     private PaymentRecipient recipient;
-
-    private Purpose purpose;
 
     @Builder.Default
     private Map<String, Object> metadata = new HashMap<>();

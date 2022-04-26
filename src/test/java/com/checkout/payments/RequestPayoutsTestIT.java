@@ -12,6 +12,8 @@ import com.checkout.payments.request.destination.PaymentRequestCardDestination;
 import com.checkout.payments.response.PaymentResponse;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,13 +49,15 @@ class RequestPayoutsTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
+        final Map<String, Object> processing = new HashMap<>();
+        processing.put("purpose", "education");
         final PayoutRequest payoutRequest = PayoutRequest.builder()
                 .destination(paymentCardDestination)
                 .capture(false)
                 .currency(Currency.GBP)
                 .amount(10L)
                 .reference(UUID.randomUUID().toString())
-                .purpose(Purpose.EDUCATION)
+                .processing(processing)
                 .build();
 
         final PaymentResponse paymentResponse = defaultApi.paymentsClient().requestPayout(payoutRequest).get();
