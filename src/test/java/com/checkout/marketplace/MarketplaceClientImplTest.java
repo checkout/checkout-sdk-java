@@ -5,9 +5,15 @@ import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
+import com.checkout.common.Currency;
 import com.checkout.common.IdResponse;
 import com.checkout.marketplace.balances.BalancesQuery;
 import com.checkout.marketplace.balances.BalancesResponse;
+import com.checkout.marketplace.payout.schedule.DaySchedule;
+import com.checkout.marketplace.payout.schedule.request.ScheduleFrequencyWeeklyRequest;
+import com.checkout.marketplace.payout.schedule.request.UpdateScheduleRequest;
+import com.checkout.marketplace.payout.schedule.response.GetScheduleResponseDeserializer;
+import com.checkout.marketplace.payout.schedule.response.VoidResponse;
 import com.checkout.marketplace.transfers.CreateTransferRequest;
 import com.checkout.marketplace.transfers.CreateTransferResponse;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -24,6 +30,7 @@ import java.util.concurrent.Executors;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.lenient;
@@ -161,6 +168,41 @@ class MarketplaceClientImplTest {
 
         assertNotNull(future.get());
         assertEquals(balancesResponse, future.get());
+
+    }
+
+    @Test
+    void shouldUpdatePayoutSchedule() throws ExecutionException, InterruptedException {
+        final UpdateScheduleRequest request = UpdateScheduleRequest.builder()
+                .enabled(true)
+                .threshold(1000)
+                .recurrence(ScheduleFrequencyWeeklyRequest.builder()
+                        .byDay(DaySchedule.MONDAY)
+                        .build())
+                .build();
+        final VoidResponse response = mock(VoidResponse.class);
+
+        when(apiClient.putAsync(eq("marketplace/entities/entity_id/payout-schedules"), eq(authorization), eq(VoidResponse.class), anyMap()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<VoidResponse> future = marketplaceClient.updatePayoutSchedule("entity_id", Currency.USD, request);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+    }
+
+    @Test
+    void shouldRetrievePayoutSchedule() throws ExecutionException, InterruptedException {
+
+        final GetScheduleResponseDeserializer response = mock(GetScheduleResponseDeserializer.class);
+
+        when(apiClient.getAsync(eq("marketplace/entities/entity_id/payout-schedules"), eq(authorization), eq(GetScheduleResponseDeserializer.class)))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<GetScheduleResponseDeserializer> future = marketplaceClient.retrievePayoutSchedule("entity_id");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
 
     }
 
