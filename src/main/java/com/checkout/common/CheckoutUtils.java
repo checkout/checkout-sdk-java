@@ -7,6 +7,10 @@ public final class CheckoutUtils {
 
     public static final String PROJECT_NAME = "checkout-sdk-java";
     public static final String TYPE = "type";
+    public static final String FREQUENCY = "frequency";
+    public static final String DAILY = "Daily";
+    public static final String WEEKLY = "Weekly";
+    public static final String MONTHLY = "Monthly";
 
     private CheckoutUtils() {
     }
