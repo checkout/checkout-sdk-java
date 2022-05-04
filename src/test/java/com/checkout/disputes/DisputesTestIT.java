@@ -113,7 +113,7 @@ class DisputesTestIT extends SandboxTestFixture {
     void shouldTestFullDisputesWorkFlow() throws Exception {
         //Create a payment who triggers a dispute
         final CardTokenRequest cardTokenRequest = createCardTokenRequest();
-        final CardTokenResponse cardTokenResponse = blocking(() -> defaultApi.tokensClient().request(cardTokenRequest));
+        final CardTokenResponse cardTokenResponse = blocking(() -> defaultApi.tokensClient().requestCardToken(cardTokenRequest));
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestTokenSource.builder().token(cardTokenResponse.getToken()).build())
                 .amount(1040L)

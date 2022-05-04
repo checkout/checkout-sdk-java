@@ -18,13 +18,13 @@ public class TokensClientImpl extends AbstractClient implements TokensClient {
     }
 
     @Override
-    public CompletableFuture<CardTokenResponse> request(final CardTokenRequest cardTokenRequest) {
+    public CompletableFuture<CardTokenResponse> requestCardToken(final CardTokenRequest cardTokenRequest) {
         validateParams("cardTokenRequest", cardTokenRequest);
         return apiClient.postAsync(TOKENS_PATH, sdkAuthorization(), CardTokenResponse.class, cardTokenRequest, null);
     }
 
     @Override
-    public CompletableFuture<TokenResponse> request(final WalletTokenRequest walletTokenRequest) {
+    public CompletableFuture<TokenResponse> requestWalletToken(final WalletTokenRequest walletTokenRequest) {
         validateParams("walletTokenRequest", walletTokenRequest);
         return apiClient.postAsync(TOKENS_PATH, sdkAuthorization(), TokenResponse.class, walletTokenRequest, null);
     }

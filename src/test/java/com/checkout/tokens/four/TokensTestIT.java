@@ -5,7 +5,6 @@ import com.checkout.SandboxTestFixture;
 import com.checkout.TestCardSource;
 import com.checkout.common.CardCategory;
 import com.checkout.common.CardType;
-import com.checkout.common.CountryCode;
 import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
 import com.checkout.tokens.TokenType;
@@ -32,7 +31,7 @@ class TokensTestIT extends SandboxTestFixture {
                 .expiryYear(TestCardSource.VISA.getExpiryYear())
                 .build();
 
-        final CardTokenResponse response = blocking(() -> fourApi.tokensClient().request(request));
+        final CardTokenResponse response = blocking(() -> fourApi.tokensClient().requestCardToken(request));
 
         assertNotNull(response);
         assertEquals(TokenType.CARD, response.getType());

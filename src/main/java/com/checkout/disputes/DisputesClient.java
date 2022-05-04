@@ -14,14 +14,14 @@ public interface DisputesClient {
 
     CompletableFuture<Void> accept(String disputeId);
 
-    CompletableFuture<Void> putEvidence(String id, DisputeEvidenceRequest disputeEvidence);
+    CompletableFuture<Void> putEvidence(String disputeId, DisputeEvidenceRequest disputeEvidence);
 
     CompletableFuture<DisputeEvidenceResponse> getEvidence(String disputeId);
 
     CompletableFuture<Void> submitEvidence(String disputeId);
 
-    CompletableFuture<IdResponse> uploadFile(FileRequest request);
+    CompletableFuture<IdResponse> uploadFile(FileRequest fileRequest);
 
-    CompletableFuture<FileDetailsResponse> getFileDetails(String id);
+    CompletableFuture<FileDetailsResponse> getFileDetails(String fileId);
 
 }

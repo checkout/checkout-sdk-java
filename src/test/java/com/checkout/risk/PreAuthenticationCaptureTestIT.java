@@ -119,7 +119,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
         cardTokenRequest.setBillingAddress(billingAddress);
         cardTokenRequest.setPhone(phone);
 
-        final CardTokenResponse cardToken = blocking(() -> defaultApi.tokensClient().request(cardTokenRequest));
+        final CardTokenResponse cardToken = blocking(() -> defaultApi.tokensClient().requestCardToken(cardTokenRequest));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type(InstrumentType.TOKEN)
@@ -140,7 +140,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final CreateInstrumentResponse response = blocking(() -> defaultApi.instrumentsClient().createInstrument(request));
+        final CreateInstrumentResponse response = blocking(() -> defaultApi.instrumentsClient().create(request));
 
         final IdSourcePrism idSourcePrism = IdSourcePrism.builder()
                 .id(response.getId()).cvv(TestCardSource.VISA.getCvv())

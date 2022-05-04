@@ -4,8 +4,8 @@ import java.util.concurrent.CompletableFuture;
 
 public interface TokensClient {
 
-    CompletableFuture<CardTokenResponse> request(CardTokenRequest cardTokenRequest);
+    CompletableFuture<CardTokenResponse> requestCardToken(CardTokenRequest cardTokenRequest);
 
-    CompletableFuture<TokenResponse> request(WalletTokenRequest walletTokenRequest);
+    CompletableFuture<TokenResponse> requestWalletToken(WalletTokenRequest walletTokenRequest);
 
 }

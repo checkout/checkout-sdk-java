@@ -20,20 +20,19 @@ class SourcesTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void can_request_sepa_source() throws Exception {
-        final SourceRequest sourceRequest = createSepaSourceRequest();
-        final SourceResponse sourceResponse = defaultApi.sourcesClient().requestAsync(sourceRequest).get();
+    void shouldCreateSepaSource() throws Exception {
+        final SepaSourceRequest sourceRequest = createSepaSourceRequest();
+        final SepaSourceResponse sourceResponse = defaultApi.sourcesClient().createSepaSource(sourceRequest).get();
 
         assertNotNull(sourceResponse);
-        final SourceProcessed source = sourceResponse.getSource();
-        assertFalse(StringUtils.isEmpty(source.getId()));
-        assertEquals("10000", source.getResponseCode());
-        assertNotNull(source.getResponseData());
-        assertTrue(sourceRequest.getType().equalsIgnoreCase(source.getType()));
-        assertTrue(source.getResponseData().containsKey("mandate_reference"));
+        assertFalse(StringUtils.isEmpty(sourceResponse.getId()));
+        assertEquals("10000", sourceResponse.getResponseCode());
+        assertNotNull(sourceResponse.getResponseData());
+        assertEquals(SourceType.SEPA, sourceResponse.getType());
+        assertTrue(sourceResponse.getResponseData().containsKey("mandate_reference"));
     }
 
-    private SourceRequest createSepaSourceRequest() {
+    private SepaSourceRequest createSepaSourceRequest() {
         final Address billingAddress = new Address();
         billingAddress.setAddressLine1("CheckoutSdk.com");
         billingAddress.setAddressLine2("90 Tottenham Court Road");
@@ -54,10 +53,12 @@ class SourcesTestIT extends SandboxTestFixture {
         sourceData.put("billing_descriptor", "Java SDK test");
         sourceData.put("mandate_type", "single");
 
-        final SourceRequest request = new SourceRequest("sepa", billingAddress);
-        request.setPhone(phone);
-        request.setReference("Java SDK test");
-        request.setSourceData(sourceData);
+        final SepaSourceRequest request = SepaSourceRequest.builder()
+                .phone(phone)
+                .billingAddress(billingAddress)
+                .sourceData(sourceData)
+                .reference("Java SDK tes")
+                .build();
 
         return request;
     }
