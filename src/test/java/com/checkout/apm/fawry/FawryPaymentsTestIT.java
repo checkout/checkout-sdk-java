@@ -89,7 +89,11 @@ class FawryPaymentsTestIT extends SandboxTestFixture {
                 ))
                 .build();
 
-        final PaymentRequest request = PaymentRequest.fawry(fawrySource, Currency.EGP, 1000L);
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(fawrySource)
+                .currency(Currency.EGP)
+                .amount(1000L)
+                .build();
 
         final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);
