@@ -8,9 +8,11 @@ import com.checkout.common.four.IdResponse;
 
 import java.util.concurrent.CompletableFuture;
 
+import static com.checkout.common.CheckoutUtils.validateParams;
+
 public class CustomersClientImpl extends AbstractClient implements CustomersClient {
 
-    public static final String CUSTOMERS_PATH = "/customers";
+    public static final String CUSTOMERS_PATH = "customers";
 
     public CustomersClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
@@ -18,21 +20,25 @@ public class CustomersClientImpl extends AbstractClient implements CustomersClie
 
     @Override
     public CompletableFuture<CustomerResponse> get(final String customerId) {
+        validateParams("customerId", customerId);
         return apiClient.getAsync(getCustomersUrl(customerId), sdkAuthorization(), CustomerResponse.class);
     }
 
     @Override
     public CompletableFuture<IdResponse> create(final CustomerRequest customerRequest) {
+        validateParams("customerRequest", customerRequest);
         return apiClient.postAsync(CUSTOMERS_PATH, sdkAuthorization(), IdResponse.class, customerRequest, null);
     }
 
     @Override
     public CompletableFuture<Void> update(final String customerId, final CustomerRequest customerRequest) {
+        validateParams("customerId", customerId, "customerRequest", customerRequest);
         return apiClient.patchAsync(getCustomersUrl(customerId), sdkAuthorization(), Void.class, customerRequest, null);
     }
 
     @Override
     public CompletableFuture<Void> delete(final String customerId) {
+        validateParams("customerId", customerId);
         return apiClient.deleteAsync(getCustomersUrl(customerId), sdkAuthorization());
     }
 

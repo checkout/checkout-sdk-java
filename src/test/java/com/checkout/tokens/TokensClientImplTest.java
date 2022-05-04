@@ -61,7 +61,7 @@ class TokensClientImplTest {
     void shouldThrowException_whenRequestIsNull_cardToken() {
 
         try {
-            tokensClient.request((CardTokenRequest) null);
+            tokensClient.requestCardToken((CardTokenRequest) null);
             fail();
         } catch (final CheckoutArgumentException checkoutArgumentException) {
             assertEquals("cardTokenRequest cannot be null", checkoutArgumentException.getMessage());
@@ -79,7 +79,7 @@ class TokensClientImplTest {
 
         final CardTokenRequest cardTokenRequest = CardTokenRequest.builder().number("123").expiryMonth(3).expiryYear(2024).build();
 
-        tokensClient.request(cardTokenRequest);
+        tokensClient.requestCardToken(cardTokenRequest);
 
         verify(apiClient).postAsync(eq("tokens"), eq(authorization), eq(CardTokenResponse.class), eq(cardTokenRequest), isNull());
 
@@ -90,7 +90,7 @@ class TokensClientImplTest {
 
         try {
 
-            tokensClient.request((WalletTokenRequest) null);
+            tokensClient.requestWalletToken((WalletTokenRequest) null);
             fail();
         } catch (final CheckoutArgumentException checkoutArgumentException) {
             assertEquals("walletTokenRequest cannot be null", checkoutArgumentException.getMessage());
@@ -130,7 +130,7 @@ class TokensClientImplTest {
                 .applePayTokenData(applePayTokenData)
                 .build();
 
-        tokensClient.request(applePayTokenRequest);
+        tokensClient.requestWalletToken(applePayTokenRequest);
 
         verify(apiClient).postAsync(eq("tokens"), eq(authorization), eq(TokenResponse.class), eq(applePayTokenRequest), isNull());
 
@@ -152,7 +152,7 @@ class TokensClientImplTest {
                 .googlePayTokenData(googlePayTokenData)
                 .build();
 
-        tokensClient.request(googlePayTokenRequest);
+        tokensClient.requestWalletToken(googlePayTokenRequest);
 
         verify(apiClient).postAsync(eq("tokens"), eq(authorization), eq(TokenResponse.class), eq(googlePayTokenRequest), isNull());
 
