@@ -13,7 +13,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class RequestBenefitPaySource extends AbstractRequestSource {
+public class RequestBenefitPaySource extends AbstractRequestSource {
 
     @SerializedName("integration_type")
     private String integrationType;

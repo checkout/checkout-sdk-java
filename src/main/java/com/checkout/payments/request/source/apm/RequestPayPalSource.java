@@ -15,7 +15,7 @@ import java.util.Map;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class RequestPayPalSource extends AbstractRequestSource {
+public class RequestPayPalSource extends AbstractRequestSource {
 
     @SerializedName("invoice_number")
     private String invoiceNumber;
@@ -29,7 +29,7 @@ public final class RequestPayPalSource extends AbstractRequestSource {
     private Map<String, String> stc;
 
     @Builder
-    private RequestPayPalSource(final String invoiceNumber,
+    public RequestPayPalSource(final String invoiceNumber,
                                final String recipientName,
                                final String logoUrl,
                                final Map<String, String> stc) {
