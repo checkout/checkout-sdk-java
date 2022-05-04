@@ -22,7 +22,6 @@ class CheckoutApiImplTest {
         when(configuration.getEnvironment()).thenReturn(Environment.SANDBOX);
         when(configuration.getHttpClientBuilder()).thenReturn(mock(HttpClientBuilder.class));
         when(configuration.getExecutor()).thenReturn(mock(Executor.class));
-        when(configuration.getBaseUri()).thenReturn(Environment.SANDBOX.getUri());
         final CheckoutApi checkoutApi = new CheckoutApiImpl(configuration);
         assertNotNull(checkoutApi.tokensClient());
         assertNotNull(checkoutApi.paymentsClient());

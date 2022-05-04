@@ -28,7 +28,11 @@ class IdealPaymentsTestIT extends SandboxTestFixture {
                 .language("nl")
                 .build();
 
-        final PaymentRequest request = PaymentRequest.ideal(idealSource, Currency.EUR, 1000L);
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(idealSource)
+                .currency(Currency.EUR)
+                .amount(1000L)
+                .build();
 
         final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);

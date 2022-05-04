@@ -12,7 +12,6 @@ import com.checkout.payments.PaymentStatus;
 import com.checkout.payments.ThreeDSEnrollment;
 import com.checkout.payments.ThreeDSRequest;
 import com.checkout.payments.four.request.PaymentRequest;
-import com.checkout.payments.four.request.Payments;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.request.source.RequestIdSource;
 import com.checkout.payments.four.request.source.RequestTokenSource;
@@ -61,7 +60,9 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                         .build())
                 .build();
 
-        final PaymentRequest request = Payments.card(source).individualSender(sender)
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(source)
+                .sender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())
                 .amount(10L)
@@ -133,7 +134,9 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
 
         final ThreeDSRequest threeDSRequest = ThreeDSRequest.builder().enabled(true).challengeIndicator(ChallengeIndicator.NO_CHALLENGE_REQUESTED).build();
 
-        final PaymentRequest request = Payments.card(source).individualSender(sender)
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(source)
+                .sender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())
                 .amount(45L)
@@ -196,7 +199,9 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                         .build())
                 .build();
 
-        final PaymentRequest request = Payments.card(source).individualSender(sender)
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(source)
+                .sender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())
                 .amount(0L)
@@ -249,7 +254,9 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
 
         final PaymentIndividualSender sender = getIndividualSender();
 
-        final PaymentRequest idSourceRequest = Payments.id(idSource).individualSender(sender)
+        final PaymentRequest idSourceRequest = PaymentRequest.builder()
+                .source(idSource)
+                .sender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())
                 .amount(16L)
@@ -307,7 +314,9 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
 
         final PaymentCorporateSender sender = getCorporateSender();
 
-        final PaymentRequest tokenRequest = Payments.token(tokenSource).corporateSender(sender)
+        final PaymentRequest tokenRequest = PaymentRequest.builder()
+                .source(tokenSource)
+                .sender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())
                 .amount(3456L)
@@ -364,7 +373,9 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
 
         final ThreeDSRequest threeDSRequest = ThreeDSRequest.builder().enabled(true).challengeIndicator(ChallengeIndicator.NO_CHALLENGE_REQUESTED).build();
 
-        final PaymentRequest tokenRequest = Payments.token(tokenSource).individualSender(sender)
+        final PaymentRequest tokenRequest = PaymentRequest.builder()
+                .source(tokenSource)
+                .sender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())
                 .amount(677777L)

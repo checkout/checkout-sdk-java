@@ -5,7 +5,6 @@ import com.checkout.ApiClient;
 import com.checkout.ApiClientImpl;
 import com.checkout.CheckoutApiClient;
 import com.checkout.CheckoutConfiguration;
-import com.checkout.FilesApiConfiguration;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.UriStrategy;
 import com.checkout.customers.four.CustomersClient;
@@ -34,7 +33,6 @@ import com.checkout.workflows.four.WorkflowsClient;
 import com.checkout.workflows.four.WorkflowsClientImpl;
 
 import java.net.URI;
-import java.util.Optional;
 
 public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutApi, CheckoutApiClient {
 
@@ -154,10 +152,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
 
         @Override
         public URI getUri() {
-            return Optional.ofNullable(configuration.getFilesApiConfiguration())
-                    .map(FilesApiConfiguration::getFilesApiEnvironment)
-                    .orElse(configuration.getEnvironment())
-                    .getFilesApiUri();
+            return configuration.getEnvironment().getFilesApiUri();
         }
     }
 
