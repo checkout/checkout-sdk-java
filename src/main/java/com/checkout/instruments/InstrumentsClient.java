@@ -4,14 +4,14 @@ import java.util.concurrent.CompletableFuture;
 
 public interface InstrumentsClient {
 
-    CompletableFuture<CreateInstrumentResponse> createInstrument(CreateInstrumentRequest createInstrumentRequest);
+    CompletableFuture<CreateInstrumentResponse> create(CreateInstrumentRequest createInstrumentRequest);
 
-    CompletableFuture<InstrumentDetailsResponse> getInstrument(String instrumentId);
+    CompletableFuture<InstrumentDetailsResponse> get(String instrumentId);
 
-    CompletableFuture<UpdateInstrumentResponse> updateInstrument(String instrumentId, UpdateInstrumentRequest updateInstrumentRequest);
+    CompletableFuture<UpdateInstrumentResponse> update(String instrumentId, UpdateInstrumentRequest updateInstrumentRequest);
 
     /**
      * @param instrumentId - matching a pattern ^(src)_(\w{26})$
      */
-    CompletableFuture<Void> deleteInstrument(String instrumentId);
+    CompletableFuture<Void> delete(String instrumentId);
 }

@@ -137,7 +137,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                 .expiryMonth(CardSourceHelper.Visa.EXPIRY_MONTH)
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
                 .build();
-        return blocking(() -> tokensClient.request(request));
+        return blocking(() -> tokensClient.requestCardToken(request));
     }
 
 }
