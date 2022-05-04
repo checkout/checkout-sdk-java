@@ -37,7 +37,11 @@ class BoletoPaymentsTestIT extends SandboxTestFixture {
                 .payer(Payer.builder().email("john@doe-enterprises.com").name("John Doe").document("53033315550").build())
                 .build();
 
-        final PaymentRequest request = PaymentRequest.boleto(boletoSource, Currency.BRL, 100L);
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(boletoSource)
+                .currency(Currency.BRL)
+                .amount(100L)
+                .build();
 
         final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);
@@ -73,7 +77,11 @@ class BoletoPaymentsTestIT extends SandboxTestFixture {
                 .payer(Payer.builder().email("john@doe-enterprises.com").name("John Doe").document("53033315550").build())
                 .build();
 
-        final PaymentRequest request = PaymentRequest.boleto(boletoSource, Currency.BRL, 100L);
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(boletoSource)
+                .currency(Currency.BRL)
+                .amount(100L)
+                .build();
 
         final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);

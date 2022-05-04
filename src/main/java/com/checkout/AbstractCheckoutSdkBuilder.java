@@ -2,40 +2,17 @@ package com.checkout;
 
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import java.net.URI;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ForkJoinPool;
-
-import static java.util.Optional.ofNullable;
 
 public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
 
     protected HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
     private Environment environment;
-    private Environment filesApiEnvironment;
-    private URI uri;
     private Executor executor = ForkJoinPool.commonPool();
 
     public AbstractCheckoutSdkBuilder<T> environment(final Environment environment) {
         this.environment = environment;
-        return this;
-    }
-
-    /**
-     * @deprecated Won't be supported anymore from version 6.0.0 in favor of using defined URI's in Environment
-     */
-    @Deprecated
-    public AbstractCheckoutSdkBuilder<T> uri(final URI uri) {
-        this.uri = uri;
-        return this;
-    }
-
-    /**
-     * @deprecated Won't be supported anymore from version 6.0.0 in favor of using defined URI's in Environment
-     */
-    @Deprecated
-    public AbstractCheckoutSdkBuilder<T> enableFilesApi(final Environment filesApiEnvironment) {
-        this.filesApiEnvironment = filesApiEnvironment;
         return this;
     }
 
@@ -64,11 +41,7 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
     }
 
     private CheckoutConfiguration buildCheckoutConfiguration(final SdkCredentials sdkCredentials) {
-        final FilesApiConfiguration filesApiConfiguration = ofNullable(filesApiEnvironment).map(FilesApiConfiguration::new).orElse(null);
-        if (uri == null) {
-            return new DefaultCheckoutConfiguration(sdkCredentials, getEnvironment(), httpClientBuilder, executor, filesApiConfiguration);
-        }
-        return new DefaultCheckoutConfiguration(sdkCredentials, environment, uri, httpClientBuilder, executor, filesApiConfiguration);
+        return new DefaultCheckoutConfiguration(sdkCredentials, getEnvironment(), httpClientBuilder, executor);
     }
 
     public abstract T build();

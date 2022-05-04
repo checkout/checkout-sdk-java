@@ -4,8 +4,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,7 +23,7 @@ class DefaultCheckoutConfigurationTest {
     void shouldFailCreatingConfiguration() {
         try {
             final FourStaticKeysSdkCredentials credentials = Mockito.mock(FourStaticKeysSdkCredentials.class);
-            new DefaultCheckoutConfiguration(credentials, (Environment) null, null, null, null);
+            new DefaultCheckoutConfiguration(credentials, null, null, null);
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
@@ -34,27 +32,12 @@ class DefaultCheckoutConfigurationTest {
     }
 
     @Test
-    void shouldFailCreatingConfiguration_invalidURI() {
-        try {
-            final FourStaticKeysSdkCredentials credentials = Mockito.mock(FourStaticKeysSdkCredentials.class);
-            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, (URI) null, null, null, null);
-            fail();
-        } catch (final Exception e) {
-            assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("uri cannot be null", e.getMessage());
-        }
-    }
-
-    @Test
-    void shouldCreateConfiguration() throws URISyntaxException {
+    void shouldCreateConfiguration() {
 
         final FourStaticKeysSdkCredentials credentials = Mockito.mock(FourStaticKeysSdkCredentials.class);
 
-        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
-        assertEquals(Environment.PRODUCTION.getUri(), configuration.getBaseUri());
-
-        final CheckoutConfiguration configuration2 = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, new URI("https://www.test.checkout.com/"), DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
-        assertEquals(URI.create("https://www.test.checkout.com/"), configuration2.getBaseUri());
+        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR);
+        assertEquals(Environment.PRODUCTION, configuration.getEnvironment());
 
     }
 
@@ -63,9 +46,9 @@ class DefaultCheckoutConfigurationTest {
 
         final FourStaticKeysSdkCredentials credentials = Mockito.mock(FourStaticKeysSdkCredentials.class);
 
-        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
+        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR);
 
-        assertEquals(Environment.PRODUCTION.getUri(), configuration.getBaseUri());
+        assertEquals(Environment.PRODUCTION, configuration.getEnvironment());
         assertNotNull(configuration.getHttpClientBuilder());
         assertEquals(ForkJoinPool.commonPool(), configuration.getExecutor());
     }
@@ -78,23 +61,20 @@ class DefaultCheckoutConfigurationTest {
         final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
         final ExecutorService executorService = Executors.newFixedThreadPool(4);
 
-        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, httpClientBuilder, executorService, null);
+        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, httpClientBuilder, executorService);
 
-        assertEquals(Environment.PRODUCTION.getUri(), configuration.getBaseUri());
+        assertEquals(Environment.PRODUCTION, configuration.getEnvironment());
         assertEquals(httpClientBuilder, configuration.getHttpClientBuilder());
         assertEquals(executorService, configuration.getExecutor());
     }
 
     @Test
-    void shouldCreateConfigurationForProd() throws URISyntaxException {
+    void shouldCreateConfigurationForProd() {
 
         final FourStaticKeysSdkCredentials credentials = Mockito.mock(FourStaticKeysSdkCredentials.class);
 
-        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
-        assertEquals(Environment.PRODUCTION.getUri(), configuration.getBaseUri());
-
-        final CheckoutConfiguration configuration2 = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, new URI("https://www.test.checkout.com/"), DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, null);
-        assertEquals(URI.create("https://www.test.checkout.com/"), configuration2.getBaseUri());
+        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR);
+        assertEquals(Environment.PRODUCTION, configuration.getEnvironment());
 
     }
 

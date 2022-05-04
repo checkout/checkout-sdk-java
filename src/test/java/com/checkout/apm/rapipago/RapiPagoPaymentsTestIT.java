@@ -81,7 +81,11 @@ class RapiPagoPaymentsTestIT extends SandboxTestFixture {
                 .payer(Payer.builder().email("bruce@wayne-enterprises.com").name("Bruce Wayne").build())
                 .build();
 
-        final PaymentRequest request = PaymentRequest.rapiPago(rapiPagoSource, Currency.ARS, 100000L);
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(rapiPagoSource)
+                .currency(Currency.ARS)
+                .amount(100000L)
+                .build();
 
         final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
 

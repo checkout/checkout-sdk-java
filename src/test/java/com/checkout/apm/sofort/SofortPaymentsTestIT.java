@@ -6,6 +6,7 @@ import com.checkout.common.Currency;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.PaymentStatus;
 import com.checkout.payments.request.PaymentRequest;
+import com.checkout.payments.request.source.apm.RequestSofortSource;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
 import com.checkout.payments.response.source.AlternativePaymentSourceResponse;
@@ -24,7 +25,11 @@ class SofortPaymentsTestIT extends SandboxTestFixture {
     @Test
     void shouldSucceedSofortPayment() {
 
-        final PaymentRequest request = PaymentRequest.sofort(Currency.EUR, 100L);
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(new RequestSofortSource())
+                .currency(Currency.EUR)
+                .amount(100L)
+                .build();
 
         final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
 

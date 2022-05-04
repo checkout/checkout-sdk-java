@@ -3,6 +3,8 @@ on:
   pull_request:
     branches:
       - master
+      - 'integration/**'
+      - 'feature/**'
 jobs:
   job-container:
     runs-on: ubuntu-latest
