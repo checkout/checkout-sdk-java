@@ -9,6 +9,7 @@ import com.checkout.payments.PaymentStatus;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.source.apm.Payer;
 import com.checkout.payments.request.source.apm.RequestOxxoSource;
+import com.checkout.payments.request.source.apm.RequestSofortSource;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
 import com.checkout.payments.response.source.AlternativePaymentSourceResponse;
@@ -81,7 +82,11 @@ class OxxoPaymentsTestIT extends SandboxTestFixture {
                 .payer(Payer.builder().email("bruce@wayne-enterprises.com").name("Bruce Wayne").build())
                 .build();
 
-        final PaymentRequest request = PaymentRequest.oxxo(oxxoSource, Currency.MXN, 100000L);
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(oxxoSource)
+                .currency(Currency.MXN)
+                .amount(100L)
+                .build();
 
         final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
 
