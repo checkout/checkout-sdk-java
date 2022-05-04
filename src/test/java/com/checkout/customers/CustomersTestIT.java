@@ -84,7 +84,7 @@ class CustomersTestIT extends SandboxTestFixture {
 
     @Test
     void shouldGetCustomerDetailsWithInstrument() {
-        final CardTokenResponse cardToken = blocking(() -> defaultApi.tokensClient().request(createValidTokenRequest()));
+        final CardTokenResponse cardToken = blocking(() -> defaultApi.tokensClient().requestCardToken(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type(InstrumentType.TOKEN)
@@ -97,7 +97,7 @@ class CustomersTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final CreateInstrumentResponse instrumentResponse = blocking(() -> defaultApi.instrumentsClient().createInstrument(request));
+        final CreateInstrumentResponse instrumentResponse = blocking(() -> defaultApi.instrumentsClient().create(request));
         assertNotNull(instrumentResponse);
         assertNotNull(instrumentResponse.getCustomer());
         assertNotNull(instrumentResponse.getCustomer().getId());

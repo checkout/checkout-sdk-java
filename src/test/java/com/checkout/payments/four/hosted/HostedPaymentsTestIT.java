@@ -25,7 +25,7 @@ class HostedPaymentsTestIT extends SandboxTestFixture {
     @Test
     void shouldCreateAndGetHostedPayments() {
         final HostedPaymentRequest request = TestHelper.createHostedPaymentRequest(REFERENCE);
-        final HostedPaymentResponse response = blocking(() -> fourApi.hostedPaymentsClient().createAsync(request));
+        final HostedPaymentResponse response = blocking(() -> fourApi.hostedPaymentsClient().createHostedPaymentsPageSession(request));
         assertNotNull(response);
         assertNotNull(response.getId());
         assertEquals(REFERENCE, response.getReference());
@@ -33,7 +33,7 @@ class HostedPaymentsTestIT extends SandboxTestFixture {
         assertTrue(response.getLinks().containsKey("redirect"));
         assertNotNull(response.getWarnings());
 
-        final HostedPaymentDetailsResponse detailsResponse = blocking(() -> fourApi.hostedPaymentsClient().get(response.getId()));
+        final HostedPaymentDetailsResponse detailsResponse = blocking(() -> fourApi.hostedPaymentsClient().getHostedPaymentsPageDetails(response.getId()));
 
         assertNotNull(detailsResponse);
         assertNotNull(detailsResponse.getId());

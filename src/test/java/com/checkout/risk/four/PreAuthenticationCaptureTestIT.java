@@ -118,7 +118,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
                 .build();
 
-        final CardTokenResponse cardTokenResponse = blocking(() -> fourApi.tokensClient().request(cardTokenRequest));
+        final CardTokenResponse cardTokenResponse = blocking(() -> fourApi.tokensClient().requestCardToken(cardTokenRequest));
 
         final CreateInstrumentTokenRequest createInstrumentTokenRequest = CreateInstrumentTokenRequest.builder()
                 .token(cardTokenResponse.getToken())
