@@ -12,7 +12,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class RequestEpsSource extends AbstractRequestSource {
+public class RequestEpsSource extends AbstractRequestSource {
 
     private String purpose;
 

@@ -1,6 +1,5 @@
 package com.checkout.payments;
 
-import com.checkout.CheckoutApiException;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.PaymentSourceType;
@@ -28,6 +27,7 @@ import com.checkout.payments.request.source.apm.RequestSofortSource;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
 import com.checkout.payments.response.source.AlternativePaymentSourceResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -36,11 +36,11 @@ import static com.checkout.TestHelper.getPayer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
 
     @Test
+    @Disabled("not available")
     void shouldMakeAliPayPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(new RequestAlipaySource())
@@ -58,6 +58,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("not available")
     void shouldMakeBenefitPayPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestBenefitPaySource.builder()
@@ -67,16 +68,17 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .amount(100L)
                 .build();
 
-        try {
-            paymentsClient.requestPayment(paymentRequest).get();
-            fail();
-        } catch (Exception e) {
-            assertTrue(e.getCause() instanceof CheckoutApiException);
-            assertEquals("The API response status code (422) does not indicate success.", e.getCause().getMessage());
-        }
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
+        assertNotNull(paymentResponse);
+
+        final GetPaymentResponse paymentDetails = blocking(() -> paymentsClient.getPayment(paymentResponse.getId()));
+        assertNotNull(paymentDetails);
+        assertTrue(paymentDetails.getSource() instanceof AlternativePaymentSourceResponse);
+        assertEquals(PaymentSourceType.BENEFITPAY, paymentDetails.getSource().getType());
     }
 
     @Test
+    @Disabled("not available")
     void shouldMakeBalotoPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestBalotoSource.builder()
@@ -88,16 +90,17 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .amount(100000L)
                 .build();
 
-        try {
-            paymentsClient.requestPayment(paymentRequest).get();
-            fail();
-        } catch (Exception e) {
-            assertTrue(e.getCause() instanceof CheckoutApiException);
-            assertEquals("The API response status code (422) does not indicate success.", e.getCause().getMessage());
-        }
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
+        assertNotNull(paymentResponse);
+
+        final GetPaymentResponse paymentDetails = blocking(() -> paymentsClient.getPayment(paymentResponse.getId()));
+        assertNotNull(paymentDetails);
+        assertTrue(paymentDetails.getSource() instanceof AlternativePaymentSourceResponse);
+        assertEquals(PaymentSourceType.BALOTO, paymentDetails.getSource().getType());
     }
 
     @Test
+    @Disabled("not available")
     void shouldMakeBoletoPaymentRedirect() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestBoletoSource.builder()
@@ -110,13 +113,13 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .amount(100L)
                 .build();
 
-        try {
-            paymentsClient.requestPayment(paymentRequest).get();
-            fail();
-        } catch (Exception e) {
-            assertTrue(e.getCause() instanceof CheckoutApiException);
-            assertEquals("The API response status code (422) does not indicate success.", e.getCause().getMessage());
-        }
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
+        assertNotNull(paymentResponse);
+
+        final GetPaymentResponse paymentDetails = blocking(() -> paymentsClient.getPayment(paymentResponse.getId()));
+        assertNotNull(paymentDetails);
+        assertTrue(paymentDetails.getSource() instanceof AlternativePaymentSourceResponse);
+        assertEquals(PaymentSourceType.BOLETO, paymentDetails.getSource().getType());
     }
 
     @Test
@@ -210,6 +213,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("not available")
     void shouldMakeOxxoPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestOxxoSource.builder()
@@ -222,16 +226,17 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .capture(true)
                 .build();
 
-        try {
-            paymentsClient.requestPayment(paymentRequest).get();
-            fail();
-        } catch (Exception e) {
-            assertTrue(e.getCause() instanceof CheckoutApiException);
-            assertEquals("The API response status code (422) does not indicate success.", e.getCause().getMessage());
-        }
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
+        assertNotNull(paymentResponse);
+
+        final GetPaymentResponse paymentDetails = blocking(() -> paymentsClient.getPayment(paymentResponse.getId()));
+        assertNotNull(paymentDetails);
+        assertTrue(paymentDetails.getSource() instanceof AlternativePaymentSourceResponse);
+        assertEquals(PaymentSourceType.OXXO, paymentDetails.getSource().getType());
     }
 
     @Test
+    @Disabled("not available")
     void shouldMakePagoFacilPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestPagoFacilSource.builder()
@@ -244,16 +249,17 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .capture(true)
                 .build();
 
-        try {
-            paymentsClient.requestPayment(paymentRequest).get();
-            fail();
-        } catch (Exception e) {
-            assertTrue(e.getCause() instanceof CheckoutApiException);
-            assertEquals("The API response status code (422) does not indicate success.", e.getCause().getMessage());
-        }
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
+        assertNotNull(paymentResponse);
+
+        final GetPaymentResponse paymentDetails = blocking(() -> paymentsClient.getPayment(paymentResponse.getId()));
+        assertNotNull(paymentDetails);
+        assertTrue(paymentDetails.getSource() instanceof AlternativePaymentSourceResponse);
+        assertEquals(PaymentSourceType.PAGOFACIL, paymentDetails.getSource().getType());
     }
 
     @Test
+    @Disabled("not available")
     void shouldMakeRapiPagoPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestRapiPagoSource.builder()
@@ -266,13 +272,13 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .capture(true)
                 .build();
 
-        try {
-            paymentsClient.requestPayment(paymentRequest).get();
-            fail();
-        } catch (Exception e) {
-            assertTrue(e.getCause() instanceof CheckoutApiException);
-            assertEquals("The API response status code (422) does not indicate success.", e.getCause().getMessage());
-        }
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
+        assertNotNull(paymentResponse);
+
+        final GetPaymentResponse paymentDetails = blocking(() -> paymentsClient.getPayment(paymentResponse.getId()));
+        assertNotNull(paymentDetails);
+        assertTrue(paymentDetails.getSource() instanceof AlternativePaymentSourceResponse);
+        assertEquals(PaymentSourceType.RAPIPAGO, paymentDetails.getSource().getType());
     }
 
     @Test
@@ -403,7 +409,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .source(RequestQPaySource.builder()
                         .description("QPay Demo Payment")
                         .language("en")
-                        .quantity(1)
+                        .quantity("1")
                         .nationalId("070AYY010BU234M")
                         .build())
                 .currency(Currency.QAR)
@@ -421,6 +427,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("not available")
     void shouldMakeMultiBancoPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestMultiBancoSource.builder()
@@ -433,13 +440,13 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .capture(true)
                 .build();
 
-        try {
-            paymentsClient.requestPayment(paymentRequest).get();
-            fail();
-        } catch (Exception e) {
-            assertTrue(e.getCause() instanceof CheckoutApiException);
-            assertEquals("The API response status code (422) does not indicate success.", e.getCause().getMessage());
-        }
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
+        assertNotNull(paymentResponse);
+
+        final GetPaymentResponse paymentDetails = blocking(() -> paymentsClient.getPayment(paymentResponse.getId()));
+        assertNotNull(paymentDetails);
+        assertTrue(paymentDetails.getSource() instanceof AlternativePaymentSourceResponse);
+        assertEquals(PaymentSourceType.MULTIBANCO, paymentDetails.getSource().getType());
     }
 
 }

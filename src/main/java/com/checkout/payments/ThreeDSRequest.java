@@ -17,7 +17,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public final class ThreeDSRequest {
 
-    private boolean enabled;
+    private Boolean enabled;
 
     @SerializedName("attempt_n3d")
     private Boolean attemptN3D;

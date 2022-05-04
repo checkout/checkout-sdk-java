@@ -13,7 +13,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class RequestKnetSource extends AbstractRequestSource {
+public class RequestKnetSource extends AbstractRequestSource {
 
     private String language;
 
@@ -38,7 +38,7 @@ public final class RequestKnetSource extends AbstractRequestSource {
     private String ptlf;
 
     @Builder
-    private RequestKnetSource(final String language,
+    public RequestKnetSource(final String language,
                              final String userDefinedField1,
                              final String userDefinedField2,
                              final String userDefinedField3,

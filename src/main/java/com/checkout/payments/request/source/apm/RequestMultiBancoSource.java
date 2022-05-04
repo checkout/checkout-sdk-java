@@ -14,7 +14,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class RequestMultiBancoSource extends AbstractRequestSource {
+public class RequestMultiBancoSource extends AbstractRequestSource {
 
     @SerializedName("payment_country")
     private CountryCode paymentCountry;
@@ -26,7 +26,7 @@ public final class RequestMultiBancoSource extends AbstractRequestSource {
     private String billingDescriptor;
 
     @Builder
-    private RequestMultiBancoSource(final CountryCode paymentCountry,
+    public RequestMultiBancoSource(final CountryCode paymentCountry,
                                    final String accountHolderName,
                                    final String billingDescriptor) {
         super(PaymentSourceType.MULTIBANCO);
