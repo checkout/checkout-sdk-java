@@ -51,6 +51,8 @@ test {
     environment "CHECKOUT_SECRET_KEY", System.getenv("CHECKOUT_SECRET_KEY")
     environment "CHECKOUT_FOUR_PUBLIC_KEY", System.getenv("CHECKOUT_FOUR_PUBLIC_KEY")
     environment "CHECKOUT_FOUR_SECRET_KEY", System.getenv("CHECKOUT_FOUR_SECRET_KEY")
+    environment "CHECKOUT_FOUR_OAUTH_PAYOUT_SCHEDULE_CLIENT_ID", System.getenv("CHECKOUT_FOUR_OAUTH_PAYOUT_SCHEDULE_CLIENT_ID")
+    environment "CHECKOUT_FOUR_OAUTH_PAYOUT_SCHEDULE_CLIENT_SECRET", System.getenv("CHECKOUT_FOUR_OAUTH_PAYOUT_SCHEDULE_CLIENT_SECRET")
     systemProperty "org.slf4j.simpleLogger.defaultLogLevel", "INFO"
     useJUnitPlatform()
     testLogging {

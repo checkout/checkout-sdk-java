@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 class CheckoutFourSdkTest {
 
     @Test
-    void shouldCreateStaticKeysCheckoutSdks() throws URISyntaxException {
+    void shouldCreateStaticKeysCheckoutSdks() {
 
         final CheckoutApi checkoutApi1 = new CheckoutFourSdk().staticKeys()
                 .publicKey(VALID_FOUR_PK)
@@ -34,15 +34,6 @@ class CheckoutFourSdkTest {
                 .build();
 
         assertNotNull(checkoutApi2);
-
-        final CheckoutApi checkoutApi3 = new CheckoutFourSdk().staticKeys()
-                .publicKey(VALID_FOUR_PK)
-                .secretKey(VALID_FOUR_SK)
-                .uri(new URI("https://test.checkout.com"))
-                .environment(Environment.SANDBOX)
-                .build();
-
-        assertNotNull(checkoutApi3);
 
     }
 
