@@ -57,7 +57,7 @@ class InstrumentsClientImplTest {
                 eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<CreateInstrumentResponse> future = client.createInstrument(request);
+        final CompletableFuture<CreateInstrumentResponse> future = client.create(request);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -72,7 +72,7 @@ class InstrumentsClientImplTest {
                 eq(InstrumentDetailsResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<InstrumentDetailsResponse> future = client.getInstrument("src_wmlfc3zyhqzehihu7giusaaawu");
+        final CompletableFuture<InstrumentDetailsResponse> future = client.get("src_wmlfc3zyhqzehihu7giusaaawu");
 
         assertNotNull(future.get());
 
@@ -88,7 +88,7 @@ class InstrumentsClientImplTest {
                 eq(UpdateInstrumentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<UpdateInstrumentResponse> future = client.updateInstrument("src_wmlfc3zyhqzehihu7giusaaawu123", request);
+        final CompletableFuture<UpdateInstrumentResponse> future = client.update("src_wmlfc3zyhqzehihu7giusaaawu123", request);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -103,7 +103,7 @@ class InstrumentsClientImplTest {
         when(apiClient.deleteAsync(eq(INSTRUMENTS + "/UpdateInstrumentResponse"), eq(authorization)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<Void> future = client.deleteInstrument("UpdateInstrumentResponse");
+        final CompletableFuture<Void> future = client.delete("UpdateInstrumentResponse");
 
         assertNotNull(future.get());
 

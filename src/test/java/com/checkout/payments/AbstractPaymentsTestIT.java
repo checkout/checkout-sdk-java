@@ -102,7 +102,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                 .phone(phone)
                 .build();
 
-        final CardTokenResponse cardTokenResponse = blocking(() -> defaultApi.tokensClient().request(cardTokenRequest));
+        final CardTokenResponse cardTokenResponse = blocking(() -> defaultApi.tokensClient().requestCardToken(cardTokenRequest));
         assertNotNull(cardTokenResponse);
 
         final RequestTokenSource requestTokenSource = RequestTokenSource.builder()

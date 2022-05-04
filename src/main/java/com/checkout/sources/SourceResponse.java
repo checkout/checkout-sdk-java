@@ -1,6 +1,8 @@
 package com.checkout.sources;
 
+import com.checkout.common.CustomerResponse;
 import com.checkout.common.Resource;
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -8,16 +10,15 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class SourceResponse extends Resource {
-    private SourceProcessed source;
+public abstract class SourceResponse extends Resource {
 
-    public static SourceResponse from(SourceProcessed processedResponse) {
-        SourceResponse response = new SourceResponse();
-        response.source = processedResponse;
-        return response;
-    }
+    private String id;
 
-    public boolean isPending() {
-        return source == null;
-    }
+    private SourceType type;
+
+    @SerializedName("response_code")
+    private String responseCode;
+
+    private CustomerResponse customer;
+
 }

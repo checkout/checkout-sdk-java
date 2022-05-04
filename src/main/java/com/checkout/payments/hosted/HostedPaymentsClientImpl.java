@@ -18,13 +18,13 @@ public class HostedPaymentsClientImpl extends AbstractClient implements HostedPa
     }
 
     @Override
-    public CompletableFuture<HostedPaymentResponse> createAsync(final HostedPaymentRequest hostedPaymentRequest) {
+    public CompletableFuture<HostedPaymentResponse> createHostedPaymentsPageSession(final HostedPaymentRequest hostedPaymentRequest) {
         validateParams("hostedPaymentRequest", hostedPaymentRequest);
         return apiClient.postAsync(HOSTED_PAYMENTS_PATH, sdkAuthorization(), HostedPaymentResponse.class, hostedPaymentRequest, null);
     }
 
     @Override
-    public CompletableFuture<HostedPaymentDetailsResponse> get(final String hostedPaymentId) {
+    public CompletableFuture<HostedPaymentDetailsResponse> getHostedPaymentsPageDetails(final String hostedPaymentId) {
         validateParams("hostedPayment", hostedPaymentId);
         return apiClient.getAsync(buildPath(HOSTED_PAYMENTS_PATH, hostedPaymentId), sdkAuthorization(), HostedPaymentDetailsResponse.class);
     }
