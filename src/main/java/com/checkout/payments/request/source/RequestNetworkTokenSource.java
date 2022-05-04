@@ -1,8 +1,7 @@
-package com.checkout.payments.four.request.source;
+package com.checkout.payments.request.source;
 
 import com.checkout.common.Address;
 import com.checkout.common.Phone;
-import com.checkout.payments.request.source.NetworkTokenType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

@@ -2,14 +2,12 @@ package com.checkout.payments.request.source.apm;
 
 import com.checkout.common.CountryCode;
 import com.checkout.common.PaymentSourceType;
+import com.checkout.payments.Payer;
 import com.checkout.payments.request.source.AbstractRequestSource;
 import com.google.gson.annotations.SerializedName;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -40,15 +38,6 @@ public final class RequestBalotoSource extends AbstractRequestSource {
 
     public RequestBalotoSource() {
         super(PaymentSourceType.BALOTO);
-    }
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Payer {
-        private String name;
-        private String email;
     }
 
 }
