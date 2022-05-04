@@ -8,7 +8,6 @@ import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.Phone;
 import com.checkout.payments.four.request.PaymentRequest;
-import com.checkout.payments.four.request.Payments;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.request.source.RequestIdSource;
 import com.checkout.payments.four.request.source.RequestTokenSource;
@@ -63,12 +62,15 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
 
         final PaymentIndividualSender sender = getIndividualSender();
 
-        final PaymentRequest idSourceRequest = Payments.id(idSource).individualSender(sender)
-                .capture(false)
-                .reference(UUID.randomUUID().toString())
-                .amount(10L)
-                .currency(Currency.EUR)
-                .build();
+        final PaymentRequest idSourceRequest =
+                PaymentRequest.builder()
+                        .source(idSource)
+                        .sender(sender)
+                        .capture(false)
+                        .reference(UUID.randomUUID().toString())
+                        .amount(10L)
+                        .currency(Currency.EUR)
+                        .build();
 
         final PaymentResponse response = blocking(() -> fourApi.paymentsClient().requestPayment(idSourceRequest));
 
@@ -95,7 +97,9 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
 
         final PaymentCorporateSender sender = getCorporateSender();
 
-        final PaymentRequest tokenRequest = Payments.token(tokenSource).corporateSender(sender)
+        final PaymentRequest tokenRequest = PaymentRequest.builder()
+                .source(tokenSource)
+                .sender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())
                 .amount(3456L)

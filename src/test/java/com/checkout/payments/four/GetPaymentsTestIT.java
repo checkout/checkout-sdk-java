@@ -9,7 +9,6 @@ import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.PaymentStatus;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.four.request.PaymentRequest;
-import com.checkout.payments.four.request.Payments;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.response.GetPaymentResponse;
 import com.checkout.payments.four.response.PaymentResponse;
@@ -78,7 +77,9 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
         final RequestCardSource source = getRequestCardSource();
         final PaymentIndividualSender sender = getIndividualSender();
 
-        final PaymentRequest request = Payments.card(source).individualSender(sender)
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(source)
+                .sender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())
                 .amount(0L)
@@ -113,7 +114,9 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
                 .zip("12345")
                 .build();
 
-        final PaymentRequest request = Payments.card(source).individualSender(sender)
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(source)
+                .sender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())
                 .amount(0L)
@@ -155,7 +158,9 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
                 .phone(phone)
                 .build();
 
-        final PaymentRequest request = Payments.card(source).individualSender(sender)
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(source)
+                .sender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())
                 .amount(0L)
