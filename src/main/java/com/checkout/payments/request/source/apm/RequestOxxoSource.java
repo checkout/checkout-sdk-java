@@ -2,6 +2,7 @@ package com.checkout.payments.request.source.apm;
 
 import com.checkout.common.CountryCode;
 import com.checkout.common.PaymentSourceType;
+import com.checkout.payments.Payer;
 import com.checkout.payments.request.source.AbstractRequestSource;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;

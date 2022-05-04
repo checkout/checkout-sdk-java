@@ -1,21 +1,25 @@
-package com.checkout.apm.tamara.four;
+package com.checkout.payments.four;
+
 
 import com.checkout.CheckoutSdk;
 import com.checkout.Environment;
-import com.checkout.PlatformType;
-import com.checkout.SandboxTestFixture;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
+import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
 import com.checkout.common.four.Product;
 import com.checkout.four.CheckoutApi;
 import com.checkout.payments.PaymentStatus;
 import com.checkout.payments.ProcessingSettings;
 import com.checkout.payments.four.request.PaymentRequest;
+import com.checkout.payments.four.request.source.apm.RequestIdealSource;
+import com.checkout.payments.four.request.source.apm.RequestSofortSource;
 import com.checkout.payments.four.request.source.apm.RequestTamaraSource;
+import com.checkout.payments.four.response.GetPaymentResponse;
 import com.checkout.payments.four.response.PaymentResponse;
+import com.checkout.payments.four.response.source.AlternativePaymentSourceResponse;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -24,11 +28,54 @@ import java.util.Collections;
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class TamaraPaymentsTestIT extends SandboxTestFixture {
+class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
 
-    TamaraPaymentsTestIT() {
-        super(PlatformType.FOUR);
+    @Test
+    void shouldMakeIdealPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestIdealSource.builder()
+                        .bic("INGBNL2A")
+                        .description("ORD50234E89")
+                        .language("nl")
+                        .build())
+                .currency(Currency.EUR)
+                .amount(1000L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
+        assertNotNull(paymentResponse);
+
+        final GetPaymentResponse paymentDetails = blocking(() -> paymentsClient.getPayment(paymentResponse.getId()));
+        assertNotNull(paymentDetails);
+        assertTrue(paymentDetails.getSource() instanceof AlternativePaymentSourceResponse);
+        assertEquals(PaymentSourceType.IDEAL, paymentDetails.getSource().getType());
+    }
+
+
+    @Test
+    void shouldMakeSofortPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestSofortSource.builder()
+                        .build())
+                .currency(Currency.EUR)
+                .amount(1000L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
+        assertNotNull(paymentResponse);
+
+        final GetPaymentResponse paymentDetails = blocking(() -> paymentsClient.getPayment(paymentResponse.getId()));
+        assertNotNull(paymentDetails);
+        assertTrue(paymentDetails.getSource() instanceof AlternativePaymentSourceResponse);
+        assertEquals(PaymentSourceType.SOFORT, paymentDetails.getSource().getType());
     }
 
     @Disabled("preview")
@@ -94,5 +141,4 @@ class TamaraPaymentsTestIT extends SandboxTestFixture {
         assertEquals(PaymentStatus.PENDING, response.getStatus());
 
     }
-
 }

@@ -10,6 +10,7 @@ import com.checkout.common.Phone;
 import com.checkout.common.Product;
 import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.BillingInformation;
+import com.checkout.payments.Payer;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.PaymentType;
 import com.checkout.payments.ProcessingSettings;
@@ -174,6 +175,14 @@ public final class TestHelper {
                 .dateOfBirth("1985-05-15")
                 .lastName("TESTING")
                 .zip("12345")
+                .build();
+    }
+
+    public static Payer getPayer() {
+        return Payer.builder()
+                .name("Bruce Wayne")
+                .email("bruce@wayne-enterprises.com")
+                .document("53033315550")
                 .build();
     }
 
