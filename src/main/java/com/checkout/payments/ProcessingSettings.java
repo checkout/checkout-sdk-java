@@ -14,6 +14,8 @@ public final class ProcessingSettings {
 
     private boolean aft;
 
+    private DLocalProcessingSettings dlocal;
+
     @SerializedName("tax_amount")
     private Long taxAmount;
 
