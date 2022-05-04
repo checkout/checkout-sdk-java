@@ -28,7 +28,7 @@ class PaymentLinksTestIT extends SandboxTestFixture {
     void shouldCreateAndGetPaymentsLink() {
 
         final PaymentLinkRequest paymentLinksRequest = TestHelper.createPaymentLinksRequest(REFERENCE);
-        final PaymentLinkResponse paymentLinkResponse = blocking(() -> fourApi.paymentLinksClient().createAsync(paymentLinksRequest));
+        final PaymentLinkResponse paymentLinkResponse = blocking(() -> fourApi.paymentLinksClient().createPaymentLink(paymentLinksRequest));
 
         assertNotNull(paymentLinkResponse);
         assertEquals(REFERENCE, paymentLinkResponse.getReference());
@@ -37,7 +37,7 @@ class PaymentLinksTestIT extends SandboxTestFixture {
         assertTrue(paymentLinkResponse.getLinks().containsKey("redirect"));
         assertNotNull(paymentLinkResponse.getWarnings());
 
-        final PaymentLinkDetailsResponse detailsResponse = blocking(() -> fourApi.paymentLinksClient().getAsync(paymentLinkResponse.getId()));
+        final PaymentLinkDetailsResponse detailsResponse = blocking(() -> fourApi.paymentLinksClient().getPaymentLink(paymentLinkResponse.getId()));
         assertNotNull(detailsResponse);
         assertEquals(paymentLinkResponse.getId(), detailsResponse.getId());
         assertThat(detailsResponse.getStatus(), anyOf(equalTo(PaymentLinkStatus.ACTIVE), equalTo(PaymentLinkStatus.PAYMENT_RECEIVED), equalTo(PaymentLinkStatus.EXPIRED)));
