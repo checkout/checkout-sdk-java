@@ -10,12 +10,14 @@ import com.checkout.common.IdResponse;
 
 import java.util.concurrent.CompletableFuture;
 
+import static com.checkout.common.CheckoutUtils.validateParams;
+
 public class DisputesClientImpl extends AbstractClient implements DisputesClient {
 
-    private static final String DISPUTES = "disputes";
-    private static final String FILES = "files";
-    private static final String ACCEPT = "accept";
-    private static final String EVIDENCE = "evidence";
+    private static final String DISPUTES_PATH = "disputes";
+    private static final String FILES_PATH = "files";
+    private static final String ACCEPT_PATH = "accept";
+    private static final String EVIDENCE_PATH = "evidence";
 
     public DisputesClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration, final SdkAuthorizationType sdkAuthorizationType) {
         super(apiClient, configuration, sdkAuthorizationType);
@@ -23,42 +25,50 @@ public class DisputesClientImpl extends AbstractClient implements DisputesClient
 
     @Override
     public CompletableFuture<DisputesQueryResponse> query(final DisputesQueryFilter queryFilter) {
-        return apiClient.queryAsync(DISPUTES, sdkAuthorization(), queryFilter, DisputesQueryResponse.class);
+        validateParams("queryFilter", queryFilter);
+        return apiClient.queryAsync(DISPUTES_PATH, sdkAuthorization(), queryFilter, DisputesQueryResponse.class);
     }
 
     @Override
-    public CompletableFuture<DisputeDetailsResponse> getDisputeDetails(final String id) {
-        return apiClient.getAsync(buildPath(DISPUTES, id), sdkAuthorization(), DisputeDetailsResponse.class);
+    public CompletableFuture<DisputeDetailsResponse> getDisputeDetails(final String disputeId) {
+        validateParams("disputeId", disputeId);
+        return apiClient.getAsync(buildPath(DISPUTES_PATH, disputeId), sdkAuthorization(), DisputeDetailsResponse.class);
     }
 
     @Override
-    public CompletableFuture<Void> accept(final String id) {
-        return apiClient.postAsync(buildPath(DISPUTES, id, ACCEPT), sdkAuthorization(), Void.class, null, null);
+    public CompletableFuture<Void> accept(final String disputeId) {
+        validateParams("disputeId", disputeId);
+        return apiClient.postAsync(buildPath(DISPUTES_PATH, disputeId, ACCEPT_PATH), sdkAuthorization(), Void.class, null, null);
     }
 
     @Override
-    public CompletableFuture<Void> putEvidence(final String id, final DisputeEvidenceRequest disputeEvidence) {
-        return apiClient.putAsync(buildPath(DISPUTES, id, EVIDENCE), sdkAuthorization(), Void.class, disputeEvidence);
+    public CompletableFuture<Void> putEvidence(final String disputeId, final DisputeEvidenceRequest disputeEvidence) {
+        validateParams("disputeId", disputeId, "disputeEvidence", disputeEvidence);
+        return apiClient.putAsync(buildPath(DISPUTES_PATH, disputeId, EVIDENCE_PATH), sdkAuthorization(), Void.class, disputeEvidence);
     }
 
     @Override
-    public CompletableFuture<DisputeEvidenceResponse> getEvidence(final String id) {
-        return apiClient.getAsync(buildPath(DISPUTES, id, EVIDENCE), sdkAuthorization(), DisputeEvidenceResponse.class);
+    public CompletableFuture<DisputeEvidenceResponse> getEvidence(final String disputeId) {
+        validateParams("disputeId", disputeId);
+        return apiClient.getAsync(buildPath(DISPUTES_PATH, disputeId, EVIDENCE_PATH), sdkAuthorization(), DisputeEvidenceResponse.class);
     }
 
     @Override
-    public CompletableFuture<Void> submitEvidence(final String id) {
-        return apiClient.postAsync(buildPath(DISPUTES, id, EVIDENCE), sdkAuthorization(), Void.class, null, null);
+    public CompletableFuture<Void> submitEvidence(final String disputeId) {
+        validateParams("disputeId", disputeId);
+        return apiClient.postAsync(buildPath(DISPUTES_PATH, disputeId, EVIDENCE_PATH), sdkAuthorization(), Void.class, null, null);
     }
 
     @Override
-    public CompletableFuture<IdResponse> uploadFile(final FileRequest request) {
-        return apiClient.submitFileAsync(FILES, sdkAuthorization(), request, IdResponse.class);
+    public CompletableFuture<IdResponse> uploadFile(final FileRequest fileRequest) {
+        validateParams("fileRequest", fileRequest);
+        return apiClient.submitFileAsync(FILES_PATH, sdkAuthorization(), fileRequest, IdResponse.class);
     }
 
     @Override
-    public CompletableFuture<FileDetailsResponse> getFileDetails(final String id) {
-        return apiClient.getAsync(buildPath(FILES, id), sdkAuthorization(), FileDetailsResponse.class);
+    public CompletableFuture<FileDetailsResponse> getFileDetails(final String fileId) {
+        validateParams("fileId", fileId);
+        return apiClient.getAsync(buildPath(FILES_PATH, fileId), sdkAuthorization(), FileDetailsResponse.class);
     }
 
 }

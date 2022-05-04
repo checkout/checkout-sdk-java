@@ -11,7 +11,7 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 
 public class InstrumentsClientImpl extends AbstractClient implements InstrumentsClient {
 
-    private static final String INSTRUMENTS = "instruments";
+    private static final String INSTRUMENTS_PATH = "instruments";
     private static final String INSTRUMENT_ID = "instrumentId";
 
     public InstrumentsClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
@@ -19,27 +19,27 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
     }
 
     @Override
-    public CompletableFuture<CreateInstrumentResponse> createInstrument(final CreateInstrumentRequest createInstrumentRequest) {
+    public CompletableFuture<CreateInstrumentResponse> create(final CreateInstrumentRequest createInstrumentRequest) {
         validateParams("createInstrumentRequest", createInstrumentRequest);
-        return apiClient.postAsync(INSTRUMENTS, sdkAuthorization(), CreateInstrumentResponse.class, createInstrumentRequest, null);
+        return apiClient.postAsync(INSTRUMENTS_PATH, sdkAuthorization(), CreateInstrumentResponse.class, createInstrumentRequest, null);
     }
 
     @Override
-    public CompletableFuture<InstrumentDetailsResponse> getInstrument(final String instrumentId) {
+    public CompletableFuture<InstrumentDetailsResponse> get(final String instrumentId) {
         validateParams(INSTRUMENT_ID, instrumentId);
-        return apiClient.getAsync(buildPath(INSTRUMENTS, instrumentId), sdkAuthorization(), InstrumentDetailsResponse.class);
+        return apiClient.getAsync(buildPath(INSTRUMENTS_PATH, instrumentId), sdkAuthorization(), InstrumentDetailsResponse.class);
     }
 
     @Override
-    public CompletableFuture<UpdateInstrumentResponse> updateInstrument(final String instrumentId, final UpdateInstrumentRequest updateInstrumentRequest) {
+    public CompletableFuture<UpdateInstrumentResponse> update(final String instrumentId, final UpdateInstrumentRequest updateInstrumentRequest) {
         validateParams(INSTRUMENT_ID, instrumentId, "updateInstrumentRequest", updateInstrumentRequest);
-        return apiClient.patchAsync(buildPath(INSTRUMENTS, instrumentId), sdkAuthorization(), UpdateInstrumentResponse.class, updateInstrumentRequest, null);
+        return apiClient.patchAsync(buildPath(INSTRUMENTS_PATH, instrumentId), sdkAuthorization(), UpdateInstrumentResponse.class, updateInstrumentRequest, null);
     }
 
     @Override
-    public CompletableFuture<Void> deleteInstrument(final String instrumentId) {
+    public CompletableFuture<Void> delete(final String instrumentId) {
         validateParams(INSTRUMENT_ID, instrumentId);
-        return apiClient.deleteAsync(buildPath(INSTRUMENTS, instrumentId), sdkAuthorization());
+        return apiClient.deleteAsync(buildPath(INSTRUMENTS_PATH, instrumentId), sdkAuthorization());
     }
 
 }

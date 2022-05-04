@@ -44,7 +44,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
 
     @Test
     void shouldCreateInstrument() {
-        final CardTokenResponse cardToken = blocking(() -> defaultApi.tokensClient().request(createValidTokenRequest()));
+        final CardTokenResponse cardToken = blocking(() -> defaultApi.tokensClient().requestCardToken(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type(InstrumentType.TOKEN)
@@ -57,7 +57,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final CreateInstrumentResponse response = blocking(() -> defaultApi.instrumentsClient().createInstrument(request));
+        final CreateInstrumentResponse response = blocking(() -> defaultApi.instrumentsClient().create(request));
 
         assertNotNull(response);
         assertNotNull(response.getId());
@@ -83,7 +83,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
     @Test
     void shouldGetInstrument() {
 
-        final CardTokenResponse cardToken = blocking(() -> defaultApi.tokensClient().request(createValidTokenRequest()));
+        final CardTokenResponse cardToken = blocking(() -> defaultApi.tokensClient().requestCardToken(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type(InstrumentType.TOKEN)
@@ -91,9 +91,9 @@ class InstrumentsTestIT extends SandboxTestFixture {
                 .accountHolder(accountHolder)
                 .build();
 
-        final CreateInstrumentResponse createInstrumentResponse = blocking(() -> defaultApi.instrumentsClient().createInstrument(request));
+        final CreateInstrumentResponse createInstrumentResponse = blocking(() -> defaultApi.instrumentsClient().create(request));
 
-        final InstrumentDetailsResponse instrument = blocking(() -> defaultApi.instrumentsClient().getInstrument(createInstrumentResponse.getId()));
+        final InstrumentDetailsResponse instrument = blocking(() -> defaultApi.instrumentsClient().get(createInstrumentResponse.getId()));
 
         assertNotNull(instrument);
         assertNotNull(instrument.getCustomer());
@@ -135,14 +135,14 @@ class InstrumentsTestIT extends SandboxTestFixture {
 
     @Test
     void shouldUpdateInstrument() {
-        final CardTokenResponse cardToken = blocking(() -> defaultApi.tokensClient().request(createValidTokenRequest()));
+        final CardTokenResponse cardToken = blocking(() -> defaultApi.tokensClient().requestCardToken(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type(InstrumentType.TOKEN)
                 .token(cardToken.getToken())
                 .build();
-        final CreateInstrumentResponse response = blocking(() -> defaultApi.instrumentsClient().createInstrument(request));
-        final UpdateInstrumentResponse updateResponse = blocking(() -> defaultApi.instrumentsClient().updateInstrument(response.getId(), UpdateInstrumentRequest.builder()
+        final CreateInstrumentResponse response = blocking(() -> defaultApi.instrumentsClient().create(request));
+        final UpdateInstrumentResponse updateResponse = blocking(() -> defaultApi.instrumentsClient().update(response.getId(), UpdateInstrumentRequest.builder()
                 .name("Test")
                 .build()));
 
@@ -150,25 +150,25 @@ class InstrumentsTestIT extends SandboxTestFixture {
         assertNotNull(updateResponse.getFingerprint());
         assertNotNull(updateResponse.getType());
 
-        final InstrumentDetailsResponse instrument = blocking(() -> defaultApi.instrumentsClient().getInstrument(response.getId()));
+        final InstrumentDetailsResponse instrument = blocking(() -> defaultApi.instrumentsClient().get(response.getId()));
         assertEquals("Test", instrument.getName());
     }
 
     @Test
     void shouldDeleteInstrument() {
 
-        final CardTokenResponse cardToken = blocking(() -> defaultApi.tokensClient().request(createValidTokenRequest()));
+        final CardTokenResponse cardToken = blocking(() -> defaultApi.tokensClient().requestCardToken(createValidTokenRequest()));
 
         final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
                 .type(InstrumentType.TOKEN)
                 .token(cardToken.getToken())
                 .build();
 
-        final CreateInstrumentResponse response = blocking(() -> defaultApi.instrumentsClient().createInstrument(request));
+        final CreateInstrumentResponse response = blocking(() -> defaultApi.instrumentsClient().create(request));
 
-        blocking(() -> defaultApi.instrumentsClient().deleteInstrument(response.getId()));
+        blocking(() -> defaultApi.instrumentsClient().delete(response.getId()));
 
-        assertNotFound(defaultApi.instrumentsClient().getInstrument(response.getId()));
+        assertNotFound(defaultApi.instrumentsClient().get(response.getId()));
 
     }
 
