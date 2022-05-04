@@ -66,7 +66,7 @@ class FourStaticKeysSdkCredentialsTest {
 
         try {
             final FourStaticKeysSdkCredentials credentials = new FourStaticKeysSdkCredentials(VALID_FOUR_SK, similarFourPk);
-            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null, null);
+            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null);
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
@@ -74,7 +74,7 @@ class FourStaticKeysSdkCredentialsTest {
         }
         try {
             final FourStaticKeysSdkCredentials credentials = new FourStaticKeysSdkCredentials(similarFourSk, VALID_FOUR_PK);
-            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null, null);
+            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null);
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);

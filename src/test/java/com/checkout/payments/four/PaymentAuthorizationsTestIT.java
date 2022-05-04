@@ -8,7 +8,6 @@ import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.payments.four.request.AuthorizationRequest;
 import com.checkout.payments.four.request.PaymentRequest;
-import com.checkout.payments.four.request.Payments;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.response.AuthorizationResponse;
 import com.checkout.payments.four.response.PaymentResponse;
@@ -103,7 +102,9 @@ class PaymentAuthorizationsTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final PaymentRequest request = Payments.card(source).fromSender(sender)
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(source)
+                .sender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())
                 .amount(10L)

@@ -80,7 +80,11 @@ class BalotoPaymentsTestIT extends SandboxTestFixture {
                 .payer(RequestBalotoSource.Payer.builder().email("bruce@wayne-enterprises.com").name("Bruce Wayne").build())
                 .build();
 
-        final PaymentRequest request = PaymentRequest.baloto(balotoSource, Currency.COP, 100000L);
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(balotoSource)
+                .currency(Currency.COP)
+                .amount(100L)
+                .build();
 
         final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);

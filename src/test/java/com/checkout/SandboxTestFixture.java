@@ -65,7 +65,6 @@ public abstract class SandboxTestFixture {
                                 FourOAuthScope.VAULT, FourOAuthScope.PAYOUTS_BANK_DETAILS, FourOAuthScope.DISPUTES,
                                 FourOAuthScope.TRANSFERS_CREATE, FourOAuthScope.BALANCES_VIEW)
                         .environment(Environment.SANDBOX)
-                        .enableFilesApi(Environment.SANDBOX)
                         .executor(CUSTOM_EXECUTOR)
                         .build();
                 break;

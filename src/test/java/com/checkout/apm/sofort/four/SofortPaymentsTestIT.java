@@ -6,7 +6,7 @@ import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.payments.four.request.PaymentRequest;
-import com.checkout.payments.four.request.Payments;
+import com.checkout.payments.four.request.source.apm.RequestSofortSource;
 import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
 import com.checkout.common.four.SenderIdentification;
@@ -40,8 +40,11 @@ class SofortPaymentsTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final PaymentRequest request = Payments.sofort(Currency.EUR, 1000L)
-                .individualSender(sender)
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(new RequestSofortSource())
+                .currency(Currency.EUR)
+                .amount(1000L)
+                .sender(sender)
                 .successUrl("https://testing.checkout.com/sucess")
                 .failureUrl("https://testing.checkout.com/failure")
                 .sender(sender)
