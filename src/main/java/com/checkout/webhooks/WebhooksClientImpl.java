@@ -13,7 +13,7 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 
 public class WebhooksClientImpl extends AbstractClient implements WebhooksClient {
 
-    private static final String WEBHOOKS = "webhooks";
+    private static final String WEBHOOKS_PATH = "webhooks";
 
     public WebhooksClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY);
@@ -21,7 +21,7 @@ public class WebhooksClientImpl extends AbstractClient implements WebhooksClient
 
     @Override
     public CompletableFuture<List<WebhookResponse>> retrieveWebhooks() {
-        return apiClient.getAsync(WEBHOOKS, sdkAuthorization(), WebhookResponse[].class)
+        return apiClient.getAsync(WEBHOOKS_PATH, sdkAuthorization(), WebhookResponse[].class)
                 .thenApply(it -> it == null ? new WebhookResponse[0] : it)
                 .thenApply(Arrays::asList);
     }
@@ -34,25 +34,25 @@ public class WebhooksClientImpl extends AbstractClient implements WebhooksClient
     @Override
     public CompletableFuture<WebhookResponse> registerWebhook(final WebhookRequest webhookRequest, final String idempotencyKey) {
         validateParams("webhookRequest", webhookRequest);
-        return apiClient.postAsync(WEBHOOKS, sdkAuthorization(), WebhookResponse.class, webhookRequest, idempotencyKey);
+        return apiClient.postAsync(WEBHOOKS_PATH, sdkAuthorization(), WebhookResponse.class, webhookRequest, idempotencyKey);
     }
 
     @Override
     public CompletableFuture<WebhookResponse> retrieveWebhook(final String webhookId) {
         validateParams("webhookId", webhookId);
-        return apiClient.getAsync(buildPath(WEBHOOKS, webhookId), sdkAuthorization(), WebhookResponse.class);
+        return apiClient.getAsync(buildPath(WEBHOOKS_PATH, webhookId), sdkAuthorization(), WebhookResponse.class);
     }
 
     @Override
     public CompletableFuture<WebhookResponse> updateWebhook(final String webhookId, final WebhookRequest webhookRequest) {
         validateParams("webhookId", webhookId, "webhookRequest", webhookRequest);
-        return apiClient.putAsync(buildPath(WEBHOOKS, webhookId), sdkAuthorization(), WebhookResponse.class, webhookRequest);
+        return apiClient.putAsync(buildPath(WEBHOOKS_PATH, webhookId), sdkAuthorization(), WebhookResponse.class, webhookRequest);
     }
 
     @Override
     public CompletableFuture<Void> removeWebhook(final String webhookId) {
         validateParams("webhookId", webhookId);
-        return apiClient.deleteAsync(buildPath(WEBHOOKS, webhookId), sdkAuthorization());
+        return apiClient.deleteAsync(buildPath(WEBHOOKS_PATH, webhookId), sdkAuthorization());
     }
 
 }
