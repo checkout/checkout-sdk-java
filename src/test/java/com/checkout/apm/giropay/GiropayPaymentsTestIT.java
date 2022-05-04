@@ -25,7 +25,11 @@ class GiropayPaymentsTestIT extends SandboxTestFixture {
                 .purpose("CKO Giropay test")
                 .build();
 
-        final PaymentRequest request = PaymentRequest.giropay(giropaySource, Currency.EUR, 1000L);
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(giropaySource)
+                .currency(Currency.EUR)
+                .amount(1000L)
+                .build();
         final PaymentResponse response = blocking(() -> defaultApi.paymentsClient().requestPayment(request));
         assertNotNull(response);
         assertEquals(PaymentStatus.PENDING, response.getStatus());

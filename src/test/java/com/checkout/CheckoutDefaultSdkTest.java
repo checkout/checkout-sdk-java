@@ -2,9 +2,6 @@ package com.checkout;
 
 import org.junit.jupiter.api.Test;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-
 import static com.checkout.TestHelper.INVALID_DEFAULT_PK;
 import static com.checkout.TestHelper.INVALID_DEFAULT_SK;
 import static com.checkout.TestHelper.VALID_DEFAULT_PK;
@@ -16,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CheckoutDefaultSdkTest {
 
     @Test
-    void shouldCreateCheckoutSdks() throws URISyntaxException {
+    void shouldCreateCheckoutSdks() {
 
         final CheckoutApi checkoutApi1 = new CheckoutDefaultSdk()
                 .staticKeys()
@@ -33,15 +30,6 @@ class CheckoutDefaultSdkTest {
                 .build();
 
         assertNotNull(checkoutApi2.tokensClient());
-
-        final CheckoutApi checkoutApi3 = new CheckoutDefaultSdk().staticKeys()
-                .publicKey(VALID_DEFAULT_PK)
-                .secretKey(VALID_DEFAULT_SK)
-                .uri(new URI("https://test.checkout.com"))
-                .environment(Environment.SANDBOX)
-                .build();
-
-        assertNotNull(checkoutApi3.tokensClient());
 
     }
 

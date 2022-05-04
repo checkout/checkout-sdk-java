@@ -11,7 +11,6 @@ import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.MarketplaceData;
 import com.checkout.payments.four.request.PaymentRequest;
-import com.checkout.payments.four.request.Payments;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
 import com.checkout.common.four.SenderIdentification;
@@ -61,7 +60,9 @@ class OAuthTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final PaymentRequest request = Payments.card(source).individualSender(sender)
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(source)
+                .sender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())
                 .amount(10L)
@@ -104,8 +105,6 @@ class OAuthTestIT extends SandboxTestFixture {
                             System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_ID"),
                             System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_SECRET"))
                     .scopes(FourOAuthScope.GATEWAY)
-                    .uri(URI.create("https://test.checkout.com"))
-
                     .build();
             fail();
         } catch (final Exception e) {
