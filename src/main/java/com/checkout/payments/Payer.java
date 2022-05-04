@@ -1,4 +1,4 @@
-package com.checkout.payments.request.source.apm;
+package com.checkout.payments;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
