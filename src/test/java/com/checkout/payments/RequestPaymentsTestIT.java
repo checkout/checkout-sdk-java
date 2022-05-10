@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
+class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
 
     @Test
     void shouldMakeCardPayment() {
@@ -46,6 +46,8 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
         // source
         assertTrue(paymentResponse.getSource() instanceof CardResponseSource);
         final CardResponseSource responseCardSource = (CardResponseSource) paymentResponse.getSource();
+        assertNotNull(responseCardSource.getBillingAddress());
+        assertNotNull(responseCardSource.getPhone());
         assertEquals(PaymentSourceType.CARD, responseCardSource.getType());
         assertNotNull(responseCardSource.getId());
         assertEquals("S", responseCardSource.getAvsCheck());
@@ -138,6 +140,8 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
         // source
         assertTrue(paymentResponse.getSource() instanceof CardResponseSource);
         final CardResponseSource responseCardSource = (CardResponseSource) paymentResponse.getSource();
+        assertNotNull(responseCardSource.getBillingAddress());
+        assertNotNull(responseCardSource.getPhone());
         assertEquals(PaymentSourceType.CARD, responseCardSource.getType());
         assertNotNull(responseCardSource.getId());
         assertEquals("S", responseCardSource.getAvsCheck());
@@ -218,6 +222,8 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
         // source
         assertTrue(paymentResponse.getSource() instanceof CardResponseSource);
         final CardResponseSource responseCardSource = (CardResponseSource) paymentResponse.getSource();
+        assertNotNull(responseCardSource.getBillingAddress());
+        assertNotNull(responseCardSource.getPhone());
         assertEquals(PaymentSourceType.CARD, responseCardSource.getType());
         assertNotNull(responseCardSource.getId());
         assertEquals("S", responseCardSource.getAvsCheck());
@@ -277,6 +283,8 @@ public class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
         // source
         assertTrue(paymentResponse.getSource() instanceof CardResponseSource);
         final CardResponseSource responseCardSource = (CardResponseSource) paymentResponse.getSource();
+        assertNotNull(responseCardSource.getBillingAddress());
+        assertNotNull(responseCardSource.getPhone());
         assertEquals(PaymentSourceType.CARD, responseCardSource.getType());
         assertNotNull(responseCardSource.getId());
         assertEquals("S", responseCardSource.getAvsCheck());
