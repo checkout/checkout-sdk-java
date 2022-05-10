@@ -62,7 +62,7 @@ public static void main(String[] args) {
 
     CheckoutApi checkoutApi = CheckoutSdk.defaultSdk()
         .staticKeys()
-        .publicKey("public_key")
+        .publicKey("public_key") // optional, only required for operations related with tokens
         .secretKey("secret_key")
         .environment(Environment.SANDBOX) // required
         .uri() // deprecated, will be removed in version 6.0.0
@@ -85,7 +85,7 @@ public static void main(String[] args) {
 
     CheckoutApi checkoutApi = CheckoutSdk.fourSdk()
         .staticKeys()
-        .publicKey("public_key")
+        .publicKey("public_key") // optional, only required for operations related with tokens
         .secretKey("secret_key")
         .environment(Environment.SANDBOX) // required
         .uri() // deprecated, will be removed in version 6.0.0
