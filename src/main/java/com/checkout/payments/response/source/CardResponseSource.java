@@ -1,8 +1,10 @@
 package com.checkout.payments.response.source;
 
+import com.checkout.common.Address;
 import com.checkout.common.CardCategory;
 import com.checkout.common.CardType;
 import com.checkout.common.CountryCode;
+import com.checkout.common.Phone;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,6 +14,11 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class CardResponseSource extends AbstractResponseSource implements ResponseSource {
+
+    @SerializedName("billing_address")
+    private Address billingAddress;
+
+    private Phone phone;
 
     @SerializedName("expiry_month")
     private Integer expiryMonth;
