@@ -1,0 +1,34 @@
+name: OWASP-Dependency-Check
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: '0 10 * * 1'
+
+jobs:
+  job-container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: setup-java-8-build
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+      - id: validate-wrapper
+        uses: gradle/wrapper-validation-action@v1
+      - id: cache-gradle-packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - id: run-dependency-check
+        run: ./gradlew dependencyCheckAnalyze
+      - id: upload-dependency-check-report
+        uses: actions/upload-artifact@master
+        with:
+          name: OWASP Dependency Check report
+          path: build/reports
