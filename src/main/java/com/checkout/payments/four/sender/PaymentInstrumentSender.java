@@ -12,7 +12,7 @@ public final class PaymentInstrumentSender extends PaymentSender {
 
     @Builder
     public PaymentInstrumentSender() {
-        super(RequestSenderType.INSTRUMENT);
+        super(SenderType.INSTRUMENT);
     }
 
 }

@@ -21,13 +21,13 @@ public final class PaymentCorporateSender extends PaymentSender {
 
     @Builder
     private PaymentCorporateSender(final String companyName, final Address address) {
-        super(RequestSenderType.CORPORATE);
+        super(SenderType.CORPORATE);
         this.companyName = companyName;
         this.address = address;
     }
 
     public PaymentCorporateSender() {
-        super(RequestSenderType.CORPORATE);
+        super(SenderType.CORPORATE);
     }
 
 }

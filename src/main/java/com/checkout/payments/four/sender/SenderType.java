@@ -2,7 +2,7 @@ package com.checkout.payments.four.sender;
 
 import com.google.gson.annotations.SerializedName;
 
-public enum RequestSenderType {
+public enum SenderType {
 
     @SerializedName("instrument")
     INSTRUMENT,

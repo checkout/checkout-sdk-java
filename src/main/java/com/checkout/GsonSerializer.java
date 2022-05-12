@@ -9,6 +9,8 @@ import com.checkout.marketplace.payout.schedule.response.CurrencySchedule;
 import com.checkout.marketplace.payout.schedule.response.GetScheduleResponseDeserializer;
 import com.checkout.marketplace.payout.schedule.response.ScheduleFrequencyMonthlyResponse;
 import com.checkout.payments.PaymentDestinationType;
+import com.checkout.payments.four.sender.Sender;
+import com.checkout.payments.four.sender.SenderType;
 import com.checkout.workflows.four.actions.WorkflowActionType;
 import com.checkout.workflows.four.conditions.WorkflowConditionType;
 import com.google.gson.FieldNamingPolicy;
@@ -56,6 +58,11 @@ class GsonSerializer implements Serializer {
             // Payments FOUR - destination
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.payments.four.response.destination.PaymentResponseDestination.class, CheckoutUtils.TYPE, true, com.checkout.payments.four.response.destination.PaymentResponseAlternativeDestination.class)
                     .registerSubtype(com.checkout.payments.four.response.destination.PaymentResponseBankAccountDestination.class, identifier(PaymentDestinationType.BANK_ACCOUNT)))
+            // Payments FOUR - sender
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(Sender.class, CheckoutUtils.TYPE, true, com.checkout.payments.four.sender.ResponseAlternativeSender.class)
+                    .registerSubtype(com.checkout.payments.four.sender.PaymentCorporateSender.class, identifier(SenderType.CORPORATE))
+                    .registerSubtype(com.checkout.payments.four.sender.PaymentIndividualSender.class, identifier(SenderType.INDIVIDUAL))
+                    .registerSubtype(com.checkout.payments.four.sender.PaymentInstrumentSender.class, identifier(SenderType.INSTRUMENT)))
             // Instruments CS2
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.instruments.four.create.CreateInstrumentResponse.class, CheckoutUtils.TYPE)
                     .registerSubtype(com.checkout.instruments.four.create.CreateInstrumentBankAccountResponse.class, identifier(InstrumentType.BANK_ACCOUNT))

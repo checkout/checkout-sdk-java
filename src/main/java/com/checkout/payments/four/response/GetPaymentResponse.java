@@ -14,7 +14,7 @@ import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSData;
 import com.checkout.payments.four.response.destination.PaymentResponseDestination;
 import com.checkout.payments.four.response.source.ResponseSource;
-import com.checkout.payments.four.sender.PaymentSender;
+import com.checkout.payments.four.sender.Sender;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -38,7 +38,7 @@ public final class GetPaymentResponse extends Resource {
 
     private PaymentResponseDestination destination;
 
-    private PaymentSender sender;
+    private Sender sender;
 
     private Long amount;
 

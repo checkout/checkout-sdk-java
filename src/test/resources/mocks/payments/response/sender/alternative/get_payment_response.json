@@ -1,0 +1,69 @@
+{
+  "id": "pay_mbabizu24mvu3mela5njyhpit4",
+  "action_id": "act_mbabizu24mvu3mela5njyhpit4",
+  "amount": 6540,
+  "currency": "USD",
+  "approved": true,
+  "status": "Authorized",
+  "auth_code": "770687",
+  "response_code": "10000",
+  "response_summary": "Approved",
+  "3ds": {
+    "downgraded": true,
+    "enrolled": "N"
+  },
+  "risk": {
+    "flagged": true
+  },
+  "source": {
+    "type": "card",
+    "id": "src_nwd3m4in3hkuddfpjsaevunhdy",
+    "billing_address": {
+      "address_line1": "Checkout.com",
+      "address_line2": "90 Tottenham Court Road",
+      "city": "London",
+      "state": "London",
+      "zip": "W1T 4TJ",
+      "country": "GB"
+    },
+    "phone": {
+      "country_code": "+1",
+      "number": "415 555 2671"
+    },
+    "last4": "4242",
+    "fingerprint": "F31828E2BDABAE63EB694903825CDD36041CC6ED461440B81415895855502832",
+    "bin": "424242"
+  },
+  "sender": {
+    "type": "xyz",
+    "company_name": "company"
+  },
+  "customer": {
+    "id": "cus_udst2tfldj6upmye2reztkmm4i",
+    "email": "brucewayne@gmail.com",
+    "name": "Bruce Wayne"
+  },
+  "processed_on": "2019-09-10T10:11:12Z",
+  "reference": "ORD-5023-4E89",
+  "processing": {
+    "retrieval_reference_number": "909913440644",
+    "acquirer_transaction_id": "440644309099499894406",
+    "recommendation_code": "02"
+  },
+  "eci": "06",
+  "scheme_id": "489341065491658",
+  "_links": {
+    "self": {
+      "href": "https://api.sandbox.checkout.com/payments/pay_mbabizu24mvu3mela5njyhpit4"
+    },
+    "action": {
+      "href": "https://api.sandbox.checkout.com/payments/pay_mbabizu24mvu3mela5njyhpit4/actions"
+    },
+    "void": {
+      "href": "https://api.sandbox.checkout.com/payments/pay_mbabizu24mvu3mela5njyhpit4/voids"
+    },
+    "capture": {
+      "href": "https://api.sandbox.checkout.com/payments/pay_mbabizu24mvu3mela5njyhpit4/captures"
+    }
+  }
+}

@@ -30,7 +30,7 @@ public final class PaymentIndividualSender extends PaymentSender {
                                     final String lastName,
                                     final Address address,
                                     final SenderIdentification identification) {
-        super(RequestSenderType.INDIVIDUAL);
+        super(SenderType.INDIVIDUAL);
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
@@ -38,7 +38,7 @@ public final class PaymentIndividualSender extends PaymentSender {
     }
 
     public PaymentIndividualSender() {
-        super(RequestSenderType.INDIVIDUAL);
+        super(SenderType.INDIVIDUAL);
     }
 
 }
