@@ -1,10 +1,13 @@
 package com.checkout.instruments;
 
+import com.checkout.HttpMetadata;
 import com.checkout.common.InstrumentType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public final class UpdateInstrumentResponse {
+@EqualsAndHashCode(callSuper = true)
+public final class UpdateInstrumentResponse extends HttpMetadata {
 
     private InstrumentType type;
 

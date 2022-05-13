@@ -1,11 +1,14 @@
 package com.checkout.workflows.four.events;
 
+import com.checkout.HttpMetadata;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Map;
 
 @Data
-public final class GetEventResponse {
+@EqualsAndHashCode(callSuper = true)
+public final class GetEventResponse extends HttpMetadata {
 
     private String id;
 

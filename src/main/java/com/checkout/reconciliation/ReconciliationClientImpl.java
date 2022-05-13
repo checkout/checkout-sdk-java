@@ -3,6 +3,7 @@ package com.checkout.reconciliation;
 import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.ContentResponse;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.common.QueryFilterDateRange;
 
@@ -40,21 +41,21 @@ public class ReconciliationClientImpl extends AbstractClient implements Reconcil
     }
 
     @Override
-    public CompletableFuture<String> retrieveCSVPaymentReport(final QueryFilterDateRange filter, final String targetFile) {
-        validateParams("filter", filter, "targetFile", targetFile);
+    public CompletableFuture<ContentResponse> retrieveCSVPaymentReport(final QueryFilterDateRange filter, final String targetFile) {
+        validateParams("filter", filter);
         return apiClient.queryCsvContentAsync(buildPath(REPORTING_PATH, PAYMENTS_PATH, DOWNLOAD_PATH), sdkAuthorization(), filter, targetFile);
 
     }
 
     @Override
-    public CompletableFuture<String> retrieveCSVSingleStatementReport(final String statementId, final String targetFile) {
-        validateParams("statementId", statementId, "targetFile", targetFile);
+    public CompletableFuture<ContentResponse> retrieveCSVSingleStatementReport(final String statementId, final String targetFile) {
+        validateParams("statementId", statementId);
         return apiClient.queryCsvContentAsync(buildPath(REPORTING_PATH, STATEMENTS_PATH, statementId, PAYMENTS_PATH, DOWNLOAD_PATH), sdkAuthorization(), null, targetFile);
     }
 
     @Override
-    public CompletableFuture<String> retrieveCSVStatementsReport(final QueryFilterDateRange filter, final String targetFile) {
-        validateParams("filter", filter, "targetFile", targetFile);
+    public CompletableFuture<ContentResponse> retrieveCSVStatementsReport(final QueryFilterDateRange filter, final String targetFile) {
+        validateParams("filter", filter);
         return apiClient.queryCsvContentAsync(buildPath(REPORTING_PATH, STATEMENTS_PATH, DOWNLOAD_PATH), sdkAuthorization(), filter, targetFile);
     }
 

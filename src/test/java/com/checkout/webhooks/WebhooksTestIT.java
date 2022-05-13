@@ -1,5 +1,6 @@
 package com.checkout.webhooks;
 
+import com.checkout.ItemsResponse;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class WebhooksTestIT extends SandboxTestFixture {
+class WebhooksTestIT extends SandboxTestFixture {
 
     protected WebhooksTestIT() {
         super(PlatformType.DEFAULT);
@@ -27,8 +28,8 @@ public class WebhooksTestIT extends SandboxTestFixture {
 
     @BeforeEach
     protected void cleanup() {
-        final List<WebhookResponse> webhookResponses = blocking(() -> defaultApi.webhooksClient().retrieveWebhooks());
-        webhookResponses.forEach(webhookResponse -> blocking(() -> defaultApi.webhooksClient().removeWebhook(webhookResponse.getId())));
+        final ItemsResponse<WebhookResponse> webhookResponses = blocking(() -> defaultApi.webhooksClient().retrieveWebhooks());
+        webhookResponses.getItems().forEach(webhookResponse -> blocking(() -> defaultApi.webhooksClient().removeWebhook(webhookResponse.getId())));
     }
 
     @Test
@@ -59,11 +60,11 @@ public class WebhooksTestIT extends SandboxTestFixture {
         assertTrue(webhook.getHeaders().containsKey("authorization"));
         assertNotNull(webhook.getHeaders().get("authorization"));
 
-        final List<WebhookResponse> response = blocking(() -> defaultApi.webhooksClient().retrieveWebhooks());
+        final ItemsResponse<WebhookResponse> response = blocking(() -> defaultApi.webhooksClient().retrieveWebhooks());
         assertNotNull(response);
-        assertTrue(response.size() >= 1);
+        assertTrue(response.getItems().size() >= 1);
 
-        final WebhookResponse webhook2 = response.stream().filter(it -> webhook.getId().equals(it.getId())).findFirst().orElse(null);
+        final WebhookResponse webhook2 = response.getItems().stream().filter(it -> webhook.getId().equals(it.getId())).findFirst().orElse(null);
         assertNotNull(webhook2);
         assertEquals("https://google.com/fail", webhook2.getUrl());
         assertEquals(GATEWAY_EVENT_TYPES, webhook2.getEventTypes());
@@ -96,12 +97,12 @@ public class WebhooksTestIT extends SandboxTestFixture {
 
         final WebhookResponse webhookResponse = registerWebhook();
 
-        final List<WebhookResponse> responseBeforeRemoval = blocking(() -> defaultApi.webhooksClient().retrieveWebhooks());
+        final ItemsResponse<WebhookResponse> responseBeforeRemoval = blocking(() -> defaultApi.webhooksClient().retrieveWebhooks());
         blocking(() -> defaultApi.webhooksClient().removeWebhook(webhookResponse.getId()));
-        final List<WebhookResponse> responseAfterRemoval = blocking(() -> defaultApi.webhooksClient().retrieveWebhooks());
-        assertEquals(responseBeforeRemoval.size() - 1, responseAfterRemoval.size());
+        final ItemsResponse<WebhookResponse> responseAfterRemoval = blocking(() -> defaultApi.webhooksClient().retrieveWebhooks());
+        assertEquals(responseBeforeRemoval.getItems().size() - 1, responseAfterRemoval.getItems().size());
 
-        responseAfterRemoval.stream()
+        responseAfterRemoval.getItems().stream()
                 .map(WebhookResponse::getId)
                 .forEach(it -> {
                     try {
@@ -110,8 +111,8 @@ public class WebhooksTestIT extends SandboxTestFixture {
                         fail(e.getCause());
                     }
                 });
-        final List<WebhookResponse> emptyResponse = blocking(() -> defaultApi.webhooksClient().retrieveWebhooks());
-        assertTrue(emptyResponse.isEmpty());
+        final ItemsResponse<WebhookResponse> emptyResponse = blocking(() -> defaultApi.webhooksClient().retrieveWebhooks());
+        assertTrue(emptyResponse.getItems().isEmpty());
 
     }
 

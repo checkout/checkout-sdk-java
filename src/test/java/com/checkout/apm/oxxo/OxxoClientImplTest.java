@@ -2,6 +2,7 @@ package com.checkout.apm.oxxo;
 
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
@@ -36,9 +37,8 @@ class OxxoClientImplTest {
     @Mock
     private SdkAuthorization authorization;
 
-
     @Mock
-    private Void voidResponse;
+    private EmptyResponse emptyResponse;
 
     private OxxoClient oxxoClient;
 
@@ -52,26 +52,26 @@ class OxxoClientImplTest {
     @Test
     void shouldSucceedPayment() throws ExecutionException, InterruptedException {
 
-        when(apiClient.postAsync(eq("/apms/oxxo/payments/payment_id/succeed"), eq(authorization), eq(Void.class), isNull(), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(voidResponse));
+        when(apiClient.postAsync(eq("apms/oxxo/payments/payment_id/succeed"), eq(authorization), eq(EmptyResponse.class), isNull(), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(emptyResponse));
 
-        final CompletableFuture<Void> future = oxxoClient.succeed("payment_id");
+        final CompletableFuture<EmptyResponse> future = oxxoClient.succeed("payment_id");
 
         assertNotNull(future.get());
-        assertEquals(voidResponse, future.get());
+        assertEquals(emptyResponse, future.get());
 
     }
 
     @Test
     void shouldExpirePayment() throws ExecutionException, InterruptedException {
 
-        when(apiClient.postAsync(eq("/apms/oxxo/payments/payment_id/expire"), eq(authorization), eq(Void.class), isNull(), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(voidResponse));
+        when(apiClient.postAsync(eq("apms/oxxo/payments/payment_id/expire"), eq(authorization), eq(EmptyResponse.class), isNull(), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(emptyResponse));
 
-        final CompletableFuture<Void> future = oxxoClient.expire("payment_id");
+        final CompletableFuture<EmptyResponse> future = oxxoClient.expire("payment_id");
 
         assertNotNull(future.get());
-        assertEquals(voidResponse, future.get());
+        assertEquals(emptyResponse, future.get());
 
     }
 

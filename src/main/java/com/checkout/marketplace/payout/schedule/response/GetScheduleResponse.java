@@ -11,7 +11,7 @@ import java.util.Map;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class GetScheduleResponseDeserializer extends Resource {
+public final class GetScheduleResponse extends Resource {
 
     private Map<Currency, CurrencySchedule> currency;
 

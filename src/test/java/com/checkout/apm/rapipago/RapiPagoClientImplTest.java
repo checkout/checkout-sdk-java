@@ -2,6 +2,7 @@ package com.checkout.apm.rapipago;
 
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
@@ -36,7 +37,7 @@ class RapiPagoClientImplTest {
     private SdkAuthorization authorization;
 
     @Mock
-    private Void voidResponse;
+    private EmptyResponse emptyResponse;
 
     private RapiPagoClient rapiPagoClient;
 
@@ -50,26 +51,26 @@ class RapiPagoClientImplTest {
     @Test
     void shouldSucceedPayment() throws ExecutionException, InterruptedException {
 
-        when(apiClient.postAsync(eq("/apms/rapipago/payments/payment_id/succeed"), eq(authorization), eq(Void.class), isNull(), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(voidResponse));
+        when(apiClient.postAsync(eq("apms/rapipago/payments/payment_id/succeed"), eq(authorization), eq(EmptyResponse.class), isNull(), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(emptyResponse));
 
-        final CompletableFuture<Void> future = rapiPagoClient.succeed("payment_id");
+        final CompletableFuture<EmptyResponse> future = rapiPagoClient.succeed("payment_id");
 
         assertNotNull(future.get());
-        assertEquals(voidResponse, future.get());
+        assertEquals(emptyResponse, future.get());
 
     }
 
     @Test
     void shouldExpirePayment() throws ExecutionException, InterruptedException {
 
-        when(apiClient.postAsync(eq("/apms/rapipago/payments/payment_id/expire"), eq(authorization), eq(Void.class), isNull(), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(voidResponse));
+        when(apiClient.postAsync(eq("apms/rapipago/payments/payment_id/expire"), eq(authorization), eq(EmptyResponse.class), isNull(), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(emptyResponse));
 
-        final CompletableFuture<Void> future = rapiPagoClient.expire("payment_id");
+        final CompletableFuture<EmptyResponse> future = rapiPagoClient.expire("payment_id");
 
         assertNotNull(future.get());
-        assertEquals(voidResponse, future.get());
+        assertEquals(emptyResponse, future.get());
 
     }
 

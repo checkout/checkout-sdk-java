@@ -1,14 +1,17 @@
 package com.checkout.instruments;
 
+import com.checkout.HttpMetadata;
 import com.checkout.common.CardCategory;
 import com.checkout.common.CardType;
 import com.checkout.common.CountryCode;
 import com.checkout.common.InstrumentType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class InstrumentDetails {
+@EqualsAndHashCode(callSuper = true)
+public class InstrumentDetails extends HttpMetadata {
 
     private String id;
 

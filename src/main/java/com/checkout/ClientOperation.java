@@ -7,6 +7,7 @@ enum ClientOperation {
     POST,
     DELETE,
     PATCH,
+    QUERY,
     GET_CSV_CONTENT,
 
 }

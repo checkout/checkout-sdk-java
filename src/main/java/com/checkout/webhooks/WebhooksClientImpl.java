@@ -3,10 +3,12 @@ package com.checkout.webhooks;
 import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
+import com.checkout.ItemsResponse;
 import com.checkout.SdkAuthorizationType;
+import com.google.gson.reflect.TypeToken;
 
-import java.util.Arrays;
-import java.util.List;
+import java.lang.reflect.Type;
 import java.util.concurrent.CompletableFuture;
 
 import static com.checkout.common.CheckoutUtils.validateParams;
@@ -15,15 +17,16 @@ public class WebhooksClientImpl extends AbstractClient implements WebhooksClient
 
     private static final String WEBHOOKS_PATH = "webhooks";
 
+    private static final Type WEBHOOKS_TYPE = new TypeToken<ItemsResponse<WebhookResponse>>() {
+    }.getType();
+
     public WebhooksClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY);
     }
 
     @Override
-    public CompletableFuture<List<WebhookResponse>> retrieveWebhooks() {
-        return apiClient.getAsync(WEBHOOKS_PATH, sdkAuthorization(), WebhookResponse[].class)
-                .thenApply(it -> it == null ? new WebhookResponse[0] : it)
-                .thenApply(Arrays::asList);
+    public CompletableFuture<ItemsResponse<WebhookResponse>> retrieveWebhooks() {
+        return apiClient.getAsync(WEBHOOKS_PATH, sdkAuthorization(), WEBHOOKS_TYPE);
     }
 
     @Override
@@ -50,7 +53,7 @@ public class WebhooksClientImpl extends AbstractClient implements WebhooksClient
     }
 
     @Override
-    public CompletableFuture<Void> removeWebhook(final String webhookId) {
+    public CompletableFuture<EmptyResponse> removeWebhook(final String webhookId) {
         validateParams("webhookId", webhookId);
         return apiClient.deleteAsync(buildPath(WEBHOOKS_PATH, webhookId), sdkAuthorization());
     }

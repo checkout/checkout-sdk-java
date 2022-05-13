@@ -2,6 +2,7 @@ package com.checkout.customers;
 
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
@@ -81,13 +82,13 @@ class CustomersClientImplTest {
     void shouldUpdateInstrument() throws ExecutionException, InterruptedException {
 
         final CustomerRequest request = mock(CustomerRequest.class);
-        final Void response = mock(Void.class);
+        final EmptyResponse response = mock(EmptyResponse.class);
 
         when(apiClient.patchAsync(eq("customers/customer_id"), eq(authorization),
-                eq(Void.class), eq(request), isNull()))
+                eq(EmptyResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<Void> future = client.update("customer_id", request);
+        final CompletableFuture<EmptyResponse> future = client.update("customer_id", request);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -97,12 +98,12 @@ class CustomersClientImplTest {
     @Test
     void shouldDeleteInstrument() throws ExecutionException, InterruptedException {
 
-        final Void response = mock(Void.class);
+        final EmptyResponse response = mock(EmptyResponse.class);
 
         when(apiClient.deleteAsync("customers/customer_id", authorization))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<Void> future = client.delete("customer_id");
+        final CompletableFuture<EmptyResponse> future = client.delete("customer_id");
 
         assertNotNull(future.get());
 

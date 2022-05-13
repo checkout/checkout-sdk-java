@@ -2,6 +2,7 @@ package com.checkout.payments;
 
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.ItemsResponse;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
@@ -23,8 +24,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -45,7 +44,7 @@ class PaymentsClientImplTest {
     private static final String REFUNDS_PATH = "refunds";
     private static final String VOIDS_PATH = "voids";
 
-    private static final Type PAYMENT_ACTION_TYPE = new TypeToken<List<PaymentAction>>() {
+    private static final Type PAYMENT_ACTIONS_TYPE = new TypeToken<ItemsResponse<PaymentAction>>() {
     }.getType();
 
     @Mock
@@ -187,12 +186,12 @@ class PaymentsClientImplTest {
     @Test
     void shouldGetPaymentActions() throws ExecutionException, InterruptedException {
 
-        final List<PaymentAction> response = Arrays.asList(new PaymentAction(), new PaymentAction());
+        final ItemsResponse response = mock(ItemsResponse.class);
 
-        when(apiClient.getAsync(eq(PAYMENTS_PATH + "/5433211/" + ACTIONS_PATH), any(SdkAuthorization.class), eq(PAYMENT_ACTION_TYPE)))
+        when(apiClient.getAsync(eq(PAYMENTS_PATH + "/5433211/" + ACTIONS_PATH), any(SdkAuthorization.class), eq(PAYMENT_ACTIONS_TYPE)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<List<PaymentAction>> future = paymentsClient.getPaymentActions("5433211");
+        final CompletableFuture<ItemsResponse<PaymentAction>> future = paymentsClient.getPaymentActions("5433211");
 
         assertNotNull(future.get());
         assertEquals(response, future.get());

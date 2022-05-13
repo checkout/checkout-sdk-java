@@ -3,6 +3,7 @@ package com.checkout.disputes;
 import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.common.FileDetailsResponse;
 import com.checkout.common.FileRequest;
@@ -36,15 +37,15 @@ public class DisputesClientImpl extends AbstractClient implements DisputesClient
     }
 
     @Override
-    public CompletableFuture<Void> accept(final String disputeId) {
+    public CompletableFuture<EmptyResponse> accept(final String disputeId) {
         validateParams("disputeId", disputeId);
-        return apiClient.postAsync(buildPath(DISPUTES_PATH, disputeId, ACCEPT_PATH), sdkAuthorization(), Void.class, null, null);
+        return apiClient.postAsync(buildPath(DISPUTES_PATH, disputeId, ACCEPT_PATH), sdkAuthorization(), EmptyResponse.class, null, null);
     }
 
     @Override
-    public CompletableFuture<Void> putEvidence(final String disputeId, final DisputeEvidenceRequest disputeEvidence) {
+    public CompletableFuture<EmptyResponse> putEvidence(final String disputeId, final DisputeEvidenceRequest disputeEvidence) {
         validateParams("disputeId", disputeId, "disputeEvidence", disputeEvidence);
-        return apiClient.putAsync(buildPath(DISPUTES_PATH, disputeId, EVIDENCE_PATH), sdkAuthorization(), Void.class, disputeEvidence);
+        return apiClient.putAsync(buildPath(DISPUTES_PATH, disputeId, EVIDENCE_PATH), sdkAuthorization(), EmptyResponse.class, disputeEvidence);
     }
 
     @Override
@@ -54,9 +55,9 @@ public class DisputesClientImpl extends AbstractClient implements DisputesClient
     }
 
     @Override
-    public CompletableFuture<Void> submitEvidence(final String disputeId) {
+    public CompletableFuture<EmptyResponse> submitEvidence(final String disputeId) {
         validateParams("disputeId", disputeId);
-        return apiClient.postAsync(buildPath(DISPUTES_PATH, disputeId, EVIDENCE_PATH), sdkAuthorization(), Void.class, null, null);
+        return apiClient.postAsync(buildPath(DISPUTES_PATH, disputeId, EVIDENCE_PATH), sdkAuthorization(), EmptyResponse.class, null, null);
     }
 
     @Override

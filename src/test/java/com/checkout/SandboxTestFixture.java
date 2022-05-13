@@ -1,8 +1,6 @@
 package com.checkout;
 
 import com.checkout.four.CheckoutApi;
-import com.checkout.payments.PaymentStatus;
-import com.checkout.payments.response.GetPaymentResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.hamcrest.BaseMatcher;
@@ -10,7 +8,6 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.opentest4j.AssertionFailedError;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -19,6 +16,8 @@ import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -85,7 +84,7 @@ public abstract class SandboxTestFixture {
         throw new AssertionFailedError("Max attempts reached!");
     }
 
-    protected <T> T blocking(final Supplier<CompletableFuture<T>> supplier, final Matcher<T> matcher) {
+    protected <T extends HttpMetadata> T blocking(final Supplier<CompletableFuture<T>> supplier, final Matcher<T> matcher) {
         int attempts = 1;
         while (attempts <= TRY_MAX_ATTEMPTS) {
             try {
@@ -93,7 +92,10 @@ public abstract class SandboxTestFixture {
                 if (!matcher.matches(t.get())) {
                     throw new AssertionFailedError(matcher.toString());
                 }
-                return t.get();
+                final T value = t.get();
+                assertNotNull(value.getHttpStatusCode());
+                assertFalse(value.getResponseHeaders().isEmpty());
+                return value;
             } catch (final Throwable e) {
                 log.warn("Request/Matcher failed with error '{}' - retry {}/{}", e.getMessage(), attempts, TRY_MAX_ATTEMPTS);
             }
@@ -122,7 +124,7 @@ public abstract class SandboxTestFixture {
     }
 
     // Hamcrest hasSize() doesn't seem to provide the type inference with generics needed
-    protected static class ListHasSize<T> extends BaseMatcher<List<T>> {
+    protected static class ListHasSize<T, R> extends BaseMatcher<ItemsResponse<R>> {
 
         private final int count;
 
@@ -132,10 +134,7 @@ public abstract class SandboxTestFixture {
 
         @Override
         public boolean matches(final Object actual) {
-            if (!(actual instanceof List)) {
-                throw new IllegalStateException("not a list!");
-            }
-            return ((List<T>) actual).size() == count;
+            return ((ItemsResponse<R>) actual).getItems().size() == count;
         }
 
         @Override
@@ -144,28 +143,4 @@ public abstract class SandboxTestFixture {
         }
 
     }
-
-    protected static class PaymentIsInStatus extends BaseMatcher<GetPaymentResponse> {
-
-        private final PaymentStatus status;
-
-        public PaymentIsInStatus(final PaymentStatus status) {
-            this.status = status;
-        }
-
-        @Override
-        public boolean matches(final Object actual) {
-            if (!(actual instanceof GetPaymentResponse)) {
-                throw new IllegalStateException("not a GetPaymentResponse!");
-            }
-            return ((GetPaymentResponse) actual).getStatus().equals(status);
-        }
-
-        @Override
-        public void describeTo(final Description description) {
-            throw new UnsupportedOperationException();
-        }
-
-    }
-
 }

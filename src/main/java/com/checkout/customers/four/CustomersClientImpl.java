@@ -3,6 +3,7 @@ package com.checkout.customers.four;
 import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.common.four.IdResponse;
 
@@ -31,13 +32,13 @@ public class CustomersClientImpl extends AbstractClient implements CustomersClie
     }
 
     @Override
-    public CompletableFuture<Void> update(final String customerId, final CustomerRequest customerRequest) {
+    public CompletableFuture<EmptyResponse> update(final String customerId, final CustomerRequest customerRequest) {
         validateParams("customerId", customerId, "customerRequest", customerRequest);
-        return apiClient.patchAsync(getCustomersUrl(customerId), sdkAuthorization(), Void.class, customerRequest, null);
+        return apiClient.patchAsync(getCustomersUrl(customerId), sdkAuthorization(), EmptyResponse.class, customerRequest, null);
     }
 
     @Override
-    public CompletableFuture<Void> delete(final String customerId) {
+    public CompletableFuture<EmptyResponse> delete(final String customerId) {
         validateParams("customerId", customerId);
         return apiClient.deleteAsync(getCustomersUrl(customerId), sdkAuthorization());
     }

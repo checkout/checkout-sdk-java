@@ -1,5 +1,7 @@
 package com.checkout.apm.oxxo;
 
+import com.checkout.EmptyResponse;
+
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -8,8 +10,8 @@ import java.util.concurrent.CompletableFuture;
 @Deprecated
 public interface OxxoClient {
 
-    CompletableFuture<Void> succeed(String paymentId);
+    CompletableFuture<EmptyResponse> succeed(String paymentId);
 
-    CompletableFuture<Void> expire(String paymentId);
+    CompletableFuture<EmptyResponse> expire(String paymentId);
 
 }
