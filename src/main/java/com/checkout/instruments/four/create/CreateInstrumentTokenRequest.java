@@ -1,7 +1,7 @@
 package com.checkout.instruments.four.create;
 
-import com.checkout.common.four.AccountHolder;
 import com.checkout.common.InstrumentType;
+import com.checkout.common.four.AccountHolder;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

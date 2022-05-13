@@ -1,15 +1,16 @@
 package com.checkout.workflows.four;
 
+import com.checkout.EmptyResponse;
+import com.checkout.ItemsResponse;
 import com.checkout.workflows.four.actions.request.WorkflowActionRequest;
 import com.checkout.workflows.four.actions.response.WorkflowActionInvocationsResponse;
 import com.checkout.workflows.four.conditions.request.WorkflowConditionRequest;
-import com.checkout.workflows.four.events.EventTypesResponse;
 import com.checkout.workflows.four.events.GetEventResponse;
 import com.checkout.workflows.four.events.SubjectEventsResponse;
+import com.checkout.workflows.four.events.WorkflowEventTypes;
 import com.checkout.workflows.four.reflow.ReflowRequest;
 import com.checkout.workflows.four.reflow.ReflowResponse;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface WorkflowsClient {
@@ -22,13 +23,13 @@ public interface WorkflowsClient {
 
     CompletableFuture<UpdateWorkflowResponse> updateWorkflow(String workflowId, UpdateWorkflowRequest updateWorkflowRequest);
 
-    CompletableFuture<Void> removeWorkflow(String workflowId);
+    CompletableFuture<EmptyResponse> removeWorkflow(String workflowId);
 
-    CompletableFuture<Void> updateWorkflowAction(String workflowId, String actionId, WorkflowActionRequest workflowActionRequest);
+    CompletableFuture<EmptyResponse> updateWorkflowAction(String workflowId, String actionId, WorkflowActionRequest workflowActionRequest);
 
-    CompletableFuture<Void> updateWorkflowCondition(String workflowId, String conditionId, WorkflowConditionRequest workflowConditionRequest);
+    CompletableFuture<EmptyResponse> updateWorkflowCondition(String workflowId, String conditionId, WorkflowConditionRequest workflowConditionRequest);
 
-    CompletableFuture<List<EventTypesResponse>> getEventTypes();
+    CompletableFuture<ItemsResponse<WorkflowEventTypes>> getEventTypes();
 
     CompletableFuture<SubjectEventsResponse> getSubjectEvents(String subjectId);
 

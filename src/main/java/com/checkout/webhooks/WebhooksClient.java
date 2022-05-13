@@ -1,11 +1,13 @@
 package com.checkout.webhooks;
 
-import java.util.List;
+import com.checkout.EmptyResponse;
+import com.checkout.ItemsResponse;
+
 import java.util.concurrent.CompletableFuture;
 
 public interface WebhooksClient {
 
-    CompletableFuture<List<WebhookResponse>> retrieveWebhooks();
+    CompletableFuture<ItemsResponse<WebhookResponse>> retrieveWebhooks();
 
     CompletableFuture<WebhookResponse> registerWebhook(WebhookRequest webhookRequest);
 
@@ -15,6 +17,6 @@ public interface WebhooksClient {
 
     CompletableFuture<WebhookResponse> updateWebhook(String webhookId, WebhookRequest webhookRequest);
 
-    CompletableFuture<Void> removeWebhook(String webhookId);
+    CompletableFuture<EmptyResponse> removeWebhook(String webhookId);
 
 }

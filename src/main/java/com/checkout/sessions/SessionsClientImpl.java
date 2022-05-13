@@ -3,9 +3,10 @@ package com.checkout.sessions;
 import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
+import com.checkout.HttpMetadata;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
-import com.checkout.common.Resource;
 import com.checkout.sessions.channel.ChannelData;
 
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public class SessionsClientImpl extends AbstractClient implements SessionsClient
     private static final String ISSUER_FINGERPRINT_PATH = "issuer-fingerprint";
     private static final String SESSION_ID = "sessionId";
 
-    private static final Map<Integer, Class<? extends Resource>> SESSION_RESPONSE_MAPPINGS = new HashMap<>();
+    private static final Map<Integer, Class<? extends HttpMetadata>> SESSION_RESPONSE_MAPPINGS = new HashMap<>();
 
     static {
         SESSION_RESPONSE_MAPPINGS.put(201, CreateSessionOkResponse.class);
@@ -63,12 +64,12 @@ public class SessionsClientImpl extends AbstractClient implements SessionsClient
     }
 
     @Override
-    public CompletableFuture<Void> completeSession(final String sessionId) {
+    public CompletableFuture<EmptyResponse> completeSession(final String sessionId) {
         return completeSession(sessionId, sdkAuthorization());
     }
 
     @Override
-    public CompletableFuture<Void> completeSession(final String sessionSecret, final String sessionId) {
+    public CompletableFuture<EmptyResponse> completeSession(final String sessionSecret, final String sessionId) {
         return completeSession(sessionId, sessionSecretAuthorization(sessionSecret));
     }
 
@@ -87,7 +88,7 @@ public class SessionsClientImpl extends AbstractClient implements SessionsClient
 
     private CompletableFuture<SessionResponse> createSession(final SessionRequest sessionRequest) {
         return apiClient.postAsync(SESSIONS_PATH, sdkAuthorization(), SESSION_RESPONSE_MAPPINGS, sessionRequest, null)
-                .thenApply((Function<Resource, SessionResponse>) resource -> {
+                .thenApply((Function<HttpMetadata, SessionResponse>) resource -> {
                     if (resource instanceof CreateSessionOkResponse) {
                         return new SessionResponse((CreateSessionOkResponse) resource);
                     } else if (resource instanceof CreateSessionAcceptedResponse) {
@@ -111,10 +112,10 @@ public class SessionsClientImpl extends AbstractClient implements SessionsClient
         return apiClient.putAsync(buildPath(SESSIONS_PATH, sessionId, COLLECT_DATA_PATH), sdkAuthorization, GetSessionResponse.class, channelData);
     }
 
-    private CompletableFuture<Void> completeSession(final String sessionId,
-                                                    final SdkAuthorization sdkAuthorization) {
+    private CompletableFuture<EmptyResponse> completeSession(final String sessionId,
+                                                             final SdkAuthorization sdkAuthorization) {
         validateParams(SESSION_ID, sessionId);
-        return apiClient.postAsync(buildPath(SESSIONS_PATH, sessionId, COMPLETE_PATH), sdkAuthorization, Void.class, null, null);
+        return apiClient.postAsync(buildPath(SESSIONS_PATH, sessionId, COMPLETE_PATH), sdkAuthorization, EmptyResponse.class, null, null);
     }
 
     private CompletableFuture<GetSessionResponseAfterChannelDataSupplied> update3dsMethodCompletionIndicator(final String sessionId,

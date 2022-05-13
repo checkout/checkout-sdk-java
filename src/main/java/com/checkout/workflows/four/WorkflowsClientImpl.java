@@ -3,19 +3,20 @@ package com.checkout.workflows.four;
 import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
+import com.checkout.ItemsResponse;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.workflows.four.actions.request.WorkflowActionRequest;
 import com.checkout.workflows.four.actions.response.WorkflowActionInvocationsResponse;
 import com.checkout.workflows.four.conditions.request.WorkflowConditionRequest;
-import com.checkout.workflows.four.events.EventTypesResponse;
 import com.checkout.workflows.four.events.GetEventResponse;
 import com.checkout.workflows.four.events.SubjectEventsResponse;
+import com.checkout.workflows.four.events.WorkflowEventTypes;
 import com.checkout.workflows.four.reflow.ReflowRequest;
 import com.checkout.workflows.four.reflow.ReflowResponse;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static com.checkout.common.CheckoutUtils.validateParams;
@@ -32,7 +33,7 @@ public class WorkflowsClientImpl extends AbstractClient implements WorkflowsClie
     private static final String SUBJECT_PATH = "subject";
     private static final String WORKFLOW_ID = "workflowId";
 
-    private static final Type EVENT_TYPES_RESPONSE = new TypeToken<List<EventTypesResponse>>() {
+    private static final Type WORKFLOWS_EVENT_TYPES_TYPE = new TypeToken<ItemsResponse<WorkflowEventTypes>>() {
     }.getType();
 
     public WorkflowsClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
@@ -63,26 +64,26 @@ public class WorkflowsClientImpl extends AbstractClient implements WorkflowsClie
     }
 
     @Override
-    public CompletableFuture<Void> removeWorkflow(final String workflowId) {
+    public CompletableFuture<EmptyResponse> removeWorkflow(final String workflowId) {
         validateParams(WORKFLOW_ID, workflowId);
         return apiClient.deleteAsync(buildPath(WORKFLOWS_PATH, workflowId), sdkAuthorization());
     }
 
     @Override
-    public CompletableFuture<Void> updateWorkflowAction(final String workflowId, final String actionId, final WorkflowActionRequest workflowActionRequest) {
+    public CompletableFuture<EmptyResponse> updateWorkflowAction(final String workflowId, final String actionId, final WorkflowActionRequest workflowActionRequest) {
         validateParams(WORKFLOW_ID, workflowId, "actionId", actionId, "workflowActionRequest", workflowActionRequest);
-        return apiClient.putAsync(buildPath(WORKFLOWS_PATH, workflowId, ACTIONS_PATH, actionId), sdkAuthorization(), Void.class, workflowActionRequest);
+        return apiClient.putAsync(buildPath(WORKFLOWS_PATH, workflowId, ACTIONS_PATH, actionId), sdkAuthorization(), EmptyResponse.class, workflowActionRequest);
     }
 
     @Override
-    public CompletableFuture<Void> updateWorkflowCondition(final String workflowId, final String conditionId, final WorkflowConditionRequest workflowConditionRequest) {
+    public CompletableFuture<EmptyResponse> updateWorkflowCondition(final String workflowId, final String conditionId, final WorkflowConditionRequest workflowConditionRequest) {
         validateParams(WORKFLOW_ID, workflowId, "conditionId", conditionId, "workflowConditionRequest", workflowConditionRequest);
-        return apiClient.putAsync(buildPath(WORKFLOWS_PATH, workflowId, CONDITIONS_PATH, conditionId), sdkAuthorization(), Void.class, workflowConditionRequest);
+        return apiClient.putAsync(buildPath(WORKFLOWS_PATH, workflowId, CONDITIONS_PATH, conditionId), sdkAuthorization(), EmptyResponse.class, workflowConditionRequest);
     }
 
     @Override
-    public CompletableFuture<List<EventTypesResponse>> getEventTypes() {
-        return apiClient.getAsync(buildPath(WORKFLOWS_PATH, EVENT_TYPES_PATH), sdkAuthorization(), EVENT_TYPES_RESPONSE);
+    public CompletableFuture<ItemsResponse<WorkflowEventTypes>> getEventTypes() {
+        return apiClient.getAsync(buildPath(WORKFLOWS_PATH, EVENT_TYPES_PATH), sdkAuthorization(), WORKFLOWS_EVENT_TYPES_TYPE);
     }
 
     @Override

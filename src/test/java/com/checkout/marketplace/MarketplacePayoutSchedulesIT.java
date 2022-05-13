@@ -11,7 +11,7 @@ import com.checkout.marketplace.payout.schedule.request.ScheduleFrequencyMonthly
 import com.checkout.marketplace.payout.schedule.request.ScheduleFrequencyWeeklyRequest;
 import com.checkout.marketplace.payout.schedule.request.UpdateScheduleRequest;
 import com.checkout.marketplace.payout.schedule.response.CurrencySchedule;
-import com.checkout.marketplace.payout.schedule.response.GetScheduleResponseDeserializer;
+import com.checkout.marketplace.payout.schedule.response.GetScheduleResponse;
 import com.checkout.marketplace.payout.schedule.response.ScheduleFrequencyDailyResponse;
 import com.checkout.marketplace.payout.schedule.response.ScheduleFrequencyMonthlyResponse;
 import com.checkout.marketplace.payout.schedule.response.ScheduleFrequencyWeeklyResponse;
@@ -43,16 +43,16 @@ class MarketplacePayoutSchedulesIT {
 
         assertNotNull(scheduleResponse);
 
-        final GetScheduleResponseDeserializer getScheduleResponseDeserializer = getPayoutSchedulesCheckoutApi().marketplaceClient()
+        final GetScheduleResponse GetScheduleResponse = getPayoutSchedulesCheckoutApi().marketplaceClient()
                 .retrievePayoutSchedule("ent_sdioy6bajpzxyl3utftdp7legq").get();
 
-        assertNotNull(getScheduleResponseDeserializer);
-        assertNotNull(getScheduleResponseDeserializer.getCurrency());
-        assertFalse(getScheduleResponseDeserializer.getCurrency().isEmpty());
-        assertNotNull(getScheduleResponseDeserializer.getLinks());
-        assertFalse(getScheduleResponseDeserializer.getLinks().isEmpty());
+        assertNotNull(GetScheduleResponse);
+        assertNotNull(GetScheduleResponse.getCurrency());
+        assertFalse(GetScheduleResponse.getCurrency().isEmpty());
+        assertNotNull(GetScheduleResponse.getLinks());
+        assertFalse(GetScheduleResponse.getLinks().isEmpty());
 
-        final CurrencySchedule schedule = getScheduleResponseDeserializer.getCurrency().get(Currency.USD);
+        final CurrencySchedule schedule = GetScheduleResponse.getCurrency().get(Currency.USD);
         assertNotNull(schedule.getEnabled());
         assertNotNull(schedule.getThreshold());
         assertNotNull(schedule.getRecurrence());
@@ -75,16 +75,16 @@ class MarketplacePayoutSchedulesIT {
 
         assertNotNull(scheduleResponse);
 
-        final GetScheduleResponseDeserializer getScheduleResponseDeserializer = getPayoutSchedulesCheckoutApi().marketplaceClient()
+        final GetScheduleResponse GetScheduleResponse = getPayoutSchedulesCheckoutApi().marketplaceClient()
                 .retrievePayoutSchedule("ent_sdioy6bajpzxyl3utftdp7legq").get();
 
-        assertNotNull(getScheduleResponseDeserializer);
-        assertNotNull(getScheduleResponseDeserializer.getCurrency());
-        assertFalse(getScheduleResponseDeserializer.getCurrency().isEmpty());
-        assertNotNull(getScheduleResponseDeserializer.getLinks());
-        assertFalse(getScheduleResponseDeserializer.getLinks().isEmpty());
+        assertNotNull(GetScheduleResponse);
+        assertNotNull(GetScheduleResponse.getCurrency());
+        assertFalse(GetScheduleResponse.getCurrency().isEmpty());
+        assertNotNull(GetScheduleResponse.getLinks());
+        assertFalse(GetScheduleResponse.getLinks().isEmpty());
 
-        final CurrencySchedule schedule = getScheduleResponseDeserializer.getCurrency().get(Currency.USD);
+        final CurrencySchedule schedule = GetScheduleResponse.getCurrency().get(Currency.USD);
         assertNotNull(schedule.getEnabled());
         assertNotNull(schedule.getThreshold());
         assertNotNull(schedule.getRecurrence());
@@ -108,16 +108,16 @@ class MarketplacePayoutSchedulesIT {
 
         assertNotNull(scheduleResponse);
 
-        final GetScheduleResponseDeserializer getScheduleResponseDeserializer = getPayoutSchedulesCheckoutApi().marketplaceClient()
+        final GetScheduleResponse GetScheduleResponse = getPayoutSchedulesCheckoutApi().marketplaceClient()
                 .retrievePayoutSchedule("ent_sdioy6bajpzxyl3utftdp7legq").get();
 
-        assertNotNull(getScheduleResponseDeserializer);
-        assertNotNull(getScheduleResponseDeserializer.getCurrency());
-        assertFalse(getScheduleResponseDeserializer.getCurrency().isEmpty());
-        assertNotNull(getScheduleResponseDeserializer.getLinks());
-        assertFalse(getScheduleResponseDeserializer.getLinks().isEmpty());
+        assertNotNull(GetScheduleResponse);
+        assertNotNull(GetScheduleResponse.getCurrency());
+        assertFalse(GetScheduleResponse.getCurrency().isEmpty());
+        assertNotNull(GetScheduleResponse.getLinks());
+        assertFalse(GetScheduleResponse.getLinks().isEmpty());
 
-        final CurrencySchedule schedule = getScheduleResponseDeserializer.getCurrency().get(Currency.USD);
+        final CurrencySchedule schedule = GetScheduleResponse.getCurrency().get(Currency.USD);
         assertNotNull(schedule.getEnabled());
         assertNotNull(schedule.getThreshold());
         assertNotNull(schedule.getRecurrence());

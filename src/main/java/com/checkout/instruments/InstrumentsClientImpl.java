@@ -3,6 +3,7 @@ package com.checkout.instruments;
 import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
 import com.checkout.SdkAuthorizationType;
 
 import java.util.concurrent.CompletableFuture;
@@ -37,7 +38,7 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
     }
 
     @Override
-    public CompletableFuture<Void> delete(final String instrumentId) {
+    public CompletableFuture<EmptyResponse> delete(final String instrumentId) {
         validateParams(INSTRUMENT_ID, instrumentId);
         return apiClient.deleteAsync(buildPath(INSTRUMENTS_PATH, instrumentId), sdkAuthorization());
     }
