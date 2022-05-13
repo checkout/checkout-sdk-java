@@ -1,22 +1,21 @@
 package com.checkout.common;
 
-import com.google.gson.annotations.Expose;
+import com.checkout.HttpMetadata;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public abstract class Resource {
+public abstract class Resource extends HttpMetadata {
 
     @SerializedName("_links")
     private Map<String, Link> links = new HashMap<>();
-
-    @Expose(deserialize = false, serialize = false)
-    private ApiResponseInfo apiResponseInfo;
 
     public Link getSelfLink() {
         return getLink("self");

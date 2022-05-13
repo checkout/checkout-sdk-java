@@ -1,9 +1,10 @@
 package com.checkout.instruments.four;
 
 import com.checkout.ApiClient;
-import com.checkout.SdkAuthorizationType;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
 import com.checkout.SdkAuthorization;
+import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
@@ -116,12 +117,12 @@ class InstrumentsClientImplTest {
     @Test
     void shouldDeleteInstrument() throws ExecutionException, InterruptedException {
 
-        final Void response = Mockito.mock(Void.class);
+        final EmptyResponse response = Mockito.mock(EmptyResponse.class);
 
         when(apiClient.deleteAsync(eq(INSTRUMENTS + "/" + "123"), any(SdkAuthorization.class)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<Void> future = instrumentsClient.delete("123");
+        final CompletableFuture<EmptyResponse> future = instrumentsClient.delete("123");
 
         assertNotNull(future.get());
 

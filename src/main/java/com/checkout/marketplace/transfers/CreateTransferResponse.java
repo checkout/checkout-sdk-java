@@ -1,9 +1,12 @@
 package com.checkout.marketplace.transfers;
 
+import com.checkout.HttpMetadata;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public final class CreateTransferResponse {
+@EqualsAndHashCode(callSuper = true)
+public final class CreateTransferResponse extends HttpMetadata {
 
     private String id;
 

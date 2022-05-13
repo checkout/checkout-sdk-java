@@ -1,5 +1,6 @@
 package com.checkout.disputes;
 
+import com.checkout.EmptyResponse;
 import com.checkout.common.FileDetailsResponse;
 import com.checkout.common.FileRequest;
 import com.checkout.common.IdResponse;
@@ -12,13 +13,13 @@ public interface DisputesClient {
 
     CompletableFuture<DisputeDetailsResponse> getDisputeDetails(String disputeId);
 
-    CompletableFuture<Void> accept(String disputeId);
+    CompletableFuture<EmptyResponse> accept(String disputeId);
 
-    CompletableFuture<Void> putEvidence(String disputeId, DisputeEvidenceRequest disputeEvidence);
+    CompletableFuture<EmptyResponse> putEvidence(String disputeId, DisputeEvidenceRequest disputeEvidence);
 
     CompletableFuture<DisputeEvidenceResponse> getEvidence(String disputeId);
 
-    CompletableFuture<Void> submitEvidence(String disputeId);
+    CompletableFuture<EmptyResponse> submitEvidence(String disputeId);
 
     CompletableFuture<IdResponse> uploadFile(FileRequest fileRequest);
 

@@ -1,17 +1,20 @@
 package com.checkout.customers;
 
+import com.checkout.HttpMetadata;
 import com.checkout.common.Phone;
 import com.checkout.instruments.InstrumentDetails;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 import java.util.Map;
 
 @Data
 @Builder
-public final class CustomerDetailsResponse {
+@EqualsAndHashCode(callSuper = true)
+public final class CustomerDetailsResponse extends HttpMetadata {
 
     private String id;
 

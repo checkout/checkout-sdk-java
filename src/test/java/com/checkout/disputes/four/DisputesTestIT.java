@@ -50,7 +50,7 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
         final DisputesQueryResponse response = blocking(() -> fourApi.disputesClient().query(query));
         assertNotNull(response);
         assertEquals(query.getLimit(), response.getLimit());
-        assertEquals(query.isThisChannelOnly(), response.isThisChannelOnly());
+        assertEquals(query.getThisChannelOnly(), response.isThisChannelOnly());
         assertEquals(query.getTo().truncatedTo(ChronoUnit.SECONDS), response.getTo());
         assertEquals(query.getFrom().truncatedTo(ChronoUnit.SECONDS), response.getFrom());
         if (response.getTotalCount() > 0) {

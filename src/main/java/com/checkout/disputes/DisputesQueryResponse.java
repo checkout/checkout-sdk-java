@@ -1,13 +1,16 @@
 package com.checkout.disputes;
 
+import com.checkout.HttpMetadata;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
 import java.util.List;
 
 @Data
-public final class DisputesQueryResponse {
+@EqualsAndHashCode(callSuper = true)
+public final class DisputesQueryResponse extends HttpMetadata {
 
     private Integer limit;
 

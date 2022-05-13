@@ -1,12 +1,15 @@
 package com.checkout.workflows.four;
 
+import com.checkout.HttpMetadata;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
 @Data
-public final class GetWorkflowsResponse {
+@EqualsAndHashCode(callSuper = true)
+public final class GetWorkflowsResponse extends HttpMetadata {
 
     @SerializedName("data")
     private List<Workflow> workflows;
