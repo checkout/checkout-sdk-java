@@ -1,5 +1,6 @@
 package com.checkout.instruments.four;
 
+import com.checkout.EmptyResponse;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.instruments.four.create.CreateInstrumentRequest;
@@ -20,7 +21,7 @@ public interface InstrumentsClient {
 
     <T extends UpdateInstrumentResponse> CompletableFuture<T> update(String instrumentId, UpdateInstrumentRequest updateInstrumentRequest);
 
-    CompletableFuture<Void> delete(String instrumentId);
+    CompletableFuture<EmptyResponse> delete(String instrumentId);
 
     CompletableFuture<BankAccountFieldResponse> getBankAccountFieldFormatting(CountryCode country, Currency currency, BankAccountFieldQuery query);
 }

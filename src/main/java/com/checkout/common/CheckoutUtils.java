@@ -3,6 +3,8 @@ package com.checkout.common;
 import com.checkout.CheckoutArgumentException;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Map;
+
 public final class CheckoutUtils {
 
     public static final String PROJECT_NAME = "checkout-sdk-java";
@@ -11,6 +13,7 @@ public final class CheckoutUtils {
     public static final String DAILY = "Daily";
     public static final String WEEKLY = "Weekly";
     public static final String MONTHLY = "Monthly";
+    private static final String CKO_REQUEST_ID = "Cko-Request-Id";
 
     private CheckoutUtils() {
     }
@@ -21,6 +24,13 @@ public final class CheckoutUtils {
 
     public static boolean isSuccessHttpStatusCode(final int httpStatusCode) {
         return httpStatusCode >= 200 && httpStatusCode <= 299;
+    }
+
+    public static String getRequestId(final Map<String, String> responseHeaders) {
+        if (responseHeaders == null) {
+            return null;
+        }
+        return responseHeaders.get(CKO_REQUEST_ID);
     }
 
     public static void validateParams(final String p1, final Object o1) {

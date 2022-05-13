@@ -3,6 +3,7 @@ package com.checkout.payments.four;
 import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.ItemsResponse;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.payments.four.request.AuthorizationRequest;
 import com.checkout.payments.four.request.PaymentRequest;
@@ -14,7 +15,6 @@ import com.checkout.payments.four.response.PayoutResponse;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static com.checkout.common.CheckoutUtils.validateParams;
@@ -28,7 +28,7 @@ public final class PaymentsClientImpl extends AbstractClient implements Payments
     private static final String REFUNDS_PATH = "refunds";
     private static final String VOIDS_PATH = "voids";
 
-    private static final Type PAYMENT_ACTION_TYPE = new TypeToken<List<PaymentAction>>() {
+    private static final Type PAYMENT_ACTIONS_TYPE = new TypeToken<ItemsResponse<PaymentAction>>() {
     }.getType();
 
     public PaymentsClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
@@ -66,9 +66,9 @@ public final class PaymentsClientImpl extends AbstractClient implements Payments
     }
 
     @Override
-    public CompletableFuture<List<PaymentAction>> getPaymentActions(final String paymentId) {
+    public CompletableFuture<ItemsResponse<PaymentAction>> getPaymentActions(final String paymentId) {
         validateParams("paymentId", paymentId);
-        return apiClient.getAsync(buildPath(PAYMENTS_PATH, paymentId, ACTIONS_PATH), sdkAuthorization(), PAYMENT_ACTION_TYPE);
+        return apiClient.getAsync(buildPath(PAYMENTS_PATH, paymentId, ACTIONS_PATH), sdkAuthorization(), PAYMENT_ACTIONS_TYPE);
     }
 
     @Override

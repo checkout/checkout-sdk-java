@@ -14,9 +14,9 @@ import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.source.RequestCardSource;
 import com.checkout.payments.request.source.RequestTokenSource;
 import com.checkout.payments.response.PaymentResponse;
-import com.checkout.tokens.TokensClient;
 import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
+import com.checkout.tokens.TokensClient;
 
 import java.util.UUID;
 

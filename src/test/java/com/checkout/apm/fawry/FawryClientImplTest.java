@@ -2,6 +2,7 @@ package com.checkout.apm.fawry;
 
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
@@ -36,7 +37,7 @@ class FawryClientImplTest {
     private SdkAuthorization authorization;
 
     @Mock
-    private Void voidResponse;
+    private EmptyResponse emptyResponse;
 
     private FawryClient fawryClient;
 
@@ -50,26 +51,26 @@ class FawryClientImplTest {
     @Test
     void shouldApprovePayment() throws ExecutionException, InterruptedException {
 
-        when(apiClient.putAsync(eq("/fawry/payments/reference/approval"), eq(authorization), eq(Void.class), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(voidResponse));
+        when(apiClient.putAsync(eq("fawry/payments/reference/approval"), eq(authorization), eq(EmptyResponse.class), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(emptyResponse));
 
-        final CompletableFuture<Void> future = fawryClient.approve("reference");
+        final CompletableFuture<EmptyResponse> future = fawryClient.approve("reference");
 
         assertNotNull(future.get());
-        assertEquals(voidResponse, future.get());
+        assertEquals(emptyResponse, future.get());
 
     }
 
     @Test
     void shouldCancelPayment() throws ExecutionException, InterruptedException {
 
-        when(apiClient.putAsync(eq("/fawry/payments/reference/cancellation"), eq(authorization), eq(Void.class), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(voidResponse));
+        when(apiClient.putAsync(eq("fawry/payments/reference/cancellation"), eq(authorization), eq(EmptyResponse.class), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(emptyResponse));
 
-        final CompletableFuture<Void> future = fawryClient.cancel("reference");
+        final CompletableFuture<EmptyResponse> future = fawryClient.cancel("reference");
 
         assertNotNull(future.get());
-        assertEquals(voidResponse, future.get());
+        assertEquals(emptyResponse, future.get());
 
     }
 

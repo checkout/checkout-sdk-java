@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public final class EventTypesResponse {
+public final class EventTypes {
 
     private String version;
 

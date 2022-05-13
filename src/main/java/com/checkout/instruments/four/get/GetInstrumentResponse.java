@@ -1,12 +1,15 @@
 package com.checkout.instruments.four.get;
 
+import com.checkout.HttpMetadata;
 import com.checkout.common.four.AccountHolder;
 import com.checkout.instruments.InstrumentCustomerResponse;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public abstract class GetInstrumentResponse {
+@EqualsAndHashCode(callSuper = true)
+public abstract class GetInstrumentResponse extends HttpMetadata {
 
     protected String id;
 

@@ -409,7 +409,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .source(RequestQPaySource.builder()
                         .description("QPay Demo Payment")
                         .language("en")
-                        .quantity("1")
+                        .quantity(1)
                         .nationalId("070AYY010BU234M")
                         .build())
                 .currency(Currency.QAR)

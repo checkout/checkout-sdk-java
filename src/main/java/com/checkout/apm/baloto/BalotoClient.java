@@ -1,5 +1,7 @@
 package com.checkout.apm.baloto;
 
+import com.checkout.EmptyResponse;
+
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -8,8 +10,8 @@ import java.util.concurrent.CompletableFuture;
 @Deprecated
 public interface BalotoClient {
 
-    CompletableFuture<Void> succeed(String id);
+    CompletableFuture<EmptyResponse> succeed(String id);
 
-    CompletableFuture<Void> expire(String id);
+    CompletableFuture<EmptyResponse> expire(String id);
 
 }

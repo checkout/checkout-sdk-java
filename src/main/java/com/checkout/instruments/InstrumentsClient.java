@@ -1,5 +1,7 @@
 package com.checkout.instruments;
 
+import com.checkout.EmptyResponse;
+
 import java.util.concurrent.CompletableFuture;
 
 public interface InstrumentsClient {
@@ -13,5 +15,5 @@ public interface InstrumentsClient {
     /**
      * @param instrumentId - matching a pattern ^(src)_(\w{26})$
      */
-    CompletableFuture<Void> delete(String instrumentId);
+    CompletableFuture<EmptyResponse> delete(String instrumentId);
 }
