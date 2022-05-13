@@ -13,7 +13,7 @@ import java.time.Instant;
 @Data
 @Builder
 @ToString(callSuper = true)
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public final class Dispute extends Resource {
 
     private String id;

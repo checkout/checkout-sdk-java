@@ -1,16 +1,15 @@
 package com.checkout.workflows.four;
 
+import com.checkout.ItemsResponse;
 import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.workflows.four.events.Event;
-import com.checkout.workflows.four.events.EventTypesResponse;
 import com.checkout.workflows.four.events.GetEventResponse;
 import com.checkout.workflows.four.events.SubjectEvent;
 import com.checkout.workflows.four.events.SubjectEventsResponse;
+import com.checkout.workflows.four.events.WorkflowEventTypes;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -21,12 +20,13 @@ class WorkflowEventsTestIT extends AbstractWorkflowTestIT {
     @Test
     void shouldGetEventTypes() {
 
-        final List<EventTypesResponse> eventTypesResponse = blocking(() -> fourApi.workflowsClient().getEventTypes());
+        final ItemsResponse<WorkflowEventTypes> workflowEventTypesResponse = blocking(() -> fourApi.workflowsClient().getEventTypes());
 
-        assertNotNull(eventTypesResponse);
-        assertFalse(eventTypesResponse.isEmpty());
+        assertNotNull(workflowEventTypesResponse);
+        assertNotNull(workflowEventTypesResponse.getItems());
+        assertFalse(workflowEventTypesResponse.getItems().isEmpty());
 
-        for (final EventTypesResponse typesResponse : eventTypesResponse) {
+        for (final WorkflowEventTypes typesResponse : workflowEventTypesResponse.getItems()) {
             assertNotNull(typesResponse.getId());
             assertNotNull(typesResponse.getDisplayName());
             assertNotNull(typesResponse.getEvents());

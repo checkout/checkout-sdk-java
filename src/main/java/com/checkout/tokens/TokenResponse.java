@@ -1,15 +1,18 @@
 package com.checkout.tokens;
 
+import com.checkout.HttpMetadata;
 import com.checkout.common.CardCategory;
 import com.checkout.common.CardType;
 import com.checkout.common.CountryCode;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
 
 @Data
-public class TokenResponse {
+@EqualsAndHashCode(callSuper = true)
+public class TokenResponse extends HttpMetadata {
 
     private TokenType type;
 

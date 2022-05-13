@@ -1,5 +1,6 @@
 package com.checkout.events;
 
+import com.checkout.ItemsResponse;
 import com.checkout.payments.AbstractPaymentsTestIT;
 import com.checkout.payments.response.PaymentResponse;
 import com.checkout.webhooks.WebhookRequest;
@@ -31,41 +32,26 @@ class EventsTestIT extends AbstractPaymentsTestIT {
 
     @BeforeEach
     protected void cleanup() {
-        final List<WebhookResponse> webhookResponses = blocking(() -> defaultApi.webhooksClient().retrieveWebhooks());
-        webhookResponses.forEach(webhookResponse -> blocking(() -> defaultApi.webhooksClient().removeWebhook(webhookResponse.getId())));
+        final ItemsResponse<WebhookResponse> webhookResponses = blocking(() -> defaultApi.webhooksClient().retrieveWebhooks());
+        webhookResponses.getItems().forEach(webhookResponse -> blocking(() -> defaultApi.webhooksClient().removeWebhook(webhookResponse.getId())));
     }
 
     @Test
     void retrieveDefaultEventTypes() {
-        final List<EventTypesResponse> allEventTypesResponses = blocking(() -> defaultApi.eventsClient().retrieveAllEventTypes(null));
+        final ItemsResponse<EventTypes> allEventTypesResponses = blocking(() -> defaultApi.eventsClient().retrieveAllEventTypes(null));
         assertNotNull(allEventTypesResponses);
-        assertEquals(2, allEventTypesResponses.size());
+        assertEquals(2, allEventTypesResponses.getItems().size());
     }
 
     @Test
     void retrieveV1EventTypes() {
 
-        final List<EventTypesResponse> eventTypesResponses = blocking(() -> defaultApi.eventsClient().retrieveAllEventTypes("1.0"));
+        final ItemsResponse<EventTypes> eventTypesResponses = blocking(() -> defaultApi.eventsClient().retrieveAllEventTypes("1.0"));
         assertNotNull(eventTypesResponses);
-        assertEquals(1, eventTypesResponses.size());
+        assertEquals(1, eventTypesResponses.getItems().size());
 
-        final EventTypesResponse eventTypesResponse = eventTypesResponses.get(0);
+        final EventTypes eventTypesResponse = eventTypesResponses.getItems().get(0);
         assertEquals("1.0", eventTypesResponse.getVersion());
-        assertNotNull(eventTypesResponse.getEventTypes());
-        assertFalse(eventTypesResponse.getEventTypes().isEmpty());
-
-    }
-
-    @Test
-    void retrieveV2EventTypes() {
-
-        final List<EventTypesResponse> eventTypesResponses = blocking(() -> defaultApi.eventsClient().retrieveAllEventTypes("2.0"));
-        assertNotNull(eventTypesResponses);
-        assertEquals(1, eventTypesResponses.size());
-
-        final EventTypesResponse eventTypesResponse = eventTypesResponses.get(0);
-
-        assertEquals("2.0", eventTypesResponse.getVersion());
         assertNotNull(eventTypesResponse.getEventTypes());
         assertFalse(eventTypesResponse.getEventTypes().isEmpty());
 
@@ -160,7 +146,7 @@ class EventsTestIT extends AbstractPaymentsTestIT {
                 .build();
 
         // Retrieve Events
-        final EventsPageResponse eventsPageResponse = blocking(() -> defaultApi.eventsClient().retrieveEvents(retrieveEventsRequest), IsNull.notNullValue(EventsPageResponse.class));
+        final EventsPageResponse eventsPageResponse = blocking(() -> defaultApi.eventsClient().retrieveEvents(retrieveEventsRequest), new EventsPageResponseHasItems());
         assertNotNull(eventsPageResponse);
         assertEquals(eventsPageResponse.getTo().truncatedTo(ChronoUnit.SECONDS), eventsPageResponse.getTo());
         assertEquals(eventsPageResponse.getFrom().truncatedTo(ChronoUnit.SECONDS), eventsPageResponse.getFrom());
@@ -193,6 +179,21 @@ class EventsTestIT extends AbstractPaymentsTestIT {
 
     private PaymentResponse makeCardPayment() {
         return makeCardPayment(false, 10L);
+    }
+
+    // Hamcrest hasSize() doesn't seem to provide the type inference with generics needed
+    protected static class EventsPageResponseHasItems extends BaseMatcher<EventsPageResponse> {
+
+        @Override
+        public boolean matches(final Object actual) {
+            return ((EventsPageResponse) actual).getData() != null;
+        }
+
+        @Override
+        public void describeTo(final Description description) {
+            throw new UnsupportedOperationException();
+        }
+
     }
 
 }

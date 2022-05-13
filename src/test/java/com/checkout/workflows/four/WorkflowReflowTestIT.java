@@ -4,12 +4,14 @@ import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.workflows.four.events.SubjectEvent;
 import com.checkout.workflows.four.reflow.ReflowByEventsRequest;
 import com.checkout.workflows.four.reflow.ReflowBySubjectsRequest;
+import com.checkout.workflows.four.reflow.ReflowResponse;
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.util.StringUtils;
 
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
@@ -24,7 +26,11 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
         assertNotNull(paymentApprovedEvent);
 
-        assertNull(blocking(() -> fourApi.workflowsClient().reflowByEvent(paymentApprovedEvent.getId())));
+        final ReflowResponse response = blocking(() -> fourApi.workflowsClient().reflowByEvent(paymentApprovedEvent.getId()));
+        assertNotNull(response);
+        assertNotNull(response.getHttpStatusCode());
+        assertNotNull(response.getResponseHeaders());
+        assertTrue(StringUtils.isBlank(response.getBody()));
 
     }
 
@@ -35,7 +41,11 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
         final PaymentResponse payment = makeCardPayment(false);
 
-        assertNull(blocking(() -> fourApi.workflowsClient().reflowBySubject(payment.getId())));
+        final ReflowResponse response = blocking(() -> fourApi.workflowsClient().reflowBySubject(payment.getId()));
+        assertNotNull(response);
+        assertNotNull(response.getHttpStatusCode());
+        assertNotNull(response.getResponseHeaders());
+        assertTrue(StringUtils.isBlank(response.getBody()));
 
     }
 
@@ -48,10 +58,13 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
         final SubjectEvent paymentApprovedEvent = getSubjectEvent(payment.getId());
 
-        assertNull(blocking(() -> fourApi.workflowsClient().reflowByEventAndWorkflow(
+        final ReflowResponse response = blocking(() -> fourApi.workflowsClient().reflowByEventAndWorkflow(
                 paymentApprovedEvent.getId(),
-                createWorkflowResponse.getId()))
-        );
+                createWorkflowResponse.getId()));
+        assertNotNull(response);
+        assertNotNull(response.getHttpStatusCode());
+        assertNotNull(response.getResponseHeaders());
+        assertTrue(StringUtils.isBlank(response.getBody()));
 
     }
 
@@ -62,10 +75,13 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
 
         final PaymentResponse payment = makeCardPayment(false);
 
-        assertNull(blocking(() -> fourApi.workflowsClient().reflowBySubjectAndWorkflow(
+        final ReflowResponse response = blocking(() -> fourApi.workflowsClient().reflowBySubjectAndWorkflow(
                 payment.getId(),
-                createWorkflowResponse.getId()))
-        );
+                createWorkflowResponse.getId()));
+        assertNotNull(response);
+        assertNotNull(response.getHttpStatusCode());
+        assertNotNull(response.getResponseHeaders());
+        assertTrue(StringUtils.isBlank(response.getBody()));
 
     }
 
@@ -82,7 +98,11 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
                 .events(Collections.singletonList(paymentApprovedEvent.getId()))
                 .workflows(Collections.singletonList(createWorkflowResponse.getId())).build();
 
-        assertNull(blocking(() -> fourApi.workflowsClient().reflow(request)));
+        final ReflowResponse response = blocking(() -> fourApi.workflowsClient().reflow(request));
+        assertNotNull(response);
+        assertNotNull(response.getHttpStatusCode());
+        assertNotNull(response.getResponseHeaders());
+        assertTrue(StringUtils.isBlank(response.getBody()));
 
     }
 
@@ -97,7 +117,11 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
                 .subjects(Collections.singletonList(payment.getId()))
                 .workflows(Collections.singletonList(createWorkflowResponse.getId())).build();
 
-        assertNull(blocking(() -> fourApi.workflowsClient().reflow(request)));
+        final ReflowResponse response = blocking(() -> fourApi.workflowsClient().reflow(request));
+        assertNotNull(response);
+        assertNotNull(response.getHttpStatusCode());
+        assertNotNull(response.getResponseHeaders());
+        assertTrue(StringUtils.isBlank(response.getBody()));
 
     }
 

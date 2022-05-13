@@ -38,7 +38,7 @@ public class DisputesQueryFilter {
     private String paymentArn;
 
     @SerializedName("this_channel_only")
-    private boolean thisChannelOnly;
+    private Boolean thisChannelOnly;
 
     //Available only on Four
 

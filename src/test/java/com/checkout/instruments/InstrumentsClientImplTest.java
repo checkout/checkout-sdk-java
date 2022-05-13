@@ -1,9 +1,10 @@
 package com.checkout.instruments;
 
 import com.checkout.ApiClient;
+import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
-import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkCredentials;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,8 +24,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class InstrumentsClientImplTest {
-
-    private static final String INSTRUMENTS = "instruments";
 
     private InstrumentsClientImpl client;
 
@@ -53,7 +52,7 @@ class InstrumentsClientImplTest {
         final CreateInstrumentRequest request = mock(CreateInstrumentRequest.class);
         final CreateInstrumentResponse response = mock(CreateInstrumentResponse.class);
 
-        when(apiClient.postAsync(eq(INSTRUMENTS), eq(authorization), eq(CreateInstrumentResponse.class),
+        when(apiClient.postAsync(eq("instruments"), eq(authorization), eq(CreateInstrumentResponse.class),
                 eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
@@ -68,8 +67,8 @@ class InstrumentsClientImplTest {
     void shouldGetInstrument() throws ExecutionException, InterruptedException {
 
         final InstrumentDetailsResponse response = mock(InstrumentDetailsResponse.class);
-        when(apiClient.getAsync(eq(INSTRUMENTS + "/src_wmlfc3zyhqzehihu7giusaaawu"), eq(authorization),
-                eq(InstrumentDetailsResponse.class)))
+        when(apiClient.getAsync("instruments/src_wmlfc3zyhqzehihu7giusaaawu", authorization,
+                InstrumentDetailsResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<InstrumentDetailsResponse> future = client.get("src_wmlfc3zyhqzehihu7giusaaawu");
@@ -84,7 +83,7 @@ class InstrumentsClientImplTest {
         final UpdateInstrumentRequest request = mock(UpdateInstrumentRequest.class);
         final UpdateInstrumentResponse response = mock(UpdateInstrumentResponse.class);
 
-        when(apiClient.patchAsync(eq(INSTRUMENTS + "/src_wmlfc3zyhqzehihu7giusaaawu123"), eq(authorization),
+        when(apiClient.patchAsync(eq("instruments/src_wmlfc3zyhqzehihu7giusaaawu123"), eq(authorization),
                 eq(UpdateInstrumentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
@@ -98,12 +97,12 @@ class InstrumentsClientImplTest {
     @Test
     void shouldDeleteInstrument() throws ExecutionException, InterruptedException {
 
-        final Void response = mock(Void.class);
+        final EmptyResponse response = mock(EmptyResponse.class);
 
-        when(apiClient.deleteAsync(eq(INSTRUMENTS + "/UpdateInstrumentResponse"), eq(authorization)))
+        when(apiClient.deleteAsync("instruments/UpdateInstrumentResponse", authorization))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<Void> future = client.delete("UpdateInstrumentResponse");
+        final CompletableFuture<EmptyResponse> future = client.delete("UpdateInstrumentResponse");
 
         assertNotNull(future.get());
 
