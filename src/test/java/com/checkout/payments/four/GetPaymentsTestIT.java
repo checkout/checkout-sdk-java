@@ -1,5 +1,6 @@
 package com.checkout.payments.four;
 
+import com.checkout.ItemsResponse;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
@@ -15,7 +16,6 @@ import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -208,12 +208,15 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
 
         final PaymentResponse payment = makeCardPayment(false);
 
-        final List<PaymentAction> paymentActions = blocking(() -> paymentsClient.getPaymentActions(payment.getId()));
+        final ItemsResponse<PaymentAction> paymentActions = blocking(() -> paymentsClient.getPaymentActions(payment.getId()));
 
         assertNotNull(paymentActions);
-        assertEquals(1, paymentActions.size());
+        assertEquals(1, paymentActions.getItems().size());
+        assertNotNull(paymentActions.getResponseHeaders());
+        assertNotNull(paymentActions.getBody());
+        assertNotNull(paymentActions.getHttpStatusCode());
 
-        final PaymentAction paymentAction = paymentActions.get(0);
+        final PaymentAction paymentAction = paymentActions.getItems().get(0);
         assertNotNull(paymentAction.getId());
         assertEquals(ActionType.AUTHORIZATION, paymentAction.getType());
         assertNotNull(paymentAction.getProcessedOn());
@@ -251,22 +254,21 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
         final CaptureResponse captureResponse = capturePayment(payment.getId(), captureRequest);
 
         // capture
-        final List<PaymentAction> paymentActions = blocking(() -> paymentsClient.getPaymentActions(payment.getId()), new ListHasSize<>(2));
+        final ItemsResponse<PaymentAction> paymentActions = blocking(() -> paymentsClient.getPaymentActions(payment.getId()), new ListHasSize<ItemsResponse<PaymentAction>, PaymentAction>(2));
 
         assertNotNull(paymentActions);
-        assertEquals(2, paymentActions.size());
+        assertEquals(2, paymentActions.getItems().size());
 
-        final PaymentAction authorizationPaymentAction = paymentActions.stream().filter(a -> ActionType.AUTHORIZATION.equals(a.getType())).findFirst().get();
+        final PaymentAction authorizationPaymentAction = paymentActions.getItems().stream().filter(a -> ActionType.AUTHORIZATION.equals(a.getType())).findFirst().get();
         assertNotNull(authorizationPaymentAction);
         assertEquals(payment.getActionId(), authorizationPaymentAction.getId());
         assertEquals("1234", authorizationPaymentAction.getMetadata().get("test"));
 
-        final PaymentAction capturePaymentAction = paymentActions.stream().filter(a -> ActionType.CAPTURE.equals(a.getType())).findFirst().get();
+        final PaymentAction capturePaymentAction = paymentActions.getItems().stream().filter(a -> ActionType.CAPTURE.equals(a.getType())).findFirst().get();
         assertNotNull(capturePaymentAction);
         assertEquals(captureResponse.getActionId(), capturePaymentAction.getId());
         assertEquals(captureResponse.getReference(), capturePaymentAction.getReference());
         assertNotNull(capturePaymentAction.getLinks());
 
     }
-
 }

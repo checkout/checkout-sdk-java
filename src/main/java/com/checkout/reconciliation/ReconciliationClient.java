@@ -1,6 +1,7 @@
 package com.checkout.reconciliation;
 
 
+import com.checkout.ContentResponse;
 import com.checkout.common.QueryFilterDateRange;
 
 import java.util.concurrent.CompletableFuture;
@@ -19,7 +20,7 @@ public interface ReconciliationClient {
      *                   file will be rewritten.
      * @return CSV content
      */
-    CompletableFuture<String> retrieveCSVPaymentReport(final QueryFilterDateRange filter, final String targetFile);
+    CompletableFuture<ContentResponse> retrieveCSVPaymentReport(final QueryFilterDateRange filter, final String targetFile);
 
     /**
      * @param targetFile Optional parameter that specifies the path where a file with the content returned is saved. If
@@ -27,7 +28,7 @@ public interface ReconciliationClient {
      *                   file will be rewritten.
      * @return CSV content
      */
-    CompletableFuture<String> retrieveCSVSingleStatementReport(final String statementId, final String targetFile);
+    CompletableFuture<ContentResponse> retrieveCSVSingleStatementReport(final String statementId, final String targetFile);
 
     /**
      * @param targetFile Optional parameter that specifies the path where a file with the content returned is saved. If
@@ -35,6 +36,6 @@ public interface ReconciliationClient {
      *                   file will be rewritten.
      * @return CSV content
      */
-    CompletableFuture<String> retrieveCSVStatementsReport(final QueryFilterDateRange filter, final String targetFile);
+    CompletableFuture<ContentResponse> retrieveCSVStatementsReport(final QueryFilterDateRange filter, final String targetFile);
 
 }

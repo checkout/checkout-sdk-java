@@ -3,15 +3,17 @@ package com.checkout.workflows.four;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutArgumentException;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
+import com.checkout.ItemsResponse;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
 import com.checkout.workflows.four.actions.request.WorkflowActionRequest;
 import com.checkout.workflows.four.actions.response.WorkflowActionInvocationsResponse;
 import com.checkout.workflows.four.conditions.request.WorkflowConditionRequest;
-import com.checkout.workflows.four.events.EventTypesResponse;
 import com.checkout.workflows.four.events.GetEventResponse;
 import com.checkout.workflows.four.events.SubjectEventsResponse;
+import com.checkout.workflows.four.events.WorkflowEventTypes;
 import com.checkout.workflows.four.reflow.ReflowBySubjectsRequest;
 import com.checkout.workflows.four.reflow.ReflowResponse;
 import com.google.gson.reflect.TypeToken;
@@ -23,8 +25,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -50,9 +50,6 @@ class WorkflowsClientImplTest {
     private static final String REFLOW = "reflow";
     private static final String SUBJECT = "subject";
 
-    private static final Type EVENT_TYPES_RESPONSE = new TypeToken<List<EventTypesResponse>>() {
-    }.getType();
-
     @Mock
     private ApiClient apiClient;
 
@@ -66,6 +63,9 @@ class WorkflowsClientImplTest {
     private SdkAuthorization authorization;
 
     private WorkflowsClient workflowsClient;
+
+    private static final Type WORKFLOWS_EVENT_TYPES_TYPE = new TypeToken<ItemsResponse<WorkflowEventTypes>>() {
+    }.getType();
 
     @BeforeEach
     void setUp() {
@@ -195,12 +195,12 @@ class WorkflowsClientImplTest {
         when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
         when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
 
-        final Void response = Mockito.mock(Void.class);
+        final EmptyResponse response = Mockito.mock(EmptyResponse.class);
 
         when(apiClient.deleteAsync(eq(WORKFLOWS + "/workflow_id"), eq(authorization)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<Void> future = workflowsClient.removeWorkflow("workflow_id");
+        final CompletableFuture<EmptyResponse> future = workflowsClient.removeWorkflow("workflow_id");
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -228,13 +228,13 @@ class WorkflowsClientImplTest {
         when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
         when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
 
-        final Void response = Mockito.mock(Void.class);
+        final EmptyResponse response = Mockito.mock(EmptyResponse.class);
         final WorkflowActionRequest action = Mockito.mock(WorkflowActionRequest.class);
 
-        when(apiClient.putAsync(eq(WORKFLOWS + "/workflow_id/" + ACTIONS + "/action_id"), eq(authorization), eq(Void.class), eq(action)))
+        when(apiClient.putAsync(eq(WORKFLOWS + "/workflow_id/" + ACTIONS + "/action_id"), eq(authorization), eq(EmptyResponse.class), eq(action)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<Void> future = workflowsClient.updateWorkflowAction("workflow_id", "action_id", action);
+        final CompletableFuture<EmptyResponse> future = workflowsClient.updateWorkflowAction("workflow_id", "action_id", action);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -273,13 +273,13 @@ class WorkflowsClientImplTest {
         when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
         when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
 
-        final Void response = Mockito.mock(Void.class);
+        final EmptyResponse response = Mockito.mock(EmptyResponse.class);
         final WorkflowConditionRequest condition = Mockito.mock(WorkflowConditionRequest.class);
 
-        when(apiClient.putAsync(eq(WORKFLOWS + "/workflow_id/" + CONDITIONS + "/condition_id"), eq(authorization), eq(Void.class), eq(condition)))
+        when(apiClient.putAsync(eq(WORKFLOWS + "/workflow_id/" + CONDITIONS + "/condition_id"), eq(authorization), eq(EmptyResponse.class), eq(condition)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<Void> future = workflowsClient.updateWorkflowCondition("workflow_id", "condition_id", condition);
+        final CompletableFuture<EmptyResponse> future = workflowsClient.updateWorkflowCondition("workflow_id", "condition_id", condition);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -318,12 +318,12 @@ class WorkflowsClientImplTest {
         when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
         when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
 
-        final List<EventTypesResponse> response = new ArrayList<>();
+        final ItemsResponse response = mock(ItemsResponse.class);
 
-        when(apiClient.getAsync(eq(WORKFLOWS + "/" + EVENT_TYPES), eq(authorization), eq(EVENT_TYPES_RESPONSE)))
+        when(apiClient.getAsync(eq(WORKFLOWS + "/" + EVENT_TYPES), eq(authorization), eq(WORKFLOWS_EVENT_TYPES_TYPE)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<List<EventTypesResponse>> future = workflowsClient.getEventTypes();
+        final CompletableFuture<ItemsResponse<WorkflowEventTypes>> future = workflowsClient.getEventTypes();
 
         assertNotNull(future.get());
         assertEquals(response, future.get());

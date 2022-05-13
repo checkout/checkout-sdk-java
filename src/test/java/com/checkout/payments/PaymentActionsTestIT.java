@@ -1,9 +1,8 @@
 package com.checkout.payments;
 
+import com.checkout.ItemsResponse;
 import com.checkout.payments.response.PaymentResponse;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -16,12 +15,15 @@ class PaymentActionsTestIT extends AbstractPaymentsTestIT {
 
         final PaymentResponse paymentResponse = makeCardPayment(true, 10L);
 
-        final List<PaymentAction> paymentActions = blocking(() -> defaultApi.paymentsClient().getPaymentActions(paymentResponse.getId()), new ListHasSize<>(2));
+        final ItemsResponse<PaymentAction> paymentActions = blocking(() -> defaultApi.paymentsClient().getPaymentActions(paymentResponse.getId()), new ListHasSize<ItemsResponse<PaymentAction>, PaymentAction>(2));
 
         assertNotNull(paymentActions);
-        assertEquals(2, paymentActions.size());
+        assertEquals(2, paymentActions.getItems().size());
+        assertNotNull(paymentActions.getResponseHeaders());
+        assertNotNull(paymentActions.getBody());
+        assertNotNull(paymentActions.getHttpStatusCode());
 
-        paymentActions.forEach(paymentAction -> {
+        paymentActions.getItems().forEach(paymentAction -> {
             assertEquals(10, paymentAction.getAmount());
             assertTrue(paymentAction.getApproved());
             assertNotNull(paymentAction.getLinks());
@@ -33,5 +35,6 @@ class PaymentActionsTestIT extends AbstractPaymentsTestIT {
         });
 
     }
+
 
 }

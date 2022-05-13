@@ -4,15 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Map;
+
 @Data
 @Builder
 @AllArgsConstructor
-public final class Response {
+final class Response {
 
-    private int statusCode;
+    private Integer statusCode;
 
     private String body;
 
-    private String requestId;
+    private Map<String, String> headers;
 
 }

@@ -1,5 +1,6 @@
 package com.checkout.payments.four;
 
+import com.checkout.ItemsResponse;
 import com.checkout.payments.four.request.AuthorizationRequest;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.PayoutRequest;
@@ -8,7 +9,6 @@ import com.checkout.payments.four.response.GetPaymentResponse;
 import com.checkout.payments.four.response.PaymentResponse;
 import com.checkout.payments.four.response.PayoutResponse;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface PaymentsClient {
@@ -23,7 +23,7 @@ public interface PaymentsClient {
 
     CompletableFuture<GetPaymentResponse> getPayment(String paymentId);
 
-    CompletableFuture<List<PaymentAction>> getPaymentActions(String paymentId);
+    CompletableFuture<ItemsResponse<PaymentAction>> getPaymentActions(String paymentId);
 
     CompletableFuture<AuthorizationResponse> incrementPaymentAuthorization(String paymentId, AuthorizationRequest authorizationRequest);
 

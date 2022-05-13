@@ -34,7 +34,6 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
@@ -54,8 +53,6 @@ class ApacheHttpClientTransport implements Transport {
     private static final String PURPOSE = "purpose";
     private static final String USER_AGENT = "user-agent";
     private static final String ACCEPT = "Accept";
-    private static final String CKO_REQUEST_ID = "Cko-Request-Id";
-    private static final String NO_REQUEST_ID_SUPPLIED = "NO_REQUEST_ID_SUPPLIED";
     private static final String PATH = "path";
     private final URI baseUri;
     private final CloseableHttpClient httpClient;
@@ -68,18 +65,13 @@ class ApacheHttpClientTransport implements Transport {
         this.executor = executor;
     }
 
-    private Header[] sanitiseHeaders(final Header[] headers) {
-        return Arrays.stream(headers)
-                .filter(it -> !it.getName().equals(AUTHORIZATION))
-                .toArray(Header[]::new);
-    }
-
     @Override
     public CompletableFuture<Response> invoke(final ClientOperation clientOperation,
                                               final String path,
                                               final SdkAuthorization authorization,
                                               final String requestBody,
-                                              final String idempotencyKey) {
+                                              final String idempotencyKey,
+                                              final Map<String, String> queryParams) {
         return CompletableFuture.supplyAsync(() -> {
             final HttpUriRequest request;
             switch (clientOperation) {
@@ -99,43 +91,32 @@ class ApacheHttpClientTransport implements Transport {
                 case PATCH:
                     request = new HttpPatch(getRequestUrl(path));
                     break;
+                case QUERY:
+                    final List<NameValuePair> params = queryParams.entrySet().stream()
+                            .map(entry -> new BasicNameValuePair(entry.getKey(), entry.getValue()))
+                            .collect(Collectors.toList());
+                    try {
+                        request = new HttpGet(new URIBuilder(getRequestUrl(path)).addParameters(params).build());
+                    } catch (final URISyntaxException e) {
+                        throw new CheckoutException(e);
+                    }
+                    break;
                 default:
                     throw new UnsupportedOperationException("Unsupported HTTP Method: " + clientOperation);
             }
             if (idempotencyKey != null) {
                 request.setHeader(CKO_IDEMPOTENCY_KEY, idempotencyKey);
             }
-            log.info("{}: {}", clientOperation, request.getURI());
             return performCall(authorization, requestBody, request, clientOperation);
-        }, executor);
-    }
-
-    @Override
-    public CompletableFuture<Response> invokeQuery(final ClientOperation clientOperation,
-                                                   final String path,
-                                                   final SdkAuthorization authorization,
-                                                   final Map<String, String> queryParams) {
-        return CompletableFuture.supplyAsync(() -> {
-            final HttpUriRequest request;
-            try {
-                final List<NameValuePair> params = queryParams.entrySet().stream()
-                        .map(entry -> new BasicNameValuePair(entry.getKey(), entry.getValue()))
-                        .collect(Collectors.toList());
-                request = new HttpGet(new URIBuilder(getRequestUrl(path)).addParameters(params).build());
-                log.info("GET: {}", request.getURI());
-                return performCall(authorization, null, request, clientOperation);
-            } catch (final URISyntaxException e) {
-                throw new CheckoutException(e);
-            }
         }, executor);
     }
 
     @Override
     public CompletableFuture<Response> submitFile(final String path, final SdkAuthorization authorization, final AbstractFileRequest fileRequest) {
         return CompletableFuture.supplyAsync(() -> {
-            final HttpPost post = new HttpPost(getRequestUrl(path));
-            post.setEntity(getMultipartFileEntity(fileRequest));
-            return performCall(authorization, null, post, POST);
+            final HttpPost request = new HttpPost(getRequestUrl(path));
+            request.setEntity(getMultipartFileEntity(fileRequest));
+            return performCall(authorization, null, request, POST);
         }, executor);
     }
 
@@ -161,6 +142,7 @@ class ApacheHttpClientTransport implements Transport {
                                  final String requestBody,
                                  final HttpUriRequest request,
                                  final ClientOperation clientOperation) {
+        log.info("{}: {}", clientOperation, request.getURI());
         request.setHeader(USER_AGENT, PROJECT_NAME + "/" + getVersionFromManifest());
         request.setHeader(ACCEPT, getAcceptHeader(clientOperation));
         request.setHeader(AUTHORIZATION, authorization.getAuthorizationHeader());
@@ -171,19 +153,26 @@ class ApacheHttpClientTransport implements Transport {
         try (final CloseableHttpResponse response = httpClient.execute(request)) {
             log.info("Response: " + response.getStatusLine().getStatusCode() + " " + Arrays.toString(response.getAllHeaders()));
             final int statusCode = response.getStatusLine().getStatusCode();
-            final String requestId = Optional.ofNullable(response.getFirstHeader(CKO_REQUEST_ID)).map(Header::getValue).orElse(NO_REQUEST_ID_SUPPLIED);
+            final Map<String, String> headers = Arrays.stream(response.getAllHeaders())
+                    .collect(Collectors.toMap(Header::getName, Header::getValue));
             if (statusCode != HttpStatus.SC_NOT_FOUND && response.getEntity() != null && response.getEntity().getContent() != null) {
                 return Response.builder()
                         .statusCode(statusCode)
-                        .requestId(requestId)
                         .body(EntityUtils.toString(response.getEntity()))
+                        .headers(headers)
                         .build();
             }
-            return Response.builder().statusCode(statusCode).requestId(requestId).build();
+            return Response.builder().statusCode(statusCode).headers(headers).build();
         } catch (final Exception e) {
             log.error("Exception occurred during the execution of the client...", e);
         }
-        return Response.builder().statusCode(HttpStatus.SC_BAD_REQUEST).requestId(NO_REQUEST_ID_SUPPLIED).build();
+        return Response.builder().statusCode(HttpStatus.SC_BAD_REQUEST).build();
+    }
+
+    private Header[] sanitiseHeaders(final Header[] headers) {
+        return Arrays.stream(headers)
+                .filter(it -> !it.getName().equals(AUTHORIZATION))
+                .toArray(Header[]::new);
     }
 
     private String getAcceptHeader(final ClientOperation clientOperation) {
@@ -193,6 +182,7 @@ class ApacheHttpClientTransport implements Transport {
             case POST:
             case DELETE:
             case PATCH:
+            case QUERY:
                 return ACCEPT_JSON;
             case GET_CSV_CONTENT:
                 return ACCEPT_CSV;

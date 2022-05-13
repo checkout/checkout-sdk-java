@@ -1,13 +1,16 @@
 package com.checkout.forex.four;
 
+import com.checkout.HttpMetadata;
 import com.checkout.common.Currency;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
 
 @Data
-public final class QuoteResponse {
+@EqualsAndHashCode(callSuper = true)
+public final class QuoteResponse extends HttpMetadata {
 
     private String id;
 

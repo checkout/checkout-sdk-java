@@ -1,8 +1,8 @@
 package com.checkout.marketplace;
 
 import com.checkout.common.CountryCode;
-import com.checkout.common.four.AccountHolderType;
 import com.checkout.common.four.AccountHolder;
+import com.checkout.common.four.AccountHolderType;
 import com.checkout.common.four.SenderIdentification;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;

@@ -3,17 +3,19 @@ package com.checkout.webhooks;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutArgumentException;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
+import com.checkout.ItemsResponse;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
+import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.Type;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -46,6 +48,9 @@ class WebhooksClientImplTest {
 
     private WebhooksClient webhooksClient;
 
+    private static final Type WEBHOOKS_TYPE = new TypeToken<ItemsResponse<WebhookResponse>>() {
+    }.getType();
+
     @BeforeEach
     void setup() {
         this.webhooksClient = new WebhooksClientImpl(apiClient, configuration);
@@ -57,18 +62,15 @@ class WebhooksClientImplTest {
         when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
         when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
 
-        final WebhookResponse[] webhookResponses = new WebhookResponse[2];
-        webhookResponses[0] = mock(WebhookResponse.class);
-        webhookResponses[1] = mock(WebhookResponse.class);
+        final ItemsResponse response = mock(ItemsResponse.class);
 
-        when(apiClient.getAsync(eq(WEBHOOKS), any(SdkAuthorization.class), eq(WebhookResponse[].class)))
-                .thenReturn(CompletableFuture.completedFuture(webhookResponses));
+        when(apiClient.getAsync(eq(WEBHOOKS), any(SdkAuthorization.class), eq(WEBHOOKS_TYPE)))
+                .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<List<WebhookResponse>> webhooks = webhooksClient.retrieveWebhooks();
+        final CompletableFuture<ItemsResponse<WebhookResponse>> webhooks = webhooksClient.retrieveWebhooks();
 
         assertNotNull(webhooks.get());
-        assertTrue(webhooks.get().contains(webhookResponses[0]));
-        assertTrue(webhooks.get().contains(webhookResponses[1]));
+        assertEquals(response, webhooks.get());
 
     }
 
@@ -78,14 +80,15 @@ class WebhooksClientImplTest {
         when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
         when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
 
-        when(apiClient.getAsync(eq(WEBHOOKS), any(SdkAuthorization.class), eq(WebhookResponse[].class)))
-                .thenReturn(CompletableFuture.completedFuture(null));
+        final ItemsResponse response = mock(ItemsResponse.class);
 
-        final CompletableFuture<List<WebhookResponse>> webhooks = webhooksClient.retrieveWebhooks();
+        when(apiClient.getAsync(eq(WEBHOOKS), any(SdkAuthorization.class), eq(WEBHOOKS_TYPE)))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<ItemsResponse<WebhookResponse>> webhooks = webhooksClient.retrieveWebhooks();
 
         assertNotNull(webhooks.get());
-        assertEquals(new ArrayList<>(), webhooks.get());
-
+        assertTrue(webhooks.get().getItems().isEmpty());
     }
 
     @Test
@@ -226,9 +229,9 @@ class WebhooksClientImplTest {
         when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
 
         when(apiClient.deleteAsync(eq(WEBHOOKS + "/webhook_id"), any(SdkAuthorization.class)))
-                .thenReturn(CompletableFuture.completedFuture(mock(Void.class)));
+                .thenReturn(CompletableFuture.completedFuture(mock(EmptyResponse.class)));
 
-        final CompletableFuture<Void> webhooks = webhooksClient.removeWebhook("webhook_id");
+        final CompletableFuture<EmptyResponse> webhooks = webhooksClient.removeWebhook("webhook_id");
 
         assertNotNull(webhooks.get());
 
