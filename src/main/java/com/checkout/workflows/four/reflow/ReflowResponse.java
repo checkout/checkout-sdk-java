@@ -1,12 +1,15 @@
 package com.checkout.workflows.four.reflow;
 
+import com.checkout.HttpMetadata;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
 @Data
-public final class ReflowResponse {
+@EqualsAndHashCode(callSuper = true)
+public final class ReflowResponse extends HttpMetadata {
 
     @SerializedName("request_id")
     private String requestId;

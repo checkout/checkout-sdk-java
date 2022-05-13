@@ -3,13 +3,14 @@ package com.checkout.marketplace;
 import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.common.Currency;
 import com.checkout.common.IdResponse;
 import com.checkout.marketplace.balances.BalancesQuery;
 import com.checkout.marketplace.balances.BalancesResponse;
 import com.checkout.marketplace.payout.schedule.request.UpdateScheduleRequest;
-import com.checkout.marketplace.payout.schedule.response.GetScheduleResponseDeserializer;
+import com.checkout.marketplace.payout.schedule.response.GetScheduleResponse;
 import com.checkout.marketplace.payout.schedule.response.VoidResponse;
 import com.checkout.marketplace.transfers.CreateTransferRequest;
 import com.checkout.marketplace.transfers.CreateTransferResponse;
@@ -64,9 +65,9 @@ public class MarketplaceClientImpl extends AbstractClient implements Marketplace
     }
 
     @Override
-    public CompletableFuture<Void> createPaymentInstrument(final MarketplacePaymentInstrument marketplacePaymentInstrument, final String entityId) {
+    public CompletableFuture<EmptyResponse> createPaymentInstrument(final MarketplacePaymentInstrument marketplacePaymentInstrument, final String entityId) {
         validateParams("marketplacePaymentInstrument", marketplacePaymentInstrument, "entityId", entityId);
-        return apiClient.postAsync(buildPath(MARKETPLACE_PATH, ENTITIES_PATH, entityId, INSTRUMENTS_PATH), sdkAuthorization(), Void.class, marketplacePaymentInstrument, null);
+        return apiClient.postAsync(buildPath(MARKETPLACE_PATH, ENTITIES_PATH, entityId, INSTRUMENTS_PATH), sdkAuthorization(), EmptyResponse.class, marketplacePaymentInstrument, null);
     }
 
     @Override
@@ -100,9 +101,9 @@ public class MarketplaceClientImpl extends AbstractClient implements Marketplace
     }
 
     @Override
-    public CompletableFuture<GetScheduleResponseDeserializer> retrievePayoutSchedule(final String entityId) {
+    public CompletableFuture<GetScheduleResponse> retrievePayoutSchedule(final String entityId) {
         validateParams("entityId", entityId);
-        return apiClient.getAsync(buildPath(MARKETPLACE_PATH, ENTITIES_PATH, entityId, PAYOUT_SCHEDULES), sdkAuthorization(), GetScheduleResponseDeserializer.class);
+        return apiClient.getAsync(buildPath(MARKETPLACE_PATH, ENTITIES_PATH, entityId, PAYOUT_SCHEDULES), sdkAuthorization(), GetScheduleResponse.class);
     }
 
     private CompletableFuture<CreateTransferResponse> requestInitiateTransferOfFunds(final CreateTransferRequest createTransferRequest, final String idempotencyKey) {

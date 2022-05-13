@@ -1,13 +1,18 @@
 package com.checkout.apm.ideal;
 
+import com.checkout.HttpMetadata;
 import com.checkout.common.Link;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
 
 @Data
-public final class IdealInfo {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public final class IdealInfo extends HttpMetadata {
 
     @SerializedName("_links")
     private IdealInfoLinks links;

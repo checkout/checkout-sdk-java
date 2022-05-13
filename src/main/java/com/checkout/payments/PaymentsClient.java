@@ -1,11 +1,11 @@
 package com.checkout.payments;
 
+import com.checkout.ItemsResponse;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.PayoutRequest;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface PaymentsClient {
@@ -20,7 +20,7 @@ public interface PaymentsClient {
 
     CompletableFuture<GetPaymentResponse> getPayment(String paymentId);
 
-    CompletableFuture<List<PaymentAction>> getPaymentActions(String paymentId);
+    CompletableFuture<ItemsResponse<PaymentAction>> getPaymentActions(String paymentId);
 
     CompletableFuture<CaptureResponse> capturePayment(String paymentId);
 

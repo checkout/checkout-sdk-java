@@ -15,7 +15,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class RequestQPaySource extends AbstractRequestSource {
 
-    private String quantity;
+    private Integer quantity;
 
     private String description;
 
@@ -25,7 +25,7 @@ public class RequestQPaySource extends AbstractRequestSource {
     private String nationalId;
 
     @Builder
-    public RequestQPaySource(final String quantity,
+    public RequestQPaySource(final Integer quantity,
                              final String description,
                              final String language,
                              final String nationalId) {

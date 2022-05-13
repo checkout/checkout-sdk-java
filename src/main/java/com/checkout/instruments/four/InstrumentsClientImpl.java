@@ -3,6 +3,7 @@ package com.checkout.instruments.four;
 import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.CountryCode;
@@ -51,7 +52,7 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
     }
 
     @Override
-    public CompletableFuture<Void> delete(final String instrumentId) {
+    public CompletableFuture<EmptyResponse> delete(final String instrumentId) {
         CheckoutUtils.validateParams("instrumentId", instrumentId);
         return apiClient.deleteAsync(buildPath(INSTRUMENTS_PATH, instrumentId), sdkAuthorization());
     }

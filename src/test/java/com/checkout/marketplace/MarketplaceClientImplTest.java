@@ -2,6 +2,7 @@ package com.checkout.marketplace;
 
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
@@ -12,7 +13,7 @@ import com.checkout.marketplace.balances.BalancesResponse;
 import com.checkout.marketplace.payout.schedule.DaySchedule;
 import com.checkout.marketplace.payout.schedule.request.ScheduleFrequencyWeeklyRequest;
 import com.checkout.marketplace.payout.schedule.request.UpdateScheduleRequest;
-import com.checkout.marketplace.payout.schedule.response.GetScheduleResponseDeserializer;
+import com.checkout.marketplace.payout.schedule.response.GetScheduleResponse;
 import com.checkout.marketplace.payout.schedule.response.VoidResponse;
 import com.checkout.marketplace.transfers.CreateTransferRequest;
 import com.checkout.marketplace.transfers.CreateTransferResponse;
@@ -56,7 +57,7 @@ class MarketplaceClientImplTest {
     private OnboardEntityResponse onboardEntityResponse;
 
     @Mock
-    private Void aVoid;
+    private EmptyResponse emptyResponse;
 
     @Mock
     private IdResponse idResponse;
@@ -95,7 +96,7 @@ class MarketplaceClientImplTest {
     @Test
     void shouldGetEntity() throws ExecutionException, InterruptedException {
 
-        when(apiClient.getAsync(eq("marketplace/entities/entity_id"), eq(authorization), eq(OnboardEntityDetailsResponse.class)))
+        when(apiClient.getAsync("marketplace/entities/entity_id", authorization, OnboardEntityDetailsResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(onboardEntityDetailsResponse));
 
         final CompletableFuture<OnboardEntityDetailsResponse> future = marketplaceClient.getEntity("entity_id");
@@ -121,13 +122,13 @@ class MarketplaceClientImplTest {
     @Test
     void shouldCreatePaymentInstrument() throws ExecutionException, InterruptedException {
 
-        when(apiClient.postAsync(eq("marketplace/entities/entity_id/instruments"), eq(authorization), eq(Void.class), any(MarketplacePaymentInstrument.class), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(aVoid));
+        when(apiClient.postAsync(eq("marketplace/entities/entity_id/instruments"), eq(authorization), eq(EmptyResponse.class), any(MarketplacePaymentInstrument.class), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(emptyResponse));
 
-        final CompletableFuture<Void> future = marketplaceClient.createPaymentInstrument(MarketplacePaymentInstrument.builder().build(), "entity_id");
+        final CompletableFuture<EmptyResponse> future = marketplaceClient.createPaymentInstrument(MarketplacePaymentInstrument.builder().build(), "entity_id");
 
         assertNotNull(future.get());
-        assertEquals(aVoid, future.get());
+        assertEquals(emptyResponse, future.get());
 
     }
 
@@ -194,12 +195,12 @@ class MarketplaceClientImplTest {
     @Test
     void shouldRetrievePayoutSchedule() throws ExecutionException, InterruptedException {
 
-        final GetScheduleResponseDeserializer response = mock(GetScheduleResponseDeserializer.class);
+        final GetScheduleResponse response = mock(GetScheduleResponse.class);
 
-        when(apiClient.getAsync(eq("marketplace/entities/entity_id/payout-schedules"), eq(authorization), eq(GetScheduleResponseDeserializer.class)))
+        when(apiClient.getAsync("marketplace/entities/entity_id/payout-schedules", authorization, GetScheduleResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<GetScheduleResponseDeserializer> future = marketplaceClient.retrievePayoutSchedule("entity_id");
+        final CompletableFuture<GetScheduleResponse> future = marketplaceClient.retrievePayoutSchedule("entity_id");
 
         assertNotNull(future.get());
         assertEquals(response, future.get());

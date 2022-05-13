@@ -2,6 +2,7 @@ package com.checkout.reconciliation;
 
 import com.checkout.CheckoutApi;
 import com.checkout.CheckoutSdk;
+import com.checkout.ContentResponse;
 import com.checkout.Environment;
 import com.checkout.common.QueryFilterDateRange;
 import org.junit.jupiter.api.Disabled;
@@ -146,10 +147,14 @@ class ReconciliationTestIT {
                 .to(Instant.now())
                 .build();
 
-        final String csv = getProductionCheckoutApi().reconciliationClient().retrieveCSVPaymentReport(queryFilterDateRange, null).get();
+        final ContentResponse ContentResponse = getProductionCheckoutApi().reconciliationClient().retrieveCSVPaymentReport(queryFilterDateRange, null).get();
 
-        assertNotNull(csv);
-        assertFalse(csv.isEmpty());
+        assertNotNull(ContentResponse);
+        assertFalse(ContentResponse.getContent().isEmpty());
+        assertNotNull(ContentResponse.getResponseHeaders());
+        assertNotNull(ContentResponse.getBody());
+        assertNotNull(ContentResponse.getHttpStatusCode());
+
     }
 
     @Test
@@ -161,50 +166,64 @@ class ReconciliationTestIT {
                 .to(Instant.now())
                 .build();
 
-        final String csv = getProductionCheckoutApi().reconciliationClient().retrieveCSVPaymentReport(queryFilterDateRange, "file_path").get();
+        final ContentResponse ContentResponse = getProductionCheckoutApi().reconciliationClient().retrieveCSVPaymentReport(queryFilterDateRange, "/tmp/report.csv").get();
 
-        assertNotNull(csv);
-        assertFalse(csv.isEmpty());
+        assertNotNull(ContentResponse);
+        assertFalse(ContentResponse.getContent().isEmpty());
+        assertNotNull(ContentResponse.getResponseHeaders());
+        assertNotNull(ContentResponse.getBody());
     }
 
     @Test
     @Disabled("Only works in production")
     void shouldRetrieveCsvSingleStatementReport() throws ExecutionException, InterruptedException {
 
-        final String csv = getProductionCheckoutApi().reconciliationClient().retrieveCSVSingleStatementReport("id", null).get();
+        final ContentResponse ContentResponse = getProductionCheckoutApi().reconciliationClient().retrieveCSVSingleStatementReport("id", null).get();
 
-        assertNotNull(csv);
-        assertFalse(csv.isEmpty());
+        assertNotNull(ContentResponse);
+        assertFalse(ContentResponse.getContent().isEmpty());
+        assertNotNull(ContentResponse.getResponseHeaders());
+        assertNotNull(ContentResponse.getBody());
+        assertNotNull(ContentResponse.getHttpStatusCode());
     }
 
     @Test
     @Disabled("Only works in production")
     void shouldRetrieveCsvSingleStatementReport_saveFile() throws ExecutionException, InterruptedException {
 
-        final String csv = getProductionCheckoutApi().reconciliationClient().retrieveCSVSingleStatementReport("id", "file_path").get();
+        final ContentResponse ContentResponse = getProductionCheckoutApi().reconciliationClient().retrieveCSVSingleStatementReport("id", "file_path").get();
 
-        assertNotNull(csv);
-        assertFalse(csv.isEmpty());
+        assertNotNull(ContentResponse);
+        assertFalse(ContentResponse.getContent().isEmpty());
+        assertNotNull(ContentResponse.getResponseHeaders());
+        assertNotNull(ContentResponse.getBody());
+        assertNotNull(ContentResponse.getHttpStatusCode());
     }
 
     @Test
     @Disabled("Only works in production")
     void shouldRetrieveCsvStatementsReport() throws ExecutionException, InterruptedException {
 
-        final String csv = getProductionCheckoutApi().reconciliationClient().retrieveCSVStatementsReport(queryFilterDateRange, null).get();
+        final ContentResponse ContentResponse = getProductionCheckoutApi().reconciliationClient().retrieveCSVStatementsReport(queryFilterDateRange, null).get();
 
-        assertNotNull(csv);
-        assertFalse(csv.isEmpty());
+        assertNotNull(ContentResponse);
+        assertFalse(ContentResponse.getContent().isEmpty());
+        assertNotNull(ContentResponse.getResponseHeaders());
+        assertNotNull(ContentResponse.getBody());
+        assertNotNull(ContentResponse.getHttpStatusCode());
     }
 
     @Test
     @Disabled("Only works in production")
     void shouldRetrieveCsvStatementsReport_saveFile() throws ExecutionException, InterruptedException {
 
-        final String csv = getProductionCheckoutApi().reconciliationClient().retrieveCSVStatementsReport(queryFilterDateRange, "file_path").get();
+        final ContentResponse ContentResponse = getProductionCheckoutApi().reconciliationClient().retrieveCSVStatementsReport(queryFilterDateRange, "file_path").get();
 
-        assertNotNull(csv);
-        assertFalse(csv.isEmpty());
+        assertNotNull(ContentResponse);
+        assertFalse(ContentResponse.getContent().isEmpty());
+        assertNotNull(ContentResponse.getResponseHeaders());
+        assertNotNull(ContentResponse.getBody());
+        assertNotNull(ContentResponse.getHttpStatusCode());
     }
 
     private CheckoutApi getProductionCheckoutApi() {

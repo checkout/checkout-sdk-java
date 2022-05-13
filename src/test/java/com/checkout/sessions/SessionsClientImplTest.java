@@ -3,10 +3,11 @@ package com.checkout.sessions;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutArgumentException;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
+import com.checkout.HttpMetadata;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
-import com.checkout.common.Resource;
 import com.checkout.sessions.channel.AppSession;
 import com.checkout.sessions.channel.ChannelData;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +44,7 @@ class SessionsClientImplTest {
     private static final SdkAuthorization SESSION_SECRET_AUTHORIZATION = new SessionSecretSdkCredentials("sessionSecret")
             .getAuthorization(SdkAuthorizationType.CUSTOM);
 
-    private static final Map<Integer, Class<? extends Resource>> SESSION_RESPONSE_MAPPINGS = new HashMap<>();
+    private static final Map<Integer, Class<? extends HttpMetadata>> SESSION_RESPONSE_MAPPINGS = new HashMap<>();
 
     static {
         SESSION_RESPONSE_MAPPINGS.put(201, CreateSessionOkResponse.class);
@@ -294,9 +295,9 @@ class SessionsClientImplTest {
 
         doReturn(CompletableFuture.completedFuture(response))
                 .when(apiClient)
-                .postAsync(eq(SESSIONS + "/id/" + COMPLETE), eq(authorization), eq(Void.class), isNull(), isNull());
+                .postAsync(eq(SESSIONS + "/id/" + COMPLETE), eq(authorization), eq(EmptyResponse.class), isNull(), isNull());
 
-        final CompletableFuture<Void> completeSessionResponse = sessionsClient.completeSession("id");
+        final CompletableFuture<EmptyResponse> completeSessionResponse = sessionsClient.completeSession("id");
 
         assertNotNull(completeSessionResponse.get());
 
@@ -305,13 +306,13 @@ class SessionsClientImplTest {
     @Test
     void shouldCompleteSession_sessionSecret() throws ExecutionException, InterruptedException {
 
-        final GetSessionResponse response = mock(GetSessionResponse.class);
+        final EmptyResponse response = mock(EmptyResponse.class);
 
         doReturn(CompletableFuture.completedFuture(response))
                 .when(apiClient)
-                .postAsync(eq(SESSIONS + "/id/" + COMPLETE), eq(SESSION_SECRET_AUTHORIZATION), eq(Void.class), isNull(), isNull());
+                .postAsync(eq(SESSIONS + "/id/" + COMPLETE), eq(SESSION_SECRET_AUTHORIZATION), eq(EmptyResponse.class), isNull(), isNull());
 
-        final CompletableFuture<Void> completeSessionResponse = sessionsClient.completeSession("sessionSecret", "id");
+        final CompletableFuture<EmptyResponse> completeSessionResponse = sessionsClient.completeSession("sessionSecret", "id");
 
         assertNotNull(completeSessionResponse.get());
 
