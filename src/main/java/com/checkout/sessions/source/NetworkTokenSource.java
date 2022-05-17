@@ -25,11 +25,14 @@ public class NetworkTokenSource extends SessionSource {
 
     private String name;
 
+    private String email;
+
     @Builder
     private NetworkTokenSource(final String token,
                                final Integer expiryMonth,
                                final Integer expiryYear,
                                final String name,
+                               final String email,
                                final SessionAddress billingAddress,
                                final Phone homePhone,
                                final Phone mobilePhone,
@@ -40,6 +43,7 @@ public class NetworkTokenSource extends SessionSource {
         this.expiryMonth = expiryMonth;
         this.expiryYear = expiryYear;
         this.name = name;
+        this.email = email;
     }
 
     public NetworkTokenSource() {
