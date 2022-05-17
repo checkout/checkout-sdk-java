@@ -12,9 +12,9 @@ public enum FourOAuthScope {
     GATEWAY_PAYMENT_VOIDS("gateway:payment-voids"),
     GATEWAY_PAYMENT_CAPTURES("gateway:payment-captures"),
     GATEWAY_PAYMENT_REFUNDS("gateway:payment-refunds"),
+    GATEWAY_MOTO("gateway:moto"),
     FX("fx"),
     PAYOUTS_BANK_DETAILS("payouts:bank-details"),
-    SESSIONS("sessions"),
     SESSIONS_APP("sessions:app"),
     SESSIONS_BROWSER("sessions:browser"),
     DISPUTES("disputes"),
@@ -28,16 +28,20 @@ public enum FourOAuthScope {
     FILES("files"),
     FILES_RETRIEVE("files:retrieve"),
     FILES_UPLOAD("files:upload"),
-    ISSUING_CLIENT("issuing:client"),
-    ISSUING_PARTNER("issuing:partner"),
+    FILES_DOWNLOAD("files:download"),
     RISK("risk"),
-    RISK_ASSESSMENT("risk:assessment"),
+    RISK_ASSESSMENTS("risk:assessments"),
     RISK_SETTINGS("risk:settings"),
     TRANSFERS("transfers"),
     TRANSFERS_CREATE("transfers:create"),
     TRANSFERS_VIEW("transfers:view"),
     BALANCES("balances"),
-    BALANCES_VIEW("balances:view");
+    BALANCES_VIEW("balances:view"),
+    MIDDLEWARE("middleware"),
+    MIDDLEWARE_GATEWAY("middleware:gateway"),
+    MIDDLEWARE_PAYMENT_CONTEXT("middleware:payment-context"),
+    MIDDLEWARE_MERCHANTS_SECRET("middleware:merchants-secret"),
+    MIDDLEWARE_MERCHANTS_PUBLIC("middleware:merchants-public");
 
     private final String scope;
 
