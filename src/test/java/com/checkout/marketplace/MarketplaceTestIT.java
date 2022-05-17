@@ -1,5 +1,6 @@
 package com.checkout.marketplace;
 
+import com.checkout.CheckoutApiException;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.Address;
@@ -22,9 +23,13 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class MarketplaceTestIT extends SandboxTestFixture {
 
@@ -129,6 +134,36 @@ class MarketplaceTestIT extends SandboxTestFixture {
         final CreateTransferResponse response = blocking(() -> fourApi.marketplaceClient().initiateTransferOfFunds(transferRequest));
         assertNotNull(response.getId());
         assertEquals("pending", response.getStatus());
+    }
+
+    @Test
+    void shouldInitiateTransferOfFunds_idempotently() throws ExecutionException, InterruptedException {
+
+        final CreateTransferRequest transferRequest = CreateTransferRequest.builder()
+                .transferType(TransferType.COMMISSION)
+                .source(TransferSource.builder()
+                        .id("ent_kidtcgc3ge5unf4a5i6enhnr5m")
+                        .amount(100L)
+                        .build())
+                .destination(TransferDestination.builder()
+                        .id("ent_w4jelhppmfiufdnatam37wrfc4")
+                        .build())
+                .build();
+
+        final String idempotencyKey = UUID.randomUUID().toString();
+
+        final CreateTransferResponse response = blocking(() -> fourApi.marketplaceClient().initiateTransferOfFunds(transferRequest, idempotencyKey));
+        assertNotNull(response.getId());
+        assertEquals("pending", response.getStatus());
+
+        try {
+            fourApi.marketplaceClient().initiateTransferOfFunds(transferRequest, idempotencyKey).get();
+            fail("Should not get here!");
+        } catch (final InterruptedException | ExecutionException e) {
+            assertTrue(e.getCause() instanceof CheckoutApiException);
+            final CheckoutApiException checkoutException = (CheckoutApiException) e.getCause();
+            assertEquals(409, checkoutException.getHttpStatusCode());
+        }
     }
 
     @Test

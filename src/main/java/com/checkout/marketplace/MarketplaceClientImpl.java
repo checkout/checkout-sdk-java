@@ -77,8 +77,12 @@ public class MarketplaceClientImpl extends AbstractClient implements Marketplace
 
     @Override
     public CompletableFuture<CreateTransferResponse> initiateTransferOfFunds(final CreateTransferRequest createTransferRequest) {
-        validateParams("createTransferRequest", createTransferRequest);
-        return transfersClient.postAsync(TRANSFERS_PATH, sdkAuthorization(), CreateTransferResponse.class, createTransferRequest, null);
+        return requestInitiateTransferOfFunds(createTransferRequest, null);
+    }
+
+    @Override
+    public CompletableFuture<CreateTransferResponse> initiateTransferOfFunds(final CreateTransferRequest createTransferRequest, final String idempotencyKey) {
+        return requestInitiateTransferOfFunds(createTransferRequest, idempotencyKey);
     }
 
     @Override
@@ -99,5 +103,10 @@ public class MarketplaceClientImpl extends AbstractClient implements Marketplace
     public CompletableFuture<GetScheduleResponseDeserializer> retrievePayoutSchedule(final String entityId) {
         validateParams("entityId", entityId);
         return apiClient.getAsync(buildPath(MARKETPLACE_PATH, ENTITIES_PATH, entityId, PAYOUT_SCHEDULES), sdkAuthorization(), GetScheduleResponseDeserializer.class);
+    }
+
+    private CompletableFuture<CreateTransferResponse> requestInitiateTransferOfFunds(final CreateTransferRequest createTransferRequest, final String idempotencyKey) {
+        validateParams("createTransferRequest", createTransferRequest);
+        return transfersClient.postAsync(TRANSFERS_PATH, sdkAuthorization(), CreateTransferResponse.class, createTransferRequest, idempotencyKey);
     }
 }
