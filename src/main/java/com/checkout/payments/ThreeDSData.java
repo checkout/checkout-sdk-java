@@ -26,4 +26,6 @@ public final class ThreeDSData {
 
     private Exemption exemption;
 
+    private Boolean challenged;
+
 }

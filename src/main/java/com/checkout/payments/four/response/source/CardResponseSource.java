@@ -62,11 +62,6 @@ public final class CardResponseSource extends AbstractResponseSource implements 
     @SerializedName("cvv_check")
     private String cvvCheck;
 
-    private Boolean payouts;
-
-    @SerializedName("fast_funds")
-    private String fastFunds;
-
     @SerializedName("payment_account_reference")
     private String paymentAccountReference;
 
