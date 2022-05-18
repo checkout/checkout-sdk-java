@@ -63,5 +63,7 @@ public enum PaymentSourceType {
     @SerializedName("provider_token")
     PROVIDER_TOKEN,
     @SerializedName("knet")
-    KNET
+    KNET,
+    @SerializedName("bank_account")
+    BANK_ACCOUNT
 }

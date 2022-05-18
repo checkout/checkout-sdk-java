@@ -14,8 +14,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class MarketplaceAccountHolder extends AccountHolder {
 
-    private AccountHolderType type;
-
     @SerializedName("company_name")
     private String companyName;
 
