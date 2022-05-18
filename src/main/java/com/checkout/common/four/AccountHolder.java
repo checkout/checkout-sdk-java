@@ -25,4 +25,6 @@ public class AccountHolder {
 
     private Phone phone;
 
+    private AccountHolderType type;
+
 }
