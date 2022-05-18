@@ -11,15 +11,19 @@ import com.checkout.common.CountryCode;
 import com.checkout.common.CustomerResponse;
 import com.checkout.common.Phone;
 import com.checkout.common.four.AccountHolder;
+import com.checkout.common.four.AccountHolderType;
+import com.checkout.common.four.AccountType;
 import com.checkout.common.four.Product;
 import com.checkout.payments.PaymentProcessing;
 import com.checkout.payments.four.request.AuthorizationRequest;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.PayoutRequest;
 import com.checkout.payments.four.request.source.PayoutRequestCurrencyAccountSource;
+import com.checkout.payments.four.request.source.RequestBankAccountSource;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.request.source.RequestIdSource;
 import com.checkout.payments.four.request.source.RequestProviderTokenSource;
+import com.checkout.payments.four.request.source.apm.RequestPayPalSource;
 import com.checkout.payments.four.request.source.apm.RequestTamaraSource;
 import com.checkout.payments.four.response.AuthorizationResponse;
 import com.checkout.payments.four.response.GetPaymentResponse;
@@ -477,6 +481,46 @@ class PaymentsClientImplTest {
         assertNotNull(future.get());
         assertEquals(response, future.get());
 
+    }
+
+    @Test
+    void shouldRequestPayPalSourcePayment() throws ExecutionException, InterruptedException {
+        final PaymentResponse response = mock(PaymentResponse.class);
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(new RequestPayPalSource())
+                .build();
+
+        when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayment(request);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+    }
+
+    @Test
+    void shouldRequestBankAccountPayment() throws ExecutionException, InterruptedException {
+        final PaymentResponse response = mock(PaymentResponse.class);
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(RequestBankAccountSource.builder()
+                        .paymentMethod("ach")
+                        .accountType(AccountType.SAVINGS)
+                        .country(CountryCode.US)
+                        .accountNumber("1365456745")
+                        .bankCode("011075150")
+                        .accountHolder(AccountHolder.builder()
+                                .build())
+                        .build())
+                .build();
+
+        when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayment(request);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
     }
 
 }
