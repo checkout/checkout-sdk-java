@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
@@ -37,9 +38,6 @@ class OxxoClientImplTest {
     @Mock
     private SdkAuthorization authorization;
 
-    @Mock
-    private EmptyResponse emptyResponse;
-
     private OxxoClient oxxoClient;
 
     @BeforeEach
@@ -52,26 +50,30 @@ class OxxoClientImplTest {
     @Test
     void shouldSucceedPayment() throws ExecutionException, InterruptedException {
 
+        final EmptyResponse response = mock(EmptyResponse.class);
+
         when(apiClient.postAsync(eq("apms/oxxo/payments/payment_id/succeed"), eq(authorization), eq(EmptyResponse.class), isNull(), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(emptyResponse));
+                .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<EmptyResponse> future = oxxoClient.succeed("payment_id");
 
         assertNotNull(future.get());
-        assertEquals(emptyResponse, future.get());
+        assertEquals(response, future.get());
 
     }
 
     @Test
     void shouldExpirePayment() throws ExecutionException, InterruptedException {
 
+        final EmptyResponse response = mock(EmptyResponse.class);
+
         when(apiClient.postAsync(eq("apms/oxxo/payments/payment_id/expire"), eq(authorization), eq(EmptyResponse.class), isNull(), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(emptyResponse));
+                .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<EmptyResponse> future = oxxoClient.expire("payment_id");
 
         assertNotNull(future.get());
-        assertEquals(emptyResponse, future.get());
+        assertEquals(response, future.get());
 
     }
 

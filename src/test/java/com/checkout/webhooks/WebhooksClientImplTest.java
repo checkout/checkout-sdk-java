@@ -25,14 +25,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class WebhooksClientImplTest {
-
-    private static final String WEBHOOKS = "webhooks";
 
     @Mock
     private ApiClient apiClient;
@@ -53,18 +52,17 @@ class WebhooksClientImplTest {
 
     @BeforeEach
     void setup() {
+        lenient().when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        lenient().when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
         this.webhooksClient = new WebhooksClientImpl(apiClient, configuration);
     }
 
     @Test
     void shouldRetrieveWebhooks() throws ExecutionException, InterruptedException {
 
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
-
         final ItemsResponse response = mock(ItemsResponse.class);
 
-        when(apiClient.getAsync(eq(WEBHOOKS), any(SdkAuthorization.class), eq(WEBHOOKS_TYPE)))
+        when(apiClient.getAsync(eq("webhooks"), any(SdkAuthorization.class), eq(WEBHOOKS_TYPE)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ItemsResponse<WebhookResponse>> webhooks = webhooksClient.retrieveWebhooks();
@@ -77,12 +75,9 @@ class WebhooksClientImplTest {
     @Test
     void shouldRetrieveWebhooks_nullResponse() throws ExecutionException, InterruptedException {
 
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
-
         final ItemsResponse response = mock(ItemsResponse.class);
 
-        when(apiClient.getAsync(eq(WEBHOOKS), any(SdkAuthorization.class), eq(WEBHOOKS_TYPE)))
+        when(apiClient.getAsync(eq("webhooks"), any(SdkAuthorization.class), eq(WEBHOOKS_TYPE)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ItemsResponse<WebhookResponse>> webhooks = webhooksClient.retrieveWebhooks();
@@ -94,13 +89,10 @@ class WebhooksClientImplTest {
     @Test
     void shouldRegisterWebhook() throws ExecutionException, InterruptedException {
 
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
-
         final WebhookRequest webhookRequest = mock(WebhookRequest.class);
         final WebhookResponse webhookResponse = mock(WebhookResponse.class);
 
-        when(apiClient.postAsync(eq(WEBHOOKS), any(SdkAuthorization.class), eq(WebhookResponse.class), eq(webhookRequest), isNull()))
+        when(apiClient.postAsync(eq("webhooks"), any(SdkAuthorization.class), eq(WebhookResponse.class), eq(webhookRequest), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(webhookResponse));
 
         final CompletableFuture<WebhookResponse> webhooks = webhooksClient.registerWebhook(webhookRequest);
@@ -127,13 +119,10 @@ class WebhooksClientImplTest {
     @Test
     void shouldRegisterWebhook_idempotencyKey() throws ExecutionException, InterruptedException {
 
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
-
         final WebhookRequest webhookRequest = mock(WebhookRequest.class);
         final WebhookResponse webhookResponse = mock(WebhookResponse.class);
 
-        when(apiClient.postAsync(eq(WEBHOOKS), any(SdkAuthorization.class), eq(WebhookResponse.class), eq(webhookRequest), eq("ik")))
+        when(apiClient.postAsync(eq("webhooks"), any(SdkAuthorization.class), eq(WebhookResponse.class), eq(webhookRequest), eq("ik")))
                 .thenReturn(CompletableFuture.completedFuture(webhookResponse));
 
         final CompletableFuture<WebhookResponse> webhooks = webhooksClient.registerWebhook(webhookRequest, "ik");
@@ -146,12 +135,9 @@ class WebhooksClientImplTest {
     @Test
     void shouldRetrieveWebhook_idempotencyKey() throws ExecutionException, InterruptedException {
 
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
-
         final WebhookResponse webhookResponse = mock(WebhookResponse.class);
 
-        when(apiClient.getAsync(eq(WEBHOOKS + "/webhook_id"), any(SdkAuthorization.class), eq(WebhookResponse.class)))
+        when(apiClient.getAsync(eq("webhooks/webhook_id"), any(SdkAuthorization.class), eq(WebhookResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(webhookResponse));
 
         final CompletableFuture<WebhookResponse> webhooks = webhooksClient.retrieveWebhook("webhook_id");
@@ -185,13 +171,10 @@ class WebhooksClientImplTest {
     @Test
     void shouldUpdateWebhook() throws ExecutionException, InterruptedException {
 
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
-
         final WebhookRequest webhookRequest = mock(WebhookRequest.class);
         final WebhookResponse webhookResponse = mock(WebhookResponse.class);
 
-        when(apiClient.putAsync(eq(WEBHOOKS + "/webhook_id"), any(SdkAuthorization.class), eq(WebhookResponse.class), eq(webhookRequest)))
+        when(apiClient.putAsync(eq("webhooks/webhook_id"), any(SdkAuthorization.class), eq(WebhookResponse.class), eq(webhookRequest)))
                 .thenReturn(CompletableFuture.completedFuture(webhookResponse));
 
         final CompletableFuture<WebhookResponse> webhooks = webhooksClient.updateWebhook("webhook_id", webhookRequest);
@@ -225,10 +208,7 @@ class WebhooksClientImplTest {
     @Test
     void shouldRemoveWebhook() throws ExecutionException, InterruptedException {
 
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
-
-        when(apiClient.deleteAsync(eq(WEBHOOKS + "/webhook_id"), any(SdkAuthorization.class)))
+        when(apiClient.deleteAsync(eq("webhooks/webhook_id"), any(SdkAuthorization.class)))
                 .thenReturn(CompletableFuture.completedFuture(mock(EmptyResponse.class)));
 
         final CompletableFuture<EmptyResponse> webhooks = webhooksClient.removeWebhook("webhook_id");
