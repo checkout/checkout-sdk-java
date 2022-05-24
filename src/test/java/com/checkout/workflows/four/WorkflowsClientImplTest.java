@@ -41,15 +41,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class WorkflowsClientImplTest {
 
-    private static final String WORKFLOWS = "workflows";
-    private static final String WORKFLOW = "workflow";
-    private static final String ACTIONS = "actions";
-    private static final String CONDITIONS = "conditions";
-    private static final String EVENT_TYPES = "event-types";
-    private static final String EVENTS = "events";
-    private static final String REFLOW = "reflow";
-    private static final String SUBJECT = "subject";
-
     @Mock
     private ApiClient apiClient;
 
@@ -81,7 +72,7 @@ class WorkflowsClientImplTest {
         final CreateWorkflowRequest request = Mockito.mock(CreateWorkflowRequest.class);
         final CreateWorkflowResponse response = Mockito.mock(CreateWorkflowResponse.class);
 
-        when(apiClient.postAsync(eq(WORKFLOWS), eq(authorization), eq(CreateWorkflowResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync(eq("workflows"), eq(authorization), eq(CreateWorkflowResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<CreateWorkflowResponse> future = workflowsClient.createWorkflow(request);
@@ -111,7 +102,7 @@ class WorkflowsClientImplTest {
 
         final GetWorkflowsResponse response = Mockito.mock(GetWorkflowsResponse.class);
 
-        when(apiClient.getAsync(eq(WORKFLOWS), eq(authorization), eq(GetWorkflowsResponse.class)))
+        when(apiClient.getAsync("workflows", authorization, GetWorkflowsResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<GetWorkflowsResponse> future = workflowsClient.getWorkflows();
@@ -129,7 +120,7 @@ class WorkflowsClientImplTest {
 
         final GetWorkflowResponse response = Mockito.mock(GetWorkflowResponse.class);
 
-        when(apiClient.getAsync(eq(WORKFLOWS + "/workflow_id"), eq(authorization), eq(GetWorkflowResponse.class)))
+        when(apiClient.getAsync("workflows/workflow_id", authorization, GetWorkflowResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<GetWorkflowResponse> future = workflowsClient.getWorkflow("workflow_id");
@@ -160,7 +151,7 @@ class WorkflowsClientImplTest {
         final UpdateWorkflowRequest request = Mockito.mock(UpdateWorkflowRequest.class);
         final UpdateWorkflowResponse response = Mockito.mock(UpdateWorkflowResponse.class);
 
-        when(apiClient.patchAsync(eq(WORKFLOWS + "/workflow_id"), eq(authorization), eq(UpdateWorkflowResponse.class), eq(request), isNull()))
+        when(apiClient.patchAsync(eq("workflows/workflow_id"), eq(authorization), eq(UpdateWorkflowResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<UpdateWorkflowResponse> future = workflowsClient.updateWorkflow("workflow_id", request);
@@ -197,7 +188,7 @@ class WorkflowsClientImplTest {
 
         final EmptyResponse response = Mockito.mock(EmptyResponse.class);
 
-        when(apiClient.deleteAsync(eq(WORKFLOWS + "/workflow_id"), eq(authorization)))
+        when(apiClient.deleteAsync("workflows/workflow_id", (authorization)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<EmptyResponse> future = workflowsClient.removeWorkflow("workflow_id");
@@ -231,7 +222,7 @@ class WorkflowsClientImplTest {
         final EmptyResponse response = Mockito.mock(EmptyResponse.class);
         final WorkflowActionRequest action = Mockito.mock(WorkflowActionRequest.class);
 
-        when(apiClient.putAsync(eq(WORKFLOWS + "/workflow_id/" + ACTIONS + "/action_id"), eq(authorization), eq(EmptyResponse.class), eq(action)))
+        when(apiClient.putAsync("workflows/workflow_id/actions/action_id", authorization, EmptyResponse.class, action))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<EmptyResponse> future = workflowsClient.updateWorkflowAction("workflow_id", "action_id", action);
@@ -276,7 +267,7 @@ class WorkflowsClientImplTest {
         final EmptyResponse response = Mockito.mock(EmptyResponse.class);
         final WorkflowConditionRequest condition = Mockito.mock(WorkflowConditionRequest.class);
 
-        when(apiClient.putAsync(eq(WORKFLOWS + "/workflow_id/" + CONDITIONS + "/condition_id"), eq(authorization), eq(EmptyResponse.class), eq(condition)))
+        when(apiClient.putAsync("workflows/workflow_id/conditions/condition_id", authorization, EmptyResponse.class, condition))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<EmptyResponse> future = workflowsClient.updateWorkflowCondition("workflow_id", "condition_id", condition);
@@ -320,7 +311,7 @@ class WorkflowsClientImplTest {
 
         final ItemsResponse response = mock(ItemsResponse.class);
 
-        when(apiClient.getAsync(eq(WORKFLOWS + "/" + EVENT_TYPES), eq(authorization), eq(WORKFLOWS_EVENT_TYPES_TYPE)))
+        when(apiClient.getAsync("workflows/event-types", authorization, WORKFLOWS_EVENT_TYPES_TYPE))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ItemsResponse<WorkflowEventTypes>> future = workflowsClient.getEventTypes();
@@ -338,7 +329,7 @@ class WorkflowsClientImplTest {
 
         final SubjectEventsResponse response = Mockito.mock(SubjectEventsResponse.class);
 
-        when(apiClient.getAsync(eq(WORKFLOWS + "/" + EVENTS + "/" + SUBJECT + "/subject_id"), eq(authorization), eq(SubjectEventsResponse.class)))
+        when(apiClient.getAsync("workflows/events/subject/subject_id", authorization, SubjectEventsResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<SubjectEventsResponse> future = workflowsClient.getSubjectEvents("subject_id");
@@ -368,7 +359,7 @@ class WorkflowsClientImplTest {
 
         final GetEventResponse response = Mockito.mock(GetEventResponse.class);
 
-        when(apiClient.getAsync(eq(WORKFLOWS + "/" + EVENTS + "/event_id"), eq(authorization), eq(GetEventResponse.class)))
+        when(apiClient.getAsync("workflows/events/event_id", authorization, GetEventResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<GetEventResponse> future = workflowsClient.getEvent("event_id");
@@ -398,7 +389,7 @@ class WorkflowsClientImplTest {
 
         final ReflowResponse response = Mockito.mock(ReflowResponse.class);
 
-        when(apiClient.postAsync(eq(WORKFLOWS + "/" + EVENTS + "/event_id/" + REFLOW), eq(authorization), eq(ReflowResponse.class), isNull(), isNull()))
+        when(apiClient.postAsync(eq("workflows/events/event_id/reflow"), eq(authorization), eq(ReflowResponse.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ReflowResponse> future = workflowsClient.reflowByEvent("event_id");
@@ -428,7 +419,7 @@ class WorkflowsClientImplTest {
 
         final ReflowResponse response = Mockito.mock(ReflowResponse.class);
 
-        when(apiClient.postAsync(eq(WORKFLOWS + "/" + EVENTS + "/" + SUBJECT + "/subject_id/" + REFLOW), eq(authorization), eq(ReflowResponse.class), isNull(), isNull()))
+        when(apiClient.postAsync(eq("workflows/events/subject/subject_id/reflow"), eq(authorization), eq(ReflowResponse.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ReflowResponse> future = workflowsClient.reflowBySubject("subject_id");
@@ -458,7 +449,7 @@ class WorkflowsClientImplTest {
 
         final ReflowResponse response = Mockito.mock(ReflowResponse.class);
 
-        when(apiClient.postAsync(eq(WORKFLOWS + "/" + EVENTS + "/event_id/" + WORKFLOW + "/workflow_id/" + REFLOW), eq(authorization), eq(ReflowResponse.class), isNull(), isNull()))
+        when(apiClient.postAsync(eq("workflows/events/event_id/workflow/workflow_id/reflow"), eq(authorization), eq(ReflowResponse.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ReflowResponse> future = workflowsClient.reflowByEventAndWorkflow("event_id", "workflow_id");
@@ -495,7 +486,7 @@ class WorkflowsClientImplTest {
 
         final ReflowResponse response = Mockito.mock(ReflowResponse.class);
 
-        when(apiClient.postAsync(eq(WORKFLOWS + "/" + EVENTS + "/" + SUBJECT + "/subject_id/" + WORKFLOW + "/workflow_id/" + REFLOW), eq(authorization), eq(ReflowResponse.class), isNull(), isNull()))
+        when(apiClient.postAsync(eq("workflows/events/subject/subject_id/workflow/workflow_id/reflow"), eq(authorization), eq(ReflowResponse.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ReflowResponse> future = workflowsClient.reflowBySubjectAndWorkflow("subject_id", "workflow_id");
@@ -533,7 +524,7 @@ class WorkflowsClientImplTest {
         final ReflowBySubjectsRequest request = Mockito.mock(ReflowBySubjectsRequest.class);
         final ReflowResponse response = Mockito.mock(ReflowResponse.class);
 
-        when(apiClient.postAsync(eq(WORKFLOWS + "/" + EVENTS + "/" + REFLOW), eq(authorization), eq(ReflowResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync(eq("workflows/events/reflow"), eq(authorization), eq(ReflowResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ReflowResponse> future = workflowsClient.reflow(request);
@@ -562,7 +553,7 @@ class WorkflowsClientImplTest {
 
         final WorkflowActionInvocationsResponse response = mock(WorkflowActionInvocationsResponse.class);
 
-        when(apiClient.getAsync(eq("workflows/events/event_id/actions/action_id"), eq(authorization), eq(WorkflowActionInvocationsResponse.class)))
+        when(apiClient.getAsync("workflows/events/event_id/actions/action_id", authorization, WorkflowActionInvocationsResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<WorkflowActionInvocationsResponse> future = workflowsClient.getActionInvocations("event_id", "action_id");
