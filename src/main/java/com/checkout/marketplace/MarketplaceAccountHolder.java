@@ -1,18 +1,23 @@
 package com.checkout.marketplace;
 
+import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
-import com.checkout.common.four.AccountHolder;
+import com.checkout.common.Phone;
 import com.checkout.common.four.AccountHolderType;
-import com.checkout.common.four.SenderIdentification;
+import com.checkout.common.four.AccountHolderIdentification;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public final class MarketplaceAccountHolder extends AccountHolder {
+public final class MarketplaceAccountHolder {
+
+    private AccountHolderType type;
+
+    @SerializedName("first_name")
+    private String firstName;
+
+    @SerializedName("last_name")
+    private String lastName;
 
     @SerializedName("company_name")
     private String companyName;
@@ -29,7 +34,12 @@ public final class MarketplaceAccountHolder extends AccountHolder {
     @SerializedName("residential_status")
     private String residentialStatus;
 
-    private SenderIdentification identification;
+    @SerializedName("billing_address")
+    private Address billingAddress;
+
+    private Phone phone;
+
+    private AccountHolderIdentification identification;
 
     private String email;
 
