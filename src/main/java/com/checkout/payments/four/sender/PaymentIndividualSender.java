@@ -2,7 +2,7 @@ package com.checkout.payments.four.sender;
 
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
-import com.checkout.common.four.SenderIdentification;
+import com.checkout.common.four.AccountHolderIdentification;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -24,7 +24,7 @@ public final class PaymentIndividualSender extends PaymentSender {
 
     private Address address;
 
-    private SenderIdentification identification;
+    private AccountHolderIdentification identification;
 
     //BETA
     @SerializedName("middle_name")
@@ -46,16 +46,16 @@ public final class PaymentIndividualSender extends PaymentSender {
 
     @Builder
     private PaymentIndividualSender(final String reference,
-                                   final String firstName,
-                                   final String lastName,
-                                   final Address address,
-                                   final SenderIdentification identification,
-                                   final String middleName,
-                                   final String referenceType,
-                                   final String dateOfBirth,
-                                   final SourceOfFunds sourceOfFunds,
-                                   final CountryCode countryOfBirth,
-                                   final CountryCode nationality) {
+                                    final String firstName,
+                                    final String lastName,
+                                    final Address address,
+                                    final AccountHolderIdentification identification,
+                                    final String middleName,
+                                    final String referenceType,
+                                    final String dateOfBirth,
+                                    final SourceOfFunds sourceOfFunds,
+                                    final CountryCode countryOfBirth,
+                                    final CountryCode nationality) {
         super(SenderType.INDIVIDUAL, reference);
         this.firstName = firstName;
         this.lastName = lastName;
