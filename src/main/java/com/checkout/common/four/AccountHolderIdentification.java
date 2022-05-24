@@ -1,7 +1,6 @@
 package com.checkout.common.four;
 
 import com.checkout.common.CountryCode;
-import com.checkout.payments.four.sender.SenderIdentificationType;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,9 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public final class SenderIdentification {
+public final class AccountHolderIdentification {
 
-    private SenderIdentificationType type;
+    private AccountHolderIdentificationType type;
 
     private String number;
 

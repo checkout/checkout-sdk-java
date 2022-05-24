@@ -8,7 +8,7 @@ import com.checkout.common.Currency;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
 import com.checkout.common.ThreeDSEnrollmentStatus;
-import com.checkout.common.four.SenderIdentification;
+import com.checkout.common.four.AccountHolderIdentification;
 import com.checkout.payments.PaymentStatus;
 import com.checkout.payments.ThreeDSEnrollment;
 import com.checkout.payments.ThreeDSRequest;
@@ -22,7 +22,7 @@ import com.checkout.payments.four.response.PaymentResponseBalances;
 import com.checkout.payments.four.response.source.CardResponseSource;
 import com.checkout.payments.four.sender.PaymentCorporateSender;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
-import com.checkout.payments.four.sender.SenderIdentificationType;
+import com.checkout.common.four.AccountHolderIdentificationType;
 import com.checkout.tokens.CardTokenResponse;
 import org.junit.jupiter.api.Test;
 
@@ -125,8 +125,8 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                         .city("City")
                         .country(CountryCode.GB)
                         .build())
-                .identification(SenderIdentification.builder()
-                        .type(SenderIdentificationType.DRIVING_LICENCE)
+                .identification(AccountHolderIdentification.builder()
+                        .type(AccountHolderIdentificationType.DRIVING_LICENCE)
                         .number("1234")
                         .issuingCountry(CountryCode.GB)
                         .build())
@@ -192,8 +192,8 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                         .city("City")
                         .country(CountryCode.GB)
                         .build())
-                .identification(SenderIdentification.builder()
-                        .type(SenderIdentificationType.DRIVING_LICENCE)
+                .identification(AccountHolderIdentification.builder()
+                        .type(AccountHolderIdentificationType.DRIVING_LICENCE)
                         .number("1234")
                         .issuingCountry(CountryCode.GB)
                         .build())
