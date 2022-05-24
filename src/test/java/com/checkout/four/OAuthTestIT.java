@@ -10,11 +10,11 @@ import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.MarketplaceData;
-import com.checkout.common.four.SenderIdentification;
+import com.checkout.common.four.AccountHolderIdentification;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.source.RequestCardSource;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
-import com.checkout.payments.four.sender.SenderIdentificationType;
+import com.checkout.common.four.AccountHolderIdentificationType;
 import org.junit.jupiter.api.Test;
 
 import java.net.URI;
@@ -53,8 +53,8 @@ class OAuthTestIT extends SandboxTestFixture {
                         .city("City")
                         .country(CountryCode.GB)
                         .build())
-                .identification(SenderIdentification.builder()
-                        .type(SenderIdentificationType.DRIVING_LICENCE)
+                .identification(AccountHolderIdentification.builder()
+                        .type(AccountHolderIdentificationType.DRIVING_LICENCE)
                         .number("1234")
                         .issuingCountry(CountryCode.GB)
                         .build())
