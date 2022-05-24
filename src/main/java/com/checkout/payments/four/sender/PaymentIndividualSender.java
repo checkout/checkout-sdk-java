@@ -1,7 +1,7 @@
 package com.checkout.payments.four.sender;
 
 import com.checkout.common.Address;
-import com.checkout.common.four.SenderIdentification;
+import com.checkout.common.four.AccountHolderIdentification;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -23,13 +23,13 @@ public final class PaymentIndividualSender extends PaymentSender {
 
     private Address address;
 
-    private SenderIdentification identification;
+    private AccountHolderIdentification identification;
 
     @Builder
     private PaymentIndividualSender(final String firstName,
                                     final String lastName,
                                     final Address address,
-                                    final SenderIdentification identification) {
+                                    final AccountHolderIdentification identification) {
         super(SenderType.INDIVIDUAL);
         this.firstName = firstName;
         this.lastName = lastName;
