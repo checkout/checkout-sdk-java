@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,18 +41,6 @@ class KlarnaClientImplTest {
     @Mock
     private SdkAuthorization authorization;
 
-    @Mock
-    private CreditSessionResponse creditSessionResponse;
-
-    @Mock
-    private CreditSession creditSession;
-
-    @Mock
-    private VoidResponse voidResponse;
-
-    @Mock
-    private CaptureResponse captureResponse;
-
     private KlarnaClient klarnaClient;
 
     @BeforeEach
@@ -64,118 +53,134 @@ class KlarnaClientImplTest {
     @Test
     void shouldCreateSession() throws ExecutionException, InterruptedException {
 
+        final CreditSessionResponse response = mock(CreditSessionResponse.class);
+
         when(apiClient.postAsync(eq("klarna/credit-sessions"), eq(authorization),
                 eq(CreditSessionResponse.class), any(CreditSessionRequest.class), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(creditSessionResponse));
+                .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<CreditSessionResponse> future = klarnaClient.createCreditSession(CreditSessionRequest.builder().build());
 
         assertNotNull(future.get());
-        assertEquals(creditSessionResponse, future.get());
+        assertEquals(response, future.get());
 
     }
 
     @Test
     void shouldCreateSession_sandbox() throws ExecutionException, InterruptedException {
 
+        final CreditSessionResponse response = mock(CreditSessionResponse.class);
+
         when(configuration.getEnvironment()).thenReturn(Environment.SANDBOX);
 
         when(apiClient.postAsync(eq("klarna-external/credit-sessions"), eq(authorization),
                 eq(CreditSessionResponse.class), any(CreditSessionRequest.class), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(creditSessionResponse));
+                .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<CreditSessionResponse> future = klarnaClient.createCreditSession(CreditSessionRequest.builder().build());
 
         assertNotNull(future.get());
-        assertEquals(creditSessionResponse, future.get());
+        assertEquals(response, future.get());
 
     }
 
     @Test
     void shouldGetCreditSession() throws ExecutionException, InterruptedException {
 
+        final CreditSession response = mock(CreditSession.class);
+
         when(apiClient.getAsync("klarna/credit-sessions/session_id", authorization, CreditSession.class))
-                .thenReturn(CompletableFuture.completedFuture(creditSession));
+                .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<CreditSession> future = klarnaClient.getCreditSession("session_id");
 
         assertNotNull(future.get());
-        assertEquals(creditSession, future.get());
+        assertEquals(response, future.get());
 
     }
 
     @Test
     void shouldGetCreditSession_sandbox() throws ExecutionException, InterruptedException {
 
+        final CreditSession response = mock(CreditSession.class);
+
         when(configuration.getEnvironment()).thenReturn(Environment.SANDBOX);
 
         when(apiClient.getAsync("klarna-external/credit-sessions/session_id", authorization, CreditSession.class))
-                .thenReturn(CompletableFuture.completedFuture(creditSession));
+                .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<CreditSession> future = klarnaClient.getCreditSession("session_id");
 
         assertNotNull(future.get());
-        assertEquals(creditSession, future.get());
+        assertEquals(response, future.get());
 
     }
 
     @Test
     void shouldCapturePayment() throws ExecutionException, InterruptedException {
 
+        final CaptureResponse response = mock(CaptureResponse.class);
+
         when(apiClient.postAsync(eq("klarna/orders/payment_id/captures"), eq(authorization),
                 eq(CaptureResponse.class), any(OrderCaptureRequest.class), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(captureResponse));
+                .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<CaptureResponse> future = klarnaClient.capturePayment("payment_id", OrderCaptureRequest.builder().build());
 
         assertNotNull(future.get());
-        assertEquals(captureResponse, future.get());
+        assertEquals(response, future.get());
 
     }
 
     @Test
     void shouldCapturePayment_sandbox() throws ExecutionException, InterruptedException {
 
+        final CaptureResponse response = mock(CaptureResponse.class);
+
         when(configuration.getEnvironment()).thenReturn(Environment.SANDBOX);
 
         when(apiClient.postAsync(eq("klarna-external/orders/payment_id/captures"), eq(authorization),
                 eq(CaptureResponse.class), any(OrderCaptureRequest.class), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(captureResponse));
+                .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<CaptureResponse> future = klarnaClient.capturePayment("payment_id", OrderCaptureRequest.builder().build());
 
         assertNotNull(future.get());
-        assertEquals(captureResponse, future.get());
+        assertEquals(response, future.get());
 
     }
 
     @Test
     void shouldVoidCapturePayment() throws ExecutionException, InterruptedException {
 
+        final VoidResponse response = mock(VoidResponse.class);
+
         when(apiClient.postAsync(eq("klarna/orders/payment_id/voids"), eq(authorization),
                 eq(VoidResponse.class), any(VoidRequest.class), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(voidResponse));
+                .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<VoidResponse> future = klarnaClient.voidPayment("payment_id", VoidRequest.builder().build());
 
         assertNotNull(future.get());
-        assertEquals(voidResponse, future.get());
+        assertEquals(response, future.get());
 
     }
 
     @Test
     void shouldVoidCapturePayment_sandbox() throws ExecutionException, InterruptedException {
 
+        final VoidResponse response = mock(VoidResponse.class);
+
         when(configuration.getEnvironment()).thenReturn(Environment.SANDBOX);
 
         when(apiClient.postAsync(eq("klarna-external/orders/payment_id/voids"), eq(authorization),
                 eq(VoidResponse.class), any(VoidRequest.class), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(voidResponse));
+                .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<VoidResponse> future = klarnaClient.voidPayment("payment_id", VoidRequest.builder().build());
 
         assertNotNull(future.get());
-        assertEquals(voidResponse, future.get());
+        assertEquals(response, future.get());
 
     }
 

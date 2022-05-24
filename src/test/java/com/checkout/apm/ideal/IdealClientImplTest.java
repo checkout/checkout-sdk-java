@@ -49,7 +49,7 @@ class IdealClientImplTest {
     @Test
     void shouldGetIssuers() throws ExecutionException, InterruptedException {
 
-        when(apiClient.getAsync(eq("/ideal-external/issuers"), eq(authorization), eq(IssuerResponse.class)))
+        when(apiClient.getAsync("/ideal-external/issuers", authorization, IssuerResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(issuerResponse));
 
         final CompletableFuture<IssuerResponse> future = idealClient.getIssuers();
