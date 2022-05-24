@@ -37,12 +37,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class PaymentsClientImplTest {
 
-    private static final String PAYMENTS_PATH = "payments";
-    private static final String ACTIONS_PATH = "actions";
-    private static final String CAPTURES_PATH = "captures";
-    private static final String REFUNDS_PATH = "refunds";
-    private static final String VOIDS_PATH = "voids";
-
     private static final Type PAYMENT_ACTIONS_TYPE = new TypeToken<ItemsResponse<PaymentAction>>() {
     }.getType();
 
@@ -73,7 +67,7 @@ class PaymentsClientImplTest {
         final PaymentRequest request = mock(PaymentRequest.class);
         final PaymentResponse response = mock(PaymentResponse.class);
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync(eq("payments"), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayment(request);
@@ -91,7 +85,7 @@ class PaymentsClientImplTest {
         final PaymentRequest request = PaymentRequest.builder().source(customSource).build();
         final PaymentResponse response = mock(PaymentResponse.class);
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync(eq("payments"), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayment(request);
@@ -123,7 +117,7 @@ class PaymentsClientImplTest {
         final PaymentRequest request = mock(PaymentRequest.class);
         final PaymentResponse response = mock(PaymentResponse.class);
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), eq("1234")))
+        when(apiClient.postAsync(eq("payments"), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), eq("1234")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayment(request, "1234");
@@ -139,7 +133,7 @@ class PaymentsClientImplTest {
         final PayoutRequest request = mock(PayoutRequest.class);
         final PaymentResponse response = mock(PaymentResponse.class);
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync(eq("payments"), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayout(request);
@@ -155,7 +149,7 @@ class PaymentsClientImplTest {
         final PayoutRequest request = mock(PayoutRequest.class);
         final PaymentResponse response = mock(PaymentResponse.class);
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), eq("456")))
+        when(apiClient.postAsync(eq("payments"), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), eq("456")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayout(request, "456");
@@ -170,7 +164,7 @@ class PaymentsClientImplTest {
 
         final GetPaymentResponse response = mock(GetPaymentResponse.class);
 
-        when(apiClient.getAsync(eq(PAYMENTS_PATH + "/12345678"), any(SdkAuthorization.class), eq(GetPaymentResponse.class)))
+        when(apiClient.getAsync(eq("payments/12345678"), any(SdkAuthorization.class), eq(GetPaymentResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<GetPaymentResponse> future = paymentsClient.getPayment("12345678");
@@ -185,7 +179,7 @@ class PaymentsClientImplTest {
 
         final ItemsResponse response = mock(ItemsResponse.class);
 
-        when(apiClient.getAsync(eq(PAYMENTS_PATH + "/5433211/" + ACTIONS_PATH), any(SdkAuthorization.class), eq(PAYMENT_ACTIONS_TYPE)))
+        when(apiClient.getAsync(eq("payments/5433211/actions"), any(SdkAuthorization.class), eq(PAYMENT_ACTIONS_TYPE)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ItemsResponse<PaymentAction>> future = paymentsClient.getPaymentActions("5433211");
@@ -200,7 +194,7 @@ class PaymentsClientImplTest {
 
         final CaptureResponse response = new CaptureResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + CAPTURES_PATH), any(SdkAuthorization.class), eq(CaptureResponse.class), isNull(), isNull()))
+        when(apiClient.postAsync(eq("payments/123456/captures"), any(SdkAuthorization.class), eq(CaptureResponse.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<CaptureResponse> future = paymentsClient.capturePayment("123456");
@@ -215,7 +209,7 @@ class PaymentsClientImplTest {
 
         final CaptureResponse response = new CaptureResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + CAPTURES_PATH), any(SdkAuthorization.class), eq(CaptureResponse.class), isNull(), eq("456789")))
+        when(apiClient.postAsync(eq("payments/123456/captures"), any(SdkAuthorization.class), eq(CaptureResponse.class), isNull(), eq("456789")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<CaptureResponse> future = paymentsClient.capturePayment("123456", "456789");
@@ -231,7 +225,7 @@ class PaymentsClientImplTest {
         final CaptureRequest request = CaptureRequest.builder().build();
         final CaptureResponse response = new CaptureResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + CAPTURES_PATH), any(SdkAuthorization.class), eq(CaptureResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync(eq("payments/123456/captures"), any(SdkAuthorization.class), eq(CaptureResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<CaptureResponse> future = paymentsClient.capturePayment("123456", request);
@@ -247,7 +241,7 @@ class PaymentsClientImplTest {
         final CaptureRequest request = CaptureRequest.builder().build();
         final CaptureResponse response = new CaptureResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + CAPTURES_PATH), any(SdkAuthorization.class), eq(CaptureResponse.class), eq(request), eq("123")))
+        when(apiClient.postAsync(eq("payments/123456/captures"), any(SdkAuthorization.class), eq(CaptureResponse.class), eq(request), eq("123")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<CaptureResponse> future = paymentsClient.capturePayment("123456", request, "123");
@@ -262,7 +256,7 @@ class PaymentsClientImplTest {
 
         final RefundResponse response = new RefundResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + REFUNDS_PATH), any(SdkAuthorization.class), eq(RefundResponse.class), isNull(), isNull()))
+        when(apiClient.postAsync(eq("payments/123456/refunds"), any(SdkAuthorization.class), eq(RefundResponse.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<RefundResponse> future = paymentsClient.refundPayment("123456");
@@ -277,7 +271,7 @@ class PaymentsClientImplTest {
 
         final RefundResponse response = new RefundResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + REFUNDS_PATH), any(SdkAuthorization.class), eq(RefundResponse.class), isNull(), eq("456789")))
+        when(apiClient.postAsync(eq("payments/123456/refunds"), any(SdkAuthorization.class), eq(RefundResponse.class), isNull(), eq("456789")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<RefundResponse> future = paymentsClient.refundPayment("123456", "456789");
@@ -293,7 +287,7 @@ class PaymentsClientImplTest {
         final RefundRequest request = RefundRequest.builder().build();
         final RefundResponse response = new RefundResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + REFUNDS_PATH), any(SdkAuthorization.class), eq(RefundResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync(eq("payments/123456/refunds"), any(SdkAuthorization.class), eq(RefundResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<RefundResponse> future = paymentsClient.refundPayment("123456", request);
@@ -309,7 +303,7 @@ class PaymentsClientImplTest {
         final RefundRequest request = RefundRequest.builder().build();
         final RefundResponse response = new RefundResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + REFUNDS_PATH), any(SdkAuthorization.class), eq(RefundResponse.class), eq(request), eq("123")))
+        when(apiClient.postAsync(eq("payments/123456/refunds"), any(SdkAuthorization.class), eq(RefundResponse.class), eq(request), eq("123")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<RefundResponse> future = paymentsClient.refundPayment("123456", request, "123");
@@ -324,7 +318,7 @@ class PaymentsClientImplTest {
 
         final VoidResponse response = new VoidResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + VOIDS_PATH), any(SdkAuthorization.class), eq(VoidResponse.class), isNull(), isNull()))
+        when(apiClient.postAsync(eq("payments/123456/voids"), any(SdkAuthorization.class), eq(VoidResponse.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<VoidResponse> future = paymentsClient.voidPayment("123456");
@@ -339,7 +333,7 @@ class PaymentsClientImplTest {
 
         final VoidResponse response = new VoidResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + VOIDS_PATH), any(SdkAuthorization.class), eq(VoidResponse.class), isNull(), eq("456789")))
+        when(apiClient.postAsync(eq("payments/123456/voids"), any(SdkAuthorization.class), eq(VoidResponse.class), isNull(), eq("456789")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<VoidResponse> future = paymentsClient.voidPayment("123456", "456789");
@@ -355,7 +349,7 @@ class PaymentsClientImplTest {
         final VoidRequest request = VoidRequest.builder().build();
         final VoidResponse response = new VoidResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + VOIDS_PATH), any(SdkAuthorization.class), eq(VoidResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync(eq("payments/123456/voids"), any(SdkAuthorization.class), eq(VoidResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<VoidResponse> future = paymentsClient.voidPayment("123456", request);
@@ -371,7 +365,7 @@ class PaymentsClientImplTest {
         final VoidRequest request = VoidRequest.builder().build();
         final VoidResponse response = new VoidResponse();
 
-        when(apiClient.postAsync(eq(PAYMENTS_PATH + "/123456/" + VOIDS_PATH), any(SdkAuthorization.class), eq(VoidResponse.class), eq(request), eq("123")))
+        when(apiClient.postAsync(eq("payments/123456/voids"), any(SdkAuthorization.class), eq(VoidResponse.class), eq(request), eq("123")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<VoidResponse> future = paymentsClient.voidPayment("123456", request, "123");

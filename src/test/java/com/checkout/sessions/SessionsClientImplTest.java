@@ -36,11 +36,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class SessionsClientImplTest {
 
-    private static final String SESSIONS = "sessions";
-    private static final String COLLECT_DATA = "collect-data";
-    private static final String COMPLETE = "complete";
-    private static final String ISSUER_FINGERPRINT = "issuer-fingerprint";
-
     private static final SdkAuthorization SESSION_SECRET_AUTHORIZATION = new SessionSecretSdkCredentials("sessionSecret")
             .getAuthorization(SdkAuthorizationType.CUSTOM);
 
@@ -81,7 +76,7 @@ class SessionsClientImplTest {
 
         doReturn(CompletableFuture.completedFuture(response))
                 .when(apiClient)
-                .postAsync(eq(SESSIONS), eq(authorization), eq(SESSION_RESPONSE_MAPPINGS), eq(request), isNull());
+                .postAsync(eq("sessions"), eq(authorization), eq(SESSION_RESPONSE_MAPPINGS), eq(request), isNull());
 
         final CompletableFuture<SessionResponse> getSessionResponse = sessionsClient.requestSession(request);
 
@@ -102,7 +97,7 @@ class SessionsClientImplTest {
 
         doReturn(CompletableFuture.completedFuture(response))
                 .when(apiClient)
-                .postAsync(eq(SESSIONS), eq(authorization), eq(SESSION_RESPONSE_MAPPINGS), eq(request), isNull());
+                .postAsync(eq("sessions"), eq(authorization), eq(SESSION_RESPONSE_MAPPINGS), eq(request), isNull());
 
         final CompletableFuture<SessionResponse> getSessionResponse = sessionsClient.requestSession(request);
 
@@ -137,7 +132,7 @@ class SessionsClientImplTest {
 
         doReturn(CompletableFuture.completedFuture(response))
                 .when(apiClient)
-                .getAsync(eq(SESSIONS + "/id"), eq(authorization), eq(GetSessionResponse.class));
+                .getAsync("sessions/id", authorization, GetSessionResponse.class);
 
         final CompletableFuture<GetSessionResponse> getSessionResponse = sessionsClient.getSessionDetails("id");
 
@@ -152,7 +147,7 @@ class SessionsClientImplTest {
 
         doReturn(CompletableFuture.completedFuture(response))
                 .when(apiClient)
-                .getAsync(eq(SESSIONS + "/id"), eq(SESSION_SECRET_AUTHORIZATION), eq(GetSessionResponse.class));
+                .getAsync("sessions/id", SESSION_SECRET_AUTHORIZATION, GetSessionResponse.class);
 
         final CompletableFuture<GetSessionResponse> getSessionResponse = sessionsClient.getSessionDetails("sessionSecret", "id");
 
@@ -204,7 +199,7 @@ class SessionsClientImplTest {
 
         doReturn(CompletableFuture.completedFuture(response))
                 .when(apiClient)
-                .putAsync(eq(SESSIONS + "/id/" + COLLECT_DATA), eq(authorization), eq(GetSessionResponse.class), eq(request));
+                .putAsync("sessions/id/collect-data", authorization, GetSessionResponse.class, request);
 
         final CompletableFuture<GetSessionResponse> getSessionResponse = sessionsClient.updateSession("id", request);
 
@@ -220,7 +215,7 @@ class SessionsClientImplTest {
 
         doReturn(CompletableFuture.completedFuture(response))
                 .when(apiClient)
-                .putAsync(eq(SESSIONS + "/id/" + COLLECT_DATA), eq(SESSION_SECRET_AUTHORIZATION), eq(GetSessionResponse.class), eq(request));
+                .putAsync("sessions/id/collect-data", SESSION_SECRET_AUTHORIZATION, GetSessionResponse.class, request);
 
         final CompletableFuture<GetSessionResponse> getSessionResponse = sessionsClient.updateSession("sessionSecret", "id", request);
 
@@ -295,7 +290,7 @@ class SessionsClientImplTest {
 
         doReturn(CompletableFuture.completedFuture(response))
                 .when(apiClient)
-                .postAsync(eq(SESSIONS + "/id/" + COMPLETE), eq(authorization), eq(EmptyResponse.class), isNull(), isNull());
+                .postAsync(eq("sessions/id/complete"), eq(authorization), eq(EmptyResponse.class), isNull(), isNull());
 
         final CompletableFuture<EmptyResponse> completeSessionResponse = sessionsClient.completeSession("id");
 
@@ -310,7 +305,7 @@ class SessionsClientImplTest {
 
         doReturn(CompletableFuture.completedFuture(response))
                 .when(apiClient)
-                .postAsync(eq(SESSIONS + "/id/" + COMPLETE), eq(SESSION_SECRET_AUTHORIZATION), eq(EmptyResponse.class), isNull(), isNull());
+                .postAsync(eq("sessions/id/complete"), eq(SESSION_SECRET_AUTHORIZATION), eq(EmptyResponse.class), isNull(), isNull());
 
         final CompletableFuture<EmptyResponse> completeSessionResponse = sessionsClient.completeSession("sessionSecret", "id");
 
@@ -360,7 +355,7 @@ class SessionsClientImplTest {
         final ThreeDsMethodCompletionRequest request = mock(ThreeDsMethodCompletionRequest.class);
         final GetSessionResponseAfterChannelDataSupplied response = mock(GetSessionResponseAfterChannelDataSupplied.class);
 
-        when(apiClient.putAsync(eq(SESSIONS + "/id/" + ISSUER_FINGERPRINT), eq(authorization), eq(GetSessionResponseAfterChannelDataSupplied.class), eq(request)))
+        when(apiClient.putAsync("sessions/id/issuer-fingerprint", authorization, GetSessionResponseAfterChannelDataSupplied.class, request))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<GetSessionResponseAfterChannelDataSupplied> getSessionResponse = sessionsClient.update3dsMethodCompletionIndicator("id", request);
@@ -375,7 +370,7 @@ class SessionsClientImplTest {
         final ThreeDsMethodCompletionRequest request = mock(ThreeDsMethodCompletionRequest.class);
         final GetSessionResponseAfterChannelDataSupplied response = mock(GetSessionResponseAfterChannelDataSupplied.class);
 
-        when(apiClient.putAsync(eq(SESSIONS + "/id/" + ISSUER_FINGERPRINT), eq(SESSION_SECRET_AUTHORIZATION), eq(GetSessionResponseAfterChannelDataSupplied.class), eq(request)))
+        when(apiClient.putAsync("sessions/id/issuer-fingerprint", SESSION_SECRET_AUTHORIZATION, GetSessionResponseAfterChannelDataSupplied.class, request))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<GetSessionResponseAfterChannelDataSupplied> getSessionResponse = sessionsClient.update3dsMethodCompletionIndicator("sessionSecret", "id", request);

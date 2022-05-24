@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,9 +37,6 @@ class RapiPagoClientImplTest {
     @Mock
     private SdkAuthorization authorization;
 
-    @Mock
-    private EmptyResponse emptyResponse;
-
     private RapiPagoClient rapiPagoClient;
 
     @BeforeEach
@@ -51,26 +49,30 @@ class RapiPagoClientImplTest {
     @Test
     void shouldSucceedPayment() throws ExecutionException, InterruptedException {
 
+        final EmptyResponse response = mock(EmptyResponse.class);
+
         when(apiClient.postAsync(eq("apms/rapipago/payments/payment_id/succeed"), eq(authorization), eq(EmptyResponse.class), isNull(), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(emptyResponse));
+                .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<EmptyResponse> future = rapiPagoClient.succeed("payment_id");
 
         assertNotNull(future.get());
-        assertEquals(emptyResponse, future.get());
+        assertEquals(response, future.get());
 
     }
 
     @Test
     void shouldExpirePayment() throws ExecutionException, InterruptedException {
 
+        final EmptyResponse response = mock(EmptyResponse.class);
+
         when(apiClient.postAsync(eq("apms/rapipago/payments/payment_id/expire"), eq(authorization), eq(EmptyResponse.class), isNull(), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(emptyResponse));
+                .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<EmptyResponse> future = rapiPagoClient.expire("payment_id");
 
         assertNotNull(future.get());
-        assertEquals(emptyResponse, future.get());
+        assertEquals(response, future.get());
 
     }
 
