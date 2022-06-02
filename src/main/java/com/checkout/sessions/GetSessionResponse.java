@@ -83,6 +83,8 @@ public class GetSessionResponse extends Resource {
 
     private CardInfo card;
 
+    private Recurring recurring;
+
     @SerializedName("authentication_date")
     private Instant authenticationDate;
 

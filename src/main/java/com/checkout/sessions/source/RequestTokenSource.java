@@ -2,7 +2,6 @@ package com.checkout.sessions.source;
 
 import com.checkout.common.Phone;
 import com.checkout.sessions.SessionAddress;
-import com.checkout.sessions.SessionScheme;
 import com.checkout.sessions.SessionSourceType;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -22,8 +21,8 @@ public final class RequestTokenSource extends SessionSource {
                                final Phone homePhone,
                                final Phone mobilePhone,
                                final Phone workPhone,
-                               final SessionScheme scheme) {
-        super(SessionSourceType.TOKEN, billingAddress, homePhone, mobilePhone, workPhone, scheme);
+                               final String email) {
+        super(SessionSourceType.TOKEN, billingAddress, homePhone, mobilePhone, workPhone, email);
         this.token = token;
     }
 

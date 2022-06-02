@@ -51,6 +51,8 @@ public final class CreateSessionAcceptedResponse extends Resource {
 
     private CardInfo card;
 
+    private Recurring recurring;
+
     @SerializedName("authentication_date")
     private Instant authenticationDate;
 
