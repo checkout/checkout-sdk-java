@@ -25,7 +25,9 @@ public final class SessionCardSource extends SessionSource {
 
     private String name;
 
-    private String email;
+    private SessionScheme scheme;
+
+    private Boolean stored;
 
     @Builder
     private SessionCardSource(final String number,
@@ -37,13 +39,15 @@ public final class SessionCardSource extends SessionSource {
                               final Phone homePhone,
                               final Phone mobilePhone,
                               final Phone workPhone,
-                              final SessionScheme scheme) {
-        super(SessionSourceType.CARD, billingAddress, homePhone, mobilePhone, workPhone, scheme);
+                              final SessionScheme scheme,
+                              final Boolean stored) {
+        super(SessionSourceType.CARD, billingAddress, homePhone, mobilePhone, workPhone, email);
         this.number = number;
         this.expiryMonth = expiryMonth;
         this.expiryYear = expiryYear;
         this.name = name;
-        this.email = email;
+        this.scheme = scheme;
+        this.stored = stored;
     }
 
     public SessionCardSource() {

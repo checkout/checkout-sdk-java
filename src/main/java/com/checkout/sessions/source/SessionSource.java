@@ -2,7 +2,6 @@ package com.checkout.sessions.source;
 
 import com.checkout.common.Phone;
 import com.checkout.sessions.SessionAddress;
-import com.checkout.sessions.SessionScheme;
 import com.checkout.sessions.SessionSourceType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
@@ -24,20 +23,20 @@ public abstract class SessionSource {
     @SerializedName("work_phone")
     protected Phone workPhone;
 
-    protected SessionScheme scheme;
+    protected String email;
 
     protected SessionSource(final SessionSourceType type,
                             final SessionAddress billingAddress,
                             final Phone homePhone,
                             final Phone mobilePhone,
                             final Phone workPhone,
-                            final SessionScheme scheme) {
+                            final String email) {
         this.type = type;
         this.billingAddress = billingAddress;
         this.homePhone = homePhone;
         this.mobilePhone = mobilePhone;
         this.workPhone = workPhone;
-        this.scheme = scheme;
+        this.email = email;
     }
 
     protected SessionSource(final SessionSourceType type) {

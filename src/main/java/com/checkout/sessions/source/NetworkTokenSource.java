@@ -2,7 +2,6 @@ package com.checkout.sessions.source;
 
 import com.checkout.common.Phone;
 import com.checkout.sessions.SessionAddress;
-import com.checkout.sessions.SessionScheme;
 import com.checkout.sessions.SessionSourceType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
@@ -25,7 +24,7 @@ public class NetworkTokenSource extends SessionSource {
 
     private String name;
 
-    private String email;
+    private Boolean stored;
 
     @Builder
     private NetworkTokenSource(final String token,
@@ -37,13 +36,13 @@ public class NetworkTokenSource extends SessionSource {
                                final Phone homePhone,
                                final Phone mobilePhone,
                                final Phone workPhone,
-                               final SessionScheme scheme) {
-        super(SessionSourceType.NETWORK_TOKEN, billingAddress, homePhone, mobilePhone, workPhone, scheme);
+                               final Boolean stored) {
+        super(SessionSourceType.NETWORK_TOKEN, billingAddress, homePhone, mobilePhone, workPhone, email);
         this.token = token;
         this.expiryMonth = expiryMonth;
         this.expiryYear = expiryYear;
         this.name = name;
-        this.email = email;
+        this.stored = stored;
     }
 
     public NetworkTokenSource() {
