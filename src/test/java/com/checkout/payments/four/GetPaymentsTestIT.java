@@ -106,9 +106,7 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
 
         final PaymentRecipient recipient = PaymentRecipient.builder()
                 .accountNumber("1234567")
-                .country(CountryCode.ES)
                 .dateOfBirth("1985-05-15")
-                .firstName("IT")
                 .lastName("TESTING")
                 .zip("12345")
                 .build();
@@ -129,7 +127,6 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
         assertNotNull(paymentReturned.getRecipient());
         assertEquals("1234567", paymentReturned.getRecipient().getAccountNumber());
         assertEquals("12345", paymentReturned.getRecipient().getZip());
-        assertEquals("IT", paymentReturned.getRecipient().getFirstName());
         assertEquals("TESTING", paymentReturned.getRecipient().getLastName());
         assertEquals("1985-05-15", paymentReturned.getRecipient().getDateOfBirth());
 
