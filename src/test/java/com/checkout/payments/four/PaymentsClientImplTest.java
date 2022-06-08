@@ -11,10 +11,10 @@ import com.checkout.common.CountryCode;
 import com.checkout.common.CustomerResponse;
 import com.checkout.common.Phone;
 import com.checkout.common.four.AccountHolder;
-import com.checkout.common.four.AccountHolderType;
 import com.checkout.common.four.AccountType;
 import com.checkout.common.four.Product;
 import com.checkout.payments.PaymentProcessing;
+import com.checkout.payments.ProcessingSettings;
 import com.checkout.payments.four.request.AuthorizationRequest;
 import com.checkout.payments.four.request.PaymentRequest;
 import com.checkout.payments.four.request.PayoutRequest;
@@ -110,7 +110,12 @@ class PaymentsClientImplTest {
         final RequestTamaraSource source = new RequestTamaraSource();
         source.setBillingAddress(billingAddress);
         final PaymentInstrumentSender sender = mock(PaymentInstrumentSender.class);
-        final PaymentRequest request = PaymentRequest.builder().sender(sender).source(source).build();
+        final PaymentRequest request = PaymentRequest.builder()
+                .sender(sender)
+                .source(source)
+                .processing(ProcessingSettings.builder()
+                        .build())
+                .build();
         request.setItems(Collections.singletonList(Product.builder()
                 .name("Item name")
                 .quantity(3L)
@@ -122,6 +127,8 @@ class PaymentsClientImplTest {
                 .imageUrl("https://some_s3bucket.com")
                 .url("https://some.website.com/item")
                 .sku("123687000111")
+                .goodsId("23123")
+                .wxpayGoodsId("wxpayGoodsId")
                 .build()));
 
         final CustomerResponse customerResponse = new CustomerResponse();
