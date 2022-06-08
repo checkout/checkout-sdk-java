@@ -65,5 +65,13 @@ public enum PaymentSourceType {
     @SerializedName("knet")
     KNET,
     @SerializedName("bank_account")
-    BANK_ACCOUNT
+    BANK_ACCOUNT,
+    @SerializedName("alipay_hk")
+    ALIPAY_HK,
+    @SerializedName("alipay_cn")
+    ALIPAY_CN,
+    @SerializedName("gcash")
+    GCASH,
+    @SerializedName("wechatpay")
+    WECHATPAY
 }

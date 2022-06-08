@@ -35,4 +35,10 @@ public final class Product {
 
     private String sku;
 
+    @SerializedName("goods_id")
+    private String goodsId;
+
+    @SerializedName("wxpay_goods_id")
+    private String wxpayGoodsId;
+
 }
