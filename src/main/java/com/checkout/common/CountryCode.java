@@ -5,507 +5,507 @@ import lombok.Getter;
 
 public enum CountryCode {
 
-    @SerializedName("AF")
+    @SerializedName(value = "AF", alternate = "AFG")
     AF("93"),
-    @SerializedName("AX")
+    @SerializedName(value = "AX", alternate = "ALA")
     AX("35818"),
-    @SerializedName("AL")
+    @SerializedName(value = "AL",alternate = "ALB")
     AL("355"),
-    @SerializedName("DZ")
+    @SerializedName(value = "DZ", alternate = "DZA")
     DZ("213"),
-    @SerializedName("AS")
+    @SerializedName(value = "AS",alternate = "ASM")
     AS("1684"),
-    @SerializedName("AD")
+    @SerializedName(value = "AD", alternate = "AND")
     AD("376"),
-    @SerializedName("AO")
+    @SerializedName(value = "AO",alternate = "AGO")
     AO("244"),
-    @SerializedName("AI")
+    @SerializedName(value = "AI",alternate = "AIA")
     AI("1264"),
-    @SerializedName("AG")
+    @SerializedName(value = "AG",alternate = "ATG")
     AG("1268"),
-    @SerializedName("AR")
+    @SerializedName(value = "AR",alternate = "ARG")
     AR("54"),
-    @SerializedName("AM")
+    @SerializedName(value = "AM",alternate = "ARM")
     AM("374"),
-    @SerializedName("AW")
+    @SerializedName(value = "AW",alternate = "ABW")
     AW("297"),
-    @SerializedName("AC")
+    @SerializedName(value = "AC",alternate = "ASC")
     AC("247"),
-    @SerializedName("AU")
+    @SerializedName(value = "AU",alternate = "AUS")
     AU("61"),
-    @SerializedName("AQ")
+    @SerializedName(value = "AQ",alternate = "ATA")
     AQ("672"),
-    @SerializedName("AT")
+    @SerializedName(value = "AT",alternate = "AUT")
     AT("43"),
-    @SerializedName("AZ")
+    @SerializedName(value = "AZ",alternate = "AZE")
     AZ("994"),
-    @SerializedName("BS")
+    @SerializedName(value = "BS",alternate = "BHS")
     BS("1242"),
-    @SerializedName("BH")
+    @SerializedName(value = "BH",alternate = "BHR")
     BH("973"),
-    @SerializedName("BD")
+    @SerializedName(value = "BD",alternate = "BGD")
     BD("880"),
-    @SerializedName("BB")
+    @SerializedName(value = "BB",alternate = "BRB")
     BB("1246"),
-    @SerializedName("BY")
+    @SerializedName(value = "BY",alternate = "BLR")
     BY("375"),
-    @SerializedName("BE")
+    @SerializedName(value = "BE",alternate = "BEL")
     BE("32"),
-    @SerializedName("BZ")
+    @SerializedName(value = "BZ",alternate = "BLZ")
     BZ("501"),
-    @SerializedName("BJ")
+    @SerializedName(value = "BJ",alternate = "BEN")
     BJ("229"),
-    @SerializedName("BM")
+    @SerializedName(value = "BM",alternate = "BMU")
     BM("1441"),
-    @SerializedName("BT")
+    @SerializedName(value = "BT",alternate = "BTN")
     BT("975"),
-    @SerializedName("BO")
+    @SerializedName(value = "BO",alternate = "BOL")
     BO("591"),
-    @SerializedName("BQ")
+    @SerializedName(value = "BQ",alternate = "BES")
     BQ("5997"),
-    @SerializedName("BA")
+    @SerializedName(value = "BA",alternate = "BIH")
     BA("387"),
-    @SerializedName("BW")
+    @SerializedName(value = "BW",alternate = "BWA")
     BW("267"),
-    @SerializedName("BV")
+    @SerializedName(value = "BV",alternate = "BVT")
     BV(""),
-    @SerializedName("BR")
+    @SerializedName(value = "BR",alternate = "BRA")
     BR("55"),
-    @SerializedName("IO")
+    @SerializedName(value = "IO",alternate = "IOT")
     IO("2"),
-    @SerializedName("VG")
+    @SerializedName(value = "VG",alternate = "VGB")
     VG("1284"),
-    @SerializedName("BN")
+    @SerializedName(value = "BN",alternate = "BRN")
     BN("673"),
-    @SerializedName("BG")
+    @SerializedName(value = "BG",alternate = "BGR")
     BG("359"),
-    @SerializedName("BF")
+    @SerializedName(value = "BF",alternate = "BFA")
     BF("226"),
-    @SerializedName("BI")
+    @SerializedName(value = "BI",alternate = "BDI")
     BI("257"),
-    @SerializedName("KH")
+    @SerializedName(value = "KH",alternate = "KHM")
     KH("855"),
-    @SerializedName("CM")
+    @SerializedName(value = "CM",alternate = "CMR")
     CM("237"),
-    @SerializedName("CA")
+    @SerializedName(value = "CA",alternate = "CAN")
     CA("1"),
-    @SerializedName("CV")
+    @SerializedName(value = "CV",alternate = "CPV")
     CV("238"),
-    @SerializedName("KY")
+    @SerializedName(value = "KY",alternate = "CYM")
     KY("1345"),
-    @SerializedName("CF")
+    @SerializedName(value = "CF",alternate = "CAF")
     CF("236"),
-    @SerializedName("TD")
+    @SerializedName(value = "TD",alternate = "TCD")
     TD("235"),
-    @SerializedName("CL")
+    @SerializedName(value = "CL",alternate = "CHL")
     CL("56"),
-    @SerializedName("CN")
+    @SerializedName(value = "CN",alternate = "CHN")
     CN("86"),
-    @SerializedName("TW")
+    @SerializedName(value = "TW",alternate = "TWN")
     TW("886"),
-    @SerializedName("CX")
+    @SerializedName(value = "CX",alternate = "CXR")
     CX("61"),
-    @SerializedName("PF")
+    @SerializedName(value = "PF",alternate = "PFY")
     PF("689"),
-    @SerializedName("CC")
+    @SerializedName(value = "CC",alternate = "CCK")
     CC("61"),
-    @SerializedName("CO")
+    @SerializedName(value = "CO",alternate = "COL")
     CO("57"),
-    @SerializedName("KM")
+    @SerializedName(value = "KM",alternate = "COM")
     KM("269"),
-    @SerializedName("CG")
+    @SerializedName(value = "CG",alternate = "COG")
     CG("242"),
-    @SerializedName("CD")
+    @SerializedName(value = "CD",alternate = "COD")
     CD("243"),
-    @SerializedName("CK")
+    @SerializedName(value = "CK",alternate = "COK")
     CK("682"),
-    @SerializedName("CR")
+    @SerializedName(value = "CR",alternate = "CRI")
     CR("506"),
-    @SerializedName("CI")
+    @SerializedName(value = "CI",alternate = "CIV")
     CI("225"),
-    @SerializedName("HR")
+    @SerializedName(value = "HR",alternate = "HRV")
     HR("385"),
-    @SerializedName("CU")
+    @SerializedName(value = "CU",alternate = "CUB")
     CU("53"),
-    @SerializedName("CW")
+    @SerializedName(value = "CW",alternate = "ANG")
     CW("5999"),
-    @SerializedName("CY")
+    @SerializedName(value = "CY",alternate = "CYP")
     CY("357"),
-    @SerializedName("CZ")
+    @SerializedName(value = "CZ",alternate = "CZE")
     CZ("420"),
-    @SerializedName("DK")
+    @SerializedName(value = "DK",alternate = "DKN")
     DK("45"),
-    @SerializedName("DJ")
+    @SerializedName(value = "DJ",alternate = "DJI")
     DJ("253"),
-    @SerializedName("DM")
+    @SerializedName(value = "DM",alternate = "DMA")
     DM("1767"),
-    @SerializedName("DO")
+    @SerializedName(value = "DO",alternate = "DOM")
     DO("1809"),
-    @SerializedName("EC")
+    @SerializedName(value = "EC",alternate = "ECU")
     EC("593"),
-    @SerializedName("EG")
+    @SerializedName(value = "EG",alternate = "EGY")
     EG("20"),
-    @SerializedName("SV")
+    @SerializedName(value = "SV",alternate = "SLV")
     SV("503"),
-    @SerializedName("GQ")
+    @SerializedName(value = "GQ",alternate = "GNQ")
     GQ("240"),
-    @SerializedName("ER")
+    @SerializedName(value = "ER",alternate = "ERI")
     ER("291"),
-    @SerializedName("EE")
+    @SerializedName(value = "EE",alternate = "EST")
     EE("372"),
-    @SerializedName("SZ")
+    @SerializedName(value = "SZ",alternate = "SWZ")
     SZ("268"),
-    @SerializedName("ET")
+    @SerializedName(value = "ET",alternate = "ETH")
     ET("251"),
-    @SerializedName("FK")
+    @SerializedName(value = "FK",alternate = "FLK")
     FK("500"),
-    @SerializedName("FO")
+    @SerializedName(value = "FO",alternate = "FRO")
     FO("298"),
-    @SerializedName("FJ")
+    @SerializedName(value = "FJ",alternate = "FJI")
     FJ("679"),
-    @SerializedName("FI")
+    @SerializedName(value = "FI",alternate = "FIN")
     FI("358"),
-    @SerializedName("FR")
+    @SerializedName(value = "FR",alternate = "FRA")
     FR("33"),
-    @SerializedName("GF")
+    @SerializedName(value = "GF",alternate = "GUF")
     GF("594"),
-    @SerializedName("TF")
+    @SerializedName(value = "TF",alternate = "ATF")
     TF("590"),
-    @SerializedName("GA")
+    @SerializedName(value = "GA",alternate = "GAB")
     GA("241"),
-    @SerializedName("GM")
+    @SerializedName(value = "GM",alternate = "GMB")
     GM("220"),
-    @SerializedName("GE")
+    @SerializedName(value = "GE",alternate = "GEO")
     GE("995"),
-    @SerializedName("DE")
+    @SerializedName(value = "DE",alternate = "DEU")
     DE("49"),
-    @SerializedName("GH")
+    @SerializedName(value = "GH",alternate = "GHA")
     GH("223"),
-    @SerializedName("GI")
+    @SerializedName(value = "GI",alternate = "GIB")
     GI("350"),
-    @SerializedName("GR")
+    @SerializedName(value = "GR",alternate = "GRC")
     GR("30"),
-    @SerializedName("GL")
+    @SerializedName(value = "GL",alternate = "GRL")
     GL("299"),
-    @SerializedName("GD")
+    @SerializedName(value = "GD",alternate = "GRD")
     GD("1473"),
-    @SerializedName("GP")
+    @SerializedName(value = "GP",alternate = "GLP")
     GP("590"),
-    @SerializedName("GU")
+    @SerializedName(value = "GU",alternate = "GUM")
     GU("1671"),
-    @SerializedName("GT")
+    @SerializedName(value = "GT",alternate = "GTM")
     GT("502"),
-    @SerializedName("GG")
+    @SerializedName(value = "GG",alternate = "GGY")
     GG("441481"),
-    @SerializedName("GN")
+    @SerializedName(value = "GN",alternate = "GIN")
     GN("224"),
-    @SerializedName("GW")
+    @SerializedName(value = "GW",alternate = "GNB")
     GW("245"),
-    @SerializedName("GY")
+    @SerializedName(value = "GY",alternate = "GUY")
     GY("592"),
-    @SerializedName("HT")
+    @SerializedName(value = "HT",alternate = "HTI")
     HT("509"),
-    @SerializedName("HM")
+    @SerializedName(value = "HM",alternate = "HMD")
     HM(""),
-    @SerializedName("HN")
+    @SerializedName(value = "HN",alternate = "HND")
     HN("504"),
-    @SerializedName("HK")
+    @SerializedName(value = "HK",alternate = "HKG")
     HK("852"),
-    @SerializedName("HU")
+    @SerializedName(value = "HU",alternate = "HUN")
     HU("36"),
-    @SerializedName("IS")
+    @SerializedName(value = "IS",alternate = "ISL")
     IS("354"),
-    @SerializedName("IN")
+    @SerializedName(value = "IN",alternate = "IND")
     IN("91"),
-    @SerializedName("ID")
+    @SerializedName(value = "ID",alternate = "IDN")
     ID("62"),
-    @SerializedName("IR")
+    @SerializedName(value = "IR",alternate = "IRN")
     IR("98"),
-    @SerializedName("IQ")
+    @SerializedName(value = "IQ",alternate = "IRQ")
     IQ("964"),
-    @SerializedName("IE")
+    @SerializedName(value = "IE",alternate = "IRL")
     IE("353"),
-    @SerializedName("IM")
+    @SerializedName(value = "IM",alternate = "IMN")
     IM("44"),
-    @SerializedName("IL")
+    @SerializedName(value = "IL",alternate = "ISR")
     IL("972"),
-    @SerializedName("IT")
+    @SerializedName(value = "IT",alternate = "ITA")
     IT("39"),
-    @SerializedName("JM")
+    @SerializedName(value = "JM",alternate = "JAM")
     JM("1876"),
-    @SerializedName("JP")
+    @SerializedName(value = "JP",alternate = "JPN")
     JP("81"),
-    @SerializedName("JE")
+    @SerializedName(value = "JE",alternate = "JEY")
     JE("44"),
-    @SerializedName("JO")
+    @SerializedName(value = "JO",alternate = "JOR")
     JO("962"),
-    @SerializedName("KZ")
+    @SerializedName(value = "KZ",alternate = "KAZ")
     KZ("7"),
-    @SerializedName("KE")
+    @SerializedName(value = "KE",alternate = "KEN")
     KE("254"),
-    @SerializedName("KI")
+    @SerializedName(value = "KI",alternate = "KIR")
     KI("686"),
-    @SerializedName("KP")
+    @SerializedName(value = "KP",alternate = "PRK")
     KP("850"),
-    @SerializedName("KR")
+    @SerializedName(value = "KR",alternate = "KOR")
     KR("82"),
-    @SerializedName("KW")
+    @SerializedName(value = "KW",alternate = "KWT")
     KW("965"),
-    @SerializedName("KG")
+    @SerializedName(value = "KG",alternate = "KGZ")
     KG("996"),
-    @SerializedName("LA")
+    @SerializedName(value = "LA",alternate = "LAO")
     LA("856"),
-    @SerializedName("LV")
+    @SerializedName(value = "LV",alternate = "LVA")
     LV("371"),
-    @SerializedName("LB")
+    @SerializedName(value = "LB",alternate = "LBN")
     LB("961"),
-    @SerializedName("LS")
+    @SerializedName(value = "LS",alternate = "LSO")
     LS("266"),
-    @SerializedName("LR")
+    @SerializedName(value = "LR",alternate = "LBR")
     LR("231"),
-    @SerializedName("LY")
+    @SerializedName(value = "LY",alternate = "LBY")
     LY("218"),
-    @SerializedName("LI")
+    @SerializedName(value = "LI",alternate = "LIE")
     LI("423"),
-    @SerializedName("LT")
+    @SerializedName(value = "LT",alternate = "LTU")
     LT("370"),
-    @SerializedName("LU")
+    @SerializedName(value = "LU",alternate = "LUX")
     LU("352"),
-    @SerializedName("MO")
+    @SerializedName(value = "MO",alternate = "MAX")
     MO("853"),
-    @SerializedName("MK")
+    @SerializedName(value = "MK",alternate = "MKD")
     MK("389"),
-    @SerializedName("MG")
+    @SerializedName(value = "MG",alternate = "MDG")
     MG("261"),
-    @SerializedName("MW")
+    @SerializedName(value = "MW",alternate = "MWI")
     MW("265"),
-    @SerializedName("MY")
+    @SerializedName(value = "MY",alternate = "MYS")
     MY("60"),
-    @SerializedName("MV")
+    @SerializedName(value = "MV",alternate = "MDV")
     MV("960"),
-    @SerializedName("ML")
+    @SerializedName(value = "ML",alternate = "MLI")
     ML("223"),
-    @SerializedName("MT")
+    @SerializedName(value = "MT",alternate = "MLT")
     MT("356"),
-    @SerializedName("MH")
+    @SerializedName(value = "MH",alternate = "MHL")
     MH("692"),
-    @SerializedName("MQ")
+    @SerializedName(value = "MQ",alternate = "MTQ")
     MQ("596"),
-    @SerializedName("MR")
+    @SerializedName(value = "MR",alternate = "MRT")
     MR("222"),
-    @SerializedName("MU")
+    @SerializedName(value = "MU",alternate = "MUS")
     MU("230"),
-    @SerializedName("YT")
+    @SerializedName(value = "YT",alternate = "MYT")
     YT("262"),
-    @SerializedName("MX")
+    @SerializedName(value = "MX",alternate = "MEX")
     MX("52"),
-    @SerializedName("FM")
+    @SerializedName(value = "FM",alternate = "FSM")
     FM("691"),
-    @SerializedName("MD")
+    @SerializedName(value = "MD",alternate = "MDA")
     MD("372"),
-    @SerializedName("MC")
+    @SerializedName(value = "MC",alternate = "MCO")
     MC("377"),
-    @SerializedName("MN")
+    @SerializedName(value = "MN",alternate = "MNG")
     MN("976"),
-    @SerializedName("ME")
+    @SerializedName(value = "ME",alternate = "MNE")
     ME("382"),
-    @SerializedName("MS")
+    @SerializedName(value = "MS",alternate = "MSR")
     MS("1664"),
-    @SerializedName("MA")
+    @SerializedName(value = "MA",alternate = "MAR")
     MA("212"),
-    @SerializedName("MZ")
+    @SerializedName(value = "MZ",alternate = "MOZ")
     MZ("258"),
-    @SerializedName("MM")
+    @SerializedName(value = "MM",alternate = "MMR")
     MM("95"),
-    @SerializedName("NA")
+    @SerializedName(value = "NA",alternate = "NAM")
     NA("264"),
-    @SerializedName("NR")
+    @SerializedName(value = "NR",alternate = "NRU")
     NR("674"),
-    @SerializedName("NP")
+    @SerializedName(value = "NP",alternate = "NPL")
     NP("977"),
-    @SerializedName("NL")
+    @SerializedName(value = "NL",alternate = "NLD")
     NL("31"),
-    @SerializedName("AN")
+    @SerializedName(value = "AN",alternate = "ANT")
     AN("599"),
-    @SerializedName("NC")
+    @SerializedName(value = "NC",alternate = "NCL")
     NC("687"),
-    @SerializedName("NZ")
+    @SerializedName(value = "NZ",alternate = "NZL")
     NZ("64"),
-    @SerializedName("NI")
+    @SerializedName(value = "NI",alternate = "NIC")
     NI("505"),
-    @SerializedName("NE")
+    @SerializedName(value = "NE",alternate = "NER")
     NE("227"),
-    @SerializedName("NG")
+    @SerializedName(value = "NG",alternate = "NGA")
     NG("234"),
-    @SerializedName("NU")
+    @SerializedName(value = "NU",alternate = "NIU")
     NU("683"),
-    @SerializedName("NF")
+    @SerializedName(value = "NF",alternate = "MFK")
     NF("672"),
-    @SerializedName("MP")
+    @SerializedName(value = "MP",alternate = "MPN")
     MP("1670"),
-    @SerializedName("NO")
+    @SerializedName(value = "NO",alternate = "NOR")
     NO("47"),
-    @SerializedName("OM")
+    @SerializedName(value = "OM",alternate = "OMN")
     OM("968"),
-    @SerializedName("PK")
+    @SerializedName(value = "PK",alternate = "PAK")
     PK("92"),
-    @SerializedName("PW")
+    @SerializedName(value = "PW",alternate = "PLW")
     PW("680"),
-    @SerializedName("PA")
+    @SerializedName(value = "PA",alternate = "PAN")
     PA("507"),
-    @SerializedName("PG")
+    @SerializedName(value = "PG",alternate = "PNG")
     PG("675"),
-    @SerializedName("PY")
+    @SerializedName(value = "PY",alternate = "PRY")
     PY("595"),
-    @SerializedName("PE")
+    @SerializedName(value = "PE",alternate = "PER")
     PE("51"),
-    @SerializedName("PH")
+    @SerializedName(value = "PH",alternate = "PHL")
     PH("63"),
-    @SerializedName("PN")
+    @SerializedName(value = "PN",alternate = "PCN")
     PN("870"),
-    @SerializedName("PL")
+    @SerializedName(value = "PL",alternate = "POL")
     PL("48"),
-    @SerializedName("PT")
+    @SerializedName(value = "PT",alternate = "PRT")
     PT("351"),
-    @SerializedName("PR")
+    @SerializedName(value = "PR",alternate = "PRI")
     PR("1787"),
-    @SerializedName("QA")
+    @SerializedName(value = "QA",alternate = "QAT")
     QA("974"),
-    @SerializedName("RE")
+    @SerializedName(value = "RE",alternate = "REU")
     RE("262"),
-    @SerializedName("RO")
+    @SerializedName(value = "RO",alternate = "ROU")
     RO("40"),
-    @SerializedName("RU")
+    @SerializedName(value = "RU",alternate = "RUS")
     RU("7"),
-    @SerializedName("RW")
+    @SerializedName(value = "RW",alternate = "RWA")
     RW("250"),
-    @SerializedName("BL")
+    @SerializedName(value = "BL",alternate = "BLM")
     BL("590"),
-    @SerializedName("SH")
+    @SerializedName(value = "SH",alternate = "SHN")
     SH("290"),
-    @SerializedName("KN")
+    @SerializedName(value = "KN",alternate = "KNA")
     KN("1869"),
-    @SerializedName("LC")
+    @SerializedName(value = "LC",alternate = "LCA")
     LC("1758"),
-    @SerializedName("MF")
+    @SerializedName(value = "MF",alternate = "MAF")
     MF("1599"),
-    @SerializedName("PM")
+    @SerializedName(value = "PM",alternate = "SPM")
     PM("508"),
-    @SerializedName("VC")
+    @SerializedName(value = "VC",alternate = "VCT")
     VC("1784"),
-    @SerializedName("WS")
+    @SerializedName(value = "WS",alternate = "WSM")
     WS("685"),
-    @SerializedName("SM")
+    @SerializedName(value = "SM",alternate = "SMR")
     SM("378"),
-    @SerializedName("ST")
+    @SerializedName(value = "ST",alternate = "STP")
     ST("239"),
-    @SerializedName("SA")
+    @SerializedName(value = "SA",alternate = "SAU")
     SA("966"),
-    @SerializedName("SN")
+    @SerializedName(value = "SN",alternate = "SEN")
     SN("221"),
-    @SerializedName("RS")
+    @SerializedName(value = "RS",alternate = "SRB")
     RS("381"),
-    @SerializedName("SC")
+    @SerializedName(value = "SC",alternate = "SYC")
     SC("248"),
-    @SerializedName("SL")
+    @SerializedName(value = "SL",alternate = "SLE")
     SL("232"),
-    @SerializedName("SG")
+    @SerializedName(value = "SG",alternate = "SGP")
     SG("65"),
-    @SerializedName("SX")
+    @SerializedName(value = "SX",alternate = "SXM")
     SX("1721"),
-    @SerializedName("SK")
+    @SerializedName(value = "SK",alternate = "SVK")
     SK("421"),
-    @SerializedName("SI")
+    @SerializedName(value = "SI",alternate = "SVN")
     SI("386"),
-    @SerializedName("SB")
+    @SerializedName(value = "SB",alternate = "SLB")
     SB("677"),
-    @SerializedName("SO")
+    @SerializedName(value = "SO",alternate = "SOM")
     SO("252"),
-    @SerializedName("ZA")
+    @SerializedName(value = "ZA",alternate = "ZAF")
     ZA("27"),
-    @SerializedName("GS")
+    @SerializedName(value = "GS",alternate = "SGS")
     GS("500"),
-    @SerializedName("SS")
+    @SerializedName(value = "SS",alternate = "SSD")
     SS("211"),
-    @SerializedName("ES")
+    @SerializedName(value = "ES",alternate = "ESP")
     ES("34"),
-    @SerializedName("LK")
+    @SerializedName(value = "LK",alternate = "LKA")
     LK("94"),
-    @SerializedName("SD")
+    @SerializedName(value = "SD",alternate = "SDN")
     SD("249"),
-    @SerializedName("SR")
+    @SerializedName(value = "SR",alternate = "SUR")
     SR("597"),
-    @SerializedName("SJ")
+    @SerializedName(value = "SJ",alternate = "SJM")
     SJ("4779"),
-    @SerializedName("SE")
+    @SerializedName(value = "SE",alternate = "SWE")
     SE("46"),
-    @SerializedName("CH")
+    @SerializedName(value = "CH",alternate = "CHE")
     CH("41"),
-    @SerializedName("SY")
+    @SerializedName(value = "SY",alternate = "SYR")
     SY("963"),
-    @SerializedName("TJ")
+    @SerializedName(value = "TJ",alternate = "TJK")
     TJ("992"),
-    @SerializedName("TZ")
+    @SerializedName(value = "TZ",alternate = "TZA")
     TZ("255"),
-    @SerializedName("TH")
+    @SerializedName(value = "TH",alternate = "THA")
     TH("66"),
-    @SerializedName("TL")
+    @SerializedName(value = "TL",alternate = "TLS")
     TL("670"),
-    @SerializedName("TG")
+    @SerializedName(value = "TG",alternate = "TGO")
     TG("228"),
-    @SerializedName("TK")
+    @SerializedName(value = "TK",alternate = "TKL")
     TK("690"),
-    @SerializedName("TO")
+    @SerializedName(value = "TO",alternate = "TON")
     TO("676"),
-    @SerializedName("TT")
+    @SerializedName(value = "TT",alternate = "TTO")
     TT("1868"),
-    @SerializedName("TA")
+    @SerializedName(value = "TA",alternate = "TAA")
     TA("2908"),
-    @SerializedName("TN")
+    @SerializedName(value = "TN",alternate = "TUN")
     TN("216"),
-    @SerializedName("TR")
+    @SerializedName(value = "TR",alternate = "TUR")
     TR("90"),
-    @SerializedName("TM")
+    @SerializedName(value = "TM",alternate = "TKM")
     TM("993"),
-    @SerializedName("TC")
+    @SerializedName(value = "TC",alternate = "TCA")
     TC("1649"),
-    @SerializedName("TV")
+    @SerializedName(value = "TV",alternate = "TUV")
     TV("688"),
-    @SerializedName("VI")
+    @SerializedName(value = "VI",alternate = "VIR")
     VI("1340"),
-    @SerializedName("UG")
+    @SerializedName(value = "UG",alternate = "UGA")
     UG("256"),
-    @SerializedName("UA")
+    @SerializedName(value = "UA",alternate = "UKR")
     UA("380"),
-    @SerializedName("AE")
+    @SerializedName(value = "AE",alternate = "ARE")
     AE("971"),
-    @SerializedName("GB")
+    @SerializedName(value = "GB",alternate = "GBR")
     GB("44"),
-    @SerializedName("US")
+    @SerializedName(value = "US",alternate = "USA")
     US("1"),
-    @SerializedName("UY")
+    @SerializedName(value = "UY",alternate = "URY")
     UY("598"),
-    @SerializedName("UZ")
+    @SerializedName(value = "UZ",alternate = "UZB")
     UZ("998"),
-    @SerializedName("VU")
+    @SerializedName(value = "VU",alternate = "VUT")
     VU("678"),
-    @SerializedName("VA")
+    @SerializedName(value = "VA",alternate = "VAT")
     VA("39"),
-    @SerializedName("VE")
+    @SerializedName(value = "VE",alternate = "VEN")
     VE("58"),
-    @SerializedName("VN")
+    @SerializedName(value = "VN",alternate = "VNM")
     VN("84"),
-    @SerializedName("UM")
+    @SerializedName(value = "UM",alternate = "UMI")
     UM("1808"),
-    @SerializedName("WF")
+    @SerializedName(value = "WF",alternate = "WLF")
     WF("681"),
-    @SerializedName("EH")
+    @SerializedName(value = "EH",alternate = "ESH")
     EH("2125288"),
-    @SerializedName("YE")
+    @SerializedName(value = "YE",alternate = "YEM")
     YE("967"),
-    @SerializedName("ZM")
+    @SerializedName(value = "ZM",alternate = "ZMB")
     ZM("260"),
-    @SerializedName("ZW")
+    @SerializedName(value = "ZW",alternate = "ZWE")
     ZW("263");
 
     @Getter
