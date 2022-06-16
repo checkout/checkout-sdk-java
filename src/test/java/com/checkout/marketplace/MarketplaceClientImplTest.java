@@ -16,6 +16,7 @@ import com.checkout.marketplace.payout.schedule.response.GetScheduleResponseDese
 import com.checkout.marketplace.payout.schedule.response.VoidResponse;
 import com.checkout.marketplace.transfers.CreateTransferRequest;
 import com.checkout.marketplace.transfers.CreateTransferResponse;
+import com.checkout.marketplace.transfers.TransferDetailsResponse;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -200,6 +201,21 @@ class MarketplaceClientImplTest {
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<GetScheduleResponseDeserializer> future = marketplaceClient.retrievePayoutSchedule("entity_id");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
+    void shouldRetrieveATransfer() throws ExecutionException, InterruptedException {
+
+        final TransferDetailsResponse response = mock(TransferDetailsResponse.class);
+
+        when(apiClient.getAsync("transfers/transfer_id", authorization, TransferDetailsResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<TransferDetailsResponse> future = marketplaceClient.retrieveATransfer("transfer_id");
 
         assertNotNull(future.get());
         assertEquals(response, future.get());

@@ -63,7 +63,7 @@ public abstract class SandboxTestFixture {
                         .scopes(FourOAuthScope.FILES, FourOAuthScope.FLOW, FourOAuthScope.FX, FourOAuthScope.GATEWAY,
                                 FourOAuthScope.MARKETPLACE, FourOAuthScope.SESSIONS_APP, FourOAuthScope.SESSIONS_BROWSER,
                                 FourOAuthScope.VAULT, FourOAuthScope.PAYOUTS_BANK_DETAILS, FourOAuthScope.DISPUTES,
-                                FourOAuthScope.TRANSFERS_CREATE, FourOAuthScope.BALANCES_VIEW)
+                                FourOAuthScope.TRANSFERS_CREATE, FourOAuthScope.TRANSFERS_VIEW, FourOAuthScope.BALANCES_VIEW)
                         .environment(Environment.SANDBOX)
                         .enableFilesApi(Environment.SANDBOX)
                         .executor(CUSTOM_EXECUTOR)
@@ -106,7 +106,7 @@ public abstract class SandboxTestFixture {
 
     private void nap() {
         try {
-            TimeUnit.SECONDS.sleep(2L);
+            TimeUnit.SECONDS.sleep(3L);
         } catch (final InterruptedException ignore) {
             fail();
         }

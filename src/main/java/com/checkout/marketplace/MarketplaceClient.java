@@ -9,6 +9,7 @@ import com.checkout.marketplace.payout.schedule.response.GetScheduleResponseDese
 import com.checkout.marketplace.payout.schedule.response.VoidResponse;
 import com.checkout.marketplace.transfers.CreateTransferRequest;
 import com.checkout.marketplace.transfers.CreateTransferResponse;
+import com.checkout.marketplace.transfers.TransferDetailsResponse;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -27,6 +28,8 @@ public interface MarketplaceClient {
     CompletableFuture<CreateTransferResponse> initiateTransferOfFunds(CreateTransferRequest createTransferRequest);
 
     CompletableFuture<CreateTransferResponse> initiateTransferOfFunds(CreateTransferRequest createTransferRequest, String idempotencyKey);
+
+    CompletableFuture<TransferDetailsResponse> retrieveATransfer(String transferId);
 
     CompletableFuture<BalancesResponse> retrieveEntityBalances(String entityId, BalancesQuery balancesQuery);
 
