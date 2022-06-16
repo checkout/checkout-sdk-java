@@ -1,20 +1,16 @@
 package com.checkout.payments.request.source.apm;
 
-import com.checkout.apm.klarna.KlarnaProduct;
 import com.checkout.common.CountryCode;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
 import com.google.gson.annotations.SerializedName;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -30,80 +26,64 @@ public final class RequestKlarnaSource extends AbstractRequestSource {
     @SerializedName("purchase_country")
     private CountryCode purchaseCountry;
 
+    @SerializedName("auto_capture")
+    private Boolean autoCapture;
+
+    @SerializedName("billing_address")
+    private Map<String, String> billingAddress;
+
+    @SerializedName("shipping_address")
+    private Map<String, String> shippingAddress;
+
     @SerializedName("tax_amount")
     private Integer taxAmount;
 
-    @SerializedName("billing_address")
-    private BillingAddress billingAddress;
+    private Map<String, String> products;
 
-    private Customer customer;
+    private Map<String, String> customer;
 
-    private List<KlarnaProduct> products;
+    @SerializedName("merchant_reference1")
+    private String merchantReference1;
+
+    @SerializedName("merchant_reference2")
+    private String merchantReference2;
+
+    @SerializedName("merchant_data")
+    private String merchantData;
+
+    private Map<String, String> attachment;
 
     @Builder
-    private RequestKlarnaSource(final String authorizationToken,
-                                final String locale,
-                                final CountryCode purchaseCountry,
-                                final Integer taxAmount,
-                                final BillingAddress billingAddress,
-                                final Customer customer,
-                                final List<KlarnaProduct> products) {
+    public RequestKlarnaSource(final String authorizationToken,
+                               final String locale,
+                               final CountryCode purchaseCountry,
+                               final Boolean autoCapture,
+                               final Map<String, String> billingAddress,
+                               final Map<String, String> shippingAddress,
+                               final Integer taxAmount,
+                               final Map<String, String> products,
+                               final Map<String, String> customer,
+                               final String merchantReference1,
+                               final String merchantReference2,
+                               final String merchantData,
+                               final Map<String, String> attachment) {
         super(PaymentSourceType.KLARNA);
         this.authorizationToken = authorizationToken;
         this.locale = locale;
         this.purchaseCountry = purchaseCountry;
-        this.taxAmount = taxAmount;
+        this.autoCapture = autoCapture;
         this.billingAddress = billingAddress;
-        this.customer = customer;
+        this.shippingAddress = shippingAddress;
+        this.taxAmount = taxAmount;
         this.products = products;
+        this.customer = customer;
+        this.merchantReference1 = merchantReference1;
+        this.merchantReference2 = merchantReference2;
+        this.merchantData = merchantData;
+        this.attachment = attachment;
     }
 
     public RequestKlarnaSource() {
         super(PaymentSourceType.KLARNA);
     }
-
-    @Data
-    @Builder
-    public static class BillingAddress {
-
-        @SerializedName("given_name")
-        private String givenName;
-
-        @SerializedName("family_name")
-        private String familyName;
-
-        private String email;
-
-        private String title;
-
-        @SerializedName("street_address")
-        private String streetAddress;
-
-        @SerializedName("street_address2")
-        private String streetAddress2;
-
-        @SerializedName("postal_code")
-        private String postalCode;
-
-        private String city;
-
-        private String phone;
-
-        private CountryCode country;
-
-    }
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Customer {
-
-        @SerializedName("date_of_birth")
-        private String dateOfBirth;
-
-        private String gender;
-
-    }
-
 }
