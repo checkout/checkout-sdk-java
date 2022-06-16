@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public final class TransferSource {
+public final class TransferDestinationRequest {
 
     private String id;
-
-    private Long amount;
 
 }

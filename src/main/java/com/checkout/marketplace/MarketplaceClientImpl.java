@@ -13,6 +13,7 @@ import com.checkout.marketplace.payout.schedule.response.GetScheduleResponseDese
 import com.checkout.marketplace.payout.schedule.response.VoidResponse;
 import com.checkout.marketplace.transfers.CreateTransferRequest;
 import com.checkout.marketplace.transfers.CreateTransferResponse;
+import com.checkout.marketplace.transfers.TransferDetailsResponse;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -83,6 +84,12 @@ public class MarketplaceClientImpl extends AbstractClient implements Marketplace
     @Override
     public CompletableFuture<CreateTransferResponse> initiateTransferOfFunds(final CreateTransferRequest createTransferRequest, final String idempotencyKey) {
         return requestInitiateTransferOfFunds(createTransferRequest, idempotencyKey);
+    }
+
+    @Override
+    public CompletableFuture<TransferDetailsResponse> retrieveATransfer(final String transferId) {
+        validateParams("transferId", transferId);
+        return transfersClient.getAsync(buildPath(TRANSFERS_PATH, transferId), sdkAuthorization(), TransferDetailsResponse.class);
     }
 
     @Override

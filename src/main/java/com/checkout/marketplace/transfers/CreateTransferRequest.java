@@ -17,8 +17,8 @@ public final class CreateTransferRequest {
     @SerializedName("transfer_type")
     private TransferType transferType;
 
-    private TransferSource source;
+    private TransferSourceRequest source;
 
-    private TransferDestination destination;
+    private TransferDestinationRequest destination;
 
 }

@@ -12,8 +12,10 @@ import com.checkout.marketplace.balances.BalancesResponse;
 import com.checkout.marketplace.balances.CurrencyAccountBalance;
 import com.checkout.marketplace.transfers.CreateTransferRequest;
 import com.checkout.marketplace.transfers.CreateTransferResponse;
-import com.checkout.marketplace.transfers.TransferDestination;
-import com.checkout.marketplace.transfers.TransferSource;
+import com.checkout.marketplace.transfers.TransferDestinationRequest;
+import com.checkout.marketplace.transfers.TransferDetailsResponse;
+import com.checkout.marketplace.transfers.TransferSourceRequest;
+import com.checkout.marketplace.transfers.TransferStatus;
 import com.checkout.marketplace.transfers.TransferType;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.entity.ContentType;
@@ -122,18 +124,29 @@ class MarketplaceTestIT extends SandboxTestFixture {
 
         final CreateTransferRequest transferRequest = CreateTransferRequest.builder()
                 .transferType(TransferType.COMMISSION)
-                .source(TransferSource.builder()
+                .source(TransferSourceRequest.builder()
                         .id("ent_kidtcgc3ge5unf4a5i6enhnr5m")
                         .amount(100L)
                         .build())
-                .destination(TransferDestination.builder()
+                .destination(TransferDestinationRequest.builder()
                         .id("ent_w4jelhppmfiufdnatam37wrfc4")
                         .build())
                 .build();
 
         final CreateTransferResponse response = blocking(() -> fourApi.marketplaceClient().initiateTransferOfFunds(transferRequest));
         assertNotNull(response.getId());
-        assertEquals("pending", response.getStatus());
+        assertEquals(TransferStatus.PENDING, response.getStatus());
+
+        final TransferDetailsResponse transferDetailsResponse = blocking(() -> fourApi.marketplaceClient().retrieveATransfer(response.getId()));
+        assertNotNull(transferDetailsResponse);
+        assertEquals(transferRequest.getReference(), transferDetailsResponse.getReference());
+        assertNotNull(transferDetailsResponse.getStatus());
+        assertNotNull(transferDetailsResponse.getTransferType());
+        assertNotNull(transferDetailsResponse.getRequestedOn());
+        assertNotNull(transferDetailsResponse.getSource());
+        assertNotNull(transferDetailsResponse.getSource().getEntityId());
+        assertNotNull(transferDetailsResponse.getDestination());
+        assertNotNull(transferDetailsResponse.getDestination().getEntityId());
     }
 
     @Test
@@ -141,11 +154,11 @@ class MarketplaceTestIT extends SandboxTestFixture {
 
         final CreateTransferRequest transferRequest = CreateTransferRequest.builder()
                 .transferType(TransferType.COMMISSION)
-                .source(TransferSource.builder()
+                .source(TransferSourceRequest.builder()
                         .id("ent_kidtcgc3ge5unf4a5i6enhnr5m")
                         .amount(100L)
                         .build())
-                .destination(TransferDestination.builder()
+                .destination(TransferDestinationRequest.builder()
                         .id("ent_w4jelhppmfiufdnatam37wrfc4")
                         .build())
                 .build();
@@ -154,7 +167,7 @@ class MarketplaceTestIT extends SandboxTestFixture {
 
         final CreateTransferResponse response = blocking(() -> fourApi.marketplaceClient().initiateTransferOfFunds(transferRequest, idempotencyKey));
         assertNotNull(response.getId());
-        assertEquals("pending", response.getStatus());
+        assertEquals(TransferStatus.PENDING, response.getStatus());
 
         try {
             fourApi.marketplaceClient().initiateTransferOfFunds(transferRequest, idempotencyKey).get();
