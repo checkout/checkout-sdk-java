@@ -82,7 +82,7 @@ public class CardSourcePaymentsTests extends SandboxTestFixture {
         Assert.assertTrue(paymentResponse.getPayment().canCapture());
 
         // Capture
-        getApi().paymentsClient().captureAsync(paymentResponse.getPayment().getId()).get();
+        blocking(() -> getApi().paymentsClient().captureAsync(paymentResponse.getPayment().getId()));
 
         RefundRequest refundRequest = new RefundRequest();
         refundRequest.setReference(UUID.randomUUID().toString());

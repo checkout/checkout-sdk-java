@@ -1,0 +1,22 @@
+name: build-master
+on:
+  push:
+    branches:
+      - legacy
+jobs:
+  job-container:
+    if: "!contains(github.event.commits[0].message, 'Release')"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+      - id: validate-wrapper
+        uses: gradle/wrapper-validation-action@v1
+      - id: build
+        env:
+          CHECKOUT_SECRET_KEY: ${{ secrets.IT_CHECKOUT_SECRET_KEY }}
+          CHECKOUT_PUBLIC_KEY: ${{ secrets.IT_CHECKOUT_PUBLIC_KEY }}
+        run: ./gradlew build test --fail-fast

@@ -1,9 +1,14 @@
-[![Build Status](https://travis-ci.com/checkout/checkout-sdk-java.svg?branch=master)](https://travis-ci.com/checkout/checkout-sdk-java) [![GitHub license](https://img.shields.io/github/license/checkout/checkout-sdk-java.svg)](https://github.com/checkout/checkout-sdk-java/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/checkout/checkout-sdk-java.svg)](https://GitHub.com/checkout/checkout-sdk-java/releases/)
+![build-status](https://github.com/checkout/checkout-sdk-java/workflows/build-master/badge.svg)
+[![GitHub license](https://img.shields.io/github/license/checkout/checkout-sdk-java.svg)](https://github.com/checkout/checkout-sdk-java/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/checkout/checkout-sdk-java.svg)](https://GitHub.com/checkout/checkout-sdk-java/releases/)
 
 <p align="center"><img src="https://i.ibb.co/6FrwfWt/Screenshot-2020-07-17-at-18-13-39.png" width="20%"></p>
 
 # Checkout.com Java SDK
 Built with Java 8 and Gradle 5
+
+> **Warning**
+> This is a legacy version, and we recommend using the [latest version](https://github.com/checkout/checkout-sdk-java/releases) to avoid compatibility issues 
 
 # :computer: Import
 
