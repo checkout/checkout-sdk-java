@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -38,7 +39,7 @@ public final class RequestKlarnaSource extends AbstractRequestSource {
     @SerializedName("tax_amount")
     private Integer taxAmount;
 
-    private Map<String, String> products;
+    private List<Map<String, String>> products;
 
     private Map<String, String> customer;
 
@@ -61,7 +62,7 @@ public final class RequestKlarnaSource extends AbstractRequestSource {
                                final Map<String, String> billingAddress,
                                final Map<String, String> shippingAddress,
                                final Integer taxAmount,
-                               final Map<String, String> products,
+                               final List<Map<String, String>> products,
                                final Map<String, String> customer,
                                final String merchantReference1,
                                final String merchantReference2,
