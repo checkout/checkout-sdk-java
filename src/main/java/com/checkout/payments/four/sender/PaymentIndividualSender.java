@@ -69,9 +69,6 @@ public final class PaymentIndividualSender extends PaymentSender {
         this.nationality = nationality;
     }
 
-    @Builder
-
-
     public PaymentIndividualSender() {
         super(SenderType.INDIVIDUAL);
     }
