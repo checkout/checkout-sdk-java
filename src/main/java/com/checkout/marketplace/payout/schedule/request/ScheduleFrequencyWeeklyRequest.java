@@ -19,7 +19,7 @@ public final class ScheduleFrequencyWeeklyRequest extends ScheduleRequest {
     private DaySchedule byDay;
 
     @Builder
-    public ScheduleFrequencyWeeklyRequest(final DaySchedule byDay) {
+    private ScheduleFrequencyWeeklyRequest(final DaySchedule byDay) {
         super(ScheduleFrequency.WEEKLY);
         this.byDay = byDay;
     }

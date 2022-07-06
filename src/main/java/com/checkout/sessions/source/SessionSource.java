@@ -4,9 +4,11 @@ import com.checkout.common.Phone;
 import com.checkout.sessions.SessionAddress;
 import com.checkout.sessions.SessionSourceType;
 import com.google.gson.annotations.SerializedName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public abstract class SessionSource {
 
     protected final SessionSourceType type;
@@ -24,20 +26,6 @@ public abstract class SessionSource {
     protected Phone workPhone;
 
     protected String email;
-
-    protected SessionSource(final SessionSourceType type,
-                            final SessionAddress billingAddress,
-                            final Phone homePhone,
-                            final Phone mobilePhone,
-                            final Phone workPhone,
-                            final String email) {
-        this.type = type;
-        this.billingAddress = billingAddress;
-        this.homePhone = homePhone;
-        this.mobilePhone = mobilePhone;
-        this.workPhone = workPhone;
-        this.email = email;
-    }
 
     protected SessionSource(final SessionSourceType type) {
         this.type = type;

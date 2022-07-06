@@ -3,6 +3,7 @@ package com.checkout.payments.four.request;
 import com.checkout.payments.four.request.source.PayoutRequestCurrencyAccountSource;
 import com.checkout.payments.four.request.source.PayoutRequestSource;
 import com.checkout.payments.four.sender.PaymentCorporateSender;
+import com.checkout.payments.four.sender.PaymentGovernmentSender;
 import com.checkout.payments.four.sender.PaymentIndividualSender;
 import com.checkout.payments.four.sender.PaymentInstrumentSender;
 import com.checkout.payments.four.sender.PaymentSender;
@@ -42,6 +43,10 @@ public final class Payouts {
 
         public PayoutRequest.PayoutRequestBuilder instrumentSender(final PaymentInstrumentSender instrumentSender) {
             return builder(instrumentSender);
+        }
+
+        public PayoutRequest.PayoutRequestBuilder governmentSender(final PaymentGovernmentSender governmentSender) {
+            return builder(governmentSender);
         }
 
         private PayoutRequest.PayoutRequestBuilder builder(final PaymentSender sender) {

@@ -8,6 +8,8 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Map;
+
 @Data
 @Builder
 public final class PayoutRequest {
@@ -31,5 +33,7 @@ public final class PayoutRequest {
 
     @SerializedName("processing_channel_id")
     private String processingChannelId;
+
+    private Map<String, Object> metadata;
 
 }

@@ -55,7 +55,7 @@ public final class RequestKlarnaSource extends AbstractRequestSource {
     private Map<String, String> attachment;
 
     @Builder
-    public RequestKlarnaSource(final String authorizationToken,
+    private RequestKlarnaSource(final String authorizationToken,
                                final String locale,
                                final CountryCode purchaseCountry,
                                final Boolean autoCapture,

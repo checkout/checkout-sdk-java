@@ -13,7 +13,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class PaymentCorporateSender extends PaymentSender {
+public final class PaymentGovernmentSender extends PaymentSender {
 
     @SerializedName("company_name")
     private String companyName;
@@ -29,13 +29,13 @@ public final class PaymentCorporateSender extends PaymentSender {
     private SenderIdentification identification;
 
     @Builder
-    private PaymentCorporateSender(final String reference,
-                                  final String companyName,
-                                  final Address address,
-                                  final String referenceType,
-                                  final SourceOfFunds sourceOfFunds,
-                                  final SenderIdentification identification) {
-        super(SenderType.CORPORATE, reference);
+    private PaymentGovernmentSender(final String reference,
+                                   final String companyName,
+                                   final Address address,
+                                   final String referenceType,
+                                   final SourceOfFunds sourceOfFunds,
+                                   final SenderIdentification identification) {
+        super(SenderType.GOVERNMENT, reference);
         this.companyName = companyName;
         this.address = address;
         this.referenceType = referenceType;
@@ -43,8 +43,8 @@ public final class PaymentCorporateSender extends PaymentSender {
         this.identification = identification;
     }
 
-    public PaymentCorporateSender() {
-        super(SenderType.CORPORATE);
+    public PaymentGovernmentSender() {
+        super(SenderType.GOVERNMENT);
     }
 
 }

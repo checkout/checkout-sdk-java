@@ -19,7 +19,9 @@ public class MarketplaceFileRequest extends AbstractFileRequest {
     private MarketplaceFilePurpose purpose;
 
     @Builder
-    public MarketplaceFileRequest(final File file, final ContentType contentType, final MarketplaceFilePurpose purpose) {
+    private MarketplaceFileRequest(final File file,
+                                   final ContentType contentType,
+                                   final MarketplaceFilePurpose purpose) {
         super(file, contentType);
         this.purpose = purpose;
     }

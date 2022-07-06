@@ -20,7 +20,9 @@ public final class FileRequest extends AbstractFileRequest {
     private FilePurpose purpose;
 
     @Builder
-    public FileRequest(final File file, final ContentType contentType, @NonNull final FilePurpose purpose) {
+    private FileRequest(final File file,
+                        final ContentType contentType,
+                        @NonNull final FilePurpose purpose) {
         super(file, contentType);
         this.purpose = purpose;
     }

@@ -19,7 +19,7 @@ public final class InstrumentCustomerRequest extends CustomerRequest {
     private boolean isDefault;
 
     @Builder
-    public InstrumentCustomerRequest(final String id,
+    private InstrumentCustomerRequest(final String id,
                                      final String email,
                                      final String name,
                                      final boolean isDefault,

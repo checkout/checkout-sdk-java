@@ -18,7 +18,7 @@ public final class ScheduleFrequencyMonthlyResponse extends ScheduleResponse {
     private Integer byMonthDay;
 
     @Builder
-    public ScheduleFrequencyMonthlyResponse(final Integer byMonthDay) {
+    private ScheduleFrequencyMonthlyResponse(final Integer byMonthDay) {
         super(ScheduleFrequency.MONTHLY);
         this.byMonthDay = byMonthDay;
     }

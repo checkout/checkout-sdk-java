@@ -20,7 +20,7 @@ public final class EntityWorkflowConditionRequest extends WorkflowConditionReque
     }
 
     @Builder
-    public EntityWorkflowConditionRequest(final List<String> entities) {
+    private EntityWorkflowConditionRequest(final List<String> entities) {
         super(WorkflowConditionType.ENTITY);
         this.entities = entities;
     }
