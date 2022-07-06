@@ -25,7 +25,7 @@ public final class WebhookWorkflowActionRequest extends WorkflowActionRequest {
     }
 
     @Builder
-    public WebhookWorkflowActionRequest(final String url,
+    private WebhookWorkflowActionRequest(final String url,
                                         final Map<String, String> headers,
                                         final WebhookSignature signature) {
         super(WorkflowActionType.WEBHOOK);

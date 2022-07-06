@@ -20,7 +20,8 @@ public final class ReflowBySubjectsRequest extends ReflowRequest {
     private List<String> subjects;
 
     @Builder
-    public ReflowBySubjectsRequest(final List<String> subjects, final List<String> workflows) {
+    private ReflowBySubjectsRequest(final List<String> subjects,
+                                    final List<String> workflows) {
         super(workflows);
         this.subjects = subjects;
     }

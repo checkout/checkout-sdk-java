@@ -13,23 +13,23 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class PaymentRequestIdDestination extends PaymentRequestDestination {
+public final class PaymentRequestTokenDestination extends PaymentRequestDestination {
 
-    private String id;
+    private String token;
 
     @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
     @Builder
-    private PaymentRequestIdDestination(final String id,
-                                        final AccountHolder accountHolder) {
-        super(PaymentDestinationType.ID);
-        this.id = id;
+    private PaymentRequestTokenDestination(final String token,
+                                           final AccountHolder accountHolder) {
+        super(PaymentDestinationType.TOKEN);
+        this.token = token;
         this.accountHolder = accountHolder;
     }
 
-    public PaymentRequestIdDestination() {
-        super(PaymentDestinationType.ID);
+    public PaymentRequestTokenDestination() {
+        super(PaymentDestinationType.TOKEN);
     }
 
 }

@@ -15,8 +15,9 @@ public final class PayoutRequestCurrencyAccountSource extends PayoutRequestSourc
     private String id;
 
     @Builder
-    private PayoutRequestCurrencyAccountSource(final String id) {
-        super(PayoutSourceType.CURRENCY_ACCOUNT);
+    private PayoutRequestCurrencyAccountSource(final Long amount,
+                                              final String id) {
+        super(PayoutSourceType.CURRENCY_ACCOUNT, amount);
         this.id = id;
     }
 

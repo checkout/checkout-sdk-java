@@ -23,4 +23,13 @@ public final class PaymentInstruction {
     @SerializedName("quote_id")
     private String quoteId;
 
+    //Beta
+    @SerializedName("skip_expiry")
+    private Boolean skipExpiry;
+
+    @SerializedName("funds_transfer_type")
+    private String fundsTransferType;
+
+    private String mvv;
+
 }

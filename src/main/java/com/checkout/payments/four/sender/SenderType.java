@@ -9,6 +9,8 @@ public enum SenderType {
     @SerializedName("individual")
     INDIVIDUAL,
     @SerializedName("corporate")
-    CORPORATE
+    CORPORATE,
+    @SerializedName("government")
+    GOVERNMENT
 
 }

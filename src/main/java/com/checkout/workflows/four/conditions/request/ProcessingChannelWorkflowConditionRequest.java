@@ -22,7 +22,7 @@ public final class ProcessingChannelWorkflowConditionRequest extends WorkflowCon
     }
 
     @Builder
-    public ProcessingChannelWorkflowConditionRequest(final List<String> processingChannels) {
+    private ProcessingChannelWorkflowConditionRequest(final List<String> processingChannels) {
         super(WorkflowConditionType.PROCESSING_CHANNEL);
         this.processingChannels = processingChannels;
     }

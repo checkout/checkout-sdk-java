@@ -20,7 +20,8 @@ public final class ReflowByEventsRequest extends ReflowRequest {
     private List<String> events;
 
     @Builder
-    public ReflowByEventsRequest(final List<String> events, final List<String> workflows) {
+    private ReflowByEventsRequest(final List<String> events,
+                                  final List<String> workflows) {
         super(workflows);
         this.events = events;
     }

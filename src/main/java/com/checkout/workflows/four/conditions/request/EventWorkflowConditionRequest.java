@@ -21,7 +21,7 @@ public final class EventWorkflowConditionRequest extends WorkflowConditionReques
     }
 
     @Builder
-    public EventWorkflowConditionRequest(final Map<String, Set<String>> events) {
+    private EventWorkflowConditionRequest(final Map<String, Set<String>> events) {
         super(WorkflowConditionType.EVENT);
         this.events = events;
     }

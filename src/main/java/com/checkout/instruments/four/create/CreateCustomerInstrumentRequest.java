@@ -19,7 +19,7 @@ public final class CreateCustomerInstrumentRequest extends CustomerRequest {
     private boolean defaultInstrument;
 
     @Builder
-    public CreateCustomerInstrumentRequest(final String id,
+    private CreateCustomerInstrumentRequest(final String id,
                                            final String email,
                                            final String name,
                                            final Phone phone,

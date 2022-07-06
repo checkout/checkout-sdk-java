@@ -11,6 +11,10 @@ import lombok.ToString;
 public final class PaymentInstrumentSender extends PaymentSender {
 
     @Builder
+    private PaymentInstrumentSender(final String reference) {
+        super(SenderType.INSTRUMENT, reference);
+    }
+
     public PaymentInstrumentSender() {
         super(SenderType.INSTRUMENT);
     }

@@ -8,7 +8,7 @@ public abstract class UpdateInstrumentRequest {
 
     protected final InstrumentType type;
 
-    public UpdateInstrumentRequest(final InstrumentType type) {
+    protected UpdateInstrumentRequest(final InstrumentType type) {
         this.type = type;
     }
 

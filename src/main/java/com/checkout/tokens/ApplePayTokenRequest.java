@@ -17,7 +17,7 @@ public final class ApplePayTokenRequest extends WalletTokenRequest {
     private ApplePayTokenData applePayTokenData;
 
     @Builder
-    public ApplePayTokenRequest(final ApplePayTokenData applePayTokenData) {
+    private ApplePayTokenRequest(final ApplePayTokenData applePayTokenData) {
         super(TokenType.APPLEPAY);
         this.applePayTokenData = applePayTokenData;
     }

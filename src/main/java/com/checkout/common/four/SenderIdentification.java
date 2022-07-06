@@ -21,4 +21,7 @@ public final class SenderIdentification {
     @SerializedName("issuing_country")
     private CountryCode issuingCountry;
 
+    @SerializedName("date_of_expiry")
+    private String dateOfExpiry;
+
 }

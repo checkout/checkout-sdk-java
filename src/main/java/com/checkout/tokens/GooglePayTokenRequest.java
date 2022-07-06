@@ -17,7 +17,7 @@ public final class GooglePayTokenRequest extends WalletTokenRequest {
     private GooglePayTokenData googlePayTokenData;
 
     @Builder
-    public GooglePayTokenRequest(final GooglePayTokenData googlePayTokenData) {
+    private GooglePayTokenRequest(final GooglePayTokenData googlePayTokenData) {
         super(TokenType.GOOGLEPAY);
         this.googlePayTokenData = googlePayTokenData;
     }

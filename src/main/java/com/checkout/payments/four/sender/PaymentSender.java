@@ -1,8 +1,10 @@
 package com.checkout.payments.four.sender;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public abstract class PaymentSender implements Sender {
 
     protected final SenderType type;

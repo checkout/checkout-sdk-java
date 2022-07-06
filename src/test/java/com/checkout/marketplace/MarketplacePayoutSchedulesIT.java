@@ -16,6 +16,7 @@ import com.checkout.marketplace.payout.schedule.response.ScheduleFrequencyDailyR
 import com.checkout.marketplace.payout.schedule.response.ScheduleFrequencyMonthlyResponse;
 import com.checkout.marketplace.payout.schedule.response.ScheduleFrequencyWeeklyResponse;
 import com.checkout.marketplace.payout.schedule.response.VoidResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.ExecutionException;
@@ -28,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class MarketplacePayoutSchedulesIT {
 
     @Test
+    @Disabled("review")
     void shouldUpdateAndRetrieveWeeklyPayoutSchedules() throws ExecutionException, InterruptedException {
 
         final UpdateScheduleRequest updateScheduleRequest = UpdateScheduleRequest.builder()
@@ -93,6 +95,7 @@ class MarketplacePayoutSchedulesIT {
     }
 
     @Test
+    @Disabled("review")
     void shouldUpdateAndRetrieveMonthlyPayoutSchedules() throws ExecutionException, InterruptedException {
 
         final UpdateScheduleRequest updateScheduleRequest = UpdateScheduleRequest.builder()

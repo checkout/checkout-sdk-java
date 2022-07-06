@@ -29,7 +29,6 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
 
         // Get by Id
         final GetWorkflowResponse getWorkflowResponse = blocking(() -> fourApi.workflowsClient().getWorkflow(createWorkflowResponse.getId()));
-
         assertNotNull(getWorkflowResponse);
         assertNotNull(getWorkflowResponse.getId());
         assertTrue(getWorkflowResponse.getActive());
