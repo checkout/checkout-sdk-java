@@ -38,7 +38,7 @@ public final class RequestFawrySource extends AbstractRequestSource {
     private List<Product> products;
 
     @Builder
-    public RequestFawrySource(final String description,
+    private RequestFawrySource(final String description,
                               final String customerProfileId,
                               final String customerEmail,
                               final String customerMobile,

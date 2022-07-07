@@ -1,7 +1,7 @@
 package com.checkout.payments.four.sender;
 
 import com.checkout.common.Address;
-import com.checkout.common.four.SenderIdentification;
+import com.checkout.common.four.AccountHolderIdentification;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -26,7 +26,7 @@ public final class PaymentCorporateSender extends PaymentSender {
     @SerializedName("source_of_funds")
     private SourceOfFunds sourceOfFunds;
 
-    private SenderIdentification identification;
+    private AccountHolderIdentification identification;
 
     @Builder
     private PaymentCorporateSender(final String reference,
@@ -34,7 +34,7 @@ public final class PaymentCorporateSender extends PaymentSender {
                                   final Address address,
                                   final String referenceType,
                                   final SourceOfFunds sourceOfFunds,
-                                  final SenderIdentification identification) {
+                                  final AccountHolderIdentification identification) {
         super(SenderType.CORPORATE, reference);
         this.companyName = companyName;
         this.address = address;

@@ -29,7 +29,7 @@ public class RequestPayPalSource extends AbstractRequestSource {
     private Map<String, String> stc;
 
     @Builder
-    public RequestPayPalSource(final String invoiceNumber,
+    private RequestPayPalSource(final String invoiceNumber,
                                final String recipientName,
                                final String logoUrl,
                                final Map<String, String> stc) {
