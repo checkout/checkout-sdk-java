@@ -26,7 +26,7 @@ public class RequestMultiBancoSource extends AbstractRequestSource {
     private String billingDescriptor;
 
     @Builder
-    public RequestMultiBancoSource(final CountryCode paymentCountry,
+    private RequestMultiBancoSource(final CountryCode paymentCountry,
                                    final String accountHolderName,
                                    final String billingDescriptor) {
         super(PaymentSourceType.MULTIBANCO);

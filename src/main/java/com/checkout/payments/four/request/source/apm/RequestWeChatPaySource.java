@@ -24,7 +24,7 @@ public final class RequestWeChatPaySource extends AbstractRequestSource {
     }
 
     @Builder
-    public RequestWeChatPaySource(final Address billingAddress) {
+    private RequestWeChatPaySource(final Address billingAddress) {
         super(PaymentSourceType.WECHATPAY);
         this.billingAddress = billingAddress;
     }

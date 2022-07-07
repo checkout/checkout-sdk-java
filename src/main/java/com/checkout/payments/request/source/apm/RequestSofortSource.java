@@ -23,7 +23,7 @@ public final class RequestSofortSource extends AbstractRequestSource {
     private String languageCode;
 
     @Builder
-    public RequestSofortSource(final CountryCode countryCode, final String languageCode) {
+    private RequestSofortSource(final CountryCode countryCode, final String languageCode) {
         super(PaymentSourceType.SOFORT);
         this.countryCode = countryCode;
         this.languageCode = languageCode;

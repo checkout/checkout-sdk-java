@@ -39,7 +39,7 @@ public class RequestBankAccountSource extends AbstractRequestSource {
     }
 
     @Builder
-    public RequestBankAccountSource(final String paymentMethod,
+    private RequestBankAccountSource(final String paymentMethod,
                                     final AccountType accountType,
                                     final CountryCode country,
                                     final String accountNumber,

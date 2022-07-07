@@ -25,7 +25,7 @@ public class RequestQPaySource extends AbstractRequestSource {
     private String nationalId;
 
     @Builder
-    public RequestQPaySource(final Integer quantity,
+    private RequestQPaySource(final Integer quantity,
                              final String description,
                              final String language,
                              final String nationalId) {
