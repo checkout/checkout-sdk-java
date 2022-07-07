@@ -28,7 +28,7 @@ public class RequestBancontactSource extends AbstractRequestSource {
     private String language;
 
     @Builder
-    public RequestBancontactSource(final CountryCode paymentCountry,
+    private RequestBancontactSource(final CountryCode paymentCountry,
                                    final String accountHolderName,
                                    final String billingDescriptor,
                                    final String language) {

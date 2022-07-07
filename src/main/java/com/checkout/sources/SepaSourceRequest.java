@@ -23,7 +23,7 @@ public class SepaSourceRequest extends SourceRequest {
     private SourceData sourceData;
 
     @Builder
-    public SepaSourceRequest(final String reference,
+    private SepaSourceRequest(final String reference,
                              final Phone phone,
                              final CustomerRequest customer,
                              final Address billingAddress,

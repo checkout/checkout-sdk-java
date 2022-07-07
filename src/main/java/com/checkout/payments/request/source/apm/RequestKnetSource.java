@@ -38,7 +38,7 @@ public class RequestKnetSource extends AbstractRequestSource {
     private String ptlf;
 
     @Builder
-    public RequestKnetSource(final String language,
+    private RequestKnetSource(final String language,
                              final String userDefinedField1,
                              final String userDefinedField2,
                              final String userDefinedField3,
