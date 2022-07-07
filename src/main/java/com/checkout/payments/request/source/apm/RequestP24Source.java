@@ -29,7 +29,7 @@ public class RequestP24Source extends AbstractRequestSource {
     private String billingDescriptor;
 
     @Builder
-    public RequestP24Source(final CountryCode paymentCountry,
+    private RequestP24Source(final CountryCode paymentCountry,
                             final String accountHolderName,
                             final String accountHolderEmail,
                             final String billingDescriptor) {
