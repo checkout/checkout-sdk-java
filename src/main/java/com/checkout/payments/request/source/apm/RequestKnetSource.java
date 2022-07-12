@@ -13,7 +13,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class RequestKnetSource extends AbstractRequestSource {
+public final class RequestKnetSource extends AbstractRequestSource {
 
     private String language;
 

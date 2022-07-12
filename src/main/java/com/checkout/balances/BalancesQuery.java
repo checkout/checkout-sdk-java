@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BalancesQuery {
+public final class BalancesQuery {
 
     private String query;
 }
