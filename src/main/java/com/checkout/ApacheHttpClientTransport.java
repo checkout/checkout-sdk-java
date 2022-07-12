@@ -3,7 +3,7 @@ package com.checkout;
 import com.checkout.common.AbstractFileRequest;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.FileRequest;
-import com.checkout.marketplace.MarketplaceFileRequest;
+import com.checkout.accounts.AccountsFileRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -127,8 +127,8 @@ class ApacheHttpClientTransport implements Transport {
             builder.addBinaryBody(FILE, fileRequest.getFile(), fileRequest.getContentType(), fileRequest.getFile().getName())
                     .addTextBody(PURPOSE, fileRequest.getPurpose().getPurpose(), ContentType.DEFAULT_BINARY)
                     .build();
-        } else if (abstractFileRequest instanceof MarketplaceFileRequest) {
-            final MarketplaceFileRequest fileRequest = (MarketplaceFileRequest) abstractFileRequest;
+        } else if (abstractFileRequest instanceof AccountsFileRequest) {
+            final AccountsFileRequest fileRequest = (AccountsFileRequest) abstractFileRequest;
             builder.addBinaryBody(PATH, fileRequest.getFile(), fileRequest.getContentType(), fileRequest.getFile().getName())
                     .addTextBody(PURPOSE, fileRequest.getPurpose().getPurpose(), ContentType.DEFAULT_TEXT)
                     .build();

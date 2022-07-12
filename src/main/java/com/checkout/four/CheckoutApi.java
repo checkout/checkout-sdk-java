@@ -1,16 +1,18 @@
 package com.checkout.four;
 
+import com.checkout.balances.BalancesClient;
 import com.checkout.customers.four.CustomersClient;
 import com.checkout.disputes.DisputesClient;
 import com.checkout.forex.four.ForexClient;
 import com.checkout.instruments.four.InstrumentsClient;
-import com.checkout.marketplace.MarketplaceClient;
+import com.checkout.accounts.AccountsClient;
 import com.checkout.payments.four.PaymentsClient;
 import com.checkout.payments.hosted.HostedPaymentsClient;
 import com.checkout.payments.links.PaymentLinksClient;
 import com.checkout.risk.RiskClient;
 import com.checkout.sessions.SessionsClient;
 import com.checkout.tokens.TokensClient;
+import com.checkout.transfers.TransfersClient;
 import com.checkout.workflows.four.WorkflowsClient;
 
 public interface CheckoutApi extends CheckoutApmApi {
@@ -29,7 +31,7 @@ public interface CheckoutApi extends CheckoutApmApi {
 
     WorkflowsClient workflowsClient();
 
-    MarketplaceClient marketplaceClient();
+    AccountsClient accountsClient();
 
     SessionsClient sessionsClient();
 
@@ -38,6 +40,10 @@ public interface CheckoutApi extends CheckoutApmApi {
     PaymentLinksClient paymentLinksClient();
 
     HostedPaymentsClient hostedPaymentsClient();
+
+    BalancesClient balancesClient();
+
+    TransfersClient transfersClient();
 
 }
 
