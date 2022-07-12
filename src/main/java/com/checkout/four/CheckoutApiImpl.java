@@ -7,6 +7,8 @@ import com.checkout.CheckoutApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.UriStrategy;
+import com.checkout.balances.BalancesClient;
+import com.checkout.balances.BalancesClientImpl;
 import com.checkout.customers.four.CustomersClient;
 import com.checkout.customers.four.CustomersClientImpl;
 import com.checkout.disputes.DisputesClient;
@@ -15,8 +17,8 @@ import com.checkout.forex.four.ForexClient;
 import com.checkout.forex.four.ForexClientImpl;
 import com.checkout.instruments.four.InstrumentsClient;
 import com.checkout.instruments.four.InstrumentsClientImpl;
-import com.checkout.marketplace.MarketplaceClient;
-import com.checkout.marketplace.MarketplaceClientImpl;
+import com.checkout.accounts.AccountsClient;
+import com.checkout.accounts.AccountsClientImpl;
 import com.checkout.payments.four.PaymentsClient;
 import com.checkout.payments.four.PaymentsClientImpl;
 import com.checkout.payments.hosted.HostedPaymentsClient;
@@ -29,6 +31,8 @@ import com.checkout.sessions.SessionsClient;
 import com.checkout.sessions.SessionsClientImpl;
 import com.checkout.tokens.TokensClient;
 import com.checkout.tokens.TokensClientImpl;
+import com.checkout.transfers.TransfersClient;
+import com.checkout.transfers.TransfersClientImpl;
 import com.checkout.workflows.four.WorkflowsClient;
 import com.checkout.workflows.four.WorkflowsClientImpl;
 
@@ -43,11 +47,13 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final InstrumentsClient instrumentsClient;
     private final RiskClient riskClient;
     private final WorkflowsClient workflowsClient;
-    private final MarketplaceClient marketplaceClient;
+    private final AccountsClient accountsClient;
     private final SessionsClient sessionsClient;
     private final ForexClient forexClient;
     private final PaymentLinksClient paymentLinksClient;
     private final HostedPaymentsClient hostedPaymentsClient;
+    private final TransfersClient transfersClient;
+    private final BalancesClient balancesClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         super(configuration);
@@ -62,12 +68,11 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.forexClient = new ForexClientImpl(this.apiClient, configuration);
         this.paymentLinksClient = new PaymentLinksClientImpl(this.apiClient, configuration);
         this.hostedPaymentsClient = new HostedPaymentsClientImpl(this.apiClient, configuration);
-        this.marketplaceClient = new MarketplaceClientImpl(this.apiClient,
+        this.transfersClient = new TransfersClientImpl(getTransfersClient(configuration), configuration);
+        this.balancesClient = new BalancesClientImpl(getBalancesClient(configuration), configuration);
+        this.accountsClient = new AccountsClientImpl(this.apiClient,
                 getFilesClient(configuration),
-                getTransfersClient(configuration),
-                getBalancesClient(configuration),
                 configuration);
-
     }
 
     @Override
@@ -106,8 +111,8 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     }
 
     @Override
-    public MarketplaceClient marketplaceClient() {
-        return marketplaceClient;
+    public AccountsClient accountsClient() {
+        return accountsClient;
     }
 
     @Override
@@ -128,6 +133,16 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     @Override
     public HostedPaymentsClient hostedPaymentsClient() {
         return hostedPaymentsClient;
+    }
+
+    @Override
+    public BalancesClient balancesClient() {
+        return balancesClient;
+    }
+
+    @Override
+    public TransfersClient transfersClient() {
+        return transfersClient;
     }
 
     private ApiClient getFilesClient(final CheckoutConfiguration configuration) {
