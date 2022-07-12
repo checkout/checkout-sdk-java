@@ -68,5 +68,7 @@ public final class SessionRequest {
 
     private Recurring recurring;
 
+    private Installment installment;
+
 }
 
