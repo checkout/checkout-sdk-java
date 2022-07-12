@@ -112,7 +112,7 @@ class MarketplaceTestIT extends SandboxTestFixture {
         final MarketplaceFileRequest fileRequest = MarketplaceFileRequest.builder()
                 .file(file)
                 .contentType(ContentType.IMAGE_JPEG)
-                .purpose(MarketplaceFilePurpose.IDENTIFICATION)
+                .purpose(MarketplaceFilePurpose.IDENTITY_VERIFICATION)
                 .build();
         final IdResponse fileResponse = blocking(() -> fourApi.marketplaceClient().submitFile(fileRequest));
         assertNotNull(fileResponse);
