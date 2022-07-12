@@ -23,14 +23,19 @@ public final class RequestTokenSource extends AbstractRequestSource {
 
     private Phone phone;
 
+    @SerializedName("store_for_future_use")
+    private Boolean storeForFutureUse;
+
     @Builder
     private RequestTokenSource(final String token,
                                final Address billingAddress,
-                               final Phone phone) {
+                               final Phone phone,
+                               final Boolean storeForFutureUse) {
         super(PaymentSourceType.TOKEN);
         this.token = token;
         this.billingAddress = billingAddress;
         this.phone = phone;
+        this.storeForFutureUse = storeForFutureUse;
     }
 
     public RequestTokenSource() {

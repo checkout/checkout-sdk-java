@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateScheduleRequest {
+public final class UpdateScheduleRequest {
 
     private boolean enabled;
 

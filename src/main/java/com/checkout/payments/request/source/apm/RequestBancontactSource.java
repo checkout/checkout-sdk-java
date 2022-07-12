@@ -14,7 +14,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class RequestBancontactSource extends AbstractRequestSource {
+public final class RequestBancontactSource extends AbstractRequestSource {
 
     @SerializedName("payment_country")
     private CountryCode paymentCountry;

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountHolder {
+public final class AccountHolder {
 
     private AccountHolderType type;
 

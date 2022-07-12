@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 import java.util.Map;
 
 @Data
-public class WorkflowActionInvocation {
+public final class WorkflowActionInvocation {
 
     @SerializedName("invocation_id")
     private String invocationId;

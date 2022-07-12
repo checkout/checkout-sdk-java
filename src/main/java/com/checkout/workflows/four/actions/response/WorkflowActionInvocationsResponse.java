@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class WorkflowActionInvocationsResponse extends Resource {
+public final class WorkflowActionInvocationsResponse extends Resource {
 
     @SerializedName("workflow_id")
     private String workflowId;
