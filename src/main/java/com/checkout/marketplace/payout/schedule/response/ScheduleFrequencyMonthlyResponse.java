@@ -2,11 +2,12 @@ package com.checkout.marketplace.payout.schedule.response;
 
 import com.checkout.marketplace.payout.schedule.ScheduleFrequency;
 import com.google.gson.annotations.SerializedName;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,13 +16,7 @@ import lombok.ToString;
 public final class ScheduleFrequencyMonthlyResponse extends ScheduleResponse {
 
     @SerializedName("by_month_day")
-    private Integer byMonthDay;
-
-    @Builder
-    private ScheduleFrequencyMonthlyResponse(final Integer byMonthDay) {
-        super(ScheduleFrequency.MONTHLY);
-        this.byMonthDay = byMonthDay;
-    }
+    private List<Integer> byMonthDay;
 
     public ScheduleFrequencyMonthlyResponse() {
         super(ScheduleFrequency.MONTHLY);
