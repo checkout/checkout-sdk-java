@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class StatementReportResponse extends Resource {
+public final class StatementReportResponse extends Resource {
 
     private int count;
 

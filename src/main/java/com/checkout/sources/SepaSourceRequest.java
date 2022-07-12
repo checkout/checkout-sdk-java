@@ -14,7 +14,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class SepaSourceRequest extends SourceRequest {
+public final class SepaSourceRequest extends SourceRequest {
 
     @SerializedName("billing_address")
     private Address billingAddress;

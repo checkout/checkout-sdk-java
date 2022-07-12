@@ -12,7 +12,7 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class NetworkTokenSource extends SessionSource {
+public final class NetworkTokenSource extends SessionSource {
 
     private String token;
 

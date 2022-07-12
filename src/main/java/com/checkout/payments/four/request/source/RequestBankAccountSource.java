@@ -15,7 +15,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class RequestBankAccountSource extends AbstractRequestSource {
+public final class RequestBankAccountSource extends AbstractRequestSource {
 
     @SerializedName("payment_method")
     private String paymentMethod;

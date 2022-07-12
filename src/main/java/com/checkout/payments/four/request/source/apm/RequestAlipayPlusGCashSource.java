@@ -8,7 +8,7 @@ import lombok.ToString;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class RequestAlipayPlusGCashSource extends AbstractRequestSource {
+public final class RequestAlipayPlusGCashSource extends AbstractRequestSource {
 
     public RequestAlipayPlusGCashSource() {
         super(PaymentSourceType.GCASH);
