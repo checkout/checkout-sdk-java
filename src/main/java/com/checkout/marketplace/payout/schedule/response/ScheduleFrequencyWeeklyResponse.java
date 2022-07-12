@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
@@ -15,7 +17,7 @@ import lombok.ToString;
 public final class ScheduleFrequencyWeeklyResponse extends ScheduleResponse {
 
     @SerializedName("by_day")
-    private DaySchedule byDay;
+    private List<DaySchedule> byDay;
 
     public ScheduleFrequencyWeeklyResponse() {
         super(ScheduleFrequency.WEEKLY);
