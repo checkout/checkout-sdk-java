@@ -5,7 +5,7 @@ import lombok.Getter;
 public enum MarketplaceFilePurpose {
 
     BANK_VERIFICATION("bank_verification"),
-    IDENTIFICATION("identification"),
+    IDENTITY_VERIFICATION("identity_verification"),
     COMPANY_VERIFICATION("company_verification");
 
     @Getter
