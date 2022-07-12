@@ -6,9 +6,9 @@ import com.checkout.common.InstrumentType;
 import com.checkout.common.Link;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.events.EventTypes;
-import com.checkout.marketplace.payout.schedule.response.CurrencySchedule;
-import com.checkout.marketplace.payout.schedule.response.GetScheduleResponse;
-import com.checkout.marketplace.payout.schedule.response.ScheduleFrequencyMonthlyResponse;
+import com.checkout.accounts.payout.schedule.response.CurrencySchedule;
+import com.checkout.accounts.payout.schedule.response.GetScheduleResponse;
+import com.checkout.accounts.payout.schedule.response.ScheduleFrequencyMonthlyResponse;
 import com.checkout.payments.PaymentAction;
 import com.checkout.payments.PaymentDestinationType;
 import com.checkout.payments.four.sender.Sender;
@@ -100,11 +100,11 @@ class GsonSerializer implements Serializer {
                     .registerSubtype(com.checkout.workflows.four.conditions.response.EventWorkflowConditionResponse.class, identifier(WorkflowConditionType.EVENT))
                     .registerSubtype(com.checkout.workflows.four.conditions.response.EntityWorkflowConditionResponse.class, identifier(WorkflowConditionType.ENTITY))
                     .registerSubtype(com.checkout.workflows.four.conditions.response.ProcessingChannelWorkflowConditionResponse.class, identifier(WorkflowConditionType.PROCESSING_CHANNEL)))
-            // Marketplace CS2 - PayoutSchedules
+            // Accounts CS2 - PayoutSchedules
             .registerTypeAdapter(GetScheduleResponse.class, getScheduleResponseDeserializer())
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.marketplace.payout.schedule.response.ScheduleResponse.class, CheckoutUtils.FREQUENCY)
-                    .registerSubtype(com.checkout.marketplace.payout.schedule.response.ScheduleFrequencyDailyResponse.class, CheckoutUtils.DAILY)
-                    .registerSubtype(com.checkout.marketplace.payout.schedule.response.ScheduleFrequencyWeeklyResponse.class, CheckoutUtils.WEEKLY)
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.accounts.payout.schedule.response.ScheduleResponse.class, CheckoutUtils.FREQUENCY)
+                    .registerSubtype(com.checkout.accounts.payout.schedule.response.ScheduleFrequencyDailyResponse.class, CheckoutUtils.DAILY)
+                    .registerSubtype(com.checkout.accounts.payout.schedule.response.ScheduleFrequencyWeeklyResponse.class, CheckoutUtils.WEEKLY)
                     .registerSubtype(ScheduleFrequencyMonthlyResponse.class, CheckoutUtils.MONTHLY))
             // Adapters when API returns an array
             .registerTypeAdapter(EVENT_TYPES_TYPE, eventTypesResponseDeserializer())
