@@ -1,15 +1,19 @@
 package com.checkout.disputes;
 
 import com.google.gson.annotations.SerializedName;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Size;
 import java.time.Instant;
 
 @Data
 @Builder
-public class DisputesQueryFilter {
+@AllArgsConstructor
+@NoArgsConstructor
+public final class DisputesQueryFilter {
 
     @Size(min = 1, max = 250)
     private Integer limit;

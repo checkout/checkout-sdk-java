@@ -14,7 +14,7 @@ import java.time.Instant;
 @Builder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class PaymentDispute extends Resource {
+public final class PaymentDispute extends Resource {
 
     private String id;
 

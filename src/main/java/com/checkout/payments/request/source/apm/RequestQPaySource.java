@@ -13,7 +13,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class RequestQPaySource extends AbstractRequestSource {
+public final class RequestQPaySource extends AbstractRequestSource {
 
     private Integer quantity;
 

@@ -15,7 +15,7 @@ import java.util.Map;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class RequestPayPalSource extends AbstractRequestSource {
+public final class RequestPayPalSource extends AbstractRequestSource {
 
     @SerializedName("invoice_number")
     private String invoiceNumber;

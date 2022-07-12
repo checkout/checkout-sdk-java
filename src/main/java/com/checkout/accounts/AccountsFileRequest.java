@@ -14,7 +14,7 @@ import java.io.File;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class AccountsFileRequest extends AbstractFileRequest {
+public final class AccountsFileRequest extends AbstractFileRequest {
 
     private AccountsFilePurpose purpose;
 
