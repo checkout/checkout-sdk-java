@@ -26,8 +26,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class CustomersClientImplTest {
 
-    private CustomersClient client;
-
     @Mock
     private ApiClient apiClient;
 
@@ -40,9 +38,11 @@ class CustomersClientImplTest {
     @Mock
     private SdkAuthorization authorization;
 
+    private CustomersClient client;
+
     @BeforeEach
     void setUp() {
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
         when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
         client = new CustomersClientImpl(apiClient, configuration);
     }
@@ -67,12 +67,12 @@ class CustomersClientImplTest {
     @Test
     void shouldGetCustomers() throws ExecutionException, InterruptedException {
 
-        final CustomerDetailsResponse response = mock(CustomerDetailsResponse.class);
+        final CustomerResponse response = mock(CustomerResponse.class);
         when(apiClient.getAsync("customers/customer_id", authorization,
-                CustomerDetailsResponse.class))
+                CustomerResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<CustomerDetailsResponse> future = client.get("customer_id");
+        final CompletableFuture<CustomerResponse> future = client.get("customer_id");
 
         assertNotNull(future.get());
 

@@ -30,6 +30,9 @@ public final class CardResponseSource extends AbstractResponseSource implements 
 
     private String scheme;
 
+    @SerializedName("scheme_local")
+    private String schemeLocal;
+
     private String last4;
 
     private String fingerprint;
@@ -58,11 +61,6 @@ public final class CardResponseSource extends AbstractResponseSource implements 
 
     @SerializedName("cvv_check")
     private String cvvCheck;
-
-    private Boolean payouts;
-
-    @SerializedName("fast_funds")
-    private String fastFunds;
 
     @SerializedName("payment_account_reference")
     private String paymentAccountReference;

@@ -16,13 +16,13 @@ public class CustomersClientImpl extends AbstractClient implements CustomersClie
     private static final String CUSTOMERS_PATH = "customers";
 
     public CustomersClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY);
+        super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
     }
 
     @Override
-    public CompletableFuture<CustomerDetailsResponse> get(final String customerId) {
+    public CompletableFuture<CustomerResponse> get(final String customerId) {
         validateParams("customerId", customerId);
-        return apiClient.getAsync(buildPath(CUSTOMERS_PATH, customerId), sdkAuthorization(), CustomerDetailsResponse.class);
+        return apiClient.getAsync(getCustomersUrl(customerId), sdkAuthorization(), CustomerResponse.class);
     }
 
     @Override
@@ -34,13 +34,17 @@ public class CustomersClientImpl extends AbstractClient implements CustomersClie
     @Override
     public CompletableFuture<EmptyResponse> update(final String customerId, final CustomerRequest customerRequest) {
         validateParams("customerId", customerId, "customerRequest", customerRequest);
-        return apiClient.patchAsync(buildPath(CUSTOMERS_PATH, customerId), sdkAuthorization(), EmptyResponse.class, customerRequest, null);
+        return apiClient.patchAsync(getCustomersUrl(customerId), sdkAuthorization(), EmptyResponse.class, customerRequest, null);
     }
 
     @Override
     public CompletableFuture<EmptyResponse> delete(final String customerId) {
         validateParams("customerId", customerId);
-        return apiClient.deleteAsync(buildPath(CUSTOMERS_PATH, customerId), sdkAuthorization());
+        return apiClient.deleteAsync(getCustomersUrl(customerId), sdkAuthorization());
+    }
+
+    private String getCustomersUrl(final String customerId) {
+        return buildPath(CUSTOMERS_PATH, customerId);
     }
 
 }

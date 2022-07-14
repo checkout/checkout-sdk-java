@@ -41,7 +41,9 @@ public final class DisputesQueryResponse extends HttpMetadata {
 
     private List<Dispute> data;
 
-    //Available only on Four
+    /**
+     * Not available on Previous
+     */
 
     @SerializedName("entity_ids")
     private String entityIds;

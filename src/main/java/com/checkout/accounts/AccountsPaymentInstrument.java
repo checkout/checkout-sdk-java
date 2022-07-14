@@ -1,10 +1,10 @@
 package com.checkout.accounts;
 
+import com.checkout.common.AccountType;
+import com.checkout.common.BankDetails;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.InstrumentType;
-import com.checkout.common.four.AccountType;
-import com.checkout.common.four.BankDetails;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;

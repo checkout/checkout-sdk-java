@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 class TransfersTestIT extends SandboxTestFixture {
 
     TransfersTestIT() {
-        super(PlatformType.FOUR_OAUTH);
+        super(PlatformType.DEFAULT_OAUTH);
     }
 
     @Test
@@ -33,11 +33,11 @@ class TransfersTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final CreateTransferResponse response = blocking(() -> fourApi.transfersClient().initiateTransferOfFunds(transferRequest));
+        final CreateTransferResponse response = blocking(() -> checkoutApi.transfersClient().initiateTransferOfFunds(transferRequest));
         assertNotNull(response.getId());
         assertEquals(TransferStatus.PENDING, response.getStatus());
 
-        final TransferDetailsResponse transferDetailsResponse = blocking(() -> fourApi.transfersClient().retrieveATransfer(response.getId()));
+        final TransferDetailsResponse transferDetailsResponse = blocking(() -> checkoutApi.transfersClient().retrieveATransfer(response.getId()));
         assertNotNull(transferDetailsResponse);
         assertEquals(transferRequest.getReference(), transferDetailsResponse.getReference());
         assertNotNull(transferDetailsResponse.getStatus());
@@ -65,12 +65,12 @@ class TransfersTestIT extends SandboxTestFixture {
 
         final String idempotencyKey = UUID.randomUUID().toString();
 
-        final CreateTransferResponse response = blocking(() -> fourApi.transfersClient().initiateTransferOfFunds(transferRequest, idempotencyKey));
+        final CreateTransferResponse response = blocking(() -> checkoutApi.transfersClient().initiateTransferOfFunds(transferRequest, idempotencyKey));
         assertNotNull(response.getId());
         assertEquals(TransferStatus.PENDING, response.getStatus());
 
         try {
-            fourApi.transfersClient().initiateTransferOfFunds(transferRequest, idempotencyKey).get();
+            checkoutApi.transfersClient().initiateTransferOfFunds(transferRequest, idempotencyKey).get();
             fail("Should not get here!");
         } catch (final InterruptedException | ExecutionException e) {
             assertTrue(e.getCause() instanceof CheckoutApiException);

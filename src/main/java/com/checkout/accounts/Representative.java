@@ -22,7 +22,7 @@ public final class Representative {
 
     private Identification identification;
 
-    private Phone phone;
+    private AccountPhone phone;
 
     @SerializedName("date_of_birth")
     private DateOfBirth dateOfBirth;

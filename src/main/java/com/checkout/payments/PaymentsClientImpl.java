@@ -5,10 +5,13 @@ import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.ItemsResponse;
 import com.checkout.SdkAuthorizationType;
+import com.checkout.payments.request.AuthorizationRequest;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.PayoutRequest;
+import com.checkout.payments.response.AuthorizationResponse;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
+import com.checkout.payments.response.PayoutResponse;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -16,11 +19,12 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.checkout.common.CheckoutUtils.validateParams;
 
-public class PaymentsClientImpl extends AbstractClient implements PaymentsClient {
+public final class PaymentsClientImpl extends AbstractClient implements PaymentsClient {
 
     private static final String PAYMENTS_PATH = "payments";
     private static final String ACTIONS_PATH = "actions";
     private static final String CAPTURES_PATH = "captures";
+    private static final String AUTHORIZATIONS_PATH = "authorizations";
     private static final String REFUNDS_PATH = "refunds";
     private static final String VOIDS_PATH = "voids";
 
@@ -28,7 +32,7 @@ public class PaymentsClientImpl extends AbstractClient implements PaymentsClient
     }.getType();
 
     public PaymentsClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY);
+        super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
     }
 
     @Override
@@ -44,15 +48,15 @@ public class PaymentsClientImpl extends AbstractClient implements PaymentsClient
     }
 
     @Override
-    public CompletableFuture<PaymentResponse> requestPayout(final PayoutRequest payoutRequest) {
+    public CompletableFuture<PayoutResponse> requestPayout(final PayoutRequest payoutRequest) {
         validateParams("payoutRequest", payoutRequest);
-        return apiClient.postAsync(PAYMENTS_PATH, sdkAuthorization(), PaymentResponse.class, payoutRequest, null);
+        return apiClient.postAsync(PAYMENTS_PATH, sdkAuthorization(), PayoutResponse.class, payoutRequest, null);
     }
 
     @Override
-    public CompletableFuture<PaymentResponse> requestPayout(final PayoutRequest payoutRequest, final String idempotencyKey) {
+    public CompletableFuture<PayoutResponse> requestPayout(final PayoutRequest payoutRequest, final String idempotencyKey) {
         validateParams("payoutRequest", payoutRequest, "idempotencyKey", idempotencyKey);
-        return apiClient.postAsync(PAYMENTS_PATH, sdkAuthorization(), PaymentResponse.class, payoutRequest, idempotencyKey);
+        return apiClient.postAsync(PAYMENTS_PATH, sdkAuthorization(), PayoutResponse.class, payoutRequest, idempotencyKey);
     }
 
     @Override
@@ -65,6 +69,18 @@ public class PaymentsClientImpl extends AbstractClient implements PaymentsClient
     public CompletableFuture<ItemsResponse<PaymentAction>> getPaymentActions(final String paymentId) {
         validateParams("paymentId", paymentId);
         return apiClient.getAsync(buildPath(PAYMENTS_PATH, paymentId, ACTIONS_PATH), sdkAuthorization(), PAYMENT_ACTIONS_TYPE);
+    }
+
+    @Override
+    public CompletableFuture<AuthorizationResponse> incrementPaymentAuthorization(final String paymentId, final AuthorizationRequest authorizationRequest) {
+        validateParams("paymentId", paymentId);
+        return apiClient.postAsync(buildPath(PAYMENTS_PATH, paymentId, AUTHORIZATIONS_PATH), sdkAuthorization(), AuthorizationResponse.class, authorizationRequest, null);
+    }
+
+    @Override
+    public CompletableFuture<AuthorizationResponse> incrementPaymentAuthorization(final String paymentId, final AuthorizationRequest authorizationRequest, final String idempotencyKey) {
+        validateParams("paymentId", paymentId, "idempotencyKey", idempotencyKey);
+        return apiClient.postAsync(buildPath(PAYMENTS_PATH, paymentId, AUTHORIZATIONS_PATH), sdkAuthorization(), AuthorizationResponse.class, authorizationRequest, idempotencyKey);
     }
 
     @Override

@@ -5,15 +5,15 @@ import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestCardSource;
 import com.checkout.TestHelper;
+import com.checkout.common.AccountHolder;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
-import com.checkout.common.InstrumentType;
 import com.checkout.common.Phone;
-import com.checkout.instruments.CreateInstrumentRequest;
-import com.checkout.instruments.CreateInstrumentResponse;
-import com.checkout.instruments.InstrumentAccountHolder;
+import com.checkout.instruments.create.CreateCustomerInstrumentRequest;
+import com.checkout.instruments.create.CreateInstrumentResponse;
+import com.checkout.instruments.create.CreateInstrumentTokenRequest;
 import com.checkout.risk.preauthentication.PreAuthenticationAssessmentRequest;
 import com.checkout.risk.preauthentication.PreAuthenticationAssessmentResponse;
 import com.checkout.risk.precapture.AuthenticationResult;
@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.checkout.TestHelper.generateRandomEmail;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
@@ -73,16 +74,18 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
     void shouldPreAuthenticate_customer() {
 
         final com.checkout.customers.CustomerRequest customerRequest = com.checkout.customers.CustomerRequest.builder()
-                .email(TestHelper.generateRandomEmail())
-                .name("User")
-                .phone(TestHelper.createPhone())
+                .email(generateRandomEmail())
+                .name("Testing")
+                .phone(Phone.builder()
+                        .countryCode("1")
+                        .number("4155552671")
+                        .build())
                 .build();
 
-        final String customerId = blocking(() -> defaultApi.customersClient().create(customerRequest)).getId();
+        final String customerId = blocking(() -> checkoutApi.customersClient().create(customerRequest)).getId();
 
         final CustomerSourcePrism customerSourcePrism = CustomerSourcePrism.builder()
-                .id(customerId)
-                .build();
+                .id(customerId).build();
 
         final PreAuthenticationAssessmentResponse authenticationAssessmentResponse = testAuthenticationAssessmentRequest(customerSourcePrism);
 
@@ -90,61 +93,56 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
 
     }
 
-    @Disabled("unvailable")
+    @Disabled("unavailable")
     @Test
     void shouldPreAuthenticate_id() {
 
-        final Address billingAddress = Address.builder()
-                .addressLine1("CheckoutSdk.com")
-                .addressLine2("90 Tottenham Court Road")
-                .city("London")
-                .state("London")
-                .zip("W1T 4TJ")
-                .country(CountryCode.GB)
-                .build();
-
-        final Phone phone = Phone.builder()
-                .countryCode("44")
-                .number("020 222333")
-                .build();
-
-        final CardTokenRequest cardTokenRequest = CardTokenRequest.builder()
-                .number(TestCardSource.VISA.getNumber())
-                .expiryMonth(TestCardSource.VISA.getExpiryMonth())
-                .expiryYear(TestCardSource.VISA.getExpiryYear())
-                .cvv(TestCardSource.VISA.getCvv())
-                .build();
-
-        cardTokenRequest.setCvv(TestCardSource.VISA.getCvv());
-        cardTokenRequest.setBillingAddress(billingAddress);
-        cardTokenRequest.setPhone(phone);
-
-        final CardTokenResponse cardToken = blocking(() -> defaultApi.tokensClient().requestCardToken(cardTokenRequest));
-
-        final CreateInstrumentRequest request = CreateInstrumentRequest.builder()
-                .type(InstrumentType.TOKEN)
-                .token(cardToken.getToken())
-                .accountHolder(InstrumentAccountHolder.builder()
-                        .billingAddress(Address.builder()
-                                .addressLine1("123 Street")
-                                .addressLine2("Hollywood Avenue")
-                                .city("Los Angeles")
-                                .state("CA")
-                                .zip("91001")
-                                .country(CountryCode.US)
-                                .build())
-                        .phone(Phone.builder()
-                                .countryCode("1")
-                                .number("999555222")
-                                .build())
+        final com.checkout.customers.CustomerRequest customerRequest = com.checkout.customers.CustomerRequest.builder()
+                .email(generateRandomEmail())
+                .name("Testing")
+                .phone(Phone.builder()
+                        .countryCode("1")
+                        .number("4155552671")
                         .build())
                 .build();
 
-        final CreateInstrumentResponse response = blocking(() -> defaultApi.instrumentsClient().create(request));
+        final String customerId = blocking(() -> checkoutApi.customersClient().create(customerRequest)).getId();
+
+        final CardTokenRequest cardTokenRequest = CardTokenRequest.builder()
+                .number(CardSourceHelper.Visa.NUMBER)
+                .expiryMonth(CardSourceHelper.Visa.EXPIRY_MONTH)
+                .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
+                .build();
+
+        final CardTokenResponse cardTokenResponse = blocking(() -> checkoutApi.tokensClient().requestCardToken(cardTokenRequest));
+
+        final CreateInstrumentTokenRequest createInstrumentTokenRequest = CreateInstrumentTokenRequest.builder()
+                .token(cardTokenResponse.getToken())
+                .accountHolder(AccountHolder.builder()
+                        .firstName("John")
+                        .lastName("Smith")
+                        .phone(Phone.builder()
+                                .countryCode("+1")
+                                .number("415 555 2671")
+                                .build())
+                        .billingAddress(Address.builder()
+                                .addressLine1("CheckoutSdk.com")
+                                .addressLine2("90 Tottenham Court Road")
+                                .city("London")
+                                .state("London")
+                                .zip("W1T 4TJ")
+                                .country(CountryCode.GB)
+                                .build())
+                        .build())
+                .customer(CreateCustomerInstrumentRequest.builder()
+                        .id(customerId)
+                        .build())
+                .build();
+
+        final CreateInstrumentResponse response = blocking(() -> checkoutApi.instrumentsClient().create(createInstrumentTokenRequest));
 
         final IdSourcePrism idSourcePrism = IdSourcePrism.builder()
-                .id(response.getId()).cvv(TestCardSource.VISA.getCvv())
-                .build();
+                .id(response.getId()).cvv(TestCardSource.VISA.getCvv()).build();
 
         final PreAuthenticationAssessmentResponse authenticationAssessmentResponse = testAuthenticationAssessmentRequest(idSourcePrism);
 
@@ -190,7 +188,8 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
                 .build();
 
-        final PreAuthenticationAssessmentResponse response = blocking(() -> defaultApi.riskClient().requestPreAuthenticationRiskScan(request));
+        final PreAuthenticationAssessmentResponse response = blocking(() -> checkoutApi.riskClient().requestPreAuthenticationRiskScan(request));
+
         assertNotNull(response);
 
         assertNotNull(response.getAssessmentId());
@@ -252,7 +251,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final PreCaptureAssessmentResponse response = blocking(() -> defaultApi.riskClient().requestPreCaptureRiskScan(request));
+        final PreCaptureAssessmentResponse response = blocking(() -> checkoutApi.riskClient().requestPreCaptureRiskScan(request));
 
         assertNotNull(response);
         assertNotNull(response.getAssessmentId());

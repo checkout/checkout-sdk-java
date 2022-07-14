@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -19,5 +20,7 @@ public final class CustomerRequest {
     private Phone phone;
 
     private Map<String, Object> metadata;
+
+    private List<String> instruments;
 
 }

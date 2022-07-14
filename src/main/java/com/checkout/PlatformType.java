@@ -1,8 +1,8 @@
 package com.checkout;
 
 public enum PlatformType {
+    PREVIOUS,
     DEFAULT,
-    FOUR,
-    FOUR_OAUTH,
+    DEFAULT_OAUTH,
     CUSTOM
 }

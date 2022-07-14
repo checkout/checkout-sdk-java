@@ -1,19 +1,27 @@
 package com.checkout.instruments;
 
 import com.checkout.EmptyResponse;
+import com.checkout.common.CountryCode;
+import com.checkout.common.Currency;
+import com.checkout.instruments.create.CreateInstrumentRequest;
+import com.checkout.instruments.create.CreateInstrumentResponse;
+import com.checkout.instruments.get.BankAccountFieldQuery;
+import com.checkout.instruments.get.BankAccountFieldResponse;
+import com.checkout.instruments.get.GetInstrumentResponse;
+import com.checkout.instruments.update.UpdateInstrumentRequest;
+import com.checkout.instruments.update.UpdateInstrumentResponse;
 
 import java.util.concurrent.CompletableFuture;
 
 public interface InstrumentsClient {
 
-    CompletableFuture<CreateInstrumentResponse> create(CreateInstrumentRequest createInstrumentRequest);
+    <T extends CreateInstrumentResponse> CompletableFuture<T> create(CreateInstrumentRequest createInstrumentRequest);
 
-    CompletableFuture<InstrumentDetailsResponse> get(String instrumentId);
+    CompletableFuture<GetInstrumentResponse> get(String instrumentId);
 
-    CompletableFuture<UpdateInstrumentResponse> update(String instrumentId, UpdateInstrumentRequest updateInstrumentRequest);
+    <T extends UpdateInstrumentResponse> CompletableFuture<T> update(String instrumentId, UpdateInstrumentRequest updateInstrumentRequest);
 
-    /**
-     * @param instrumentId - matching a pattern ^(src)_(\w{26})$
-     */
     CompletableFuture<EmptyResponse> delete(String instrumentId);
+
+    CompletableFuture<BankAccountFieldResponse> getBankAccountFieldFormatting(CountryCode country, Currency currency, BankAccountFieldQuery query);
 }

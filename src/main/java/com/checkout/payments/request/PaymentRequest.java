@@ -2,6 +2,9 @@ package com.checkout.payments.request;
 
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
+import com.checkout.common.MarketplaceData;
+import com.checkout.payments.Product;
+import com.checkout.payments.AuthorizationType;
 import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.PaymentType;
@@ -10,20 +13,18 @@ import com.checkout.payments.RiskRequest;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
 import com.checkout.payments.request.source.AbstractRequestSource;
+import com.checkout.payments.sender.PaymentSender;
 import com.google.gson.annotations.SerializedName;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public final class PaymentRequest {
 
     private AbstractRequestSource source;
@@ -42,6 +43,9 @@ public final class PaymentRequest {
 
     private String description;
 
+    @SerializedName("authorization_type")
+    private AuthorizationType authorizationType;
+
     private Boolean capture;
 
     @SerializedName("capture_on")
@@ -57,6 +61,9 @@ public final class PaymentRequest {
     @SerializedName("3ds")
     private ThreeDSRequest threeDS;
 
+    @SerializedName("processing_channel_id")
+    private String processingChannelId;
+
     @SerializedName("previous_payment_id")
     private String previousPaymentId;
 
@@ -71,9 +78,15 @@ public final class PaymentRequest {
     @SerializedName("payment_ip")
     private String paymentIp;
 
+    private PaymentSender sender;
+
     private PaymentRecipient recipient;
 
+    private MarketplaceData marketplace;
+
     private ProcessingSettings processing;
+
+    private List<Product> items;
 
     @Builder.Default
     private Map<String, Object> metadata = new HashMap<>();

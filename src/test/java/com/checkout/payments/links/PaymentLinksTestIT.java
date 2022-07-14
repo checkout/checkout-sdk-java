@@ -21,22 +21,19 @@ class PaymentLinksTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void shouldCreatePaymentsLink() {
-        final PaymentLinkRequest paymentLinksRequest = TestHelper.createPaymentLinksRequest(REFERENCE);
-        final PaymentLinkResponse response = blocking(() -> defaultApi.paymentLinksClient().createPaymentLink(paymentLinksRequest));
-        assertNotNull(response);
-        assertEquals(REFERENCE, response.getReference());
-        assertNotNull(response.getExpiresOn());
-        assertNotNull(response.getLinks());
-        assertTrue(response.getLinks().containsKey("redirect"));
-    }
+    void shouldCreateAndGetPaymentsLink() {
 
-    @Test
-    void shouldRetrievePaymentsLink() {
         final PaymentLinkRequest paymentLinksRequest = TestHelper.createPaymentLinksRequest(REFERENCE);
-        final PaymentLinkResponse paymentLinkResponse = blocking(() -> defaultApi.paymentLinksClient().createPaymentLink(paymentLinksRequest));
+        final PaymentLinkResponse paymentLinkResponse = blocking(() -> checkoutApi.paymentLinksClient().createPaymentLink(paymentLinksRequest));
+
         assertNotNull(paymentLinkResponse);
-        final PaymentLinkDetailsResponse detailsResponse = blocking(() -> defaultApi.paymentLinksClient().getPaymentLink(paymentLinkResponse.getId()));
+        assertEquals(REFERENCE, paymentLinkResponse.getReference());
+        assertNotNull(paymentLinkResponse.getExpiresOn());
+        assertNotNull(paymentLinkResponse.getLinks());
+        assertTrue(paymentLinkResponse.getLinks().containsKey("redirect"));
+        assertNotNull(paymentLinkResponse.getWarnings());
+
+        final PaymentLinkDetailsResponse detailsResponse = blocking(() -> checkoutApi.paymentLinksClient().getPaymentLink(paymentLinkResponse.getId()));
         assertNotNull(detailsResponse);
         assertEquals(paymentLinkResponse.getId(), detailsResponse.getId());
         assertThat(detailsResponse.getStatus(), anyOf(equalTo(PaymentLinkStatus.ACTIVE), equalTo(PaymentLinkStatus.PAYMENT_RECEIVED), equalTo(PaymentLinkStatus.EXPIRED)));
