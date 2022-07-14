@@ -9,14 +9,14 @@ import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
 import com.checkout.common.Product;
 import com.checkout.payments.BillingDescriptor;
-import com.checkout.payments.BillingInformation;
-import com.checkout.payments.Payer;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.PaymentType;
 import com.checkout.payments.ProcessingSettings;
 import com.checkout.payments.RiskRequest;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
+import com.checkout.payments.BillingInformation;
+import com.checkout.payments.Payer;
 import com.checkout.payments.hosted.HostedPaymentRequest;
 import com.checkout.payments.links.PaymentLinkRequest;
 import lombok.SneakyThrows;
@@ -35,17 +35,17 @@ public final class TestHelper {
     private TestHelper() {
     }
 
-    // Default
-    public static final String VALID_DEFAULT_SK = "sk_test_fde517a8-3f01-41ef-b4bd-4282384b0a64";
-    public static final String VALID_DEFAULT_PK = "pk_test_fe70ff27-7c32-4ce1-ae90-5691a188ee7b";
-    public static final String INVALID_DEFAULT_SK = "sk_test_asdsad3q4dq";
-    public static final String INVALID_DEFAULT_PK = "pk_test_q414dasds";
+    // Previous
+    public static final String VALID_PREVIOUS_SK = "sk_test_fde517a8-3f01-41ef-b4bd-4282384b0a64";
+    public static final String VALID_PREVIOUS_PK = "pk_test_fe70ff27-7c32-4ce1-ae90-5691a188ee7b";
+    public static final String INVALID_PREVIOUS_SK = "sk_test_asdsad3q4dq";
+    public static final String INVALID_PREVIOUS_PK = "pk_test_q414dasds";
 
-    // FOUR
-    public static final String VALID_FOUR_SK = "sk_sbox_m73dzbpy7cf3gfd46xr4yj5xo4e";
-    public static final String VALID_FOUR_PK = "pk_sbox_pkhpdtvmkgf7hdnpwnbhw7r2uic";
-    public static final String INVALID_FOUR_SK = "sk_sbox_m73dzbpy7c-f3gfd46xr4yj5xo4e";
-    public static final String INVALID_FOUR_PK = "pk_sbox_pkh";
+    // Default
+    public static final String VALID_DEFAULT_SK = "sk_sbox_m73dzbpy7cf3gfd46xr4yj5xo4e";
+    public static final String VALID_DEFAULT_PK = "pk_sbox_pkhpdtvmkgf7hdnpwnbhw7r2uic";
+    public static final String INVALID_DEFAULT_SK = "sk_sbox_m73dzbpy7c-f3gfd46xr4yj5xo4e";
+    public static final String INVALID_DEFAULT_PK = "pk_sbox_pkh";
 
     @SneakyThrows
     public static String getMock(final String mock) {

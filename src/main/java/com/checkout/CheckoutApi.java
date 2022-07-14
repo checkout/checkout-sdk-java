@@ -1,42 +1,49 @@
 package com.checkout;
 
+import com.checkout.accounts.AccountsClient;
+import com.checkout.balances.BalancesClient;
 import com.checkout.customers.CustomersClient;
 import com.checkout.disputes.DisputesClient;
-import com.checkout.events.EventsClient;
+import com.checkout.forex.ForexClient;
 import com.checkout.instruments.InstrumentsClient;
 import com.checkout.payments.PaymentsClient;
 import com.checkout.payments.hosted.HostedPaymentsClient;
 import com.checkout.payments.links.PaymentLinksClient;
-import com.checkout.reconciliation.ReconciliationClient;
 import com.checkout.risk.RiskClient;
-import com.checkout.sources.SourcesClient;
+import com.checkout.sessions.SessionsClient;
 import com.checkout.tokens.TokensClient;
-import com.checkout.webhooks.WebhooksClient;
+import com.checkout.transfers.TransfersClient;
+import com.checkout.workflows.WorkflowsClient;
 
 public interface CheckoutApi extends CheckoutApmApi {
 
-    PaymentsClient paymentsClient();
-
-    SourcesClient sourcesClient();
-
     TokensClient tokensClient();
 
-    WebhooksClient webhooksClient();
-
-    EventsClient eventsClient();
-
-    InstrumentsClient instrumentsClient();
-
-    PaymentLinksClient paymentLinksClient();
-
-    HostedPaymentsClient hostedPaymentsClient();
+    PaymentsClient paymentsClient();
 
     CustomersClient customersClient();
 
     DisputesClient disputesClient();
 
-    ReconciliationClient reconciliationClient();
+    InstrumentsClient instrumentsClient();
 
     RiskClient riskClient();
 
+    WorkflowsClient workflowsClient();
+
+    AccountsClient accountsClient();
+
+    SessionsClient sessionsClient();
+
+    ForexClient forexClient();
+
+    PaymentLinksClient paymentLinksClient();
+
+    HostedPaymentsClient hostedPaymentsClient();
+
+    BalancesClient balancesClient();
+
+    TransfersClient transfersClient();
+
 }
+

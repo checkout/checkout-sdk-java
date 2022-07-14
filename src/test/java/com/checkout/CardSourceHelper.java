@@ -1,17 +1,17 @@
 package com.checkout;
 
+import com.checkout.common.AccountHolderIdentification;
+import com.checkout.common.AccountHolderIdentificationType;
 import com.checkout.common.Address;
 import com.checkout.common.ChallengeIndicator;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
-import com.checkout.common.four.AccountHolderIdentification;
 import com.checkout.payments.ThreeDSRequest;
-import com.checkout.payments.four.request.PaymentRequest;
-import com.checkout.payments.four.request.source.RequestCardSource;
-import com.checkout.payments.four.sender.PaymentCorporateSender;
-import com.checkout.payments.four.sender.PaymentIndividualSender;
-import com.checkout.payments.four.sender.PaymentSender;
-import com.checkout.common.four.AccountHolderIdentificationType;
+import com.checkout.payments.request.PaymentRequest;
+import com.checkout.payments.request.source.RequestCardSource;
+import com.checkout.payments.sender.PaymentCorporateSender;
+import com.checkout.payments.sender.PaymentIndividualSender;
+import com.checkout.payments.sender.PaymentSender;
 
 import java.util.UUID;
 

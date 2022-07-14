@@ -28,7 +28,8 @@ class TokensTestIT extends SandboxTestFixture {
                 .expiryYear(TestCardSource.VISA.getExpiryYear())
                 .build();
 
-        final CardTokenResponse response = blocking(() -> defaultApi.tokensClient().requestCardToken(request));
+        final CardTokenResponse response = blocking(() -> checkoutApi.tokensClient().requestCardToken(request));
+
 
         assertNotNull(response);
         assertEquals(TokenType.CARD, response.getType());
@@ -38,7 +39,7 @@ class TokensTestIT extends SandboxTestFixture {
         assertTrue(response.getExpiresOn().isAfter(Instant.now()));
         assertEquals(6, response.getExpiryMonth().intValue());
         assertEquals(2025, response.getExpiryYear().intValue());
-        //assertEquals("Visa", response.getScheme());
+        assertEquals("VISA", response.getScheme());
         assertEquals("4242", response.getLast4());
         assertEquals("424242", response.getBin());
         assertEquals(CardType.CREDIT, response.getCardType());

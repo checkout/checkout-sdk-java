@@ -32,7 +32,9 @@ public final class PaymentDispute extends Resource {
     @SerializedName("processed_on")
     private Instant processedOn;
 
-    //Available only on Four
+    /**
+     * Not available on Previous
+     */
 
     @SerializedName("processing_channel_id")
     private String processingChannelId;

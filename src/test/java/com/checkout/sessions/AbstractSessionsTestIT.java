@@ -23,7 +23,7 @@ import java.util.Arrays;
 abstract class AbstractSessionsTestIT extends SandboxTestFixture {
 
     public AbstractSessionsTestIT() {
-        super(PlatformType.FOUR_OAUTH);
+        super(PlatformType.DEFAULT_OAUTH);
     }
 
     protected SessionResponse createNonHostedSession(final ChannelData channelData,
@@ -75,7 +75,7 @@ abstract class AbstractSessionsTestIT extends SandboxTestFixture {
                 .channelData(channelData)
                 .build();
 
-        return blocking(() -> fourApi.sessionsClient().requestSession(sessionRequest));
+        return blocking(() -> checkoutApi.sessionsClient().requestSession(sessionRequest));
 
     }
 
@@ -109,7 +109,7 @@ abstract class AbstractSessionsTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        return blocking(() -> fourApi.sessionsClient().requestSession(sessionRequest));
+        return blocking(() -> checkoutApi.sessionsClient().requestSession(sessionRequest));
 
     }
 

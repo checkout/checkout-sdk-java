@@ -3,7 +3,7 @@ package com.checkout.sessions;
 import com.checkout.common.ChallengeIndicator;
 import com.checkout.common.Currency;
 import com.checkout.common.Resource;
-import com.checkout.common.four.ThreeDSFlowType;
+import com.checkout.common.ThreeDSFlowType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

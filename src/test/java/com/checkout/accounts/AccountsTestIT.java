@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class AccountsTestIT extends SandboxTestFixture {
 
     AccountsTestIT() {
-        super(PlatformType.FOUR_OAUTH);
+        super(PlatformType.DEFAULT_OAUTH);
     }
 
     @Test
@@ -29,7 +29,7 @@ class AccountsTestIT extends SandboxTestFixture {
         final OnboardEntityRequest onboardEntityRequest = OnboardEntityRequest.builder()
                 .reference(randomReference)
                 .contactDetails(ContactDetails.builder()
-                        .phone(Phone.builder()
+                        .phone(AccountPhone.builder()
                                 .number("2345678910")
                                 .build())
                         .build())
@@ -61,13 +61,13 @@ class AccountsTestIT extends SandboxTestFixture {
                         .build())
 
                 .build();
-        final OnboardEntityResponse entityResponse = blocking(() -> fourApi.accountsClient().createEntity(onboardEntityRequest));
+        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(onboardEntityRequest));
         assertNotNull(entityResponse);
         final String entityId = entityResponse.getId();
         assertNotNull(entityId);
         assertEquals(randomReference, entityResponse.getReference());
 
-        final OnboardEntityDetailsResponse entityDetailsResponse = blocking(() -> fourApi.accountsClient().getEntity(entityId));
+        final OnboardEntityDetailsResponse entityDetailsResponse = blocking(() -> checkoutApi.accountsClient().getEntity(entityId));
         assertNotNull(entityDetailsResponse);
         assertEquals(entityId, entityDetailsResponse.getId());
         assertEquals(randomReference, entityDetailsResponse.getReference());
@@ -79,10 +79,10 @@ class AccountsTestIT extends SandboxTestFixture {
         assertEquals(onboardEntityRequest.getIndividual().getDateOfBirth(), entityDetailsResponse.getIndividual().getDateOfBirth());
 
         onboardEntityRequest.getIndividual().setFirstName("Jhon");
-        final OnboardEntityResponse updatedEntityResponse = blocking(() -> fourApi.accountsClient().updateEntity(onboardEntityRequest, entityId));
+        final OnboardEntityResponse updatedEntityResponse = blocking(() -> checkoutApi.accountsClient().updateEntity(onboardEntityRequest, entityId));
         assertNotNull(updatedEntityResponse);
 
-        final OnboardEntityDetailsResponse verifyUpdated = blocking(() -> fourApi.accountsClient().getEntity(entityId));
+        final OnboardEntityDetailsResponse verifyUpdated = blocking(() -> checkoutApi.accountsClient().getEntity(entityId));
         assertNotNull(verifyUpdated);
         assertEquals(onboardEntityRequest.getIndividual().getFirstName(), verifyUpdated.getIndividual().getFirstName());
 
@@ -98,7 +98,7 @@ class AccountsTestIT extends SandboxTestFixture {
                 .contentType(ContentType.IMAGE_JPEG)
                 .purpose(AccountsFilePurpose.IDENTITY_VERIFICATION)
                 .build();
-        final IdResponse fileResponse = blocking(() -> fourApi.accountsClient().submitFile(fileRequest));
+        final IdResponse fileResponse = blocking(() -> checkoutApi.accountsClient().submitFile(fileRequest));
         assertNotNull(fileResponse);
         assertNotNull(fileResponse.getId());
     }

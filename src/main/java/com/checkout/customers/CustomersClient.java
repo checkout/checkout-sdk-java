@@ -7,11 +7,12 @@ import java.util.concurrent.CompletableFuture;
 
 public interface CustomersClient {
 
-    CompletableFuture<CustomerDetailsResponse> get(String customerId);
+    CompletableFuture<CustomerResponse> get(String customerId);
 
     CompletableFuture<IdResponse> create(CustomerRequest customerRequest);
 
     CompletableFuture<EmptyResponse> update(String customerId, CustomerRequest customerRequest);
 
     CompletableFuture<EmptyResponse> delete(String customerId);
+
 }

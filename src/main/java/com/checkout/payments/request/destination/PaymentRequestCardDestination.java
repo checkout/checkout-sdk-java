@@ -1,7 +1,6 @@
 package com.checkout.payments.request.destination;
 
-import com.checkout.common.Address;
-import com.checkout.common.Phone;
+import com.checkout.common.AccountHolder;
 import com.checkout.payments.PaymentDestinationType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
@@ -24,37 +23,19 @@ public final class PaymentRequestCardDestination extends PaymentRequestDestinati
     @SerializedName("expiry_year")
     private Integer expiryYear;
 
-    @SerializedName("first_name")
-    private String firstName;
-
-    @SerializedName("last_name")
-    private String lastName;
-
-    private String name;
-
-    @SerializedName("billing_address")
-    private Address billingAddress;
-
-    private Phone phone;
+    @SerializedName("account_holder")
+    private AccountHolder accountHolder;
 
     @Builder
     private PaymentRequestCardDestination(final String number,
-                                          final Integer expiryMonth,
-                                          final Integer expiryYear,
-                                          final String firstName,
-                                          final String lastName,
-                                          final String name,
-                                          final Address billingAddress,
-                                          final Phone phone) {
+                                         final Integer expiryMonth,
+                                         final Integer expiryYear,
+                                         final AccountHolder accountHolder) {
         super(PaymentDestinationType.CARD);
         this.number = number;
         this.expiryMonth = expiryMonth;
         this.expiryYear = expiryYear;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.name = name;
-        this.billingAddress = billingAddress;
-        this.phone = phone;
+        this.accountHolder = accountHolder;
     }
 
     public PaymentRequestCardDestination() {

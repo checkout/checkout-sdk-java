@@ -18,8 +18,7 @@ public final class RequestIdSource extends AbstractRequestSource {
     private String cvv;
 
     @Builder
-    private RequestIdSource(final String id,
-                            final String cvv) {
+    private RequestIdSource(final String id, final String cvv) {
         super(PaymentSourceType.ID);
         this.id = id;
         this.cvv = cvv;

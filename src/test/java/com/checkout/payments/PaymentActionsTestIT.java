@@ -13,12 +13,12 @@ class PaymentActionsTestIT extends AbstractPaymentsTestIT {
     @Test
     void shouldGetPaymentActions() {
 
-        final PaymentResponse paymentResponse = makeCardPayment(true, 10L);
+        final PaymentResponse paymentResponse = makeCardPayment(false);
 
-        final ItemsResponse<PaymentAction> paymentActions = blocking(() -> defaultApi.paymentsClient().getPaymentActions(paymentResponse.getId()), new ListHasSize<ItemsResponse<PaymentAction>, PaymentAction>(2));
+        final ItemsResponse<PaymentAction> paymentActions = blocking(() -> checkoutApi.paymentsClient().getPaymentActions(paymentResponse.getId()));
 
         assertNotNull(paymentActions);
-        assertEquals(2, paymentActions.getItems().size());
+        assertEquals(1, paymentActions.getItems().size());
         assertNotNull(paymentActions.getResponseHeaders());
         assertNotNull(paymentActions.getBody());
         assertNotNull(paymentActions.getHttpStatusCode());
@@ -35,6 +35,5 @@ class PaymentActionsTestIT extends AbstractPaymentsTestIT {
         });
 
     }
-
 
 }

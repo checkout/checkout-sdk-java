@@ -51,9 +51,9 @@ class UpdateSessionsTestIT extends AbstractSessionsTestIT {
         final GetSessionResponse updated;
 
         if (!usingSessionSecret) {
-            updated = blocking(() -> fourApi.sessionsClient().updateSession(created.getId(), browserSession()));
+            updated = blocking(() -> checkoutApi.sessionsClient().updateSession(created.getId(), browserSession()));
         } else {
-            updated = blocking(() -> fourApi.sessionsClient().updateSession(created.getSessionSecret(), created.getId(), browserSession()));
+            updated = blocking(() -> checkoutApi.sessionsClient().updateSession(created.getSessionSecret(), created.getId(), browserSession()));
         }
 
         assertNotNull(updated);
@@ -104,7 +104,7 @@ class UpdateSessionsTestIT extends AbstractSessionsTestIT {
         assertNotNull(created.getLink("failure_url"));
         assertNotNull(created.getLink("redirect_url"));
 
-        final GetSessionResponse updated = blocking(() -> fourApi.sessionsClient().updateSession(created.getId(), appSession()));
+        final GetSessionResponse updated = blocking(() -> checkoutApi.sessionsClient().updateSession(created.getId(), appSession()));
 
         assertNotNull(updated);
         assertNotNull(updated.getId());
@@ -142,9 +142,9 @@ class UpdateSessionsTestIT extends AbstractSessionsTestIT {
         final GetSessionResponseAfterChannelDataSupplied updated;
 
         if (usingSessionSecret) {
-            updated = blocking(() -> fourApi.sessionsClient().update3dsMethodCompletionIndicator(created.getId(), threeDsMethodCompletionRequest));
+            updated = blocking(() -> checkoutApi.sessionsClient().update3dsMethodCompletionIndicator(created.getId(), threeDsMethodCompletionRequest));
         } else {
-            updated = blocking(() -> fourApi.sessionsClient().update3dsMethodCompletionIndicator(created.getSessionSecret(), created.getId(), threeDsMethodCompletionRequest));
+            updated = blocking(() -> checkoutApi.sessionsClient().update3dsMethodCompletionIndicator(created.getSessionSecret(), created.getId(), threeDsMethodCompletionRequest));
         }
 
         assertNotNull(updated);

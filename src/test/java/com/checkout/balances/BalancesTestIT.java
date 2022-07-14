@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class BalancesTestIT extends SandboxTestFixture {
 
     BalancesTestIT() {
-        super(PlatformType.FOUR_OAUTH);
+        super(PlatformType.DEFAULT_OAUTH);
     }
 
     @Test
@@ -19,7 +19,7 @@ class BalancesTestIT extends SandboxTestFixture {
                 .query("currency:" + Currency.GBP)
                 .build();
 
-        final BalancesResponse balancesResponse = blocking(() -> fourApi.balancesClient().retrieveEntityBalances("ent_kidtcgc3ge5unf4a5i6enhnr5m", query));
+        final BalancesResponse balancesResponse = blocking(() -> checkoutApi.balancesClient().retrieveEntityBalances("ent_kidtcgc3ge5unf4a5i6enhnr5m", query));
         assertNotNull(balancesResponse);
         assertNotNull(balancesResponse.getData());
         for (final CurrencyAccountBalance balance : balancesResponse.getData()) {

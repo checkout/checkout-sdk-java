@@ -1,6 +1,5 @@
 package com.checkout;
 
-import com.checkout.four.CheckoutApi;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.hamcrest.BaseMatcher;
@@ -30,39 +29,40 @@ public abstract class SandboxTestFixture {
 
     protected static final String SELF = "self";
 
-    protected com.checkout.CheckoutApi defaultApi;
-    protected CheckoutApi fourApi;
+    protected com.checkout.previous.CheckoutApi previousApi;
+    protected CheckoutApi checkoutApi;
 
     public SandboxTestFixture(final PlatformType platformType) {
         switch (platformType) {
-            case DEFAULT:
-                this.defaultApi = CheckoutSdk.defaultSdk()
+            case PREVIOUS:
+                this.previousApi = CheckoutSdk.builder()
+                        .previous()
                         .staticKeys()
-                        .publicKey(requireNonNull(System.getenv("CHECKOUT_PUBLIC_KEY")))
-                        .secretKey(requireNonNull(System.getenv("CHECKOUT_SECRET_KEY")))
+                        .publicKey(requireNonNull(System.getenv("CHECKOUT_PREVIOUS_PUBLIC_KEY")))
+                        .secretKey(requireNonNull(System.getenv("CHECKOUT_PREVIOUS_SECRET_KEY")))
                         .environment(Environment.SANDBOX)
                         .httpClientBuilder(CUSTOM_HTTP_BUILDER)
                         .build();
                 break;
-            case FOUR:
-                this.fourApi = CheckoutSdk.fourSdk()
+            case DEFAULT:
+                this.checkoutApi = CheckoutSdk.builder()
                         .staticKeys()
-                        .publicKey(requireNonNull(System.getenv("CHECKOUT_FOUR_PUBLIC_KEY")))
-                        .secretKey(requireNonNull(System.getenv("CHECKOUT_FOUR_SECRET_KEY")))
+                        .publicKey(requireNonNull(System.getenv("CHECKOUT_DEFAULT_PUBLIC_KEY")))
+                        .secretKey(requireNonNull(System.getenv("CHECKOUT_DEFAULT_SECRET_KEY")))
                         .environment(Environment.SANDBOX)
                         .executor(CUSTOM_EXECUTOR)
                         .build();
                 break;
-            case FOUR_OAUTH:
-                this.fourApi = CheckoutSdk.fourSdk()
+            case DEFAULT_OAUTH:
+                this.checkoutApi = CheckoutSdk.builder()
                         .oAuth()
                         .clientCredentials(
-                                requireNonNull(System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_ID")),
-                                requireNonNull(System.getenv("CHECKOUT_FOUR_OAUTH_CLIENT_SECRET")))
-                        .scopes(FourOAuthScope.FILES, FourOAuthScope.FLOW, FourOAuthScope.FX, FourOAuthScope.GATEWAY,
-                                FourOAuthScope.MARKETPLACE, FourOAuthScope.SESSIONS_APP, FourOAuthScope.SESSIONS_BROWSER,
-                                FourOAuthScope.VAULT, FourOAuthScope.PAYOUTS_BANK_DETAILS, FourOAuthScope.DISPUTES,
-                                FourOAuthScope.TRANSFERS_CREATE, FourOAuthScope.TRANSFERS_VIEW, FourOAuthScope.BALANCES_VIEW)
+                                requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_ID")),
+                                requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_SECRET")))
+                        .scopes(OAuthScope.FILES, OAuthScope.FLOW, OAuthScope.FX, OAuthScope.GATEWAY,
+                                OAuthScope.MARKETPLACE, OAuthScope.SESSIONS_APP, OAuthScope.SESSIONS_BROWSER,
+                                OAuthScope.VAULT, OAuthScope.PAYOUTS_BANK_DETAILS, OAuthScope.DISPUTES,
+                                OAuthScope.TRANSFERS_CREATE, OAuthScope.TRANSFERS_VIEW, OAuthScope.BALANCES_VIEW)
                         .environment(Environment.SANDBOX)
                         .executor(CUSTOM_EXECUTOR)
                         .build();

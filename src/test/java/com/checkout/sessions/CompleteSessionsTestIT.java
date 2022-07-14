@@ -55,9 +55,9 @@ class CompleteSessionsTestIT extends AbstractSessionsTestIT {
 
     private void tryComplete(final boolean usingSessionSecret, final String sessionId, final String sessionSecret) {
         if (!usingSessionSecret) {
-            assertOperationNotAllowed(fourApi.sessionsClient().completeSession(sessionId));
+            assertOperationNotAllowed(checkoutApi.sessionsClient().completeSession(sessionId));
         } else {
-            assertOperationNotAllowed(fourApi.sessionsClient().completeSession(sessionSecret, sessionId));
+            assertOperationNotAllowed(checkoutApi.sessionsClient().completeSession(sessionSecret, sessionId));
         }
     }
 

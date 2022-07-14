@@ -54,7 +54,7 @@ public final class Dispute extends Resource {
     private Instant lastUpdate;
 
     /**
-     * Available only on Four
+     * Not available on Previous
      */
 
     @SerializedName("entity_id")

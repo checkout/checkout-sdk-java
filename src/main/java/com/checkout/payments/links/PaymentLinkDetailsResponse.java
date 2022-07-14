@@ -3,8 +3,8 @@ package com.checkout.payments.links;
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerResponse;
 import com.checkout.common.MarketplaceData;
-import com.checkout.common.Product;
 import com.checkout.common.Resource;
+import com.checkout.common.Product;
 import com.checkout.payments.BillingInformation;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
@@ -43,7 +43,9 @@ public final class PaymentLinkDetailsResponse extends Resource {
 
     private Map<String, Object> metadata;
 
-    // Only available in Four
+    /**
+     * Not available on Previous
+     */
 
     @SerializedName("processing_channel_id")
     private String processingChannelId;

@@ -21,15 +21,15 @@ class HostedPaymentsTestIT extends SandboxTestFixture {
     @Test
     void shouldCreateAndGetHostedPayments() {
         final HostedPaymentRequest request = TestHelper.createHostedPaymentRequest(REFERENCE);
-        final HostedPaymentResponse response = blocking(() -> defaultApi.hostedPaymentsClient().createHostedPaymentsPageSession(request));
+        final HostedPaymentResponse response = blocking(() -> checkoutApi.hostedPaymentsClient().createHostedPaymentsPageSession(request));
         assertNotNull(response);
         assertNotNull(response.getId());
         assertEquals(REFERENCE, response.getReference());
         assertNotNull(response.getLinks());
         assertTrue(response.getLinks().containsKey("redirect"));
-        HostedPaymentRequest.builder().build();
+        assertNotNull(response.getWarnings());
 
-        final HostedPaymentDetailsResponse detailsResponse = blocking(() -> defaultApi.hostedPaymentsClient().getHostedPaymentsPageDetails(response.getId()));
+        final HostedPaymentDetailsResponse detailsResponse = blocking(() -> checkoutApi.hostedPaymentsClient().getHostedPaymentsPageDetails(response.getId()));
 
         assertNotNull(detailsResponse);
         assertNotNull(detailsResponse.getId());
@@ -43,5 +43,6 @@ class HostedPaymentsTestIT extends SandboxTestFixture {
         assertNotNull(detailsResponse.getFailureUrl());
         assertNotNull(detailsResponse.getSuccessUrl());
         assertNotNull(detailsResponse.getCancelUrl());
+
     }
 }

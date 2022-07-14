@@ -17,32 +17,25 @@ class CheckoutApiImplTest {
     @Test
     void shouldInstantiateAndRetrieveClients() {
         final CheckoutConfiguration configuration = mock(CheckoutConfiguration.class);
+        when(configuration.getEnvironment()).thenReturn(Environment.SANDBOX);
         when(configuration.getHttpClientBuilder()).thenReturn(mock(HttpClientBuilder.class));
         when(configuration.getExecutor()).thenReturn(mock(Executor.class));
-        when(configuration.getEnvironment()).thenReturn(Environment.SANDBOX);
         final CheckoutApi checkoutApi = new CheckoutApiImpl(configuration);
-        assertNotNull(checkoutApi.paymentsClient());
-        assertNotNull(checkoutApi.sourcesClient());
         assertNotNull(checkoutApi.tokensClient());
-        assertNotNull(checkoutApi.eventsClient());
-        assertNotNull(checkoutApi.webhooksClient());
-        assertNotNull(checkoutApi.instrumentsClient());
-        assertNotNull(checkoutApi.paymentLinksClient());
-        assertNotNull(checkoutApi.hostedPaymentsClient());
+        assertNotNull(checkoutApi.paymentsClient());
         assertNotNull(checkoutApi.customersClient());
         assertNotNull(checkoutApi.disputesClient());
-        assertNotNull(checkoutApi.reconciliationClient());
+        assertNotNull(checkoutApi.instrumentsClient());
         assertNotNull(checkoutApi.riskClient());
+        assertNotNull(checkoutApi.workflowsClient());
+        assertNotNull(checkoutApi.accountsClient());
+        assertNotNull(checkoutApi.sessionsClient());
+        assertNotNull(checkoutApi.forexClient());
+        assertNotNull(checkoutApi.hostedPaymentsClient());
+        assertNotNull(checkoutApi.paymentLinksClient());
+        assertNotNull(checkoutApi.forexClient());
         // APMs
-        assertNotNull(checkoutApi.balotoClient());
-        assertNotNull(checkoutApi.fawryClient());
         assertNotNull(checkoutApi.idealClient());
-        assertNotNull(checkoutApi.klarnaClient());
-        assertNotNull(checkoutApi.oxxoClient());
-        assertNotNull(checkoutApi.pagoFacilClient());
-        assertNotNull(checkoutApi.rapiPagoClient());
-        assertNotNull(checkoutApi.sepaClient());
-
     }
 
 }

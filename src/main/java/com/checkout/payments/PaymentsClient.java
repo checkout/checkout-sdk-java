@@ -1,10 +1,13 @@
 package com.checkout.payments;
 
 import com.checkout.ItemsResponse;
+import com.checkout.payments.request.AuthorizationRequest;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.PayoutRequest;
+import com.checkout.payments.response.AuthorizationResponse;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
+import com.checkout.payments.response.PayoutResponse;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -12,15 +15,19 @@ public interface PaymentsClient {
 
     CompletableFuture<PaymentResponse> requestPayment(PaymentRequest paymentRequest);
 
-    CompletableFuture<PaymentResponse> requestPayment(PaymentRequest paymentRequest, String idempotencyKey);
+    CompletableFuture<PaymentResponse> requestPayment(PaymentRequest paymentRequest, final String idempotencyKey);
 
-    CompletableFuture<PaymentResponse> requestPayout(PayoutRequest payoutRequest);
+    CompletableFuture<PayoutResponse> requestPayout(PayoutRequest payoutRequest);
 
-    CompletableFuture<PaymentResponse> requestPayout(PayoutRequest payoutRequest, String idempotencyKey);
+    CompletableFuture<PayoutResponse> requestPayout(PayoutRequest payoutRequest, final String idempotencyKey);
 
     CompletableFuture<GetPaymentResponse> getPayment(String paymentId);
 
     CompletableFuture<ItemsResponse<PaymentAction>> getPaymentActions(String paymentId);
+
+    CompletableFuture<AuthorizationResponse> incrementPaymentAuthorization(String paymentId, AuthorizationRequest authorizationRequest);
+
+    CompletableFuture<AuthorizationResponse> incrementPaymentAuthorization(String paymentId, AuthorizationRequest authorizationRequest, String idempotencyKey);
 
     CompletableFuture<CaptureResponse> capturePayment(String paymentId);
 
@@ -45,4 +52,5 @@ public interface PaymentsClient {
     CompletableFuture<VoidResponse> voidPayment(String paymentId, VoidRequest voidRequest);
 
     CompletableFuture<VoidResponse> voidPayment(String paymentId, VoidRequest voidRequest, String idempotencyKey);
+
 }

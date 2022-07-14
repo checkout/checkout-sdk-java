@@ -6,16 +6,28 @@ import com.checkout.ItemsResponse;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
-import com.checkout.common.Currency;
-import com.checkout.common.PaymentSourceType;
+import com.checkout.common.AccountHolder;
+import com.checkout.common.AccountType;
+import com.checkout.common.Address;
+import com.checkout.common.CountryCode;
+import com.checkout.common.CustomerResponse;
+import com.checkout.common.Phone;
+import com.checkout.payments.request.AuthorizationRequest;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.PayoutRequest;
-import com.checkout.payments.request.source.AbstractRequestSource;
+import com.checkout.payments.request.source.PayoutRequestCurrencyAccountSource;
+import com.checkout.payments.request.source.RequestBankAccountSource;
+import com.checkout.payments.request.source.RequestCardSource;
+import com.checkout.payments.request.source.RequestIdSource;
+import com.checkout.payments.request.source.RequestProviderTokenSource;
+import com.checkout.payments.request.source.apm.RequestPayPalSource;
+import com.checkout.payments.request.source.apm.RequestTamaraSource;
+import com.checkout.payments.response.AuthorizationResponse;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
+import com.checkout.payments.response.PayoutResponse;
+import com.checkout.payments.sender.PaymentInstrumentSender;
 import com.google.gson.reflect.TypeToken;
-import lombok.Getter;
-import lombok.Setter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +35,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -56,7 +69,7 @@ class PaymentsClientImplTest {
 
     @BeforeEach
     void setUp() {
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
         when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
         paymentsClient = new PaymentsClientImpl(apiClient, configuration);
     }
@@ -64,8 +77,11 @@ class PaymentsClientImplTest {
     @Test
     void shouldRequestPayment() throws ExecutionException, InterruptedException {
 
-        final PaymentRequest request = mock(PaymentRequest.class);
+        final RequestIdSource source = mock(RequestIdSource.class);
+        final PaymentInstrumentSender sender = mock(PaymentInstrumentSender.class);
         final PaymentResponse response = mock(PaymentResponse.class);
+
+        final PaymentRequest request = PaymentRequest.builder().sender(sender).source(source).build();
 
         when(apiClient.postAsync(eq("payments"), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
@@ -78,12 +94,52 @@ class PaymentsClientImplTest {
     }
 
     @Test
-    void shouldRequestPayment_customSource() throws ExecutionException, InterruptedException {
+    void shouldRequestPaymentWithCustomApmSource() throws ExecutionException, InterruptedException {
 
-        final CustomSource customSource = new CustomSource(10, Currency.USD);
+        final Address billingAddress = new Address();
+        billingAddress.setAddressLine1("CheckoutSdk.com");
+        billingAddress.setAddressLine2("90 Tottenham Court Road");
+        billingAddress.setCity("London");
+        billingAddress.setState("London");
+        billingAddress.setZip("W1T 4TJ");
+        billingAddress.setCountry(CountryCode.GB);
 
-        final PaymentRequest request = PaymentRequest.builder().source(customSource).build();
-        final PaymentResponse response = mock(PaymentResponse.class);
+        final RequestTamaraSource source = new RequestTamaraSource();
+        source.setBillingAddress(billingAddress);
+        final PaymentInstrumentSender sender = mock(PaymentInstrumentSender.class);
+        final PaymentRequest request = PaymentRequest.builder()
+                .sender(sender)
+                .source(source)
+                .processing(ProcessingSettings.builder()
+                        .build())
+                .build();
+        request.setItems(Collections.singletonList(Product.builder()
+                .name("Item name")
+                .quantity(3L)
+                .unitPrice(100L)
+                .totalAmount(100L)
+                .taxAmount(19L)
+                .discountAmount(2L)
+                .reference("some description about item")
+                .imageUrl("https://some_s3bucket.com")
+                .url("https://some.website.com/item")
+                .sku("123687000111")
+                .goodsId("23123")
+                .wxpayGoodsId("wxpayGoodsId")
+                .build()));
+
+        final CustomerResponse customerResponse = new CustomerResponse();
+        customerResponse.setEmail("email");
+        customerResponse.setId("id");
+        customerResponse.setName("name");
+        customerResponse.setPhone(Phone.builder().build());
+
+        final PaymentProcessing paymentProcessing = new PaymentProcessing();
+        paymentProcessing.setPartnerPaymentId("1234567");
+
+        final PaymentResponse response = new PaymentResponse();
+        response.setCustomer(customerResponse);
+        response.setProcessing(paymentProcessing);
 
         when(apiClient.postAsync(eq("payments"), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
@@ -93,29 +149,16 @@ class PaymentsClientImplTest {
         assertNotNull(future.get());
         assertEquals(response, future.get());
 
-    }
-
-    @Getter
-    @Setter
-    private static class CustomSource extends AbstractRequestSource {
-
-        private long amount;
-        private Currency currency;
-
-        protected CustomSource(final long amount,
-                               final Currency currency) {
-
-            super(PaymentSourceType.ALIPAY);
-            this.amount = amount;
-            this.currency = currency;
-        }
     }
 
     @Test
     void shouldRequestPayment_idempotencyKey() throws ExecutionException, InterruptedException {
 
-        final PaymentRequest request = mock(PaymentRequest.class);
+        final RequestCardSource source = mock(RequestCardSource.class);
+        final PaymentInstrumentSender sender = mock(PaymentInstrumentSender.class);
         final PaymentResponse response = mock(PaymentResponse.class);
+
+        final PaymentRequest request = PaymentRequest.builder().sender(sender).source(source).build();
 
         when(apiClient.postAsync(eq("payments"), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), eq("1234")))
                 .thenReturn(CompletableFuture.completedFuture(response));
@@ -130,13 +173,16 @@ class PaymentsClientImplTest {
     @Test
     void shouldRequestPayout() throws ExecutionException, InterruptedException {
 
-        final PayoutRequest request = mock(PayoutRequest.class);
-        final PaymentResponse response = mock(PaymentResponse.class);
+        final PayoutRequestCurrencyAccountSource source = mock(PayoutRequestCurrencyAccountSource.class);
+        final PaymentInstrumentSender sender = mock(PaymentInstrumentSender.class);
+        final PayoutResponse response = mock(PayoutResponse.class);
 
-        when(apiClient.postAsync(eq("payments"), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
+        final PayoutRequest request = PayoutRequest.builder().sender(sender).source(source).build();
+
+        when(apiClient.postAsync(eq("payments"), any(SdkAuthorization.class), eq(PayoutResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayout(request);
+        final CompletableFuture<PayoutResponse> future = paymentsClient.requestPayout(request);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -146,13 +192,16 @@ class PaymentsClientImplTest {
     @Test
     void shouldRequestPayout_idempotencyKey() throws ExecutionException, InterruptedException {
 
-        final PayoutRequest request = mock(PayoutRequest.class);
-        final PaymentResponse response = mock(PaymentResponse.class);
+        final PayoutRequestCurrencyAccountSource source = mock(PayoutRequestCurrencyAccountSource.class);
+        final PaymentInstrumentSender sender = mock(PaymentInstrumentSender.class);
+        final PayoutResponse response = mock(PayoutResponse.class);
 
-        when(apiClient.postAsync(eq("payments"), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), eq("456")))
+        final PayoutRequest request = PayoutRequest.builder().sender(sender).source(source).build();
+
+        when(apiClient.postAsync(eq("payments"), any(SdkAuthorization.class), eq(PayoutResponse.class), eq(request), eq("456")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayout(request, "456");
+        final CompletableFuture<PayoutResponse> future = paymentsClient.requestPayout(request, "456");
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -183,6 +232,38 @@ class PaymentsClientImplTest {
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ItemsResponse<PaymentAction>> future = paymentsClient.getPaymentActions("5433211");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
+    void shouldIncrementPaymentAuthorization() throws ExecutionException, InterruptedException {
+
+        final AuthorizationRequest request = mock(AuthorizationRequest.class);
+        final AuthorizationResponse response = mock(AuthorizationResponse.class);
+
+        when(apiClient.postAsync(eq("payments/payment_id/authorizations"), any(SdkAuthorization.class), eq(AuthorizationResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<AuthorizationResponse> future = paymentsClient.incrementPaymentAuthorization("payment_id", request);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
+    void shouldIncrementPaymentAuthorization_idempotencyKey() throws ExecutionException, InterruptedException {
+
+        final AuthorizationRequest request = mock(AuthorizationRequest.class);
+        final AuthorizationResponse response = mock(AuthorizationResponse.class);
+
+        when(apiClient.postAsync(eq("payments/payment_id/authorizations"), any(SdkAuthorization.class), eq(AuthorizationResponse.class), eq(request), eq("idempotency_key")))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<AuthorizationResponse> future = paymentsClient.incrementPaymentAuthorization("payment_id", request, "idempotency_key");
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -373,6 +454,70 @@ class PaymentsClientImplTest {
         assertNotNull(future.get());
         assertEquals(response, future.get());
 
+    }
+
+    @Test
+    void shouldRequestProviderTokenSourcePayment() throws ExecutionException, InterruptedException {
+
+        final PaymentInstrumentSender sender = mock(PaymentInstrumentSender.class);
+        final PaymentResponse response = mock(PaymentResponse.class);
+
+        final RequestProviderTokenSource source = RequestProviderTokenSource.builder()
+                .token("token")
+                .paymentMethod("method")
+                .accountHolder(mock(AccountHolder.class))
+                .build();
+
+        final PaymentRequest request = PaymentRequest.builder().sender(sender).source(source).build();
+
+        when(apiClient.postAsync(eq("payments"), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayment(request);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
+    void shouldRequestPayPalSourcePayment() throws ExecutionException, InterruptedException {
+        final PaymentResponse response = mock(PaymentResponse.class);
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(new RequestPayPalSource())
+                .build();
+
+        when(apiClient.postAsync(eq("payments"), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayment(request);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+    }
+
+    @Test
+    void shouldRequestBankAccountPayment() throws ExecutionException, InterruptedException {
+        final PaymentResponse response = mock(PaymentResponse.class);
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(RequestBankAccountSource.builder()
+                        .paymentMethod("ach")
+                        .accountType(AccountType.SAVINGS)
+                        .country(CountryCode.US)
+                        .accountNumber("1365456745")
+                        .bankCode("011075150")
+                        .accountHolder(AccountHolder.builder()
+                                .build())
+                        .build())
+                .build();
+
+        when(apiClient.postAsync(eq("payments"), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<PaymentResponse> future = paymentsClient.requestPayment(request);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
     }
 
 }
