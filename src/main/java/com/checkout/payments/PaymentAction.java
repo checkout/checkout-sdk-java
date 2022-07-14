@@ -35,9 +35,12 @@ public final class PaymentAction extends Resource {
     @SerializedName("response_summary")
     private String responseSummary;
 
-    private Processing processing;
+    @SerializedName("authorization_type")
+    private AuthorizationType authorizationType;
 
     private String reference;
+
+    private Processing processing;
 
     private Map<String, Object> metadata = new HashMap<>();
 

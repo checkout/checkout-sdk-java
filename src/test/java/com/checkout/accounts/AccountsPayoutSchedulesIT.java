@@ -1,10 +1,9 @@
 package com.checkout.accounts;
 
+import com.checkout.CheckoutApi;
 import com.checkout.CheckoutSdk;
 import com.checkout.Environment;
-import com.checkout.FourOAuthScope;
-import com.checkout.common.Currency;
-import com.checkout.four.CheckoutApi;
+import com.checkout.OAuthScope;
 import com.checkout.accounts.payout.schedule.DaySchedule;
 import com.checkout.accounts.payout.schedule.request.ScheduleFrequencyDailyRequest;
 import com.checkout.accounts.payout.schedule.request.ScheduleFrequencyMonthlyRequest;
@@ -16,6 +15,7 @@ import com.checkout.accounts.payout.schedule.response.ScheduleFrequencyDailyResp
 import com.checkout.accounts.payout.schedule.response.ScheduleFrequencyMonthlyResponse;
 import com.checkout.accounts.payout.schedule.response.ScheduleFrequencyWeeklyResponse;
 import com.checkout.accounts.payout.schedule.response.VoidResponse;
+import com.checkout.common.Currency;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -131,12 +131,12 @@ class AccountsPayoutSchedulesIT {
     }
 
     private CheckoutApi getPayoutSchedulesCheckoutApi() {
-        return CheckoutSdk.fourSdk()
+        return CheckoutSdk.builder()
                 .oAuth()
                 .clientCredentials(
-                        requireNonNull(System.getenv("CHECKOUT_FOUR_OAUTH_PAYOUT_SCHEDULE_CLIENT_ID")),
-                        requireNonNull(System.getenv("CHECKOUT_FOUR_OAUTH_PAYOUT_SCHEDULE_CLIENT_SECRET")))
-                .scopes(FourOAuthScope.MARKETPLACE)
+                        requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_PAYOUT_SCHEDULE_CLIENT_ID")),
+                        requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_PAYOUT_SCHEDULE_CLIENT_SECRET")))
+                .scopes(OAuthScope.MARKETPLACE)
                 .environment(Environment.SANDBOX)
                 .build();
     }

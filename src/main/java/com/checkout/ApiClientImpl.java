@@ -28,7 +28,6 @@ public class ApiClientImpl implements ApiClient {
 
     private static final String AUTHORIZATION = "authorization";
     private static final String PATH = "path";
-
     private final Serializer serializer;
     private final Transport transport;
 

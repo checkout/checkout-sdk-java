@@ -7,7 +7,6 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 public final class SdkAuthorization {
 
     private static final String BEARER = "Bearer ";
-
     private final PlatformType platformType;
     private final String credential;
 
@@ -19,11 +18,11 @@ public final class SdkAuthorization {
 
     public String getAuthorizationHeader() {
         switch (platformType) {
-            case DEFAULT:
+            case PREVIOUS:
             case CUSTOM:
                 return credential;
-            case FOUR:
-            case FOUR_OAUTH:
+            case DEFAULT:
+            case DEFAULT_OAUTH:
                 return BEARER + credential;
             default:
                 throw new CheckoutAuthorizationException("Invalid platform type");

@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class ContactDetails {
 
-    private Phone phone;
+    private AccountPhone phone;
 
 }

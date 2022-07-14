@@ -1,7 +1,6 @@
 package com.checkout.payments.request.destination;
 
-import com.checkout.common.Address;
-import com.checkout.common.Phone;
+import com.checkout.common.AccountHolder;
 import com.checkout.payments.PaymentDestinationType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
@@ -18,29 +17,15 @@ public final class PaymentRequestTokenDestination extends PaymentRequestDestinat
 
     private String token;
 
-    @SerializedName("first_name")
-    private String firstName;
-
-    @SerializedName("last_name")
-    private String lastName;
-
-    @SerializedName("billing_address")
-    private Address billingAddress;
-
-    private Phone phone;
+    @SerializedName("account_holder")
+    private AccountHolder accountHolder;
 
     @Builder
     private PaymentRequestTokenDestination(final String token,
-                                           final String firstName,
-                                           final String lastName,
-                                           final Address billingAddress,
-                                           final Phone phone) {
+                                           final AccountHolder accountHolder) {
         super(PaymentDestinationType.TOKEN);
         this.token = token;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.billingAddress = billingAddress;
-        this.phone = phone;
+        this.accountHolder = accountHolder;
     }
 
     public PaymentRequestTokenDestination() {
@@ -48,4 +33,3 @@ public final class PaymentRequestTokenDestination extends PaymentRequestDestinat
     }
 
 }
-

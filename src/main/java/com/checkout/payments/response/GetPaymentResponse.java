@@ -2,6 +2,7 @@ package com.checkout.payments.response;
 
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerResponse;
+import com.checkout.common.MarketplaceData;
 import com.checkout.common.Resource;
 import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.PaymentActionSummary;
@@ -13,14 +14,13 @@ import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSData;
 import com.checkout.payments.response.destination.PaymentResponseDestination;
 import com.checkout.payments.response.source.ResponseSource;
+import com.checkout.payments.sender.Sender;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,12 +38,14 @@ public final class GetPaymentResponse extends Resource {
 
     private PaymentResponseDestination destination;
 
+    private Sender sender;
+
     private Long amount;
 
     private Currency currency;
 
     @SerializedName("payment_type")
-    private PaymentType paymentType;
+    private PaymentType type;
 
     private String reference;
 
@@ -51,32 +53,39 @@ public final class GetPaymentResponse extends Resource {
 
     private Boolean approved;
 
+    @SerializedName("expires_on")
+    private Instant expiresOn;
+
     private PaymentStatus status;
 
+    private PaymentResponseBalances balances;
+
     @SerializedName("3ds")
-    private ThreeDSData threeDS;
+    private ThreeDSData threeDSData;
 
     private RiskAssessment risk;
 
     private CustomerResponse customer;
 
     @SerializedName("billing_descriptor")
-    private BillingDescriptor billingDescriptor;
+    private BillingDescriptor billing;
 
     private ShippingDetails shipping;
 
     @SerializedName("payment_ip")
     private String paymentIp;
 
+    private MarketplaceData marketplace;
+
     private PaymentRecipient recipient;
 
-    private Map<String, Object> metadata = new HashMap<>();
+    private Map<String, Object> metadata;
 
     private String eci;
 
     @SerializedName("scheme_id")
     private String schemeId;
 
-    private List<PaymentActionSummary> actions = new ArrayList<>();
+    private List<PaymentActionSummary> actions;
 
 }

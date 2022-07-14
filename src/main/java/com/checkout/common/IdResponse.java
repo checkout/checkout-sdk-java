@@ -8,4 +8,5 @@ import lombok.EqualsAndHashCode;
 public final class IdResponse extends Resource {
 
     private String id;
+
 }

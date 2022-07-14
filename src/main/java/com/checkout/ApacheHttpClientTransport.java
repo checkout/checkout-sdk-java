@@ -1,9 +1,9 @@
 package com.checkout;
 
+import com.checkout.accounts.AccountsFileRequest;
 import com.checkout.common.AbstractFileRequest;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.FileRequest;
-import com.checkout.accounts.AccountsFileRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;

@@ -1,11 +1,11 @@
 package com.checkout;
 
-import com.checkout.payments.four.sender.PaymentCorporateSender;
-import com.checkout.payments.four.sender.ResponseAlternativeSender;
-import com.checkout.payments.four.sender.SenderType;
-import com.checkout.payments.response.GetPaymentResponse;
-import com.checkout.payments.response.destination.PaymentResponseAlternativeDestination;
-import com.checkout.payments.response.destination.PaymentResponseCardDestination;
+import com.checkout.payments.previous.response.GetPaymentResponse;
+import com.checkout.payments.previous.response.destination.PaymentResponseAlternativeDestination;
+import com.checkout.payments.previous.response.destination.PaymentResponseCardDestination;
+import com.checkout.payments.sender.PaymentCorporateSender;
+import com.checkout.payments.sender.ResponseAlternativeSender;
+import com.checkout.payments.sender.SenderType;
 import org.junit.jupiter.api.Test;
 
 import static com.checkout.TestHelper.getMock;
@@ -19,7 +19,7 @@ class GsonSerializerTest {
     private final Serializer serializer = new GsonSerializer();
 
     @Test
-    void shouldDeserialize_default_getPaymentResponse_cardDestination() {
+    void shouldDeserialize_previous_getPaymentResponse_cardDestination() {
 
         final GetPaymentResponse paymentResponse = serializer.fromJson(getMock("/mocks/payments/response/destination/card/get_payment_response.json"), GetPaymentResponse.class);
 
@@ -39,7 +39,7 @@ class GsonSerializerTest {
     }
 
     @Test
-    void shouldDeserialize_default_getPaymentResponse_alternativeDestination() {
+    void shouldDeserialize_previous_getPaymentResponse_alternativeDestination() {
 
         final GetPaymentResponse paymentResponse = serializer.fromJson(getMock("/mocks/payments/response/destination/alternative/get_payment_response.json"), GetPaymentResponse.class);
 
@@ -52,9 +52,9 @@ class GsonSerializerTest {
     }
 
     @Test
-    void shouldDeserialize_four_getPaymentResponse_corporateSender() {
+    void shouldDeserialize_default_getPaymentResponse_corporateSender() {
 
-        final com.checkout.payments.four.response.GetPaymentResponse paymentResponse = serializer.fromJson(getMock("/mocks/payments/response/sender/corporate/get_payment_response.json"), com.checkout.payments.four.response.GetPaymentResponse.class);
+        final com.checkout.payments.response.GetPaymentResponse paymentResponse = serializer.fromJson(getMock("/mocks/payments/response/sender/corporate/get_payment_response.json"), com.checkout.payments.response.GetPaymentResponse.class);
 
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getSender());
@@ -65,9 +65,9 @@ class GsonSerializerTest {
     }
 
     @Test
-    void shouldDeserialize_four_getPaymentResponse_alternativeSender() {
+    void shouldDeserialize_default_getPaymentResponse_alternativeSender() {
 
-        final com.checkout.payments.four.response.GetPaymentResponse paymentResponse = serializer.fromJson(getMock("/mocks/payments/response/sender/alternative/get_payment_response.json"), com.checkout.payments.four.response.GetPaymentResponse.class);
+        final com.checkout.payments.response.GetPaymentResponse paymentResponse = serializer.fromJson(getMock("/mocks/payments/response/sender/alternative/get_payment_response.json"), com.checkout.payments.response.GetPaymentResponse.class);
 
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getSender());

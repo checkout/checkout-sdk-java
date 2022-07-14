@@ -1,5 +1,6 @@
 package com.checkout.payments.request.destination;
 
+import com.checkout.common.AccountHolder;
 import com.checkout.payments.PaymentDestinationType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
@@ -16,20 +17,15 @@ public final class PaymentRequestIdDestination extends PaymentRequestDestination
 
     private String id;
 
-    @SerializedName("first_name")
-    private String firstName;
-
-    @SerializedName("last_name")
-    private String lastName;
+    @SerializedName("account_holder")
+    private AccountHolder accountHolder;
 
     @Builder
     private PaymentRequestIdDestination(final String id,
-                                        final String firstName,
-                                        final String lastName) {
+                                        final AccountHolder accountHolder) {
         super(PaymentDestinationType.ID);
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.accountHolder = accountHolder;
     }
 
     public PaymentRequestIdDestination() {

@@ -5,10 +5,10 @@ import com.google.gson.annotations.SerializedName;
 public enum ThreeDSEnrollmentStatus {
 
     @SerializedName("Y")
-    YES,
+    ISSUER_ENROLLED,
     @SerializedName("N")
-    NO,
+    CUSTOMER_NOT_ENROLLED,
     @SerializedName("U")
-    U
+    UNKNOWN
 
 }

@@ -2,8 +2,8 @@ package com.checkout.payments.hosted;
 
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerResponse;
-import com.checkout.common.Product;
 import com.checkout.common.Resource;
+import com.checkout.common.Product;
 import com.checkout.payments.BillingInformation;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;

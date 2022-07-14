@@ -2,7 +2,7 @@ package com.checkout.payments;
 
 import com.checkout.common.ChallengeIndicator;
 import com.checkout.common.Exemption;
-import com.checkout.common.four.ThreeDSFlowType;
+import com.checkout.common.ThreeDSFlowType;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,7 +35,9 @@ public final class ThreeDSRequest {
     @SerializedName("challenge_indicator")
     private ChallengeIndicator challengeIndicator;
 
-    // Only available in Four
+    /**
+     * Not available on Previous
+     */
 
     private String status;
 

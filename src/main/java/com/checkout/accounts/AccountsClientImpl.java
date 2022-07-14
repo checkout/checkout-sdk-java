@@ -5,11 +5,11 @@ import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.EmptyResponse;
 import com.checkout.SdkAuthorizationType;
-import com.checkout.common.Currency;
-import com.checkout.common.IdResponse;
 import com.checkout.accounts.payout.schedule.request.UpdateScheduleRequest;
 import com.checkout.accounts.payout.schedule.response.GetScheduleResponse;
 import com.checkout.accounts.payout.schedule.response.VoidResponse;
+import com.checkout.common.Currency;
+import com.checkout.common.IdResponse;
 
 import java.util.EnumMap;
 import java.util.Map;

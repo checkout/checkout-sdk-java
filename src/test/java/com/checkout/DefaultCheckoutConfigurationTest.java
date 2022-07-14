@@ -22,7 +22,7 @@ class DefaultCheckoutConfigurationTest {
     @Test
     void shouldFailCreatingConfiguration() {
         try {
-            final FourStaticKeysSdkCredentials credentials = Mockito.mock(FourStaticKeysSdkCredentials.class);
+            final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
             new DefaultCheckoutConfiguration(credentials, null, null, null);
             fail();
         } catch (final Exception e) {
@@ -34,7 +34,7 @@ class DefaultCheckoutConfigurationTest {
     @Test
     void shouldCreateConfiguration() {
 
-        final FourStaticKeysSdkCredentials credentials = Mockito.mock(FourStaticKeysSdkCredentials.class);
+        final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
 
         final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR);
         assertEquals(Environment.PRODUCTION, configuration.getEnvironment());
@@ -44,7 +44,7 @@ class DefaultCheckoutConfigurationTest {
     @Test
     void shouldCreateConfiguration_defaultHttpClientBuilderAndExecutor() {
 
-        final FourStaticKeysSdkCredentials credentials = Mockito.mock(FourStaticKeysSdkCredentials.class);
+        final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
 
         final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR);
 
@@ -56,7 +56,7 @@ class DefaultCheckoutConfigurationTest {
     @Test
     void shouldCreateConfiguration_customHttpClientBuilderAndExecutor() {
 
-        final FourStaticKeysSdkCredentials credentials = Mockito.mock(FourStaticKeysSdkCredentials.class);
+        final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
 
         final HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
         final ExecutorService executorService = Executors.newFixedThreadPool(4);
@@ -71,7 +71,7 @@ class DefaultCheckoutConfigurationTest {
     @Test
     void shouldCreateConfigurationForProd() {
 
-        final FourStaticKeysSdkCredentials credentials = Mockito.mock(FourStaticKeysSdkCredentials.class);
+        final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
 
         final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR);
         assertEquals(Environment.PRODUCTION, configuration.getEnvironment());

@@ -1,26 +1,26 @@
 package com.checkout.payments;
 
-import com.checkout.CardSourceHelper;
+import com.checkout.ItemsResponse;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
-import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.source.RequestCardSource;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
-import com.checkout.payments.response.source.CardResponseSource;
+import com.checkout.payments.sender.PaymentIndividualSender;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import static com.checkout.CardSourceHelper.getCardSourcePayment;
+import static com.checkout.CardSourceHelper.getIndividualSender;
+import static com.checkout.CardSourceHelper.getRequestCardSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -37,110 +37,234 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    void shouldGetPayment() {
+    void shouldGetCardPayment() {
 
-        final Phone phone = Phone.builder()
-                .countryCode("44")
-                .number("020 222333")
+        final PaymentResponse payment = makeCardPayment(false);
+
+        final GetPaymentResponse paymentReturned = blocking(() -> paymentsClient.getPayment(payment.getId()));
+
+        assertNotNull(paymentReturned);
+        assertEquals(PaymentStatus.AUTHORIZED, paymentReturned.getStatus());
+
+    }
+
+    @Test
+    void shouldGetCardPaymentWithMetadata() {
+
+        final RequestCardSource source = getRequestCardSource();
+        final PaymentIndividualSender sender = getIndividualSender();
+
+        final PaymentRequest request = getCardSourcePayment(source, sender, false);
+        request.getMetadata().put("test", "1234");
+
+        final PaymentResponse payment = blocking(() -> paymentsClient.requestPayment(request));
+
+        final GetPaymentResponse paymentReturned = blocking(() -> paymentsClient.getPayment(payment.getId()));
+
+        assertNotNull(paymentReturned);
+        assertEquals(PaymentStatus.AUTHORIZED, paymentReturned.getStatus());
+        assertEquals("1234", paymentReturned.getMetadata().get("test"));
+
+    }
+
+    @Test
+    void shouldGetCardPaymentWithIpAndDescription() {
+
+        final RequestCardSource source = getRequestCardSource();
+        final PaymentIndividualSender sender = getIndividualSender();
+
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(source)
+                .sender(sender)
+                .capture(false)
+                .reference(UUID.randomUUID().toString())
+                .amount(0L)
+                .currency(Currency.EUR)
+                .paymentIp("12.12.67.89")
+                .description("description")
                 .build();
 
-        final Address billingAddress = Address.builder()
-                .addressLine1("CheckoutSdk.com")
-                .addressLine2("90 Tottenham Court Road")
-                .city("London")
-                .state("London")
-                .zip("W1T 4TJ")
+        final PaymentResponse payment = blocking(() -> paymentsClient.requestPayment(request));
+
+        final GetPaymentResponse paymentReturned = blocking(() -> paymentsClient.getPayment(payment.getId()));
+
+        assertNotNull(paymentReturned);
+        assertEquals(PaymentStatus.CARD_VERIFIED, paymentReturned.getStatus());
+        assertEquals("12.12.67.89", paymentReturned.getPaymentIp());
+        assertEquals("description", paymentReturned.getDescription());
+
+    }
+
+    @Test
+    void shouldGetCardPaymentWithRecipient() {
+
+        final RequestCardSource source = getRequestCardSource();
+        final PaymentIndividualSender sender = getIndividualSender();
+
+        final PaymentRecipient recipient = PaymentRecipient.builder()
+                .accountNumber("1234567")
+                .dateOfBirth("1985-05-15")
+                .lastName("TESTING")
+                .zip("12345")
+                .build();
+
+        final PaymentRequest request = PaymentRequest.builder()
+                .source(source)
+                .sender(sender)
+                .capture(false)
+                .reference(UUID.randomUUID().toString())
+                .amount(0L)
+                .currency(Currency.EUR)
+                .recipient(recipient)
+                .build();
+
+        final PaymentResponse payment = blocking(() -> paymentsClient.requestPayment(request));
+
+        final GetPaymentResponse paymentReturned = blocking(() -> paymentsClient.getPayment(payment.getId()));
+
+        assertNotNull(paymentReturned);
+        assertNotNull(paymentReturned.getRecipient());
+        assertEquals("1234567", paymentReturned.getRecipient().getAccountNumber());
+        assertEquals("12345", paymentReturned.getRecipient().getZip());
+        assertEquals("TESTING", paymentReturned.getRecipient().getLastName());
+        assertEquals("1985-05-15", paymentReturned.getRecipient().getDateOfBirth());
+
+    }
+
+    @Test
+    void shouldGetCardPaymentWithShipping() {
+
+        final RequestCardSource source = getRequestCardSource();
+        final PaymentIndividualSender sender = getIndividualSender();
+
+        final Address address = Address.builder()
+                .addressLine1("Address Line 1")
+                .addressLine2("Address Line 2")
+                .city("City")
                 .country(CountryCode.GB)
                 .build();
 
-        final RequestCardSource source = RequestCardSource.builder()
-                .name(CardSourceHelper.Visa.NAME)
-                .number(CardSourceHelper.Visa.NUMBER)
-                .expiryMonth(CardSourceHelper.Visa.EXPIRY_MONTH)
-                .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
-                .cvv(CardSourceHelper.Visa.CVV)
-                .stored(false)
-                .billingAddress(billingAddress)
+        final Phone phone = Phone.builder().number("675676541").countryCode("+34").build();
+
+        final ShippingDetails recipient = ShippingDetails.builder()
+                .address(address)
                 .phone(phone)
                 .build();
 
-        final ShippingDetails shippingDetails = ShippingDetails.builder()
-                .address(billingAddress)
-                .phone(phone)
-                .build();
-
-        final PaymentRequest paymentRequest = PaymentRequest.builder()
+        final PaymentRequest request = PaymentRequest.builder()
                 .source(source)
-                .capture(true)
+                .sender(sender)
+                .capture(false)
                 .reference(UUID.randomUUID().toString())
-                .amount(10L)
-                .currency(Currency.GBP)
-                .paymentIp("1.2.3.4")
-                .description("description")
-                .shipping(shippingDetails)
+                .amount(0L)
+                .currency(Currency.EUR)
+                .shipping(recipient)
                 .build();
 
-        paymentRequest.getMetadata().put("test", "1234");
+        final PaymentResponse payment = blocking(() -> paymentsClient.requestPayment(request));
 
-        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
-        assertNotNull(paymentResponse);
+        final GetPaymentResponse paymentReturned = blocking(() -> paymentsClient.getPayment(payment.getId()));
 
-        final GetPaymentResponse paymentReturned = blocking(() -> paymentsClient.getPayment(paymentResponse.getId()));
+        assertNotNull(paymentReturned);
+        assertNotNull(paymentReturned.getShipping());
 
-        assertNotNull(paymentReturned.getId());
-        assertEquals(PaymentType.REGULAR, paymentReturned.getPaymentType());
-        assertNotNull(paymentReturned.getRequestedOn());
-        assertNotNull(paymentReturned.getReference());
-        assertNotNull(paymentReturned.getSchemeId());
-        //assertNotNull(paymentReturned.getEci());
-        //assertEquals(PaymentStatus.CAPTURED, paymentReturned.getStatus());
-        assertEquals(10, paymentReturned.getAmount());
-        assertTrue(paymentReturned.getApproved());
-        assertNull(paymentResponse.getThreeDSEnrollment());
-        assertEquals(Currency.GBP, paymentReturned.getCurrency());
-        // source
-        assertTrue(paymentReturned.getSource() instanceof CardResponseSource);
-        final CardResponseSource responseCardSource = (CardResponseSource) paymentReturned.getSource();
-        assertEquals(PaymentSourceType.CARD, responseCardSource.getType());
-        assertNotNull(responseCardSource.getId());
-        assertEquals("S", responseCardSource.getAvsCheck());
-        assertEquals("Y", responseCardSource.getCvvCheck());
-        assertNotNull(responseCardSource.getBin());
-        //assertEquals(CardCategory.CONSUMER, responseCardSource.getCardCategory());
-        //assertEquals(CardType.CREDIT, responseCardSource.getCardType());
-        assertEquals(CardSourceHelper.Visa.EXPIRY_MONTH, responseCardSource.getExpiryMonth());
-        assertEquals(CardSourceHelper.Visa.EXPIRY_YEAR, responseCardSource.getExpiryYear());
-        assertNotNull(responseCardSource.getLast4());
-        //assertNotNull(responseCardSource.getScheme());
-        assertNotNull(responseCardSource.getName());
-        assertNotNull(responseCardSource.getFastFunds());
-        assertNotNull(responseCardSource.getFingerprint());
-        //assertNotNull(responseCardSource.getIssuer());
-        //assertEquals(CountryCode.US, responseCardSource.getIssuerCountry());
-        assertTrue(responseCardSource.getPayouts());
-        //assertNotNull(responseCardSource.getProductId());
-        //assertNotNull(responseCardSource.getProductType());
-        // customer
-        assertNotNull(paymentReturned.getCustomer());
-        assertNotNull(paymentReturned.getCustomer().getId());
-        assertNotNull(paymentReturned.getCustomer().getName());
-        //risk
-        assertFalse(paymentReturned.getRisk().getFlagged());
-        // links
-        assertEquals(4, paymentResponse.getLinks().size());
-        assertNotNull(paymentResponse.getLink(SELF));
-        assertNotNull(paymentResponse.getLink("actions"));
-        assertNotNull(paymentResponse.getLink("capture"));
-        assertNotNull(paymentResponse.getLink("void"));
-        // metadata
-        assertEquals(1, paymentReturned.getMetadata().size());
-        assertEquals("1234", paymentReturned.getMetadata().get("test"));
-        // ip
-        assertEquals("1.2.3.4", paymentReturned.getPaymentIp());
-        // description
-        assertEquals("description", paymentReturned.getDescription());
-        // shipping
-        assertEquals(shippingDetails, paymentReturned.getShipping());
+        final ShippingDetails shippingDetails = paymentReturned.getShipping();
+        assertEquals("City", shippingDetails.getAddress().getCity());
+        assertEquals(CountryCode.GB, shippingDetails.getAddress().getCountry());
+        assertEquals(phone, shippingDetails.getPhone());
+
     }
 
+    @Test
+    void shouldGetCardPayment_3ds() {
+
+        final PaymentResponse payment = makeCardPayment(true);
+
+        final GetPaymentResponse paymentReturned = blocking(() -> paymentsClient.getPayment(payment.getId()));
+
+        assertNotNull(paymentReturned);
+        assertEquals(PaymentStatus.PENDING, paymentReturned.getStatus());
+
+    }
+
+    @Test
+    void shouldGetCardTokenPayment() {
+
+        final PaymentResponse payment = makeTokenPayment();
+
+        final GetPaymentResponse paymentReturned = blocking(() -> paymentsClient.getPayment(payment.getId()));
+
+        assertNotNull(paymentReturned);
+        assertEquals(PaymentStatus.AUTHORIZED, paymentReturned.getStatus());
+
+    }
+
+    @Test
+    void shouldGetCardPaymentAction() {
+
+        final PaymentResponse payment = makeCardPayment(false);
+
+        final ItemsResponse<PaymentAction> paymentActions = blocking(() -> paymentsClient.getPaymentActions(payment.getId()));
+
+        assertNotNull(paymentActions);
+        assertEquals(1, paymentActions.getItems().size());
+        assertNotNull(paymentActions.getResponseHeaders());
+        assertNotNull(paymentActions.getBody());
+        assertNotNull(paymentActions.getHttpStatusCode());
+
+        final PaymentAction paymentAction = paymentActions.getItems().get(0);
+        assertNotNull(paymentAction.getId());
+        assertEquals(ActionType.AUTHORIZATION, paymentAction.getType());
+        assertNotNull(paymentAction.getProcessedOn());
+        assertEquals(Long.valueOf(10), paymentAction.getAmount());
+        assertTrue(paymentAction.getApproved());
+        assertNotNull(paymentAction.getAuthCode());
+        assertNotNull(paymentAction.getResponseCode());
+        assertEquals("Approved", paymentAction.getResponseSummary());
+        assertEquals(AuthorizationType.FINAL, paymentAction.getAuthorizationType());
+        assertNotNull(paymentAction.getReference());
+        assertNotNull(paymentAction.getProcessing());
+        assertNotNull(paymentAction.getProcessing().getRetrievalReferenceNumber());
+        assertNotNull(paymentAction.getProcessing().getAcquirerTransactionId());
+
+    }
+
+    @Test
+    void shouldGetCardMultiplePaymentActions() {
+
+        // payment
+
+        final RequestCardSource source = getRequestCardSource();
+        final PaymentIndividualSender sender = getIndividualSender();
+
+        final PaymentRequest request = getCardSourcePayment(source, sender, false);
+        request.getMetadata().put("test", "1234");
+
+        final CaptureRequest captureRequest = CaptureRequest.builder()
+                .reference(UUID.randomUUID().toString())
+                .build();
+
+        final PaymentResponse payment = blocking(() -> paymentsClient.requestPayment(request));
+
+        // capture
+        final CaptureResponse captureResponse = capturePayment(payment.getId(), captureRequest);
+
+        // capture
+        final ItemsResponse<PaymentAction> paymentActions = blocking(() -> paymentsClient.getPaymentActions(payment.getId()), new ListHasSize<ItemsResponse<PaymentAction>, PaymentAction>(2));
+
+        assertNotNull(paymentActions);
+        assertEquals(2, paymentActions.getItems().size());
+
+        final PaymentAction authorizationPaymentAction = paymentActions.getItems().stream().filter(a -> ActionType.AUTHORIZATION.equals(a.getType())).findFirst().get();
+        assertNotNull(authorizationPaymentAction);
+        assertEquals(payment.getActionId(), authorizationPaymentAction.getId());
+        assertEquals("1234", authorizationPaymentAction.getMetadata().get("test"));
+
+        final PaymentAction capturePaymentAction = paymentActions.getItems().stream().filter(a -> ActionType.CAPTURE.equals(a.getType())).findFirst().get();
+        assertNotNull(capturePaymentAction);
+        assertEquals(captureResponse.getActionId(), capturePaymentAction.getId());
+        assertEquals(captureResponse.getReference(), capturePaymentAction.getReference());
+        assertNotNull(capturePaymentAction.getLinks());
+
+    }
 }
