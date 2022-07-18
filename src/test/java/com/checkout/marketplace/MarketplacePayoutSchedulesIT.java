@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class MarketplacePayoutSchedulesIT {
 
     @Test
+    @Disabled("not available")
     void shouldUpdateAndRetrieveWeeklyPayoutSchedules() throws ExecutionException, InterruptedException {
 
         final UpdateScheduleRequest updateScheduleRequest = UpdateScheduleRequest.builder()
@@ -63,6 +64,7 @@ class MarketplacePayoutSchedulesIT {
     }
 
     @Test
+    @Disabled("not available")
     void shouldUpdateAndRetrieveDailyPayoutSchedules() throws ExecutionException, InterruptedException {
 
         final UpdateScheduleRequest updateScheduleRequest = UpdateScheduleRequest.builder()
@@ -94,6 +96,7 @@ class MarketplacePayoutSchedulesIT {
     }
 
     @Test
+    @Disabled("not available")
     void shouldUpdateAndRetrieveMonthlyPayoutSchedules() throws ExecutionException, InterruptedException {
 
         final UpdateScheduleRequest updateScheduleRequest = UpdateScheduleRequest.builder()

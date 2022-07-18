@@ -9,6 +9,6 @@ import lombok.Data;
 @AllArgsConstructor
 public final class PayoutBillingDescriptor {
 
-    private String purpose;
+    private String reference;
 
 }
