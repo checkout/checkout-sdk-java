@@ -30,6 +30,9 @@ public final class RequestCardSource extends AbstractRequestSource {
 
     private Boolean stored;
 
+    @SerializedName("store_for_future_use")
+    private Boolean storeForFutureUse;
+
     @SerializedName("billing_address")
     private Address billingAddress;
 
@@ -42,6 +45,7 @@ public final class RequestCardSource extends AbstractRequestSource {
                               final String name,
                               final String cvv,
                               final Boolean stored,
+                              final Boolean storeForFutureUse,
                               final Address billingAddress,
                               final Phone phone) {
         super(PaymentSourceType.CARD);
@@ -51,6 +55,7 @@ public final class RequestCardSource extends AbstractRequestSource {
         this.name = name;
         this.cvv = cvv;
         this.stored = stored;
+        this.storeForFutureUse = storeForFutureUse;
         this.billingAddress = billingAddress;
         this.phone = phone;
     }
