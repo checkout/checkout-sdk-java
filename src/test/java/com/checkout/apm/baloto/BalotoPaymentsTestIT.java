@@ -14,6 +14,7 @@ import com.checkout.payments.response.source.AlternativePaymentSourceResponse;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static com.checkout.TestHelper.getPayer;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -77,7 +78,7 @@ class BalotoPaymentsTestIT extends SandboxTestFixture {
         final RequestBalotoSource balotoSource = RequestBalotoSource.builder()
                 .country(CountryCode.CO)
                 .description("simulate Via Baloto Demo Payment")
-                .payer(RequestBalotoSource.Payer.builder().email("bruce@wayne-enterprises.com").name("Bruce Wayne").build())
+                .payer(getPayer())
                 .build();
 
         final PaymentRequest request = PaymentRequest.baloto(balotoSource, Currency.COP, 100000L);

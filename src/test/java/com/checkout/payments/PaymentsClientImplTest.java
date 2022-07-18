@@ -10,6 +10,7 @@ import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.PayoutRequest;
 import com.checkout.payments.request.source.AbstractRequestSource;
+import com.checkout.payments.request.source.RequestNetworkTokenSource;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
 import com.google.gson.reflect.TypeToken;
@@ -122,6 +123,8 @@ class PaymentsClientImplTest {
     void shouldRequestPayment_idempotencyKey() throws ExecutionException, InterruptedException {
 
         final PaymentRequest request = mock(PaymentRequest.class);
+        final RequestNetworkTokenSource source = RequestNetworkTokenSource.builder().build();
+        request.setSource(source);
         final PaymentResponse response = mock(PaymentResponse.class);
 
         when(apiClient.postAsync(eq(PAYMENTS_PATH), any(SdkAuthorization.class), eq(PaymentResponse.class), eq(request), eq("1234")))

@@ -53,7 +53,7 @@ public enum PaymentSourceType {
     @SerializedName("poli")
     POLI,
     @SerializedName("p24")
-    PRZELEWY24,
+    P24,
     @SerializedName("benefitpay")
     BENEFITPAY,
     @SerializedName("bancontact")
@@ -61,5 +61,17 @@ public enum PaymentSourceType {
     @SerializedName("tamara")
     TAMARA,
     @SerializedName("provider_token")
-    PROVIDER_TOKEN
+    PROVIDER_TOKEN,
+    @SerializedName("knet")
+    KNET,
+    @SerializedName("bank_account")
+    BANK_ACCOUNT,
+    @SerializedName("alipay_hk")
+    ALIPAY_HK,
+    @SerializedName("alipay_cn")
+    ALIPAY_CN,
+    @SerializedName("gcash")
+    GCASH,
+    @SerializedName("wechatpay")
+    WECHATPAY
 }
