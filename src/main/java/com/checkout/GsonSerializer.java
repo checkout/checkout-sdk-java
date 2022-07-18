@@ -16,9 +16,7 @@ import com.checkout.workflows.four.conditions.WorkflowConditionType;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
@@ -29,6 +27,10 @@ import org.apache.commons.lang3.EnumUtils;
 
 import java.lang.reflect.Type;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.EnumMap;
 import java.util.Map;
@@ -43,8 +45,7 @@ class GsonSerializer implements Serializer {
             // Instant type adapters
             .registerTypeAdapter(Instant.class, (JsonSerializer<Instant>) (Instant date, Type typeOfSrc, JsonSerializationContext context) ->
                     new JsonPrimitive(date.truncatedTo(ChronoUnit.SECONDS).toString()))
-            .registerTypeAdapter(Instant.class, (JsonDeserializer<Instant>) (JsonElement json, Type typeOfSrc, JsonDeserializationContext context) ->
-                    Instant.parse(json.getAsString()))
+            .registerTypeAdapter(Instant.class, getInstantJsonDeserializer())
             // Payments DEFAULT - source
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.payments.response.source.ResponseSource.class, CheckoutUtils.TYPE, true, com.checkout.payments.response.source.AlternativePaymentSourceResponse.class)
                     .registerSubtype(com.checkout.payments.response.source.CardResponseSource.class, identifier(PaymentSourceType.CARD)))
@@ -124,6 +125,21 @@ class GsonSerializer implements Serializer {
             throw new IllegalStateException("invalid enum entry");
         }
         return enumEntry.name().toLowerCase();
+    }
+
+    private static JsonDeserializer<Instant> getInstantJsonDeserializer() {
+        return (json, typeOfT, context) -> {
+            Instant parsedDate;
+            try {
+                parsedDate = Instant.parse(json.getAsString());
+            } catch (DateTimeParseException ex) {
+                final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSXXX");
+                final LocalDateTime dateTime = LocalDateTime.parse(json.getAsString(), dtf);
+                parsedDate = dateTime.toInstant(ZoneOffset.UTC);
+            }
+            return parsedDate;
+        };
+
     }
 
     private static JsonDeserializer<GetScheduleResponseDeserializer> getWrapDeserializer() {
