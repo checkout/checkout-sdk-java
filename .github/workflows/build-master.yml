@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - v5
 jobs:
   job-container:
     if: "!contains(github.event.commits[0].message, 'Release')"

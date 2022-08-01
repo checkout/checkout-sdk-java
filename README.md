@@ -10,6 +10,25 @@
 
 ## Getting started
 
+> **This is a Legacy Version** </br>
+> We will provide support to some features or changes on APIs until users are fully migrated to the version 6.X.X, 
+> however we recommend to upgrade to version 6.X.X because this support is momentary and a lot of things were fixed and changed. </br>
+> If you’re still having issues don't hesitate to open a [ticket](https://github.com/checkout/checkout-sdk-java/issues/new/choose). </br></br>
+> Remember: </br>
+> * In documentation Marketplace prefixes no longer exist, you need to search in documentation as Platforms. </br>
+> * The `default` prefixes on versions < 6, in documentation you need to search as `previous` </br>
+> * In documentation `Four` prefixes no longer exist, your need to search as `default`.
+
+### :book: Checkout our official documentation.
+
+* [Official Docs (Four)](https://docs.checkout.com/)
+* [Official Docs (Previous/Current default)](https://docs.checkout.com/previous)
+
+### :books: Check out our official API documentation guide, where you can also find more usage examples.
+
+* [API Reference (Four)](https://api-reference.checkout.com/)
+* [API Reference (Previous/Current default)](https://api-reference.checkout.com/previous)
+
 Binaries, Javadoc, and sources are all available from [Maven Central](https://search.maven.org/artifact/com.checkout/checkout-sdk-java).
 
 #### Gradle
@@ -42,8 +61,8 @@ If you're having problems migrating to the new version, please create an [issue]
 This SDK can be used with two different pair of API keys provided by Checkout. However, using different API keys imply using specific API features. Please find in the table below the types of keys that can be used within this SDK.
 
 | Account System | Public Key (example)                    | Secret Key (example)                    |
-| -------------- | --------------------------------------- | --------------------------------------- |
-| default        | pk_g650ff27-7c42-4ce1-ae90-5691a188ee7b | sk_gk3517a8-3z01-45fq-b4bd-4282384b0a64 |
+|----------------| --------------------------------------- | --------------------------------------- |
+| Previous       | pk_g650ff27-7c42-4ce1-ae90-5691a188ee7b | sk_gk3517a8-3z01-45fq-b4bd-4282384b0a64 |
 | Four           | pk_pkhpdtvabcf7hdgpwnbhw7r2uic          | sk_m73dzypy7cf3gf5d2xr4k7sxo4e          |
 
 Note: sandbox keys have a `test_` or `sbox_` identifier, for Default and Four accounts respectively.
@@ -52,7 +71,7 @@ If you don't have your own API keys, you can sign up for a test account [here](h
 
 **PLEASE NEVER SHARE OR PUBLISH YOUR CHECKOUT CREDENTIALS.**
 
-## Default
+## Previous
 
 Default keys client instantiation can be done as follows:
 
@@ -148,13 +167,6 @@ public static void main(String[] args) {
 All the API responses that do not fall in the 2** status codes will cause a `CheckoutApiException`. The exception encapsulates 
 the `requestId`, `httpStatusCode` and a map of `errorDetails`, if available.
 
-More documentation related to Checkout API and the SDK is available at:
-
-* [API Reference (Default)](https://api-reference.checkout.com/)
-* [API Reference (Four)](https://api-reference.checkout.com/preview/crusoe/)
-* [Official Docs (Default)](https://docs.checkout.com/)
-* [Official Docs (Four)](https://docs.checkout.com/four)
-
 ## Building from source
 
 Once you checkout the code from GitHub, the project can be built using Gradle:
@@ -168,7 +180,7 @@ gradlew build -x test
 
 The execution of integration tests require the following environment variables set in your system:
 
-* For Default account systems: `CHECKOUT_PUBLIC_KEY` & `CHECKOUT_SECRET_KEY`
+* For Previous account systems: `CHECKOUT_PUBLIC_KEY` & `CHECKOUT_SECRET_KEY`
 * For Four account systems: `CHECKOUT_FOUR_PUBLIC_KEY` & `CHECKOUT_FOUR_SECRET_KEY`
 * For Four account systems (OAuth): `CHECKOUT_FOUR_OAUTH_CLIENT_ID` & `CHECKOUT_FOUR_OAUTH_CLIENT_SECRET`
 
