@@ -37,9 +37,6 @@ public final class Product {
     @SerializedName("wxpay_goods_id")
     private String wxpayGoodsId;
 
-    @SerializedName("goods_id")
-    private String goodsId;
-
     @SerializedName("image_url")
     private String imageUrl;
 

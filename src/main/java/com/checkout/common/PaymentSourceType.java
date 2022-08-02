@@ -73,5 +73,14 @@ public enum PaymentSourceType {
     @SerializedName("gcash")
     GCASH,
     @SerializedName("wechatpay")
-    WECHATPAY
+    WECHATPAY,
+    @SerializedName("dana")
+    DANA,
+    @SerializedName("kakaopay")
+    KAKAOPAY,
+    @SerializedName("truemoney")
+    TRUEMONEY,
+    @SerializedName("tng")
+    TNG
+
 }
