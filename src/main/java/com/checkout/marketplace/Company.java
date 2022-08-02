@@ -14,6 +14,9 @@ public final class Company {
     @SerializedName("business_registration_number")
     private String businessRegistrationNumber;
 
+    @SerializedName("business_type")
+    private BusinessType businessType;
+
     @SerializedName("legal_name")
     private String legalName;
 
@@ -29,5 +32,8 @@ public final class Company {
     private EntityDocument document;
 
     private List<Representative> representatives;
+
+    @SerializedName("financial_details")
+    private EntityFinancialDetails financialDetails;
 
 }
