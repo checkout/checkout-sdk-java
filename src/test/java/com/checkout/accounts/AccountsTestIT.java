@@ -24,7 +24,7 @@ class AccountsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void shouldCreateGetAndUpdateOnboardEntity() {
+    void shouldCreateGetAndUpdateOnboardIndividualEntity() {
         final String randomReference = RandomStringUtils.random(15, true, true);
         final OnboardEntityRequest onboardEntityRequest = OnboardEntityRequest.builder()
                 .reference(randomReference)
@@ -54,6 +54,9 @@ class AccountsTestIT extends SandboxTestFixture {
                                 .day(5)
                                 .month(6)
                                 .year(1995)
+                                .build())
+                        .placeOfBirth(PlaceOfBirth.builder()
+                                .country(CountryCode.GB)
                                 .build())
                         .identification(Identification.builder()
                                 .nationalIdNumber("AB123456C")
@@ -86,6 +89,86 @@ class AccountsTestIT extends SandboxTestFixture {
         assertNotNull(verifyUpdated);
         assertEquals(onboardEntityRequest.getIndividual().getFirstName(), verifyUpdated.getIndividual().getFirstName());
 
+    }
+
+    @Test
+    void shouldCreateGetAndUpdateOnboardCompanyEntity() {
+        final String randomReference = RandomStringUtils.random(15, true, true);
+        final OnboardEntityRequest onboardEntityRequest = OnboardEntityRequest.builder()
+                .reference(randomReference)
+                .contactDetails(ContactDetails.builder()
+                        .phone(AccountPhone.builder()
+                                .number("2345678910")
+                                .build())
+                        .build())
+                .profile(Profile.builder()
+                        .urls(Collections.singletonList("https://www.superheroexample.com"))
+                        .mccs(Collections.singletonList("0742"))
+                        .build())
+                .company(Company.builder()
+                        .businessRegistrationNumber("452349600005")
+                        .businessType(BusinessType.PUBLIC_LIMITED_COMPANY)
+                        .legalName("Super Hero Masks Inc.")
+                        .tradingName("Super Hero Masks")
+                        .principalAddress(Address.builder()
+                                .addressLine1("Checkout.com")
+                                .addressLine1("90 Tottenham Court Road")
+                                .city("London")
+                                .state("London")
+                                .zip("WIT 4TJ")
+                                .country(CountryCode.GB)
+                                .build())
+                        .representatives(Collections.singletonList(Representative.builder()
+                                .firstName("John")
+                                .lastName("Doe")
+                                .address(Address.builder()
+                                        .addressLine1("Checkout.com")
+                                        .addressLine1("90 Tottenham Court Road")
+                                        .city("London")
+                                        .state("London")
+                                        .zip("WIT 4TJ")
+                                        .country(CountryCode.GB)
+                                        .build())
+                                        .identification(Identification.builder()
+                                                .nationalIdNumber("AB123456C")
+                                                .build())
+                                        .phone(AccountPhone.builder()
+                                                .number("2345678910")
+                                                .build())
+                                        .dateOfBirth(DateOfBirth.builder()
+                                                .day(5)
+                                                .month(6)
+                                                .year(1995)
+                                                .build())
+                                        .placeOfBirth(PlaceOfBirth.builder()
+                                                .country(CountryCode.ES)
+                                                .build())
+                                        .roles(Collections.singletonList(EntityRoles.UBO))
+                                .build()))
+                        .financialDetails(EntityFinancialDetails.builder()
+                                .annualProcessingVolume(120000L)
+                                .averageTransactionValue(10000L)
+                                .highestTransactionValue(2500L)
+
+                                .build())
+                        .build())
+                .build();
+
+        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(onboardEntityRequest));
+        assertNotNull(entityResponse);
+        final String entityId = entityResponse.getId();
+        assertNotNull(entityId);
+        assertEquals(randomReference, entityResponse.getReference());
+
+        final OnboardEntityDetailsResponse entityDetailsResponse = blocking(() -> checkoutApi.accountsClient().getEntity(entityId));
+        assertNotNull(entityDetailsResponse);
+        assertEquals(entityId, entityDetailsResponse.getId());
+        assertEquals(randomReference, entityDetailsResponse.getReference());
+        assertEquals(onboardEntityRequest.getContactDetails(), entityDetailsResponse.getContactDetails());
+        assertNotNull(entityDetailsResponse.getCompany());
+        assertEquals(onboardEntityRequest.getCompany().getBusinessType(), entityDetailsResponse.getCompany().getBusinessType());
+        assertEquals(onboardEntityRequest.getCompany().getLegalName(), entityDetailsResponse.getCompany().getLegalName());
+        assertEquals(onboardEntityRequest.getCompany().getTradingName(), entityDetailsResponse.getCompany().getTradingName());
     }
 
     @Test

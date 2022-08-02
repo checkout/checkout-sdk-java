@@ -4,23 +4,13 @@ import com.checkout.common.AccountHolderIdentification;
 import com.checkout.common.AccountHolderType;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
-import com.checkout.common.Phone;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 @Data
-public final class AccountsAccountHolder {
+public abstract class AccountsAccountHolder {
 
     private AccountHolderType type;
-
-    @SerializedName("first_name")
-    private String firstName;
-
-    @SerializedName("last_name")
-    private String lastName;
-
-    @SerializedName("company_name")
-    private String companyName;
 
     @SerializedName("tax_id")
     private String taxId;
@@ -37,10 +27,29 @@ public final class AccountsAccountHolder {
     @SerializedName("billing_address")
     private Address billingAddress;
 
-    private Phone phone;
+    private AccountPhone phone;
 
     private AccountHolderIdentification identification;
 
     private String email;
 
+    protected AccountsAccountHolder(final AccountHolderType type,
+                                    final String taxId,
+                                    final DateOfBirth dateOfBirth,
+                                    final CountryCode countryOfBirth,
+                                    final String residentialStatus,
+                                    final Address billingAddress,
+                                    final AccountPhone phone,
+                                    final AccountHolderIdentification identification,
+                                    final String email) {
+        this.type = type;
+        this.taxId = taxId;
+        this.dateOfBirth = dateOfBirth;
+        this.countryOfBirth = countryOfBirth;
+        this.residentialStatus = residentialStatus;
+        this.billingAddress = billingAddress;
+        this.phone = phone;
+        this.identification = identification;
+        this.email = email;
+    }
 }

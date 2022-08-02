@@ -60,7 +60,6 @@ class AccountsClientImplTest {
 
     @Test
     void shouldCreateEntity() throws ExecutionException, InterruptedException {
-
         final OnboardEntityResponse response = mock(OnboardEntityResponse.class);
 
         when(apiClient.postAsync(eq("accounts/entities"), eq(authorization), eq(OnboardEntityResponse.class), any(OnboardEntityRequest.class), isNull()))
@@ -107,11 +106,16 @@ class AccountsClientImplTest {
     void shouldCreatePaymentInstrument() throws ExecutionException, InterruptedException {
 
         final EmptyResponse response = mock(EmptyResponse.class);
+        final AccountsPaymentInstrument request = mock(AccountsPaymentInstrument.class);
+        final AccountsCorporateAccountHolder corporateAccountHolder = mock(AccountsCorporateAccountHolder.class);
+        final AccountsIndividualAccountHolder individualAccountHolder = mock(AccountsIndividualAccountHolder.class);
+        request.setAccountHolder(corporateAccountHolder);
+        request.setAccountHolder(individualAccountHolder);
 
         when(apiClient.postAsync(eq("accounts/entities/entity_id/instruments"), eq(authorization), eq(EmptyResponse.class), any(AccountsPaymentInstrument.class), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<EmptyResponse> future = accountsClient.createPaymentInstrument(AccountsPaymentInstrument.builder().build(), "entity_id");
+        final CompletableFuture<EmptyResponse> future = accountsClient.createPaymentInstrument(request, "entity_id");
 
         assertNotNull(future.get());
         assertEquals(response, future.get());

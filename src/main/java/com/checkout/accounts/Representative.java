@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public final class Representative {
@@ -26,5 +28,10 @@ public final class Representative {
 
     @SerializedName("date_of_birth")
     private DateOfBirth dateOfBirth;
+
+    @SerializedName("place_of_birth")
+    private PlaceOfBirth placeOfBirth;
+
+    private List<EntityRoles> roles;
 
 }

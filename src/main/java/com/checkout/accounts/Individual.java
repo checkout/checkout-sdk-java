@@ -30,6 +30,9 @@ public final class Individual {
     @SerializedName("date_of_birth")
     private DateOfBirth dateOfBirth;
 
+    @SerializedName("place_of_birth")
+    private PlaceOfBirth placeOfBirth;
+
     private Identification identification;
 
 }
