@@ -2,6 +2,7 @@ package com.checkout.payments;
 
 
 import com.checkout.CheckoutApi;
+import com.checkout.CheckoutApiException;
 import com.checkout.CheckoutSdk;
 import com.checkout.Environment;
 import com.checkout.common.Address;
@@ -11,6 +12,7 @@ import com.checkout.common.CustomerRequest;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
 import com.checkout.payments.request.PaymentRequest;
+import com.checkout.payments.request.source.apm.RequestAlipayPlusSource;
 import com.checkout.payments.request.source.apm.RequestIdealSource;
 import com.checkout.payments.request.source.apm.RequestSofortSource;
 import com.checkout.payments.request.source.apm.RequestTamaraSource;
@@ -21,13 +23,46 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.UUID;
 
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
+
+    @Test
+    void shouldMakeAliPayPayment() throws InterruptedException {
+        RequestAlipayPlusSource source = RequestAlipayPlusSource.requestAlipayPlusCNSource();
+        source = RequestAlipayPlusSource.requestAlipayPlusGCashSource();
+        source = RequestAlipayPlusSource.requestAlipayPlusHKSource();
+        source = RequestAlipayPlusSource.requestAlipayPlusDanaSource();
+        source = RequestAlipayPlusSource.requestAlipayPlusKakaoPaySource();
+        source = RequestAlipayPlusSource.requestAlipayPlusTrueMoneySource();
+        source = RequestAlipayPlusSource.requestAlipayPlusTNGSource();
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(source)
+                .reference(UUID.randomUUID().toString())
+                .processingChannelId("pc_5jp2az55l3cuths25t5p3xhwru")
+                .currency(Currency.EUR)
+                .amount(1000L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        try {
+            paymentsClient.requestPayment(paymentRequest).get();
+            fail();
+        } catch (Exception exception) {
+            assertTrue(exception.getCause() instanceof CheckoutApiException);
+
+        }
+
+
+    }
 
     @Test
     void shouldMakeIdealPayment() {

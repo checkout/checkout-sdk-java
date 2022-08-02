@@ -6,6 +6,7 @@ import com.checkout.common.MarketplaceData;
 import com.checkout.common.Resource;
 import com.checkout.common.Product;
 import com.checkout.payments.BillingInformation;
+import com.checkout.payments.ShippingDetails;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,11 +22,8 @@ public final class PaymentLinkDetailsResponse extends Resource {
 
     private PaymentLinkStatus status;
 
-    @SerializedName("expires_on")
-    private String expiresOn;
-
-    @SerializedName("return_url")
-    private String returnUrl;
+    @SerializedName("payment_id")
+    private String paymentId;
 
     private Long amount;
 
@@ -35,7 +33,20 @@ public final class PaymentLinkDetailsResponse extends Resource {
 
     private String description;
 
+    @SerializedName("created_on")
+    private String createdOn;
+
+    @SerializedName("expires_on")
+    private String expiresOn;
+
+    @SerializedName("processing_channel_id")
+    private String processingChannelId;
+
+    private MarketplaceData marketplace;
+
     private CustomerResponse customer;
+
+    private ShippingDetails shipping;
 
     private BillingInformation billing;
 
@@ -43,13 +54,9 @@ public final class PaymentLinkDetailsResponse extends Resource {
 
     private Map<String, Object> metadata;
 
-    /**
-     * Not available on Previous
-     */
+    private String locale;
 
-    @SerializedName("processing_channel_id")
-    private String processingChannelId;
-
-    private MarketplaceData marketplace;
+    @SerializedName("return_url")
+    private String returnUrl;
 
 }

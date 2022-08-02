@@ -124,7 +124,6 @@ class PaymentsClientImplTest {
                 .imageUrl("https://some_s3bucket.com")
                 .url("https://some.website.com/item")
                 .sku("123687000111")
-                .goodsId("23123")
                 .wxpayGoodsId("wxpayGoodsId")
                 .build()));
 
