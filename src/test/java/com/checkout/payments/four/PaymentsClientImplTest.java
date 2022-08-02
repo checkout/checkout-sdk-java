@@ -464,7 +464,7 @@ class PaymentsClientImplTest {
 
         final RequestProviderTokenSource source = RequestProviderTokenSource.builder()
                 .token("token")
-                .payment_method("method")
+                .paymentMethod("method")
                 .accountHolder(mock(AccountHolder.class))
                 .build();
 

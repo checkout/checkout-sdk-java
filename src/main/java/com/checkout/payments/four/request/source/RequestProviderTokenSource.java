@@ -16,7 +16,7 @@ import lombok.ToString;
 public final class RequestProviderTokenSource extends AbstractRequestSource {
 
     @SerializedName("payment_method")
-    private String payment_method;
+    private String paymentMethod;
 
     private String token;
 
@@ -24,11 +24,11 @@ public final class RequestProviderTokenSource extends AbstractRequestSource {
     private AccountHolder accountHolder;
 
     @Builder
-    private RequestProviderTokenSource(final String payment_method,
+    private RequestProviderTokenSource(final String paymentMethod,
                                        final String token,
                                        final AccountHolder accountHolder) {
         super(PaymentSourceType.PROVIDER_TOKEN);
-        this.payment_method = payment_method;
+        this.paymentMethod = paymentMethod;
         this.token = token;
         this.accountHolder = accountHolder;
     }
