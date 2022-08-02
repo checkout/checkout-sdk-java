@@ -1,7 +1,6 @@
 package com.checkout.payments;
 
-import com.checkout.common.Address;
-import com.checkout.common.Phone;
+import com.checkout.common.CountryCode;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,13 +11,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class ShippingDetails {
+public final class Passenger {
 
-    private Address address;
+    private PassengerName name;
 
-    private Phone phone;
+    @SerializedName("date_of_birth")
+    private String dateOfBirth;
 
-    @SerializedName("from_address_zip")
-    private String fromAddressZip;
-
+    @SerializedName("country_code")
+    private CountryCode countryCode;
 }
