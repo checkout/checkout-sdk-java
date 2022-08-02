@@ -2,7 +2,8 @@ name: build-pull-request
 on:
   pull_request:
     branches:
-      - master
+      - 'integration/**'
+      - 'feature/**'
       - v5
 jobs:
   job-container:
