@@ -27,5 +27,4 @@ public final class CreateCustomerInstrumentRequest extends CustomerRequest {
         super(id, email, name, phone);
         this.defaultInstrument = defaultInstrument;
     }
-
 }

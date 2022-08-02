@@ -19,10 +19,11 @@ public final class Product {
 
     private String reference;
 
-    @SerializedName("image_url")
-    private String imageUrl;
+    @SerializedName("commodity_code")
+    private String commodityCode;
 
-    private String url;
+    @SerializedName("unit_of_measure")
+    private String unitOfMeasure;
 
     @SerializedName("total_amount")
     private Long totalAmount;
@@ -33,12 +34,17 @@ public final class Product {
     @SerializedName("discount_amount")
     private Long discountAmount;
 
-    private String sku;
+    @SerializedName("wxpay_goods_id")
+    private String wxpayGoodsId;
 
     @SerializedName("goods_id")
     private String goodsId;
 
-    @SerializedName("wxpay_goods_id")
-    private String wxpayGoodsId;
+    @SerializedName("image_url")
+    private String imageUrl;
+
+    private String url;
+
+    private String sku;
 
 }
