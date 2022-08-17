@@ -33,8 +33,6 @@ public class CardDestinationPaymentTests extends SandboxTestFixture {
                     paymentResponse.getPayment().getDestination().getLast4(),
                     paymentRequest.getDestination().getNumber().substring(paymentRequest.getDestination().getNumber().length() - 4));
             Assert.assertEquals(paymentRequest.getDestination().getType(), paymentResponse.getPayment().getDestination().getType());
-            Assert.assertEquals(paymentRequest.getDestination().getExpiryMonth(), paymentResponse.getPayment().getDestination().getExpiryMonth());
-            Assert.assertEquals(paymentRequest.getDestination().getExpiryYear(), paymentResponse.getPayment().getDestination().getExpiryYear());
         }
     }
 }

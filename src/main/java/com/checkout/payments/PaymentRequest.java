@@ -1,6 +1,8 @@
 package com.checkout.payments;
 
 import com.checkout.common.CheckoutUtils;
+import com.checkout.common.Currency;
+import com.checkout.payments.sender.PaymentSender;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +11,7 @@ import lombok.NonNull;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -44,6 +47,10 @@ public class PaymentRequest<T extends RequestSource> {
     private String processingChannelId;
     private AuthorizationType authorizationType;
     private MarketplaceData marketplace;
+
+    private PaymentSender sender;
+
+    private List<Product> items;
 
     private PaymentRequest(T sourceOrDestination, String currency, Long amount, boolean isSource) {
         if (sourceOrDestination == null) {
