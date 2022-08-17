@@ -1,9 +1,12 @@
 package com.checkout;
 
+import com.checkout.common.CheckoutUtils;
 import com.checkout.payments.AlternativePaymentSourceResponse;
 import com.checkout.payments.CardSource;
 import com.checkout.payments.CardSourceResponse;
 import com.checkout.payments.ResponseSource;
+import com.checkout.payments.sender.Sender;
+import com.checkout.payments.sender.SenderType;
 import com.google.gson.*;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,11 @@ public class GsonSerializer implements Serializer {
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(ResponseSource.class, "type", true, AlternativePaymentSourceResponse.class)
                     .registerSubtype(CardSourceResponse.class, CardSource.TYPE_NAME))
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            // Payments - sender
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(Sender.class, CheckoutUtils.TYPE, true, com.checkout.payments.sender.ResponseAlternativeSender.class)
+                    .registerSubtype(com.checkout.payments.sender.PaymentCorporateSender.class, identifier(SenderType.CORPORATE))
+                    .registerSubtype(com.checkout.payments.sender.PaymentIndividualSender.class, identifier(SenderType.INDIVIDUAL))
+                    .registerSubtype(com.checkout.payments.sender.PaymentInstrumentSender.class, identifier(SenderType.INSTRUMENT)))
             .create();
 
     private final Gson gson;
@@ -50,5 +58,12 @@ public class GsonSerializer implements Serializer {
     public <T> T fromJson(String json, Class<T> type) {
         log.debug("fromJson: " + json);
         return gson.fromJson(json, type);
+    }
+
+    private static <E extends Enum<E>> String identifier(final E enumEntry) {
+        if (enumEntry == null) {
+            throw new IllegalStateException("invalid enum entry");
+        }
+        return enumEntry.name().toLowerCase();
     }
 }

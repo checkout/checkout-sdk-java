@@ -1,6 +1,8 @@
 package com.checkout.common;
 
 public class CheckoutUtils {
+
+    public static final String TYPE = "type";
     public static boolean isNullOrEmpty(String string) {
         return string == null || string.isEmpty();
     }

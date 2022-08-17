@@ -1,26 +1,23 @@
 package com.checkout.payments;
 
-import com.checkout.common.Phone;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerRequest {
+public final class AirlineData {
 
-    private String id;
+    private Ticket ticket;
 
-    private String email;
+    private Passenger passenger;
 
-    private String name;
-
-    private Phone phone;
-
-    @SerializedName("tax_number")
-    private String taxNumber;
+    @SerializedName("flight_leg_details")
+    private List<FlightLegDetails> flightLegDetails;
 }
