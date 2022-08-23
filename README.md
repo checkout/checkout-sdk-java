@@ -4,6 +4,9 @@
 
 <p align="center"><img src="https://i.ibb.co/6FrwfWt/Screenshot-2020-07-17-at-18-13-39.png" width="20%"></p>
 
+> **This is a Legacy Version** </br>
+> This is an unsupported version, please consider to migrate to the latest version
+
 # Checkout.com Java SDK
 Built with Java 8 and Gradle 5
 
@@ -18,7 +21,7 @@ The jar, javadoc, and sources are all available from [Maven Central](https://sea
 
 ```groovy
 dependencies {
-    implementation 'com.checkout:checkout-sdk-java:3.7.1'
+    implementation 'com.checkout:checkout-sdk-java:3.7.2'
 }
 ```
 
@@ -28,7 +31,7 @@ dependencies {
 <dependency>
     <groupId>com.checkout</groupId>
     <artifactId>checkout-sdk-java</artifactId>
-    <version>3.7.1</version>
+    <version>3.7.2</version>
 </dependency>
 ```
 
