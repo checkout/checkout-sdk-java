@@ -54,20 +54,24 @@ public final class RequestKlarnaSource extends AbstractRequestSource {
 
     private Map<String, String> attachment;
 
+    @SerializedName("custom_payment_method_ids")
+    private List<Map<String, String>> customPaymentMethodIds;
+
     @Builder
     private RequestKlarnaSource(final String authorizationToken,
-                               final String locale,
-                               final CountryCode purchaseCountry,
-                               final Boolean autoCapture,
-                               final Map<String, String> billingAddress,
-                               final Map<String, String> shippingAddress,
-                               final Integer taxAmount,
-                               final List<Map<String, String>> products,
-                               final Map<String, String> customer,
-                               final String merchantReference1,
-                               final String merchantReference2,
-                               final String merchantData,
-                               final Map<String, String> attachment) {
+                                final String locale,
+                                final CountryCode purchaseCountry,
+                                final Boolean autoCapture,
+                                final Map<String, String> billingAddress,
+                                final Map<String, String> shippingAddress,
+                                final Integer taxAmount,
+                                final List<Map<String, String>> products,
+                                final Map<String, String> customer,
+                                final String merchantReference1,
+                                final String merchantReference2,
+                                final String merchantData,
+                                final Map<String, String> attachment,
+                                final List<Map<String, String>> customPaymentMethodIds) {
         super(PaymentSourceType.KLARNA);
         this.authorizationToken = authorizationToken;
         this.locale = locale;
@@ -82,6 +86,7 @@ public final class RequestKlarnaSource extends AbstractRequestSource {
         this.merchantReference2 = merchantReference2;
         this.merchantData = merchantData;
         this.attachment = attachment;
+        this.customPaymentMethodIds = customPaymentMethodIds;
     }
 
     public RequestKlarnaSource() {

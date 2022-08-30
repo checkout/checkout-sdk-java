@@ -5,6 +5,7 @@ import com.checkout.CheckoutApi;
 import com.checkout.CheckoutApiException;
 import com.checkout.CheckoutSdk;
 import com.checkout.Environment;
+import com.checkout.common.AccountHolder;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
@@ -12,8 +13,14 @@ import com.checkout.common.CustomerRequest;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
 import com.checkout.payments.request.PaymentRequest;
+import com.checkout.payments.request.source.apm.RequestAfterPaySource;
 import com.checkout.payments.request.source.apm.RequestAlipayPlusSource;
+import com.checkout.payments.request.source.apm.RequestBenefitSource;
+import com.checkout.payments.request.source.apm.RequestEpsSource;
+import com.checkout.payments.request.source.apm.RequestGiropaySource;
 import com.checkout.payments.request.source.apm.RequestIdealSource;
+import com.checkout.payments.request.source.apm.RequestMbwaySource;
+import com.checkout.payments.request.source.apm.RequestQPaySource;
 import com.checkout.payments.request.source.apm.RequestSofortSource;
 import com.checkout.payments.request.source.apm.RequestTamaraSource;
 import com.checkout.payments.response.GetPaymentResponse;
@@ -42,6 +49,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         source = RequestAlipayPlusSource.requestAlipayPlusKakaoPaySource();
         source = RequestAlipayPlusSource.requestAlipayPlusTrueMoneySource();
         source = RequestAlipayPlusSource.requestAlipayPlusTNGSource();
+        source = RequestAlipayPlusSource.requestAlipayPlusSource();
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(source)
                 .reference(UUID.randomUUID().toString())
@@ -172,5 +180,132 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         assertNotNull(response.getProcessing().getPartnerPaymentId());
         assertEquals(PaymentStatus.PENDING, response.getStatus());
 
+    }
+
+    @Test
+    void shouldMakeAfterPayPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestAfterPaySource.builder()
+                        .accountHolder(AccountHolder.builder()
+                                .build())
+                        .build())
+                .currency(Currency.GBP)
+                .amount(10L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        try {
+            paymentsClient.requestPayment(paymentRequest).get();
+            fail();
+        } catch (Exception exception) {
+            assertTrue(exception.getCause() instanceof CheckoutApiException);
+        }
+    }
+
+    @Test
+    void shouldMakeBenefitPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(new RequestBenefitSource())
+                .currency(Currency.BHD)
+                .reference("reference")
+                .amount(10L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        try {
+            paymentsClient.requestPayment(paymentRequest).get();
+            fail();
+        } catch (Exception exception) {
+            assertTrue(exception.getCause() instanceof CheckoutApiException);
+        }
+    }
+
+    @Test
+    void shouldMakeQPayPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestQPaySource.builder()
+                        .description("QPay Demo Payment")
+                        .language("en")
+                        .quantity(1)
+                        .nationalId("070AYY010BU234M")
+                        .build())
+                .currency(Currency.QAR)
+                .amount(100L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        try {
+            paymentsClient.requestPayment(paymentRequest).get();
+            fail();
+        } catch (Exception exception) {
+            assertTrue(exception.getCause() instanceof CheckoutApiException);
+        }
+    }
+
+    @Test
+    void shouldMakeMbwayPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(new RequestMbwaySource())
+                .currency(Currency.GBP)
+                .amount(100L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        try {
+            paymentsClient.requestPayment(paymentRequest).get();
+            fail();
+        } catch (Exception exception) {
+            assertTrue(exception.getCause() instanceof CheckoutApiException);
+        }
+    }
+
+    @Test
+    void shouldMakeEpsPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestEpsSource.builder()
+                        .purpose("Mens black t-shirt L")
+                        .build())
+                .currency(Currency.EUR)
+                .amount(10L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        try {
+            paymentsClient.requestPayment(paymentRequest).get();
+            fail();
+        } catch (Exception exception) {
+            assertTrue(exception.getCause() instanceof CheckoutApiException);
+        }
+    }
+
+    @Test
+    void shouldMakeGiropayPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestGiropaySource.builder()
+                        .purpose("CKO Giropay test")
+                        .build())
+                .currency(Currency.GBP)
+                .amount(100L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        try {
+            paymentsClient.requestPayment(paymentRequest).get();
+            fail();
+        } catch (Exception exception) {
+            assertTrue(exception.getCause() instanceof CheckoutApiException);
+        }
     }
 }
