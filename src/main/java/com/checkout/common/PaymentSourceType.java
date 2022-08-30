@@ -70,6 +70,8 @@ public enum PaymentSourceType {
     ALIPAY_HK,
     @SerializedName("alipay_cn")
     ALIPAY_CN,
+    @SerializedName("alipay_plus")
+    ALIPAY_PLUS,
     @SerializedName("gcash")
     GCASH,
     @SerializedName("wechatpay")
@@ -81,6 +83,12 @@ public enum PaymentSourceType {
     @SerializedName("truemoney")
     TRUEMONEY,
     @SerializedName("tng")
-    TNG
+    TNG,
+    @SerializedName("afterpay")
+    AFTERPAY,
+    @SerializedName("benefit")
+    BENEFIT,
+    @SerializedName("mbway")
+    MBWAY
 
 }

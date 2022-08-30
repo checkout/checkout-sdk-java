@@ -15,10 +15,15 @@ public final class PaymentProcessing {
     @SerializedName("recommendation_code")
     private String recommendationCode;
 
+    @SerializedName("partner_order_id")
+    private String partnerOrderId;
+
     @SerializedName("partner_payment_id")
     private String partnerPaymentId;
 
     @SerializedName("continuation_payload")
     private String continuationPayload;
+
+    private String pun;
 
 }

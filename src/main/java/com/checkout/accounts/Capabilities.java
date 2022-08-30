@@ -14,12 +14,16 @@ public final class Capabilities {
     @Data
     public static class Payments {
 
+        private boolean available;
+
         private boolean enabled;
 
     }
 
     @Data
     public static class Payouts {
+
+        private boolean available;
 
         private boolean enabled;
 

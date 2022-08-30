@@ -41,6 +41,9 @@ public final class ProcessingSettings {
     @SerializedName("merchant_initiated_reason")
     private MerchantInitiatedReason merchantInitiatedReason;
 
+    @SerializedName("campaign_id")
+    private Long campaignId;
+
     @SerializedName("product_type")
     private ProductType productType;
 
