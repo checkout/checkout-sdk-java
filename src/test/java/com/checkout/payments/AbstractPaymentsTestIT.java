@@ -1,6 +1,7 @@
 package com.checkout.payments;
 
 import com.checkout.CardSourceHelper;
+import com.checkout.CheckoutApiException;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.Address;
@@ -19,13 +20,21 @@ import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
 import com.checkout.tokens.TokensClient;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Supplier;
 
 import static com.checkout.CardSourceHelper.getCardSourcePayment;
 import static com.checkout.CardSourceHelper.getCorporateSender;
 import static com.checkout.CardSourceHelper.getIndividualSender;
 import static com.checkout.CardSourceHelper.getRequestCardSource;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
 
@@ -138,6 +147,17 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
                 .build();
         return blocking(() -> tokensClient.requestCardToken(request));
+    }
+
+    protected <T> void makePayeeNotOnboarded(final Supplier<CompletableFuture<T>> supplier) {
+        try {
+            supplier.get().get();
+            fail();
+        } catch (final InterruptedException | ExecutionException exception) {
+            assertTrue(exception.getCause() instanceof CheckoutApiException);
+            final List<String> error_codes = (List<String>) ((CheckoutApiException) exception.getCause()).getErrorDetails().get("error_codes");
+            assertThat(error_codes, hasItem("payee_not_onboarded"));
+        }
     }
 
 }

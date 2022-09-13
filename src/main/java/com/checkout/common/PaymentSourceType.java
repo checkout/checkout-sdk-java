@@ -89,6 +89,10 @@ public enum PaymentSourceType {
     @SerializedName("benefit")
     BENEFIT,
     @SerializedName("mbway")
-    MBWAY
+    MBWAY,
+    @SerializedName("postfinance")
+    POSTFINANCE,
+    @SerializedName("stcpay")
+    STCPAY
 
 }
