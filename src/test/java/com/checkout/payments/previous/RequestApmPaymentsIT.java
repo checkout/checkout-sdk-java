@@ -6,7 +6,6 @@ import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.previous.request.PaymentRequest;
 import com.checkout.payments.previous.request.source.apm.IntegrationType;
 import com.checkout.payments.previous.request.source.apm.RequestAlipaySource;
-import com.checkout.payments.previous.request.source.apm.RequestBalotoSource;
 import com.checkout.payments.previous.request.source.apm.RequestBancontactSource;
 import com.checkout.payments.previous.request.source.apm.RequestBenefitPaySource;
 import com.checkout.payments.previous.request.source.apm.RequestBoletoSource;
@@ -75,28 +74,6 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         assertNotNull(paymentDetails);
         assertTrue(paymentDetails.getSource() instanceof AlternativePaymentSourceResponse);
         assertEquals(PaymentSourceType.BENEFITPAY, paymentDetails.getSource().getType());
-    }
-
-    @Test
-    @Disabled("not available")
-    void shouldMakeBalotoPayment() {
-        final PaymentRequest paymentRequest = PaymentRequest.builder()
-                .source(RequestBalotoSource.builder()
-                        .country(CountryCode.CO)
-                        .description("simulate Via Baloto Demo Payment")
-                        .payer(getPayer())
-                        .build())
-                .currency(Currency.COP)
-                .amount(100000L)
-                .build();
-
-        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
-        assertNotNull(paymentResponse);
-
-        final GetPaymentResponse paymentDetails = blocking(() -> paymentsClient.getPayment(paymentResponse.getId()));
-        assertNotNull(paymentDetails);
-        assertTrue(paymentDetails.getSource() instanceof AlternativePaymentSourceResponse);
-        assertEquals(PaymentSourceType.BALOTO, paymentDetails.getSource().getType());
     }
 
     @Test
