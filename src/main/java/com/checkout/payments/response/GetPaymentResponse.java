@@ -1,5 +1,6 @@
 package com.checkout.payments.response;
 
+import com.checkout.common.AmountAllocations;
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerResponse;
 import com.checkout.common.MarketplaceData;
@@ -75,7 +76,15 @@ public final class GetPaymentResponse extends Resource {
     @SerializedName("payment_ip")
     private String paymentIp;
 
+    /**
+     * @deprecated This property will be removed in the future, and should be used
+     * {@link GetPaymentResponse#amountAllocations} instead
+     */
+    @Deprecated
     private MarketplaceData marketplace;
+
+    @SerializedName("amount_allocations")
+    private List<AmountAllocations> amountAllocations;
 
     private PaymentRecipient recipient;
 

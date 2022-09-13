@@ -1,5 +1,6 @@
 package com.checkout.payments;
 
+import com.checkout.common.AmountAllocations;
 import com.checkout.common.MarketplaceData;
 import com.checkout.payments.request.PaymentCustomerRequest;
 import com.google.gson.annotations.SerializedName;
@@ -36,7 +37,15 @@ public final class CaptureRequest {
 
     private List<Product> items;
 
+    /**
+     * @deprecated This property will be removed in the future, and should be used
+     * {@link CaptureRequest#amountAllocations} instead
+     */
+    @Deprecated
     private MarketplaceData marketplace;
+
+    @SerializedName("amount_allocations")
+    private List<AmountAllocations> amountAllocations;
 
     private ProcessingSettings processing;
 

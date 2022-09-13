@@ -4,7 +4,9 @@ import com.checkout.CardSourceHelper;
 import com.checkout.common.AccountHolderIdentification;
 import com.checkout.common.AccountHolderIdentificationType;
 import com.checkout.common.Address;
+import com.checkout.common.AmountAllocations;
 import com.checkout.common.ChallengeIndicator;
+import com.checkout.common.Commission;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.PaymentSourceType;
@@ -23,6 +25,7 @@ import com.checkout.payments.sender.PaymentIndividualSender;
 import com.checkout.tokens.CardTokenResponse;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.UUID;
 
 import static com.checkout.CardSourceHelper.getCorporateSender;
@@ -64,6 +67,15 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .reference(UUID.randomUUID().toString())
                 .amount(10L)
                 .currency(Currency.EUR)
+                .amountAllocations(Collections.singletonList(AmountAllocations.builder()
+                        .id("ent_sdioy6bajpzxyl3utftdp7legq")
+                        .amount(10L)
+                        .reference(UUID.randomUUID().toString())
+                        .commission(Commission.builder()
+                                .amount(1L)
+                                .percentage(0.0)
+                                .build())
+                        .build()))
                 .build();
 
         final PaymentResponse paymentResponse = blocking(() -> checkoutApi.paymentsClient().requestPayment(request));

@@ -3,7 +3,12 @@ package com.checkout.payments.links;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
+import com.checkout.common.AmountAllocations;
+import com.checkout.common.Commission;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
+import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -24,6 +29,15 @@ class PaymentLinksTestIT extends SandboxTestFixture {
     void shouldCreateAndGetPaymentsLink() {
 
         final PaymentLinkRequest paymentLinksRequest = TestHelper.createPaymentLinksRequest(REFERENCE);
+        paymentLinksRequest.setAmountAllocations(Collections.singletonList(AmountAllocations.builder()
+                .id("ent_sdioy6bajpzxyl3utftdp7legq")
+                .amount(100L)
+                .reference(UUID.randomUUID().toString())
+                .commission(Commission.builder()
+                        .amount(1L)
+                        .percentage(0.1)
+                        .build())
+                .build()));
         final PaymentLinkResponse paymentLinkResponse = blocking(() -> checkoutApi.paymentLinksClient().createPaymentLink(paymentLinksRequest));
 
         assertNotNull(paymentLinkResponse);
