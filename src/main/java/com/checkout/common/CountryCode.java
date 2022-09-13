@@ -508,7 +508,9 @@ public enum CountryCode {
     @SerializedName(value = "ZW",alternate = "ZWE")
     ZW("263"),
     @SerializedName(value = "PS",alternate = "PSE")
-    PS("970");
+    PS("970"),
+    @SerializedName(value = "QZ")
+    QZ("");
 
     @Getter
     private final String dialCode;

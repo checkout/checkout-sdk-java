@@ -222,7 +222,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
     }
 
     @Test
@@ -241,7 +241,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
     }
 
     @Test
@@ -277,7 +277,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
     }
 
     @Test
@@ -293,7 +293,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
     }
 
     @Test
@@ -312,7 +312,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
     }
 
     @Test
@@ -328,7 +328,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
     }
 
     @Test
@@ -346,7 +346,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
     }
 
     @Test
@@ -364,7 +364,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
     }
 
     @Test
@@ -382,7 +382,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
     }
 
     @Test

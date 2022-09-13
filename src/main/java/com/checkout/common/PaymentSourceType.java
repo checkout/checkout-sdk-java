@@ -18,8 +18,6 @@ public enum PaymentSourceType {
     CUSTOMER,
     @SerializedName("dlocal")
     DLOCAL,
-    @SerializedName("baloto")
-    BALOTO,
     @SerializedName("boleto")
     BOLETO,
     @SerializedName("fawry")

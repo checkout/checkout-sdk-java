@@ -149,7 +149,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
         return blocking(() -> tokensClient.requestCardToken(request));
     }
 
-    protected <T> void makePayeeNotOnboarded(final Supplier<CompletableFuture<T>> supplier) {
+    protected <T> void checkPayeeNotOnboarded(final Supplier<CompletableFuture<T>> supplier) {
         try {
             supplier.get().get();
             fail();
