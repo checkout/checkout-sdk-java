@@ -1,5 +1,6 @@
 package com.checkout.payments.hosted;
 
+import com.checkout.common.AmountAllocations;
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerResponse;
 import com.checkout.common.Resource;
@@ -49,5 +50,8 @@ public final class HostedPaymentDetailsResponse extends Resource {
 
     @SerializedName("failure_url")
     private String failureUrl;
+
+    @SerializedName("amount_allocations")
+    private List<AmountAllocations> amountAllocations;
 
 }

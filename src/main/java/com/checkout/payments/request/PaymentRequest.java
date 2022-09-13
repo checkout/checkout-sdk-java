@@ -1,5 +1,6 @@
 package com.checkout.payments.request;
 
+import com.checkout.common.AmountAllocations;
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
 import com.checkout.common.MarketplaceData;
@@ -82,7 +83,15 @@ public final class PaymentRequest {
 
     private PaymentRecipient recipient;
 
+    /**
+     * @deprecated This property will be removed in the future, and should be used
+     * {@link PaymentRequest#amountAllocations} instead
+     */
+    @Deprecated
     private MarketplaceData marketplace;
+
+    @SerializedName("amount_allocations")
+    private List<AmountAllocations> amountAllocations;
 
     private ProcessingSettings processing;
 
