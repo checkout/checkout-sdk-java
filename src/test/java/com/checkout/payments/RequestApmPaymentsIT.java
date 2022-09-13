@@ -15,13 +15,19 @@ import com.checkout.common.Phone;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.source.apm.RequestAfterPaySource;
 import com.checkout.payments.request.source.apm.RequestAlipayPlusSource;
+import com.checkout.payments.request.source.apm.RequestBancontactSource;
 import com.checkout.payments.request.source.apm.RequestBenefitSource;
 import com.checkout.payments.request.source.apm.RequestEpsSource;
 import com.checkout.payments.request.source.apm.RequestGiropaySource;
 import com.checkout.payments.request.source.apm.RequestIdealSource;
+import com.checkout.payments.request.source.apm.RequestKnetSource;
 import com.checkout.payments.request.source.apm.RequestMbwaySource;
+import com.checkout.payments.request.source.apm.RequestMultiBancoSource;
+import com.checkout.payments.request.source.apm.RequestP24Source;
+import com.checkout.payments.request.source.apm.RequestPostFinanceSource;
 import com.checkout.payments.request.source.apm.RequestQPaySource;
 import com.checkout.payments.request.source.apm.RequestSofortSource;
+import com.checkout.payments.request.source.apm.RequestStcPaySource;
 import com.checkout.payments.request.source.apm.RequestTamaraSource;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
@@ -216,12 +222,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        try {
-            paymentsClient.requestPayment(paymentRequest).get();
-            fail();
-        } catch (Exception exception) {
-            assertTrue(exception.getCause() instanceof CheckoutApiException);
-        }
+        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
     }
 
     @Test
@@ -240,12 +241,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        try {
-            paymentsClient.requestPayment(paymentRequest).get();
-            fail();
-        } catch (Exception exception) {
-            assertTrue(exception.getCause() instanceof CheckoutApiException);
-        }
+        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
     }
 
     @Test
@@ -255,6 +251,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .currency(Currency.GBP)
                 .amount(100L)
                 .capture(true)
+                .reference(UUID.randomUUID().toString())
                 .successUrl("https://testing.checkout.com/sucess")
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
@@ -280,12 +277,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        try {
-            paymentsClient.requestPayment(paymentRequest).get();
-            fail();
-        } catch (Exception exception) {
-            assertTrue(exception.getCause() instanceof CheckoutApiException);
-        }
+        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
     }
 
     @Test
@@ -294,9 +286,113 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .source(RequestGiropaySource.builder()
                         .purpose("CKO Giropay test")
                         .build())
-                .currency(Currency.GBP)
+                .currency(Currency.EUR)
                 .amount(100L)
                 .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+    }
+
+    @Test
+    void shouldMakePrzelewy24Payment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestP24Source.builder()
+                        .paymentCountry(CountryCode.PL)
+                        .accountHolderName("Bruce Wayne")
+                        .accountHolderEmail("bruce@wayne-enterprises.com")
+                        .billingDescriptor("P24 Demo Payment")
+                        .build())
+                .currency(Currency.PLN)
+                .amount(100L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+    }
+
+    @Test
+    void shouldMakeKnetPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestKnetSource.builder()
+                        .language("en")
+                        .build())
+                .currency(Currency.KWD)
+                .amount(1000L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+    }
+
+    @Test
+    void shouldMakeBancontactPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestBancontactSource.builder()
+                        .paymentCountry(CountryCode.BE)
+                        .accountHolderName("Bruce Wayne")
+                        .billingDescriptor("CKO Demo - bancontact")
+                        .build())
+                .currency(Currency.EUR)
+                .amount(100L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+    }
+
+    @Test
+    void shouldMakeMultiBancoPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestMultiBancoSource.builder()
+                        .paymentCountry(CountryCode.PT)
+                        .accountHolderName("Bruce Wayne")
+                        .billingDescriptor("Multibanco Demo Payment")
+                        .build())
+                .currency(Currency.EUR)
+                .amount(10L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+    }
+
+    @Test
+    void shouldMakePostFinancePayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestPostFinanceSource.builder()
+                        .paymentCountry(CountryCode.CH)
+                        .accountHolderName("Bruce Wayne")
+                        .billingDescriptor("PostFinance Demo Payment")
+                        .build())
+                .currency(Currency.EUR)
+                .amount(10L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        makePayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+    }
+
+    @Test
+    void shouldMakeStcPayPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(new RequestStcPaySource())
+                .currency(Currency.QAR)
+                .amount(10L)
+                .capture(true)
+                .reference(UUID.randomUUID().toString())
                 .successUrl("https://testing.checkout.com/sucess")
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();

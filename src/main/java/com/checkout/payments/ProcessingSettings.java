@@ -82,6 +82,9 @@ public final class ProcessingSettings {
     @SerializedName("airline_data")
     private List<AirlineData> airlineData;
 
+    @SerializedName("otp_value")
+    private String otpValue;
+
     //Previous
     private DLocalProcessingSettings dlocal;
 
