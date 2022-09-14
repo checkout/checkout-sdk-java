@@ -18,6 +18,8 @@ import com.checkout.payments.hosted.HostedPaymentsClient;
 import com.checkout.payments.hosted.HostedPaymentsClientImpl;
 import com.checkout.payments.links.PaymentLinksClient;
 import com.checkout.payments.links.PaymentLinksClientImpl;
+import com.checkout.reports.ReportsClient;
+import com.checkout.reports.ReportsClientImpl;
 import com.checkout.risk.RiskClient;
 import com.checkout.risk.RiskClientImpl;
 import com.checkout.sessions.SessionsClient;
@@ -47,6 +49,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final HostedPaymentsClient hostedPaymentsClient;
     private final TransfersClient transfersClient;
     private final BalancesClient balancesClient;
+    private final ReportsClient reportsClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         super(configuration);
@@ -63,6 +66,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.hostedPaymentsClient = new HostedPaymentsClientImpl(this.apiClient, configuration);
         this.transfersClient = new TransfersClientImpl(getTransfersClient(configuration), configuration);
         this.balancesClient = new BalancesClientImpl(getBalancesClient(configuration), configuration);
+        this.reportsClient = new ReportsClientImpl(this.apiClient, configuration);
         this.accountsClient = new AccountsClientImpl(this.apiClient,
                 getFilesClient(configuration),
                 configuration);
@@ -136,6 +140,11 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     @Override
     public TransfersClient transfersClient() {
         return transfersClient;
+    }
+
+    @Override
+    public ReportsClient reportsClient() {
+        return reportsClient;
     }
 
     private ApiClient getFilesClient(final CheckoutConfiguration configuration) {

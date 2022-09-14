@@ -146,6 +146,7 @@ class ApacheHttpClientTransport implements Transport {
         request.setHeader(USER_AGENT, PROJECT_NAME + "/" + getVersionFromManifest());
         request.setHeader(ACCEPT, getAcceptHeader(clientOperation));
         request.setHeader(AUTHORIZATION, authorization.getAuthorizationHeader());
+
         log.info("Request: " + Arrays.toString(sanitiseHeaders(request.getAllHeaders())));
         if (requestBody != null && request instanceof HttpEntityEnclosingRequest) {
             ((HttpEntityEnclosingRequestBase) request).setEntity(new StringEntity(requestBody, ContentType.APPLICATION_JSON));

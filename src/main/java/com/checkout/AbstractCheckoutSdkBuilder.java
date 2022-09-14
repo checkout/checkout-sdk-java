@@ -1,9 +1,8 @@
 package com.checkout;
 
-import org.apache.http.impl.client.HttpClientBuilder;
-
 import java.util.concurrent.Executor;
 import java.util.concurrent.ForkJoinPool;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
 

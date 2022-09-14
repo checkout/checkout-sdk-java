@@ -9,6 +9,7 @@ import com.checkout.instruments.InstrumentsClient;
 import com.checkout.payments.PaymentsClient;
 import com.checkout.payments.hosted.HostedPaymentsClient;
 import com.checkout.payments.links.PaymentLinksClient;
+import com.checkout.reports.ReportsClient;
 import com.checkout.risk.RiskClient;
 import com.checkout.sessions.SessionsClient;
 import com.checkout.tokens.TokensClient;
@@ -44,6 +45,8 @@ public interface CheckoutApi extends CheckoutApmApi {
     BalancesClient balancesClient();
 
     TransfersClient transfersClient();
+
+    ReportsClient reportsClient();
 
 }
 

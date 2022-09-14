@@ -36,7 +36,9 @@ public enum OAuthScope {
     BALANCES_VIEW("balances:view"),
     MIDDLEWARE("middleware"),
     MIDDLEWARE_MERCHANTS_SECRET("middleware:merchants-secret"),
-    MIDDLEWARE_MERCHANTS_PUBLIC("middleware:merchants-public");
+    MIDDLEWARE_MERCHANTS_PUBLIC("middleware:merchants-public"),
+    REPORTING("reporting"),
+    REPORTING_VIEW("reporting:view");
 
     private final String scope;
 
