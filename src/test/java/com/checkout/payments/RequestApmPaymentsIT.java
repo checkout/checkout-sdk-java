@@ -5,6 +5,7 @@ import com.checkout.CheckoutApi;
 import com.checkout.CheckoutApiException;
 import com.checkout.CheckoutSdk;
 import com.checkout.Environment;
+import com.checkout.TestHelper;
 import com.checkout.common.AccountHolder;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
@@ -12,18 +13,23 @@ import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
+import com.checkout.payments.request.PaymentCustomerRequest;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.source.apm.RequestAfterPaySource;
 import com.checkout.payments.request.source.apm.RequestAlipayPlusSource;
+import com.checkout.payments.request.source.apm.RequestAlmaSource;
 import com.checkout.payments.request.source.apm.RequestBancontactSource;
 import com.checkout.payments.request.source.apm.RequestBenefitSource;
 import com.checkout.payments.request.source.apm.RequestEpsSource;
+import com.checkout.payments.request.source.apm.RequestFawrySource;
 import com.checkout.payments.request.source.apm.RequestGiropaySource;
 import com.checkout.payments.request.source.apm.RequestIdealSource;
+import com.checkout.payments.request.source.apm.RequestKlarnaSource;
 import com.checkout.payments.request.source.apm.RequestKnetSource;
 import com.checkout.payments.request.source.apm.RequestMbwaySource;
 import com.checkout.payments.request.source.apm.RequestMultiBancoSource;
 import com.checkout.payments.request.source.apm.RequestP24Source;
+import com.checkout.payments.request.source.apm.RequestPayPalSource;
 import com.checkout.payments.request.source.apm.RequestPostFinanceSource;
 import com.checkout.payments.request.source.apm.RequestQPaySource;
 import com.checkout.payments.request.source.apm.RequestSofortSource;
@@ -38,6 +44,8 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.UUID;
 
+import static com.checkout.TestHelper.createAddress;
+import static com.checkout.TestHelper.createPhone;
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -50,7 +58,6 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     void shouldMakeAliPayPayment() throws InterruptedException {
         RequestAlipayPlusSource source = RequestAlipayPlusSource.requestAlipayPlusCNSource();
         source = RequestAlipayPlusSource.requestAlipayPlusGCashSource();
-        source = RequestAlipayPlusSource.requestAlipayPlusHKSource();
         source = RequestAlipayPlusSource.requestAlipayPlusDanaSource();
         source = RequestAlipayPlusSource.requestAlipayPlusKakaoPaySource();
         source = RequestAlipayPlusSource.requestAlipayPlusTrueMoneySource();
@@ -222,7 +229,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 
     @Test
@@ -241,7 +248,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 
     @Test
@@ -256,12 +263,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        try {
-            paymentsClient.requestPayment(paymentRequest).get();
-            fail();
-        } catch (Exception exception) {
-            assertTrue(exception.getCause() instanceof CheckoutApiException);
-        }
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), APM_SERVICE_UNAVAILABLE);
     }
 
     @Test
@@ -277,7 +279,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 
     @Test
@@ -293,7 +295,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 
     @Test
@@ -312,7 +314,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 
     @Test
@@ -328,7 +330,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 
     @Test
@@ -346,7 +348,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 
     @Test
@@ -364,7 +366,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 
     @Test
@@ -382,26 +384,107 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        checkPayeeNotOnboarded(() -> paymentsClient.requestPayment(paymentRequest));
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 
     @Test
     void shouldMakeStcPayPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(new RequestStcPaySource())
-                .currency(Currency.QAR)
+                .currency(Currency.SAR)
                 .amount(10L)
                 .capture(true)
                 .reference(UUID.randomUUID().toString())
+                .customer(PaymentCustomerRequest.builder()
+                        .email(TestHelper.generateRandomEmail())
+                        .name("Louis Smith")
+                        .phone(createPhone())
+                        .build())
                 .successUrl("https://testing.checkout.com/sucess")
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        try {
-            paymentsClient.requestPayment(paymentRequest).get();
-            fail();
-        } catch (Exception exception) {
-            assertTrue(exception.getCause() instanceof CheckoutApiException);
-        }
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), "merchant_data_delegated_authentication_failed");
+    }
+
+    @Test
+    void shouldMakeAlmaPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestAlmaSource.builder()
+                        .billingAddress(createAddress())
+                        .build())
+                .currency(Currency.EUR)
+                .amount(10L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
+    }
+
+    @Test
+    void shouldMakeKlarnaPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestKlarnaSource.builder()
+                        .accountHolder(TestHelper.getAccountHolder())
+                        .build())
+                .currency(Currency.EUR)
+                .amount(10L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), APM_SERVICE_UNAVAILABLE);
+    }
+
+    @Test
+    void shouldMakePayPalPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestPayPalSource.builder()
+                        .plan(BillingPlan.builder()
+                                .type(BillingPlanType.CHANNEL_INITIATED_BILLING_SINGLE_AGREEMENT)
+                                .immutableShippingAddress(false)
+                                .skipShippingAddress(true)
+                                .build())
+                        .build())
+                .currency(Currency.EUR)
+                .amount(10L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .items(Collections.singletonList(Product.builder()
+                        .name("laptop")
+                        .unitPrice(10L)
+                        .quantity(1L)
+                        .build()))
+                .build();
+
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
+    }
+
+    @Test
+    void shouldMakeFawryPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestFawrySource.builder()
+                        .description("Fawry Demo Payment")
+                        .customerMobile("01058375055")
+                        .customerEmail("bruce@wayne-enterprises.com")
+                        .products(Collections.singletonList(RequestFawrySource.Product.builder()
+                                .id("0123456789")
+                                .quantity(1L)
+                                .price(10L)
+                                .description("Fawry Demo Product")
+                                .build()))
+                        .build())
+                .currency(Currency.EGP)
+                .amount(10L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 }

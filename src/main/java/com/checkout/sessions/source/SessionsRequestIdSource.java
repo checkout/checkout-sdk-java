@@ -2,6 +2,7 @@ package com.checkout.sessions.source;
 
 import com.checkout.common.Phone;
 import com.checkout.sessions.SessionAddress;
+import com.checkout.sessions.SessionScheme;
 import com.checkout.sessions.SessionSourceType;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -17,12 +18,13 @@ public final class SessionsRequestIdSource extends SessionSource {
 
     @Builder
     private SessionsRequestIdSource(final String id,
+                                    final SessionScheme scheme,
                                     final SessionAddress billingAddress,
                                     final Phone homePhone,
                                     final Phone mobilePhone,
                                     final Phone workPhone,
                                     final String email) {
-        super(SessionSourceType.ID, billingAddress, homePhone, mobilePhone, workPhone, email);
+        super(SessionSourceType.ID, scheme, billingAddress, homePhone, mobilePhone, workPhone, email);
         this.id = id;
     }
 

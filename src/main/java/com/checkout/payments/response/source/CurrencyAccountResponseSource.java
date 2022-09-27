@@ -11,4 +11,6 @@ public final class CurrencyAccountResponseSource extends AbstractResponseSource 
 
     private Long amount;
 
+    private String currency;
+
 }

@@ -25,8 +25,6 @@ public final class SessionCardSource extends SessionSource {
 
     private String name;
 
-    private SessionScheme scheme;
-
     private Boolean stored;
 
     @SerializedName("store_for_future_use")
@@ -38,19 +36,18 @@ public final class SessionCardSource extends SessionSource {
                               final Integer expiryYear,
                               final String name,
                               final String email,
+                              final SessionScheme scheme,
                               final SessionAddress billingAddress,
                               final Phone homePhone,
                               final Phone mobilePhone,
                               final Phone workPhone,
-                              final SessionScheme scheme,
                               final Boolean stored,
                               final Boolean storeForFutureUse) {
-        super(SessionSourceType.CARD, billingAddress, homePhone, mobilePhone, workPhone, email);
+        super(SessionSourceType.CARD, scheme, billingAddress, homePhone, mobilePhone, workPhone, email);
         this.number = number;
         this.expiryMonth = expiryMonth;
         this.expiryYear = expiryYear;
         this.name = name;
-        this.scheme = scheme;
         this.stored = stored;
         this.storeForFutureUse = storeForFutureUse;
     }

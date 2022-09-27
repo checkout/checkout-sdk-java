@@ -1,5 +1,7 @@
 package com.checkout.payments;
 
+import com.checkout.common.CountryCode;
+import com.checkout.common.ShippingInfo;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -84,6 +86,18 @@ public final class ProcessingSettings {
 
     @SerializedName("otp_value")
     private String otpValue;
+
+    @SerializedName("purchase_country")
+    private CountryCode purchaseCountry;
+
+    @SerializedName("custom_payment_method_ids")
+    private List<String> customPaymentMethodIds;
+
+    @SerializedName("shipping_delay")
+    private Long shippingDelay;
+
+    @SerializedName("shipping_info")
+    private List<ShippingInfo> shippingInfo;
 
     //Previous
     private DLocalProcessingSettings dlocal;

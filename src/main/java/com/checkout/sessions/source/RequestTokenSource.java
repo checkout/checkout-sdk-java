@@ -2,6 +2,7 @@ package com.checkout.sessions.source;
 
 import com.checkout.common.Phone;
 import com.checkout.sessions.SessionAddress;
+import com.checkout.sessions.SessionScheme;
 import com.checkout.sessions.SessionSourceType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
@@ -21,13 +22,14 @@ public final class RequestTokenSource extends SessionSource {
 
     @Builder
     private RequestTokenSource(final String token,
+                               final SessionScheme scheme,
                                final SessionAddress billingAddress,
                                final Phone homePhone,
                                final Phone mobilePhone,
                                final Phone workPhone,
                                final String email,
                                final Boolean storeForFutureUse) {
-        super(SessionSourceType.TOKEN, billingAddress, homePhone, mobilePhone, workPhone, email);
+        super(SessionSourceType.TOKEN, scheme, billingAddress, homePhone, mobilePhone, workPhone, email);
         this.token = token;
         this.storeForFutureUse = storeForFutureUse;
     }

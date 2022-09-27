@@ -61,5 +61,8 @@ public final class ThreeDSRequest {
     @SerializedName("cryptogram_algorithm")
     private String cryptogramAlgorithm;
 
+    @SerializedName("authentication_id")
+    private String authenticationId;
+
 }
 
