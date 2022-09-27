@@ -1,5 +1,6 @@
 package com.checkout;
 
+import com.checkout.common.AccountHolder;
 import com.checkout.common.Address;
 import com.checkout.common.ChallengeIndicator;
 import com.checkout.common.CountryCode;
@@ -183,6 +184,15 @@ public final class TestHelper {
                 .name("Bruce Wayne")
                 .email("bruce@wayne-enterprises.com")
                 .document("53033315550")
+                .build();
+    }
+
+    public static AccountHolder getAccountHolder(){
+        return AccountHolder.builder()
+                .firstName("John")
+                .lastName("Doe")
+                .phone(createPhone())
+                .billingAddress(createAddress())
                 .build();
     }
 

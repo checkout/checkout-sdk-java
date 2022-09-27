@@ -40,6 +40,8 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
 
     protected final PaymentsClient paymentsClient;
     protected final TokensClient tokensClient;
+    public static final String PAYEE_NOT_ONBOARDED = "payee_not_onboarded";
+    public static final String APM_SERVICE_UNAVAILABLE = "apm_service_unavailable";
 
     public AbstractPaymentsTestIT() {
         super(PlatformType.DEFAULT);
@@ -149,14 +151,14 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
         return blocking(() -> tokensClient.requestCardToken(request));
     }
 
-    protected <T> void checkPayeeNotOnboarded(final Supplier<CompletableFuture<T>> supplier) {
+    protected <T> void checkErrorItem(final Supplier<CompletableFuture<T>> supplier, final String errorItem) {
         try {
             supplier.get().get();
             fail();
         } catch (final InterruptedException | ExecutionException exception) {
             assertTrue(exception.getCause() instanceof CheckoutApiException);
             final List<String> error_codes = (List<String>) ((CheckoutApiException) exception.getCause()).getErrorDetails().get("error_codes");
-            assertThat(error_codes, hasItem("payee_not_onboarded"));
+            assertThat(error_codes, hasItem(errorItem));
         }
     }
 

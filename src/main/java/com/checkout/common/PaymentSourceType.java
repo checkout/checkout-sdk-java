@@ -91,6 +91,8 @@ public enum PaymentSourceType {
     @SerializedName("postfinance")
     POSTFINANCE,
     @SerializedName("stcpay")
-    STCPAY
+    STCPAY,
+    @SerializedName("alma")
+    ALMA
 
 }

@@ -44,4 +44,6 @@ public final class AccountHolder {
 
     private String email;
 
+    private String gender;
+
 }

@@ -18,6 +18,12 @@ public final class PaymentProcessing {
     @SerializedName("partner_order_id")
     private String partnerOrderId;
 
+    @SerializedName("partner_session_id")
+    private String partnerSessionId;
+
+    @SerializedName("partner_client_token")
+    private String partnerClientToken;
+
     @SerializedName("partner_payment_id")
     private String partnerPaymentId;
 

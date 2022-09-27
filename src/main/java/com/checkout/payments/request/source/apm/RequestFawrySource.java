@@ -1,7 +1,7 @@
-package com.checkout.payments.previous.request.source.apm;
+package com.checkout.payments.request.source.apm;
 
 import com.checkout.common.PaymentSourceType;
-import com.checkout.payments.previous.request.source.AbstractRequestSource;
+import com.checkout.payments.request.source.AbstractRequestSource;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,11 +39,11 @@ public final class RequestFawrySource extends AbstractRequestSource {
 
     @Builder
     private RequestFawrySource(final String description,
-                              final String customerProfileId,
-                              final String customerEmail,
-                              final String customerMobile,
-                              final Instant expiresOn,
-                              final List<Product> products) {
+                               final String customerProfileId,
+                               final String customerEmail,
+                               final String customerMobile,
+                               final Instant expiresOn,
+                               final List<Product> products) {
         super(PaymentSourceType.FAWRY);
         this.description = description;
         this.customerProfileId = customerProfileId;

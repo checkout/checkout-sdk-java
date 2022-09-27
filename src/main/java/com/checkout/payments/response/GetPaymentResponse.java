@@ -10,6 +10,7 @@ import com.checkout.payments.PaymentActionSummary;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.PaymentStatus;
 import com.checkout.payments.PaymentType;
+import com.checkout.payments.Product;
 import com.checkout.payments.RiskAssessment;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSData;
@@ -88,6 +89,10 @@ public final class GetPaymentResponse extends Resource {
 
     private PaymentRecipient recipient;
 
+    private ProcessingData processing;
+
+    private List<Product> items;
+
     private Map<String, Object> metadata;
 
     private String eci;
@@ -96,5 +101,8 @@ public final class GetPaymentResponse extends Resource {
     private String schemeId;
 
     private List<PaymentActionSummary> actions;
+
+    @SerializedName("processed_on")
+    private String processedOn;
 
 }

@@ -1,6 +1,7 @@
 package com.checkout.apm.previous.klarna;
 
 import com.checkout.common.PaymentSourceType;
+import com.checkout.common.ShippingInfo;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,34 +48,4 @@ public final class OrderCaptureRequest {
         private Integer shippingDelay;
 
     }
-
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class ShippingInfo {
-
-        @SerializedName("shipping_company")
-        private String shippingCompany;
-
-        @SerializedName("shipping_method")
-        private String shippingMethod;
-
-        @SerializedName("tracking_number")
-        private String trackingNumber;
-
-        @SerializedName("tracking_uri")
-        private String trackingUri;
-
-        @SerializedName("return_shipping_company")
-        private String returnShippingCompany;
-
-        @SerializedName("return_tracking_number")
-        private String returnTrackingNumber;
-
-        @SerializedName("return_tracking_uri")
-        private String returnTrackingUri;
-
-    }
-
 }
