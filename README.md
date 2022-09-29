@@ -49,7 +49,8 @@ dependencies {
 
 ## How to use the SDK
 
-This SDK can be used with two different pair of API keys provided by Checkout. However, using different API keys imply using specific API features. Please find in the table below the types of keys that can be used within this SDK.
+This SDK can be used with two different pair of API keys provided by Checkout. However, using different API keys imply using specific API features. </br> 
+Please find in the table below the types of keys that can be used within this SDK.
 
 | Account System | Public Key (example)                    | Secret Key (example)                    |
 |----------------|-----------------------------------------|-----------------------------------------|
@@ -107,7 +108,7 @@ final CheckoutApi checkoutApi = CheckoutSdk.builder()
 final PaymentsClient client = checkoutApi.paymentsClient();
 
 final CompletableFuture<RefundResponse> refundPayment = client.refundPayment("payment_id");
-        }
+}
 ```
 
 ### Previous
@@ -133,10 +134,31 @@ public static void main(String[] args) {
         }
 ```
 
+## Custom HttpClient
+
+Sometimes you need a custom thread pool, or any custom http property, so you can provide your own httpClient configuration as follows.
+
+```java
+final HttpClientBuilder customHttpClient = HttpClientBuilder.create()
+        .setProxy(HttpHost.create("https://proxy"))
+        .setConnectionTimeToLive(3, TimeUnit.SECONDS);
+
+final CheckoutApi checkoutApi = CheckoutSdk.builder()
+        .staticKeys()
+        .secretKey("secret_key")
+        .environment(Environment.PRODUCTION)  // required
+        .executor(customHttpClient) // optional for a custom Executor Service
+        .build();
+```
+
+## Logging
+
+The SDK supports SLF4J as logger provider, you need to provide your configuration file through `resources` folder.
+
 ## Exception handling
 
-All the API responses that do not fall in the 2** status codes will cause a `CheckoutApiException`. The exception encapsulates 
-the `requestId`, `httpStatusCode` and a map of `errorDetails`, if available.
+All the API responses that do not fall in the 2** status codes will cause a `CheckoutApiException`. The exception encapsulates
+the `responseHeaders`, `httpStatusCode` and a map of `errorDetails`, if available.
 
 ## Building from source
 
@@ -151,9 +173,9 @@ gradlew build -x test
 
 The execution of integration tests require the following environment variables set in your system:
 
-* For default account systems: `CHECKOUT_DEFAULT_PUBLIC_KEY` & `CHECKOUT_DEFAULT_SECRET_KEY`
+* For default account systems (NAS): `CHECKOUT_DEFAULT_PUBLIC_KEY` & `CHECKOUT_DEFAULT_SECRET_KEY`
 * For default account systems (OAuth): `CHECKOUT_DEFAULT_OAUTH_CLIENT_ID` & `CHECKOUT_DEFAULT_OAUTH_CLIENT_SECRET`
-* For Previous account systems: `CHECKOUT_PREVIOUS_PUBLIC_KEY` & `CHECKOUT_PREVIOUS_SECRET_KEY`
+* For Previous account systems (ABC): `CHECKOUT_PREVIOUS_PUBLIC_KEY` & `CHECKOUT_PREVIOUS_SECRET_KEY`
 
 ## Code of Conduct
 
