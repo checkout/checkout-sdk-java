@@ -14,6 +14,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
 
+import static com.checkout.TestHelper.generateRandomEmail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -31,6 +32,9 @@ class AccountsTestIT extends SandboxTestFixture {
                 .contactDetails(ContactDetails.builder()
                         .phone(AccountPhone.builder()
                                 .number("2345678910")
+                                .build())
+                        .emailAddresses(EntityEmailAddresses.builder()
+                                .primary(generateRandomEmail())
                                 .build())
                         .build())
                 .profile(Profile.builder()
