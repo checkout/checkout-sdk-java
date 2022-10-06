@@ -35,6 +35,9 @@ public final class ThreeDSRequest {
     @SerializedName("challenge_indicator")
     private ChallengeIndicator challengeIndicator;
 
+    @SerializedName("allow_upgrade")
+    private Boolean allowUpgrade;
+
     /**
      * Not available on Previous
      */

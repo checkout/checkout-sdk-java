@@ -11,8 +11,5 @@ public enum PaymentType {
     @SerializedName("Moto")
     MOTO,
     @SerializedName("Installment")
-    INSTALLMENT,
-    @SerializedName("Unscheduled")
-    UNSCHEDULED
-
+    INSTALLMENT
 }

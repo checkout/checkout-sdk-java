@@ -12,6 +12,9 @@ public final class ThreeDSData {
 
     private ThreeDSEnrollmentStatus enrolled;
 
+    @SerializedName("upgrade_reason")
+    private String upgradeReason;
+
     @SerializedName("signature_valid")
     private String signatureValid;
 

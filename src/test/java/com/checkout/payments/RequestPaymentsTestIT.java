@@ -14,6 +14,7 @@ import com.checkout.common.Phone;
 import com.checkout.common.ThreeDSEnrollmentStatus;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.source.RequestCardSource;
+import com.checkout.payments.request.source.RequestCustomerSource;
 import com.checkout.payments.request.source.RequestIdSource;
 import com.checkout.payments.request.source.RequestTokenSource;
 import com.checkout.payments.response.GetPaymentResponse;
@@ -412,6 +413,22 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
         final CardResponseSource responseCardSource = (CardResponseSource) paymentResponse.getSource();
         assertNull(responseCardSource);
 
+    }
+
+    @Test
+    void shouldMakeCustomerPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestCustomerSource.builder()
+                        .id("cus_udst2tfldj6upmye2reztkmm4i")
+                        .build())
+                .currency(Currency.GBP)
+                .amount(10L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), "customer_not_found");
     }
 
 }
