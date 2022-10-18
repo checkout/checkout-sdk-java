@@ -8,10 +8,7 @@ import com.checkout.SdkAuthorizationType;
 import com.checkout.payments.request.AuthorizationRequest;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.PayoutRequest;
-import com.checkout.payments.response.AuthorizationResponse;
-import com.checkout.payments.response.GetPaymentResponse;
-import com.checkout.payments.response.PaymentResponse;
-import com.checkout.payments.response.PayoutResponse;
+import com.checkout.payments.response.*;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
@@ -57,6 +54,12 @@ public final class PaymentsClientImpl extends AbstractClient implements Payments
     public CompletableFuture<PayoutResponse> requestPayout(final PayoutRequest payoutRequest, final String idempotencyKey) {
         validateParams("payoutRequest", payoutRequest, "idempotencyKey", idempotencyKey);
         return apiClient.postAsync(PAYMENTS_PATH, sdkAuthorization(), PayoutResponse.class, payoutRequest, idempotencyKey);
+    }
+
+    @Override
+    public CompletableFuture<PaymentsQueryResponse> getPaymentsList(final PaymentsQueryFilter queryFilter) {
+        validateParams("queryFilter", queryFilter);
+        return apiClient.queryAsync(PAYMENTS_PATH, sdkAuthorization(), queryFilter, PaymentsQueryResponse.class);
     }
 
     @Override

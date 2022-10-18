@@ -12,6 +12,7 @@ import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.CustomerResponse;
 import com.checkout.common.Phone;
+import com.checkout.payments.response.PaymentsQueryResponse;
 import com.checkout.payments.request.AuthorizationRequest;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.PayoutRequest;
@@ -205,6 +206,20 @@ class PaymentsClientImplTest {
         assertNotNull(future.get());
         assertEquals(response, future.get());
 
+    }
+
+    @Test
+    void shouldGetPaymentsList() throws ExecutionException, InterruptedException {
+        final PaymentsQueryFilter query = mock(PaymentsQueryFilter.class);
+        final PaymentsQueryResponse response = mock(PaymentsQueryResponse.class);
+
+        when(apiClient.queryAsync(eq("payments"), any(SdkAuthorization.class), eq(query), eq(PaymentsQueryResponse.class)))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<PaymentsQueryResponse> future = paymentsClient.getPaymentsList(query);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
     }
 
     @Test
