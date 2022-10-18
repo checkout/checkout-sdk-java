@@ -8,17 +8,13 @@ import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
 import com.checkout.common.Currency;
 import com.checkout.common.PaymentSourceType;
-import com.checkout.payments.CaptureRequest;
-import com.checkout.payments.CaptureResponse;
-import com.checkout.payments.RefundRequest;
-import com.checkout.payments.RefundResponse;
-import com.checkout.payments.VoidRequest;
-import com.checkout.payments.VoidResponse;
+import com.checkout.payments.*;
 import com.checkout.payments.previous.request.PaymentRequest;
 import com.checkout.payments.previous.request.PayoutRequest;
 import com.checkout.payments.previous.request.source.AbstractRequestSource;
 import com.checkout.payments.previous.response.GetPaymentResponse;
 import com.checkout.payments.previous.response.PaymentResponse;
+import com.checkout.payments.previous.response.PaymentsQueryResponse;
 import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
 import lombok.Setter;
@@ -163,6 +159,20 @@ class PaymentsClientImplTest {
         assertNotNull(future.get());
         assertEquals(response, future.get());
 
+    }
+
+    @Test
+    void shouldGetPaymentsList() throws ExecutionException, InterruptedException {
+        final PaymentsQueryFilter query = mock(PaymentsQueryFilter.class);
+        final PaymentsQueryResponse response = mock(PaymentsQueryResponse.class);
+
+        when(apiClient.queryAsync(eq("payments"), any(SdkAuthorization.class), eq(query), eq(PaymentsQueryResponse.class)))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<PaymentsQueryResponse> future = paymentsClient.getPaymentsList(query);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
     }
 
     @Test

@@ -11,6 +11,8 @@ import com.checkout.payments.previous.request.PaymentRequest;
 import com.checkout.payments.previous.request.PayoutRequest;
 import com.checkout.payments.previous.response.GetPaymentResponse;
 import com.checkout.payments.previous.response.PaymentResponse;
+import com.checkout.payments.PaymentsQueryFilter;
+import com.checkout.payments.previous.response.PaymentsQueryResponse;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -23,6 +25,8 @@ public interface PaymentsClient {
     CompletableFuture<PaymentResponse> requestPayout(PayoutRequest payoutRequest);
 
     CompletableFuture<PaymentResponse> requestPayout(PayoutRequest payoutRequest, String idempotencyKey);
+
+    CompletableFuture<PaymentsQueryResponse> getPaymentsList(PaymentsQueryFilter queryFilter);
 
     CompletableFuture<GetPaymentResponse> getPayment(String paymentId);
 

@@ -7,6 +7,7 @@ import com.checkout.payments.request.PayoutRequest;
 import com.checkout.payments.response.AuthorizationResponse;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
+import com.checkout.payments.response.PaymentsQueryResponse;
 import com.checkout.payments.response.PayoutResponse;
 
 import java.util.concurrent.CompletableFuture;
@@ -20,6 +21,8 @@ public interface PaymentsClient {
     CompletableFuture<PayoutResponse> requestPayout(PayoutRequest payoutRequest);
 
     CompletableFuture<PayoutResponse> requestPayout(PayoutRequest payoutRequest, final String idempotencyKey);
+
+    CompletableFuture<PaymentsQueryResponse> getPaymentsList(PaymentsQueryFilter queryFilter);
 
     CompletableFuture<GetPaymentResponse> getPayment(String paymentId);
 

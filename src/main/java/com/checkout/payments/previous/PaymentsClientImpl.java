@@ -1,5 +1,7 @@
 package com.checkout.payments.previous;
 
+import static com.checkout.common.CheckoutUtils.validateParams;
+
 import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
@@ -15,12 +17,11 @@ import com.checkout.payments.previous.request.PaymentRequest;
 import com.checkout.payments.previous.request.PayoutRequest;
 import com.checkout.payments.previous.response.GetPaymentResponse;
 import com.checkout.payments.previous.response.PaymentResponse;
+import com.checkout.payments.PaymentsQueryFilter;
+import com.checkout.payments.previous.response.PaymentsQueryResponse;
 import com.google.gson.reflect.TypeToken;
-
 import java.lang.reflect.Type;
 import java.util.concurrent.CompletableFuture;
-
-import static com.checkout.common.CheckoutUtils.validateParams;
 
 public class PaymentsClientImpl extends AbstractClient implements PaymentsClient {
 
@@ -59,6 +60,12 @@ public class PaymentsClientImpl extends AbstractClient implements PaymentsClient
     public CompletableFuture<PaymentResponse> requestPayout(final PayoutRequest payoutRequest, final String idempotencyKey) {
         validateParams("payoutRequest", payoutRequest, "idempotencyKey", idempotencyKey);
         return apiClient.postAsync(PAYMENTS_PATH, sdkAuthorization(), PaymentResponse.class, payoutRequest, idempotencyKey);
+    }
+
+    @Override
+    public CompletableFuture<PaymentsQueryResponse> getPaymentsList(final PaymentsQueryFilter queryFilter) {
+        validateParams("queryFilter", queryFilter);
+        return apiClient.queryAsync(PAYMENTS_PATH, sdkAuthorization(), queryFilter, PaymentsQueryResponse.class);
     }
 
     @Override
