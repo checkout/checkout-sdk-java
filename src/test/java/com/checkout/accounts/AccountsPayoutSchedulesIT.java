@@ -19,6 +19,7 @@ import com.checkout.common.Currency;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 import static java.util.Objects.requireNonNull;
@@ -36,7 +37,7 @@ class AccountsPayoutSchedulesIT {
                 .enabled(true)
                 .threshold(1000)
                 .recurrence(ScheduleFrequencyWeeklyRequest.builder()
-                        .byDay(DaySchedule.MONDAY)
+                        .byDays(Collections.singletonList(DaySchedule.MONDAY))
                         .build())
                 .build();
 
@@ -103,7 +104,7 @@ class AccountsPayoutSchedulesIT {
                 .enabled(true)
                 .threshold(1000)
                 .recurrence(ScheduleFrequencyMonthlyRequest.builder()
-                        .byMonthDay(15)
+                        .byMonthDays(Collections.singletonList(15))
                         .build())
                 .build();
 

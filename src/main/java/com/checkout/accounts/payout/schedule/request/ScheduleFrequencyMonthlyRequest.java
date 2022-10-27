@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
@@ -15,12 +17,12 @@ import lombok.ToString;
 public final class ScheduleFrequencyMonthlyRequest extends ScheduleRequest {
 
     @SerializedName("by_month_day")
-    private Integer byMonthDay;
+    private List<Integer> byMonthDays;
 
     @Builder
-    private ScheduleFrequencyMonthlyRequest(final Integer byMonthDay) {
+    private ScheduleFrequencyMonthlyRequest(final List<Integer> byMonthDays) {
         super(ScheduleFrequency.MONTHLY);
-        this.byMonthDay = byMonthDay;
+        this.byMonthDays = byMonthDays;
     }
 
     public ScheduleFrequencyMonthlyRequest() {
