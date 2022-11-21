@@ -12,6 +12,8 @@ import com.checkout.forex.ForexClient;
 import com.checkout.forex.ForexClientImpl;
 import com.checkout.instruments.InstrumentsClient;
 import com.checkout.instruments.InstrumentsClientImpl;
+import com.checkout.metadata.MetadataClient;
+import com.checkout.metadata.MetadataClientImpl;
 import com.checkout.payments.PaymentsClient;
 import com.checkout.payments.PaymentsClientImpl;
 import com.checkout.payments.hosted.HostedPaymentsClient;
@@ -50,6 +52,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final TransfersClient transfersClient;
     private final BalancesClient balancesClient;
     private final ReportsClient reportsClient;
+    private final MetadataClient metadataClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         super(configuration);
@@ -67,6 +70,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.transfersClient = new TransfersClientImpl(getTransfersClient(configuration), configuration);
         this.balancesClient = new BalancesClientImpl(getBalancesClient(configuration), configuration);
         this.reportsClient = new ReportsClientImpl(this.apiClient, configuration);
+        this.metadataClient = new MetadataClientImpl(this.apiClient, configuration);
         this.accountsClient = new AccountsClientImpl(this.apiClient,
                 getFilesClient(configuration),
                 configuration);
@@ -145,6 +149,11 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     @Override
     public ReportsClient reportsClient() {
         return reportsClient;
+    }
+
+    @Override
+    public MetadataClient metadataClient() {
+        return metadataClient;
     }
 
     private ApiClient getFilesClient(final CheckoutConfiguration configuration) {
