@@ -38,7 +38,8 @@ public enum OAuthScope {
     MIDDLEWARE_MERCHANTS_SECRET("middleware:merchants-secret"),
     MIDDLEWARE_MERCHANTS_PUBLIC("middleware:merchants-public"),
     REPORTING("reporting"),
-    REPORTING_VIEW("reporting:view");
+    REPORTING_VIEW("reporting:view"),
+    VAULT_CARD_METADATA("vault:card-metadata");
 
     private final String scope;
 
