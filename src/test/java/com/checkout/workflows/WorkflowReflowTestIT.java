@@ -5,6 +5,7 @@ import com.checkout.workflows.events.SubjectEvent;
 import com.checkout.workflows.reflow.ReflowByEventsRequest;
 import com.checkout.workflows.reflow.ReflowBySubjectsRequest;
 import com.checkout.workflows.reflow.ReflowResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.util.StringUtils;
 
@@ -107,6 +108,7 @@ class WorkflowReflowTestIT extends AbstractWorkflowTestIT {
     }
 
     @Test
+    @Disabled("unstable")
     void shouldReflowSubjects() {
 
         final CreateWorkflowResponse createWorkflowResponse = createWorkflow();

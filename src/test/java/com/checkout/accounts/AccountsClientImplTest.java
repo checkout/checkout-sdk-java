@@ -103,7 +103,7 @@ class AccountsClientImplTest {
     }
 
     @Test
-    void shouldCreatePaymentInstrument() throws ExecutionException, InterruptedException {
+    void shouldCreatePaymentInstrumentDeprecated() throws ExecutionException, InterruptedException {
 
         final EmptyResponse response = mock(EmptyResponse.class);
         final AccountsPaymentInstrument request = mock(AccountsPaymentInstrument.class);
@@ -160,6 +160,51 @@ class AccountsClientImplTest {
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<GetScheduleResponse> future = accountsClient.retrievePayoutSchedule("entity_id");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
+    void shouldCreatePaymentInstrument() throws ExecutionException, InterruptedException {
+
+        final IdResponse response = mock(IdResponse.class);
+        final PaymentInstrumentRequest request = mock(PaymentInstrumentRequest.class);
+
+        when(apiClient.postAsync(eq("accounts/entities/entity_id/payment-instruments"), eq(authorization), eq(IdResponse.class), any(PaymentInstrumentRequest.class), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<IdResponse> future = accountsClient.createPaymentInstrument("entity_id", request);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+    }
+
+    @Test
+    void shouldRetrievePaymentInstrumentDetails() throws ExecutionException, InterruptedException {
+
+        final PaymentInstrumentDetailsResponse response = mock(PaymentInstrumentDetailsResponse.class);
+
+        when(apiClient.getAsync("accounts/entities/entity_id/payment-instruments/instrument_id", authorization, PaymentInstrumentDetailsResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<PaymentInstrumentDetailsResponse> future = accountsClient.retrievePaymentInstrumentDetails("entity_id", "instrument_id");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
+    void shouldQueryPaymentInstruments() throws ExecutionException, InterruptedException {
+
+        final PaymentInstrumentQueryResponse response = mock(PaymentInstrumentQueryResponse.class);
+
+        when(apiClient.queryAsync(eq("accounts/entities/entity_id/payment-instruments"), eq(authorization), any(PaymentInstrumentsQuery.class), eq(PaymentInstrumentQueryResponse.class)))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<PaymentInstrumentQueryResponse> future = accountsClient.queryPaymentInstruments("entity_id", new PaymentInstrumentsQuery());
 
         assertNotNull(future.get());
         assertEquals(response, future.get());

@@ -60,10 +60,10 @@ public abstract class SandboxTestFixture {
                                 requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_ID")),
                                 requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_SECRET")))
                         .scopes(OAuthScope.FILES, OAuthScope.FLOW, OAuthScope.FX, OAuthScope.GATEWAY,
-                                OAuthScope.MARKETPLACE, OAuthScope.SESSIONS_APP, OAuthScope.SESSIONS_BROWSER,
+                                OAuthScope.ACCOUNTS, OAuthScope.SESSIONS_APP, OAuthScope.SESSIONS_BROWSER,
                                 OAuthScope.VAULT, OAuthScope.PAYOUTS_BANK_DETAILS, OAuthScope.DISPUTES,
                                 OAuthScope.TRANSFERS_CREATE, OAuthScope.TRANSFERS_VIEW, OAuthScope.BALANCES_VIEW,
-                                OAuthScope.REPORTING, OAuthScope.VAULT_CARD_METADATA)
+                                OAuthScope.VAULT_CARD_METADATA)
                         .environment(Environment.SANDBOX)
                         .executor(CUSTOM_EXECUTOR)
                         .build();
