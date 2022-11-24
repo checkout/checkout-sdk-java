@@ -6,7 +6,8 @@ public enum AccountsFilePurpose {
 
     BANK_VERIFICATION("bank_verification"),
     IDENTITY_VERIFICATION("identity_verification"),
-    COMPANY_VERIFICATION("company_verification");
+    COMPANY_VERIFICATION("company_verification"),
+    FINANCIAL_VERIFICATION("financial_verification");
 
     @Getter
     private final String purpose;

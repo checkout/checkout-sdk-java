@@ -11,18 +11,28 @@ import java.util.concurrent.CompletableFuture;
 
 public interface AccountsClient {
 
+    CompletableFuture<IdResponse> submitFile(AccountsFileRequest accountsFileRequest);
+
     CompletableFuture<OnboardEntityResponse> createEntity(OnboardEntityRequest entityRequest);
+
+    CompletableFuture<PaymentInstrumentDetailsResponse> retrievePaymentInstrumentDetails(String entityId, String paymentInstrumentId);
 
     CompletableFuture<OnboardEntityDetailsResponse> getEntity(String entityId);
 
     CompletableFuture<OnboardEntityResponse> updateEntity(OnboardEntityRequest entityRequest, String entityId);
 
+    /**
+     * @deprecated Use {{@link #createPaymentInstrument(String, PaymentInstrumentRequest)}} instead
+     */
+    @Deprecated
     CompletableFuture<EmptyResponse> createPaymentInstrument(AccountsPaymentInstrument accountsPaymentInstrument, String entityId);
 
-    CompletableFuture<IdResponse> submitFile(AccountsFileRequest accountsFileRequest);
+    CompletableFuture<IdResponse> createPaymentInstrument(String entityId, PaymentInstrumentRequest paymentInstrumentRequest);
 
-    CompletableFuture<VoidResponse> updatePayoutSchedule(String entityId, Currency currency, UpdateScheduleRequest updateScheduleRequest);
+    CompletableFuture<PaymentInstrumentQueryResponse> queryPaymentInstruments(String entityId, PaymentInstrumentsQuery query);
 
     CompletableFuture<GetScheduleResponse> retrievePayoutSchedule(String entityId);
+
+    CompletableFuture<VoidResponse> updatePayoutSchedule(String entityId, Currency currency, UpdateScheduleRequest updateScheduleRequest);
 
 }
