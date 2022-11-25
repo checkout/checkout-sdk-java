@@ -30,7 +30,7 @@ public abstract class AbstractClient {
     }
 
     protected boolean isSandbox() {
-        return Environment.SANDBOX.equals(configuration.getEnvironment());
+        return configuration.getEnvironment().isSandbox();
     }
 
 }

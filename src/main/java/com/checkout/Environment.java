@@ -1,58 +1,45 @@
 package com.checkout;
 
+import lombok.Getter;
+
 import java.net.URI;
 
 import static java.net.URI.create;
 
-public enum Environment {
+@Getter
+public enum Environment implements IEnvironment {
 
     SANDBOX(create("https://api.sandbox.checkout.com/"),
             create("https://files.sandbox.checkout.com/"),
             create("https://transfers.sandbox.checkout.com/"),
             create("https://balances.sandbox.checkout.com/"),
-            create("https://access.sandbox.checkout.com/connect/token")),
+            create("https://access.sandbox.checkout.com/connect/token"),
+            true),
     PRODUCTION(create("https://api.checkout.com/"),
             create("https://files.checkout.com/"),
             create("https://transfers.checkout.com/"),
             create("https://balances.checkout.com/"),
-            create("https://access.checkout.com/connect/token"));
+            create("https://access.checkout.com/connect/token"),
+            false);
 
-    private final URI uri;
-    private final URI filesApiURI;
-    private final URI transfersApiURI;
-    private final URI balancesApiURI;
-    private final URI oauthAuthorizeURI;
+    private final URI checkoutApi;
+    private final URI filesApi;
+    private final URI transfersApi;
+    private final URI balancesApi;
+    private final URI oAuthAuthorizationApi;
+    private final boolean sandbox;
 
-    Environment(final URI uri,
-                final URI filesApiURI,
-                final URI transfersApiURI,
-                final URI balancesApiURI,
-                final URI oauthAuthorizeURI) {
-        this.uri = uri;
-        this.filesApiURI = filesApiURI;
-        this.transfersApiURI = transfersApiURI;
-        this.balancesApiURI = balancesApiURI;
-        this.oauthAuthorizeURI = oauthAuthorizeURI;
+    Environment(final URI checkoutApi,
+                final URI filesApi,
+                final URI transfersApi,
+                final URI balancesApi,
+                final URI oAuthAuthorizationApi,
+                final boolean sandbox) {
+        this.checkoutApi = checkoutApi;
+        this.filesApi = filesApi;
+        this.transfersApi = transfersApi;
+        this.balancesApi = balancesApi;
+        this.oAuthAuthorizationApi = oAuthAuthorizationApi;
+        this.sandbox = sandbox;
     }
-
-    public URI getUri() {
-        return uri;
-    }
-
-    public URI getFilesApiUri() {
-        return filesApiURI;
-    }
-
-    public URI getTransfersApiURI() {
-        return transfersApiURI;
-    }
-
-    public URI getBalancesApiURI() {
-        return balancesApiURI;
-    }
-
-    public URI getOAuthAuthorizeUri() {
-        return oauthAuthorizeURI;
-    }
-
 }

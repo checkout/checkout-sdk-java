@@ -47,6 +47,7 @@ class KlarnaClientImplTest {
     void setUp() {
         when(sdkCredentials.getAuthorization(SdkAuthorizationType.PUBLIC_KEY)).thenReturn(authorization);
         when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+        when(configuration.getEnvironment()).thenReturn(Environment.PRODUCTION);
         this.klarnaClient = new KlarnaClientImpl(apiClient, configuration);
     }
 

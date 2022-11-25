@@ -7,10 +7,10 @@ import org.apache.http.impl.client.HttpClientBuilder;
 public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
 
     protected HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
-    private Environment environment;
+    private IEnvironment environment;
     private Executor executor = ForkJoinPool.commonPool();
 
-    public AbstractCheckoutSdkBuilder<T> environment(final Environment environment) {
+    public AbstractCheckoutSdkBuilder<T> environment(final IEnvironment environment) {
         this.environment = environment;
         return this;
     }
@@ -25,7 +25,7 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
         return this;
     }
 
-    protected Environment getEnvironment() {
+    protected IEnvironment getEnvironment() {
         return environment;
     }
 

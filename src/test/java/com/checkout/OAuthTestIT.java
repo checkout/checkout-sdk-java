@@ -15,6 +15,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.UUID;
 
+import static java.net.URI.create;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -138,6 +139,27 @@ class OAuthTestIT extends SandboxTestFixture {
                 .build();
 
         assertNotNull(checkoutApi);
+
+    }
+
+    @Test
+    void shouldFailInitAuthorizationWithCustomEnvironment() {
+
+        try {
+            CheckoutSdk.builder()
+                    .oAuth()
+                    .clientCredentials(
+                            System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_ID"),
+                            System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_SECRET"))
+                    .scopes(OAuthScope.GATEWAY)
+                    .environment(CustomEnvironment.builder()
+                            .oAuthAuthorizationApi(create("https://the.oauth.uri/connect/token"))
+                            .build())
+                    .build();
+            fail();
+        } catch (final Exception e) {
+            assertEquals("OAuth client_credentials authentication failed", e.getMessage());
+        }
 
     }
 

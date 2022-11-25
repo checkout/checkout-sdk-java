@@ -50,7 +50,7 @@ public abstract class AbstractCheckoutApmApi {
 
         @Override
         public URI getUri() {
-            return configuration.getEnvironment().getUri();
+            return configuration.getEnvironment().getCheckoutApi();
         }
     }
 

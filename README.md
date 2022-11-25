@@ -134,6 +134,29 @@ public static void main(String[] args) {
         }
 ```
 
+## Custom Environment
+
+In case that you want to use an integrator or mock server, you can specify your own configuration as follows:
+```java
+final CustomEnvironment environment = CustomEnvironment.builder()
+        .checkoutApi(create("https://the.base.uri/")) // the uri for all Checkout operations
+        .oAuthAuthorizationApi(create("https://the.oauth.uri/connect/token")) // the uri used for OAUTH authorization, only required for OAuth operations
+        .filesApi(create("https://the.files.uri/")) // the uri used for Files operations, only required for Accounts module
+        .transfersApi(create("https://the.transfers.uri/")) // the uri used for Transfer operations, only required for Transfers module
+        .balancesApi(create("https://the.balances.uri/")) // the uri used for Balances operations, only required for Balances module
+        .sandbox(false) // flag to determine if Sanbox or Production configured, default false
+        .build();
+
+final CheckoutApi checkoutApi = CheckoutSdk.builder()
+        .staticKeys()
+        .secretKey("secret_key")
+        .environment(environment)  // required
+        .executor(customHttpClient) // optional for a custom Executor Service
+        .build();
+```
+
+You don't need to specify all the previous URI's, only the ones for the modules that you're going to use.
+
 ## Custom HttpClient
 
 Sometimes you need a custom thread pool, or any custom http property, so you can provide your own httpClient configuration as follows.
