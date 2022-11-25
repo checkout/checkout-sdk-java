@@ -24,6 +24,7 @@ import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
 import org.apache.http.entity.ContentType;
 import org.hamcrest.core.IsNull;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -95,6 +96,7 @@ class DisputesTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("unstable")
     void shouldFailOnAcceptDisputeAlreadyAccepted() {
         final DisputesQueryResponse queryResponse = blocking(() -> previousApi.disputesClient().query(DisputesQueryFilter.builder()
                 .statuses(DisputeStatus.ACCEPTED.toString()).build()));
