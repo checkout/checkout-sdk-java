@@ -11,10 +11,10 @@ class DefaultCheckoutConfiguration implements CheckoutConfiguration {
     private final SdkCredentials sdkCredentials;
     private final HttpClientBuilder httpClientBuilder;
     private final Executor executor;
-    private Environment environment;
+    private final IEnvironment environment;
 
     DefaultCheckoutConfiguration(final SdkCredentials sdkCredentials,
-                                 final Environment environment,
+                                 final IEnvironment environment,
                                  final HttpClientBuilder httpClientBuilder,
                                  final Executor executor) {
         validateParams("sdkCredentials", sdkCredentials, "environment", environment, "httpClientBuilder", httpClientBuilder, "executor", executor);
@@ -40,7 +40,7 @@ class DefaultCheckoutConfiguration implements CheckoutConfiguration {
     }
 
     @Override
-    public Environment getEnvironment() {
+    public IEnvironment getEnvironment() {
         return environment;
     }
 }

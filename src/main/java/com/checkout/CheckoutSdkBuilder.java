@@ -51,11 +51,11 @@ public final class CheckoutSdkBuilder {
         @Override
         protected SdkCredentials getSdkCredentials() {
             if (this.authorizationUri == null) {
-                final Environment environment = getEnvironment();
+                final IEnvironment environment = getEnvironment();
                 if (environment == null) {
                     throw new CheckoutArgumentException("Invalid configuration. Please specify an Environment or a specific OAuth authorizationURI.");
                 }
-                this.authorizationUri = environment.getOAuthAuthorizeUri();
+                this.authorizationUri = environment.getOAuthAuthorizationApi();
             }
             final OAuthSdkCredentials credentials = new OAuthSdkCredentials(httpClientBuilder, authorizationUri, clientId, clientSecret, scopes);
             credentials.initOAuthAccess();

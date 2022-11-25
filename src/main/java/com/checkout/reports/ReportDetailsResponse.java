@@ -3,11 +3,15 @@ package com.checkout.reports;
 import com.checkout.common.Resource;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.time.Instant;
 import java.util.List;
 
 @Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public final class ReportDetailsResponse extends Resource {
 
     private String id;

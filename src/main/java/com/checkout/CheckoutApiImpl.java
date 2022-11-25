@@ -178,7 +178,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
 
         @Override
         public URI getUri() {
-            return configuration.getEnvironment().getFilesApiUri();
+            return configuration.getEnvironment().getFilesApi();
         }
     }
 
@@ -192,7 +192,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
 
         @Override
         public URI getUri() {
-            return configuration.getEnvironment().getTransfersApiURI();
+            return configuration.getEnvironment().getTransfersApi();
         }
     }
 
@@ -206,7 +206,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
 
         @Override
         public URI getUri() {
-            return configuration.getEnvironment().getBalancesApiURI();
+            return configuration.getEnvironment().getBalancesApi();
         }
     }
 

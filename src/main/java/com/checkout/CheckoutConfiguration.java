@@ -6,7 +6,7 @@ import java.util.concurrent.Executor;
 
 public interface CheckoutConfiguration {
 
-    Environment getEnvironment();
+    IEnvironment getEnvironment();
 
     SdkCredentials getSdkCredentials();
 
