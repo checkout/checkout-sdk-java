@@ -6,4 +6,6 @@ import lombok.Data;
 public final class RiskAssessment {
 
     private Boolean flagged;
+
+    private Integer score;
 }
