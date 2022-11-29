@@ -1,5 +1,6 @@
 package com.checkout;
 
+import com.checkout.disputes.DisputesQueryResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.hamcrest.BaseMatcher;
@@ -136,6 +137,20 @@ public abstract class SandboxTestFixture {
         @Override
         public boolean matches(final Object actual) {
             return ((ItemsResponse<R>) actual).getItems().size() == count;
+        }
+
+        @Override
+        public void describeTo(final Description description) {
+            throw new UnsupportedOperationException();
+        }
+
+    }
+
+    public static class DisputesQueryResponseHasItems extends BaseMatcher<DisputesQueryResponse> {
+
+        @Override
+        public boolean matches(final Object actual) {
+            return ((DisputesQueryResponse) actual).getTotalCount() > 0;
         }
 
         @Override

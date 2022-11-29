@@ -16,6 +16,7 @@ import com.checkout.disputes.DisputeEvidenceResponse;
 import com.checkout.disputes.DisputeStatus;
 import com.checkout.disputes.DisputesQueryFilter;
 import com.checkout.disputes.DisputesQueryResponse;
+import com.checkout.disputes.SchemeFileResponse;
 import com.checkout.payments.CaptureRequest;
 import com.checkout.payments.previous.request.PaymentRequest;
 import com.checkout.payments.previous.request.source.RequestTokenSource;
@@ -113,6 +114,28 @@ class DisputesTestIT extends SandboxTestFixture {
         }
     }
 
+    @Test
+    void shouldGetDisputeSchemeFiles() {
+        final DisputesQueryFilter query = DisputesQueryFilter
+                .builder()
+                .to(Instant.now())
+                .from(LocalDateTime.now().minusMonths(1).toInstant(ZoneOffset.UTC))
+                .limit(5)
+                .thisChannelOnly(true)
+                .build();
+        final DisputesQueryResponse response = blocking(() -> previousApi.disputesClient().query(query));
+        assertNotNull(response);
+
+        if (response.getData() != null) {
+            response.getData().forEach(dispute -> {
+                final SchemeFileResponse schemeFileResponse = blocking(() -> previousApi.disputesClient().getDisputeSchemeFiles(dispute.getId()));
+                assertNotNull(schemeFileResponse);
+                assertNotNull(schemeFileResponse.getId());
+                assertNotNull(schemeFileResponse.getFiles());
+            });
+        }
+    }
+
     /**
      * This test is disabled to avoid long waiting due the async operations that requires to perform a dispute
      * however it complete functional and can be enabled for confirmation purposes
@@ -139,7 +162,7 @@ class DisputesTestIT extends SandboxTestFixture {
                 .paymentId(paymentResponse.getId())
                 .statuses(DisputeStatus.EVIDENCE_REQUIRED.getStatus())
                 .build();
-        final DisputesQueryResponse queryResponse = blocking(() -> previousApi.disputesClient().query(query), IsNull.notNullValue(DisputesQueryResponse.class));
+        final DisputesQueryResponse queryResponse = blocking(() -> previousApi.disputesClient().query(query), new DisputesQueryResponseHasItems());
 
         //Get dispute details
         final DisputeDetailsResponse disputeDetails = blocking(() -> previousApi.disputesClient()

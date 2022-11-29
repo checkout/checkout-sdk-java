@@ -167,4 +167,17 @@ class DisputesClientImplTest {
         assertEquals(response, future.get());
     }
 
+    @Test
+    void shouldGetDisputeSchemeFiles() throws ExecutionException, InterruptedException {
+        final SchemeFileResponse response = mock(SchemeFileResponse.class);
+
+        when(apiClient.getAsync("disputes/dispute_id/schemefiles", authorization, SchemeFileResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<SchemeFileResponse> future = client.getDisputeSchemeFiles("dispute_id");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+    }
+
 }

@@ -11,7 +11,6 @@ import com.checkout.payments.request.source.RequestCardSource;
 import com.checkout.payments.response.PaymentResponse;
 import com.checkout.payments.sender.PaymentIndividualSender;
 import org.apache.http.entity.ContentType;
-import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -98,6 +97,29 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
         }
     }
 
+    @Test
+    void shouldGetDisputeSchemeFiles() {
+        final DisputesQueryFilter query = DisputesQueryFilter
+                .builder()
+                .to(Instant.now())
+                .from(LocalDateTime.now().minusMonths(1).toInstant(ZoneOffset.UTC))
+                .limit(5)
+                .thisChannelOnly(true)
+                .build();
+        final DisputesQueryResponse response = blocking(() -> checkoutApi.disputesClient().query(query));
+        assertNotNull(response);
+
+        if (response.getData() != null) {
+            response.getData().forEach(dispute -> {
+                final SchemeFileResponse schemeFileResponse = blocking(() -> checkoutApi.disputesClient().getDisputeSchemeFiles(dispute.getId()));
+                assertNotNull(schemeFileResponse);
+                assertNotNull(schemeFileResponse.getId());
+                assertNotNull(schemeFileResponse.getFiles());
+            });
+        }
+    }
+
+
     /**
      * This test is disabled to avoid long waiting due the async operations that requires to perform a dispute
      * however its complete functional and can be enabled for digging purposes
@@ -122,7 +144,7 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
                 .paymentId(paymentResponse.getId())
                 .statuses("evidence_required")
                 .build();
-        final DisputesQueryResponse queryResponse = blocking(() -> checkoutApi.disputesClient().query(query), IsNull.notNullValue(DisputesQueryResponse.class));
+        final DisputesQueryResponse queryResponse = blocking(() -> checkoutApi.disputesClient().query(query), new DisputesQueryResponseHasItems());
 
         //Get dispute details
         final DisputeDetailsResponse disputeDetails = blocking(() -> checkoutApi.disputesClient()
@@ -178,6 +200,5 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
         //Submit your dispute evidence
         blocking(() -> checkoutApi.disputesClient().submitEvidence(disputeDetails.getId()));
     }
-
 
 }
