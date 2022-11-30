@@ -1,5 +1,6 @@
 package com.checkout.payments;
 
+import com.checkout.common.CountryCode;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,13 @@ public final class PaymentRecipient {
 
     private String zip;
 
+    @SerializedName("first_name")
+    private String firstName;
+
     @SerializedName("last_name")
     private String lastName;
+
+    private CountryCode country;
+
 
 }
