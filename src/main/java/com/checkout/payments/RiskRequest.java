@@ -1,15 +1,17 @@
 package com.checkout.payments;
 
-import lombok.AllArgsConstructor;
+import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-@AllArgsConstructor
 public final class RiskRequest {
 
     private boolean enabled;
+
+    @SerializedName("device_session_id")
+    private String deviceSessionId;
 
 }
 
