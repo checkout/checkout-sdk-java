@@ -13,6 +13,7 @@ public final class CheckoutUtils {
     public static final String DAILY = "Daily";
     public static final String WEEKLY = "Weekly";
     public static final String MONTHLY = "Monthly";
+    public static final String ACCEPT_JSON = "application/json;charset=UTF-8";
     private static final String CKO_REQUEST_ID = "Cko-Request-Id";
 
     private CheckoutUtils() {

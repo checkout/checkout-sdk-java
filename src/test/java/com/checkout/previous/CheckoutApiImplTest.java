@@ -19,7 +19,7 @@ class CheckoutApiImplTest {
     @Test
     void shouldInstantiateAndRetrieveClients() {
         final CheckoutConfiguration configuration = mock(CheckoutConfiguration.class);
-        when(configuration.getHttpClientBuilder()).thenReturn(mock(HttpClientBuilder.class));
+        when(configuration.getHttpClientBuilder()).thenReturn(HttpClientBuilder.create());
         when(configuration.getExecutor()).thenReturn(mock(Executor.class));
         when(configuration.getEnvironment()).thenReturn(Environment.SANDBOX);
         final CheckoutApi checkoutApi = new CheckoutApiImpl(configuration);
