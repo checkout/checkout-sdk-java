@@ -2,6 +2,7 @@ package com.checkout.sessions;
 
 import com.checkout.common.ChallengeIndicator;
 import com.checkout.sessions.channel.ChannelData;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -118,6 +119,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
 
     }
 
+    @Disabled("unstable")
     @ParameterizedTest
     @MethodSource("sessionsTypes_appSession")
     void shouldRequestAndGetCardSession_appSession(final Category category,

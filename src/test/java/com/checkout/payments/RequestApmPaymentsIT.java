@@ -252,6 +252,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldMakeMbwayPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(new RequestMbwaySource())
