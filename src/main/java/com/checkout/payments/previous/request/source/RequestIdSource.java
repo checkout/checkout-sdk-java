@@ -1,6 +1,7 @@
 package com.checkout.payments.previous.request.source;
 
 import com.checkout.common.PaymentSourceType;
+import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,12 +18,21 @@ public final class RequestIdSource extends AbstractRequestSource {
 
     private String cvv;
 
+    private Boolean stored;
+
+    @SerializedName("store_for_future_use")
+    private Boolean storeForFutureUse;
+
     @Builder
     private RequestIdSource(final String id,
-                            final String cvv) {
+                            final String cvv,
+                            final Boolean stored,
+                            final Boolean storeForFutureUse) {
         super(PaymentSourceType.ID);
         this.id = id;
         this.cvv = cvv;
+        this.stored = stored;
+        this.storeForFutureUse = storeForFutureUse;
     }
 
     public RequestIdSource() {
