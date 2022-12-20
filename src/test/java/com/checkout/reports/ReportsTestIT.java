@@ -1,5 +1,6 @@
 package com.checkout.reports;
 
+import com.checkout.ContentResponse;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import org.junit.jupiter.api.Test;
@@ -8,9 +9,11 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ReportsTestIT extends SandboxTestFixture {
 
@@ -25,7 +28,7 @@ class ReportsTestIT extends SandboxTestFixture {
 
     @Test
     void shouldGetAllReports() {
-        final ReportsResponse reportsResponse = blocking(() -> checkoutApi.reportsClient().getAllReports(queryFilterDateRange));
+        final ReportsResponse reportsResponse = getAllReports();
         assertNotNull(reportsResponse);
         if (reportsResponse.getData() != null && !reportsResponse.getData().isEmpty()) {
             reportsResponse.getData().forEach(detailsResponse -> {
@@ -44,7 +47,7 @@ class ReportsTestIT extends SandboxTestFixture {
 
     @Test
     void shouldGetReportDetails() {
-        final ReportsResponse reportsResponse = blocking(() -> checkoutApi.reportsClient().getAllReports(queryFilterDateRange));
+        final ReportsResponse reportsResponse = getAllReports();
         assertNotNull(reportsResponse);
         if (reportsResponse.getData() != null && !reportsResponse.getData().isEmpty()) {
             final ReportDetailsResponse reportDetails = reportsResponse.getData().get(0);
@@ -58,5 +61,22 @@ class ReportsTestIT extends SandboxTestFixture {
             assertEquals(reportDetails.getFrom(), detailsResponse.getFrom());
             assertEquals(reportDetails.getTo(), detailsResponse.getTo());
         }
+    }
+
+    @Test
+    void shouldGetReportFile() throws ExecutionException, InterruptedException {
+        final ReportsResponse reportsResponse = getAllReports();
+        assertNotNull(reportsResponse);
+        if (reportsResponse.getData() != null && !reportsResponse.getData().isEmpty()) {
+            final ReportDetailsResponse reportDetails = reportsResponse.getData().get(0);
+            final ContentResponse contentResponse = checkoutApi.reportsClient().getReportFile(reportDetails.getId(), reportDetails.getFiles().get(0).getId()).get();
+            assertNotNull(contentResponse);
+            assertNotNull(contentResponse.getContent());
+            assertTrue(contentResponse.getContent().contains("Client Entity ID,Client Entity Name"));
+        }
+    }
+
+    private ReportsResponse getAllReports() {
+        return blocking(() -> checkoutApi.reportsClient().getAllReports(queryFilterDateRange));
     }
 }

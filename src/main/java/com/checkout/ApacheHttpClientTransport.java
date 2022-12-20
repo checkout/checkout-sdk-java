@@ -40,20 +40,20 @@ import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 import static com.checkout.ClientOperation.POST;
+import static com.checkout.common.CheckoutUtils.ACCEPT_JSON;
 import static com.checkout.common.CheckoutUtils.PROJECT_NAME;
 import static com.checkout.common.CheckoutUtils.getVersionFromManifest;
+import static org.apache.http.HttpHeaders.ACCEPT;
+import static org.apache.http.HttpHeaders.AUTHORIZATION;
+import static org.apache.http.HttpHeaders.USER_AGENT;
 
 @Slf4j
 class ApacheHttpClientTransport implements Transport {
 
     private static final String ACCEPT_CSV = "text/csv";
-    private static final String ACCEPT_JSON = "application/json;charset=UTF-8";
-    private static final String AUTHORIZATION = "Authorization";
     private static final String CKO_IDEMPOTENCY_KEY = "Cko-Idempotency-Key";
     private static final String FILE = "file";
     private static final String PURPOSE = "purpose";
-    private static final String USER_AGENT = "user-agent";
-    private static final String ACCEPT = "Accept";
     private static final String PATH = "path";
     private final URI baseUri;
     private final CloseableHttpClient httpClient;
@@ -62,8 +62,11 @@ class ApacheHttpClientTransport implements Transport {
     ApacheHttpClientTransport(final URI baseUri, final HttpClientBuilder httpClientBuilder, final Executor executor) {
         CheckoutUtils.validateParams("baseUri", baseUri, "httpClientBuilder", httpClientBuilder, "executor", executor);
         this.baseUri = baseUri;
-        this.httpClient = httpClientBuilder.build();
+        this.httpClient = httpClientBuilder
+                .setRedirectStrategy(new CustomAwsRedirectStrategy())
+                .build();
         this.executor = executor;
+
     }
 
     @Override
