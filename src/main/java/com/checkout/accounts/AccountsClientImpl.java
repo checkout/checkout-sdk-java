@@ -31,7 +31,7 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
     public AccountsClientImpl(final ApiClient apiClient,
                               final ApiClient filesClient,
                               final CheckoutConfiguration configuration) {
-        super(apiClient, configuration, SdkAuthorizationType.OAUTH);
+        super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
         this.filesClient = filesClient;
     }
 

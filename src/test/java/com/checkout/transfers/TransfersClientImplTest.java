@@ -44,7 +44,7 @@ class TransfersClientImplTest {
 
     @BeforeEach
     void setUp() {
-        lenient().when(sdkCredentials.getAuthorization(SdkAuthorizationType.OAUTH)).thenReturn(authorization);
+        lenient().when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
         lenient().when(checkoutConfiguration.getSdkCredentials()).thenReturn(sdkCredentials);
         lenient().when(checkoutConfiguration.getHttpClientBuilder()).thenReturn(HttpClientBuilder.create());
         lenient().when(checkoutConfiguration.getExecutor()).thenReturn(Executors.newSingleThreadExecutor());
