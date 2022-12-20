@@ -14,7 +14,7 @@ public class TransfersClientImpl extends AbstractClient implements TransfersClie
     private static final String TRANSFERS_PATH = "transfers";
 
     public TransfersClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
-        super(apiClient, configuration, SdkAuthorizationType.OAUTH);
+        super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
     }
 
     @Override
