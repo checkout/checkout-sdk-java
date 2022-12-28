@@ -16,7 +16,8 @@ import lombok.NoArgsConstructor;
 public class BankAccountSource implements RequestSource {
     public static final String TYPE_NAME = "bank_account";
 
-    private static final String type = TYPE_NAME;
+    @SerializedName("type")
+    private final String type = TYPE_NAME;
 
     @SerializedName("payment_method")
     private String paymentMethod;
