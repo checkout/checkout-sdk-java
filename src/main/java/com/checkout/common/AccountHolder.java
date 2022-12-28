@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public final class AccountHolder {
     private AccountHolderType type;
 
+    @SerializedName("first_name")
     private String firstName;
 
     @SerializedName("last_name")
