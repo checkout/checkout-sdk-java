@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 abstract class AbstractWorkflowTestIT extends AbstractPaymentsTestIT {
 
     protected static final String WORKFLOW_ENTITY_ID = "ent_kidtcgc3ge5unf4a5i6enhnr5m";
-    protected static final String TESTING = "testing";
+    protected static final String TESTING = "testing-java";
     protected static final String GATEWAY = "gateway";
     protected static final String PAYMENT_CAPTURED = "payment_captured";
     protected static final String PAYMENT_APPROVED = "payment_approved";
