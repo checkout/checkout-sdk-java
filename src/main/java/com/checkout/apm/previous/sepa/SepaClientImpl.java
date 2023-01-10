@@ -11,6 +11,7 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 
 public class SepaClientImpl extends AbstractClient implements SepaClient {
 
+    private static final String APMS = "apms";
     private static final String SEPA_MANDATES = "sepa/mandates";
     private static final String PPRO = "ppro";
     private static final String CANCEL = "cancel";
@@ -35,13 +36,13 @@ public class SepaClientImpl extends AbstractClient implements SepaClient {
     @Override
     public CompletableFuture<MandateResponse> getMandateViaPPRO(final String mandateId) {
         validateParams(MANDATE_ID, mandateId);
-        return apiClient.getAsync(buildPath(PPRO, SEPA_MANDATES, mandateId), sdkAuthorization(), MandateResponse.class);
+        return apiClient.getAsync(buildPath(APMS, PPRO, SEPA_MANDATES, mandateId), sdkAuthorization(), MandateResponse.class);
     }
 
     @Override
     public CompletableFuture<SepaResource> cancelMandateViaPPRO(final String mandateId) {
         validateParams(MANDATE_ID, mandateId);
-        return apiClient.postAsync(buildPath(PPRO, SEPA_MANDATES, mandateId, CANCEL), sdkAuthorization(), SepaResource.class, null, null);
+        return apiClient.postAsync(buildPath(APMS, PPRO, SEPA_MANDATES, mandateId, CANCEL), sdkAuthorization(), SepaResource.class, null, null);
     }
 
 }
