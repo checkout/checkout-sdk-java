@@ -80,7 +80,7 @@ class SepaClientImplTest {
 
         final MandateResponse response = mock(MandateResponse.class);
 
-        when(apiClient.getAsync("ppro/sepa/mandates/mandate_id", authorization, MandateResponse.class))
+        when(apiClient.getAsync("apms/ppro/sepa/mandates/mandate_id", authorization, MandateResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<MandateResponse> future = sepaClient.getMandateViaPPRO("mandate_id");
@@ -95,7 +95,7 @@ class SepaClientImplTest {
 
         final SepaResource response = mock(SepaResource.class);
 
-        when(apiClient.postAsync(eq("ppro/sepa/mandates/mandate_id/cancel"), eq(authorization), eq(SepaResource.class), isNull(), isNull()))
+        when(apiClient.postAsync(eq("apms/ppro/sepa/mandates/mandate_id/cancel"), eq(authorization), eq(SepaResource.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<SepaResource> future = sepaClient.cancelMandateViaPPRO("mandate_id");
