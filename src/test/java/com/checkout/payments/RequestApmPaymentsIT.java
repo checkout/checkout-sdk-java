@@ -20,6 +20,7 @@ import com.checkout.payments.request.source.apm.RequestAlipayPlusSource;
 import com.checkout.payments.request.source.apm.RequestAlmaSource;
 import com.checkout.payments.request.source.apm.RequestBancontactSource;
 import com.checkout.payments.request.source.apm.RequestBenefitSource;
+import com.checkout.payments.request.source.apm.RequestCvConnectSource;
 import com.checkout.payments.request.source.apm.RequestEpsSource;
 import com.checkout.payments.request.source.apm.RequestFawrySource;
 import com.checkout.payments.request.source.apm.RequestGiropaySource;
@@ -35,6 +36,7 @@ import com.checkout.payments.request.source.apm.RequestQPaySource;
 import com.checkout.payments.request.source.apm.RequestSofortSource;
 import com.checkout.payments.request.source.apm.RequestStcPaySource;
 import com.checkout.payments.request.source.apm.RequestTamaraSource;
+import com.checkout.payments.request.source.apm.RequestTrustlySource;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
 import com.checkout.payments.response.source.AlternativePaymentSourceResponse;
@@ -480,6 +482,38 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                                 .build()))
                         .build())
                 .currency(Currency.EGP)
+                .amount(10L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
+    }
+
+    @Test
+    void shouldMakeTrustlyPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestTrustlySource.builder()
+                        .billingAddress(createAddress())
+                        .build())
+                .currency(Currency.EUR)
+                .amount(10L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
+    }
+
+    @Test
+    void shouldMakeCvConnectPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestCvConnectSource.builder()
+                        .billingAddress(createAddress())
+                        .build())
+                .currency(Currency.EUR)
                 .amount(10L)
                 .capture(true)
                 .successUrl("https://testing.checkout.com/sucess")

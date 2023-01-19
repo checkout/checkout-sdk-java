@@ -14,18 +14,18 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class RequestAlmaSource extends AbstractRequestSource {
+public final class RequestTrustlySource extends AbstractRequestSource {
 
     @SerializedName("billing_address")
     private Address billingAddress;
 
     @Builder
-    private RequestAlmaSource(final Address billingAddress) {
-        super(PaymentSourceType.ALMA);
+    private RequestTrustlySource(final Address billingAddress) {
+        super(PaymentSourceType.TRUSTLY);
         this.billingAddress = billingAddress;
     }
 
-    public RequestAlmaSource() {
-        super(PaymentSourceType.ALMA);
+    public RequestTrustlySource() {
+        super(PaymentSourceType.TRUSTLY);
     }
 }
