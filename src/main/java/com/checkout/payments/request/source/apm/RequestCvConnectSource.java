@@ -14,18 +14,18 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class RequestAlmaSource extends AbstractRequestSource {
+public final class RequestCvConnectSource extends AbstractRequestSource {
 
     @SerializedName("billing_address")
     private Address billingAddress;
 
     @Builder
-    private RequestAlmaSource(final Address billingAddress) {
-        super(PaymentSourceType.ALMA);
+    private RequestCvConnectSource(final Address billingAddress) {
+        super(PaymentSourceType.CV_CONNECT);
         this.billingAddress = billingAddress;
     }
 
-    public RequestAlmaSource() {
-        super(PaymentSourceType.ALMA);
+    public RequestCvConnectSource() {
+        super(PaymentSourceType.CV_CONNECT);
     }
 }

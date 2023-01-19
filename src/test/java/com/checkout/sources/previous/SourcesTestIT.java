@@ -6,6 +6,7 @@ import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Phone;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,6 +21,7 @@ class SourcesTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("not available")
     void shouldCreateSepaSource() throws Exception {
         final SepaSourceRequest sourceRequest = createSepaSourceRequest();
         final SepaSourceResponse sourceResponse = previousApi.sourcesClient().createSepaSource(sourceRequest).get();

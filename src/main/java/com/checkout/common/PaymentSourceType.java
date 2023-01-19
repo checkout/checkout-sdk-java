@@ -93,6 +93,10 @@ public enum PaymentSourceType {
     @SerializedName("stcpay")
     STCPAY,
     @SerializedName("alma")
-    ALMA
+    ALMA,
+    @SerializedName("trustly")
+    TRUSTLY,
+    @SerializedName("cvconnect")
+    CV_CONNECT
 
 }
