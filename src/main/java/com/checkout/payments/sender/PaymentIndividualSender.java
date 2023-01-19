@@ -19,25 +19,27 @@ public final class PaymentIndividualSender extends PaymentSender {
     @SerializedName("first_name")
     private String firstName;
 
+    @SerializedName("middle_name")
+    private String middleName;
+
     @SerializedName("last_name")
     private String lastName;
+
+    @SerializedName("dob")
+    private String dob;
 
     private Address address;
 
     private AccountHolderIdentification identification;
 
-    //BETA
-    @SerializedName("middle_name")
-    private String middleName;
-
     @SerializedName("reference_type")
     private String referenceType;
 
-    @SerializedName("date_of_birth")
-    private String dateOfBirth;
-
     @SerializedName("source_of_funds")
     private SourceOfFunds sourceOfFunds;
+
+    @SerializedName("date_of_birth")
+    private String dateOfBirth;
 
     @SerializedName("country_of_birth")
     private CountryCode countryOfBirth;
@@ -47,24 +49,27 @@ public final class PaymentIndividualSender extends PaymentSender {
     @Builder
     private PaymentIndividualSender(final String reference,
                                     final String firstName,
+                                    final String middleName,
                                     final String lastName,
+                                    final String dob,
                                     final Address address,
                                     final AccountHolderIdentification identification,
-                                    final String middleName,
                                     final String referenceType,
-                                    final String dateOfBirth,
                                     final SourceOfFunds sourceOfFunds,
+                                    final String dateOfBirth,
                                     final CountryCode countryOfBirth,
-                                    final CountryCode nationality) {
+                                    final CountryCode nationality
+    ) {
         super(SenderType.INDIVIDUAL, reference);
         this.firstName = firstName;
+        this.middleName = middleName;
         this.lastName = lastName;
+        this.dob = dob;
         this.address = address;
         this.identification = identification;
-        this.middleName = middleName;
         this.referenceType = referenceType;
-        this.dateOfBirth = dateOfBirth;
         this.sourceOfFunds = sourceOfFunds;
+        this.dateOfBirth = dateOfBirth;
         this.countryOfBirth = countryOfBirth;
         this.nationality = nationality;
     }
