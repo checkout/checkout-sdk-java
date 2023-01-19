@@ -2,6 +2,7 @@ package com.checkout.payments;
 
 import com.checkout.common.CountryCode;
 import com.checkout.common.ShippingInfo;
+import com.checkout.payments.previous.request.SenderInformation;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -93,6 +94,9 @@ public final class ProcessingSettings {
     @SerializedName("custom_payment_method_ids")
     private List<String> customPaymentMethodIds;
 
+    @SerializedName("merchant_callback_url")
+    private String merchantCallbackUrl;
+
     @SerializedName("shipping_delay")
     private Long shippingDelay;
 
@@ -101,5 +105,8 @@ public final class ProcessingSettings {
 
     //Previous
     private DLocalProcessingSettings dlocal;
+
+    @SerializedName("senderInformation")
+    private SenderInformation senderInformation;
 
 }

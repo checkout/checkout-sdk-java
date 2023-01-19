@@ -46,4 +46,7 @@ public final class AccountHolder {
 
     private String gender;
 
+    @SerializedName("middle_name")
+    private String middleName;
+
 }
