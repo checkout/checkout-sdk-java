@@ -15,7 +15,7 @@ public class BalancesClientImpl extends AbstractClient implements BalancesClient
 
     public BalancesClientImpl(final ApiClient apiClient,
                               final CheckoutConfiguration configuration) {
-        super(apiClient, configuration, SdkAuthorizationType.OAUTH);
+        super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
     }
 
     @Override
