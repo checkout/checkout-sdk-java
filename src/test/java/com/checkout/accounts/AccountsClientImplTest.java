@@ -182,6 +182,21 @@ class AccountsClientImplTest {
     }
 
     @Test
+    void shouldUpdatePaymentInstrument() throws ExecutionException, InterruptedException {
+
+        final IdResponse response = mock(IdResponse.class);
+        final UpdatePaymentInstrumentRequest request = mock(UpdatePaymentInstrumentRequest.class);
+
+        when(apiClient.patchAsync(eq("accounts/entities/entity_id/payment-instruments/instrument_id"), eq(authorization), eq(IdResponse.class), any(UpdatePaymentInstrumentRequest.class), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<IdResponse> future = accountsClient.updatePaymentInstrumentDetails("entity_id", "instrument_id", request);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+    }
+
+    @Test
     void shouldRetrievePaymentInstrumentDetails() throws ExecutionException, InterruptedException {
 
         final PaymentInstrumentDetailsResponse response = mock(PaymentInstrumentDetailsResponse.class);
