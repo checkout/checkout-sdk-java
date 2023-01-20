@@ -108,6 +108,20 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
     }
 
     @Override
+    public CompletableFuture<IdResponse> updatePaymentInstrumentDetails(final String entityId,
+                                                                        final String instrumentId,
+                                                                        final UpdatePaymentInstrumentRequest updatePaymentInstrumentRequest) {
+        validateParams("entityId", entityId, "instrumentId", instrumentId, "updatePaymentInstrumentRequest", updatePaymentInstrumentRequest);
+        return apiClient.patchAsync(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, PAYMENT_INSTRUMENTS_PATH, instrumentId),
+                sdkAuthorization(),
+                IdResponse.class,
+                updatePaymentInstrumentRequest,
+                null
+        );
+    }
+
+    @Override
     public CompletableFuture<PaymentInstrumentQueryResponse> queryPaymentInstruments(final String entityId, final PaymentInstrumentsQuery query) {
         validateParams("entityId", entityId, "query", query);
         return apiClient.queryAsync(

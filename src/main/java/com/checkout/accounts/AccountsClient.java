@@ -29,6 +29,10 @@ public interface AccountsClient {
 
     CompletableFuture<IdResponse> createPaymentInstrument(String entityId, PaymentInstrumentRequest paymentInstrumentRequest);
 
+    CompletableFuture<IdResponse> updatePaymentInstrumentDetails(String entityId,
+                                                                 String instrumentId,
+                                                                 UpdatePaymentInstrumentRequest updatePaymentInstrumentRequest);
+
     CompletableFuture<PaymentInstrumentQueryResponse> queryPaymentInstruments(String entityId, PaymentInstrumentsQuery query);
 
     CompletableFuture<GetScheduleResponse> retrievePayoutSchedule(String entityId);
