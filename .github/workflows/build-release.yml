@@ -37,6 +37,13 @@ jobs:
           CHECKOUT_DEFAULT_OAUTH_ACCOUNTS_CLIENT_ID: ${{ secrets.IT_CHECKOUT_DEFAULT_OAUTH_ACCOUNTS_CLIENT_ID }}
           CHECKOUT_DEFAULT_OAUTH_ACCOUNTS_CLIENT_SECRET: ${{ secrets.IT_CHECKOUT_DEFAULT_OAUTH_ACCOUNTS_CLIENT_SECRET }}
         run: ./gradlew build test --fail-fast jar
+      - id: publish
+        env:
+          GPG_KEY: '${{ secrets.GPG_KEY }}'
+          GPG_PASSPHRASE: '${{ secrets.GPG_PASSPHRASE }}'
+          SONATYPE_PASSWORD: '${{ secrets.SONATYPE_PASSWORD }}'
+          SONATYPE_USERNAME: '${{ secrets.SONATYPE_USERNAME }}'
+        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
       - id: create-release
         uses: actions/create-release@v1
         env:
