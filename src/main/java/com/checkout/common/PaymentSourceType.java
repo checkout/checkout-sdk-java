@@ -48,6 +48,8 @@ public enum PaymentSourceType {
     MULTIBANCO,
     @SerializedName("eps")
     EPS,
+    @SerializedName("illicado")
+    ILLICADO,
     @SerializedName("poli")
     POLI,
     @SerializedName("p24")
