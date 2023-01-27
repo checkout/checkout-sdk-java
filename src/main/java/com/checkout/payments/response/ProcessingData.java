@@ -45,6 +45,6 @@ public final class ProcessingData {
     @SerializedName("partner_error_codes")
     private List<String> partnerErrorCodes;
 
-    @SerializedName("partner_reason")
-    private List<String> partnerReason;
+    @SerializedName("partner_error_message")
+    private List<String> partnerErrorMessage;
 }
