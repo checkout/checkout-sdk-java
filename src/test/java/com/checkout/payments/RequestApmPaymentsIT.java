@@ -15,28 +15,7 @@ import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
 import com.checkout.payments.request.PaymentCustomerRequest;
 import com.checkout.payments.request.PaymentRequest;
-import com.checkout.payments.request.source.apm.RequestAfterPaySource;
-import com.checkout.payments.request.source.apm.RequestAlipayPlusSource;
-import com.checkout.payments.request.source.apm.RequestAlmaSource;
-import com.checkout.payments.request.source.apm.RequestBancontactSource;
-import com.checkout.payments.request.source.apm.RequestBenefitSource;
-import com.checkout.payments.request.source.apm.RequestCvConnectSource;
-import com.checkout.payments.request.source.apm.RequestEpsSource;
-import com.checkout.payments.request.source.apm.RequestFawrySource;
-import com.checkout.payments.request.source.apm.RequestGiropaySource;
-import com.checkout.payments.request.source.apm.RequestIdealSource;
-import com.checkout.payments.request.source.apm.RequestKlarnaSource;
-import com.checkout.payments.request.source.apm.RequestKnetSource;
-import com.checkout.payments.request.source.apm.RequestMbwaySource;
-import com.checkout.payments.request.source.apm.RequestMultiBancoSource;
-import com.checkout.payments.request.source.apm.RequestP24Source;
-import com.checkout.payments.request.source.apm.RequestPayPalSource;
-import com.checkout.payments.request.source.apm.RequestPostFinanceSource;
-import com.checkout.payments.request.source.apm.RequestQPaySource;
-import com.checkout.payments.request.source.apm.RequestSofortSource;
-import com.checkout.payments.request.source.apm.RequestStcPaySource;
-import com.checkout.payments.request.source.apm.RequestTamaraSource;
-import com.checkout.payments.request.source.apm.RequestTrustlySource;
+import com.checkout.payments.request.source.apm.*;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
 import com.checkout.payments.response.source.AlternativePaymentSourceResponse;
@@ -274,6 +253,30 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestEpsSource.builder()
                         .purpose("Mens black t-shirt L")
+                        .build())
+                .currency(Currency.EUR)
+                .amount(10L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
+    }
+
+    @Test
+    void shouldMakeIllicadoPayment() {
+        final Address billingAddress = new Address();
+        billingAddress.setAddressLine1("Cecilia Chapman");
+        billingAddress.setAddressLine2("711-2880 Nulla St.");
+        billingAddress.setCity("Mankato");
+        billingAddress.setState("Mississippi");
+        billingAddress.setZip("96522");
+        billingAddress.setCountry(CountryCode.SA);
+
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestIllicadoSource.builder()
+                        .billingAddress(billingAddress)
                         .build())
                 .currency(Currency.EUR)
                 .amount(10L)

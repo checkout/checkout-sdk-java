@@ -41,4 +41,10 @@ public final class ProcessingData {
 
     @SerializedName("custom_payment_method_ids")
     private List<String> customPaymentMethodIds;
+
+    @SerializedName("partner_error_codes")
+    private List<String> partnerErrorCodes;
+
+    @SerializedName("partner_reason")
+    private List<String> partnerReason;
 }
