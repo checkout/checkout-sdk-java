@@ -3,6 +3,8 @@ package com.checkout.payments;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public final class PaymentProcessing {
 
@@ -31,5 +33,23 @@ public final class PaymentProcessing {
     private String continuationPayload;
 
     private String pun;
+
+    @SerializedName("partner_status")
+    private String partnerStatus;
+
+    @SerializedName("partner_transaction_id")
+    private String partnerTransactionId;
+
+    @SerializedName("partner_error_codes")
+    private List<String> partnerErrorCodes;
+
+    @SerializedName("partner_error_message")
+    private String partnerErrorMessage;
+
+    @SerializedName("partner_authorization_code")
+    private String partnerAuthorizationCode;
+
+    @SerializedName("partner_authorization_response_code")
+    private String partnerAuthorizationResponseCode;
 
 }

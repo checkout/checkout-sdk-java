@@ -30,8 +30,29 @@ public final class ProcessingData {
 
     private String locale;
 
+    @SerializedName("retrieval_reference_number")
+    private String retrievalReferenceNumber;
+
     @SerializedName("partner_order_id")
     private String partnerOrderId;
+
+    @SerializedName("partner_status")
+    private String partnerStatus;
+
+    @SerializedName("partner_transaction_id")
+    private String partnerTransactionId;
+
+    @SerializedName("partner_error_codes")
+    private List<String> partnerErrorCodes;
+
+    @SerializedName("partner_error_message")
+    private String partnerErrorMessage;
+
+    @SerializedName("partner_authorization_code")
+    private String partnerAuthorizationCode;
+
+    @SerializedName("partner_authorization_response_code")
+    private String partnerAuthorizationResponseCode;
 
     @SerializedName("fraud_status")
     private String fraudStatus;
@@ -42,9 +63,4 @@ public final class ProcessingData {
     @SerializedName("custom_payment_method_ids")
     private List<String> customPaymentMethodIds;
 
-    @SerializedName("partner_error_codes")
-    private List<String> partnerErrorCodes;
-
-    @SerializedName("partner_error_message")
-    private List<String> partnerErrorMessage;
 }
