@@ -36,6 +36,8 @@ public enum PaymentSourceType {
     KLARNA,
     @SerializedName("id")
     SEPA,
+    @SerializedName("sepa")
+    SEPAV4,
     @SerializedName("sofort")
     SOFORT,
     @SerializedName("qpay")
