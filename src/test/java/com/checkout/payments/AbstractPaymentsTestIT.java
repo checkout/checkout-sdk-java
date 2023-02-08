@@ -49,6 +49,12 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
         this.tokensClient = checkoutApi.tokensClient();
     }
 
+    public AbstractPaymentsTestIT(PlatformType platformType) {
+        super(platformType);
+        this.paymentsClient = checkoutApi.paymentsClient();
+        this.tokensClient = checkoutApi.tokensClient();
+    }
+
     protected PaymentResponse makeCardPayment(final boolean three3ds) {
 
         final RequestCardSource source = getRequestCardSource();

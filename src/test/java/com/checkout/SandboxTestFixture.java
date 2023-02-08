@@ -64,7 +64,7 @@ public abstract class SandboxTestFixture {
                                 OAuthScope.ACCOUNTS, OAuthScope.SESSIONS_APP, OAuthScope.SESSIONS_BROWSER,
                                 OAuthScope.VAULT, OAuthScope.PAYOUTS_BANK_DETAILS, OAuthScope.DISPUTES,
                                 OAuthScope.TRANSFERS_CREATE, OAuthScope.TRANSFERS_VIEW, OAuthScope.BALANCES_VIEW,
-                                OAuthScope.VAULT_CARD_METADATA)
+                                OAuthScope.VAULT_CARD_METADATA, OAuthScope.FINANCIAL_ACTIONS)
                         .environment(Environment.SANDBOX)
                         .executor(CUSTOM_EXECUTOR)
                         .build();
@@ -81,12 +81,19 @@ public abstract class SandboxTestFixture {
                 log.warn("Request failed with error '{}' - retry {}/{}", e.getMessage(), attempts, TRY_MAX_ATTEMPTS);
             }
             attempts++;
-            nap();
+            nap(3L);
         }
         throw new AssertionFailedError("Max attempts reached!");
     }
 
     protected <T extends HttpMetadata> T blocking(final Supplier<CompletableFuture<T>> supplier, final Matcher<T> matcher) {
+        return blocking(supplier, matcher, 3L);
+    }
+
+    protected  <T extends HttpMetadata> T blocking(
+            final Supplier<CompletableFuture<T>> supplier,
+            final Matcher<T> matcher,
+            final long timeout) {
         int attempts = 1;
         while (attempts <= TRY_MAX_ATTEMPTS) {
             try {
@@ -102,14 +109,14 @@ public abstract class SandboxTestFixture {
                 log.warn("Request/Matcher failed with error '{}' - retry {}/{}", e.getMessage(), attempts, TRY_MAX_ATTEMPTS);
             }
             attempts++;
-            nap();
+            nap(timeout);
         }
         throw new AssertionFailedError("Max attempts reached!");
     }
 
-    private void nap() {
+    private void nap(long timeout) {
         try {
-            TimeUnit.SECONDS.sleep(3L);
+            TimeUnit.SECONDS.sleep(timeout);
         } catch (final InterruptedException ignore) {
             fail();
         }
