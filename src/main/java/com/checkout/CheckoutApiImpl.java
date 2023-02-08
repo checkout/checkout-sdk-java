@@ -8,6 +8,8 @@ import com.checkout.customers.CustomersClient;
 import com.checkout.customers.CustomersClientImpl;
 import com.checkout.disputes.DisputesClient;
 import com.checkout.disputes.DisputesClientImpl;
+import com.checkout.financial.FinancialClient;
+import com.checkout.financial.FinancialClientImpl;
 import com.checkout.forex.ForexClient;
 import com.checkout.forex.ForexClientImpl;
 import com.checkout.instruments.InstrumentsClient;
@@ -53,6 +55,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final BalancesClient balancesClient;
     private final ReportsClient reportsClient;
     private final MetadataClient metadataClient;
+    private final FinancialClient financialClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         super(configuration);
@@ -71,6 +74,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.balancesClient = new BalancesClientImpl(getBalancesClient(configuration), configuration);
         this.reportsClient = new ReportsClientImpl(this.apiClient, configuration);
         this.metadataClient = new MetadataClientImpl(this.apiClient, configuration);
+        this.financialClient = new FinancialClientImpl(this.apiClient,configuration);
         this.accountsClient = new AccountsClientImpl(this.apiClient,
                 getFilesClient(configuration),
                 configuration);
@@ -155,6 +159,9 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     public MetadataClient metadataClient() {
         return metadataClient;
     }
+
+    @Override
+    public FinancialClient financialClient() { return financialClient; }
 
     private ApiClient getFilesClient(final CheckoutConfiguration configuration) {
         return new ApiClientImpl(configuration, new FilesApiUriStrategy(configuration));
