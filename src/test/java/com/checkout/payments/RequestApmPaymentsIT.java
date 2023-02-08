@@ -525,4 +525,36 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
 
         checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
+
+    @Test
+    void shouldMakeSepaV4Payment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestSepaSource.builder()
+                        .country(CountryCode.ES)
+                        .accountNumber("HU93116000060000000012345676")
+                        .bankCode("37040044")
+                        .currency(Currency.EUR)
+                        .mandateId("man_12321233211")
+                        .dateOfSignature("2023-01-01")
+                        .accountHolder(AccountHolder.builder()
+                                .firstName("Name")
+                                .lastName("Last")
+                                .billingAddress(Address.builder()
+                                        .addressLine1("Address Line 1")
+                                        .addressLine2("Address Line 2")
+                                        .city("City")
+                                        .zip("12345")
+                                        .country(CountryCode.GB)
+                                        .build())
+                                .build())
+                        .build())
+                .currency(Currency.EUR)
+                .amount(10L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/sucess")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
+    }
 }
