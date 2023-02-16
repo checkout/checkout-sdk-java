@@ -44,7 +44,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-class GsonSerializer implements Serializer {
+public class GsonSerializer implements Serializer {
 
     private static final Type MAP_TYPE_TOKEN = new TypeToken<Map<String, Object>>() {
     }.getType();
@@ -116,12 +116,16 @@ class GsonSerializer implements Serializer {
 
     private final Gson gson;
 
-    GsonSerializer() {
+    public GsonSerializer() {
         this(DEFAULT_GSON);
     }
 
-    GsonSerializer(final Gson gson) {
+    public GsonSerializer(final Gson gson) {
         this.gson = gson;
+    }
+
+    public Gson getGson() {
+        return gson;
     }
 
     @Override
@@ -243,6 +247,5 @@ class GsonSerializer implements Serializer {
             }
             return parsedDate;
         };
-
     }
 }

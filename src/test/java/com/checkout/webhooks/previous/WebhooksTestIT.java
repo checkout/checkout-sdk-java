@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -120,6 +121,8 @@ class WebhooksTestIT extends SandboxTestFixture {
 
         final WebhookRequest webhookRequest = WebhookRequest.builder()
                 .url("https://google.com/fail")
+                .contentType("json")
+                .headers(Collections.singletonMap("authorization", "Something"))
                 .build();
 
         webhookRequest.setEventTypes(GATEWAY_EVENT_TYPES);

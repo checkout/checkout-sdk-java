@@ -2,6 +2,7 @@ package com.checkout._external;
 
 import com.checkout.CheckoutSdk;
 import com.checkout.Environment;
+import com.checkout.GsonSerializer;
 import com.checkout.accounts.AccountsClientImpl;
 import com.checkout.apm.previous.klarna.KlarnaClientImpl;
 import com.checkout.apm.previous.sepa.SepaClientImpl;
@@ -10,9 +11,9 @@ import com.checkout.customers.previous.CustomersClientImpl;
 import com.checkout.events.previous.EventsClientImpl;
 import com.checkout.forex.ForexClientImpl;
 import com.checkout.instruments.previous.InstrumentsClientImpl;
-import com.checkout.payments.previous.PaymentsClientImpl;
 import com.checkout.payments.hosted.HostedPaymentsClientImpl;
 import com.checkout.payments.links.PaymentLinksClientImpl;
+import com.checkout.payments.previous.PaymentsClientImpl;
 import com.checkout.previous.CheckoutApi;
 import com.checkout.reconciliation.previous.ReconciliationClientImpl;
 import com.checkout.sessions.SessionsClientImpl;
@@ -22,10 +23,10 @@ import com.checkout.webhooks.previous.WebhooksClientImpl;
 import com.checkout.workflows.WorkflowsClientImpl;
 import org.junit.jupiter.api.Test;
 
-import static com.checkout.TestHelper.VALID_PREVIOUS_PK;
-import static com.checkout.TestHelper.VALID_PREVIOUS_SK;
 import static com.checkout.TestHelper.VALID_DEFAULT_PK;
 import static com.checkout.TestHelper.VALID_DEFAULT_SK;
+import static com.checkout.TestHelper.VALID_PREVIOUS_PK;
+import static com.checkout.TestHelper.VALID_PREVIOUS_SK;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -89,4 +90,10 @@ class CheckoutSdkTest {
     }
 
 
+    @Test
+    void shouldInstantiateGsonSerializer(){
+        final GsonSerializer gsonSerializer = new GsonSerializer();
+        assertNotNull(gsonSerializer);
+        assertNotNull(gsonSerializer.getGson());
+    }
 }
