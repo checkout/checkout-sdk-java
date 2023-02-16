@@ -10,6 +10,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
+import org.apache.http.NoHttpResponseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
@@ -164,6 +165,10 @@ class ApacheHttpClientTransport implements Transport {
                         .build();
             }
             return Response.builder().statusCode(statusCode).headers(headers).build();
+        } catch (final NoHttpResponseException e) {
+            log.error("Target server failed to respond with a valid HTTP response.");
+            return Response.builder().statusCode(HttpStatus.SC_GATEWAY_TIMEOUT).build();
+
         } catch (final Exception e) {
             log.error("Exception occurred during the execution of the client...", e);
         }
