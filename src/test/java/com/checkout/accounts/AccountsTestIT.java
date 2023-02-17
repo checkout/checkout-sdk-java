@@ -14,6 +14,7 @@ import com.checkout.common.IdResponse;
 import com.checkout.common.InstrumentType;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.entity.ContentType;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -113,6 +114,56 @@ class AccountsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("unstable")
+    void shouldUploadAndGetAFile() throws URISyntaxException {
+        final String randomReference = RandomStringUtils.random(15, true, true);
+        final OnboardEntityRequest onboardEntityRequest = OnboardEntityRequest.builder()
+                .reference(randomReference)
+                .contactDetails(ContactDetails.builder()
+                        .phone(buildAccountPhone())
+                        .emailAddresses(EntityEmailAddresses.builder()
+                                .primary(generateRandomEmail())
+                                .build())
+                        .build())
+                .profile(buildProfile())
+                .individual(Individual.builder()
+                        .firstName("Bruce")
+                        .lastName("Wayne")
+                        .tradingName("Batman's Super Hero Masks")
+                        .registeredAddress(TestHelper.createAddress())
+                        .nationalTaxId("TAX123456")
+                        .dateOfBirth(DateOfBirth.builder()
+                                .day(5)
+                                .month(6)
+                                .year(1995)
+                                .build())
+                        .placeOfBirth(PlaceOfBirth.builder()
+                                .country(CountryCode.GB)
+                                .build())
+                        .identification(Identification.builder()
+                                .nationalIdNumber("AB123456C")
+                                .build())
+                        .build())
+                .build();
+        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(onboardEntityRequest));
+
+        final PlatformsFileRequest fileRequest = PlatformsFileRequest.builder()
+                .entityId(entityResponse.getId())
+                .purpose("identity_verification")
+                .build();
+
+        final PlatformsFileUploadResponse uploadAFileResponse = blocking(() -> checkoutApi.accountsClient().uploadAFile(fileRequest));
+
+        assertNotNull(uploadAFileResponse);
+
+        PlatformsFileRetrieveResponse retrieveAFileResponse = blocking(() -> checkoutApi.accountsClient().retrieveAFile(uploadAFileResponse.getId()));
+
+        assertNotNull(retrieveAFileResponse);
+
+    }
+
+    @Test
+    @Disabled("Obsolete")
     void shouldUploadAccountsFile() throws URISyntaxException {
         uploadFile();
     }

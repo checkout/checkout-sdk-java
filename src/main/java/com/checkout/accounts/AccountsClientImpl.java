@@ -26,6 +26,8 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
     private static final String PAYOUT_SCHEDULES_PATH = "payout-schedules";
     private static final String PAYMENT_INSTRUMENTS_PATH = "payment-instruments";
 
+    private static final String PLATFORMS_FILES_PATH = "platforms-files";
+
     private final ApiClient filesClient;
 
     public AccountsClientImpl(final ApiClient apiClient,
@@ -57,15 +59,6 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
     }
 
     @Override
-    public CompletableFuture<PaymentInstrumentDetailsResponse> retrievePaymentInstrumentDetails(final String entityId, final String paymentInstrumentId) {
-        validateParams("entityId", entityId, "paymentInstrumentId", paymentInstrumentId);
-        return apiClient.getAsync(
-                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, PAYMENT_INSTRUMENTS_PATH, paymentInstrumentId),
-                sdkAuthorization(),
-                PaymentInstrumentDetailsResponse.class);
-    }
-
-    @Override
     public CompletableFuture<OnboardEntityDetailsResponse> getEntity(final String entityId) {
         validateParams("entityId", entityId);
         return apiClient.getAsync(
@@ -82,6 +75,26 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
                 sdkAuthorization(),
                 OnboardEntityResponse.class,
                 entityRequest);
+    }
+
+    @Override
+    public CompletableFuture<PlatformsFileUploadResponse> uploadAFile(final PlatformsFileRequest fileRequest) {
+        validateParams("fileRequest", fileRequest);
+        return apiClient.postAsync(
+                buildPath(PLATFORMS_FILES_PATH),
+                sdkAuthorization(),
+                PlatformsFileUploadResponse.class,
+                fileRequest,
+                null);
+    }
+
+    @Override
+    public CompletableFuture<PlatformsFileRetrieveResponse> retrieveAFile(final String fileId) {
+        validateParams("fileId", fileId);
+        return apiClient.getAsync(
+                buildPath(PLATFORMS_FILES_PATH, fileId),
+                sdkAuthorization(),
+                PlatformsFileRetrieveResponse.class);
     }
 
     @Override
@@ -105,6 +118,15 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
                 paymentInstrumentRequest,
                 null
         );
+    }
+
+    @Override
+    public CompletableFuture<PaymentInstrumentDetailsResponse> retrievePaymentInstrumentDetails(final String entityId, final String paymentInstrumentId) {
+        validateParams("entityId", entityId, "paymentInstrumentId", paymentInstrumentId);
+        return apiClient.getAsync(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, PAYMENT_INSTRUMENTS_PATH, paymentInstrumentId),
+                sdkAuthorization(),
+                PaymentInstrumentDetailsResponse.class);
     }
 
     @Override

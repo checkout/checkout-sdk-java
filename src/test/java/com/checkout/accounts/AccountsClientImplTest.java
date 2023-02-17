@@ -13,6 +13,7 @@ import com.checkout.common.Currency;
 import com.checkout.common.IdResponse;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -103,6 +104,33 @@ class AccountsClientImplTest {
     }
 
     @Test
+    void shouldUpdateAFile() throws ExecutionException, InterruptedException {
+        final PlatformsFileRequest request = mock(PlatformsFileRequest.class);
+        final PlatformsFileUploadResponse response = mock(PlatformsFileUploadResponse.class);
+
+        when(apiClient.postAsync(eq("platforms-files"), eq(authorization), eq(PlatformsFileUploadResponse.class), any(PlatformsFileRequest.class), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<PlatformsFileUploadResponse> future = accountsClient.uploadAFile(request);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+    }
+
+    @Test
+    void shouldRetrieveAFile() throws ExecutionException, InterruptedException {
+        final PlatformsFileRetrieveResponse response = mock(PlatformsFileRetrieveResponse.class);
+
+        when(apiClient.getAsync("platforms-files/file_id", authorization, PlatformsFileRetrieveResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<PlatformsFileRetrieveResponse> future = accountsClient.retrieveAFile("file_id");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+    }
+
+    @Test
     void shouldCreatePaymentInstrumentDeprecated() throws ExecutionException, InterruptedException {
 
         final EmptyResponse response = mock(EmptyResponse.class);
@@ -123,6 +151,7 @@ class AccountsClientImplTest {
     }
 
     @Test
+    @Disabled("Obsolete")
     void shouldSubmitFile() throws ExecutionException, InterruptedException {
 
         final IdResponse response = mock(IdResponse.class);

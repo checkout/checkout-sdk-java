@@ -11,15 +11,22 @@ import java.util.concurrent.CompletableFuture;
 
 public interface AccountsClient {
 
+    /**
+     * @deprecated SubmitFile endpoint is no longer supported officially,
+     * please check the documentation.
+     */
+    @Deprecated
     CompletableFuture<IdResponse> submitFile(AccountsFileRequest accountsFileRequest);
 
     CompletableFuture<OnboardEntityResponse> createEntity(OnboardEntityRequest entityRequest);
 
-    CompletableFuture<PaymentInstrumentDetailsResponse> retrievePaymentInstrumentDetails(String entityId, String paymentInstrumentId);
-
     CompletableFuture<OnboardEntityDetailsResponse> getEntity(String entityId);
 
     CompletableFuture<OnboardEntityResponse> updateEntity(OnboardEntityRequest entityRequest, String entityId);
+
+    CompletableFuture<PlatformsFileUploadResponse> uploadAFile(PlatformsFileRequest fileRequest);
+
+    CompletableFuture<PlatformsFileRetrieveResponse> retrieveAFile(String fileId);
 
     /**
      * @deprecated Use {{@link #createPaymentInstrument(String, PaymentInstrumentRequest)}} instead
@@ -28,6 +35,8 @@ public interface AccountsClient {
     CompletableFuture<EmptyResponse> createPaymentInstrument(AccountsPaymentInstrument accountsPaymentInstrument, String entityId);
 
     CompletableFuture<IdResponse> createPaymentInstrument(String entityId, PaymentInstrumentRequest paymentInstrumentRequest);
+
+    CompletableFuture<PaymentInstrumentDetailsResponse> retrievePaymentInstrumentDetails(String entityId, String paymentInstrumentId);
 
     CompletableFuture<IdResponse> updatePaymentInstrumentDetails(String entityId,
                                                                  String instrumentId,
