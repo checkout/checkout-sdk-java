@@ -29,6 +29,9 @@ public final class ThreeDSData {
 
     private Exemption exemption;
 
+    @SerializedName("exemption_applied")
+    private String exemptionApplied;
+
     private Boolean challenged;
 
 }
