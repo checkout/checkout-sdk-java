@@ -97,6 +97,9 @@ public final class ProcessingSettings {
     @SerializedName("merchant_callback_url")
     private String merchantCallbackUrl;
 
+    @SerializedName("line_of_business")
+    private String lineOfBusiness;
+
     @SerializedName("shipping_delay")
     private Long shippingDelay;
 

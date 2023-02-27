@@ -109,6 +109,7 @@ class CaptureTestIT extends AbstractPaymentsTestIT {
                                         .build()))
 
                                 .build()))
+                        .lineOfBusiness("Flights")
                         .build())
                 .metadata(metadata)
                 .build();
