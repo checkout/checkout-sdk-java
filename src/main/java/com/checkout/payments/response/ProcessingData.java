@@ -63,4 +63,12 @@ public final class ProcessingData {
     @SerializedName("custom_payment_method_ids")
     private List<String> customPaymentMethodIds;
 
+    private Boolean aft;
+
+    @SerializedName("merchant_category_code")
+    private String merchantCategoryCode;
+
+    @SerializedName("scheme_merchant_id")
+    private String schemeMerchantId;
+
 }
