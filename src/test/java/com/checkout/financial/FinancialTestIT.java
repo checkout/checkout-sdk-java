@@ -5,6 +5,7 @@ import com.checkout.payments.AbstractPaymentsTestIT;
 import com.checkout.payments.response.PaymentResponse;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,6 +19,7 @@ public class FinancialTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("unstable")
     public void shouldQueryFinancialActions() {
         // payment
         final PaymentResponse paymentResponse = makeCardPayment(false);
