@@ -289,17 +289,18 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    @Disabled("unstable")
     void shouldMakeGiropayPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
-                .source(RequestGiropaySource.builder()
-                        .purpose("CKO Giropay test")
-                        .build())
+                .source(new RequestGiropaySource())
                 .currency(Currency.EUR)
                 .amount(100L)
                 .capture(true)
                 .successUrl("https://testing.checkout.com/sucess")
                 .failureUrl("https://testing.checkout.com/failure")
+                .description("Giropay example")
+                .shipping(ShippingDetails.builder()
+                        .address(createAddress())
+                        .build())
                 .build();
 
         checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
