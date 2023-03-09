@@ -1,5 +1,6 @@
 package com.checkout.workflows;
 
+import com.checkout.common.IdResponse;
 import com.checkout.workflows.actions.request.WebhookWorkflowActionRequest;
 import com.checkout.workflows.actions.response.WebhookWorkflowActionResponse;
 import com.checkout.workflows.conditions.WorkflowConditionType;
@@ -16,6 +17,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -91,6 +93,25 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
     }
 
     @Test
+    void shouldAddAndDeleteWorkflowAction() {
+
+        final CreateWorkflowResponse createWorkflowResponse = createWorkflow();
+
+        final WebhookWorkflowActionRequest workflowActionRequest = WebhookWorkflowActionRequest.builder()
+                .signature(baseWorkflowActionRequest.getSignature())
+                .headers(baseWorkflowActionRequest.getHeaders())
+                .url(baseWorkflowActionRequest.getUrl() + "/fake")
+                .build();
+
+        final IdResponse workflowAction = blocking(() -> checkoutApi.workflowsClient().addWorkflowAction(createWorkflowResponse.getId(), workflowActionRequest));
+
+        assertNotNull(workflowAction);
+
+        assertDoesNotThrow(() -> checkoutApi.workflowsClient().removeWorkflowAction(createWorkflowResponse.getId(), workflowAction.getId()));
+
+    }
+
+    @Test
     void shouldUpdateWorkflowAction() {
 
         final CreateWorkflowResponse createWorkflowResponse = createWorkflow();
@@ -160,6 +181,8 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
         assertNotNull(updatedEventConditionResponse);
         assertNotNull(updatedEventConditionResponse.getEvents());
         assertEquals(new HashSet<>(GATEWAY_EVENT_TYPES), updatedEventConditionResponse.getEvents().get(GATEWAY));
+
+        assertDoesNotThrow(() -> checkoutApi.workflowsClient().removeWorkflowCondition(getWorkflowResponse.getId(), eventConditionResponse.getId()));
 
     }
 

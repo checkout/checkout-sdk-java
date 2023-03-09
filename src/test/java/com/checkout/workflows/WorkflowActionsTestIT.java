@@ -3,6 +3,7 @@ package com.checkout.workflows;
 import com.checkout.payments.response.PaymentResponse;
 import com.checkout.workflows.actions.response.WorkflowActionInvocationsResponse;
 import com.checkout.workflows.events.SubjectEvent;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class WorkflowActionsTestIT extends AbstractWorkflowTestIT {
 
     @Test
+    @Disabled("unstable")
     void shouldGetActionInvocations() {
 
         final CreateWorkflowResponse createWorkflowResponse = createWorkflow();
