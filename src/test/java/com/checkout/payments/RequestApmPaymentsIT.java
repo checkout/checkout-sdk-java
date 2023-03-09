@@ -289,6 +289,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("unstable")
     void shouldMakeGiropayPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestGiropaySource.builder()

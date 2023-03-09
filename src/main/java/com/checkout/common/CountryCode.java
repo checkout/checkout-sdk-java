@@ -510,7 +510,9 @@ public enum CountryCode {
     @SerializedName(value = "PS",alternate = "PSE")
     PS("970"),
     @SerializedName(value = "QZ")
-    QZ("");
+    QZ(""),
+    @SerializedName(value = "XK")
+    XK("");
 
     @Getter
     private final String dialCode;
