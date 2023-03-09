@@ -6,6 +6,7 @@ import com.checkout.CheckoutConfiguration;
 import com.checkout.EmptyResponse;
 import com.checkout.ItemsResponse;
 import com.checkout.SdkAuthorizationType;
+import com.checkout.common.IdResponse;
 import com.checkout.workflows.actions.request.WorkflowActionRequest;
 import com.checkout.workflows.actions.response.WorkflowActionInvocationsResponse;
 import com.checkout.workflows.conditions.request.WorkflowConditionRequest;
@@ -41,14 +42,22 @@ public class WorkflowsClientImpl extends AbstractClient implements WorkflowsClie
     }
 
     @Override
-    public CompletableFuture<CreateWorkflowResponse> createWorkflow(final CreateWorkflowRequest createWorkflowRequest) {
-        validateParams("createWorkflowRequest", createWorkflowRequest);
-        return apiClient.postAsync(WORKFLOWS_PATH, sdkAuthorization(), CreateWorkflowResponse.class, createWorkflowRequest, null);
+    public CompletableFuture<GetWorkflowsResponse> getWorkflows() {
+        return apiClient.getAsync(
+                WORKFLOWS_PATH,
+                sdkAuthorization(),
+                GetWorkflowsResponse.class);
     }
 
     @Override
-    public CompletableFuture<GetWorkflowsResponse> getWorkflows() {
-        return apiClient.getAsync(WORKFLOWS_PATH, sdkAuthorization(), GetWorkflowsResponse.class);
+    public CompletableFuture<CreateWorkflowResponse> createWorkflow(final CreateWorkflowRequest createWorkflowRequest) {
+        validateParams("createWorkflowRequest", createWorkflowRequest);
+        return apiClient.postAsync(
+                WORKFLOWS_PATH,
+                sdkAuthorization(),
+                CreateWorkflowResponse.class,
+                createWorkflowRequest,
+                null);
     }
 
     @Override
@@ -58,79 +67,180 @@ public class WorkflowsClientImpl extends AbstractClient implements WorkflowsClie
     }
 
     @Override
-    public CompletableFuture<UpdateWorkflowResponse> updateWorkflow(final String workflowId, final UpdateWorkflowRequest updateWorkflowRequest) {
-        validateParams(WORKFLOW_ID, workflowId, "updateWorkflowRequest", updateWorkflowRequest);
-        return apiClient.patchAsync(buildPath(WORKFLOWS_PATH, workflowId), sdkAuthorization(), UpdateWorkflowResponse.class, updateWorkflowRequest, null);
-    }
-
-    @Override
     public CompletableFuture<EmptyResponse> removeWorkflow(final String workflowId) {
         validateParams(WORKFLOW_ID, workflowId);
         return apiClient.deleteAsync(buildPath(WORKFLOWS_PATH, workflowId), sdkAuthorization());
     }
 
     @Override
-    public CompletableFuture<EmptyResponse> updateWorkflowAction(final String workflowId, final String actionId, final WorkflowActionRequest workflowActionRequest) {
-        validateParams(WORKFLOW_ID, workflowId, "actionId", actionId, "workflowActionRequest", workflowActionRequest);
-        return apiClient.putAsync(buildPath(WORKFLOWS_PATH, workflowId, ACTIONS_PATH, actionId), sdkAuthorization(), EmptyResponse.class, workflowActionRequest);
+    public CompletableFuture<UpdateWorkflowResponse> updateWorkflow(final String workflowId,
+                                                                    final UpdateWorkflowRequest updateWorkflowRequest) {
+        validateParams(WORKFLOW_ID, workflowId, "updateWorkflowRequest", updateWorkflowRequest);
+        return apiClient.patchAsync(
+                buildPath(WORKFLOWS_PATH, workflowId),
+                sdkAuthorization(),
+                UpdateWorkflowResponse.class,
+                updateWorkflowRequest,
+                null);
     }
 
     @Override
-    public CompletableFuture<EmptyResponse> updateWorkflowCondition(final String workflowId, final String conditionId, final WorkflowConditionRequest workflowConditionRequest) {
+    public CompletableFuture<IdResponse> addWorkflowAction(final String workflowId,
+                                                           final WorkflowActionRequest workflowActionRequest) {
+        validateParams(WORKFLOW_ID, workflowId, "workflowActionRequest", workflowActionRequest);
+        return apiClient.postAsync(
+                buildPath(WORKFLOWS_PATH, workflowId, ACTIONS_PATH),
+                sdkAuthorization(),
+                IdResponse.class,
+                workflowActionRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<EmptyResponse> updateWorkflowAction(final String workflowId,
+                                                                 final String actionId,
+                                                                 final WorkflowActionRequest workflowActionRequest) {
+        validateParams(WORKFLOW_ID, workflowId, "actionId", actionId, "workflowActionRequest", workflowActionRequest);
+        return apiClient.putAsync(
+                buildPath(WORKFLOWS_PATH, workflowId, ACTIONS_PATH, actionId),
+                sdkAuthorization(),
+                EmptyResponse.class,
+                workflowActionRequest);
+    }
+
+    @Override
+    public CompletableFuture<EmptyResponse> removeWorkflowAction(final String workflowId,
+                                                                 final String actionId) {
+        validateParams(WORKFLOW_ID, workflowId, "actionId", actionId);
+        return apiClient.deleteAsync(
+                buildPath(WORKFLOWS_PATH, workflowId, ACTIONS_PATH, actionId),
+                sdkAuthorization()
+        );
+    }
+
+    @Override
+    public CompletableFuture<IdResponse> addWorkflowCondition(final String workflowId,
+                                                              final WorkflowConditionRequest workflowConditionRequest) {
+        validateParams(WORKFLOW_ID, workflowId, "workflowConditionRequest", workflowConditionRequest);
+        return apiClient.postAsync(
+                buildPath(WORKFLOWS_PATH, workflowId, CONDITIONS_PATH),
+                sdkAuthorization(),
+                IdResponse.class,
+                workflowConditionRequest,
+                null);
+    }
+
+    @Override
+    public CompletableFuture<EmptyResponse> updateWorkflowCondition(final String workflowId,
+                                                                    final String conditionId,
+                                                                    final WorkflowConditionRequest workflowConditionRequest) {
         validateParams(WORKFLOW_ID, workflowId, "conditionId", conditionId, "workflowConditionRequest", workflowConditionRequest);
-        return apiClient.putAsync(buildPath(WORKFLOWS_PATH, workflowId, CONDITIONS_PATH, conditionId), sdkAuthorization(), EmptyResponse.class, workflowConditionRequest);
+        return apiClient.putAsync(
+                buildPath(WORKFLOWS_PATH, workflowId, CONDITIONS_PATH, conditionId),
+                sdkAuthorization(),
+                EmptyResponse.class,
+                workflowConditionRequest);
+    }
+
+    @Override
+    public CompletableFuture<EmptyResponse> removeWorkflowCondition(final String workflowId, final String conditionId) {
+        validateParams(WORKFLOW_ID, workflowId, "conditionId", conditionId);
+        return apiClient.deleteAsync(
+                buildPath(WORKFLOWS_PATH, workflowId, CONDITIONS_PATH, conditionId),
+                sdkAuthorization());
     }
 
     @Override
     public CompletableFuture<ItemsResponse<WorkflowEventTypes>> getEventTypes() {
-        return apiClient.getAsync(buildPath(WORKFLOWS_PATH, EVENT_TYPES_PATH), sdkAuthorization(), WORKFLOWS_EVENT_TYPES_TYPE);
-    }
-
-    @Override
-    public CompletableFuture<SubjectEventsResponse> getSubjectEvents(final String subjectId) {
-        validateParams("subjectId", subjectId);
-        return apiClient.getAsync(buildPath(WORKFLOWS_PATH, EVENTS_PATH, SUBJECT_PATH, subjectId), sdkAuthorization(), SubjectEventsResponse.class);
+        return apiClient.getAsync(
+                buildPath(WORKFLOWS_PATH, EVENT_TYPES_PATH),
+                sdkAuthorization(),
+                WORKFLOWS_EVENT_TYPES_TYPE);
     }
 
     @Override
     public CompletableFuture<GetEventResponse> getEvent(final String eventId) {
         validateParams("eventId", eventId);
-        return apiClient.getAsync(buildPath(WORKFLOWS_PATH, EVENTS_PATH, eventId), sdkAuthorization(), GetEventResponse.class);
-    }
-
-    @Override
-    public CompletableFuture<ReflowResponse> reflowByEvent(final String eventId) {
-        validateParams("eventId", eventId);
-        return apiClient.postAsync(buildPath(WORKFLOWS_PATH, EVENTS_PATH, eventId, REFLOW_PATH), sdkAuthorization(), ReflowResponse.class, null, null);
-    }
-
-    @Override
-    public CompletableFuture<ReflowResponse> reflowBySubject(final String subjectId) {
-        validateParams("subjectId", subjectId);
-        return apiClient.postAsync(buildPath(WORKFLOWS_PATH, EVENTS_PATH, SUBJECT_PATH, subjectId, REFLOW_PATH), sdkAuthorization(), ReflowResponse.class, null, null);
-    }
-
-    @Override
-    public CompletableFuture<ReflowResponse> reflowByEventAndWorkflow(final String eventId, final String workflowId) {
-        validateParams("eventId", eventId, WORKFLOW_ID, workflowId);
-        return apiClient.postAsync(buildPath(WORKFLOWS_PATH, EVENTS_PATH, eventId, WORKFLOW_PATH, workflowId, REFLOW_PATH), sdkAuthorization(), ReflowResponse.class, null, null);
-    }
-
-    @Override
-    public CompletableFuture<ReflowResponse> reflowBySubjectAndWorkflow(final String subjectId, final String workflowId) {
-        validateParams("subjectId", subjectId, WORKFLOW_ID, workflowId);
-        return apiClient.postAsync(buildPath(WORKFLOWS_PATH, EVENTS_PATH, SUBJECT_PATH, subjectId, WORKFLOW_PATH, workflowId, REFLOW_PATH), sdkAuthorization(), ReflowResponse.class, null, null);
-    }
-
-    @Override
-    public CompletableFuture<ReflowResponse> reflow(final ReflowRequest reflowRequest) {
-        validateParams("reflowRequest", reflowRequest);
-        return apiClient.postAsync(buildPath(WORKFLOWS_PATH, EVENTS_PATH, REFLOW_PATH), sdkAuthorization(), ReflowResponse.class, reflowRequest, null);
+        return apiClient.getAsync(
+                buildPath(WORKFLOWS_PATH, EVENTS_PATH, eventId),
+                sdkAuthorization(),
+                GetEventResponse.class);
     }
 
     @Override
     public CompletableFuture<WorkflowActionInvocationsResponse> getActionInvocations(final String eventId, final String actionId) {
         validateParams("eventId", eventId, "actionId", actionId);
-        return apiClient.getAsync(buildPath(WORKFLOWS_PATH, EVENTS_PATH, eventId, ACTIONS_PATH, actionId), sdkAuthorization(), WorkflowActionInvocationsResponse.class);
+        return apiClient.getAsync(
+                buildPath(WORKFLOWS_PATH, EVENTS_PATH, eventId, ACTIONS_PATH, actionId),
+                sdkAuthorization(),
+                WorkflowActionInvocationsResponse.class);
     }
+
+    @Override
+    public CompletableFuture<ReflowResponse> reflowByEvent(final String eventId) {
+        validateParams("eventId", eventId);
+        return apiClient.postAsync(
+                buildPath(WORKFLOWS_PATH, EVENTS_PATH, eventId, REFLOW_PATH),
+                sdkAuthorization(),
+                ReflowResponse.class,
+                null,
+                null);
+    }
+
+    @Override
+    public CompletableFuture<ReflowResponse> reflowByEventAndWorkflow(final String eventId,
+                                                                      final String workflowId) {
+        validateParams("eventId", eventId, WORKFLOW_ID, workflowId);
+        return apiClient.postAsync(
+                buildPath(WORKFLOWS_PATH, EVENTS_PATH, eventId, WORKFLOW_PATH, workflowId, REFLOW_PATH),
+                sdkAuthorization(),
+                ReflowResponse.class,
+                null,
+                null);
+    }
+
+    @Override
+    public CompletableFuture<ReflowResponse> reflow(final ReflowRequest reflowRequest) {
+        validateParams("reflowRequest", reflowRequest);
+        return apiClient.postAsync(
+                buildPath(WORKFLOWS_PATH, EVENTS_PATH, REFLOW_PATH),
+                sdkAuthorization(),
+                ReflowResponse.class,
+                reflowRequest,
+                null);
+    }
+
+    @Override
+    public CompletableFuture<SubjectEventsResponse> getSubjectEvents(final String subjectId) {
+        validateParams("subjectId", subjectId);
+        return apiClient.getAsync(
+                buildPath(WORKFLOWS_PATH, EVENTS_PATH, SUBJECT_PATH, subjectId),
+                sdkAuthorization(),
+                SubjectEventsResponse.class);
+    }
+
+    @Override
+    public CompletableFuture<ReflowResponse> reflowBySubject(final String subjectId) {
+        validateParams("subjectId", subjectId);
+        return apiClient.postAsync(
+                buildPath(WORKFLOWS_PATH, EVENTS_PATH, SUBJECT_PATH, subjectId, REFLOW_PATH),
+                sdkAuthorization(),
+                ReflowResponse.class,
+                null,
+                null);
+    }
+
+    @Override
+    public CompletableFuture<ReflowResponse> reflowBySubjectAndWorkflow(final String subjectId,
+                                                                        final String workflowId) {
+        validateParams("subjectId", subjectId, WORKFLOW_ID, workflowId);
+        return apiClient.postAsync(
+                buildPath(WORKFLOWS_PATH, EVENTS_PATH, SUBJECT_PATH, subjectId, WORKFLOW_PATH, workflowId, REFLOW_PATH),
+                sdkAuthorization(),
+                ReflowResponse.class,
+                null,
+                null);
+    }
+
 }

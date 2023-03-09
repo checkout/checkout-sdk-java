@@ -8,6 +8,7 @@ import com.checkout.ItemsResponse;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
+import com.checkout.common.IdResponse;
 import com.checkout.workflows.actions.request.WorkflowActionRequest;
 import com.checkout.workflows.actions.response.WorkflowActionInvocationsResponse;
 import com.checkout.workflows.conditions.request.WorkflowConditionRequest;
@@ -211,6 +212,28 @@ class WorkflowsClientImplTest {
     }
 
     @Test
+    void shouldAddWorkflowAction() throws ExecutionException, InterruptedException {
+
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+
+        final IdResponse response = Mockito.mock(IdResponse.class);
+        final WorkflowActionRequest action = Mockito.mock(WorkflowActionRequest.class);
+
+        when(apiClient.postAsync("workflows/workflow_id/actions", authorization, IdResponse.class, action, null))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<IdResponse> future = workflowsClient.addWorkflowAction("workflow_id", action);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
     void shouldUpdateWorkflowAction() throws ExecutionException, InterruptedException {
 
         when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
@@ -226,6 +249,24 @@ class WorkflowsClientImplTest {
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<EmptyResponse> future = workflowsClient.updateWorkflowAction("workflow_id", "action_id", action);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
+    void shouldRemoveWorkflowAction() throws ExecutionException, InterruptedException {
+
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+
+        final EmptyResponse response = Mockito.mock(EmptyResponse.class);
+
+        when(apiClient.deleteAsync("workflows/workflow_id/actions/action_id", (authorization)))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<EmptyResponse> future = workflowsClient.removeWorkflowAction("workflow_id", "action_id");
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -259,6 +300,25 @@ class WorkflowsClientImplTest {
     }
 
     @Test
+    void shouldAddWorkflowCondition() throws ExecutionException, InterruptedException {
+
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+
+        final IdResponse response = Mockito.mock(IdResponse.class);
+        final WorkflowConditionRequest condition = Mockito.mock(WorkflowConditionRequest.class);
+
+        when(apiClient.postAsync("workflows/workflow_id/conditions", authorization, IdResponse.class, condition, null))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<IdResponse> future = workflowsClient.addWorkflowCondition("workflow_id", condition);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
     void shouldUpdateWorkflowCondition() throws ExecutionException, InterruptedException {
 
         when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
@@ -271,6 +331,24 @@ class WorkflowsClientImplTest {
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<EmptyResponse> future = workflowsClient.updateWorkflowCondition("workflow_id", "condition_id", condition);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
+    void shouldRemoveWorkflowCondition() throws ExecutionException, InterruptedException {
+
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+
+        final EmptyResponse response = Mockito.mock(EmptyResponse.class);
+
+        when(apiClient.deleteAsync("workflows/workflow_id/conditions/condition_id", (authorization)))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<EmptyResponse> future = workflowsClient.removeWorkflowCondition("workflow_id", "condition_id");
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
