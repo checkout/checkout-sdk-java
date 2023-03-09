@@ -120,8 +120,6 @@ class EventsClientImplTest {
         final Instant to = LocalDateTime.now().toInstant(ZoneOffset.UTC);
 
         final RetrieveEventsRequest retrieveEventsRequest = RetrieveEventsRequest.builder()
-                .from(from)
-                .to(to)
                 .limit(15)
                 .skip(0)
                 .paymentId("paymentId")

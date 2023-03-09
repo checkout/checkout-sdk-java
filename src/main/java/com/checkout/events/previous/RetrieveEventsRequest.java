@@ -21,8 +21,4 @@ public final class RetrieveEventsRequest {
 
     private Integer limit;
 
-    private Instant from;
-
-    private Instant to;
-
 }
