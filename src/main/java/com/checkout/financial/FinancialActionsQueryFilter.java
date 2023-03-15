@@ -17,8 +17,8 @@ public class FinancialActionsQueryFilter {
     @SerializedName("payment_id")
     private String paymentId;
 
-    @SerializedName("entity_id")
-    private String entityId;
+    @SerializedName("action_id")
+    private String actionId;
 
     @Size(min = 1, max = 100)
     private Integer limit;
