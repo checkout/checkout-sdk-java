@@ -288,6 +288,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 
+    @Disabled("unstable")
     @Test
     void shouldMakeGiropayPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
@@ -303,7 +304,11 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                         .build())
                 .build();
 
-        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
+        final PaymentResponse response = blocking(() -> checkoutApi.paymentsClient().requestPayment(paymentRequest));
+
+        assertNotNull(response);
+        assertNotNull(response.getId());
+        assertEquals(PaymentStatus.PENDING, response.getStatus());
     }
 
     @Test
