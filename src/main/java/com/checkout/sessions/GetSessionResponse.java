@@ -88,6 +88,9 @@ public class GetSessionResponse extends Resource {
 
     private Installment installment;
 
+    @SerializedName("customer_ip")
+    private String customerIp;
+
     @SerializedName("authentication_date")
     private Instant authenticationDate;
 

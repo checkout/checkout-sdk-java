@@ -15,6 +15,8 @@ public final class Acs {
     @SerializedName("operator_id")
     private String operatorId;
 
+    private String url;
+
     @SerializedName("signed_content")
     private String signedContent;
 
