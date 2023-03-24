@@ -76,4 +76,15 @@ class GsonSerializerTest {
 
     }
 
+    @Test
+    void shouldDeserialize_default_getPaymentResponse_with_wrong_format() {
+
+        final com.checkout.payments.response.GetPaymentResponse paymentResponse = serializer.fromJson(getMock("/mocks/payments/response/get_payment_response_wrong_format.json"), com.checkout.payments.response.GetPaymentResponse.class);
+
+        assertNotNull(paymentResponse);
+        assertNotNull(paymentResponse.getExpiresOn());
+        assertEquals("2019-09-10T10:11:12Z", paymentResponse.getExpiresOn().toString());
+
+    }
+
 }
