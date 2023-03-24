@@ -38,6 +38,7 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,10 @@ import java.util.stream.IntStream;
 
 public class GsonSerializer implements Serializer {
 
+    private static final List<DateTimeFormatter> DEFAULT_FORMATTERS = Arrays.asList(
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSXXX"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+    );
     private static final Type MAP_TYPE_TOKEN = new TypeToken<Map<String, Object>>() {
     }.getType();
     private static final Type EVENT_TYPES_TYPE = new TypeToken<ItemsResponse<EventTypes>>() {
@@ -237,15 +242,20 @@ public class GsonSerializer implements Serializer {
 
     private static JsonDeserializer<Instant> getInstantJsonDeserializer() {
         return (json, typeOfT, context) -> {
-            Instant parsedDate;
+            final String dateString = json.getAsString();
             try {
-                parsedDate = Instant.parse(json.getAsString());
-            } catch (DateTimeParseException ex) {
-                final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSXXX");
-                final LocalDateTime dateTime = LocalDateTime.parse(json.getAsString(), dtf);
-                parsedDate = dateTime.toInstant(ZoneOffset.UTC);
+                return Instant.parse(dateString);
+            } catch (final DateTimeParseException ex) {
+                for (final DateTimeFormatter formatter : DEFAULT_FORMATTERS) {
+                    try {
+                        final LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
+                        return dateTime.toInstant(ZoneOffset.UTC);
+                    } catch (final DateTimeParseException ignored) {
+                        // continue to next formatter
+                    }
+                }
+                throw ex;
             }
-            return parsedDate;
         };
     }
 }
