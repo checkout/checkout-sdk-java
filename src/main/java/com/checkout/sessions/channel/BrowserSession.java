@@ -20,6 +20,9 @@ public final class BrowserSession extends ChannelData {
     @SerializedName("java_enabled")
     private Boolean javaEnabled;
 
+    @SerializedName("javascript_enabled")
+    private Boolean javascriptEnabled;
+
     @SerializedName("language")
     private String language;
 
@@ -44,6 +47,7 @@ public final class BrowserSession extends ChannelData {
     private BrowserSession(final ThreeDsMethodCompletion threeDsMethodCompletion,
                            final String acceptHeader,
                            final Boolean javaEnabled,
+                           final Boolean javascriptEnabled,
                            final String language,
                            final String colorDepth,
                            final String screenHeight,
@@ -55,6 +59,7 @@ public final class BrowserSession extends ChannelData {
         this.threeDsMethodCompletion = threeDsMethodCompletion;
         this.acceptHeader = acceptHeader;
         this.javaEnabled = javaEnabled;
+        this.javascriptEnabled = javascriptEnabled;
         this.language = language;
         this.colorDepth = colorDepth;
         this.screenHeight = screenHeight;

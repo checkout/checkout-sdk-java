@@ -117,6 +117,7 @@ abstract class AbstractSessionsTestIT extends SandboxTestFixture {
         return BrowserSession.builder()
                 .acceptHeader("Accept:  *.*, q=0.1")
                 .javaEnabled(true)
+                .javascriptEnabled(true)
                 .language("FR-fr")
                 .colorDepth("16")
                 .screenWidth("1920")
