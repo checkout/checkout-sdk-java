@@ -3,7 +3,6 @@ package com.checkout.payments.links;
 import com.checkout.common.AmountAllocations;
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
-import com.checkout.common.MarketplaceData;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Product;
 import com.checkout.payments.BillingDescriptor;
@@ -84,13 +83,6 @@ public final class PaymentLinkRequest {
 
     @SerializedName("processing_channel_id")
     private String processingChannelId;
-
-    /**
-     * @deprecated This property will be removed in the future, and should be used
-     * {@link PaymentLinkRequest#amountAllocations} instead
-     */
-    @Deprecated
-    private MarketplaceData marketplace;
 
     @SerializedName("amount_allocations")
     private List<AmountAllocations> amountAllocations;

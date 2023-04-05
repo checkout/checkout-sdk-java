@@ -59,7 +59,27 @@ class ForexClientImplTest {
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
+    }
 
+    @Test
+    void shouldGetRates() throws ExecutionException, InterruptedException {
+
+        final RatesQueryFilter request = RatesQueryFilter.builder()
+                .product("card_payouts")
+                .source(ForexSource.VISA)
+                .currencyPairs("GBPEUR,USDNOK,JPNCAD")
+                .processChannelId("pc_abcdefghijklmnopqrstuvwxyz")
+                .build();
+        final RatesQueryResponse response = mock(RatesQueryResponse.class);
+
+        when(apiClient.queryAsync(eq("forex/rates"), eq(authorization), eq(request),
+                eq(RatesQueryResponse.class)))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<RatesQueryResponse> future = client.getRates(request);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
     }
 
 }

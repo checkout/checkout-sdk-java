@@ -3,6 +3,7 @@ package com.checkout.forex;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.Currency;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,6 +37,26 @@ class ForexTestIT extends SandboxTestFixture {
         assertNotNull(response.getRate());
         assertNotNull(response.getExpiresOn());
         assertFalse(response.isSingleUse());
+    }
+
+    @Disabled("Skipping because processing_channel_id is invalid")
+    @Test
+    void shouldGetRates() {
+
+        final RatesQueryFilter request = RatesQueryFilter.builder()
+                .product("card_payouts")
+                .source(ForexSource.VISA)
+                .currencyPairs("GBPEUR,USDNOK,JPNCAD")
+                .processChannelId("pc_abcdefghijklmnopqrstuvwxyz")
+                .build();
+        final RatesQueryResponse response = blocking(() -> checkoutApi.forexClient().getRates(request));
+
+        assertNotNull(response);
+        assertNotNull(response.getProduct());
+        assertNotNull(response.getSource());
+        assertEquals(request.getProduct(), response.getProduct());
+        assertEquals(request.getSource(), response.getSource());
+        assertNotNull(response.getRates());
     }
 
 }

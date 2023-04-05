@@ -20,4 +20,10 @@ public class ForexClientImpl extends AbstractClient implements ForexClient {
         return apiClient.postAsync("forex/quotes", sdkAuthorization(), QuoteResponse.class, quoteRequest, null);
     }
 
+    @Override
+    public CompletableFuture<RatesQueryResponse> getRates(RatesQueryFilter ratesQuery) {
+        CheckoutUtils.validateParams("ratesQuery", ratesQuery);
+        return apiClient.queryAsync("forex/rates", sdkAuthorization(), ratesQuery, RatesQueryResponse.class);
+    }
+
 }
