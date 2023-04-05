@@ -20,6 +20,8 @@ public class FinancialActionsQueryFilter {
     @SerializedName("action_id")
     private String actionId;
 
+    private String reference;
+
     @Size(min = 1, max = 100)
     private Integer limit;
 
