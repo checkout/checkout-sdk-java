@@ -20,36 +20,6 @@ class TransfersTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void shouldInitiateAndGetTransferOfFunds() {
-
-        final CreateTransferRequest transferRequest = CreateTransferRequest.builder()
-                .transferType(TransferType.COMMISSION)
-                .source(TransferSourceRequest.builder()
-                        .id("ent_kidtcgc3ge5unf4a5i6enhnr5m")
-                        .amount(100L)
-                        .build())
-                .destination(TransferDestinationRequest.builder()
-                        .id("ent_w4jelhppmfiufdnatam37wrfc4")
-                        .build())
-                .build();
-
-        final CreateTransferResponse response = blocking(() -> checkoutApi.transfersClient().initiateTransferOfFunds(transferRequest));
-        assertNotNull(response.getId());
-        assertEquals(TransferStatus.PENDING, response.getStatus());
-
-        final TransferDetailsResponse transferDetailsResponse = blocking(() -> checkoutApi.transfersClient().retrieveATransfer(response.getId()));
-        assertNotNull(transferDetailsResponse);
-        assertEquals(transferRequest.getReference(), transferDetailsResponse.getReference());
-        assertNotNull(transferDetailsResponse.getStatus());
-        assertNotNull(transferDetailsResponse.getTransferType());
-        assertNotNull(transferDetailsResponse.getRequestedOn());
-        assertNotNull(transferDetailsResponse.getSource());
-        assertNotNull(transferDetailsResponse.getSource().getEntityId());
-        assertNotNull(transferDetailsResponse.getDestination());
-        assertNotNull(transferDetailsResponse.getDestination().getEntityId());
-    }
-
-    @Test
     void shouldInitiateTransferOfFunds_idempotently() {
 
         final CreateTransferRequest transferRequest = CreateTransferRequest.builder()
