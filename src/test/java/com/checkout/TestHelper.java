@@ -83,7 +83,7 @@ public final class TestHelper {
         return Product.builder()
                 .name("Gold Necklace")
                 .quantity(1L)
-                .price(200L)
+                .price(1000L)
                 .build();
     }
 
@@ -98,7 +98,7 @@ public final class TestHelper {
     public static PaymentLinkRequest createPaymentLinksRequest(final String reference) {
         final Instant time = LocalDateTime.now().toInstant(ZoneOffset.UTC);
         return PaymentLinkRequest.builder()
-                .amount(200L)
+                .amount(1000L)
                 .currency(Currency.GBP)
                 .reference(reference)
                 .description("Payment for Gold Necklace")

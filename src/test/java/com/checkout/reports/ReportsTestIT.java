@@ -72,7 +72,7 @@ class ReportsTestIT extends SandboxTestFixture {
             final ContentResponse contentResponse = checkoutApi.reportsClient().getReportFile(reportDetails.getId(), reportDetails.getFiles().get(0).getId()).get();
             assertNotNull(contentResponse);
             assertNotNull(contentResponse.getContent());
-            assertTrue(contentResponse.getContent().contains("Client Entity ID,Client Entity Name"));
+            assertTrue(contentResponse.getContent().contains("Entity ID,Entity Name"));
         }
     }
 

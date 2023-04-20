@@ -36,8 +36,8 @@ public class ActionBreakdown {
     @SerializedName("transaction_currency")
     private Currency transactionCurrency;
 
-    @SerializedName("transaction_currency_account")
-    private Double transactionCurrencyAccount;
+    @SerializedName("transaction_currency_amount")
+    private Double transactionCurrencyAmount;
 
     @SerializedName("processing_to_transaction_currency_fx_rate")
     private Double processingToTransactionCurrencyFxRate;

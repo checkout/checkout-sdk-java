@@ -13,4 +13,6 @@ public class UpdatePaymentInstrumentRequest {
     @SerializedName("default")
     private Boolean defaultDestination;
 
+    private Headers headers;
+
 }
