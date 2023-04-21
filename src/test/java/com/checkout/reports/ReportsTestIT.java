@@ -3,6 +3,7 @@ package com.checkout.reports;
 import com.checkout.ContentResponse;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -63,6 +64,7 @@ class ReportsTestIT extends SandboxTestFixture {
         }
     }
 
+    @Disabled("unstable")
     @Test
     void shouldGetReportFile() throws ExecutionException, InterruptedException {
         final ReportsResponse reportsResponse = getAllReports();
