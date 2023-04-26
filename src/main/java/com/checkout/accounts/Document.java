@@ -1,5 +1,6 @@
 package com.checkout.accounts;
 
+import com.checkout.common.DocumentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

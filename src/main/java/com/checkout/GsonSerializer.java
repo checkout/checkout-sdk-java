@@ -9,6 +9,7 @@ import com.checkout.common.InstrumentType;
 import com.checkout.common.Link;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.events.previous.EventTypes;
+import com.checkout.issuing.cards.CardType;
 import com.checkout.payments.PaymentDestinationType;
 import com.checkout.payments.previous.PaymentAction;
 import com.checkout.payments.sender.Sender;
@@ -111,6 +112,10 @@ public class GsonSerializer implements Serializer {
                     .registerSubtype(com.checkout.accounts.payout.schedule.response.ScheduleFrequencyDailyResponse.class, CheckoutUtils.DAILY)
                     .registerSubtype(com.checkout.accounts.payout.schedule.response.ScheduleFrequencyWeeklyResponse.class, CheckoutUtils.WEEKLY)
                     .registerSubtype(ScheduleFrequencyMonthlyResponse.class, CheckoutUtils.MONTHLY))
+            // Issuing CS2 - CardDetailsResponse
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.issuing.cards.AbstractCardDetailsResponse.class, CheckoutUtils.TYPE)
+                    .registerSubtype(com.checkout.issuing.cards.PhysicalCardDetailsResponse.class, identifier(CardType.PHYSICAL))
+                    .registerSubtype(com.checkout.issuing.cards.VirtualCardDetailsResponse.class, identifier(CardType.VIRTUAL)))
             // Adapters when API returns an array
             .registerTypeAdapter(EVENT_TYPES_TYPE, eventTypesResponseDeserializer())
             .registerTypeAdapter(WORKFLOWS_EVENT_TYPES_TYPE, workflowEventTypesResponseDeserializer())
