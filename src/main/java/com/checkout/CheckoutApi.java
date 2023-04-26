@@ -7,6 +7,7 @@ import com.checkout.disputes.DisputesClient;
 import com.checkout.financial.FinancialClient;
 import com.checkout.forex.ForexClient;
 import com.checkout.instruments.InstrumentsClient;
+import com.checkout.issuing.IssuingClient;
 import com.checkout.metadata.MetadataClient;
 import com.checkout.payments.PaymentsClient;
 import com.checkout.payments.hosted.HostedPaymentsClient;
@@ -53,6 +54,8 @@ public interface CheckoutApi extends CheckoutApmApi {
     MetadataClient metadataClient();
 
     FinancialClient financialClient();
+
+    IssuingClient issuingClient();
 
 }
 

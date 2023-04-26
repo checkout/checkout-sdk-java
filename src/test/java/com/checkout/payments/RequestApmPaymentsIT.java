@@ -562,6 +562,6 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), APM_SERVICE_UNAVAILABLE);
     }
 }
