@@ -41,7 +41,13 @@ public enum OAuthScope {
     REPORTS_VIEW("reports:view"),
     VAULT_CARD_METADATA("vault:card-metadata"),
     FINANCIAL_ACTIONS("financial-actions"),
-    FINANCIAL_ACTIONS_VIEW("financial-actions:view");
+    FINANCIAL_ACTIONS_VIEW("financial-actions:view"),
+    ISSUING_CLIENT("issuing:client"),
+    ISSUING_CARD_MGMT("issuing:card-mgmt"),
+    ISSUING_CONTROLS_READ("issuing:controls-read"),
+    ISSUING_CONTROLS_WRITE("issuing:controls-write");
+
+
 
     private final String scope;
 
