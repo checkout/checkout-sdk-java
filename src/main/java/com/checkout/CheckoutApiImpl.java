@@ -14,6 +14,8 @@ import com.checkout.forex.ForexClient;
 import com.checkout.forex.ForexClientImpl;
 import com.checkout.instruments.InstrumentsClient;
 import com.checkout.instruments.InstrumentsClientImpl;
+import com.checkout.issuing.IssuingClient;
+import com.checkout.issuing.IssuingClientImpl;
 import com.checkout.metadata.MetadataClient;
 import com.checkout.metadata.MetadataClientImpl;
 import com.checkout.payments.PaymentsClient;
@@ -56,6 +58,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final ReportsClient reportsClient;
     private final MetadataClient metadataClient;
     private final FinancialClient financialClient;
+    private final IssuingClient issuingClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         super(configuration);
@@ -74,10 +77,12 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.balancesClient = new BalancesClientImpl(getBalancesClient(configuration), configuration);
         this.reportsClient = new ReportsClientImpl(this.apiClient, configuration);
         this.metadataClient = new MetadataClientImpl(this.apiClient, configuration);
-        this.financialClient = new FinancialClientImpl(this.apiClient,configuration);
+        this.financialClient = new FinancialClientImpl(this.apiClient, configuration);
+        this.issuingClient = new IssuingClientImpl(this.apiClient, configuration);
         this.accountsClient = new AccountsClientImpl(this.apiClient,
                 getFilesClient(configuration),
                 configuration);
+
     }
 
     @Override
@@ -162,6 +167,9 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
 
     @Override
     public FinancialClient financialClient() { return financialClient; }
+
+    @Override
+    public IssuingClient issuingClient() { return issuingClient; }
 
     private ApiClient getFilesClient(final CheckoutConfiguration configuration) {
         return new ApiClientImpl(configuration, new FilesApiUriStrategy(configuration));
