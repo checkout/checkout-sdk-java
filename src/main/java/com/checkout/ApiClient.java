@@ -26,6 +26,8 @@ public interface ApiClient {
 
     CompletableFuture<EmptyResponse> deleteAsync(String path, SdkAuthorization authorization);
 
+    <T extends HttpMetadata> CompletableFuture<T> deleteAsync(String path, SdkAuthorization authorization, Class<T> responseType);
+
     <T extends HttpMetadata> CompletableFuture<T> queryAsync(String path, SdkAuthorization authorization, Object filter, Class<T> responseType);
 
     CompletableFuture<ContentResponse> queryCsvContentAsync(String path, SdkAuthorization authorization, Object filter, String targetFile);

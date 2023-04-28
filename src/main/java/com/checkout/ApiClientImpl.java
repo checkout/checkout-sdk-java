@@ -85,6 +85,12 @@ public class ApiClientImpl implements ApiClient {
     }
 
     @Override
+    public <T extends HttpMetadata> CompletableFuture<T> deleteAsync(String path, SdkAuthorization authorization, Class<T> responseType) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestAsync(DELETE, path, authorization, null, null, responseType);
+    }
+
+    @Override
     public CompletableFuture<? extends HttpMetadata> postAsync(final String path, final SdkAuthorization authorization, final Map<Integer, Class<? extends HttpMetadata>> resultTypeMappings, final Object request, final String idempotencyKey) {
         validateParams(PATH, path, AUTHORIZATION, authorization, "resultTypeMappings", resultTypeMappings);
         return transport.invoke(POST, path, authorization, serializer.toJson(request), idempotencyKey, null)
