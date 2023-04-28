@@ -1,5 +1,6 @@
-package com.checkout.issuing.cards;
+package com.checkout.issuing.cards.responses;
 
+import com.checkout.issuing.cards.CardType;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
