@@ -1,8 +1,10 @@
-package com.checkout.issuing.cards;
+package com.checkout.issuing.cards.responses;
 
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.Resource;
+import com.checkout.issuing.cards.CardStatus;
+import com.checkout.issuing.cards.CardType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

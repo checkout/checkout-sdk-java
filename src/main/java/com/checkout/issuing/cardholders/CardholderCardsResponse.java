@@ -1,7 +1,7 @@
 package com.checkout.issuing.cardholders;
 
 import com.checkout.HttpMetadata;
-import com.checkout.issuing.cards.AbstractCardDetailsResponse;
+import com.checkout.issuing.cards.responses.AbstractCardDetailsResponse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

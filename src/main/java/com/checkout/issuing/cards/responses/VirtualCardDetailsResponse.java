@@ -1,5 +1,6 @@
-package com.checkout.issuing.cards;
+package com.checkout.issuing.cards.responses;
 
+import com.checkout.issuing.cards.CardType;
 import com.google.gson.annotations.SerializedName;
 import lombok.*;
 
