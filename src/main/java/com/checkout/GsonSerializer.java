@@ -13,6 +13,10 @@ import com.checkout.issuing.cards.CardType;
 import com.checkout.issuing.cards.responses.AbstractCardDetailsResponse;
 import com.checkout.issuing.cards.responses.PhysicalCardDetailsResponse;
 import com.checkout.issuing.cards.responses.VirtualCardDetailsResponse;
+import com.checkout.issuing.controls.requests.ControlType;
+import com.checkout.issuing.controls.responses.create.AbstractCardControlResponse;
+import com.checkout.issuing.controls.responses.create.MccCardControlResponse;
+import com.checkout.issuing.controls.responses.create.VelocityCardControlResponse;
 import com.checkout.payments.PaymentDestinationType;
 import com.checkout.payments.previous.PaymentAction;
 import com.checkout.payments.sender.Sender;
@@ -119,6 +123,10 @@ public class GsonSerializer implements Serializer {
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(AbstractCardDetailsResponse.class, CheckoutUtils.TYPE)
                     .registerSubtype(PhysicalCardDetailsResponse.class, identifier(CardType.PHYSICAL))
                     .registerSubtype(VirtualCardDetailsResponse.class, identifier(CardType.VIRTUAL)))
+            // Issuing CS2 - CardControlsResponse
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(AbstractCardControlResponse.class, CheckoutUtils.TYPE)
+                    .registerSubtype(VelocityCardControlResponse.class, identifier(ControlType.VELOCITY_LIMIT))
+                    .registerSubtype(MccCardControlResponse.class, identifier(ControlType.MCC_LIMIT)))
             // Adapters when API returns an array
             .registerTypeAdapter(EVENT_TYPES_TYPE, eventTypesResponseDeserializer())
             .registerTypeAdapter(WORKFLOWS_EVENT_TYPES_TYPE, workflowEventTypesResponseDeserializer())
