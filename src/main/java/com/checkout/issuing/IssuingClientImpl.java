@@ -4,6 +4,7 @@ import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorizationType;
+import com.checkout.common.IdResponse;
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
 import com.checkout.issuing.cardholders.CardholderDetailsResponse;
 import com.checkout.issuing.cardholders.CardholderRequest;
@@ -20,6 +21,11 @@ import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
+import com.checkout.issuing.controls.requests.create.AbstractCardControlRequest;
+import com.checkout.issuing.controls.requests.query.CardControlsQuery;
+import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
+import com.checkout.issuing.controls.responses.create.AbstractCardControlResponse;
+import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
 import com.checkout.payments.VoidResponse;
 
 import java.util.concurrent.CompletableFuture;
@@ -43,6 +49,8 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     private static final String REVOKE_PATH = "revoke";
 
     private static final String SUSPEND_PATH = "suspend";
+
+    private static final String CONTROLS_PATH = "controls";
 
     public IssuingClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
@@ -191,6 +199,66 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 VoidResponse.class,
                 suspendCardRequest,
                 null
+        );
+    }
+
+    @Override
+    public CompletableFuture<AbstractCardControlResponse> createControl(
+            final AbstractCardControlRequest cardControlRequest
+    ) {
+        validateParams("cardControlRequest", cardControlRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH),
+                sdkAuthorization(),
+                AbstractCardControlResponse.class,
+                cardControlRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<CardControlsQueryResponse> getCardControls(
+            final CardControlsQuery queryFilter
+    ) {
+        validateParams("queryFilter", queryFilter);
+        return apiClient.queryAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH),
+                sdkAuthorization(),
+                queryFilter,
+                CardControlsQueryResponse.class);
+    }
+
+    @Override
+    public CompletableFuture<AbstractCardControlResponse> getCardControlDetails(final String controlId) {
+        validateParams("controlId", controlId);
+        return apiClient.getAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, controlId),
+                sdkAuthorization(),
+                AbstractCardControlResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<AbstractCardControlResponse> updateCardControl(
+            final String controlId,
+            final UpdateCardControlRequest updateCardControlRequest
+    ) {
+        validateParams("controlId", controlId, "updateCardControlRequest", updateCardControlRequest);
+        return apiClient.putAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, controlId),
+                sdkAuthorization(),
+                AbstractCardControlResponse.class,
+                updateCardControlRequest
+        );
+    }
+
+    @Override
+    public CompletableFuture<IdResponse> removeCardControl(final String controlId) {
+        validateParams("controlId", controlId);
+        return apiClient.deleteAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, controlId),
+                sdkAuthorization(),
+                IdResponse.class
         );
     }
 }

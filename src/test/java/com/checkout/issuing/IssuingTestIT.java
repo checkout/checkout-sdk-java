@@ -8,6 +8,7 @@ import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
 import com.checkout.common.DocumentType;
+import com.checkout.common.IdResponse;
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
 import com.checkout.issuing.cardholders.CardholderDetailsResponse;
 import com.checkout.issuing.cardholders.CardholderDocument;
@@ -33,12 +34,28 @@ import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
+import com.checkout.issuing.controls.requests.ControlType;
+import com.checkout.issuing.controls.requests.VelocityLimit;
+import com.checkout.issuing.controls.requests.VelocityWindow;
+import com.checkout.issuing.controls.requests.VelocityWindowType;
+import com.checkout.issuing.controls.requests.create.AbstractCardControlRequest;
+import com.checkout.issuing.controls.requests.create.VelocityCardControlRequest;
+import com.checkout.issuing.controls.requests.query.CardControlsQuery;
+import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
+import com.checkout.issuing.controls.responses.create.AbstractCardControlResponse;
+import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
 import com.checkout.payments.VoidResponse;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -48,12 +65,15 @@ public class IssuingTestIT extends SandboxTestFixture {
 
     private CardResponse card;
 
+    private AbstractCardControlResponse control;
+
     public IssuingTestIT() { super(PlatformType.DEFAULT_OAUTH); }
 
     @BeforeAll
     void setUp() {
         cardholder = createCardholder();
         card = createCard(cardholder.getId());
+        control = createCardControl(card.getId());
     }
 
     @Nested
@@ -300,6 +320,102 @@ public class IssuingTestIT extends SandboxTestFixture {
         }
     }
 
+    @Nested
+    @DisplayName("Controls")
+    class Controls {
+        @Test
+        void shouldCreateControl() {
+            final CardholderResponse cardholder = createCardholder();
+            final CardResponse card = createCard(cardholder.getId());
+
+            final AbstractCardControlRequest request = VelocityCardControlRequest.builder()
+                    .description("Max spend of 500€ per week for restaurants")
+                    .targetId(card.getId())
+                    .velocityLimit(VelocityLimit.builder()
+                            .amountLimit(500)
+                            .velocityWindow(VelocityWindow.builder()
+                                    .type(VelocityWindowType.WEEKLY)
+                                    .build())
+                            .build())
+                    .build();
+
+            final AbstractCardControlResponse cardControlResponse = blocking(() ->
+                    getIssuingCheckoutApi()
+                            .issuingClient()
+                            .createControl(request));
+
+            assertNotNull(cardControlResponse);
+            assertEquals(card.getId(), cardControlResponse.getTargetId());
+            assertEquals(ControlType.VELOCITY_LIMIT, cardControlResponse.getControlType());
+        }
+
+        @Test
+        void shouldGetCardControls() {
+            final CardControlsQuery query = CardControlsQuery.builder()
+                    .targetId(card.getId())
+                    .build();
+
+            final CardControlsQueryResponse response = blocking(() ->
+                    getIssuingCheckoutApi()
+                            .issuingClient()
+                            .getCardControls(query));
+
+            assertNotNull(response);
+            for (AbstractCardControlResponse control : response.getControls()) {
+                assertEquals(card.getId(), control.getTargetId());
+            }
+        }
+
+        @Test
+        @Disabled("not-found")
+        void shouldGetCardControlDetails() {
+            final AbstractCardControlResponse response = blocking(() ->
+                    getIssuingCheckoutApi()
+                            .issuingClient()
+                            .getCardControlDetails(control.getId()));
+
+            assertNotNull(response);
+            assertEquals(control.getId(), response.getId());
+            assertEquals(card.getId(), response.getTargetId());
+            assertEquals(ControlType.VELOCITY_LIMIT, response.getControlType());
+        }
+
+        @Test
+        @Disabled("not-found")
+        void shouldUpdateCardControl() {
+            final UpdateCardControlRequest request = UpdateCardControlRequest.builder()
+                    .description("New max spend of 1000€ per month for restaurants")
+                    .velocityLimit(VelocityLimit.builder()
+                            .amountLimit(1000)
+                            .velocityWindow(VelocityWindow.builder()
+                                    .type(VelocityWindowType.MONTHLY)
+                                    .build())
+                            .build())
+                    .build();
+
+            final AbstractCardControlResponse response = blocking(() ->
+                    getIssuingCheckoutApi()
+                            .issuingClient()
+                            .updateCardControl(control.getId(), request));
+
+            assertNotNull(response);
+            assertEquals(control.getId(), response.getId());
+            assertEquals("New max spend of 1000€ per month for restaurants", request.getDescription());
+            assertEquals(ControlType.VELOCITY_LIMIT, response.getControlType());
+        }
+
+        @Test
+        void shouldRemoveCardControl() {
+            final IdResponse response = blocking(() ->
+                    getIssuingCheckoutApi()
+                            .issuingClient()
+                            .removeCardControl(control.getId()));
+
+            assertNotNull(response);
+            assertEquals(control.getId(), response.getId());
+        }
+    }
+
     private CardholderResponse createCardholder() {
         final CardholderRequest cardholderRequest = CardholderRequest.builder()
                 .type(CardholderType.INDIVIDUAL)
@@ -357,6 +473,28 @@ public class IssuingTestIT extends SandboxTestFixture {
         assertNotNull(cardResponse);
 
         return cardResponse;
+    }
+
+    private AbstractCardControlResponse createCardControl(String cardId) {
+        final AbstractCardControlRequest request = VelocityCardControlRequest.builder()
+                .description("Max spend of 500€ per week for restaurants")
+                .targetId(cardId)
+                .velocityLimit(VelocityLimit.builder()
+                        .amountLimit(500)
+                        .velocityWindow(VelocityWindow.builder()
+                                .type(VelocityWindowType.WEEKLY)
+                                .build())
+                        .build())
+                .build();
+
+        final AbstractCardControlResponse cardControlResponse = blocking(() ->
+                getIssuingCheckoutApi()
+                        .issuingClient()
+                        .createControl(request));
+
+        assertNotNull(cardControlResponse);
+
+        return cardControlResponse;
     }
 
     private CheckoutApi getIssuingCheckoutApi() {
