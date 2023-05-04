@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public abstract class AbstractThreeDSEnrollmentRequest {
+public abstract class ThreeDSEnrollmentRequest {
 
     private String locale;
 

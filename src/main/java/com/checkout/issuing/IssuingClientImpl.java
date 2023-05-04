@@ -11,21 +11,23 @@ import com.checkout.issuing.cardholders.CardholderRequest;
 import com.checkout.issuing.cardholders.CardholderResponse;
 import com.checkout.issuing.cards.requests.create.CardRequest;
 import com.checkout.issuing.cards.requests.credentials.CardCredentialsQuery;
-import com.checkout.issuing.cards.requests.enrollment.AbstractThreeDSEnrollmentRequest;
+import com.checkout.issuing.cards.requests.enrollment.ThreeDSEnrollmentRequest;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSUpdateRequest;
 import com.checkout.issuing.cards.requests.revoke.RevokeCardRequest;
 import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
-import com.checkout.issuing.cards.responses.AbstractCardDetailsResponse;
+import com.checkout.issuing.cards.responses.CardDetailsResponse;
 import com.checkout.issuing.cards.responses.CardResponse;
 import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
-import com.checkout.issuing.controls.requests.create.AbstractCardControlRequest;
+import com.checkout.issuing.controls.requests.create.CardControlRequest;
 import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
-import com.checkout.issuing.controls.responses.create.AbstractCardControlResponse;
+import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
+import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
+import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
 import com.checkout.payments.VoidResponse;
 
 import java.util.concurrent.CompletableFuture;
@@ -51,6 +53,10 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     private static final String SUSPEND_PATH = "suspend";
 
     private static final String CONTROLS_PATH = "controls";
+
+    private static final String SIMULATE_PATH = "simulate";
+
+    private static final String AUTHORIZATIONS_PATH = "authorizations";
 
     public IssuingClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
@@ -101,19 +107,19 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
-    public CompletableFuture<AbstractCardDetailsResponse> getCardDetails(final String cardId) {
+    public CompletableFuture<CardDetailsResponse> getCardDetails(final String cardId) {
         validateParams("cardId", cardId);
         return apiClient.getAsync(
                 buildPath(ISSUING_PATH, CARDS_PATH, cardId),
                 sdkAuthorization(),
-                AbstractCardDetailsResponse.class
+                CardDetailsResponse.class
         );
     }
 
     @Override
     public CompletableFuture<ThreeDSEnrollmentResponse> enrollThreeDS(
             final String cardId,
-            final AbstractThreeDSEnrollmentRequest enrollmentRequest
+            final ThreeDSEnrollmentRequest enrollmentRequest
     ) {
         validateParams("cardId", cardId,"enrollmentRequest", enrollmentRequest);
         return apiClient.postAsync(
@@ -203,14 +209,14 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
-    public CompletableFuture<AbstractCardControlResponse> createControl(
-            final AbstractCardControlRequest cardControlRequest
+    public CompletableFuture<CardControlResponse> createControl(
+            final CardControlRequest cardControlRequest
     ) {
         validateParams("cardControlRequest", cardControlRequest);
         return apiClient.postAsync(
                 buildPath(ISSUING_PATH, CONTROLS_PATH),
                 sdkAuthorization(),
-                AbstractCardControlResponse.class,
+                CardControlResponse.class,
                 cardControlRequest,
                 null
         );
@@ -229,17 +235,17 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
-    public CompletableFuture<AbstractCardControlResponse> getCardControlDetails(final String controlId) {
+    public CompletableFuture<CardControlResponse> getCardControlDetails(final String controlId) {
         validateParams("controlId", controlId);
         return apiClient.getAsync(
                 buildPath(ISSUING_PATH, CONTROLS_PATH, controlId),
                 sdkAuthorization(),
-                AbstractCardControlResponse.class
+                CardControlResponse.class
         );
     }
 
     @Override
-    public CompletableFuture<AbstractCardControlResponse> updateCardControl(
+    public CompletableFuture<CardControlResponse> updateCardControl(
             final String controlId,
             final UpdateCardControlRequest updateCardControlRequest
     ) {
@@ -247,7 +253,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         return apiClient.putAsync(
                 buildPath(ISSUING_PATH, CONTROLS_PATH, controlId),
                 sdkAuthorization(),
-                AbstractCardControlResponse.class,
+                CardControlResponse.class,
                 updateCardControlRequest
         );
     }
@@ -259,6 +265,18 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 buildPath(ISSUING_PATH, CONTROLS_PATH, controlId),
                 sdkAuthorization(),
                 IdResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<CardAuthorizationResponse> simulateAuthorization(final CardAuthorizationRequest cardAuthorizationRequest) {
+        validateParams("cardAuthorizationRequest", cardAuthorizationRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, SIMULATE_PATH, AUTHORIZATIONS_PATH),
+                sdkAuthorization(),
+                CardAuthorizationResponse.class,
+                cardAuthorizationRequest,
+                null
         );
     }
 }

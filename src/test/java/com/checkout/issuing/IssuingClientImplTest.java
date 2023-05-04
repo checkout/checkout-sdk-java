@@ -16,17 +16,19 @@ import com.checkout.issuing.cards.requests.enrollment.PasswordThreeDSEnrollmentR
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSUpdateRequest;
 import com.checkout.issuing.cards.requests.revoke.RevokeCardRequest;
 import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
-import com.checkout.issuing.cards.responses.AbstractCardDetailsResponse;
+import com.checkout.issuing.cards.responses.CardDetailsResponse;
 import com.checkout.issuing.cards.responses.CardResponse;
 import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
-import com.checkout.issuing.controls.requests.create.AbstractCardControlRequest;
+import com.checkout.issuing.controls.requests.create.CardControlRequest;
 import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
-import com.checkout.issuing.controls.responses.create.AbstractCardControlResponse;
+import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
+import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
+import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
 import com.checkout.payments.VoidResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -147,15 +149,15 @@ public class IssuingClientImplTest {
 
         @Test
         void shouldGetCardDetails() throws ExecutionException, InterruptedException {
-            final AbstractCardDetailsResponse response = mock(AbstractCardDetailsResponse.class);
+            final CardDetailsResponse response = mock(CardDetailsResponse.class);
 
             when(apiClient.getAsync(
                     "issuing/cards/card_id",
                     authorization,
-                    AbstractCardDetailsResponse.class
+                    CardDetailsResponse.class
             )).thenReturn(CompletableFuture.completedFuture(response));
 
-            final CompletableFuture<AbstractCardDetailsResponse> future = client.getCardDetails("card_id");
+            final CompletableFuture<CardDetailsResponse> future = client.getCardDetails("card_id");
 
             assertNotNull(future.get());
             assertEquals(response, future.get());
@@ -295,18 +297,18 @@ public class IssuingClientImplTest {
     class Controls {
         @Test
         void shouldCreateControl() throws ExecutionException, InterruptedException {
-            final AbstractCardControlRequest request = mock(AbstractCardControlRequest.class);
-            final AbstractCardControlResponse response = mock(AbstractCardControlResponse.class);
+            final CardControlRequest request = mock(CardControlRequest.class);
+            final CardControlResponse response = mock(CardControlResponse.class);
 
             when(apiClient.postAsync(
                     "issuing/controls",
                     authorization,
-                    AbstractCardControlResponse.class,
+                    CardControlResponse.class,
                     request,
                     null
             )).thenReturn(CompletableFuture.completedFuture(response));
 
-            final CompletableFuture<AbstractCardControlResponse> future = client.createControl(request);
+            final CompletableFuture<CardControlResponse> future = client.createControl(request);
 
             assertNotNull(future.get());
             assertEquals(response, future.get());
@@ -332,32 +334,33 @@ public class IssuingClientImplTest {
 
         @Test
         void shouldGetCardControlDetails() throws ExecutionException, InterruptedException {
-            final AbstractCardControlResponse response = mock(AbstractCardControlResponse.class);
+            final CardControlResponse response = mock(CardControlResponse.class);
 
             when(apiClient.getAsync(
                     "issuing/controls/control_id",
                     authorization,
-                    AbstractCardControlResponse.class
+                    CardControlResponse.class
             )).thenReturn(CompletableFuture.completedFuture(response));
 
-            final CompletableFuture<AbstractCardControlResponse> future = client.getCardControlDetails("control_id");
+            final CompletableFuture<CardControlResponse> future = client.getCardControlDetails("control_id");
 
             assertNotNull(future.get());
             assertEquals(response, future.get());
         }
 
+        @Test
         void shouldUpdateCardControl() throws ExecutionException, InterruptedException {
             final UpdateCardControlRequest request = mock(UpdateCardControlRequest.class);
-            final AbstractCardControlResponse response = mock(AbstractCardControlResponse.class);
+            final CardControlResponse response = mock(CardControlResponse.class);
 
             when(apiClient.putAsync(
                     "issuing/controls/control_id",
                     authorization,
-                    AbstractCardControlResponse.class,
+                    CardControlResponse.class,
                     request
             )).thenReturn(CompletableFuture.completedFuture(response));
 
-            final CompletableFuture<AbstractCardControlResponse> future = client.updateCardControl("control_id", request);
+            final CompletableFuture<CardControlResponse> future = client.updateCardControl("control_id", request);
 
             assertNotNull(future.get());
             assertEquals(response, future.get());
@@ -374,6 +377,29 @@ public class IssuingClientImplTest {
             )).thenReturn(CompletableFuture.completedFuture(response));
 
             final CompletableFuture<IdResponse> future = client.removeCardControl("control_id");
+
+            assertNotNull(future.get());
+            assertEquals(response, future.get());
+        }
+    }
+
+    @Nested
+    @DisplayName("Testing")
+    class Testing {
+        @Test
+        void shouldSimulateAuthorization() throws ExecutionException, InterruptedException {
+            final CardAuthorizationRequest request = mock(CardAuthorizationRequest.class);
+            final CardAuthorizationResponse response = mock(CardAuthorizationResponse.class);
+
+            when(apiClient.postAsync(
+                    "issuing/simulate/authorizations",
+                    authorization,
+                    CardAuthorizationResponse.class,
+                    request,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<CardAuthorizationResponse> future = client.simulateAuthorization(request);
 
             assertNotNull(future.get());
             assertEquals(response, future.get());

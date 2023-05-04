@@ -11,12 +11,14 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class PasswordThreeDSEnrollmentRequest extends AbstractThreeDSEnrollmentRequest {
+public class PasswordThreeDSEnrollmentRequest extends ThreeDSEnrollmentRequest {
 
     private String password;
 
     @Builder
-    public PasswordThreeDSEnrollmentRequest(String locale, Phone phoneNumber, String password) {
+    private PasswordThreeDSEnrollmentRequest(final String locale,
+                                             final Phone phoneNumber,
+                                             final String password) {
         super(locale, phoneNumber);
         this.password = password;
     }

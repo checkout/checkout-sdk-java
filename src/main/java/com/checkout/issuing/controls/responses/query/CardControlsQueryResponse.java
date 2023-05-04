@@ -1,7 +1,7 @@
 package com.checkout.issuing.controls.responses.query;
 
 import com.checkout.HttpMetadata;
-import com.checkout.issuing.controls.responses.create.AbstractCardControlResponse;
+import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -13,5 +13,5 @@ import java.util.List;
 @ToString(callSuper = true)
 public class CardControlsQueryResponse extends HttpMetadata {
 
-    private List<AbstractCardControlResponse> controls;
+    private List<CardControlResponse> controls;
 }

@@ -10,11 +10,11 @@ import com.checkout.common.Link;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.events.previous.EventTypes;
 import com.checkout.issuing.cards.CardType;
-import com.checkout.issuing.cards.responses.AbstractCardDetailsResponse;
+import com.checkout.issuing.cards.responses.CardDetailsResponse;
 import com.checkout.issuing.cards.responses.PhysicalCardDetailsResponse;
 import com.checkout.issuing.cards.responses.VirtualCardDetailsResponse;
 import com.checkout.issuing.controls.requests.ControlType;
-import com.checkout.issuing.controls.responses.create.AbstractCardControlResponse;
+import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.create.MccCardControlResponse;
 import com.checkout.issuing.controls.responses.create.VelocityCardControlResponse;
 import com.checkout.payments.PaymentDestinationType;
@@ -120,11 +120,11 @@ public class GsonSerializer implements Serializer {
                     .registerSubtype(com.checkout.accounts.payout.schedule.response.ScheduleFrequencyWeeklyResponse.class, CheckoutUtils.WEEKLY)
                     .registerSubtype(ScheduleFrequencyMonthlyResponse.class, CheckoutUtils.MONTHLY))
             // Issuing CS2 - CardDetailsResponse
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(AbstractCardDetailsResponse.class, CheckoutUtils.TYPE)
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(CardDetailsResponse.class, CheckoutUtils.TYPE)
                     .registerSubtype(PhysicalCardDetailsResponse.class, identifier(CardType.PHYSICAL))
                     .registerSubtype(VirtualCardDetailsResponse.class, identifier(CardType.VIRTUAL)))
             // Issuing CS2 - CardControlsResponse
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(AbstractCardControlResponse.class, CheckoutUtils.TYPE)
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(CardControlResponse.class, CheckoutUtils.CONTROL_TYPE)
                     .registerSubtype(VelocityCardControlResponse.class, identifier(ControlType.VELOCITY_LIMIT))
                     .registerSubtype(MccCardControlResponse.class, identifier(ControlType.MCC_LIMIT)))
             // Adapters when API returns an array

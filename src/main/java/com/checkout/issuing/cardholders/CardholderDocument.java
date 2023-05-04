@@ -9,11 +9,11 @@ import lombok.Data;
 @Builder
 public class CardholderDocument {
 
-    public DocumentType type;
+    private DocumentType type;
 
     @SerializedName("front_document_id")
-    public String frontDocumentId;
+    private String frontDocumentId;
 
     @SerializedName("back_document_id")
-    public String backDocumentId;
+    private String backDocumentId;
 }

@@ -15,6 +15,7 @@ public final class CheckoutUtils {
     public static final String MONTHLY = "Monthly";
     public static final String ACCEPT_JSON = "application/json;charset=UTF-8";
     private static final String CKO_REQUEST_ID = "Cko-Request-Id";
+    public static final String CONTROL_TYPE = "control_type";
 
     private CheckoutUtils() {
     }

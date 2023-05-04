@@ -18,12 +18,15 @@ public class PhysicalCardRequest extends CardRequest {
     private ShippingInstruction shippingInstructions;
 
     @Builder
-    private PhysicalCardRequest(ShippingInstruction shippingInstructions) {
-        super(CardType.PHYSICAL);
+    private PhysicalCardRequest(final String cardholderId,
+                                final CardLifetime lifetime,
+                                final String reference,
+                                final String cardProductId,
+                                final String displayName,
+                                final Boolean activateCard,
+                                final ShippingInstruction shippingInstructions) {
+        super(CardType.PHYSICAL, cardholderId, lifetime, reference, cardProductId, displayName, activateCard);
         this.shippingInstructions = shippingInstructions;
     }
 
-    private PhysicalCardRequest() {
-        super(CardType.PHYSICAL);
-    }
 }
