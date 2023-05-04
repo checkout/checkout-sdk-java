@@ -5,6 +5,6 @@ import com.google.gson.annotations.SerializedName;
 public enum CardholderType {
 
     @SerializedName("individual")
-    INDIVIDUAL,
+    INDIVIDUAL
 
 }

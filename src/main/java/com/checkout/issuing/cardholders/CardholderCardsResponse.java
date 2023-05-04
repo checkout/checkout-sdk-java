@@ -1,7 +1,7 @@
 package com.checkout.issuing.cardholders;
 
 import com.checkout.HttpMetadata;
-import com.checkout.issuing.cards.responses.AbstractCardDetailsResponse;
+import com.checkout.issuing.cards.responses.CardDetailsResponse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -13,5 +13,5 @@ import java.util.List;
 @ToString(callSuper = true)
 public class CardholderCardsResponse extends HttpMetadata {
 
-    private List<AbstractCardDetailsResponse> cards;
+    private List<CardDetailsResponse> cards;
 }

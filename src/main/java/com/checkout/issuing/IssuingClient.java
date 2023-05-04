@@ -7,21 +7,23 @@ import com.checkout.issuing.cardholders.CardholderRequest;
 import com.checkout.issuing.cardholders.CardholderResponse;
 import com.checkout.issuing.cards.requests.create.CardRequest;
 import com.checkout.issuing.cards.requests.credentials.CardCredentialsQuery;
-import com.checkout.issuing.cards.requests.enrollment.AbstractThreeDSEnrollmentRequest;
+import com.checkout.issuing.cards.requests.enrollment.ThreeDSEnrollmentRequest;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSUpdateRequest;
 import com.checkout.issuing.cards.requests.revoke.RevokeCardRequest;
 import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
-import com.checkout.issuing.cards.responses.AbstractCardDetailsResponse;
+import com.checkout.issuing.cards.responses.CardDetailsResponse;
 import com.checkout.issuing.cards.responses.CardResponse;
 import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
-import com.checkout.issuing.controls.requests.create.AbstractCardControlRequest;
+import com.checkout.issuing.controls.requests.create.CardControlRequest;
 import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
-import com.checkout.issuing.controls.responses.create.AbstractCardControlResponse;
+import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
+import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
+import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
 import com.checkout.payments.VoidResponse;
 
 import java.util.concurrent.CompletableFuture;
@@ -36,9 +38,9 @@ public interface IssuingClient {
 
     CompletableFuture<CardResponse> createCard(CardRequest cardRequest);
 
-    CompletableFuture<AbstractCardDetailsResponse> getCardDetails(String cardId);
+    CompletableFuture<CardDetailsResponse> getCardDetails(String cardId);
 
-    CompletableFuture<ThreeDSEnrollmentResponse> enrollThreeDS(String cardId, AbstractThreeDSEnrollmentRequest enrollmentRequest);
+    CompletableFuture<ThreeDSEnrollmentResponse> enrollThreeDS(String cardId, ThreeDSEnrollmentRequest enrollmentRequest);
 
     CompletableFuture<ThreeDSUpdateResponse> updateThreeDS(String cardId, ThreeDSUpdateRequest threeDSUpdateRequest);
 
@@ -52,13 +54,15 @@ public interface IssuingClient {
 
     CompletableFuture<VoidResponse> suspendCard(final String cardId, final SuspendCardRequest suspendCardRequest);
 
-    CompletableFuture<AbstractCardControlResponse> createControl(final AbstractCardControlRequest cardControlRequest);
+    CompletableFuture<CardControlResponse> createControl(final CardControlRequest cardControlRequest);
 
     CompletableFuture<CardControlsQueryResponse> getCardControls(final CardControlsQuery queryFilter);
 
-    CompletableFuture<AbstractCardControlResponse> getCardControlDetails(final String controlId);
+    CompletableFuture<CardControlResponse> getCardControlDetails(final String controlId);
 
-    CompletableFuture<AbstractCardControlResponse> updateCardControl(final String controlId, final UpdateCardControlRequest updateCardControlRequest);
+    CompletableFuture<CardControlResponse> updateCardControl(final String controlId, final UpdateCardControlRequest updateCardControlRequest);
 
     CompletableFuture<IdResponse> removeCardControl(final String controlId);
+
+    CompletableFuture<CardAuthorizationResponse> simulateAuthorization(final CardAuthorizationRequest cardAuthorizationRequest);
 }

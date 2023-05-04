@@ -1,0 +1,39 @@
+{
+  "cards": [
+    {
+      "id": "crd_fa6psq242dcd6fdn5gifcq1491",
+      "cardholder_id": "crh_d3ozhf43pcq2xbldn2g45qnb44",
+      "card_product_id": "pro_7syjig3jq3mezlc3vjrdpfitl4",
+      "client_id": "cli_vkuhvk4vjn2edkps7dfsq6emqm",
+      "last_four": 1234,
+      "expiry_month": 5,
+      "expiry_year": 2025,
+      "status": "active",
+      "display_name": "JOHN KENNEDY",
+      "type": "virtual",
+      "billing_currency": "USD",
+      "issuing_country": "US",
+      "reference": "X-123456-N11",
+      "created_date": "2021-09-09T19:41:39Z",
+      "last_modified_date": "2021-09-09T19:41:39Z",
+      "is_single_use": true
+    },
+    {
+      "id": "crd_fa6psq242dcd6fdn5gifcq1491",
+      "cardholder_id": "crh_d3ozhf43pcq2xbldn2g45qnb44",
+      "card_product_id": "pro_7syjig3jq3mezlc3vjrdpfitl4",
+      "client_id": "cli_vkuhvk4vjn2edkps7dfsq6emqm",
+      "last_four": 1234,
+      "expiry_month": 5,
+      "expiry_year": 2025,
+      "status": "active",
+      "display_name": "JOHN KENNEDY",
+      "type": "physical",
+      "billing_currency": "USD",
+      "issuing_country": "US",
+      "reference": "X-123456-N11",
+      "created_date": "2021-09-09T19:41:39Z",
+      "last_modified_date": "2021-09-09T19:41:39Z"
+    }
+  ]
+}

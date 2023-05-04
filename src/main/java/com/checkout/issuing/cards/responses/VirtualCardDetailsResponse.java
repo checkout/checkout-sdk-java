@@ -2,24 +2,22 @@ package com.checkout.issuing.cards.responses;
 
 import com.checkout.issuing.cards.CardType;
 import com.google.gson.annotations.SerializedName;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class VirtualCardDetailsResponse extends AbstractCardDetailsResponse {
+public class VirtualCardDetailsResponse extends CardDetailsResponse {
 
     @SerializedName("is_single_use")
     private Boolean isSingleUse;
 
-    protected VirtualCardDetailsResponse() {
+    public VirtualCardDetailsResponse() {
         super(CardType.VIRTUAL);
     }
 
-    @Builder
-    protected VirtualCardDetailsResponse(Boolean isSingleUse) {
-        super(CardType.VIRTUAL);
-        this.isSingleUse = isSingleUse;
-    }
 }

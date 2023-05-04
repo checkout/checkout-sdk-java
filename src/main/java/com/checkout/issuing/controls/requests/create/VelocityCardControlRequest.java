@@ -13,22 +13,18 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class VelocityCardControlRequest extends AbstractCardControlRequest {
+public class VelocityCardControlRequest extends CardControlRequest {
 
     @SerializedName("velocity_limit")
     private VelocityLimit velocityLimit;
 
     @Builder
-    public VelocityCardControlRequest(
-            VelocityLimit velocityLimit,
-            String description,
-            String targetId
+    private VelocityCardControlRequest(
+            final VelocityLimit velocityLimit,
+            final String description,
+            final String targetId
     ) {
         super(ControlType.VELOCITY_LIMIT, description, targetId);
         this.velocityLimit = velocityLimit;
-    }
-
-    public VelocityCardControlRequest() {
-        super(ControlType.VELOCITY_LIMIT);
     }
 }

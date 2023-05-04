@@ -15,7 +15,7 @@ import java.time.Instant;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class AbstractCardDetailsResponse extends Resource {
+public abstract class CardDetailsResponse extends Resource {
 
     protected final CardType type;
 
@@ -58,7 +58,7 @@ public abstract class AbstractCardDetailsResponse extends Resource {
     @SerializedName("last_modified_date")
     protected Instant lastModifiedDate;
 
-    protected AbstractCardDetailsResponse(final CardType type) {
+    protected CardDetailsResponse(final CardType type) {
         this.type = type;
     }
 }

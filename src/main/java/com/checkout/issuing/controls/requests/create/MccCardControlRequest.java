@@ -13,22 +13,19 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class MccCardControlRequest extends AbstractCardControlRequest {
+public class MccCardControlRequest extends CardControlRequest {
 
     @SerializedName("mcc_limit")
     private MccLimit mccLimit;
 
     @Builder
-    public MccCardControlRequest(
-            MccLimit mccLimit,
-            String description,
-            String targetId
+    private MccCardControlRequest(
+            final MccLimit mccLimit,
+            final String description,
+            final String targetId
     ) {
         super(ControlType.MCC_LIMIT, description, targetId);
         this.mccLimit = mccLimit;
     }
 
-    public MccCardControlRequest() {
-        super(ControlType.MCC_LIMIT);
-    }
 }

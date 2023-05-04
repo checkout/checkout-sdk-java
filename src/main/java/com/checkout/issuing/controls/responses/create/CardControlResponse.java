@@ -5,20 +5,17 @@ import com.checkout.issuing.controls.requests.ControlType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 import java.time.Instant;
 
 @Data
-@Getter
-@Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public abstract class AbstractCardControlResponse extends HttpMetadata {
+public abstract class CardControlResponse extends HttpMetadata {
 
-    private final ControlType type;
+    @SerializedName("control_type")
+    private final ControlType controlType;
 
     private String id;
 
@@ -33,8 +30,8 @@ public abstract class AbstractCardControlResponse extends HttpMetadata {
     @SerializedName("last_modified_date")
     private Instant lastModifiedDate;
 
-    protected AbstractCardControlResponse(final ControlType type) {
-        this.type = type;
+    protected CardControlResponse(final ControlType controlType) {
+        this.controlType = controlType;
     }
 
 }

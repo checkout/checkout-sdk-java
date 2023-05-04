@@ -1,5 +1,8 @@
 package com.checkout;
 
+import com.checkout.issuing.cardholders.CardholderCardsResponse;
+import com.checkout.issuing.cards.responses.PhysicalCardDetailsResponse;
+import com.checkout.issuing.cards.responses.VirtualCardDetailsResponse;
 import com.checkout.payments.previous.response.GetPaymentResponse;
 import com.checkout.payments.previous.response.destination.PaymentResponseAlternativeDestination;
 import com.checkout.payments.previous.response.destination.PaymentResponseCardDestination;
@@ -9,6 +12,9 @@ import com.checkout.payments.sender.SenderType;
 import org.junit.jupiter.api.Test;
 
 import static com.checkout.TestHelper.getMock;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.isA;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -85,6 +91,18 @@ class GsonSerializerTest {
         assertNotNull(paymentResponse.getExpiresOn());
         assertEquals("2019-09-10T10:11:12Z", paymentResponse.getExpiresOn().toString());
 
+    }
+
+    @Test
+    void shouldDeserializeCardHolderCardsResponse() {
+
+        final CardholderCardsResponse cardholderCardsResponse = serializer.fromJson(getMock("/mocks/issuing/response/cardholders/get_cardholder_card_response.json"), CardholderCardsResponse.class);
+
+        assertNotNull(cardholderCardsResponse);
+        assertNotNull(cardholderCardsResponse.getCards());
+        assertThat(cardholderCardsResponse.getCards(), hasSize(2));
+        assertThat(cardholderCardsResponse.getCards().get(0), isA(VirtualCardDetailsResponse.class));
+        assertThat(cardholderCardsResponse.getCards().get(1), isA(PhysicalCardDetailsResponse.class));
     }
 
 }

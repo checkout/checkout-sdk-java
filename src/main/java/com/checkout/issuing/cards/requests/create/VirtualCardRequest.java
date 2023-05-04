@@ -18,20 +18,14 @@ public class VirtualCardRequest extends CardRequest {
     private Boolean isSingleUse;
 
     @Builder
-    public VirtualCardRequest(
-            Boolean isSingleUse,
-            String cardholderId,
-            CardLifetime lifetime,
-            String reference,
-            String cardProductId,
-            String displayName,
-            Boolean activateCard
-    ) {
+    private VirtualCardRequest(final String cardholderId,
+                               final CardLifetime lifetime,
+                               final String reference,
+                               final String cardProductId,
+                               final String displayName,
+                               final Boolean activateCard,
+                               final Boolean isSingleUse) {
         super(CardType.VIRTUAL, cardholderId, lifetime, reference, cardProductId, displayName, activateCard);
         this.isSingleUse = isSingleUse;
-    }
-
-    public VirtualCardRequest() {
-        super(CardType.VIRTUAL);
     }
 }
