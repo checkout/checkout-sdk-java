@@ -21,6 +21,9 @@ public final class ThreeDSData {
     @SerializedName("authentication_response")
     private String authenticationResponse;
 
+    @SerializedName("authentication_status_reason")
+    private String authenticationStatusReason;
+
     private String cryptogram;
 
     private String xid;
