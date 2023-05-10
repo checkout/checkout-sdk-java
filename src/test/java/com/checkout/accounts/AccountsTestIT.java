@@ -1,6 +1,7 @@
 package com.checkout.accounts;
 
 import com.checkout.CheckoutApi;
+import com.checkout.CheckoutApiException;
 import com.checkout.CheckoutSdk;
 import com.checkout.Environment;
 import com.checkout.OAuthScope;
@@ -20,11 +21,11 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.concurrent.ExecutionException;
 
 import static com.checkout.TestHelper.generateRandomEmail;
 import static java.util.Objects.requireNonNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class AccountsTestIT extends SandboxTestFixture {
 
@@ -88,6 +89,57 @@ class AccountsTestIT extends SandboxTestFixture {
         assertNotNull(verifyUpdated);
         assertEquals(onboardEntityRequest.getIndividual().getFirstName(), verifyUpdated.getIndividual().getFirstName());
 
+    }
+
+    @Test
+    void shouldThrowConflictWhenCreatingExistingEntity() {
+        final String randomReference = RandomStringUtils.random(15, true, true);
+
+        final OnboardEntityRequest onboardEntityRequest = OnboardEntityRequest.builder()
+                .reference(randomReference)
+                .contactDetails(ContactDetails.builder()
+                        .phone(buildAccountPhone())
+                        .emailAddresses(EntityEmailAddresses.builder()
+                                .primary(generateRandomEmail())
+                                .build())
+                        .build())
+                .profile(buildProfile())
+                .individual(Individual.builder()
+                        .firstName("Bruce")
+                        .lastName("Wayne")
+                        .tradingName("Batman's Super Hero Masks")
+                        .registeredAddress(TestHelper.createAddress())
+                        .nationalTaxId("TAX123456")
+                        .dateOfBirth(DateOfBirth.builder()
+                                .day(5)
+                                .month(6)
+                                .year(1995)
+                                .build())
+                        .placeOfBirth(PlaceOfBirth.builder()
+                                .country(CountryCode.GB)
+                                .build())
+                        .identification(Identification.builder()
+                                .nationalIdNumber("AB123456C")
+                                .build())
+                        .build())
+                .build();
+        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(onboardEntityRequest));
+        assertNotNull(entityResponse);
+
+        final String entityId = entityResponse.getId();
+        assertNotNull(entityId);
+        assertEquals(randomReference, entityResponse.getReference());
+
+        Throwable thrown = assertThrows(ExecutionException.class, () ->
+                checkoutApi.accountsClient().createEntity(onboardEntityRequest).get()).getCause();
+
+        assertTrue(thrown instanceof CheckoutApiException);
+        CheckoutApiException e = (CheckoutApiException)thrown;
+
+        assertEquals(409, e.getHttpStatusCode());
+        assertNotNull(e.getErrorDetails());
+        assertNotNull(e.getErrorDetails().get("id"));
+        assertEquals(entityId, e.getErrorDetails().get("id"));
     }
 
     @Test
