@@ -1,6 +1,7 @@
 package com.checkout.customers;
 
 import com.checkout.common.Phone;
+import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
@@ -20,6 +21,9 @@ public final class CustomerRequest {
     private Phone phone;
 
     private Map<String, Object> metadata;
+
+    @SerializedName("default")
+    private String DefaultId;
 
     private List<String> instruments;
 

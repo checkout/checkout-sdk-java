@@ -18,7 +18,6 @@ import com.checkout.payments.sender.PaymentCorporateSender;
 import com.checkout.payments.sender.PaymentIndividualSender;
 import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
-import com.checkout.tokens.TokensClient;
 
 import java.util.List;
 import java.util.UUID;
@@ -39,7 +38,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
 
     protected final PaymentsClient paymentsClient;
-    protected final TokensClient tokensClient;
     public static final String PAYEE_NOT_ONBOARDED = "payee_not_onboarded";
     public static final String APM_SERVICE_UNAVAILABLE = "apm_service_unavailable";
 

@@ -1,6 +1,9 @@
 package com.checkout;
 
 import com.checkout.disputes.DisputesQueryResponse;
+import com.checkout.tokens.CardTokenRequest;
+import com.checkout.tokens.CardTokenResponse;
+import com.checkout.tokens.TokensClient;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.hamcrest.BaseMatcher;
@@ -32,6 +35,8 @@ public abstract class SandboxTestFixture {
 
     protected com.checkout.previous.CheckoutApi previousApi;
     protected CheckoutApi checkoutApi;
+
+    protected TokensClient tokensClient;
 
     public SandboxTestFixture(final PlatformType platformType) {
         switch (platformType) {
@@ -90,7 +95,7 @@ public abstract class SandboxTestFixture {
         return blocking(supplier, matcher, 3L);
     }
 
-    protected  <T extends HttpMetadata> T blocking(
+    protected <T extends HttpMetadata> T blocking(
             final Supplier<CompletableFuture<T>> supplier,
             final Matcher<T> matcher,
             final long timeout) {
@@ -151,6 +156,15 @@ public abstract class SandboxTestFixture {
             throw new UnsupportedOperationException();
         }
 
+    }
+
+    protected CardTokenResponse requestToken() {
+        final CardTokenRequest request = CardTokenRequest.builder()
+                .number(CardSourceHelper.Visa.NUMBER)
+                .expiryMonth(CardSourceHelper.Visa.EXPIRY_MONTH)
+                .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
+                .build();
+        return blocking(() -> tokensClient.requestCardToken(request));
     }
 
     public static class DisputesQueryResponseHasItems extends BaseMatcher<DisputesQueryResponse> {
