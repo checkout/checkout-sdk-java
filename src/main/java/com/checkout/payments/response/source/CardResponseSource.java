@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.List;
+
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -30,8 +32,16 @@ public final class CardResponseSource extends AbstractResponseSource implements 
 
     private String scheme;
 
+    /**
+     * @deprecated This property will be removed in the future, and should be used
+     * {@link CardResponseSource#localSchemes} instead
+     */
+    @Deprecated
     @SerializedName("scheme_local")
     private String schemeLocal;
+
+    @SerializedName("local_schemes")
+    private List<String> localSchemes;
 
     private String last4;
 
