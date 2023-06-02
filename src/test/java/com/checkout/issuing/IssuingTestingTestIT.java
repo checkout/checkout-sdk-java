@@ -3,11 +3,15 @@ package com.checkout.issuing;
 import com.checkout.common.Currency;
 import com.checkout.issuing.cardholders.CardholderResponse;
 import com.checkout.issuing.cards.responses.CardResponse;
+import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
+import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
 import com.checkout.issuing.testing.requests.CardSimulation;
+import com.checkout.issuing.testing.requests.TransactionMerchant;
 import com.checkout.issuing.testing.requests.TransactionSimulation;
 import com.checkout.issuing.testing.requests.TransactionType;
 import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
+import com.checkout.issuing.testing.responses.ReversalStatus;
 import com.checkout.issuing.testing.responses.TransactionStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -22,16 +26,49 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class IssuingTestingTestIT extends BaseIssuingTestIT {
 
     private CardResponse card;
+    private CardAuthorizationResponse transaction;
 
     @BeforeAll
     void setUp() {
         final CardholderResponse cardholder = createCardholder();
         card = createCard(cardholder.getId(), true);
+        transaction = getCardAuthorizationResponse();
     }
 
     @Test
     void shouldSimulateAuthorization() {
-        final CardAuthorizationRequest request = CardAuthorizationRequest.builder()
+        assertNotNull(transaction);
+        assertEquals(TransactionStatus.AUTHORIZED, transaction.getStatus());
+    }
+
+    @Test
+    void shouldSimulateIncrementingAuthorization() {
+        final CardAuthorizationIncrementingRequest request = CardAuthorizationIncrementingRequest.builder()
+                .amount(1)
+                .build();
+
+        final CardAuthorizationResponse response = blocking(() ->
+                issuingApi.issuingClient().simulateIncrementingAuthorization(transaction.getId(), request));
+
+        assertNotNull(response);
+        assertEquals(TransactionStatus.AUTHORIZED, response.getStatus());
+    }
+
+    @Test
+    void shouldSimulateReversal() {
+        final CardAuthorizationReversalRequest request = CardAuthorizationReversalRequest.builder()
+                .amount(1)
+                .build();
+
+        final CardAuthorizationResponse response = blocking(() ->
+                issuingApi.issuingClient().simulateReversal(transaction.getId(), request));
+
+        assertNotNull(response);
+        assertEquals(ReversalStatus.REVERSED, response.getStatus());
+    }
+
+    private CardAuthorizationResponse getCardAuthorizationResponse() {
+        final CardAuthorizationRequest authorizationRequest = CardAuthorizationRequest.builder()
                 .card(CardSimulation.builder()
                         .id(card.getId())
                         .expiryMonth(card.getExpiryMonth())
@@ -41,13 +78,14 @@ class IssuingTestingTestIT extends BaseIssuingTestIT {
                         .type(TransactionType.PURCHASE)
                         .amount(100)
                         .currency(Currency.GBP)
+                        .merchant(TransactionMerchant.builder()
+                                .categoryCode("7399")
+                                .build())
                         .build())
                 .build();
 
-        final CardAuthorizationResponse response = blocking(() ->
-                issuingApi.issuingClient().simulateAuthorization(request));
-
-        assertNotNull(response);
-        assertEquals(TransactionStatus.AUTHORIZED, response.getStatus());
+        final CardAuthorizationResponse authorizationResponse = blocking(() ->
+                issuingApi.issuingClient().simulateAuthorization(authorizationRequest));
+        return authorizationResponse;
     }
 }

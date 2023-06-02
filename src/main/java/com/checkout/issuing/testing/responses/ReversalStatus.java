@@ -2,12 +2,11 @@ package com.checkout.issuing.testing.responses;
 
 import com.google.gson.annotations.SerializedName;
 
-public enum TransactionStatus {
+public enum ReversalStatus {
 
-    @SerializedName("Authorized")
-    AUTHORIZED,
+    @SerializedName("Reversed")
+    REVERSED,
 
     @SerializedName("Declined")
     DECLINED
-
 }

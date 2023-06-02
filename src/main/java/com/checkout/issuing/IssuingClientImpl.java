@@ -26,7 +26,9 @@ import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
 import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
+import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
+import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
 import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
 import com.checkout.payments.VoidResponse;
 
@@ -57,6 +59,8 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     private static final String SIMULATE_PATH = "simulate";
 
     private static final String AUTHORIZATIONS_PATH = "authorizations";
+
+    private static final String REVERSALS_PATH = "reversals";
 
     public IssuingClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
@@ -276,6 +280,36 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 sdkAuthorization(),
                 CardAuthorizationResponse.class,
                 cardAuthorizationRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<CardAuthorizationResponse> simulateIncrementingAuthorization(
+            String authorizationId,
+            CardAuthorizationIncrementingRequest cardAuthorizationIncrementingRequest
+    ) {
+        validateParams("authorizationId", authorizationId, "cardAuthorizationIncrementingRequest", cardAuthorizationIncrementingRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, SIMULATE_PATH, AUTHORIZATIONS_PATH, authorizationId, AUTHORIZATIONS_PATH),
+                sdkAuthorization(),
+                CardAuthorizationResponse.class,
+                cardAuthorizationIncrementingRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<CardAuthorizationResponse> simulateReversal(
+            String authorizationId,
+            CardAuthorizationReversalRequest cardAuthorizationReversalRequest
+    ) {
+        validateParams("authorizationId", authorizationId, "cardAuthorizationReversalRequest", cardAuthorizationReversalRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, SIMULATE_PATH, AUTHORIZATIONS_PATH, authorizationId, REVERSALS_PATH),
+                sdkAuthorization(),
+                CardAuthorizationResponse.class,
+                cardAuthorizationReversalRequest,
                 null
         );
     }
