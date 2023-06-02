@@ -22,7 +22,9 @@ import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
 import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
+import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
+import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
 import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
 import com.checkout.payments.VoidResponse;
 
@@ -65,4 +67,14 @@ public interface IssuingClient {
     CompletableFuture<IdResponse> removeCardControl(final String controlId);
 
     CompletableFuture<CardAuthorizationResponse> simulateAuthorization(final CardAuthorizationRequest cardAuthorizationRequest);
+
+    CompletableFuture<CardAuthorizationResponse> simulateIncrementingAuthorization(
+            final String authorizationId,
+            final CardAuthorizationIncrementingRequest cardAuthorizationIncrementingRequest
+    );
+
+    CompletableFuture<CardAuthorizationResponse> simulateReversal(
+            final String authorizationId,
+            final CardAuthorizationReversalRequest cardAuthorizationReversalRequest
+    );
 }

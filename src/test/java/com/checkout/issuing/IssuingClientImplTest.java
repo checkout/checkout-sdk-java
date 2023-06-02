@@ -27,7 +27,10 @@ import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
 import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
+import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
+import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
+import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
 import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
 import com.checkout.payments.VoidResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -400,6 +403,46 @@ public class IssuingClientImplTest {
             )).thenReturn(CompletableFuture.completedFuture(response));
 
             final CompletableFuture<CardAuthorizationResponse> future = client.simulateAuthorization(request);
+
+            assertNotNull(future.get());
+            assertEquals(response, future.get());
+        }
+
+        @Test
+        void shouldSimulateAuthorizationIncrementingAuthorization() throws ExecutionException, InterruptedException {
+            final CardAuthorizationIncrementingRequest request = mock(CardAuthorizationIncrementingRequest.class);
+            final CardAuthorizationResponse response = mock(CardAuthorizationResponse.class);
+
+            when(apiClient.postAsync(
+                    "issuing/simulate/authorizations/authorization_id/authorizations",
+                    authorization,
+                    CardAuthorizationResponse.class,
+                    request,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<CardAuthorizationResponse> future =
+                    client.simulateIncrementingAuthorization("authorization_id", request);
+
+            assertNotNull(future.get());
+            assertEquals(response, future.get());
+        }
+
+        @Test
+        void shouldSimulateAuthorizationReversal() throws ExecutionException, InterruptedException {
+            final CardAuthorizationReversalRequest request = mock(CardAuthorizationReversalRequest.class);
+            final CardAuthorizationResponse response = mock(CardAuthorizationResponse.class);
+
+            when(apiClient.postAsync(
+                    "issuing/simulate/authorizations/authorization_id/reversals",
+                    authorization,
+                    CardAuthorizationResponse.class,
+                    request,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<CardAuthorizationResponse> future =
+                    client.simulateReversal("authorization_id", request);
 
             assertNotNull(future.get());
             assertEquals(response, future.get());

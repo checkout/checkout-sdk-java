@@ -13,4 +13,8 @@ public class TransactionSimulation {
     private Integer amount;
 
     private Currency currency;
+
+    private TransactionMerchant merchant;
+
+    private TransactionAuthorizationType transaction;
 }
