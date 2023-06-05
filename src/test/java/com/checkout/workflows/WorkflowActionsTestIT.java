@@ -10,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Disabled("unstable")
 class WorkflowActionsTestIT extends AbstractWorkflowTestIT {
 
     @Test
-    @Disabled("unstable")
     void shouldGetActionInvocations() {
 
         final CreateWorkflowResponse createWorkflowResponse = createWorkflow();

@@ -2,6 +2,7 @@ package com.checkout.issuing;
 
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
@@ -31,7 +32,9 @@ import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
+import com.checkout.issuing.testing.responses.CardAuthorizationIncrementingResponse;
 import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
+import com.checkout.issuing.testing.responses.CardAuthorizationReversalResponse;
 import com.checkout.payments.VoidResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -411,18 +414,38 @@ public class IssuingClientImplTest {
         @Test
         void shouldSimulateAuthorizationIncrementingAuthorization() throws ExecutionException, InterruptedException {
             final CardAuthorizationIncrementingRequest request = mock(CardAuthorizationIncrementingRequest.class);
-            final CardAuthorizationResponse response = mock(CardAuthorizationResponse.class);
+            final CardAuthorizationIncrementingResponse response = mock(CardAuthorizationIncrementingResponse.class);
 
             when(apiClient.postAsync(
                     "issuing/simulate/authorizations/authorization_id/authorizations",
                     authorization,
-                    CardAuthorizationResponse.class,
+                    CardAuthorizationIncrementingResponse.class,
                     request,
                     null
             )).thenReturn(CompletableFuture.completedFuture(response));
 
-            final CompletableFuture<CardAuthorizationResponse> future =
+            final CompletableFuture<CardAuthorizationIncrementingResponse> future =
                     client.simulateIncrementingAuthorization("authorization_id", request);
+
+            assertNotNull(future.get());
+            assertEquals(response, future.get());
+        }
+
+        @Test
+        void shouldSimulateAuthorizationClearing() throws ExecutionException, InterruptedException {
+            final CardAuthorizationClearingRequest request = mock(CardAuthorizationClearingRequest.class);
+            final EmptyResponse response = mock(EmptyResponse.class);
+
+            when(apiClient.postAsync(
+                    "issuing/simulate/authorizations/authorization_id/presentments",
+                    authorization,
+                    EmptyResponse.class,
+                    request,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<EmptyResponse> future =
+                    client.simulateClearing("authorization_id", request);
 
             assertNotNull(future.get());
             assertEquals(response, future.get());
@@ -431,17 +454,17 @@ public class IssuingClientImplTest {
         @Test
         void shouldSimulateAuthorizationReversal() throws ExecutionException, InterruptedException {
             final CardAuthorizationReversalRequest request = mock(CardAuthorizationReversalRequest.class);
-            final CardAuthorizationResponse response = mock(CardAuthorizationResponse.class);
+            final CardAuthorizationReversalResponse response = mock(CardAuthorizationReversalResponse.class);
 
             when(apiClient.postAsync(
                     "issuing/simulate/authorizations/authorization_id/reversals",
                     authorization,
-                    CardAuthorizationResponse.class,
+                    CardAuthorizationReversalResponse.class,
                     request,
                     null
             )).thenReturn(CompletableFuture.completedFuture(response));
 
-            final CompletableFuture<CardAuthorizationResponse> future =
+            final CompletableFuture<CardAuthorizationReversalResponse> future =
                     client.simulateReversal("authorization_id", request);
 
             assertNotNull(future.get());

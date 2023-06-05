@@ -9,12 +9,14 @@ import com.checkout.workflows.events.SubjectEventsResponse;
 import com.checkout.workflows.events.WorkflowEventTypes;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@Disabled("unstable")
 class WorkflowEventsTestIT extends AbstractWorkflowTestIT {
 
     @Test

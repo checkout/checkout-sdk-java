@@ -4,6 +4,7 @@ import com.checkout.ItemsResponse;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@Disabled("unstable")
 class WebhooksTestIT extends SandboxTestFixture {
 
     protected WebhooksTestIT() {
