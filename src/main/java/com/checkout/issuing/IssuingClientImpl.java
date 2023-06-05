@@ -3,6 +3,7 @@ package com.checkout.issuing;
 import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.EmptyResponse;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.common.IdResponse;
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
@@ -26,10 +27,13 @@ import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
 import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
+import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
+import com.checkout.issuing.testing.responses.CardAuthorizationIncrementingResponse;
 import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
+import com.checkout.issuing.testing.responses.CardAuthorizationReversalResponse;
 import com.checkout.payments.VoidResponse;
 
 import java.util.concurrent.CompletableFuture;
@@ -59,6 +63,8 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     private static final String SIMULATE_PATH = "simulate";
 
     private static final String AUTHORIZATIONS_PATH = "authorizations";
+
+    private static final String PRESENTMENTS_PATH = "presentments";
 
     private static final String REVERSALS_PATH = "reversals";
 
@@ -125,7 +131,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
             final String cardId,
             final ThreeDSEnrollmentRequest enrollmentRequest
     ) {
-        validateParams("cardId", cardId,"enrollmentRequest", enrollmentRequest);
+        validateParams("cardId", cardId, "enrollmentRequest", enrollmentRequest);
         return apiClient.postAsync(
                 buildPath(ISSUING_PATH, CARDS_PATH, cardId, THREE_DS_ENROLLMENT_PATH),
                 sdkAuthorization(),
@@ -177,7 +183,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
             final String cardId,
             final CardCredentialsQuery queryFilter
     ) {
-        validateParams("cardId", cardId,"queryFilter", queryFilter);
+        validateParams("cardId", cardId, "queryFilter", queryFilter);
         return apiClient.queryAsync(
                 buildPath(ISSUING_PATH, CARDS_PATH, cardId, CREDENTIALS_PATH),
                 sdkAuthorization(),
@@ -285,7 +291,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
-    public CompletableFuture<CardAuthorizationResponse> simulateIncrementingAuthorization(
+    public CompletableFuture<CardAuthorizationIncrementingResponse> simulateIncrementingAuthorization(
             String authorizationId,
             CardAuthorizationIncrementingRequest cardAuthorizationIncrementingRequest
     ) {
@@ -293,14 +299,29 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         return apiClient.postAsync(
                 buildPath(ISSUING_PATH, SIMULATE_PATH, AUTHORIZATIONS_PATH, authorizationId, AUTHORIZATIONS_PATH),
                 sdkAuthorization(),
-                CardAuthorizationResponse.class,
+                CardAuthorizationIncrementingResponse.class,
                 cardAuthorizationIncrementingRequest,
                 null
         );
     }
 
     @Override
-    public CompletableFuture<CardAuthorizationResponse> simulateReversal(
+    public CompletableFuture<EmptyResponse> simulateClearing(
+            String authorizationId,
+            CardAuthorizationClearingRequest cardAuthorizationClearingRequest
+    ) {
+        validateParams("authorizationId", authorizationId, "cardAuthorizationClearingRequest", cardAuthorizationClearingRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, SIMULATE_PATH, AUTHORIZATIONS_PATH, authorizationId, PRESENTMENTS_PATH),
+                sdkAuthorization(),
+                EmptyResponse.class,
+                cardAuthorizationClearingRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<CardAuthorizationReversalResponse> simulateReversal(
             String authorizationId,
             CardAuthorizationReversalRequest cardAuthorizationReversalRequest
     ) {
@@ -308,7 +329,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         return apiClient.postAsync(
                 buildPath(ISSUING_PATH, SIMULATE_PATH, AUTHORIZATIONS_PATH, authorizationId, REVERSALS_PATH),
                 sdkAuthorization(),
-                CardAuthorizationResponse.class,
+                CardAuthorizationReversalResponse.class,
                 cardAuthorizationReversalRequest,
                 null
         );

@@ -1,5 +1,6 @@
 package com.checkout.issuing;
 
+import com.checkout.EmptyResponse;
 import com.checkout.common.IdResponse;
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
 import com.checkout.issuing.cardholders.CardholderDetailsResponse;
@@ -22,10 +23,13 @@ import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
 import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
+import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
+import com.checkout.issuing.testing.responses.CardAuthorizationIncrementingResponse;
 import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
+import com.checkout.issuing.testing.responses.CardAuthorizationReversalResponse;
 import com.checkout.payments.VoidResponse;
 
 import java.util.concurrent.CompletableFuture;
@@ -68,12 +72,17 @@ public interface IssuingClient {
 
     CompletableFuture<CardAuthorizationResponse> simulateAuthorization(final CardAuthorizationRequest cardAuthorizationRequest);
 
-    CompletableFuture<CardAuthorizationResponse> simulateIncrementingAuthorization(
+    CompletableFuture<CardAuthorizationIncrementingResponse> simulateIncrementingAuthorization(
             final String authorizationId,
             final CardAuthorizationIncrementingRequest cardAuthorizationIncrementingRequest
     );
 
-    CompletableFuture<CardAuthorizationResponse> simulateReversal(
+    CompletableFuture<EmptyResponse> simulateClearing(
+            final String authorizationId,
+            final CardAuthorizationClearingRequest cardAuthorizationClearingRequest
+    );
+
+    CompletableFuture<CardAuthorizationReversalResponse> simulateReversal(
             final String authorizationId,
             final CardAuthorizationReversalRequest cardAuthorizationReversalRequest
     );
