@@ -56,8 +56,14 @@ import java.util.stream.IntStream;
 public class GsonSerializer implements Serializer {
 
     private static final List<DateTimeFormatter> DEFAULT_FORMATTERS = Arrays.asList(
+            DateTimeFormatter.ISO_INSTANT,
+            DateTimeFormatter.ISO_OFFSET_DATE_TIME,
+            DateTimeFormatter.ISO_LOCAL_DATE_TIME,
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSXXX"),
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXX"),
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX")
     );
     private static final Type MAP_TYPE_TOKEN = new TypeToken<Map<String, Object>>() {
     }.getType();

@@ -1,0 +1,62 @@
+{
+  "count": 1,
+  "limit": 5,
+  "data": [
+    {
+      "payment_id": "pay_pajupjy4prju**************",
+      "action_id": "act_bh54vusn2d4u**************",
+      "action_type": "Authorization",
+      "entity_id": "ent_5hq7hvcm7hm6**************",
+      "currency_account_id": "ca_qtv3lmg4ohme**************",
+      "payment_method": "VISA",
+      "processing_channel_id": "pc_yh27b6hewkfe**************",
+      "reference": "ABC",
+      "response_code": "10000",
+      "response_description": "Approved",
+      "region": "Domestic",
+      "card_type": "Credit",
+      "card_category": "Consumer",
+      "issuer_country": "GB",
+      "merchant_category_code": "5815",
+      "processed_on": "2023-06-15T07:03:01.9998684",
+      "requested_on": "2023-05-31T04:20:19.8099000+00:00",
+      "acquirer_reference_number": "957414540922",
+      "account_funding_transaction": false,
+      "breakdown": [
+        {
+          "breakdown_type": "Authorization Fixed Fee",
+          "fx_rate_applied": 1.349386,
+          "holding_currency": "USD",
+          "holding_currency_amount": -0.01349386,
+          "processing_currency": "GBP",
+          "processing_currency_amount": -0.01000000,
+          "transaction_currency": "USD",
+          "transaction_currency_amount": -0.01349386,
+          "processing_to_transaction_currency_fx_rate": 1.349386,
+          "transaction_to_holding_currency_fx_rate": 1.0
+        },
+        {
+          "breakdown_type": "Scheme Fixed Fee",
+          "fx_rate_applied": 1.0,
+          "holding_currency": "USD",
+          "holding_currency_amount": -0.00362977,
+          "processing_currency": "USD",
+          "processing_currency_amount": -0.00362977,
+          "transaction_currency": "USD",
+          "transaction_currency_amount": -0.00362977,
+          "processing_to_transaction_currency_fx_rate": 1.0,
+          "transaction_to_holding_currency_fx_rate": 1.0,
+          "fee_detail": "Visa Acquirer Authorization Fee"
+        }
+      ]
+    }
+  ],
+  "_links": {
+    "self": {
+      "href": "https://api.checkout.com/financial-actions?payment_id=pay_*******************************&limit=5"
+    },
+    "next": {
+      "href": "https://api.checkout.com/financial-actions?payment_id=pay_*******************************&limit=5&pagination_token=string"
+    }
+  }
+}
