@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public final class ReportsResponse extends Resource {
+public class ReportsResponse extends Resource {
 
     private Integer count;
 

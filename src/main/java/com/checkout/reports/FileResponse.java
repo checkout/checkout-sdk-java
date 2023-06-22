@@ -9,7 +9,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public final class FileResponse extends Resource {
+public class FileResponse extends Resource {
 
     private String id;
 
