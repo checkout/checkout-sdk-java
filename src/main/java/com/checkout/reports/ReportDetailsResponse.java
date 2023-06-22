@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public final class ReportDetailsResponse extends Resource {
+public class ReportDetailsResponse extends Resource {
 
     private String id;
 

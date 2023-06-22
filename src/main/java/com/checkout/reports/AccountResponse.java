@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 @Data
-public final class AccountResponse {
+public class AccountResponse {
 
     @SerializedName("client_id")
     private String clientId;

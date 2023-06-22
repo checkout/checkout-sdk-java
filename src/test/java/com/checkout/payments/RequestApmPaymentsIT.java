@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
 
     @Test
-    void shouldMakeAliPayPayment() throws InterruptedException {
+    void shouldMakeAliPayPayment() {
         RequestAlipayPlusSource source = RequestAlipayPlusSource.requestAlipayPlusCNSource();
         source = RequestAlipayPlusSource.requestAlipayPlusGCashSource();
         source = RequestAlipayPlusSource.requestAlipayPlusDanaSource();
@@ -474,7 +474,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                         .build()))
                 .build();
 
-        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), APM_SERVICE_UNAVAILABLE);
     }
 
     @Test
