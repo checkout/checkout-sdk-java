@@ -1,11 +1,14 @@
 # Checkout.com Java SDK
 
-![build-status](https://github.com/checkout/checkout-sdk-java/workflows/build-master/badge.svg) 
-[![GitHub license](https://img.shields.io/github/license/checkout/checkout-sdk-java.svg)](https://github.com/checkout/checkout-sdk-java/blob/master/LICENSE)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=checkout_checkout-sdk-java&metric=alert_status)](https://sonarcloud.io/summary/overall?id=checkout_checkout-sdk-java)
+[![build-status](https://github.com/checkout/checkout-sdk-java/workflows/build-master/badge.svg)](https://github.com/checkout/checkout-sdk-java/actions/workflows/build-master.yml)
+![CodeQL](https://github.com/checkout/checkout-sdk-java/workflows/CodeQL/badge.svg)
 [![OWASP-Dependency-Check](https://github.com/checkout/checkout-sdk-java/actions/workflows/dependency-check.yaml/badge.svg?branch=master)](https://github.com/checkout/checkout-sdk-java/actions/workflows/dependency-check.yaml)
+
+![build-status](https://github.com/checkout/checkout-sdk-java/workflows/build-release/badge.svg)
 [![GitHub release](https://img.shields.io/github/release/checkout/checkout-sdk-java.svg)](https://GitHub.com/checkout/checkout-sdk-java/releases/)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.checkout/checkout-sdk-java/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.checkout/checkout-sdk-java/)
+
+[![GitHub license](https://img.shields.io/github/license/checkout/checkout-sdk-java.svg)](https://github.com/checkout/checkout-sdk-java/blob/master/LICENSE.md)
 
 ## Getting started
 
