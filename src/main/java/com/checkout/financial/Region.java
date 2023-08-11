@@ -6,8 +6,19 @@ public enum Region {
 
     @SerializedName("Domestic")
     DOMESTIC,
-    @SerializedName("EEA")
-    EEA,
+
+    @SerializedName("Intra")
+    INTRA,
+
+    @SerializedName("IntraEEA")
+    INTRA_EEA,
+
+    @SerializedName("IntraEuropean_SEPA")
+    INTRA_EUROPEAN_SEPA,
+
     @SerializedName("International")
-    INTERNATIONAL;
+    INTERNATIONAL,
+
+    @SerializedName("EEA")
+    EEA
 }
