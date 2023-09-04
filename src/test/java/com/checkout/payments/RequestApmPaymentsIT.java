@@ -548,7 +548,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                                 .lastName("Last")
                                 .billingAddress(Address.builder()
                                         .addressLine1("Address Line 1")
-                                        .addressLine2("Address Line 2")
+                                        .addressLine2("Max_10_c__")
                                         .city("City")
                                         .zip("12345")
                                         .country(CountryCode.GB)

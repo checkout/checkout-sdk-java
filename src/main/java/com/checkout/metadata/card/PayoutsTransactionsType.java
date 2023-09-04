@@ -8,8 +8,8 @@ public enum PayoutsTransactionsType {
     NOT_SUPPORTED,
     @SerializedName("standard")
     STANDARD,
-    @SerializedName("fast_founds")
-    FAST_FOUNDS,
+    @SerializedName("fast_funds")
+    FAST_FUNDS,
     @SerializedName("unknown")
     UNKNOWN
 }
