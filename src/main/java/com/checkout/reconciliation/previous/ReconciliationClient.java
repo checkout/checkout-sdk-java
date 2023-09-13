@@ -1,6 +1,5 @@
 package com.checkout.reconciliation.previous;
 
-
 import com.checkout.ContentResponse;
 import com.checkout.common.QueryFilterDateRange;
 
@@ -13,6 +12,14 @@ public interface ReconciliationClient {
     CompletableFuture<ReconciliationPaymentReportResponse> singlePaymentReportAsync(String paymentId);
 
     CompletableFuture<StatementReportResponse> queryStatementsReport(QueryFilterDateRange filter);
+
+    /**
+     * More information in:
+     * <a href="https://www.checkout.com/docs/previous/reporting-and-insights/reconciliation-api/statements-endpoint#2._Statement_ID_/_Payments">
+     *     Statements endpoint
+     *     </a>
+     * */
+    CompletableFuture<StatementReportResponse> getStatementsReportById(String statementId);
 
     /**
      * @param targetFile Optional parameter that specifies the path where a file with the content returned is saved. If

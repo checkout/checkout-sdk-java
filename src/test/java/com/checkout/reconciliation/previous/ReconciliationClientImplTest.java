@@ -92,6 +92,20 @@ class ReconciliationClientImplTest {
     }
 
     @Test
+    void shouldGetStatementsReportById() throws ExecutionException, InterruptedException {
+        final StatementReportResponse response = mock(StatementReportResponse.class);
+
+        when(apiClient.getAsync(eq("reporting/statements/statement_id/payments"), any(SdkAuthorization.class),
+                eq(StatementReportResponse.class)))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<StatementReportResponse> future = client.getStatementsReportById("statement_id");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+    }
+
+    @Test
     void shouldRetrieveCSVPaymentReport() throws ExecutionException, InterruptedException {
         final String report = "/etc/foo/payment_report.csv";
         final QueryFilterDateRange request = mock(QueryFilterDateRange.class);

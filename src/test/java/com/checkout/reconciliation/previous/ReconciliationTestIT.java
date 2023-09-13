@@ -140,6 +140,37 @@ class ReconciliationTestIT {
 
     @Test
     @Disabled("Only works in production")
+    void shouldGetStatementsReportById() throws ExecutionException, InterruptedException {
+
+        final StatementReportResponse response = getProductionCheckoutApi().reconciliationClient().getStatementsReportById("statement_id").get();
+
+        assertNotNull(response);
+        assertNotNull(response.getLinks());
+        assertTrue(response.getCount() >= 1);
+        response.getData().forEach(statementData -> {
+            assertNotNull(statementData.getId());
+            assertNotNull(statementData.getPeriodStart());
+            assertNotNull(statementData.getPeriodEnd());
+            assertNotNull(statementData.getDate());
+            assertNotNull(statementData.getPayouts());
+            assertNotNull(statementData.getLinks());
+            statementData.getPayouts().forEach(payoutStatement -> {
+                assertNotNull(payoutStatement.getCurrency());
+                assertNotNull(payoutStatement.getCarriedForwardAmount());
+                assertNotNull(payoutStatement.getCurrentPeriodAmount());
+                assertNotNull(payoutStatement.getNetAmount());
+                assertNotNull(payoutStatement.getPeriodStart());
+                assertNotNull(payoutStatement.getPeriodEnd());
+                assertNotNull(payoutStatement.getId());
+                assertNotNull(payoutStatement.getStatus());
+                assertNotNull(payoutStatement.getPayoutFee());
+                assertNotNull(payoutStatement.getLinks());
+            });
+        });
+    }
+
+    @Test
+    @Disabled("Only works in production")
     void shouldRetrieveCsvPaymentReport() throws ExecutionException, InterruptedException {
 
         final QueryFilterDateRange queryFilterDateRange = QueryFilterDateRange.builder()
@@ -178,7 +209,7 @@ class ReconciliationTestIT {
     @Disabled("Only works in production")
     void shouldRetrieveCsvSingleStatementReport() throws ExecutionException, InterruptedException {
 
-        final ContentResponse ContentResponse = getProductionCheckoutApi().reconciliationClient().retrieveCSVSingleStatementReport("id", null).get();
+        final ContentResponse ContentResponse = getProductionCheckoutApi().reconciliationClient().retrieveCSVSingleStatementReport("statement_id", null).get();
 
         assertNotNull(ContentResponse);
         assertFalse(ContentResponse.getContent().isEmpty());
@@ -191,7 +222,7 @@ class ReconciliationTestIT {
     @Disabled("Only works in production")
     void shouldRetrieveCsvSingleStatementReport_saveFile() throws ExecutionException, InterruptedException {
 
-        final ContentResponse ContentResponse = getProductionCheckoutApi().reconciliationClient().retrieveCSVSingleStatementReport("id", "file_path").get();
+        final ContentResponse ContentResponse = getProductionCheckoutApi().reconciliationClient().retrieveCSVSingleStatementReport("statement_id", "file_path").get();
 
         assertNotNull(ContentResponse);
         assertFalse(ContentResponse.getContent().isEmpty());
