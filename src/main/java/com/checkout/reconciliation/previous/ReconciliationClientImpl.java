@@ -41,10 +41,15 @@ public class ReconciliationClientImpl extends AbstractClient implements Reconcil
     }
 
     @Override
+    public CompletableFuture<StatementReportResponse> getStatementsReportById(final String statementId) {
+        validateParams("statementId", statementId);
+        return apiClient.getAsync(buildPath(REPORTING_PATH, STATEMENTS_PATH, statementId, PAYMENTS_PATH), sdkAuthorization(), StatementReportResponse.class);
+    }
+
+    @Override
     public CompletableFuture<ContentResponse> retrieveCSVPaymentReport(final QueryFilterDateRange filter, final String targetFile) {
         validateParams("filter", filter);
         return apiClient.queryCsvContentAsync(buildPath(REPORTING_PATH, PAYMENTS_PATH, DOWNLOAD_PATH), sdkAuthorization(), filter, targetFile);
-
     }
 
     @Override
