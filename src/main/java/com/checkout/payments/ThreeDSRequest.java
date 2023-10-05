@@ -42,6 +42,12 @@ public final class ThreeDSRequest {
      * Not available on Previous
      */
 
+    @SerializedName("merchant_authentication_info")
+    private MerchantAuthenticationInfo merchantAuthenticationInfo;
+
+    @SerializedName("account_info")
+    private AccountInfo accountInfo;
+
     private String status;
 
     @SerializedName("authentication_date")
@@ -66,6 +72,9 @@ public final class ThreeDSRequest {
 
     @SerializedName("authentication_id")
     private String authenticationId;
+
+    @SerializedName("initial_authentication")
+    private InitialAuthentication initialAuthentication;
 
 }
 
