@@ -15,11 +15,7 @@ jobs:
           distribution: 'temurin'
           java-version: '8'
       - id: read-version
-        uses: HardNorth/github-version-generate@v1.1.1
-        with:
-          version-source: file
-          version-file: gradle.properties
-          version-file-extraction-pattern: '(?<=version=).+'
+        run: echo "CURRENT_VERSION=$( grep "version" gradle.properties | awk -F "=" '{print $2}' )" >> $GITHUB_ENV
       - id: print-version
         run: echo "Releasing $CURRENT_VERSION"
       - id: validate-wrapper
