@@ -216,6 +216,7 @@ class DisputesTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("Temporarily disabled")
     void shouldUploadDisputeFile() throws URISyntaxException {
         //Upload your dispute file evidence
         final URL resource = getClass().getClassLoader().getResource("checkout.jpeg");

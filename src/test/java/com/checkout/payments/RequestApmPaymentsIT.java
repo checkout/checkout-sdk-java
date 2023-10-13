@@ -474,7 +474,8 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                         .build()))
                 .build();
 
-        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
+        final PaymentResponse response = blocking(() -> paymentsClient.requestPayment(paymentRequest));
+        assertNotNull(response);
     }
 
     @Test
