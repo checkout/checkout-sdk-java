@@ -37,5 +37,8 @@ public final class PayoutStatement extends Resource {
 
     @SerializedName("period_end")
     private String periodEnd;
+    
+    @SerializedName("current_period_breakdown")
+    private CurrentPeriodBreakdown currentPeriodBreakdown;
 
 }
