@@ -479,7 +479,7 @@ public enum CountryCode {
     UA("380"),
     @SerializedName(value = "AE",alternate = "ARE")
     AE("971"),
-    @SerializedName(value = "GB",alternate = "GBR")
+    @SerializedName(value = "GB",alternate = {"GBR", "UK"})
     GB("44"),
     @SerializedName(value = "US",alternate = "USA")
     US("1"),
