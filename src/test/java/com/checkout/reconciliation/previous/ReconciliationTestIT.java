@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ReconciliationTestIT {
 
-    private final QueryFilterDateRange queryFilterDateRange = QueryFilterDateRange.builder()
+    private final StatementsQueryFilter statementsQueryFilter = StatementsQueryFilter.builder()
             .from(LocalDateTime.now().minus(1, ChronoUnit.MONTHS).toInstant(ZoneOffset.UTC))
             .to(Instant.now())
             .build();
@@ -111,7 +111,7 @@ class ReconciliationTestIT {
     @Disabled("Only works in production")
     void shouldQueryStatementsReport() throws ExecutionException, InterruptedException {
 
-        final StatementReportResponse response = getProductionCheckoutApi().reconciliationClient().queryStatementsReport(queryFilterDateRange).get();
+        final StatementReportResponse response = getProductionCheckoutApi().reconciliationClient().queryStatementsReport(statementsQueryFilter).get();
 
         assertNotNull(response);
         assertNotNull(response.getLinks());
@@ -235,7 +235,7 @@ class ReconciliationTestIT {
     @Disabled("Only works in production")
     void shouldRetrieveCsvStatementsReport() throws ExecutionException, InterruptedException {
 
-        final ContentResponse ContentResponse = getProductionCheckoutApi().reconciliationClient().retrieveCSVStatementsReport(queryFilterDateRange, null).get();
+        final ContentResponse ContentResponse = getProductionCheckoutApi().reconciliationClient().retrieveCSVStatementsReport(statementsQueryFilter, null).get();
 
         assertNotNull(ContentResponse);
         assertFalse(ContentResponse.getContent().isEmpty());
@@ -248,7 +248,7 @@ class ReconciliationTestIT {
     @Disabled("Only works in production")
     void shouldRetrieveCsvStatementsReport_saveFile() throws ExecutionException, InterruptedException {
 
-        final ContentResponse ContentResponse = getProductionCheckoutApi().reconciliationClient().retrieveCSVStatementsReport(queryFilterDateRange, "file_path").get();
+        final ContentResponse ContentResponse = getProductionCheckoutApi().reconciliationClient().retrieveCSVStatementsReport(statementsQueryFilter, "file_path").get();
 
         assertNotNull(ContentResponse);
         assertFalse(ContentResponse.getContent().isEmpty());

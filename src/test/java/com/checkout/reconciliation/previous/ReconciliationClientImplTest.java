@@ -78,7 +78,7 @@ class ReconciliationClientImplTest {
 
     @Test
     void shouldQueryStatementsReport() throws ExecutionException, InterruptedException {
-        final QueryFilterDateRange request = mock(QueryFilterDateRange.class);
+        final StatementsQueryFilter request = mock(StatementsQueryFilter.class);
         final StatementReportResponse response = mock(StatementReportResponse.class);
 
         when(apiClient.queryAsync(eq("reporting/statements"), any(SdkAuthorization.class), eq(request),
@@ -100,6 +100,21 @@ class ReconciliationClientImplTest {
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<StatementReportResponse> future = client.getStatementsReportById("statement_id");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+    }
+
+    @Test
+    void shouldGetStatementsReportByIdWithQuery() throws ExecutionException, InterruptedException {
+        final StatementsQueryFilter filter = mock(StatementsQueryFilter.class);
+        final StatementReportResponse response = mock(StatementReportResponse.class);
+
+        when(apiClient.queryAsync(eq("reporting/statements/statement_id/payments"), any(SdkAuthorization.class), eq(filter),
+                eq(StatementReportResponse.class)))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<StatementReportResponse> future = client.getStatementsReportByIdQuery("statement_id", filter);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -139,7 +154,7 @@ class ReconciliationClientImplTest {
     @Test
     void shouldRetrieveCSVStatementsReport() throws ExecutionException, InterruptedException {
         final String report = "/etc/foo/statement_report.csv";
-        final QueryFilterDateRange request = mock(QueryFilterDateRange.class);
+        final StatementsQueryFilter request = mock(StatementsQueryFilter.class);
         final ContentResponse response = mock(ContentResponse.class);
 
         when(apiClient.queryCsvContentAsync(eq("reporting/statements/download"), any(SdkAuthorization.class), eq(request),

@@ -25,43 +25,87 @@ public class ReconciliationClientImpl extends AbstractClient implements Reconcil
     @Override
     public CompletableFuture<ReconciliationPaymentReportResponse> queryPaymentsReport(final ReconciliationQueryPaymentsFilter filter) {
         validateParams("filter", filter);
-        return apiClient.queryAsync(buildPath(REPORTING_PATH, PAYMENTS_PATH), sdkAuthorization(), filter, ReconciliationPaymentReportResponse.class);
+        return apiClient.queryAsync(
+                buildPath(REPORTING_PATH, PAYMENTS_PATH),
+                sdkAuthorization(),
+                filter,
+                ReconciliationPaymentReportResponse.class
+        );
     }
 
     @Override
     public CompletableFuture<ReconciliationPaymentReportResponse> singlePaymentReportAsync(final String paymentId) {
         validateParams("paymentId", paymentId);
-        return apiClient.getAsync(buildPath(REPORTING_PATH, PAYMENTS_PATH, paymentId), sdkAuthorization(), ReconciliationPaymentReportResponse.class);
+        return apiClient.getAsync(
+                buildPath(REPORTING_PATH, PAYMENTS_PATH, paymentId),
+                sdkAuthorization(),
+                ReconciliationPaymentReportResponse.class
+        );
     }
 
     @Override
-    public CompletableFuture<StatementReportResponse> queryStatementsReport(final QueryFilterDateRange filter) {
+    public CompletableFuture<StatementReportResponse> queryStatementsReport(final StatementsQueryFilter filter) {
         validateParams("filter", filter);
-        return apiClient.queryAsync(buildPath(REPORTING_PATH, STATEMENTS_PATH), sdkAuthorization(), filter, StatementReportResponse.class);
+        return apiClient.queryAsync(
+                buildPath(REPORTING_PATH, STATEMENTS_PATH),
+                sdkAuthorization(),
+                filter,
+                StatementReportResponse.class
+        );
     }
 
     @Override
     public CompletableFuture<StatementReportResponse> getStatementsReportById(final String statementId) {
         validateParams("statementId", statementId);
-        return apiClient.getAsync(buildPath(REPORTING_PATH, STATEMENTS_PATH, statementId, PAYMENTS_PATH), sdkAuthorization(), StatementReportResponse.class);
+        return apiClient.getAsync(
+                buildPath(REPORTING_PATH, STATEMENTS_PATH, statementId, PAYMENTS_PATH),
+                sdkAuthorization(),
+                StatementReportResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<StatementReportResponse> getStatementsReportByIdQuery(final String statementId, final StatementsQueryFilter filter) {
+        validateParams("statementId", statementId, "filter", filter);
+        return apiClient.queryAsync(
+                buildPath(REPORTING_PATH, STATEMENTS_PATH, statementId, PAYMENTS_PATH),
+                sdkAuthorization(),
+                filter,
+                StatementReportResponse.class
+        );
     }
 
     @Override
     public CompletableFuture<ContentResponse> retrieveCSVPaymentReport(final QueryFilterDateRange filter, final String targetFile) {
         validateParams("filter", filter);
-        return apiClient.queryCsvContentAsync(buildPath(REPORTING_PATH, PAYMENTS_PATH, DOWNLOAD_PATH), sdkAuthorization(), filter, targetFile);
+        return apiClient.queryCsvContentAsync(
+                buildPath(REPORTING_PATH, PAYMENTS_PATH, DOWNLOAD_PATH),
+                sdkAuthorization(),
+                filter,
+                targetFile
+        );
     }
 
     @Override
     public CompletableFuture<ContentResponse> retrieveCSVSingleStatementReport(final String statementId, final String targetFile) {
         validateParams("statementId", statementId);
-        return apiClient.queryCsvContentAsync(buildPath(REPORTING_PATH, STATEMENTS_PATH, statementId, PAYMENTS_PATH, DOWNLOAD_PATH), sdkAuthorization(), null, targetFile);
+        return apiClient.queryCsvContentAsync(
+                buildPath(REPORTING_PATH, STATEMENTS_PATH, statementId, PAYMENTS_PATH, DOWNLOAD_PATH),
+                sdkAuthorization(),
+                null,
+                targetFile
+        );
     }
 
     @Override
-    public CompletableFuture<ContentResponse> retrieveCSVStatementsReport(final QueryFilterDateRange filter, final String targetFile) {
+    public CompletableFuture<ContentResponse> retrieveCSVStatementsReport(final StatementsQueryFilter filter, final String targetFile) {
         validateParams("filter", filter);
-        return apiClient.queryCsvContentAsync(buildPath(REPORTING_PATH, STATEMENTS_PATH, DOWNLOAD_PATH), sdkAuthorization(), filter, targetFile);
+        return apiClient.queryCsvContentAsync(
+                buildPath(REPORTING_PATH, STATEMENTS_PATH, DOWNLOAD_PATH),
+                sdkAuthorization(),
+                filter,
+                targetFile
+        );
     }
 
 }

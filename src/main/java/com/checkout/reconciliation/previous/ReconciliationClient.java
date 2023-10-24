@@ -11,7 +11,7 @@ public interface ReconciliationClient {
 
     CompletableFuture<ReconciliationPaymentReportResponse> singlePaymentReportAsync(String paymentId);
 
-    CompletableFuture<StatementReportResponse> queryStatementsReport(QueryFilterDateRange filter);
+    CompletableFuture<StatementReportResponse> queryStatementsReport(StatementsQueryFilter filter);
 
     /**
      * More information in:
@@ -20,6 +20,14 @@ public interface ReconciliationClient {
      *     </a>
      * */
     CompletableFuture<StatementReportResponse> getStatementsReportById(String statementId);
+
+    /**
+     * More information in:
+     * <a href="https://www.checkout.com/docs/previous/reporting-and-insights/reconciliation-api/statements-endpoint#2._Statement_ID_/_Payments">
+     *     Statements endpoint
+     *     </a>
+     * */
+    CompletableFuture<StatementReportResponse> getStatementsReportByIdQuery(String statementId, StatementsQueryFilter filter);
 
     /**
      * @param targetFile Optional parameter that specifies the path where a file with the content returned is saved. If
@@ -43,6 +51,6 @@ public interface ReconciliationClient {
      *                   file will be rewritten.
      * @return CSV content
      */
-    CompletableFuture<ContentResponse> retrieveCSVStatementsReport(final QueryFilterDateRange filter, final String targetFile);
+    CompletableFuture<ContentResponse> retrieveCSVStatementsReport(final StatementsQueryFilter filter, final String targetFile);
 
 }
