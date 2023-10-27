@@ -19,7 +19,7 @@ public interface ReconciliationClient {
      *     Statements endpoint
      *     </a>
      * */
-    CompletableFuture<StatementReportResponse> getStatementsReportById(String statementId);
+    CompletableFuture<ReconciliationPaymentReportResponse> getStatementsReportById(String statementId);
 
     /**
      * More information in:
@@ -27,7 +27,7 @@ public interface ReconciliationClient {
      *     Statements endpoint
      *     </a>
      * */
-    CompletableFuture<StatementReportResponse> getStatementsReportByIdQuery(String statementId, StatementsQueryFilter filter);
+    CompletableFuture<ReconciliationPaymentReportResponse> getStatementsReportByIdQuery(String statementId, StatementsQueryFilter filter);
 
     /**
      * @param targetFile Optional parameter that specifies the path where a file with the content returned is saved. If
