@@ -93,13 +93,13 @@ class ReconciliationClientImplTest {
 
     @Test
     void shouldGetStatementsReportById() throws ExecutionException, InterruptedException {
-        final StatementReportResponse response = mock(StatementReportResponse.class);
+        final ReconciliationPaymentReportResponse response = mock(ReconciliationPaymentReportResponse.class);
 
         when(apiClient.getAsync(eq("reporting/statements/statement_id/payments"), any(SdkAuthorization.class),
-                eq(StatementReportResponse.class)))
+                eq(ReconciliationPaymentReportResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<StatementReportResponse> future = client.getStatementsReportById("statement_id");
+        final CompletableFuture<ReconciliationPaymentReportResponse> future = client.getStatementsReportById("statement_id");
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -108,13 +108,13 @@ class ReconciliationClientImplTest {
     @Test
     void shouldGetStatementsReportByIdWithQuery() throws ExecutionException, InterruptedException {
         final StatementsQueryFilter filter = mock(StatementsQueryFilter.class);
-        final StatementReportResponse response = mock(StatementReportResponse.class);
+        final ReconciliationPaymentReportResponse response = mock(ReconciliationPaymentReportResponse.class);
 
         when(apiClient.queryAsync(eq("reporting/statements/statement_id/payments"), any(SdkAuthorization.class), eq(filter),
-                eq(StatementReportResponse.class)))
+                eq(ReconciliationPaymentReportResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<StatementReportResponse> future = client.getStatementsReportByIdQuery("statement_id", filter);
+        final CompletableFuture<ReconciliationPaymentReportResponse> future = client.getStatementsReportByIdQuery("statement_id", filter);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());

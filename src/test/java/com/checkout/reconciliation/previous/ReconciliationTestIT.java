@@ -142,29 +142,18 @@ class ReconciliationTestIT {
     @Disabled("Only works in production")
     void shouldGetStatementsReportById() throws ExecutionException, InterruptedException {
 
-        final StatementReportResponse response = getProductionCheckoutApi().reconciliationClient().getStatementsReportById("statement_id").get();
+        final ReconciliationPaymentReportResponse response = getProductionCheckoutApi().reconciliationClient().getStatementsReportById("statement_id").get();
 
         assertNotNull(response);
         assertNotNull(response.getLinks());
         assertTrue(response.getCount() >= 1);
-        response.getData().forEach(statementData -> {
-            assertNotNull(statementData.getId());
-            assertNotNull(statementData.getPeriodStart());
-            assertNotNull(statementData.getPeriodEnd());
-            assertNotNull(statementData.getDate());
-            assertNotNull(statementData.getPayouts());
-            assertNotNull(statementData.getLinks());
-            statementData.getPayouts().forEach(payoutStatement -> {
-                assertNotNull(payoutStatement.getCurrency());
-                assertNotNull(payoutStatement.getCarriedForwardAmount());
-                assertNotNull(payoutStatement.getCurrentPeriodAmount());
-                assertNotNull(payoutStatement.getNetAmount());
-                assertNotNull(payoutStatement.getPeriodStart());
-                assertNotNull(payoutStatement.getPeriodEnd());
-                assertNotNull(payoutStatement.getId());
-                assertNotNull(payoutStatement.getStatus());
-                assertNotNull(payoutStatement.getPayoutFee());
-                assertNotNull(payoutStatement.getLinks());
+        response.getData().forEach(PaymentReportData -> {
+            assertNotNull(PaymentReportData.getId());
+            PaymentReportData.getActions().forEach(action -> {
+                assertNotNull(action.getId());
+                action.getBreakdown().forEach(breakdown -> {
+                    assertNotNull(breakdown.getType());
+                });
             });
         });
     }

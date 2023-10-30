@@ -55,23 +55,23 @@ public class ReconciliationClientImpl extends AbstractClient implements Reconcil
     }
 
     @Override
-    public CompletableFuture<StatementReportResponse> getStatementsReportById(final String statementId) {
+    public CompletableFuture<ReconciliationPaymentReportResponse> getStatementsReportById(final String statementId) {
         validateParams("statementId", statementId);
         return apiClient.getAsync(
                 buildPath(REPORTING_PATH, STATEMENTS_PATH, statementId, PAYMENTS_PATH),
                 sdkAuthorization(),
-                StatementReportResponse.class
+                ReconciliationPaymentReportResponse.class
         );
     }
 
     @Override
-    public CompletableFuture<StatementReportResponse> getStatementsReportByIdQuery(final String statementId, final StatementsQueryFilter filter) {
+    public CompletableFuture<ReconciliationPaymentReportResponse> getStatementsReportByIdQuery(final String statementId, final StatementsQueryFilter filter) {
         validateParams("statementId", statementId, "filter", filter);
         return apiClient.queryAsync(
                 buildPath(REPORTING_PATH, STATEMENTS_PATH, statementId, PAYMENTS_PATH),
                 sdkAuthorization(),
                 filter,
-                StatementReportResponse.class
+                ReconciliationPaymentReportResponse.class
         );
     }
 
