@@ -1,10 +1,23 @@
 package com.checkout;
 
-import com.checkout.accounts.AccountsFileRequest;
-import com.checkout.common.AbstractFileRequest;
-import com.checkout.common.CheckoutUtils;
-import com.checkout.common.FileRequest;
-import lombok.extern.slf4j.Slf4j;
+import static com.checkout.ClientOperation.POST;
+import static com.checkout.common.CheckoutUtils.ACCEPT_JSON;
+import static com.checkout.common.CheckoutUtils.PROJECT_NAME;
+import static com.checkout.common.CheckoutUtils.getVersionFromManifest;
+import static org.apache.http.HttpHeaders.ACCEPT;
+import static org.apache.http.HttpHeaders.AUTHORIZATION;
+import static org.apache.http.HttpHeaders.USER_AGENT;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
+
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -29,23 +42,12 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.stream.Collectors;
+import com.checkout.accounts.AccountsFileRequest;
+import com.checkout.common.AbstractFileRequest;
+import com.checkout.common.CheckoutUtils;
+import com.checkout.common.FileRequest;
 
-import static com.checkout.ClientOperation.POST;
-import static com.checkout.common.CheckoutUtils.ACCEPT_JSON;
-import static com.checkout.common.CheckoutUtils.PROJECT_NAME;
-import static com.checkout.common.CheckoutUtils.getVersionFromManifest;
-import static org.apache.http.HttpHeaders.ACCEPT;
-import static org.apache.http.HttpHeaders.AUTHORIZATION;
-import static org.apache.http.HttpHeaders.USER_AGENT;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 class ApacheHttpClientTransport implements Transport {
@@ -58,15 +60,16 @@ class ApacheHttpClientTransport implements Transport {
     private final URI baseUri;
     private final CloseableHttpClient httpClient;
     private final Executor executor;
+    private final TransportConfiguration transportConfiguration;
 
-    ApacheHttpClientTransport(final URI baseUri, final HttpClientBuilder httpClientBuilder, final Executor executor) {
+    ApacheHttpClientTransport(final URI baseUri, final HttpClientBuilder httpClientBuilder, final Executor executor, final TransportConfiguration transportConfiguration) {
         CheckoutUtils.validateParams("baseUri", baseUri, "httpClientBuilder", httpClientBuilder, "executor", executor);
         this.baseUri = baseUri;
         this.httpClient = httpClientBuilder
                 .setRedirectStrategy(new CustomAwsRedirectStrategy())
                 .build();
         this.executor = executor;
-
+        this.transportConfiguration = transportConfiguration;
     }
 
     @Override
@@ -175,7 +178,7 @@ class ApacheHttpClientTransport implements Transport {
         } catch (final Exception e) {
             log.error("Exception occurred during the execution of the client...", e);
         }
-        return Response.builder().statusCode(HttpStatus.SC_BAD_REQUEST).build();
+        return Response.builder().statusCode(transportConfiguration.getDefaultHttpStatusCode()).build();
     }
 
     private Header[] sanitiseHeaders(final Header[] headers) {

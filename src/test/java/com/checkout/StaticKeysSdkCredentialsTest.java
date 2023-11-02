@@ -1,7 +1,5 @@
 package com.checkout;
 
-import org.junit.jupiter.api.Test;
-
 import static com.checkout.PlatformType.DEFAULT;
 import static com.checkout.TestHelper.INVALID_DEFAULT_PK;
 import static com.checkout.TestHelper.INVALID_DEFAULT_SK;
@@ -11,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.Test;
 
 class StaticKeysSdkCredentialsTest {
 
@@ -66,7 +66,7 @@ class StaticKeysSdkCredentialsTest {
 
         try {
             final StaticKeysSdkCredentials credentials = new StaticKeysSdkCredentials(VALID_DEFAULT_SK, similarDefaultPk);
-            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null);
+            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null, null);
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
@@ -74,7 +74,7 @@ class StaticKeysSdkCredentialsTest {
         }
         try {
             final StaticKeysSdkCredentials credentials = new StaticKeysSdkCredentials(similarDefaultSk, VALID_DEFAULT_PK);
-            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null);
+            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null, null);
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);

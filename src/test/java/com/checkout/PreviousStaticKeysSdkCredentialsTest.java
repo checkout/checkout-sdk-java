@@ -1,7 +1,5 @@
 package com.checkout;
 
-import org.junit.jupiter.api.Test;
-
 import static com.checkout.PlatformType.PREVIOUS;
 import static com.checkout.TestHelper.INVALID_PREVIOUS_PK;
 import static com.checkout.TestHelper.INVALID_PREVIOUS_SK;
@@ -11,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.Test;
 
 class PreviousStaticKeysSdkCredentialsTest {
 
@@ -64,7 +64,7 @@ class PreviousStaticKeysSdkCredentialsTest {
 
         try {
             final PreviousStaticKeysSdkCredentials credentials = new PreviousStaticKeysSdkCredentials(VALID_PREVIOUS_SK, similarDefaultPk);
-            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null);
+            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null, null);
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
@@ -72,7 +72,7 @@ class PreviousStaticKeysSdkCredentialsTest {
         }
         try {
             final PreviousStaticKeysSdkCredentials credentials = new PreviousStaticKeysSdkCredentials(similarDefaultSk, VALID_PREVIOUS_PK);
-            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null);
+            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null, null);
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
