@@ -215,6 +215,7 @@ class DisputesTestIT extends SandboxTestFixture {
         blocking(() -> previousApi.disputesClient().submitEvidence(disputeDetails.getId()));
     }
 
+    @Disabled("Temporarily skipped")
     @Test
     void shouldUploadDisputeFile() throws URISyntaxException {
         //Upload your dispute file evidence

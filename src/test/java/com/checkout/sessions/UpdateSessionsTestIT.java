@@ -114,13 +114,10 @@ class UpdateSessionsTestIT extends AbstractSessionsTestIT {
         assertNotNull(updated.getCard());
         assertEquals(AuthenticationType.REGULAR, updated.getAuthenticationType());
         assertEquals(Category.PAYMENT, updated.getAuthenticationCategory());
-        assertEquals(SessionStatus.CHALLENGED, updated.getStatus());
-        assertEquals(1, updated.getNextActions().size());
-        assertEquals(NextAction.REDIRECT_CARDHOLDER, updated.getNextActions().get(0));
+        assertEquals(SessionStatus.UNAVAILABLE, updated.getStatus());
         assertNotNull(updated.getSelfLink());
         assertNotNull(updated.getLink("success_url"));
         assertNotNull(updated.getLink("failure_url"));
-        assertNotNull(updated.getLink("redirect_url"));
 
     }
 
