@@ -1,8 +1,8 @@
 package com.checkout;
 
-import org.apache.http.impl.client.HttpClientBuilder;
-
 import java.util.concurrent.Executor;
+
+import org.apache.http.impl.client.HttpClientBuilder;
 
 public interface CheckoutConfiguration {
 
@@ -13,5 +13,7 @@ public interface CheckoutConfiguration {
     HttpClientBuilder getHttpClientBuilder();
 
     Executor getExecutor();
+
+    TransportConfiguration getTransportConfiguration();
 
 }

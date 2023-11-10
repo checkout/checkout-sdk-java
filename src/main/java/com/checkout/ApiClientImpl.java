@@ -1,9 +1,12 @@
 package com.checkout;
 
-import com.checkout.common.AbstractFileRequest;
-import com.checkout.common.CheckoutUtils;
-import com.google.gson.reflect.TypeToken;
-import org.apache.commons.lang3.StringUtils;
+import static com.checkout.ClientOperation.DELETE;
+import static com.checkout.ClientOperation.GET;
+import static com.checkout.ClientOperation.PATCH;
+import static com.checkout.ClientOperation.POST;
+import static com.checkout.ClientOperation.PUT;
+import static com.checkout.ClientOperation.QUERY;
+import static com.checkout.common.CheckoutUtils.validateParams;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -16,13 +19,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import static com.checkout.ClientOperation.DELETE;
-import static com.checkout.ClientOperation.GET;
-import static com.checkout.ClientOperation.PATCH;
-import static com.checkout.ClientOperation.POST;
-import static com.checkout.ClientOperation.PUT;
-import static com.checkout.ClientOperation.QUERY;
-import static com.checkout.common.CheckoutUtils.validateParams;
+import org.apache.commons.lang3.StringUtils;
+
+import com.checkout.common.AbstractFileRequest;
+import com.checkout.common.CheckoutUtils;
+import com.google.gson.reflect.TypeToken;
 
 public class ApiClientImpl implements ApiClient {
 
@@ -33,7 +34,7 @@ public class ApiClientImpl implements ApiClient {
 
     public ApiClientImpl(final CheckoutConfiguration configuration, final UriStrategy uriStrategy) {
         this.serializer = new GsonSerializer();
-        this.transport = new ApacheHttpClientTransport(uriStrategy.getUri(), configuration.getHttpClientBuilder(), configuration.getExecutor());
+        this.transport = new ApacheHttpClientTransport(uriStrategy.getUri(), configuration.getHttpClientBuilder(), configuration.getExecutor(), configuration.getTransportConfiguration());
     }
 
     @Override

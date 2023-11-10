@@ -1,10 +1,10 @@
 package com.checkout;
 
-import org.apache.http.impl.client.HttpClientBuilder;
+import static com.checkout.common.CheckoutUtils.validateParams;
 
 import java.util.concurrent.Executor;
 
-import static com.checkout.common.CheckoutUtils.validateParams;
+import org.apache.http.impl.client.HttpClientBuilder;
 
 class DefaultCheckoutConfiguration implements CheckoutConfiguration {
 
@@ -12,16 +12,19 @@ class DefaultCheckoutConfiguration implements CheckoutConfiguration {
     private final HttpClientBuilder httpClientBuilder;
     private final Executor executor;
     private final IEnvironment environment;
+    private final TransportConfiguration transportConfiguration;
 
     DefaultCheckoutConfiguration(final SdkCredentials sdkCredentials,
                                  final IEnvironment environment,
                                  final HttpClientBuilder httpClientBuilder,
-                                 final Executor executor) {
-        validateParams("sdkCredentials", sdkCredentials, "environment", environment, "httpClientBuilder", httpClientBuilder, "executor", executor);
+                                 final Executor executor,
+                                 final TransportConfiguration transportConfiguration) {
+        validateParams("sdkCredentials", sdkCredentials, "environment", environment, "httpClientBuilder", httpClientBuilder, "executor", executor, "transportConfiguration", transportConfiguration);
         this.sdkCredentials = sdkCredentials;
         this.httpClientBuilder = httpClientBuilder;
         this.executor = executor;
         this.environment = environment;
+        this.transportConfiguration = transportConfiguration;
     }
 
     @Override
@@ -42,5 +45,10 @@ class DefaultCheckoutConfiguration implements CheckoutConfiguration {
     @Override
     public IEnvironment getEnvironment() {
         return environment;
+    }
+
+    @Override
+    public TransportConfiguration getTransportConfiguration() {
+        return transportConfiguration;
     }
 }
