@@ -15,7 +15,30 @@ import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
 import com.checkout.payments.request.PaymentCustomerRequest;
 import com.checkout.payments.request.PaymentRequest;
-import com.checkout.payments.request.source.apm.*;
+import com.checkout.payments.request.source.apm.RequestAfterPaySource;
+import com.checkout.payments.request.source.apm.RequestAlipayPlusSource;
+import com.checkout.payments.request.source.apm.RequestAlmaSource;
+import com.checkout.payments.request.source.apm.RequestBancontactSource;
+import com.checkout.payments.request.source.apm.RequestBenefitSource;
+import com.checkout.payments.request.source.apm.RequestCvConnectSource;
+import com.checkout.payments.request.source.apm.RequestEpsSource;
+import com.checkout.payments.request.source.apm.RequestFawrySource;
+import com.checkout.payments.request.source.apm.RequestGiropaySource;
+import com.checkout.payments.request.source.apm.RequestIdealSource;
+import com.checkout.payments.request.source.apm.RequestIllicadoSource;
+import com.checkout.payments.request.source.apm.RequestKlarnaSource;
+import com.checkout.payments.request.source.apm.RequestKnetSource;
+import com.checkout.payments.request.source.apm.RequestMbwaySource;
+import com.checkout.payments.request.source.apm.RequestMultiBancoSource;
+import com.checkout.payments.request.source.apm.RequestP24Source;
+import com.checkout.payments.request.source.apm.RequestPayPalSource;
+import com.checkout.payments.request.source.apm.RequestPostFinanceSource;
+import com.checkout.payments.request.source.apm.RequestQPaySource;
+import com.checkout.payments.request.source.apm.RequestSepaSource;
+import com.checkout.payments.request.source.apm.RequestSofortSource;
+import com.checkout.payments.request.source.apm.RequestStcPaySource;
+import com.checkout.payments.request.source.apm.RequestTamaraSource;
+import com.checkout.payments.request.source.apm.RequestTrustlySource;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
 import com.checkout.payments.response.source.AlternativePaymentSourceResponse;
@@ -474,7 +497,10 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                         .build()))
                 .build();
 
-        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
+        final PaymentResponse response = blocking(() -> checkoutApi.paymentsClient().requestPayment(paymentRequest));
+
+        assertNotNull(response);
+        assertNotNull(response.getId());
     }
 
     @Test
