@@ -63,7 +63,7 @@ public final class TestHelper {
 
     public static Phone createPhone() {
         return Phone.builder()
-                .countryCode("1")
+                .countryCode("+1")
                 .number("4155552671")
                 .build();
     }
@@ -193,6 +193,7 @@ public final class TestHelper {
         return AccountHolder.builder()
                 .firstName("John")
                 .lastName("Doe")
+                .email(generateRandomEmail())
                 .phone(createPhone())
                 .billingAddress(createAddress())
                 .build();

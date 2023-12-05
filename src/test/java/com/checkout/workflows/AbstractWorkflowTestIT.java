@@ -28,7 +28,7 @@ abstract class AbstractWorkflowTestIT extends AbstractPaymentsTestIT {
     protected static final String GATEWAY = "gateway";
     protected static final String PAYMENT_CAPTURED = "payment_captured";
     protected static final String PAYMENT_APPROVED = "payment_approved";
-    protected static final String PROCESSING_CHANNEL_ID = "pc_5jp2az55l3cuths25t5p3xhwru";
+    protected static final String PROCESSING_CHANNEL_ID = System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID");
 
     protected static final List<String> GATEWAY_EVENT_TYPES = Arrays.asList(PAYMENT_APPROVED, "payment_declined",
             PAYMENT_CAPTURED, "payment_capture_declined", "payment_refunded", "payment_refund_declined", "payment_voided",
