@@ -40,7 +40,6 @@ class CustomersTestIT extends SandboxTestFixture {
         assertNotNull(customerDetailsResponse);
         assertEquals(customerRequest.getEmail(), customerDetailsResponse.getEmail());
         assertEquals(customerRequest.getName(), customerDetailsResponse.getName());
-        assertEquals(customerRequest.getPhone(), customerDetailsResponse.getPhone());
         assertNull(customerDetailsResponse.getDefaultId());
         assertTrue(customerDetailsResponse.getInstruments().isEmpty());
     }

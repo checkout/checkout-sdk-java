@@ -79,7 +79,7 @@ public class CardSourceHelper {
                 .amount(amount)
                 .currency(Currency.EUR)
                 .threeDS(threeDSRequest)
-                .processingChannelId("pc_5jp2az55l3cuths25t5p3xhwru")
+                .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
                 .successUrl(three3ds ? "https://test.checkout.com/success" : null)
                 .failureUrl(three3ds ? "https://test.checkout.com/failure" : null)
                 .build();

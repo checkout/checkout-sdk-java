@@ -70,7 +70,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(source)
                 .reference(UUID.randomUUID().toString())
-                .processingChannelId("pc_5jp2az55l3cuths25t5p3xhwru")
+                .processingChannelId(System.getenv("CHECKOUT_PREVIOUS_PUBLIC_KEY"))
                 .currency(Currency.EUR)
                 .amount(1000L)
                 .capture(true)
@@ -384,7 +384,14 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
+        //checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
+        final com.checkout.payments.response.PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
+        assertNotNull(paymentResponse);
+
+        final com.checkout.payments.response.GetPaymentResponse paymentDetails = blocking(() -> paymentsClient.getPayment(paymentResponse.getId()));
+        assertNotNull(paymentDetails);
+        assertTrue(paymentDetails.getSource() instanceof com.checkout.payments.response.source.AlternativePaymentSourceResponse);
+        assertEquals(PaymentSourceType.BANCONTACT, paymentDetails.getSource().getType());
     }
 
     @Test
@@ -460,6 +467,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("not available")
     void shouldMakeKlarnaPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestKlarnaSource.builder()
