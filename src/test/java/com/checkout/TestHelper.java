@@ -10,16 +10,19 @@ import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
 import com.checkout.common.Product;
 import com.checkout.payments.BillingDescriptor;
+import com.checkout.payments.BillingInformation;
+import com.checkout.payments.Payer;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.PaymentType;
 import com.checkout.payments.ProcessingSettings;
 import com.checkout.payments.RiskRequest;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
-import com.checkout.payments.BillingInformation;
-import com.checkout.payments.Payer;
+import com.checkout.payments.contexts.PaymentContextsItems;
+import com.checkout.payments.contexts.PaymentContextsRequest;
 import com.checkout.payments.hosted.HostedPaymentRequest;
 import com.checkout.payments.links.PaymentLinkRequest;
+import com.checkout.payments.request.source.contexts.PaymentContextsPayPalSource;
 import lombok.SneakyThrows;
 
 import java.nio.file.Files;
@@ -29,7 +32,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
+
+import static java.util.Objects.requireNonNull;
 
 public final class TestHelper {
 
@@ -170,6 +176,33 @@ public final class TestHelper {
                 .build();
     }
 
+    public static PaymentContextsRequest createPaymentContextsRequest() {
+
+        final PaymentContextsPayPalSource source = PaymentContextsPayPalSource.builder().build();
+
+        final PaymentContextsItems item = PaymentContextsItems.builder()
+                .name("mask")
+                .quantity(1)
+                .unitPrice(2000)
+                .build();
+
+        final List<PaymentContextsItems> items = Arrays.asList(
+                item
+        );
+
+        return PaymentContextsRequest.builder()
+                .source(source)
+                .amount(2000L)
+                .currency(Currency.EUR)
+                .paymentType(PaymentType.REGULAR)
+                .capture(true)
+                .processingChannelId(requireNonNull(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID")))
+                .successUrl("https://example.com/payments/success")
+                .failureUrl("https://example.com/payments/fail")
+                .items(items)
+                .build();
+    }
+
     public static PaymentRecipient createRecipient() {
         return PaymentRecipient.builder()
                 .accountNumber("1234567")
@@ -189,7 +222,7 @@ public final class TestHelper {
                 .build();
     }
 
-    public static AccountHolder getAccountHolder(){
+    public static AccountHolder getAccountHolder() {
         return AccountHolder.builder()
                 .firstName("John")
                 .lastName("Doe")

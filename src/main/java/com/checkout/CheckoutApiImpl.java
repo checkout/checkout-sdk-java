@@ -20,6 +20,9 @@ import com.checkout.metadata.MetadataClient;
 import com.checkout.metadata.MetadataClientImpl;
 import com.checkout.payments.PaymentsClient;
 import com.checkout.payments.PaymentsClientImpl;
+import com.checkout.payments.contexts.PaymentContexts;
+import com.checkout.payments.contexts.PaymentContextsClient;
+import com.checkout.payments.contexts.PaymentContextsClientImpl;
 import com.checkout.payments.hosted.HostedPaymentsClient;
 import com.checkout.payments.hosted.HostedPaymentsClientImpl;
 import com.checkout.payments.links.PaymentLinksClient;
@@ -59,6 +62,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final MetadataClient metadataClient;
     private final FinancialClient financialClient;
     private final IssuingClient issuingClient;
+    private final PaymentContextsClient paymentContextsClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         super(configuration);
@@ -82,6 +86,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.accountsClient = new AccountsClientImpl(this.apiClient,
                 getFilesClient(configuration),
                 configuration);
+        this.paymentContextsClient = new PaymentContextsClientImpl(this.apiClient, configuration);
 
     }
 
@@ -170,6 +175,9 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
 
     @Override
     public IssuingClient issuingClient() { return issuingClient; }
+
+    @Override
+    public PaymentContextsClient paymentContextsClient() { return paymentContextsClient; }
 
     private ApiClient getFilesClient(final CheckoutConfiguration configuration) {
         return new ApiClientImpl(configuration, new FilesApiUriStrategy(configuration));
