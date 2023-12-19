@@ -10,6 +10,8 @@ import com.checkout.instruments.InstrumentsClient;
 import com.checkout.issuing.IssuingClient;
 import com.checkout.metadata.MetadataClient;
 import com.checkout.payments.PaymentsClient;
+import com.checkout.payments.contexts.PaymentContexts;
+import com.checkout.payments.contexts.PaymentContextsClient;
 import com.checkout.payments.hosted.HostedPaymentsClient;
 import com.checkout.payments.links.PaymentLinksClient;
 import com.checkout.reports.ReportsClient;
@@ -56,6 +58,8 @@ public interface CheckoutApi extends CheckoutApmApi {
     FinancialClient financialClient();
 
     IssuingClient issuingClient();
+
+    PaymentContextsClient paymentContextsClient();
 
 }
 

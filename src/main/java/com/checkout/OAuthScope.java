@@ -45,7 +45,8 @@ public enum OAuthScope {
     ISSUING_CLIENT("issuing:client"),
     ISSUING_CARD_MGMT("issuing:card-mgmt"),
     ISSUING_CONTROLS_READ("issuing:controls-read"),
-    ISSUING_CONTROLS_WRITE("issuing:controls-write");
+    ISSUING_CONTROLS_WRITE("issuing:controls-write"),
+    PAYMENT_CONTEXTS("Payment Contexts");
 
     private final String scope;
 

@@ -37,4 +37,6 @@ public final class ShippingDetails {
     @SerializedName("method")
     private ShippingDetailsMethods method;
 
+    private Integer delay;
+
 }

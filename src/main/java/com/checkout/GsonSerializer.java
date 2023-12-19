@@ -94,6 +94,9 @@ public class GsonSerializer implements Serializer {
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.payments.response.source.ResponseSource.class, CheckoutUtils.TYPE, true, com.checkout.payments.response.source.AlternativePaymentSourceResponse.class)
                     .registerSubtype(com.checkout.payments.response.source.CardResponseSource.class, identifier(PaymentSourceType.CARD))
                     .registerSubtype(com.checkout.payments.response.source.CurrencyAccountResponseSource.class, identifier(PaymentSourceType.CURRENCY_ACCOUNT)))
+            // Payment Contexts
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.payments.response.source.contexts.ResponseSource.class, CheckoutUtils.TYPE, true, com.checkout.payments.response.source.contexts.AlternativePaymentSourceResponse.class)
+                    .registerSubtype(com.checkout.payments.response.source.contexts.PaymentContextsPayPayResponseSource.class, identifier(PaymentSourceType.PAYPAL)))
             // Payments - destination
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.payments.response.destination.PaymentResponseDestination.class, CheckoutUtils.TYPE, true, com.checkout.payments.response.destination.PaymentResponseAlternativeDestination.class)
                     .registerSubtype(com.checkout.payments.response.destination.PaymentResponseBankAccountDestination.class, identifier(PaymentDestinationType.BANK_ACCOUNT)))
