@@ -32,7 +32,7 @@ public final class ShippingDetails {
     private String fromAddressZip;
     
     @SerializedName("timeframe")
-    private ShippingDetailsTimeframe timeFrame;
+    private ShippingDetailsTimeframe timeframe;
 
     @SerializedName("method")
     private ShippingDetailsMethods method;
