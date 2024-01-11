@@ -20,13 +20,14 @@ import com.checkout.metadata.MetadataClient;
 import com.checkout.metadata.MetadataClientImpl;
 import com.checkout.payments.PaymentsClient;
 import com.checkout.payments.PaymentsClientImpl;
-import com.checkout.payments.contexts.PaymentContexts;
 import com.checkout.payments.contexts.PaymentContextsClient;
 import com.checkout.payments.contexts.PaymentContextsClientImpl;
 import com.checkout.payments.hosted.HostedPaymentsClient;
 import com.checkout.payments.hosted.HostedPaymentsClientImpl;
 import com.checkout.payments.links.PaymentLinksClient;
 import com.checkout.payments.links.PaymentLinksClientImpl;
+import com.checkout.payments.sessions.PaymentSessionsClient;
+import com.checkout.payments.sessions.PaymentSessionsClientImpl;
 import com.checkout.reports.ReportsClient;
 import com.checkout.reports.ReportsClientImpl;
 import com.checkout.risk.RiskClient;
@@ -63,6 +64,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final FinancialClient financialClient;
     private final IssuingClient issuingClient;
     private final PaymentContextsClient paymentContextsClient;
+    private final PaymentSessionsClient paymentSessionsClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         super(configuration);
@@ -87,6 +89,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
                 getFilesClient(configuration),
                 configuration);
         this.paymentContextsClient = new PaymentContextsClientImpl(this.apiClient, configuration);
+        this.paymentSessionsClient = new PaymentSessionsClientImpl(this.apiClient, configuration);
 
     }
 
@@ -179,6 +182,9 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     @Override
     public PaymentContextsClient paymentContextsClient() { return paymentContextsClient; }
 
+    @Override
+    public PaymentSessionsClient paymentSessionsClient() { return paymentSessionsClient; }
+
     private ApiClient getFilesClient(final CheckoutConfiguration configuration) {
         return new ApiClientImpl(configuration, new FilesApiUriStrategy(configuration));
     }
@@ -203,6 +209,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         public URI getUri() {
             return configuration.getEnvironment().getFilesApi();
         }
+
     }
 
     private static class TransfersApiUriStrategy implements UriStrategy {
@@ -217,6 +224,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         public URI getUri() {
             return configuration.getEnvironment().getTransfersApi();
         }
+
     }
 
     private static class BalancesApiUriStrategy implements UriStrategy {
@@ -231,6 +239,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         public URI getUri() {
             return configuration.getEnvironment().getBalancesApi();
         }
+
     }
 
 }
