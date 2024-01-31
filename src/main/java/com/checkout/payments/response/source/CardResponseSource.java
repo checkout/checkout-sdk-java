@@ -75,4 +75,7 @@ public final class CardResponseSource extends AbstractResponseSource implements 
     @SerializedName("payment_account_reference")
     private String paymentAccountReference;
 
+    @SerializedName("encrypted_card_number")
+    private String encryptedCardNumber;
+
 }
