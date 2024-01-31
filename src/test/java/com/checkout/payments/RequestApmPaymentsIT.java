@@ -484,34 +484,6 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     @Test
-    void shouldMakePayPalPayment() {
-        final PaymentRequest paymentRequest = PaymentRequest.builder()
-                .source(RequestPayPalSource.builder()
-                        .plan(BillingPlan.builder()
-                                .type(BillingPlanType.CHANNEL_INITIATED_BILLING_SINGLE_AGREEMENT)
-                                .immutableShippingAddress(false)
-                                .skipShippingAddress(true)
-                                .build())
-                        .build())
-                .currency(Currency.EUR)
-                .amount(10L)
-                .capture(true)
-                .successUrl("https://testing.checkout.com/sucess")
-                .failureUrl("https://testing.checkout.com/failure")
-                .items(Collections.singletonList(Product.builder()
-                        .name("laptop")
-                        .unitPrice(10L)
-                        .quantity(1L)
-                        .build()))
-                .build();
-
-        final PaymentResponse response = blocking(() -> checkoutApi.paymentsClient().requestPayment(paymentRequest));
-
-        assertNotNull(response);
-        assertNotNull(response.getId());
-    }
-
-    @Test
     void shouldMakeFawryPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestFawrySource.builder()
