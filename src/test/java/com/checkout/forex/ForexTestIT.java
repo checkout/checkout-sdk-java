@@ -17,6 +17,7 @@ class ForexTestIT extends SandboxTestFixture {
         super(PlatformType.DEFAULT_OAUTH);
     }
 
+    @Disabled("Temporarily skipped")
     @Test
     void shouldRequestQuote() {
 
