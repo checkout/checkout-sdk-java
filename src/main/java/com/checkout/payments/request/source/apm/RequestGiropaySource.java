@@ -1,5 +1,6 @@
 package com.checkout.payments.request.source.apm;
 
+import com.checkout.common.AccountHolder;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
 import com.google.gson.annotations.SerializedName;
@@ -33,12 +34,17 @@ public final class RequestGiropaySource extends AbstractRequestSource {
     @SerializedName("info_fields")
     private List<InfoFields> infoFields;
 
+    @SerializedName("account_holder")
+    private AccountHolder accountHolder;
+
     @Builder
     private RequestGiropaySource(final String purpose,
-                                 final List<InfoFields> infoFields) {
+                                 final List<InfoFields> infoFields,
+                                 final AccountHolder accountHolder) {
         super(PaymentSourceType.GIROPAY);
         this.purpose = purpose;
         this.infoFields = infoFields;
+        this.accountHolder = accountHolder;
     }
 
     public RequestGiropaySource() {

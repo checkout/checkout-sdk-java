@@ -73,6 +73,8 @@ public final class PaymentResponse extends Resource implements Serializable {
     @SerializedName("scheme_id")
     private String schemeId;
 
+    private PaymentRetryResponse retry;
+
     @SerializedName("payment_ip")
     private String paymentIp;
 

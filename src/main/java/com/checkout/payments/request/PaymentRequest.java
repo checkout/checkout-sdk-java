@@ -97,7 +97,11 @@ public final class PaymentRequest {
 
     private List<Product> items;
 
+    private PaymentRetryRequest retry;
+
     @Builder.Default
     private Map<String, Object> metadata = new HashMap<>();
+
+    private PaymentSegment segment;
 
 }

@@ -311,11 +311,19 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 
-    @Disabled("unstable")
     @Test
     void shouldMakeGiropayPayment() {
+        final AccountHolder accountHolder = AccountHolder.builder()
+                .firstName("Firstname")
+                .lastName("Lastname")
+                .build();
+
+        final RequestGiropaySource giropay = RequestGiropaySource.builder()
+                .accountHolder(accountHolder)
+                .build();
+
         final PaymentRequest paymentRequest = PaymentRequest.builder()
-                .source(new RequestGiropaySource())
+                .source(giropay)
                 .currency(Currency.EUR)
                 .amount(100L)
                 .capture(true)
@@ -327,11 +335,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                         .build())
                 .build();
 
-        final PaymentResponse response = blocking(() -> checkoutApi.paymentsClient().requestPayment(paymentRequest));
-
-        assertNotNull(response);
-        assertNotNull(response.getId());
-        assertEquals(PaymentStatus.PENDING, response.getStatus());
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 
     @Test
