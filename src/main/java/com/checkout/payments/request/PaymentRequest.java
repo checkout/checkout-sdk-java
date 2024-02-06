@@ -27,6 +27,9 @@ import java.util.Map;
 @Data
 @Builder
 public final class PaymentRequest {
+    
+    @SerializedName("payment_context_id")
+    private String paymentContextId;
 
     private AbstractRequestSource source;
 

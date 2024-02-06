@@ -16,9 +16,14 @@ public final class PaymentProcessing {
 
     @SerializedName("recommendation_code")
     private String recommendationCode;
+    
+    private String scheme;
 
     @SerializedName("partner_merchant_advice_code") 
     private String partnerMerchantAdviceCode;
+    
+    @SerializedName("partner_response_code")
+    private String partnerResponseCode;
 
     @SerializedName("partner_order_id")
     private String partnerOrderId;
@@ -54,5 +59,8 @@ public final class PaymentProcessing {
 
     @SerializedName("partner_authorization_response_code")
     private String partnerAuthorizationResponseCode;
+    
+    @SerializedName("surcharge_amount")
+    private Long surchargeAmount;
 
 }
