@@ -8,6 +8,8 @@ public interface CheckoutConfiguration {
 
     IEnvironment getEnvironment();
 
+    EnvironmentSubdomain getEnvironmentSubdomain();
+
     SdkCredentials getSdkCredentials();
 
     HttpClientBuilder getHttpClientBuilder();

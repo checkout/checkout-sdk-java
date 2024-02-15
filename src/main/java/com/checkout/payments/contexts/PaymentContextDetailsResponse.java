@@ -18,7 +18,4 @@ public final class PaymentContextDetailsResponse extends HttpMetadata {
 
     @SerializedName("partner_metadata")
     private PaymentContextsPartnerMetadata partnerMetadata;
-
-    private Object customer;
-
 }

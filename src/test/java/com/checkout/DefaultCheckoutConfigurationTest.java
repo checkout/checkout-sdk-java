@@ -45,6 +45,26 @@ class DefaultCheckoutConfigurationTest {
     }
 
     @Test
+    void shouldCreateConfigurationWithSubdomain() {
+
+        final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
+        final EnvironmentSubdomain environmentSubdomain = new EnvironmentSubdomain(Environment.SANDBOX, "123dmain");
+
+        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, environmentSubdomain, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, DEFAULT_TRANSPORT_CONFIGURATION);
+        assertEquals("https://123dmain.api.sandbox.checkout.com/", configuration.getEnvironmentSubdomain().getCheckoutApi().toString());
+    }
+
+    @Test
+    void shouldCreateConfigurationWithBadSubdomain() {
+
+        final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
+        final EnvironmentSubdomain environmentSubdomain = new EnvironmentSubdomain(Environment.SANDBOX, "123bad");
+
+        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, environmentSubdomain, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, DEFAULT_TRANSPORT_CONFIGURATION);
+        assertEquals("https://api.sandbox.checkout.com/", configuration.getEnvironmentSubdomain().getCheckoutApi().toString());
+    }
+
+    @Test
     void shouldCreateConfiguration_defaultHttpClientBuilderAndExecutor() {
 
         final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
@@ -81,7 +101,6 @@ class DefaultCheckoutConfigurationTest {
 
         final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, DEFAULT_TRANSPORT_CONFIGURATION);
         assertEquals(Environment.PRODUCTION, configuration.getEnvironment());
-
     }
 
     @Test

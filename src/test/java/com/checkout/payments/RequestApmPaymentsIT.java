@@ -388,14 +388,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        //checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
-        final com.checkout.payments.response.PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
-        assertNotNull(paymentResponse);
-
-        final com.checkout.payments.response.GetPaymentResponse paymentDetails = blocking(() -> paymentsClient.getPayment(paymentResponse.getId()));
-        assertNotNull(paymentDetails);
-        assertTrue(paymentDetails.getSource() instanceof com.checkout.payments.response.source.AlternativePaymentSourceResponse);
-        assertEquals(PaymentSourceType.BANCONTACT, paymentDetails.getSource().getType());
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), APM_SERVICE_UNAVAILABLE);
     }
 
     @Test

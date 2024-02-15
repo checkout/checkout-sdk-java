@@ -35,6 +35,29 @@ class CheckoutPreviousSdkBuilderTest {
     }
 
     @Test
+    void shouldCreateCheckoutWithSubdomainSdks() {
+
+        final CheckoutApi checkoutApi1 = new CheckoutPreviousSdkBuilder()
+                .staticKeys()
+                .publicKey(VALID_PREVIOUS_PK)
+                .secretKey(VALID_PREVIOUS_SK)
+                .environment(Environment.SANDBOX)
+                .environmentSubdomain("123dmain")
+                .build();
+
+        assertNotNull(checkoutApi1.tokensClient());
+
+        final CheckoutApi checkoutApi2 = new CheckoutPreviousSdkBuilder().staticKeys()
+                .secretKey(VALID_PREVIOUS_SK)
+                .environment(Environment.SANDBOX)
+                .environmentSubdomain("123dmain")
+                .build();
+
+        assertNotNull(checkoutApi2.tokensClient());
+
+    }
+
+    @Test
     void shouldFailToCreateCheckoutSdks() {
 
         try {

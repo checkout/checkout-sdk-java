@@ -8,11 +8,20 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
 
     protected HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
     private IEnvironment environment;
+    private EnvironmentSubdomain environmentSubdomain;
     private Executor executor = ForkJoinPool.commonPool();
     private TransportConfiguration transportConfiguration;
 
     public AbstractCheckoutSdkBuilder<T> environment(final IEnvironment environment) {
         this.environment = environment;
+        return this;
+    }
+
+    public AbstractCheckoutSdkBuilder<T> environmentSubdomain(final String subdomain) {
+        if (subdomain == null) {
+            throw new CheckoutArgumentException("subdomain must be specified");
+        }
+        this.environmentSubdomain = new EnvironmentSubdomain(this.environment, subdomain);
         return this;
     }
 
@@ -35,6 +44,10 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
         return environment;
     }
 
+    protected EnvironmentSubdomain getEnvironmentSubdomain() {
+        return environmentSubdomain;
+    }
+
     protected abstract SdkCredentials getSdkCredentials();
 
     protected CheckoutConfiguration getCheckoutConfiguration() {
@@ -49,7 +62,7 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
     }
 
     private CheckoutConfiguration buildCheckoutConfiguration(final SdkCredentials sdkCredentials) {
-        return new DefaultCheckoutConfiguration(sdkCredentials, getEnvironment(), httpClientBuilder, executor, transportConfiguration);
+        return new DefaultCheckoutConfiguration(sdkCredentials, getEnvironment(), getEnvironmentSubdomain(), httpClientBuilder, executor, transportConfiguration);
     }
 
     public abstract T build();

@@ -18,6 +18,7 @@ class CheckoutApiImplTest {
     void shouldInstantiateAndRetrieveClients() {
         final CheckoutConfiguration configuration = mock(CheckoutConfiguration.class);
         when(configuration.getEnvironment()).thenReturn(Environment.SANDBOX);
+        when(configuration.getEnvironmentSubdomain()).thenReturn(new EnvironmentSubdomain(Environment.SANDBOX, "subdomain"));
         when(configuration.getHttpClientBuilder()).thenReturn(HttpClientBuilder.create());
         when(configuration.getExecutor()).thenReturn(mock(Executor.class));
         final CheckoutApi checkoutApi = new CheckoutApiImpl(configuration);

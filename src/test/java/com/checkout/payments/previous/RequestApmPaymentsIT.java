@@ -297,6 +297,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         assertEquals(PaymentSourceType.KNET, paymentDetails.getSource().getType());
     }
 
+    @Disabled("not available")
     @Test
     void shouldMakePrzelewy24Payment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
@@ -358,6 +359,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         assertEquals(PaymentSourceType.POLI, paymentDetails.getSource().getType());
     }
 
+    @Disabled("not available")
     @Test
     void shouldMakeBancontactPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()

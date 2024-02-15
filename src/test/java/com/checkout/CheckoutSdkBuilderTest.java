@@ -37,6 +37,28 @@ class CheckoutSdkBuilderTest {
     }
 
     @Test
+    void shouldCreateStaticKeysCheckoutWithSubdomainSdks() {
+
+        final CheckoutApi checkoutApi1 = new CheckoutSdkBuilder().staticKeys()
+                .publicKey(VALID_DEFAULT_PK)
+                .secretKey(VALID_DEFAULT_SK)
+                .environment(Environment.SANDBOX)
+                .environmentSubdomain("123dmain")
+                .build();
+
+        assertNotNull(checkoutApi1);
+
+        final CheckoutApi checkoutApi2 = new CheckoutSdkBuilder().staticKeys()
+                .secretKey(VALID_DEFAULT_SK)
+                .environment(Environment.SANDBOX)
+                .environmentSubdomain("123dmain")
+                .build();
+
+        assertNotNull(checkoutApi2);
+
+    }
+
+    @Test
     void shouldCreateCheckoutAndInitOAuthSdk() throws URISyntaxException {
 
         try {
