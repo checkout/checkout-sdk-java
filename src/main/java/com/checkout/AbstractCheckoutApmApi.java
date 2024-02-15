@@ -37,6 +37,7 @@ public abstract class AbstractCheckoutApmApi {
     }
 
     private ApiClient getBaseApiClient(final CheckoutConfiguration configuration) {
+
         return new ApiClientImpl(configuration, new BaseUriStrategy(configuration));
     }
 
@@ -50,7 +51,12 @@ public abstract class AbstractCheckoutApmApi {
 
         @Override
         public URI getUri() {
-            return configuration.getEnvironment().getCheckoutApi();
+
+            if (configuration.getEnvironmentSubdomain() != null) {
+                return configuration.getEnvironmentSubdomain().getCheckoutApi();
+            }else {
+                return configuration.getEnvironment().getCheckoutApi();
+            }
         }
     }
 

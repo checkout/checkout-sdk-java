@@ -16,10 +16,14 @@ public final class NonHostedCompletionInfo extends CompletionInfo {
     @SerializedName("callback_url")
     private final String callbackUrl;
 
+    @SerializedName("challenge_notification_url")
+    private final String challengeNotificationUrl;
+
     @Builder
-    private NonHostedCompletionInfo(final String callbackUrl) {
+    private NonHostedCompletionInfo(final String callbackUrl, final String challengeNotificationUrl) {
         super(CompletionInfoType.NON_HOSTED);
         this.callbackUrl = callbackUrl;
+        this.challengeNotificationUrl = challengeNotificationUrl;
     }
 
 }
