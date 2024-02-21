@@ -222,6 +222,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldMakeBenefitPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(new RequestBenefitSource())
@@ -374,6 +375,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldMakeBancontactPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestBancontactSource.builder()
@@ -388,7 +390,13 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), APM_SERVICE_UNAVAILABLE);
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
+        assertNotNull(paymentResponse);
+
+        final GetPaymentResponse paymentDetails = blocking(() -> paymentsClient.getPayment(paymentResponse.getId()));
+        assertNotNull(paymentDetails);
+        assertTrue(paymentDetails.getSource() instanceof AlternativePaymentSourceResponse);
+        assertEquals(PaymentSourceType.BANCONTACT, paymentDetails.getSource().getType());
     }
 
     @Test

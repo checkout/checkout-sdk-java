@@ -17,4 +17,6 @@ public final class ContactDetails {
     @SerializedName("email_addresses")
     private EntityEmailAddresses emailAddresses;
 
+    private Invitee invitee;
+
 }
