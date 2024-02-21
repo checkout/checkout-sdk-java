@@ -130,6 +130,7 @@ public static void main(String[] args) {
             .publicKey("public_key")  // optional, only required for operations related with tokens
             .secretKey("secret_key")
             .environment(Environment.PRODUCTION)  // required
+            .environmentSubdomain("subdomain") // optional, Merchant-specific DNS name
             .executor() // optional for a custom Executor Service
             .build();
     
@@ -175,6 +176,7 @@ final CheckoutApi checkoutApi = CheckoutSdk.builder()
         .staticKeys()
         .secretKey("secret_key")
         .environment(Environment.PRODUCTION)  // required
+        .environmentSubdomain("subdomain") // optional, Merchant-specific DNS name
         .executor(customHttpClient) // optional for a custom Executor Service
         .build();
 ```

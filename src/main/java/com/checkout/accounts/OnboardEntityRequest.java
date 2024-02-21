@@ -10,6 +10,9 @@ public final class OnboardEntityRequest {
 
     private String reference;
 
+    @SerializedName("is_draft")
+    private boolean isDraft;
+
     @SerializedName("contact_details")
     private ContactDetails contactDetails;
 
@@ -18,5 +21,7 @@ public final class OnboardEntityRequest {
     private Company company;
 
     private Individual individual;
+
+    private OnboardSubEntityDocuments documents;
 
 }
