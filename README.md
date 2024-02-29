@@ -177,7 +177,7 @@ final CheckoutApi checkoutApi = CheckoutSdk.builder()
         .secretKey("secret_key")
         .environment(Environment.PRODUCTION)  // required
         .environmentSubdomain("subdomain") // optional, Merchant-specific DNS name
-        .executor(customHttpClient) // optional for a custom Executor Service
+        .httpClientBuilder(customHttpClient) // optional for a custom HttpClient
         .build();
 ```
 
