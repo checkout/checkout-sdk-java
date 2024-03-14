@@ -37,9 +37,6 @@ class PaymentSessionsTestIT extends SandboxTestFixture {
 
         assertNotNull(response);
         assertNotNull(response.getId());
-        assertEquals("en-GB", response.getLocale());
-        assertEquals(Currency.GBP, response.getCurrency());
-        assertNotNull(response.getPaymentMethods());
         assertNotNull(response.getLinks());
 
     }

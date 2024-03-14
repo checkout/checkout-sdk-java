@@ -1,6 +1,7 @@
 package com.checkout.payments.contexts;
 
 import com.checkout.common.Currency;
+import com.checkout.common.CustomerRequest;
 import com.checkout.payments.PaymentType;
 import com.checkout.payments.ShippingDetails;
 import com.google.gson.annotations.SerializedName;
@@ -22,7 +23,12 @@ public class PaymentContexts {
     @SerializedName("payment_type")
     public PaymentType paymentType;
 
+    @SerializedName("authorization_type")
+    private String authorizationType;
+
     public boolean capture;
+
+    private CustomerRequest customer;
 
     public ShippingDetails shipping;
 
