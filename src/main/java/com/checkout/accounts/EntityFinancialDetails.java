@@ -1,5 +1,6 @@
 package com.checkout.accounts;
 
+import com.checkout.common.Currency;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +19,7 @@ public class EntityFinancialDetails {
     private Long highestTransactionValue;
 
     private EntityFinancialDocuments documents;
+
+    private Currency currency;
 
 }

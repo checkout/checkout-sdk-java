@@ -34,4 +34,6 @@ public final class Representative {
 
     private List<EntityRoles> roles;
 
+    private OnboardSubEntityDocuments documents;
+
 }

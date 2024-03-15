@@ -34,5 +34,8 @@ public final class Individual {
     private PlaceOfBirth placeOfBirth;
 
     private Identification identification;
+    
+    @SerializedName("financial_details")
+    private EntityFinancialDetails financialDetails;
 
 }
