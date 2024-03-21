@@ -25,6 +25,8 @@ public interface DisputesClient {
 
     CompletableFuture<FileDetailsResponse> getFileDetails(String fileId);
 
+    CompletableFuture<DisputeCompiledSubmittedEvidenceResponse> getCompiledSubmittedEvidence(String disputeId);
+
     CompletableFuture<SchemeFileResponse> getDisputeSchemeFiles(String disputeId);
 
 }

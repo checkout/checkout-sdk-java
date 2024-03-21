@@ -199,6 +199,12 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
 
         //Submit your dispute evidence
         blocking(() -> checkoutApi.disputesClient().submitEvidence(disputeDetails.getId()));
+
+        //Get compiled submitted evidence
+        final DisputeCompiledSubmittedEvidenceResponse compiledSubmittedEvidenceResponse = blocking(() -> checkoutApi.disputesClient().getCompiledSubmittedEvidence(disputeDetails.getId()));
+        assertNotNull(compiledSubmittedEvidenceResponse);
+        assertNotNull(compiledSubmittedEvidenceResponse.getFileId());
+
     }
 
 }

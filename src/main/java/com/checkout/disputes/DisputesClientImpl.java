@@ -19,6 +19,7 @@ public class DisputesClientImpl extends AbstractClient implements DisputesClient
     private static final String FILES_PATH = "files";
     private static final String ACCEPT_PATH = "accept";
     private static final String EVIDENCE_PATH = "evidence";
+    private static final String SUBMITTED_PATH = "submitted";
     private static final String SCHEME_FILES_PATH = "schemefiles";
 
     public DisputesClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration, final SdkAuthorizationType sdkAuthorizationType) {
@@ -102,6 +103,16 @@ public class DisputesClientImpl extends AbstractClient implements DisputesClient
                 buildPath(FILES_PATH, fileId),
                 sdkAuthorization(),
                 FileDetailsResponse.class);
+    }
+
+    @Override
+    public CompletableFuture<DisputeCompiledSubmittedEvidenceResponse> getCompiledSubmittedEvidence(String disputeId) {
+        validateParams("disputeId", disputeId);
+        return apiClient.getAsync(
+                buildPath(DISPUTES_PATH, disputeId, EVIDENCE_PATH, SUBMITTED_PATH),
+                sdkAuthorization(),
+                DisputeCompiledSubmittedEvidenceResponse.class
+        );
     }
 
     @Override
