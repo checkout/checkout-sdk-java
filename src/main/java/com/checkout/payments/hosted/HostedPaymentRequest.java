@@ -84,6 +84,9 @@ public final class HostedPaymentRequest {
      * Not available on Previous
      */
 
+    @SerializedName("disabled_payment_methods")
+    private List<PaymentSourceType> disabledPaymentMethods;
+
     @SerializedName("processing_channel_id")
     private String processingChannelId;
 
