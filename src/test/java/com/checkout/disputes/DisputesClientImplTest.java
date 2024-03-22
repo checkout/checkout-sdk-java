@@ -124,6 +124,19 @@ class DisputesClientImplTest {
     }
 
     @Test
+    void shouldGetCompiledSubmittedEvidence() throws ExecutionException, InterruptedException {
+        final DisputeCompiledSubmittedEvidenceResponse response = mock(DisputeCompiledSubmittedEvidenceResponse.class);
+
+        when(apiClient.getAsync("disputes/dispute_id/evidence/submitted", authorization, DisputeCompiledSubmittedEvidenceResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<DisputeCompiledSubmittedEvidenceResponse> future = client.getCompiledSubmittedEvidence("dispute_id");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+    }
+
+    @Test
     void shouldSubmitDisputeEvidence() throws ExecutionException, InterruptedException {
 
         final EmptyResponse response = mock(EmptyResponse.class);
