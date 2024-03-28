@@ -13,6 +13,7 @@ import com.checkout.payments.ProcessingSettings;
 import com.checkout.payments.RiskRequest;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
+import com.checkout.payments.request.PaymentRetryRequest;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
@@ -80,6 +81,15 @@ public final class PaymentLinkRequest {
     /**
      * Not available on Previous
      */
+
+    @SerializedName("display_name")
+    private String displayName;
+
+    @SerializedName("disabled_payment_methods")
+    private List<PaymentSourceType> disabledPaymentMethods;
+
+    @SerializedName("customer_retry")
+    private PaymentRetryRequest customerRetry;
 
     @SerializedName("processing_channel_id")
     private String processingChannelId;
