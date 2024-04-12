@@ -14,6 +14,9 @@ public enum InstrumentType {
     CARD,
 
     @SerializedName("card_token")
-    CARD_TOKEN
+    CARD_TOKEN,
+
+    @SerializedName("sepa")
+    SEPA
 
 }

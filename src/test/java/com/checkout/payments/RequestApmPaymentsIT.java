@@ -544,7 +544,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 
-    @Disabled("Temporarily skipped")
+
     @Test
     void shouldMakeSepaV4Payment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
