@@ -22,4 +22,7 @@ public final class Profile {
     @SerializedName("default_holding_currency")
     private Currency defaultHoldingCurrency;
 
+    @SerializedName("holding_currencies")
+    private List<Currency> holdingCurrencies;
+
 }
