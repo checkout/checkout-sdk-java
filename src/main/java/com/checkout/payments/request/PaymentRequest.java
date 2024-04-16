@@ -107,4 +107,6 @@ public final class PaymentRequest {
 
     private PaymentSegment segment;
 
+    private PaymentInstruction instruction ;
+
 }
