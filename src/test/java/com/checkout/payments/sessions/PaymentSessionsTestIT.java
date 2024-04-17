@@ -3,6 +3,7 @@ package com.checkout.payments.sessions;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.Currency;
+import com.checkout.payments.BillingInformation;
 import org.junit.jupiter.api.Test;
 
 import static com.checkout.TestHelper.createAddress;
@@ -19,7 +20,7 @@ class PaymentSessionsTestIT extends SandboxTestFixture {
     @Test
     void shouldMakeAPaymentSessionsRequest() {
 
-        final Billing billing = Billing.builder()
+        final BillingInformation billing = BillingInformation.builder()
                 .address(createAddress())
                 .build();
 
@@ -28,7 +29,6 @@ class PaymentSessionsTestIT extends SandboxTestFixture {
                 .currency(Currency.GBP)
                 .reference("ORD-123A")
                 .billing(billing)
-                .customer(createCustomer())
                 .successUrl("https://example.com/payments/success")
                 .failureUrl("https://example.com/payments/failure")
                 .build();
@@ -37,6 +37,7 @@ class PaymentSessionsTestIT extends SandboxTestFixture {
 
         assertNotNull(response);
         assertNotNull(response.getId());
+        assertNotNull(response.getPaymentSessionToken());
         assertNotNull(response.getLinks());
 
     }
