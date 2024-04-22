@@ -12,4 +12,6 @@ public final class PaymentSessionsResponse extends Resource {
 
     private String id;
 
+    private String paymentSessionToken;
+
 }
