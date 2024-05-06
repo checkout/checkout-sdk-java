@@ -9,6 +9,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public final class PaymentContextsPayPayResponseSource extends AbstractPaymentContextsResponseSource implements ResponseSource {
+public final class PaymentContextsKlarnaResponseSource extends AbstractPaymentContextsResponseSource implements ResponseSource {
 
 }

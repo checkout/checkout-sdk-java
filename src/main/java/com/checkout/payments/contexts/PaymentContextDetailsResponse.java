@@ -13,6 +13,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public final class PaymentContextDetailsResponse extends HttpMetadata {
 
+    private PaymentContextDetailsStatusType status;
+
     @SerializedName("payment_request")
     private PaymentContextsResponse paymentRequest;
 
