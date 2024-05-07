@@ -7,5 +7,7 @@ public enum EntityRoles {
     @SerializedName("ubo")
     UBO,
     @SerializedName("legal_representative")
-    LEGAL_REPRESENTATIVE
+    LEGAL_REPRESENTATIVE,
+    @SerializedName("authorised_signatory")
+    AUTHORISED_SIGNATORY
 }
