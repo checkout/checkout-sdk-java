@@ -3,6 +3,7 @@ package com.checkout.payments.response.source;
 import com.checkout.common.Address;
 import com.checkout.common.CardCategory;
 import com.checkout.common.CardType;
+import com.checkout.common.CardWalletType;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Phone;
 import com.google.gson.annotations.SerializedName;
@@ -54,6 +55,9 @@ public final class CardResponseSource extends AbstractResponseSource implements 
 
     @SerializedName("card_category")
     private CardCategory cardCategory;
+
+    @SerializedName("card_wallet_type")
+    private CardWalletType cardWalletType;
 
     private String issuer;
 
