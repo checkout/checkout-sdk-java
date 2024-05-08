@@ -19,9 +19,11 @@ import com.checkout.payments.RiskRequest;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
 import com.checkout.payments.contexts.PaymentContextsItems;
+import com.checkout.payments.contexts.PaymentContextsProcessing;
 import com.checkout.payments.contexts.PaymentContextsRequest;
 import com.checkout.payments.hosted.HostedPaymentRequest;
 import com.checkout.payments.links.PaymentLinkRequest;
+import com.checkout.payments.request.source.contexts.PaymentContextsKlarnaSource;
 import com.checkout.payments.request.source.contexts.PaymentContextsPayPalSource;
 import lombok.SneakyThrows;
 
@@ -176,14 +178,15 @@ public final class TestHelper {
                 .build();
     }
 
-    public static PaymentContextsRequest createPaymentContextsRequest() {
+    public static PaymentContextsRequest createPaymentContextsPayPalRequest() {
 
         final PaymentContextsPayPalSource source = PaymentContextsPayPalSource.builder().build();
 
         final PaymentContextsItems item = PaymentContextsItems.builder()
                 .name("mask")
                 .quantity(1)
-                .unitPrice(2000)
+                .unitPrice(1000)
+                .totalAmount(1000)
                 .build();
 
         final List<PaymentContextsItems> items = Arrays.asList(
@@ -192,7 +195,7 @@ public final class TestHelper {
 
         return PaymentContextsRequest.builder()
                 .source(source)
-                .amount(2000L)
+                .amount(1000L)
                 .currency(Currency.EUR)
                 .paymentType(PaymentType.REGULAR)
                 .capture(true)
@@ -200,6 +203,42 @@ public final class TestHelper {
                 .successUrl("https://example.com/payments/success")
                 .failureUrl("https://example.com/payments/fail")
                 .items(items)
+                .build();
+    }
+
+    public static PaymentContextsRequest createPaymentContextsKlarnaRequest() {
+
+        final PaymentContextsKlarnaSource source = PaymentContextsKlarnaSource.builder()
+                .accountHolder(AccountHolder.builder()
+                        .billingAddress(Address.builder()
+                                .country(CountryCode.DE)
+                                .build())
+                        .build())
+                .build();
+
+        final PaymentContextsItems item = PaymentContextsItems.builder()
+                .name("mask")
+                .quantity(1)
+                .unitPrice(1000)
+                .totalAmount(1000)
+                .build();
+
+        final List<PaymentContextsItems> items = Arrays.asList(
+                item
+        );
+
+        final PaymentContextsProcessing processing = PaymentContextsProcessing.builder()
+                .locale("en-GB")
+                .build();
+
+        return PaymentContextsRequest.builder()
+                .source(source)
+                .amount(1000L)
+                .currency(Currency.EUR)
+                .paymentType(PaymentType.REGULAR)
+                .processingChannelId(requireNonNull(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID")))
+                .items(items)
+                .processing(processing)
                 .build();
     }
 

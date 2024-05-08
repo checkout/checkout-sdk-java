@@ -11,13 +11,17 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.opentest4j.AssertionFailedError;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -165,6 +169,17 @@ public abstract class SandboxTestFixture {
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
                 .build();
         return blocking(() -> tokensClient.requestCardToken(request));
+    }
+
+    protected <T> void checkErrorItem(final Supplier<CompletableFuture<T>> supplier, final String errorItem) {
+        try {
+            supplier.get().get();
+            fail();
+        } catch (final InterruptedException | ExecutionException exception) {
+            assertTrue(exception.getCause() instanceof CheckoutApiException);
+            final List<String> error_codes = (List<String>) ((CheckoutApiException) exception.getCause()).getErrorDetails().get("error_codes");
+            assertThat(error_codes, hasItem(errorItem));
+        }
     }
 
     public static class DisputesQueryResponseHasItems extends BaseMatcher<DisputesQueryResponse> {

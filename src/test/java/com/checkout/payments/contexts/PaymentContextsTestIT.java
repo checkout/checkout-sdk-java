@@ -1,5 +1,6 @@
 package com.checkout.payments.contexts;
 
+import com.checkout.CheckoutApiException;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
@@ -17,9 +18,9 @@ class PaymentContextsTestIT extends SandboxTestFixture {
     }
 
     @Test
-    void shouldMakeAPaymentContextRequest() {
+    void shouldMakeAPaymentContextPayPalRequest() {
 
-        final PaymentContextsRequest request = TestHelper.createPaymentContextsRequest();
+        final PaymentContextsRequest request = TestHelper.createPaymentContextsPayPalRequest();
 
         final PaymentContextsRequestResponse response = blocking(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request));
 
@@ -29,9 +30,17 @@ class PaymentContextsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    void shouldMakeAPaymentContextKlarnaRequest() {
+
+        final PaymentContextsRequest request = TestHelper.createPaymentContextsKlarnaRequest();
+
+        checkErrorItem(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request), "apm_service_unavailable");
+    }
+
+    @Test
     void shouldGetAPaymentContext() {
 
-        final PaymentContextsRequest request = TestHelper.createPaymentContextsRequest();
+        final PaymentContextsRequest request = TestHelper.createPaymentContextsPayPalRequest();
 
         final PaymentContextsRequestResponse paymentContextsResponse = blocking(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request));
 
@@ -39,13 +48,13 @@ class PaymentContextsTestIT extends SandboxTestFixture {
 
         assertNotNull(response);
         assertNotNull(response.getPaymentRequest());
-        assertEquals(2000, response.getPaymentRequest().getAmount());
+        assertEquals(1000, response.getPaymentRequest().getAmount());
         assertEquals(Currency.EUR, response.getPaymentRequest().getCurrency());
         assertEquals(PaymentType.REGULAR, response.getPaymentRequest().getPaymentType());
         assertEquals(true, response.getPaymentRequest().isCapture());
         assertEquals("mask", response.getPaymentRequest().getItems().get(0).getName());
         assertEquals(1, response.getPaymentRequest().getItems().get(0).getQuantity());
-        assertEquals(2000, response.getPaymentRequest().getItems().get(0).getUnitPrice());
+        assertEquals(1000, response.getPaymentRequest().getItems().get(0).getUnitPrice());
         assertEquals("https://example.com/payments/success", response.getPaymentRequest().getSuccessUrl());
         assertEquals("https://example.com/payments/fail", response.getPaymentRequest().getFailureUrl());
         assertNotNull(response.getPartnerMetadata());

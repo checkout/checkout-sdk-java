@@ -155,15 +155,4 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
         return blocking(() -> tokensClient.requestCardToken(request));
     }
 
-    protected <T> void checkErrorItem(final Supplier<CompletableFuture<T>> supplier, final String errorItem) {
-        try {
-            supplier.get().get();
-            fail();
-        } catch (final InterruptedException | ExecutionException exception) {
-            assertTrue(exception.getCause() instanceof CheckoutApiException);
-            final List<String> error_codes = (List<String>) ((CheckoutApiException) exception.getCause()).getErrorDetails().get("error_codes");
-            assertThat(error_codes, hasItem(errorItem));
-        }
-    }
-
 }
