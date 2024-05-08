@@ -14,18 +14,14 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestIdealSource extends AbstractRequestSource {
 
-    private String bic;
-
     private String description;
 
     private String language;
 
     @Builder
-    private RequestIdealSource(final String bic,
-                               final String description,
+    private RequestIdealSource(final String description,
                                final String language) {
         super(PaymentSourceType.IDEAL);
-        this.bic = bic;
         this.description = description;
         this.language = language;
     }
