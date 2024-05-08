@@ -9,4 +9,13 @@ public enum AuthenticationType {
     @SerializedName("recurring")
     RECURRING,
 
+    @SerializedName("installment")
+    INSTALLMENT,
+
+    @SerializedName("maintain_card")
+    MAINTAIN_CARD,
+
+    @SerializedName("add_card")
+    ADD_CARD,
+
 }
