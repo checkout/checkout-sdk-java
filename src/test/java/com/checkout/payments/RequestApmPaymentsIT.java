@@ -90,10 +90,10 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldMakeIdealPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestIdealSource.builder()
-                        .bic("INGBNL2A")
                         .description("ORD50234E89")
                         .language("nl")
                         .build())
