@@ -15,4 +15,8 @@ public final class PaymentContextsRequestResponse extends Resource {
     private String id;
 
     private PaymentContextsPartnerMetadata partnerMetadata;
+
+    private String sessionId;
+
+    private String clientToken;
 }
