@@ -17,4 +17,10 @@ public final class PaymentContextsPartnerMetadata {
 
     @SerializedName("customer_id")
     private String customerId;
+
+    @SerializedName("session_id")
+    private String sessionId;
+
+    @SerializedName("client_token")
+    private String clientToken;
 }
