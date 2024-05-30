@@ -37,6 +37,9 @@ public final class PaymentProcessing {
     @SerializedName("partner_payment_id")
     private String partnerPaymentId;
 
+    @SerializedName("pan_type_processed")
+    private PanProcessedType panTypeProcessed;
+
     @SerializedName("continuation_payload")
     private String continuationPayload;
 
@@ -62,5 +65,11 @@ public final class PaymentProcessing {
     
     @SerializedName("surcharge_amount")
     private Long surchargeAmount;
+
+    @SerializedName("cko_network_token_available")
+    private Boolean ckoNetworkTokenAvailable;
+
+    @SerializedName("merchant_category_code")
+    private String merchantCategoryCode;
 
 }

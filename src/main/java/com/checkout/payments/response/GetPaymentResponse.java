@@ -6,6 +6,7 @@ import com.checkout.common.CustomerResponse;
 import com.checkout.common.MarketplaceData;
 import com.checkout.common.Resource;
 import com.checkout.payments.BillingDescriptor;
+import com.checkout.payments.PanProcessedType;
 import com.checkout.payments.PaymentActionSummary;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.PaymentStatus;
@@ -14,6 +15,7 @@ import com.checkout.payments.Product;
 import com.checkout.payments.RiskAssessment;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSData;
+import com.checkout.payments.request.PaymentInstruction;
 import com.checkout.payments.response.destination.PaymentResponseDestination;
 import com.checkout.payments.response.source.ResponseSource;
 import com.checkout.payments.sender.Sender;
@@ -101,8 +103,18 @@ public final class GetPaymentResponse extends Resource {
     private String schemeId;
 
     private List<PaymentActionSummary> actions;
+    
+    private PaymentRetryResponse retry;
+    
+    @SerializedName("pan_type_processed")
+    private PanProcessedType panTypeProcessed;
+    
+    @SerializedName("cko_network_token_available")
+    private Boolean ckoNetworkTokenAvailable;
 
     @SerializedName("processed_on")
     private String processedOn;
+
+    private PaymentInstruction instruction;
 
 }
