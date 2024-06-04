@@ -14,6 +14,8 @@ import java.util.concurrent.ForkJoinPool;
 import org.apache.http.HttpStatus;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
 class DefaultCheckoutConfigurationTest {
@@ -44,21 +46,23 @@ class DefaultCheckoutConfigurationTest {
 
     }
 
-    @Test
-    void shouldCreateConfigurationWithSubdomain() {
+    @ParameterizedTest
+    @ValueSource(strings = {"123dmain", "123domain", "1234domain", "12345domain"})
+    void shouldCreateConfigurationWithSubdomain(String subdomain) {
 
         final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
-        final EnvironmentSubdomain environmentSubdomain = new EnvironmentSubdomain(Environment.SANDBOX, "123dmain");
+        final EnvironmentSubdomain environmentSubdomain = new EnvironmentSubdomain(Environment.SANDBOX, subdomain);
 
         final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, environmentSubdomain, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, DEFAULT_TRANSPORT_CONFIGURATION);
-        assertEquals("https://123dmain.api.sandbox.checkout.com/", configuration.getEnvironmentSubdomain().getCheckoutApi().toString());
+        assertEquals("https://" + subdomain + ".api.sandbox.checkout.com/", configuration.getEnvironmentSubdomain().getCheckoutApi().toString());
     }
 
-    @Test
-    void shouldCreateConfigurationWithBadSubdomain() {
+    @ParameterizedTest
+    @ValueSource(strings = {"", "123", "123bad", "12345domainBad"})
+    void shouldCreateConfigurationWithBadSubdomain(String subdomain) {
 
         final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
-        final EnvironmentSubdomain environmentSubdomain = new EnvironmentSubdomain(Environment.SANDBOX, "123bad");
+        final EnvironmentSubdomain environmentSubdomain = new EnvironmentSubdomain(Environment.SANDBOX, subdomain);
 
         final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, environmentSubdomain, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, DEFAULT_TRANSPORT_CONFIGURATION);
         assertEquals("https://api.sandbox.checkout.com/", configuration.getEnvironmentSubdomain().getCheckoutApi().toString());
