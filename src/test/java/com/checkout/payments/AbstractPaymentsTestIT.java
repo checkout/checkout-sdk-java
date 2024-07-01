@@ -40,6 +40,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
     protected final PaymentsClient paymentsClient;
     public static final String PAYEE_NOT_ONBOARDED = "payee_not_onboarded";
     public static final String APM_SERVICE_UNAVAILABLE = "apm_service_unavailable";
+    public static final String PAYMENT_METHOD_NOT_SUPPORTED = "payment_method_not_supported";
 
     public AbstractPaymentsTestIT() {
         super(PlatformType.DEFAULT);
