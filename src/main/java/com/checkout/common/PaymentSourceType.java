@@ -16,6 +16,8 @@ public enum PaymentSourceType {
     TOKEN,
     @SerializedName("customer")
     CUSTOMER,
+    @SerializedName("applepay")
+    APPLEPAY,
     @SerializedName("dlocal")
     DLOCAL,
     @SerializedName("boleto")
@@ -44,6 +46,8 @@ public enum PaymentSourceType {
     QPAY,
     @SerializedName("alipay")
     ALIPAY,
+    @SerializedName("googlepay")
+    GOOGLEPAY,
     @SerializedName("paypal")
     PAYPAL,
     @SerializedName("multibanco")

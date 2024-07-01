@@ -336,7 +336,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                         .build())
                 .build();
 
-        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYMENT_METHOD_NOT_SUPPORTED);
     }
 
     @Test

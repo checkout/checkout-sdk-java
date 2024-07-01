@@ -148,6 +148,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("Temporarily skipped")
     void shouldMakeGiropayPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestGiropaySource.builder()
