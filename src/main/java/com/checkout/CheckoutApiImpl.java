@@ -1,5 +1,6 @@
 package com.checkout;
 
+import com.checkout.accounts.AccountsBetaClientImpl;
 import com.checkout.accounts.AccountsClient;
 import com.checkout.accounts.AccountsClientImpl;
 import com.checkout.balances.BalancesClient;
@@ -53,6 +54,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final RiskClient riskClient;
     private final WorkflowsClient workflowsClient;
     private final AccountsClient accountsClient;
+    private final AccountsClient accountsBetaClient;
     private final SessionsClient sessionsClient;
     private final ForexClient forexClient;
     private final PaymentLinksClient paymentLinksClient;
@@ -86,6 +88,9 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.financialClient = new FinancialClientImpl(this.apiClient, configuration);
         this.issuingClient = new IssuingClientImpl(this.apiClient, configuration);
         this.accountsClient = new AccountsClientImpl(this.apiClient,
+                getFilesClient(configuration),
+                configuration);
+        this.accountsBetaClient = new AccountsBetaClientImpl(this.apiClient,
                 getFilesClient(configuration),
                 configuration);
         this.paymentContextsClient = new PaymentContextsClientImpl(this.apiClient, configuration);
@@ -134,6 +139,11 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     }
 
     @Override
+    public AccountsClient accountsBetaClient() {
+        return accountsBetaClient;
+    }
+
+    @Override
     public SessionsClient sessionsClient() {
         return sessionsClient;
     }
@@ -174,16 +184,24 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     }
 
     @Override
-    public FinancialClient financialClient() { return financialClient; }
+    public FinancialClient financialClient() {
+        return financialClient;
+    }
 
     @Override
-    public IssuingClient issuingClient() { return issuingClient; }
+    public IssuingClient issuingClient() {
+        return issuingClient;
+    }
 
     @Override
-    public PaymentContextsClient paymentContextsClient() { return paymentContextsClient; }
+    public PaymentContextsClient paymentContextsClient() {
+        return paymentContextsClient;
+    }
 
     @Override
-    public PaymentSessionsClient paymentSessionsClient() { return paymentSessionsClient; }
+    public PaymentSessionsClient paymentSessionsClient() {
+        return paymentSessionsClient;
+    }
 
     private ApiClient getFilesClient(final CheckoutConfiguration configuration) {
         return new ApiClientImpl(configuration, new FilesApiUriStrategy(configuration));

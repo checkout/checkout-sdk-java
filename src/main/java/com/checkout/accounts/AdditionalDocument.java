@@ -5,9 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public final class TaxVerification {
-
-    private TaxVerificationType type;
+public final class AdditionalDocument {
 
     private String front;
 

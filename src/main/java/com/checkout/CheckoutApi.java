@@ -39,6 +39,8 @@ public interface CheckoutApi extends CheckoutApmApi {
 
     AccountsClient accountsClient();
 
+    AccountsClient accountsBetaClient();
+
     SessionsClient sessionsClient();
 
     ForexClient forexClient();

@@ -13,15 +13,21 @@ public final class OnboardEntityRequest {
     @SerializedName("is_draft")
     private boolean isDraft;
 
+    private Profile profile;
+
     @SerializedName("contact_details")
     private ContactDetails contactDetails;
 
-    private Profile profile;
-
     private Company company;
+
+    @SerializedName("processing_details")
+    private ProcessingDetails processingDetails;
 
     private Individual individual;
 
     private OnboardSubEntityDocuments documents;
+
+    @SerializedName("additional_info")
+    private AdditionalInfo additionalInfo;
 
 }

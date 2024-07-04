@@ -19,12 +19,12 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 
 public class AccountsClientImpl extends AbstractClient implements AccountsClient {
 
-    private static final String ACCOUNTS_PATH = "accounts";
-    private static final String ENTITIES_PATH = "entities";
-    private static final String INSTRUMENTS_PATH = "instruments";
-    private static final String FILES_PATH = "files";
-    private static final String PAYOUT_SCHEDULES_PATH = "payout-schedules";
-    private static final String PAYMENT_INSTRUMENTS_PATH = "payment-instruments";
+    protected static final String ACCOUNTS_PATH = "accounts";
+    protected static final String ENTITIES_PATH = "entities";
+    protected static final String INSTRUMENTS_PATH = "instruments";
+    protected static final String FILES_PATH = "files";
+    protected static final String PAYOUT_SCHEDULES_PATH = "payout-schedules";
+    protected static final String PAYMENT_INSTRUMENTS_PATH = "payment-instruments";
 
     private final ApiClient filesClient;
 
@@ -152,4 +152,5 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
                 VoidResponse.class,
                 request);
     }
+
 }

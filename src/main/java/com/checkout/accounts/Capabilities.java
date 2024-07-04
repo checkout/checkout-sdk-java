@@ -11,6 +11,8 @@ public final class Capabilities {
 
     private Payouts payouts;
 
+    private Issuing issuing;
+
     @Data
     public static class Payments {
 
@@ -22,6 +24,15 @@ public final class Capabilities {
 
     @Data
     public static class Payouts {
+
+        private boolean available;
+
+        private boolean enabled;
+
+    }
+
+    @Data
+    public static class Issuing {
 
         private boolean available;
 
