@@ -1,6 +1,7 @@
 package com.checkout.payments.contexts;
 
 import com.checkout.common.Currency;
+import com.checkout.common.CustomerRequest;
 import com.checkout.payments.PaymentType;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.request.source.AbstractRequestSource;
@@ -26,7 +27,7 @@ public final class PaymentContextsRequest extends PaymentContexts {
             final Long amount,
             final Currency currency,
             final PaymentType paymentType,
-            final boolean capture,
+            final Boolean capture,
             final ShippingDetails shipping,
             final PaymentContextsProcessing processing,
             final String processingChannelId,
@@ -34,21 +35,12 @@ public final class PaymentContextsRequest extends PaymentContexts {
             final String description,
             final String successUrl,
             final String failureUrl,
-            final List<PaymentContextsItems> items
+            final List<PaymentContextsItems> items,
+            final String authorizationType,
+            final CustomerRequest customer
     ) {
-        super();
+        super(amount, currency, paymentType, authorizationType, capture, customer, shipping, processing,
+                processingChannelId, reference, description, successUrl, failureUrl, items);
         this.source = source;
-        this.amount = amount;
-        this.currency = currency;
-        this.paymentType = paymentType;
-        this.capture = capture;
-        this.shipping = shipping;
-        this.processing = processing;
-        this.processingChannelId = processingChannelId;
-        this.reference = reference;
-        this.description = description;
-        this.successUrl = successUrl;
-        this.failureUrl = failureUrl;
-        this.items = items;
     }
 }

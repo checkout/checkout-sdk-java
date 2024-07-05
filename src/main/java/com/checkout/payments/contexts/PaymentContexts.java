@@ -16,36 +16,36 @@ import java.util.List;
 @NoArgsConstructor
 public class PaymentContexts {
 
-    public Long amount;
+    private Long amount;
 
-    public Currency currency;
+    private Currency currency;
 
     @SerializedName("payment_type")
-    public PaymentType paymentType;
+    private PaymentType paymentType;
 
     @SerializedName("authorization_type")
     private String authorizationType;
 
-    public boolean capture;
+    private Boolean capture;
 
     private CustomerRequest customer;
 
-    public ShippingDetails shipping;
+    private ShippingDetails shipping;
 
-    public PaymentContextsProcessing processing;
+    private PaymentContextsProcessing processing;
 
     @SerializedName("processing_channel_id")
-    public String processingChannelId;
+    private String processingChannelId;
 
-    public String reference;
+    private String reference;
 
-    public String description;
+    private String description;
 
     @SerializedName("success_url")
-    public String successUrl;
+    private String successUrl;
 
     @SerializedName("failure_url")
-    public String failureUrl;
+    private String failureUrl;
 
-    public List<PaymentContextsItems> items;
+    private List<PaymentContextsItems> items;
 }
