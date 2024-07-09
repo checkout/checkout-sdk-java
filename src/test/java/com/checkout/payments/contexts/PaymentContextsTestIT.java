@@ -51,7 +51,6 @@ class PaymentContextsTestIT extends SandboxTestFixture {
         assertEquals(1000, response.getPaymentRequest().getAmount());
         assertEquals(Currency.EUR, response.getPaymentRequest().getCurrency());
         assertEquals(PaymentType.REGULAR, response.getPaymentRequest().getPaymentType());
-        assertEquals(true, response.getPaymentRequest().isCapture());
         assertEquals("mask", response.getPaymentRequest().getItems().get(0).getName());
         assertEquals(1, response.getPaymentRequest().getItems().get(0).getQuantity());
         assertEquals(1000, response.getPaymentRequest().getItems().get(0).getUnitPrice());

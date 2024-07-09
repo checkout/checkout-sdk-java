@@ -23,6 +23,7 @@ import com.checkout.payments.contexts.PaymentContextsProcessing;
 import com.checkout.payments.contexts.PaymentContextsRequest;
 import com.checkout.payments.hosted.HostedPaymentRequest;
 import com.checkout.payments.links.PaymentLinkRequest;
+import com.checkout.payments.request.PaymentCustomerRequest;
 import com.checkout.payments.request.source.contexts.PaymentContextsKlarnaSource;
 import com.checkout.payments.request.source.contexts.PaymentContextsPayPalSource;
 import lombok.SneakyThrows;
@@ -193,12 +194,17 @@ public final class TestHelper {
                 item
         );
 
+        final PaymentCustomerRequest customer = PaymentCustomerRequest.builder()
+                .phone(createPhone())
+                .build();
+
         return PaymentContextsRequest.builder()
                 .source(source)
                 .amount(1000L)
                 .currency(Currency.EUR)
                 .paymentType(PaymentType.REGULAR)
                 .capture(true)
+                .customer(customer)
                 .processingChannelId(requireNonNull(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID")))
                 .successUrl("https://example.com/payments/success")
                 .failureUrl("https://example.com/payments/fail")
