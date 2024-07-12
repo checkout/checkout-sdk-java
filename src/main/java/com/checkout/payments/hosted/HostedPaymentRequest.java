@@ -64,7 +64,7 @@ public final class HostedPaymentRequest {
     @SerializedName("3ds")
     private ThreeDSRequest threeDS;
 
-    private boolean capture;
+    private Boolean capture;
 
     @SerializedName("capture_on")
     private Instant captureOn;
