@@ -409,6 +409,68 @@ class PaymentsClientImplTest {
     }
 
     @Test
+    void shouldReversePayment() throws ExecutionException, InterruptedException {
+
+        final ReverseResponse response = new ReverseResponse();
+
+        when(apiClient.postAsync(eq("payments/123456/reversals"), any(SdkAuthorization.class), eq(ReverseResponse.class), isNull(), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<ReverseResponse> future = paymentsClient.reversePayment("123456");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
+    void shouldReversePayment_idempotencyKey() throws ExecutionException, InterruptedException {
+
+        final ReverseResponse response = new ReverseResponse();
+
+        when(apiClient.postAsync(eq("payments/123456/reversals"), any(SdkAuthorization.class), eq(ReverseResponse.class), isNull(), eq("123")))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<ReverseResponse> future = paymentsClient.reversePayment("123456", "123");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
+    void shouldReversePayment_request() throws ExecutionException, InterruptedException {
+
+        final ReverseRequest request = new ReverseRequest();
+        final ReverseResponse response = new ReverseResponse();
+
+        when(apiClient.postAsync(eq("payments/123456/reversals"), any(SdkAuthorization.class), eq(ReverseResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<ReverseResponse> future = paymentsClient.reversePayment("123456", request);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
+    void shouldReversePayment_request_idempotencyKey() throws ExecutionException, InterruptedException {
+
+        final ReverseRequest request = new ReverseRequest();
+        final ReverseResponse response = new ReverseResponse();
+
+        when(apiClient.postAsync(eq("payments/123456/reversals"), any(SdkAuthorization.class), eq(ReverseResponse.class), eq(request), eq("123")))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<ReverseResponse> future = paymentsClient.reversePayment("123456", request, "123");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
     void shouldVoidPayment() throws ExecutionException, InterruptedException {
 
         final VoidResponse response = new VoidResponse();

@@ -48,6 +48,14 @@ public interface PaymentsClient {
 
     CompletableFuture<RefundResponse> refundPayment(String paymentId, RefundRequest refundRequest, String idempotencyKey);
 
+    CompletableFuture<ReverseResponse> reversePayment(String paymentId);
+
+    CompletableFuture<ReverseResponse> reversePayment(String paymentId, String idempotencyKey);
+
+    CompletableFuture<ReverseResponse> reversePayment(String paymentId, ReverseRequest reverseRequest);
+
+    CompletableFuture<ReverseResponse> reversePayment(String paymentId, ReverseRequest reverseRequest, String idempotencyKey);
+
     CompletableFuture<VoidResponse> voidPayment(String paymentId);
 
     CompletableFuture<VoidResponse> voidPayment(String paymentId, String idempotencyKey);

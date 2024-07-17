@@ -23,6 +23,7 @@ public final class PaymentsClientImpl extends AbstractClient implements Payments
     private static final String CAPTURES_PATH = "captures";
     private static final String AUTHORIZATIONS_PATH = "authorizations";
     private static final String REFUNDS_PATH = "refunds";
+    private static final String REVERSALS_PATH = "reversals";
     private static final String VOIDS_PATH = "voids";
 
     private static final Type PAYMENT_ACTIONS_TYPE = new TypeToken<ItemsResponse<PaymentAction>>() {
@@ -132,6 +133,30 @@ public final class PaymentsClientImpl extends AbstractClient implements Payments
     public CompletableFuture<RefundResponse> refundPayment(final String paymentId, final RefundRequest refundRequest, final String idempotencyKey) {
         validateParams("paymentId", paymentId, "refundRequest", refundRequest, "idempotencyKey", idempotencyKey);
         return apiClient.postAsync(buildPath(PAYMENTS_PATH, paymentId, REFUNDS_PATH), sdkAuthorization(), RefundResponse.class, refundRequest, idempotencyKey);
+    }
+
+    @Override
+    public CompletableFuture<ReverseResponse> reversePayment(final String paymentId) {
+        validateParams("paymentId", paymentId);
+        return apiClient.postAsync(buildPath(PAYMENTS_PATH, paymentId, REVERSALS_PATH), sdkAuthorization(), ReverseResponse.class, null, null);
+    }
+
+    @Override
+    public CompletableFuture<ReverseResponse> reversePayment(final String paymentId, final String idempotencyKey) {
+        validateParams("paymentId", paymentId, "idempotencyKey", idempotencyKey);
+        return apiClient.postAsync(buildPath(PAYMENTS_PATH, paymentId, REVERSALS_PATH), sdkAuthorization(), ReverseResponse.class, null, idempotencyKey);
+    }
+
+    @Override
+    public CompletableFuture<ReverseResponse> reversePayment(final String paymentId, final ReverseRequest reverseRequest) {
+        validateParams("paymentId", paymentId, "reverseRequest", reverseRequest);
+        return apiClient.postAsync(buildPath(PAYMENTS_PATH, paymentId, REVERSALS_PATH), sdkAuthorization(), ReverseResponse.class, reverseRequest, null);
+    }
+
+    @Override
+    public CompletableFuture<ReverseResponse> reversePayment(final String paymentId, final ReverseRequest reverseRequest, final String idempotencyKey) {
+        validateParams("paymentId", paymentId, "reverseRequest", reverseRequest, "idempotencyKey", idempotencyKey);
+        return apiClient.postAsync(buildPath(PAYMENTS_PATH, paymentId, REVERSALS_PATH), sdkAuthorization(), ReverseResponse.class, reverseRequest, idempotencyKey);
     }
 
     @Override
