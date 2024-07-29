@@ -4,9 +4,11 @@ import com.google.gson.annotations.SerializedName;
 
 public enum ChannelType {
 
+    @SerializedName("app")
+    APP,
     @SerializedName("browser")
     BROWSER,
-    @SerializedName("app")
-    APP
+    @SerializedName("merchant_initiated")
+    MERCHANT_INITIATED
 
 }

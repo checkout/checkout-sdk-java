@@ -53,6 +53,12 @@ public class GetSessionResponse extends Resource {
     @SerializedName("protocol_version")
     private String protocolVersion;
 
+    @SerializedName("account_info")
+    private CardholderAccountInfo cardholderAccountInfo;
+
+    @SerializedName("merchant_risk_info")
+    private MerchantRiskInfo merchantRiskInfo;
+
     private String reference;
 
     @SerializedName("transaction_type")
@@ -88,6 +94,9 @@ public class GetSessionResponse extends Resource {
 
     private Installment installment;
 
+    @SerializedName("initial_transaction")
+    private InitialTransaction initialTransaction;
+
     @SerializedName("customer_ip")
     private String customerIp;
 
@@ -101,6 +110,8 @@ public class GetSessionResponse extends Resource {
 
     @SerializedName("challenge_indicator")
     private ChallengeIndicator challengeIndicator;
+
+    private Optimization optimization;
 
     @SerializedName("scheme_info")
     private SchemeInfo schemeInfo;

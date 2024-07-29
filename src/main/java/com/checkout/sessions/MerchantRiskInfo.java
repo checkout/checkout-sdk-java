@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -26,5 +28,23 @@ public final class MerchantRiskInfo {
 
     @SerializedName("shipping_indicator")
     private ShippingIndicator shippingIndicator;
+
+    @SerializedName("reorder_items_indicator")
+    private ReorderItemsIndicatorType reorderItemsIndicator;
+
+    @SerializedName("pre_order_purchase_indicator")
+    private PreOrderPurchaseIndicator preOrderPurchaseIndicator;
+    
+    @SerializedName("pre_order_date")
+    private Instant preOrderDate;
+    
+    @SerializedName("gift_card_amount")
+    private String giftCardAmount;
+    
+    @SerializedName("gift_card_currency")
+    private String giftCardCurrency;
+
+    @SerializedName("gift_card_count")
+    private String giftCardCount;
 
 }

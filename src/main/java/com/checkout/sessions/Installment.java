@@ -15,9 +15,11 @@ public final class Installment {
     @SerializedName("number_of_payments")
     private Long numberOfPayments;
 
+    @Builder.Default
     @SerializedName("days_between_payments")
-    private Long daysBetweenPayments;
+    private Long daysBetweenPayments = 1L;
 
-    private String expiry;
+    @Builder.Default
+    private String expiry = "99991231";
 
 }

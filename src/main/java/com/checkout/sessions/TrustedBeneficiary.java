@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class TrustedBeneficiary {
 
-    private String status;
+    private TrustedBeneficiaryStatusType status;
 
     private String source;
 }

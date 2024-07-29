@@ -4,18 +4,15 @@ import com.google.gson.annotations.SerializedName;
 
 public enum AuthenticationType {
 
-    @SerializedName("regular")
-    REGULAR,
-    @SerializedName("recurring")
-    RECURRING,
-
-    @SerializedName("installment")
-    INSTALLMENT,
-
-    @SerializedName("maintain_card")
-    MAINTAIN_CARD,
-
     @SerializedName("add_card")
     ADD_CARD,
+    @SerializedName("installment")
+    INSTALLMENT,
+    @SerializedName("maintain_card")
+    MAINTAIN_CARD,
+    @SerializedName("recurring")
+    RECURRING,
+    @SerializedName("regular")
+    REGULAR
 
 }

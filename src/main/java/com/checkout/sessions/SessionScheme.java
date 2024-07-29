@@ -4,17 +4,17 @@ import com.google.gson.annotations.SerializedName;
 
 public enum SessionScheme {
 
-    @SerializedName("visa")
-    VISA,
-    @SerializedName("mastercard")
-    MASTERCARD,
-    @SerializedName("jcb")
-    JCB,
     @SerializedName("amex")
     AMEX,
+    @SerializedName("cartes_bancaires")
+    CARTES_BANCAIRES,
     @SerializedName("diners")
     DINERS,
-    @SerializedName("cartes_bancaires")
-    CARTES_BANCAIRES
+    @SerializedName("jcb")
+    JCB,
+    @SerializedName("mastercard")
+    MASTERCARD,
+    @SerializedName("visa")
+    VISA
 
 }
