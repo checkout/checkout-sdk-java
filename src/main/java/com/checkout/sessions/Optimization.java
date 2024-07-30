@@ -6,17 +6,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public final class Recurring {
+public final class Optimization {
 
-    @Builder.Default
-    @SerializedName("days_between_payments")
-    private Long daysBetweenPayments = 1L;
+    private Boolean optimized;
 
-    @Builder.Default
-    private String expiry = "99991231";
+    private String framework;
+
+    @SerializedName("optimized_properties")
+    private List<OptimizedProperties> optimizedProperties;
 
 }

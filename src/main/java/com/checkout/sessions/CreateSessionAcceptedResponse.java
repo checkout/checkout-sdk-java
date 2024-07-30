@@ -47,6 +47,12 @@ public final class CreateSessionAcceptedResponse extends Resource {
     @SerializedName("protocol_version")
     private String protocolVersion;
 
+    @SerializedName("account_info")
+    private CardholderAccountInfo accountInfo;
+
+    @SerializedName("merchant_risk_info")
+    private MerchantRiskInfo merchantRiskInfo;
+
     private String reference;
 
     private CardInfo card;
@@ -55,10 +61,15 @@ public final class CreateSessionAcceptedResponse extends Resource {
 
     private Installment installment;
 
+    @SerializedName("initial_transaction")
+    private InitialTransaction initialTransaction;
+
     @SerializedName("authentication_date")
     private Instant authenticationDate;
 
     @SerializedName("challenge_indicator")
     private ChallengeIndicator challengeIndicator;
+
+    private Optimization optimization;
 
 }

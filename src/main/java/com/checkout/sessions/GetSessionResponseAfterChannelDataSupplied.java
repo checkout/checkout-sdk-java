@@ -50,6 +50,12 @@ public final class GetSessionResponseAfterChannelDataSupplied extends Resource {
     @SerializedName("protocol_version")
     private String protocolVersion;
 
+    @SerializedName("account_info")
+    private CardholderAccountInfo cardholderAccountInfo;
+
+    @SerializedName("merchant_risk_info")
+    private MerchantRiskInfo merchantRiskInfo;
+
     private String reference;
 
     @SerializedName("transaction_type")

@@ -2,8 +2,10 @@ package com.checkout.sessions;
 
 import com.checkout.common.ChallengeIndicator;
 import com.checkout.common.Currency;
+import com.checkout.sessions.channel.BrowserSession;
 import com.checkout.sessions.channel.ChannelData;
 import com.checkout.sessions.completion.CompletionInfo;
+import com.checkout.sessions.source.SessionCardSource;
 import com.checkout.sessions.source.SessionSource;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
@@ -17,7 +19,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class SessionRequest {
 
-    private SessionSource source;
+    @Builder.Default
+    private SessionSource source = new SessionCardSource();
 
     private Long amount;
 
@@ -29,17 +32,20 @@ public final class SessionRequest {
     @SerializedName("marketplace")
     private SessionMarketplaceData marketplace;
 
+    @Builder.Default
     @SerializedName("authentication_type")
-    private AuthenticationType authenticationType;
+    private AuthenticationType authenticationType = AuthenticationType.REGULAR;
 
+    @Builder.Default
     @SerializedName("authentication_category")
-    private Category authenticationCategory;
+    private Category authenticationCategory = Category.PAYMENT;
 
     @SerializedName("account_info")
     private CardholderAccountInfo cardholderAccountInfo;
 
+    @Builder.Default
     @SerializedName("challenge_indicator")
-    private ChallengeIndicator challengeIndicator;
+    private ChallengeIndicator challengeIndicator = ChallengeIndicator.NO_PREFERENCE;
 
     @SerializedName("billing_descriptor")
     private SessionsBillingDescriptor billingDescriptor;
@@ -52,8 +58,9 @@ public final class SessionRequest {
     @SerializedName("prior_transaction_reference")
     private String priorTransactionReference;
 
+    @Builder.Default
     @SerializedName("transaction_type")
-    private TransactionType transactionType;
+    private TransactionType transactionType = TransactionType.GOODS_SERVICE;
 
     @SerializedName("shipping_address")
     private SessionAddress shippingAddress;
@@ -70,5 +77,9 @@ public final class SessionRequest {
 
     private Installment installment;
 
-}
+    private Optimization optimization;
 
+    @SerializedName("initial_transaction")
+    private InitialTransaction initialTransaction;
+
+}

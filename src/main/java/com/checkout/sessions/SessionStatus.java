@@ -4,25 +4,25 @@ import com.google.gson.annotations.SerializedName;
 
 public enum SessionStatus {
 
-    @SerializedName("pending")
-    PENDING,
-    @SerializedName("processing")
-    PROCESSING,
-    @SerializedName("challenged")
-    CHALLENGED,
-    @SerializedName("challenge_abandoned")
-    CHALLENGE_ABANDONED,
-    @SerializedName("expired")
-    EXPIRED,
     @SerializedName("approved")
     APPROVED,
     @SerializedName("attempted")
     ATTEMPTED,
-    @SerializedName("unavailable")
-    UNAVAILABLE,
+    @SerializedName("challenge_abandoned")
+    CHALLENGE_ABANDONED,
+    @SerializedName("challenged")
+    CHALLENGED,
     @SerializedName("declined")
     DECLINED,
+    @SerializedName("expired")
+    EXPIRED,
+    @SerializedName("pending")
+    PENDING,
+    @SerializedName("processing")
+    PROCESSING,
     @SerializedName("rejected")
-    REJECTED
+    REJECTED,
+    @SerializedName("unavailable")
+    UNAVAILABLE,
 
 }

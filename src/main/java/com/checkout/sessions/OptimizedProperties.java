@@ -10,13 +10,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public final class Recurring {
+public final class OptimizedProperties {
 
-    @Builder.Default
-    @SerializedName("days_between_payments")
-    private Long daysBetweenPayments = 1L;
+    private String field;
 
-    @Builder.Default
-    private String expiry = "99991231";
+    @SerializedName("original_value")
+    private String originalValue;
+
+    @SerializedName("optimized_value")
+    private String optimizedValue;
 
 }

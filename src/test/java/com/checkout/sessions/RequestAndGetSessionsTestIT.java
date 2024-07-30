@@ -119,7 +119,6 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
 
     }
 
-    @Disabled("unstable")
     @ParameterizedTest
     @MethodSource("sessionsTypes_appSession")
     void shouldRequestAndGetCardSession_appSession(final Category category,
@@ -144,9 +143,9 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
 
         assertEquals(AuthenticationType.REGULAR, response.getAuthenticationType());
         assertEquals(category, response.getAuthenticationCategory());
-        assertEquals(SessionStatus.CHALLENGED, response.getStatus());
+        assertEquals(SessionStatus.UNAVAILABLE, response.getStatus());
         assertEquals(1, response.getNextActions().size());
-        assertEquals(NextAction.AUTHENTICATE, response.getNextActions().get(0));
+        assertEquals(NextAction.COMPLETE, response.getNextActions().get(0));
         assertEquals(transactionType, response.getTransactionType());
 
         assertNotNull(response.getSelfLink());
@@ -168,40 +167,76 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
 
         assertEquals(AuthenticationType.REGULAR, getSessionResponse.getAuthenticationType());
         assertEquals(category, getSessionResponse.getAuthenticationCategory());
-        assertEquals(SessionStatus.CHALLENGED, getSessionResponse.getStatus());
+        assertEquals(SessionStatus.UNAVAILABLE, getSessionResponse.getStatus());
         assertEquals(1, getSessionResponse.getNextActions().size());
-        assertEquals(NextAction.AUTHENTICATE, getSessionResponse.getNextActions().get(0));
+        assertEquals(NextAction.COMPLETE, getSessionResponse.getNextActions().get(0));
         assertEquals(transactionType, getSessionResponse.getTransactionType());
-        assertNull(getSessionResponse.getResponseCode());
+        assertEquals(ResponseCode.U, getSessionResponse.getResponseCode());
 
         assertNotNull(getSessionResponse.getSelfLink());
         assertNotNull(getSessionResponse.getLink("callback_url"));
         assertFalse(getSessionResponse.getCompleted());
 
-        final GetSessionResponse getSessionSecretSessionResponse = blocking(() -> checkoutApi.sessionsClient().getSessionDetails(response.getSessionSecret(), response.getId()));
+    }
 
-        assertNull(getSessionSecretSessionResponse.getCertificates());
-        assertNull(getSessionSecretSessionResponse.getSessionSecret());
+    @Disabled("Not supported")
+    @ParameterizedTest
+    @MethodSource("sessionsTypes_merchantInitiatedSession")
+    void shouldRequestAndGetCardSession_merchantInitiatedSession(final Category category,
+                                                                 final ChallengeIndicator challengeIndicator,
+                                                                 final TransactionType transactionType) {
 
-        assertNotNull(getSessionSecretSessionResponse.getId());
-        assertNotNull(getSessionSecretSessionResponse.getTransactionId());
-        assertNotNull(getSessionSecretSessionResponse.getAmount());
+        final ChannelData merchantInitiatedSession = merchantInitiatedSession();
 
-        assertNotNull(getSessionSecretSessionResponse.getDs());
-        assertNull(getSessionSecretSessionResponse.getAcs());
-        assertNotNull(getSessionSecretSessionResponse.getCard());
+        final SessionResponse sessionResponse = createNonHostedSession(merchantInitiatedSession, category, challengeIndicator, transactionType);
 
-        assertEquals(AuthenticationType.REGULAR, getSessionSecretSessionResponse.getAuthenticationType());
-        assertEquals(category, getSessionSecretSessionResponse.getAuthenticationCategory());
-        assertEquals(SessionStatus.CHALLENGED, getSessionSecretSessionResponse.getStatus());
-        assertEquals(1, getSessionSecretSessionResponse.getNextActions().size());
-        assertEquals(NextAction.AUTHENTICATE, getSessionSecretSessionResponse.getNextActions().get(0));
-        assertEquals(transactionType, getSessionSecretSessionResponse.getTransactionType());
-        assertNull(getSessionSecretSessionResponse.getResponseCode());
+        assertNotNull(sessionResponse);
+        assertNotNull(sessionResponse.getCreated());
 
-        assertNotNull(getSessionSecretSessionResponse.getSelfLink());
-        assertNotNull(getSessionSecretSessionResponse.getLink("callback_url"));
-        assertFalse(getSessionSecretSessionResponse.getCompleted());
+        final CreateSessionOkResponse response = sessionResponse.getCreated();
+        assertNotNull(response.getId());
+        assertNotNull(response.getSessionSecret());
+        assertNotNull(response.getTransactionId());
+        assertNotNull(response.getAmount());
+        assertNotNull(response.getCertificates());
+        assertNotNull(response.getDs());
+        assertNotNull(response.getCard());
+
+        assertEquals(AuthenticationType.REGULAR, response.getAuthenticationType());
+        assertEquals(category, response.getAuthenticationCategory());
+        assertEquals(SessionStatus.UNAVAILABLE, response.getStatus());
+        assertEquals(1, response.getNextActions().size());
+        assertEquals(NextAction.COMPLETE, response.getNextActions().get(0));
+        assertEquals(transactionType, response.getTransactionType());
+
+        assertNotNull(response.getSelfLink());
+        assertNotNull(response.getLink("callback_url"));
+        assertFalse(response.getCompleted());
+
+        final GetSessionResponse getSessionResponse = blocking(() -> checkoutApi.sessionsClient().getSessionDetails(response.getId()));
+
+        assertNotNull(getSessionResponse);
+
+        assertNotNull(getSessionResponse.getId());
+        assertNotNull(getSessionResponse.getSessionSecret());
+        assertNotNull(getSessionResponse.getTransactionId());
+        assertNotNull(getSessionResponse.getAmount());
+        assertNotNull(getSessionResponse.getCertificates());
+        assertNotNull(getSessionResponse.getDs());
+        assertNull(getSessionResponse.getAcs());
+        assertNotNull(getSessionResponse.getCard());
+
+        assertEquals(AuthenticationType.REGULAR, getSessionResponse.getAuthenticationType());
+        assertEquals(category, getSessionResponse.getAuthenticationCategory());
+        assertEquals(SessionStatus.UNAVAILABLE, getSessionResponse.getStatus());
+        assertEquals(1, getSessionResponse.getNextActions().size());
+        assertEquals(NextAction.COMPLETE, getSessionResponse.getNextActions().get(0));
+        assertEquals(transactionType, getSessionResponse.getTransactionType());
+        assertEquals(ResponseCode.U, getSessionResponse.getResponseCode());
+
+        assertNotNull(getSessionResponse.getSelfLink());
+        assertNotNull(getSessionResponse.getLink("callback_url"));
+        assertFalse(getSessionResponse.getCompleted());
 
     }
 

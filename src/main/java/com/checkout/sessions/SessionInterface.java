@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName;
 
 public enum SessionInterface {
 
-    @SerializedName("native_ui")
-    NATIVE_UI,
     @SerializedName("html")
-    HTML
+    HTML,
+    @SerializedName("native_ui")
+    NATIVE_UI
 
 }

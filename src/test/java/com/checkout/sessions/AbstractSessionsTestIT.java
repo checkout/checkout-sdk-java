@@ -11,6 +11,8 @@ import com.checkout.common.Phone;
 import com.checkout.sessions.channel.AppSession;
 import com.checkout.sessions.channel.BrowserSession;
 import com.checkout.sessions.channel.ChannelData;
+import com.checkout.sessions.channel.MerchantInitiatedSession;
+import com.checkout.sessions.channel.RequestType;
 import com.checkout.sessions.channel.SdkEphemeralPublicKey;
 import com.checkout.sessions.channel.SdkInterfaceType;
 import com.checkout.sessions.channel.ThreeDsMethodCompletion;
@@ -144,6 +146,12 @@ abstract class AbstractSessionsTestIT extends SandboxTestFixture {
                 .sdkTransactionId("b2385523-a66c-4907-ac3c-91848e8c0067")
                 .sdkInterfaceType(SdkInterfaceType.BOTH)
                 .sdkUIElements(Arrays.asList(UIElements.SINGLE_SELECT, UIElements.HTML_OTHER))
+                .build();
+    }
+
+    protected static ChannelData merchantInitiatedSession() {
+        return MerchantInitiatedSession.builder()
+                .requestType(RequestType.RECURRING_TRANSACTION)
                 .build();
     }
 

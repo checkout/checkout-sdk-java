@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName;
 
 public enum SdkInterfaceType {
 
-    @SerializedName("native")
-    NATIVE,
+    @SerializedName("both")
+    BOTH,
     @SerializedName("html")
     HTML,
-    @SerializedName("both")
-    BOTH
+    @SerializedName("native")
+    NATIVE
 
 }

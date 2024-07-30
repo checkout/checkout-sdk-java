@@ -7,12 +7,14 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 @Data
+@Builder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class BrowserSession extends ChannelData {
 
+    @Builder.Default
     @SerializedName("three_ds_method_completion")
-    private ThreeDsMethodCompletion threeDsMethodCompletion;
+    private ThreeDsMethodCompletion threeDsMethodCompletion = ThreeDsMethodCompletion.U;
 
     @SerializedName("accept_header")
     private String acceptHeader;

@@ -1,12 +1,10 @@
 package com.checkout.sessions;
 
-public enum ResponseCode {
+public enum TrustedBeneficiaryStatusType {
 
-    A,
-    C,
-    D,
-    I,
+    E,
     N,
+    P,
     R,
     U,
     Y

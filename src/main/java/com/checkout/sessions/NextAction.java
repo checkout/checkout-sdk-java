@@ -4,17 +4,17 @@ import com.google.gson.annotations.SerializedName;
 
 public enum NextAction {
 
-    @SerializedName("collect_channel_data")
-    COLLECT_CHANNEL_DATA,
-    @SerializedName("issuer_fingerprint")
-    ISSUER_FINGERPRINT,
+    @SerializedName("authenticate")
+    AUTHENTICATE,
     @SerializedName("challenge_cardholder")
     CHALLENGE_CARDHOLDER,
-    @SerializedName("redirect_cardholder")
-    REDIRECT_CARDHOLDER,
+    @SerializedName("collect_channel_data")
+    COLLECT_CHANNEL_DATA,
     @SerializedName("complete")
     COMPLETE,
-    @SerializedName("authenticate")
-    AUTHENTICATE
+    @SerializedName("issuer_fingerprint")
+    ISSUER_FINGERPRINT,
+    @SerializedName("redirect_cardholder")
+    REDIRECT_CARDHOLDER
 
 }
