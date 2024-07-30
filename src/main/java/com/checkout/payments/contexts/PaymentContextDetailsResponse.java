@@ -10,7 +10,6 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@NoArgsConstructor
 public final class PaymentContextDetailsResponse extends HttpMetadata {
 
     private PaymentContextDetailsStatusType status;

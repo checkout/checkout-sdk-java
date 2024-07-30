@@ -1,13 +1,16 @@
 package com.checkout;
 
+import com.checkout.common.PaymentSourceType;
 import com.checkout.financial.FinancialActionsQueryResponse;
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
 import com.checkout.issuing.cards.responses.PhysicalCardDetailsResponse;
 import com.checkout.issuing.cards.responses.VirtualCardDetailsResponse;
+import com.checkout.payments.contexts.PaymentContextDetailsResponse;
 import com.checkout.payments.previous.response.GetPaymentResponse;
 import com.checkout.payments.previous.response.PaymentResponse;
 import com.checkout.payments.previous.response.destination.PaymentResponseAlternativeDestination;
 import com.checkout.payments.previous.response.destination.PaymentResponseCardDestination;
+import com.checkout.payments.response.source.contexts.PaymentContextsPayPalResponseSource;
 import com.checkout.payments.sender.PaymentCorporateSender;
 import com.checkout.payments.sender.ResponseAlternativeSender;
 import com.checkout.payments.sender.SenderType;
@@ -116,6 +119,16 @@ class GsonSerializerTest {
         assertThat(actionsQueryResponse.getData(), hasSize(1));
         assertNotNull(actionsQueryResponse.getData().get(0).getProcessedOn());
         assertNotNull(actionsQueryResponse.getData().get(0).getRequestedOn());
+    }
+
+    @Test
+    void shouldSerializePaymentContextsPayPalDetailsResponseFromJson() {
+
+        final PaymentContextDetailsResponse paymentContextsPayPalResponseSource = serializer.fromJson(getMock("/mocks/payments/response/contexts/payment_context_paypal_details_response.json"), PaymentContextDetailsResponse.class);
+
+        assertNotNull(paymentContextsPayPalResponseSource);
+        assertTrue(paymentContextsPayPalResponseSource.getPaymentRequest().getSource() instanceof PaymentContextsPayPalResponseSource);
+        assertEquals(PaymentSourceType.PAYPAL, paymentContextsPayPalResponseSource.getPaymentRequest().getSource().getType());
     }
 
     @Test
