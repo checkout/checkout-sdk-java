@@ -9,6 +9,7 @@ import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.payments.request.AuthorizationRequest;
+import com.checkout.payments.request.PartialAuthorization;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.source.RequestCardSource;
 import com.checkout.payments.response.AuthorizationResponse;
@@ -102,6 +103,10 @@ class PaymentAuthorizationsTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
+        final PartialAuthorization partialAuthorization = PartialAuthorization.builder()
+                .enabled(true)
+                .build();
+
         final PaymentRequest request = PaymentRequest.builder()
                 .source(source)
                 .sender(sender)
@@ -113,6 +118,7 @@ class PaymentAuthorizationsTestIT extends SandboxTestFixture {
                 .threeDS(null)
                 .successUrl(null)
                 .failureUrl(null)
+                .partialAuthorization(partialAuthorization)
                 .build();
 
         return blocking(() -> checkoutApi.paymentsClient().requestPayment(request));

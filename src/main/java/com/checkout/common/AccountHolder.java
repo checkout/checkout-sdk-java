@@ -14,11 +14,21 @@ public final class AccountHolder {
 
     private AccountHolderType type;
 
+    @SerializedName("full_name")
+    private String fullName;
+
     @SerializedName("first_name")
     private String firstName;
 
+    @SerializedName("middle_name")
+    private String middleName;
+
     @SerializedName("last_name")
     private String lastName;
+
+    private String email;
+
+    private String gender;
 
     @SerializedName("company_name")
     private String companyName;
@@ -41,12 +51,5 @@ public final class AccountHolder {
     private Phone phone;
 
     private AccountHolderIdentification identification;
-
-    private String email;
-
-    private String gender;
-
-    @SerializedName("middle_name")
-    private String middleName;
 
 }

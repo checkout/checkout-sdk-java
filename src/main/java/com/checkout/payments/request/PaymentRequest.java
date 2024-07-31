@@ -50,6 +50,9 @@ public final class PaymentRequest {
     @SerializedName("authorization_type")
     private AuthorizationType authorizationType;
 
+    @SerializedName("partial_authorization")
+    private PartialAuthorization partialAuthorization;
+
     private Boolean capture;
 
     @SerializedName("capture_on")
