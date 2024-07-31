@@ -1,14 +1,14 @@
 {
   "partner_metadata": {
-    "customer_id": "WXZ3YUKYW27V4",
-    "order_id": "0UX64350RX431305J"
+    "customer_id": "EWR4HCRWOEIW4",
+    "order_id": "NF89G5J9E5G905E90"
   },
   "payment_request": {
     "amount": 2500,
     "authorization_type": "Final",
     "capture": true,
     "currency": "GBP",
-    "failure_url": "https://www.spaseekers.com/checkout/checkoutdotcom3/payment-failed",
+    "failure_url": "https://url/payment-failed",
     "items": [
       {
         "discount_amount": 0,
@@ -25,26 +25,26 @@
       "user_action": "PAY_NOW"
     },
     "processing_channel_id": "pc_strugfrty47ellyymdfg6fzhc4i",
-    "reference": "770859",
+    "reference": "543454",
     "shipping": {
       "address": {
-        "address_line1": "6 May Close",
-        "address_line2": "Goring-by-Sea",
-        "city": "Worthing",
+        "address_line1": "Main Address",
+        "address_line2": "Flor 1",
+        "city": "London",
         "country": "GB",
-        "state": "WEST SUSSEX",
-        "zip": "BN12 6HW"
+        "state": "State",
+        "zip": "ZIP"
       },
-      "first_name": "Matthew Abbott"
+      "first_name": "Andrey Young"
     },
     "source": {
       "account_holder": {
-        "email": "me+paypal@matthewabbott.dev",
-        "full_name": "Matthew Abbott"
+        "email": "ayoung@fakedomain.com",
+        "full_name": "Andrey Young"
       },
       "type": "paypal"
     },
-    "success_url": "https://www.spaseekers.com/checkout/checkoutdotcom3/payment-successful"
+    "success_url": "https://url/payment-successful"
   },
   "status": "Created"
 }
