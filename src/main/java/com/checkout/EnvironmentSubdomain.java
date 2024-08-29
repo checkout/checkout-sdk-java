@@ -25,7 +25,7 @@ public class EnvironmentSubdomain {
         } catch (final URISyntaxException e) {
             throw new CheckoutException(e);
         }
-        Pattern pattern = Pattern.compile("^[0-9a-z]{8,11}$");
+        Pattern pattern = Pattern.compile("^[0-9a-z]+$");
         Matcher matcher = pattern.matcher(subdomain);
         if (matcher.matches()) {
             String host = apiUrl.getHost();

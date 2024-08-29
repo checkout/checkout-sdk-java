@@ -47,7 +47,7 @@ class DefaultCheckoutConfigurationTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"123dmain", "123domain", "1234domain", "12345domain"})
+    @ValueSource(strings = {"a", "ab", "abc", "abc1", "12345domain"})
     void shouldCreateConfigurationWithSubdomain(String subdomain) {
 
         final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
@@ -58,7 +58,7 @@ class DefaultCheckoutConfigurationTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "123", "123bad", "12345domainBad"})
+    @ValueSource(strings = {"", " ", "  ", " - ", "a b", "ab c1"})
     void shouldCreateConfigurationWithBadSubdomain(String subdomain) {
 
         final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
