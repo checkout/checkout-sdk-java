@@ -19,6 +19,7 @@ import com.checkout.issuing.controls.responses.create.MccCardControlResponse;
 import com.checkout.issuing.controls.responses.create.VelocityCardControlResponse;
 import com.checkout.payments.PaymentDestinationType;
 import com.checkout.payments.previous.PaymentAction;
+import com.checkout.payments.PaymentPlanType;
 import com.checkout.payments.sender.Sender;
 import com.checkout.payments.sender.SenderType;
 import com.checkout.webhooks.previous.WebhookResponse;
@@ -32,6 +33,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
@@ -41,6 +43,7 @@ import org.apache.commons.lang3.EnumUtils;
 
 import java.lang.reflect.Type;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -274,6 +277,15 @@ public class GsonSerializer implements Serializer {
             try {
                 return Instant.parse(dateString);
             } catch (final DateTimeParseException ex) {
+                if (dateString.length() == 8) {
+                    try {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+                        LocalDateTime dateTime = LocalDate.parse(dateString, formatter).atStartOfDay();
+                        return dateTime.toInstant(ZoneOffset.UTC);
+                    } catch (final DateTimeParseException e) {
+                        throw new JsonParseException("Failed to parse date in format yyyyMMdd: " + dateString, e);
+                    }
+                }
                 for (final DateTimeFormatter formatter : DEFAULT_FORMATTERS) {
                     try {
                         final LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);

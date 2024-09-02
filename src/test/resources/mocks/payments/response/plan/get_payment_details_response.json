@@ -1,0 +1,252 @@
+{
+  "id": "pay_mbabizu24mvu3mela5njyhpit4",
+  "requested_on": "2019-08-24T14:15:22Z",
+  "source": {
+    "type": "card"
+  },
+  "destination": {
+    "type": "card"
+  },
+  "amount": 6540,
+  "amount_requested": 6540,
+  "currency": "USD",
+  "payment_type": "Recurring",
+  "payment_plan": {
+    "amount_variability": "Variable",
+    "days_between_payments": 28,
+    "total_number_of_payments": 5,
+    "current_payment_number": 3,
+    "expiry": 20251031
+  },
+  "reference": "ORD-5023-4E89",
+  "description": "Set of 3 masks",
+  "approved": true,
+  "expires_on": "2025-08-24T14:15:22Z",
+  "status": "Authorized",
+  "balances": {
+    "total_authorized": 6540,
+    "total_voided": 0,
+    "available_to_void": 6540,
+    "total_captured": 0,
+    "available_to_capture": 6540,
+    "total_refunded": 0,
+    "available_to_refund": 0
+  },
+  "3ds": {
+    "downgraded": false,
+    "enrolled": "Y",
+    "signature_valid": "Y",
+    "authentication_response": "Y",
+    "authentication_status_reason": "string",
+    "cryptogram": "hv8mUFzPzRZoCAAAAAEQBDMAAAA=",
+    "xid": "MDAwMDAwMDAwMDAwMDAwMzIyNzY=",
+    "version": "2.1.0",
+    "exemption": "low_value",
+    "exemption_applied": "string",
+    "challenged": true,
+    "upgrade_reason": "sca_retry",
+    "trusted_listing": {
+      "status": "Y",
+      "source": "01"
+    }
+  },
+  "risk": {
+    "flagged": true,
+    "score": 22
+  },
+  "customer": {
+    "id": "cus_y3oqhf46pyzuxjbcn2giaqnb44",
+    "email": "brucewayne@gmail.com",
+    "name": "Bruce Wayne"
+  },
+  "billing_descriptor": {
+    "name": "SUPERHEROES.COM",
+    "city": "GOTHAM",
+    "reference": "string",
+    "local_descriptors": [
+      {
+        "name": "漢字",
+        "character_set": "kanji"
+      }
+    ]
+  },
+  "shipping": {
+    "address": {
+      "address_line1": "123 High St.",
+      "address_line2": "Flat 456",
+      "city": "London",
+      "state": "str",
+      "zip": "SW1A 1AA",
+      "country": "GB"
+    },
+    "phone": {
+      "country_code": "+1",
+      "number": "415 555 2671"
+    }
+  },
+  "payment_ip": "90.197.169.245",
+  "sender": {
+    "type": "instrument",
+    "reference": "8285282045818"
+  },
+  "amount_allocations": [
+    {
+      "id": "ent_w4jelhppmfiufdnatam37wrfc4",
+      "amount": 1000,
+      "reference": "ORD-5023-4E89",
+      "commission": {
+        "amount": 1000,
+        "percentage": 1.125
+      }
+    }
+  ],
+  "recipient": {
+    "dob": "1985-05-15",
+    "account_number": "5555554444",
+    "address": {
+      "address_line1": "123 High St.",
+      "address_line2": "Flat 456",
+      "city": "London",
+      "state": "str",
+      "zip": "SW1A 1AA",
+      "country": "GB"
+    },
+    "zip": "SW1A",
+    "first_name": "John",
+    "last_name": "Jones"
+  },
+  "processing": {
+    "preferred_scheme": "cartes_bancaires",
+    "app_id": "com.iap.linker_portal",
+    "airline_data": [
+      {
+        "ticket": {
+          "number": "045-21351455613",
+          "issue_date": "2023-05-20",
+          "issuing_carrier_code": "AI",
+          "travel_package_indicator": "B",
+          "travel_agency_name": "World Tours",
+          "travel_agency_code": "01"
+        },
+        "passenger": [
+          {
+            "first_name": "John",
+            "last_name": "White",
+            "date_of_birth": "1990-05-26",
+            "address": {
+              "country": "US"
+            }
+          }
+        ],
+        "flight_leg_details": [
+          {
+            "flight_number": "101",
+            "carrier_code": "BA",
+            "class_of_travelling": "J",
+            "departure_airport": "LHR",
+            "departure_date": "2023-06-19",
+            "departure_time": "15:30",
+            "arrival_airport": "LAX",
+            "stop_over_code": "x",
+            "fare_basis_code": "SPRSVR"
+          }
+        ]
+      }
+    ],
+    "accommodation_data": [
+      {
+        "name": "The Sea View Hotel",
+        "check_in_date": "2023-06-20",
+        "check_out_date": "2023-06-23",
+        "state": "US",
+        "country": "CA",
+        "city": "Los Angeles",
+        "room": [
+          {
+            "rate": "70",
+            "number_of_nights_at_room_rate": "3"
+          }
+        ]
+      }
+    ],
+    "partner_customer_id": "2102209000001106125F8",
+    "partner_payment_id": "440644309099499894406",
+    "tax_amount": 1000,
+    "locale": "en-US",
+    "retrieval_reference_number": "909913440644",
+    "partner_order_id": "string",
+    "partner_status": "string",
+    "partner_transaction_id": "string",
+    "partner_error_codes": [
+      "string"
+    ],
+    "partner_error_message": "string",
+    "partner_authorization_code": "string",
+    "partner_authorization_response_code": "string",
+    "partner_fraud_status": "string",
+    "custom_payment_method_ids": [
+      "string"
+    ],
+    "aft": true,
+    "merchant_category_code": 5311,
+    "scheme_merchant_id": "string"
+  },
+  "items": [
+    {
+      "type": "string",
+      "name": "Kevlar batterang",
+      "quantity": 2,
+      "unit_price": 50,
+      "reference": "858818ac",
+      "commodity_code": "DEF123",
+      "unit_of_measure": "metres",
+      "total_amount": 29000,
+      "tax_rate": 2000,
+      "tax_amount": 1000,
+      "discount_amount": 1000,
+      "wxpay_goods_id": 1001,
+      "url": "string",
+      "image_url": "string",
+      "service_ends_on": "2025-01-01"
+    }
+  ],
+  "metadata": {
+    "coupon_code": "NY2018",
+    "partner_id": 123989
+  },
+  "eci": "06",
+  "scheme_id": "488341541494658",
+  "actions": [
+    {
+      "id": "act_y3oqhf46pyzuxjbcn2giaqnb44",
+      "type": "Authorization",
+      "response_code": "10000",
+      "response_summary": "Approved"
+    }
+  ],
+  "retry": {
+    "attempts_made": 0,
+    "max_attempts": 6,
+    "ends_on": "2019-08-24T14:15:22Z",
+    "next_attempt_on": "2019-08-24T14:15:22Z"
+  },
+  "pan_type_processed": "fpan",
+  "cko_network_token_available": false,
+  "instruction": {
+    "purpose": "financial_services"
+  },
+  "_links": {
+    "self": {
+      "href": "https://api.checkout.com/payments/pay_y3oqhf46pyzuxjbcn2giaqnb44"
+    },
+    "actions": {
+      "href": "https://api.checkout.com/payments/pay_y3oqhf46pyzuxjbcn2giaqnb44/actions"
+    },
+    "authorize": {
+      "href": "https://api.checkout.com/payments/pay_y3oqhf46pyzuxjbcn2giaqnb44/authorizations"
+    },
+    "refund": {
+      "href": "https://api.checkout.com/payments/pay_y3oqhf46pyzuxjbcn2giaqnb44/refund"
+    }
+  }
+}

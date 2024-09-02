@@ -17,6 +17,7 @@ import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSData;
 import com.checkout.payments.request.PaymentInstruction;
 import com.checkout.payments.response.destination.PaymentResponseDestination;
+import com.checkout.payments.PaymentPlanType;
 import com.checkout.payments.response.source.ResponseSource;
 import com.checkout.payments.sender.Sender;
 import com.google.gson.annotations.SerializedName;
@@ -50,6 +51,9 @@ public final class GetPaymentResponse extends Resource {
 
     @SerializedName("payment_type")
     private PaymentType type;
+
+    @SerializedName("payment_plan")
+    private PaymentPlanType paymentPlan;
 
     private String reference;
 
@@ -103,12 +107,12 @@ public final class GetPaymentResponse extends Resource {
     private String schemeId;
 
     private List<PaymentActionSummary> actions;
-    
+
     private PaymentRetryResponse retry;
-    
+
     @SerializedName("pan_type_processed")
     private PanProcessedType panTypeProcessed;
-    
+
     @SerializedName("cko_network_token_available")
     private Boolean ckoNetworkTokenAvailable;
 

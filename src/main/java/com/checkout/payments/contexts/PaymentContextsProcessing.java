@@ -19,6 +19,9 @@ public final class PaymentContextsProcessing {
 
     private BillingPlan plan;
 
+    @SerializedName("discount_amount")
+    private Integer discountAmount;
+
     @SerializedName("shipping_amount")
     private Integer shippingAmount;
 
@@ -41,4 +44,5 @@ public final class PaymentContextsProcessing {
 
     @SerializedName("airline_data")
     private List<PaymentContextsAirlineData> airlineData;
+
 }

@@ -132,38 +132,61 @@ class GsonSerializerTest {
     }
 
     @Test
+    void shouldSerializePaymentContextsResponseFromJson() {
+
+        final com.checkout.payments.response.PaymentResponse paymentContextsResponse = serializer.fromJson(getMock("/mocks/payments/response/plan/get_payment_context_response.json"), com.checkout.payments.response.PaymentResponse.class);
+
+        assertNotNull(paymentContextsResponse);
+        assertNotNull(paymentContextsResponse.getPaymentPlan());
+    }
+
+    @Test
+    void shouldSerializePaymentDetailsResponseFromJson() {
+
+        final com.checkout.payments.response.GetPaymentResponse paymentDetailsResponse = serializer.fromJson(getMock("/mocks/payments/response/plan/get_payment_details_response.json"), com.checkout.payments.response.GetPaymentResponse.class);
+
+        assertNotNull(paymentDetailsResponse);
+        assertNotNull(paymentDetailsResponse.getPaymentPlan());
+    }
+
+    @Test
     void shouldDeserializeMultipleDateFormats() {
-        Instant instant = Instant.parse("2021-06-08T12:25:01Z");
-        PaymentResponse paymentResponse = serializer.fromJson("{\"processed_on\":\"2021-06-08T12:25:01.000Z\"}", PaymentResponse.class);
+        Instant instant = Instant.parse("2021-06-08T00:00:00Z");
+        PaymentResponse paymentResponse;
+
+        // Test format yyyyMMdd
+        paymentResponse = serializer.fromJson("{\"processed_on\":\"20210608\"}", PaymentResponse.class);
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getProcessedOn());
         assertEquals(instant, paymentResponse.getProcessedOn());
+
+        // Test other valid formats
+        paymentResponse = serializer.fromJson("{\"processed_on\":\"2021-06-08T12:25:01.000Z\"}", PaymentResponse.class);
+        assertNotNull(paymentResponse);
+        assertNotNull(paymentResponse.getProcessedOn());
+        assertEquals(Instant.parse("2021-06-08T12:25:01Z"), paymentResponse.getProcessedOn());
 
         paymentResponse = serializer.fromJson("{\"processed_on\":\"2021-06-08T12:25:01Z\"}", PaymentResponse.class);
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getProcessedOn());
-        assertEquals(instant, paymentResponse.getProcessedOn());
+        assertEquals(Instant.parse("2021-06-08T12:25:01Z"), paymentResponse.getProcessedOn());
 
         paymentResponse = serializer.fromJson("{\"processed_on\":\"2021-06-08T12:25:01+00:00\"}", PaymentResponse.class);
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getProcessedOn());
-        assertEquals(instant, paymentResponse.getProcessedOn());
+        assertEquals(Instant.parse("2021-06-08T12:25:01Z"), paymentResponse.getProcessedOn());
 
         paymentResponse = serializer.fromJson("{\"processed_on\":\"2021-06-08T12:25:01+0000\"}", PaymentResponse.class);
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getProcessedOn());
-        assertEquals(instant, paymentResponse.getProcessedOn());
-
-        paymentResponse = serializer.fromJson("{\"processed_on\":\"2021-06-08T12:25:01+00\"}", PaymentResponse.class);
-        assertNotNull(paymentResponse);
-        assertNotNull(paymentResponse.getProcessedOn());
-        assertEquals(instant, paymentResponse.getProcessedOn());
+        assertEquals(Instant.parse("2021-06-08T12:25:01Z"), paymentResponse.getProcessedOn());
 
         paymentResponse = serializer.fromJson("{\"processed_on\":\"2021-06-08T12:25:01\"}", PaymentResponse.class);
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getProcessedOn());
-        assertEquals(instant, paymentResponse.getProcessedOn());
+        assertEquals(Instant.parse("2021-06-08T12:25:01Z"), paymentResponse.getProcessedOn());
 
+        // Additional cases for different milliseconds precision
         paymentResponse = serializer.fromJson("{\"processed_on\":\"2021-06-08T12:25:01.4698039\"}", PaymentResponse.class);
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getProcessedOn());
