@@ -106,6 +106,9 @@ public final class ProcessingSettings {
     @SerializedName("shipping_info")
     private List<ShippingInfo> shippingInfo;
 
+    @SerializedName("pan_preference")
+    private PanProcessedType panPreference;
+
     //Previous
     private DLocalProcessingSettings dlocal;
 

@@ -4,14 +4,22 @@ import com.google.gson.annotations.SerializedName;
 
 public enum PaymentType {
 
-    @SerializedName("Regular")
-    REGULAR,
-    @SerializedName("Recurring")
-    RECURRING,
-    @SerializedName("Moto")
-    MOTO,
     @SerializedName("Installment")
     INSTALLMENT,
+
+    @SerializedName("Moto")
+    MOTO,
+
+    @SerializedName("PayLater")
+    PAYLATER,
+
+    @SerializedName("Recurring")
+    RECURRING,
+
+    @SerializedName("Regular")
+    REGULAR,
+
     @SerializedName("Unscheduled")
     UNSCHEDULED
+
 }

@@ -1,0 +1,29 @@
+{
+  "id": "pay_mbabizu24mvu3mela5njyhpit4",
+  "payment_type": "Installment",
+  "payment_plan": {
+    "financing": true,
+    "amount": 100000,
+    "days_between_payments": 28,
+    "total_number_of_payments": 5,
+    "current_payment_number": 3,
+    "expiry": 20251031
+  },
+  "processing": {
+    "partner_order_id": "5GK24544NA744002L"
+  },
+  "customer": {
+    "id": "cus_y3oqhf46pyzuxjbcn2giaqnb44",
+    "email": "johnsmith@example.com",
+    "name": "John Smith",
+    "phone": {
+      "country_code": "+1",
+      "number": "415 555 2671"
+    }
+  },
+  "_links": {
+    "self": {
+      "href": "https://api.checkout.com/payments/pay_y3oqhf46pezuxjbcn2giaqnb44"
+    }
+  }
+}

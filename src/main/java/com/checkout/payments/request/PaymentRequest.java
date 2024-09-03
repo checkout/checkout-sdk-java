@@ -14,6 +14,7 @@ import com.checkout.payments.RiskRequest;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
 import com.checkout.payments.request.source.AbstractRequestSource;
+import com.checkout.payments.PaymentPlanType;
 import com.checkout.payments.sender.PaymentSender;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
@@ -38,7 +39,10 @@ public final class PaymentRequest {
     private Currency currency;
 
     @SerializedName("payment_type")
-    private PaymentType paymentType;
+    private PaymentType paymentType = PaymentType.REGULAR;
+
+    @SerializedName("payment_plan")
+    private PaymentPlanType paymentPlan;
 
     @SerializedName("merchant_initiated")
     private Boolean merchantInitiated;

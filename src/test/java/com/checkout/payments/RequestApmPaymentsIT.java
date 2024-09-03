@@ -31,7 +31,6 @@ import com.checkout.payments.request.source.apm.RequestKnetSource;
 import com.checkout.payments.request.source.apm.RequestMbwaySource;
 import com.checkout.payments.request.source.apm.RequestMultiBancoSource;
 import com.checkout.payments.request.source.apm.RequestP24Source;
-import com.checkout.payments.request.source.apm.RequestPayPalSource;
 import com.checkout.payments.request.source.apm.RequestPostFinanceSource;
 import com.checkout.payments.request.source.apm.RequestQPaySource;
 import com.checkout.payments.request.source.apm.RequestSepaSource;

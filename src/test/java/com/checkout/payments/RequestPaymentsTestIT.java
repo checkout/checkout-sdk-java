@@ -1,6 +1,7 @@
 package com.checkout.payments;
 
 import com.checkout.CardSourceHelper;
+import com.checkout.CheckoutArgumentException;
 import com.checkout.common.AccountHolderIdentification;
 import com.checkout.common.AccountHolderIdentificationType;
 import com.checkout.common.Address;
@@ -26,7 +27,9 @@ import com.checkout.payments.sender.PaymentIndividualSender;
 import com.checkout.tokens.CardTokenResponse;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
 import java.util.Collections;
+import java.util.Date;
 import java.util.UUID;
 
 import static com.checkout.CardSourceHelper.getCorporateSender;
@@ -61,8 +64,18 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                         .build())
                 .build();
 
+        final PaymentPlanType recurringPlan = PaymentPlanType.builder()
+                .amountVariability(AmountVariability.FIXED)
+                .daysBetweenPayments(1)
+                .totalNumberOfPayments(1)
+                .currentPaymentNumber(1)
+                .expiry(Instant.parse("2025-12-31T00:00:00Z"))
+                .build();
+
         final PaymentRequest request = PaymentRequest.builder()
                 .source(source)
+                .paymentType(PaymentType.RECURRING)
+                .paymentPlan(recurringPlan)
                 .sender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())

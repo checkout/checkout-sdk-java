@@ -32,6 +32,14 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         );
     }
 
+    private static Stream<Arguments> sessionsTypes_merchantInitiatedSession() {
+        return Stream.of(
+                Arguments.of(Category.PAYMENT, ChallengeIndicator.NO_PREFERENCE, TransactionType.GOODS_SERVICE),
+                Arguments.of(Category.NON_PAYMENT, ChallengeIndicator.CHALLENGE_REQUESTED, TransactionType.CHECK_ACCEPTANCE),
+                Arguments.of(Category.NON_PAYMENT, ChallengeIndicator.CHALLENGE_REQUESTED_MANDATE, TransactionType.ACCOUNT_FUNDING)
+        );
+    }
+
     @ParameterizedTest
     @MethodSource("sessionsTypes_browserSession")
     void shouldRequestAndGetCardSession_browserSession(final Category category,
@@ -130,27 +138,23 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         final SessionResponse sessionResponse = createNonHostedSession(appSession, category, challengeIndicator, transactionType);
 
         assertNotNull(sessionResponse);
-        assertNotNull(sessionResponse.getCreated());
+        assertNotNull(sessionResponse.getAccepted());
 
-        final CreateSessionOkResponse response = sessionResponse.getCreated();
+        final CreateSessionAcceptedResponse response = sessionResponse.getAccepted();
         assertNotNull(response.getId());
         assertNotNull(response.getSessionSecret());
         assertNotNull(response.getTransactionId());
         assertNotNull(response.getAmount());
-        assertNotNull(response.getCertificates());
-        assertNotNull(response.getDs());
         assertNotNull(response.getCard());
 
         assertEquals(AuthenticationType.REGULAR, response.getAuthenticationType());
         assertEquals(category, response.getAuthenticationCategory());
-        assertEquals(SessionStatus.UNAVAILABLE, response.getStatus());
+        assertEquals(SessionStatus.PENDING, response.getStatus());
         assertEquals(1, response.getNextActions().size());
-        assertEquals(NextAction.COMPLETE, response.getNextActions().get(0));
-        assertEquals(transactionType, response.getTransactionType());
+        assertEquals(NextAction.COLLECT_CHANNEL_DATA, response.getNextActions().get(0));
 
         assertNotNull(response.getSelfLink());
         assertNotNull(response.getLink("callback_url"));
-        assertFalse(response.getCompleted());
 
         final GetSessionResponse getSessionResponse = blocking(() -> checkoutApi.sessionsClient().getSessionDetails(response.getId()));
 
@@ -167,11 +171,11 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
 
         assertEquals(AuthenticationType.REGULAR, getSessionResponse.getAuthenticationType());
         assertEquals(category, getSessionResponse.getAuthenticationCategory());
-        assertEquals(SessionStatus.UNAVAILABLE, getSessionResponse.getStatus());
+        assertEquals(SessionStatus.PENDING, getSessionResponse.getStatus());
         assertEquals(1, getSessionResponse.getNextActions().size());
-        assertEquals(NextAction.COMPLETE, getSessionResponse.getNextActions().get(0));
+        assertEquals(NextAction.COLLECT_CHANNEL_DATA, getSessionResponse.getNextActions().get(0));
         assertEquals(transactionType, getSessionResponse.getTransactionType());
-        assertEquals(ResponseCode.U, getSessionResponse.getResponseCode());
+        assertNull(getSessionResponse.getResponseCode());
 
         assertNotNull(getSessionResponse.getSelfLink());
         assertNotNull(getSessionResponse.getLink("callback_url"));

@@ -6,9 +6,11 @@ import com.checkout.common.Resource;
 import com.checkout.payments.PaymentProcessing;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.PaymentStatus;
+import com.checkout.payments.PaymentType;
 import com.checkout.payments.RiskAssessment;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSEnrollment;
+import com.checkout.payments.PaymentPlanType;
 import com.checkout.payments.response.source.ResponseSource;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
@@ -28,6 +30,12 @@ public final class PaymentResponse extends Resource implements Serializable {
     private ResponseSource source;
 
     private String id;
+
+    @SerializedName("payment_type")
+    private PaymentType paymentType;
+
+    @SerializedName("payment_plan")
+    private PaymentPlanType paymentPlan;
 
     @SerializedName("action_id")
     private String actionId;
