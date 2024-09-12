@@ -32,6 +32,9 @@ public final class Order {
     @SerializedName("total_amount")
     private Long totalAmount;
 
+    @SerializedName("tax_rate")
+    private Long taxRate;
+
     @SerializedName("tax_amount")
     private Long taxAmount;
 
