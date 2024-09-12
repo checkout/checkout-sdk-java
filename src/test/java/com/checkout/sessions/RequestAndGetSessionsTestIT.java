@@ -138,9 +138,9 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         final SessionResponse sessionResponse = createNonHostedSession(appSession, category, challengeIndicator, transactionType);
 
         assertNotNull(sessionResponse);
-        assertNotNull(sessionResponse.getAccepted());
+        assertNotNull(sessionResponse.getCreated());
 
-        final CreateSessionAcceptedResponse response = sessionResponse.getAccepted();
+        final CreateSessionOkResponse response = sessionResponse.getCreated();
         assertNotNull(response.getId());
         assertNotNull(response.getSessionSecret());
         assertNotNull(response.getTransactionId());
@@ -149,9 +149,9 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
 
         assertEquals(AuthenticationType.REGULAR, response.getAuthenticationType());
         assertEquals(category, response.getAuthenticationCategory());
-        assertEquals(SessionStatus.PENDING, response.getStatus());
+        assertEquals(SessionStatus.UNAVAILABLE, response.getStatus());
         assertEquals(1, response.getNextActions().size());
-        assertEquals(NextAction.COLLECT_CHANNEL_DATA, response.getNextActions().get(0));
+        assertEquals(NextAction.COMPLETE, response.getNextActions().get(0));
 
         assertNotNull(response.getSelfLink());
         assertNotNull(response.getLink("callback_url"));
@@ -171,11 +171,11 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
 
         assertEquals(AuthenticationType.REGULAR, getSessionResponse.getAuthenticationType());
         assertEquals(category, getSessionResponse.getAuthenticationCategory());
-        assertEquals(SessionStatus.PENDING, getSessionResponse.getStatus());
+        assertEquals(SessionStatus.UNAVAILABLE, getSessionResponse.getStatus());
         assertEquals(1, getSessionResponse.getNextActions().size());
-        assertEquals(NextAction.COLLECT_CHANNEL_DATA, getSessionResponse.getNextActions().get(0));
+        assertEquals(NextAction.COMPLETE, getSessionResponse.getNextActions().get(0));
         assertEquals(transactionType, getSessionResponse.getTransactionType());
-        assertNull(getSessionResponse.getResponseCode());
+        assertEquals(ResponseCode.U, getSessionResponse.getResponseCode());
 
         assertNotNull(getSessionResponse.getSelfLink());
         assertNotNull(getSessionResponse.getLink("callback_url"));

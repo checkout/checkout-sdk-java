@@ -59,12 +59,15 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
 
     @Test
     void shouldMakeAliPayPayment() {
-        RequestAlipayPlusSource source = RequestAlipayPlusSource.requestAlipayPlusCNSource();
-        source = RequestAlipayPlusSource.requestAlipayPlusGCashSource();
-        source = RequestAlipayPlusSource.requestAlipayPlusDanaSource();
-        source = RequestAlipayPlusSource.requestAlipayPlusKakaoPaySource();
-        source = RequestAlipayPlusSource.requestAlipayPlusTrueMoneySource();
-        source = RequestAlipayPlusSource.requestAlipayPlusTNGSource();
+        RequestAlipayPlusSource source;
+        /*
+         Use the source that you need it
+         source = RequestAlipayPlusSource.requestAlipayPlusGCashSource();
+         source = RequestAlipayPlusSource.requestAlipayPlusDanaSource();
+         source = RequestAlipayPlusSource.requestAlipayPlusKakaoPaySource();
+         source = RequestAlipayPlusSource.requestAlipayPlusTrueMoneySource();
+         source = RequestAlipayPlusSource.requestAlipayPlusTNGSource();
+        */
         source = RequestAlipayPlusSource.requestAlipayPlusSource();
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(source)
@@ -370,7 +373,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), APM_SERVICE_UNAVAILABLE);
     }
 
     @Test

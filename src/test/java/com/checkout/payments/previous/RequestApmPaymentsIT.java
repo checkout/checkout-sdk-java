@@ -278,6 +278,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         assertEquals(PaymentSourceType.SOFORT, paymentDetails.getSource().getType());
     }
 
+    @Disabled("not available")
     @Test
     void shouldMakeKnetPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
