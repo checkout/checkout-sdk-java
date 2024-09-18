@@ -1,7 +1,9 @@
 package com.checkout.payments.previous.request.source.apm;
 
 import com.checkout.common.PaymentSourceType;
+import com.checkout.payments.PaymentMethodsDetails;
 import com.checkout.payments.previous.request.source.AbstractRequestSource;
+import com.checkout.tokens.ApplePayTokenData;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -37,15 +39,27 @@ public final class RequestKnetSource extends AbstractRequestSource {
 
     private String ptlf;
 
+    @SerializedName("token_type")
+    private String tokenType;
+
+    @SerializedName("token_data")
+    private ApplePayTokenData tokenData;
+
+    @SerializedName("payment_method_details")
+    private PaymentMethodsDetails paymentMethodsDetails;
+
     @Builder
     private RequestKnetSource(final String language,
-                             final String userDefinedField1,
-                             final String userDefinedField2,
-                             final String userDefinedField3,
-                             final String userDefinedField4,
-                             final String userDefinedField5,
-                             final String cardToken,
-                             final String ptlf) {
+                              final String userDefinedField1,
+                              final String userDefinedField2,
+                              final String userDefinedField3,
+                              final String userDefinedField4,
+                              final String userDefinedField5,
+                              final String cardToken,
+                              final String ptlf,
+                              final String tokenType,
+                              final ApplePayTokenData tokenData,
+                              final PaymentMethodsDetails paymentMethodsDetails) {
         super(PaymentSourceType.KNET);
         this.language = language;
         this.userDefinedField1 = userDefinedField1;
@@ -55,6 +69,9 @@ public final class RequestKnetSource extends AbstractRequestSource {
         this.userDefinedField5 = userDefinedField5;
         this.cardToken = cardToken;
         this.ptlf = ptlf;
+        this.tokenType = tokenType;
+        this.tokenData = tokenData;
+        this.paymentMethodsDetails = paymentMethodsDetails;
     }
 
     public RequestKnetSource() {

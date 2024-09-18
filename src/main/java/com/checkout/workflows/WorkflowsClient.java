@@ -6,6 +6,7 @@ import com.checkout.common.IdResponse;
 import com.checkout.workflows.actions.request.WorkflowActionRequest;
 import com.checkout.workflows.actions.response.WorkflowActionInvocationsResponse;
 import com.checkout.workflows.conditions.request.WorkflowConditionRequest;
+import com.checkout.workflows.events.EventTypesRequest;
 import com.checkout.workflows.events.GetEventResponse;
 import com.checkout.workflows.events.SubjectEventsResponse;
 import com.checkout.workflows.events.WorkflowEventTypes;
@@ -37,6 +38,8 @@ public interface WorkflowsClient {
     CompletableFuture<EmptyResponse> updateWorkflowCondition(String workflowId, String conditionId, WorkflowConditionRequest workflowConditionRequest);
 
     CompletableFuture<EmptyResponse> removeWorkflowCondition(String workflowId, String conditionId);
+
+    CompletableFuture<EmptyResponse> testWorkflow(String workflowId, EventTypesRequest eventTypesRequest);
 
     CompletableFuture<ItemsResponse<WorkflowEventTypes>> getEventTypes();
 

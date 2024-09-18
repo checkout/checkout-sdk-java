@@ -12,6 +12,7 @@ import com.checkout.common.IdResponse;
 import com.checkout.workflows.actions.request.WorkflowActionRequest;
 import com.checkout.workflows.actions.response.WorkflowActionInvocationsResponse;
 import com.checkout.workflows.conditions.request.WorkflowConditionRequest;
+import com.checkout.workflows.events.EventTypesRequest;
 import com.checkout.workflows.events.GetEventResponse;
 import com.checkout.workflows.events.SubjectEventsResponse;
 import com.checkout.workflows.events.WorkflowEventTypes;
@@ -19,7 +20,6 @@ import com.checkout.workflows.reflow.ReflowBySubjectsRequest;
 import com.checkout.workflows.reflow.ReflowResponse;
 import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -350,6 +350,25 @@ class WorkflowsClientImplTest {
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<EmptyResponse> future = workflowsClient.removeWorkflowCondition("workflow_id", "condition_id");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+
+    }
+
+    @Test
+    void shouldTestWorkflow() throws ExecutionException, InterruptedException {
+
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+
+        final EmptyResponse response = Mockito.mock(EmptyResponse.class);
+        final EventTypesRequest eventTypesRequest = Mockito.mock(EventTypesRequest.class);
+
+        when(apiClient.postAsync("workflows/workflow_id/test", authorization, EmptyResponse.class, eventTypesRequest, null))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<EmptyResponse> future = workflowsClient.testWorkflow("workflow_id", eventTypesRequest);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());

@@ -3,6 +3,7 @@ package com.checkout.payments.previous;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.PaymentSourceType;
+import com.checkout.payments.PaymentMethodsDetails;
 import com.checkout.payments.previous.request.PaymentRequest;
 import com.checkout.payments.previous.request.source.apm.IntegrationType;
 import com.checkout.payments.previous.request.source.apm.RequestAlipaySource;
@@ -278,12 +279,17 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         assertEquals(PaymentSourceType.SOFORT, paymentDetails.getSource().getType());
     }
 
-    @Disabled("not available")
+    //@Disabled("not available")
     @Test
     void shouldMakeKnetPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestKnetSource.builder()
                         .language("en")
+                        .paymentMethodsDetails(PaymentMethodsDetails.builder()
+                                .displayName("name")
+                                .type("type")
+                                .network("card_network")
+                                .build())
                         .build())
                 .currency(Currency.KWD)
                 .amount(1000L)

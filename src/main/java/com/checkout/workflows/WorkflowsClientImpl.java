@@ -10,6 +10,7 @@ import com.checkout.common.IdResponse;
 import com.checkout.workflows.actions.request.WorkflowActionRequest;
 import com.checkout.workflows.actions.response.WorkflowActionInvocationsResponse;
 import com.checkout.workflows.conditions.request.WorkflowConditionRequest;
+import com.checkout.workflows.events.EventTypesRequest;
 import com.checkout.workflows.events.GetEventResponse;
 import com.checkout.workflows.events.SubjectEventsResponse;
 import com.checkout.workflows.events.WorkflowEventTypes;
@@ -33,6 +34,7 @@ public class WorkflowsClientImpl extends AbstractClient implements WorkflowsClie
     private static final String REFLOW_PATH = "reflow";
     private static final String SUBJECT_PATH = "subject";
     private static final String WORKFLOW_ID = "workflowId";
+    private static final String TEST_PATH = "test";
 
     private static final Type WORKFLOWS_EVENT_TYPES_TYPE = new TypeToken<ItemsResponse<WorkflowEventTypes>>() {
     }.getType();
@@ -149,6 +151,17 @@ public class WorkflowsClientImpl extends AbstractClient implements WorkflowsClie
         return apiClient.deleteAsync(
                 buildPath(WORKFLOWS_PATH, workflowId, CONDITIONS_PATH, conditionId),
                 sdkAuthorization());
+    }
+
+    @Override
+    public CompletableFuture<EmptyResponse> testWorkflow(String workflowId, EventTypesRequest eventTypesRequest) {
+        validateParams(WORKFLOW_ID, workflowId, "eventTypesRequest", eventTypesRequest);
+        return apiClient.postAsync(
+                buildPath(WORKFLOWS_PATH, workflowId, TEST_PATH),
+                sdkAuthorization(),
+                EmptyResponse.class,
+                eventTypesRequest,
+                null);
     }
 
     @Override

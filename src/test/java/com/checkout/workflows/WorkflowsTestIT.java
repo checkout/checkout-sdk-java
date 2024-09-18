@@ -1,5 +1,6 @@
 package com.checkout.workflows;
 
+import com.checkout.EmptyResponse;
 import com.checkout.common.IdResponse;
 import com.checkout.workflows.actions.request.WebhookWorkflowActionRequest;
 import com.checkout.workflows.actions.response.WebhookWorkflowActionResponse;
@@ -7,6 +8,7 @@ import com.checkout.workflows.conditions.WorkflowConditionType;
 import com.checkout.workflows.conditions.request.EventWorkflowConditionRequest;
 import com.checkout.workflows.conditions.response.EntityWorkflowConditionResponse;
 import com.checkout.workflows.conditions.response.EventWorkflowConditionResponse;
+import com.checkout.workflows.events.EventTypesRequest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -183,6 +185,36 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
         assertEquals(new HashSet<>(GATEWAY_EVENT_TYPES), updatedEventConditionResponse.getEvents().get(GATEWAY));
 
         assertDoesNotThrow(() -> checkoutApi.workflowsClient().removeWorkflowCondition(getWorkflowResponse.getId(), eventConditionResponse.getId()));
+
+    }
+
+    @Test
+    void shouldCreateAndTestWorkflows() {
+
+        final CreateWorkflowResponse createWorkflowResponse = createWorkflow();
+        final EventTypesRequest eventTypesRequest = EventTypesRequest.builder()
+                .eventTypes(Arrays.asList("payment_approved",
+                        "payment_declined",
+                        "card_verification_declined",
+                        "card_verified",
+                        "payment_authorization_incremented",
+                        "payment_authorization_increment_declined",
+                        "payment_capture_declined",
+                        "payment_captured",
+                        "payment_refund_declined",
+                        "payment_refunded",
+                        "payment_void_declined",
+                        "payment_voided",
+                        "dispute_canceled",
+                        "dispute_evidence_required",
+                        "dispute_expired",
+                        "dispute_lost",
+                        "dispute_resolved",
+                        "dispute_won"))
+                .build();
+
+        final EmptyResponse response = blocking(() -> checkoutApi.workflowsClient().testWorkflow(createWorkflowResponse.getId(), eventTypesRequest));
+        assertNotNull(response);
 
     }
 

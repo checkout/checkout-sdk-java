@@ -365,6 +365,11 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestKnetSource.builder()
                         .language("en")
+                        .paymentMethodsDetails(PaymentMethodsDetails.builder()
+                                .displayName("name")
+                                .type("type")
+                                .network("card_network")
+                                .build())
                         .build())
                 .currency(Currency.KWD)
                 .amount(1000L)
@@ -373,7 +378,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
 
-        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), APM_SERVICE_UNAVAILABLE);
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 
     @Test
