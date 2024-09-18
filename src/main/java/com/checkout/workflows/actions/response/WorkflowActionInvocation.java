@@ -21,5 +21,6 @@ public final class WorkflowActionInvocation {
     @SerializedName("final")
     private Boolean finalAttempt;
 
+    @SerializedName("result_details")
     private Map<String, Object> result;
 }
