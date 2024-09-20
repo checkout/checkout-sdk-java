@@ -1,7 +1,7 @@
 package com.checkout.payments.previous.request.source.apm;
 
 import com.checkout.common.PaymentSourceType;
-import com.checkout.payments.PaymentMethodsDetails;
+import com.checkout.payments.PaymentMethodDetails;
 import com.checkout.payments.previous.request.source.AbstractRequestSource;
 import com.checkout.tokens.ApplePayTokenData;
 import com.google.gson.annotations.SerializedName;
@@ -46,7 +46,7 @@ public final class RequestKnetSource extends AbstractRequestSource {
     private ApplePayTokenData tokenData;
 
     @SerializedName("payment_method_details")
-    private PaymentMethodsDetails paymentMethodsDetails;
+    private PaymentMethodDetails paymentMethodDetails;
 
     @Builder
     private RequestKnetSource(final String language,
@@ -59,7 +59,7 @@ public final class RequestKnetSource extends AbstractRequestSource {
                               final String ptlf,
                               final String tokenType,
                               final ApplePayTokenData tokenData,
-                              final PaymentMethodsDetails paymentMethodsDetails) {
+                              final PaymentMethodDetails paymentMethodDetails) {
         super(PaymentSourceType.KNET);
         this.language = language;
         this.userDefinedField1 = userDefinedField1;
@@ -71,7 +71,7 @@ public final class RequestKnetSource extends AbstractRequestSource {
         this.ptlf = ptlf;
         this.tokenType = tokenType;
         this.tokenData = tokenData;
-        this.paymentMethodsDetails = paymentMethodsDetails;
+        this.paymentMethodDetails = paymentMethodDetails;
     }
 
     public RequestKnetSource() {

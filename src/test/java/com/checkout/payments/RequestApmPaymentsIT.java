@@ -365,7 +365,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestKnetSource.builder()
                         .language("en")
-                        .paymentMethodsDetails(PaymentMethodsDetails.builder()
+                        .paymentMethodDetails(PaymentMethodDetails.builder()
                                 .displayName("name")
                                 .type("type")
                                 .network("card_network")

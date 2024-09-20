@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public final class PaymentMethodsDetails {
+public final class PaymentMethodDetails {
 
     @SerializedName("display_name")
     private String displayName;
