@@ -11,6 +11,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.List;
+
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
@@ -29,7 +31,7 @@ public final class CardMetadataResponse extends HttpMetadata {
     private SchemeLocalType schemeLocal;
 
     @SerializedName("local_schemes")
-    private SchemeLocalType localSchemes;
+    private List<SchemeLocalType> localSchemes;
 
     @SerializedName("card_type")
     private CardType cardType;
