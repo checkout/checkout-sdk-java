@@ -69,4 +69,7 @@ public final class CardMetadataResponse extends HttpMetadata {
 
     @SerializedName("scheme_metadata")
     private SchemeMetadata schemeMetadata;
+    
+    @SerializedName("account_funding_transaction")
+    private AccountFundingTransaction accountFundingTransaction;
 }
