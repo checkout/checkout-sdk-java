@@ -7,12 +7,12 @@ import java.util.List;
 @Data
 public final class SchemeMetadata {
 
-    private PinlessDebitSchemeMetadata accel;
+    private List<PinlessDebitSchemeMetadata> accel;
 
     private List<PinlessDebitSchemeMetadata> pulse;
 
-    private PinlessDebitSchemeMetadata nyce;
+    private List<PinlessDebitSchemeMetadata> nyce;
 
-    private PinlessDebitSchemeMetadata star;
+    private List<PinlessDebitSchemeMetadata> star;
 
 }
