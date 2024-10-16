@@ -10,6 +10,8 @@ public enum PaymentDestinationType {
     ID,
     @SerializedName("token")
     TOKEN,
+    @SerializedName("network_token")
+    NETWORK_TOKEN,
     @SerializedName("bank_account")
     BANK_ACCOUNT;
 
