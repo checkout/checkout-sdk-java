@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public final class PaymentContextsItems {
 
-    private String type;
+    private PaymentContextsItemsType type;
 
     private String name;
 
