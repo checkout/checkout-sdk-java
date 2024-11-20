@@ -1,7 +1,6 @@
 package com.checkout.payments;
 
 import com.checkout.CardSourceHelper;
-import com.checkout.CheckoutArgumentException;
 import com.checkout.common.AccountHolderIdentification;
 import com.checkout.common.AccountHolderIdentificationType;
 import com.checkout.common.Address;
@@ -29,7 +28,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.util.Collections;
-import java.util.Date;
 import java.util.UUID;
 
 import static com.checkout.CardSourceHelper.getCorporateSender;

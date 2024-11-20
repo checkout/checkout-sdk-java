@@ -11,21 +11,32 @@ public final class Capabilities {
 
     private Payouts payouts;
 
+    private IssuingCapabilities issuing;
+
     @Data
     public static class Payments {
 
-        private boolean available;
+        private Boolean available;
 
-        private boolean enabled;
+        private Boolean enabled;
 
     }
 
     @Data
     public static class Payouts {
 
-        private boolean available;
+        private Boolean available;
 
-        private boolean enabled;
+        private Boolean enabled;
+
+    }
+
+    @Data
+    public static class IssuingCapabilities {
+
+        private Boolean available;
+
+        private Boolean enabled;
 
     }
 

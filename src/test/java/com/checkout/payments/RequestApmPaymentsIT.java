@@ -26,7 +26,6 @@ import com.checkout.payments.request.source.apm.RequestFawrySource;
 import com.checkout.payments.request.source.apm.RequestGiropaySource;
 import com.checkout.payments.request.source.apm.RequestIdealSource;
 import com.checkout.payments.request.source.apm.RequestIllicadoSource;
-import com.checkout.payments.request.source.apm.RequestKlarnaSource;
 import com.checkout.payments.request.source.apm.RequestKnetSource;
 import com.checkout.payments.request.source.apm.RequestMbwaySource;
 import com.checkout.payments.request.source.apm.RequestMultiBancoSource;
@@ -476,23 +475,6 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .build();
 
         checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
-    }
-
-    @Test
-    @Disabled("not available")
-    void shouldMakeKlarnaPayment() {
-        final PaymentRequest paymentRequest = PaymentRequest.builder()
-                .source(RequestKlarnaSource.builder()
-                        .accountHolder(TestHelper.getAccountHolder())
-                        .build())
-                .currency(Currency.EUR)
-                .amount(10L)
-                .capture(true)
-                .successUrl("https://testing.checkout.com/sucess")
-                .failureUrl("https://testing.checkout.com/failure")
-                .build();
-
-        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), APM_SERVICE_UNAVAILABLE);
     }
 
     @Test
