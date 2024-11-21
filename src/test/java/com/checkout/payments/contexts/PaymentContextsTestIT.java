@@ -34,7 +34,12 @@ class PaymentContextsTestIT extends SandboxTestFixture {
 
         final PaymentContextsRequest request = TestHelper.createPaymentContextsKlarnaRequest();
 
-        checkErrorItem(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request), "apm_service_unavailable");
+        final PaymentContextsRequestResponse response = blocking(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request));
+
+        assertNotNull(response);
+        assertNotNull(response.getId());
+        assertNotNull(response.getPartnerMetadata().getSessionId());
+        assertNotNull(response.getPartnerMetadata().getClientToken());
     }
 
     @Test

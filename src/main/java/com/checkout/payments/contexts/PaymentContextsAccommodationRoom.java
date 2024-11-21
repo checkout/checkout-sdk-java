@@ -1,6 +1,5 @@
-package com.checkout.accounts;
+package com.checkout.payments.contexts;
 
-import com.checkout.common.CountryCode;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,11 +10,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class AccountPhone {
+public final class PaymentContextsAccommodationRoom {
 
-    @SerializedName("country_code")
-    private CountryCode countryCode;
+    private String rate;
 
-    private String number;
-
+    @SerializedName("number_of_nights_at_room_rate")
+    private Integer numberOfNightsAtRoomRate;
 }
