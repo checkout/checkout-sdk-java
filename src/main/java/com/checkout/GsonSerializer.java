@@ -273,27 +273,48 @@ public class GsonSerializer implements Serializer {
 
     private static JsonDeserializer<Instant> getInstantJsonDeserializer() {
         return (json, typeOfT, context) -> {
-            final String dateString = json.getAsString();
+            String dateString;
+
+            // Check if the JSON is a number or a string
+            if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isNumber()) {
+                dateString = String.valueOf(json.getAsLong()); // Convert numeric value to string
+            } else {
+                dateString = json.getAsString(); // Use the string value directly
+            }
+
             try {
+                // Try parsing the string as an ISO-8601 Instant
                 return Instant.parse(dateString);
             } catch (final DateTimeParseException ex) {
-                if (dateString.length() == 8) {
+                if (dateString.matches("\\d{8}")) { // Handle numeric format yyyyMMdd
                     try {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
                         LocalDateTime dateTime = LocalDate.parse(dateString, formatter).atStartOfDay();
                         return dateTime.toInstant(ZoneOffset.UTC);
                     } catch (final DateTimeParseException e) {
-                        throw new JsonParseException("Failed to parse date in format yyyyMMdd: " + dateString, e);
+                        throw new JsonParseException("Failed to parse numeric date in format yyyyMMdd: " + dateString, e);
                     }
                 }
+                // Explicitly handle the yyyy-MM-dd format
+                if (dateString.length() == 10) { // Handle format yyyy-MM-dd
+                    try {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                        LocalDate date = LocalDate.parse(dateString, formatter);
+                        return date.atStartOfDay().toInstant(ZoneOffset.UTC);
+                    } catch (final DateTimeParseException e) {
+                        throw new JsonParseException("Failed to parse date in format yyyy-MM-dd: " + dateString, e);
+                    }
+                }
+                // Attempt parsing with the DEFAULT_FORMATTERS
                 for (final DateTimeFormatter formatter : DEFAULT_FORMATTERS) {
                     try {
                         final LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
                         return dateTime.toInstant(ZoneOffset.UTC);
                     } catch (final DateTimeParseException ignored) {
-                        // continue to next formatter
+                        // Continue with the next formatter
                     }
                 }
+                // Rethrow the original exception if no format matches
                 throw ex;
             }
         };

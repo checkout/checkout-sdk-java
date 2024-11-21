@@ -10,6 +10,8 @@ import com.checkout.payments.previous.response.GetPaymentResponse;
 import com.checkout.payments.previous.response.PaymentResponse;
 import com.checkout.payments.previous.response.destination.PaymentResponseAlternativeDestination;
 import com.checkout.payments.previous.response.destination.PaymentResponseCardDestination;
+import com.checkout.payments.response.source.AlternativePaymentSourceResponse;
+import com.checkout.payments.response.source.contexts.PaymentContextsKlarnaResponseSource;
 import com.checkout.payments.response.source.contexts.PaymentContextsPayPalResponseSource;
 import com.checkout.payments.sender.PaymentCorporateSender;
 import com.checkout.payments.sender.ResponseAlternativeSender;
@@ -122,6 +124,16 @@ class GsonSerializerTest {
     }
 
     @Test
+    void shouldSerializePaymentKlarnaDetailsResponseFromJson() {
+
+        final com.checkout.payments.response.GetPaymentResponse paymentKlarnaResponseSource = serializer.fromJson(getMock("/mocks/payments/response/get_payment_klarna_response.json"), com.checkout.payments.response.GetPaymentResponse.class);
+
+        assertNotNull(paymentKlarnaResponseSource);
+        assertTrue(paymentKlarnaResponseSource.getSource() instanceof AlternativePaymentSourceResponse);
+        assertEquals(PaymentSourceType.KLARNA, paymentKlarnaResponseSource.getSource().getType());
+    }
+
+    @Test
     void shouldSerializePaymentContextsPayPalDetailsResponseFromJson() {
 
         final PaymentContextDetailsResponse paymentContextsPayPalResponseSource = serializer.fromJson(getMock("/mocks/payments/response/contexts/payment_context_paypal_details_response.json"), PaymentContextDetailsResponse.class);
@@ -129,6 +141,16 @@ class GsonSerializerTest {
         assertNotNull(paymentContextsPayPalResponseSource);
         assertTrue(paymentContextsPayPalResponseSource.getPaymentRequest().getSource() instanceof PaymentContextsPayPalResponseSource);
         assertEquals(PaymentSourceType.PAYPAL, paymentContextsPayPalResponseSource.getPaymentRequest().getSource().getType());
+    }
+
+    @Test
+    void shouldSerializePaymentContextsKlarnaDetailsResponseFromJson() {
+
+        final PaymentContextDetailsResponse paymentKlarnaResponseSource = serializer.fromJson(getMock("/mocks/payments/response/contexts/payment_context_klarna_details_response.json"), PaymentContextDetailsResponse.class);
+
+        assertNotNull(paymentKlarnaResponseSource);
+        assertTrue(paymentKlarnaResponseSource.getPaymentRequest().getSource() instanceof PaymentContextsKlarnaResponseSource);
+        assertEquals(PaymentSourceType.KLARNA, paymentKlarnaResponseSource.getPaymentRequest().getSource().getType());
     }
 
     @Test
@@ -156,6 +178,18 @@ class GsonSerializerTest {
 
         // Test format yyyyMMdd
         paymentResponse = serializer.fromJson("{\"processed_on\":\"20210608\"}", PaymentResponse.class);
+        assertNotNull(paymentResponse);
+        assertNotNull(paymentResponse.getProcessedOn());
+        assertEquals(instant, paymentResponse.getProcessedOn());
+
+        // Test format yyyyMMdd number
+        paymentResponse = serializer.fromJson("{\"processed_on\":20210608}", PaymentResponse.class);
+        assertNotNull(paymentResponse);
+        assertNotNull(paymentResponse.getProcessedOn());
+        assertEquals(instant, paymentResponse.getProcessedOn());
+
+        // Test format yyyy-MM-dd
+        paymentResponse = serializer.fromJson("{\"processed_on\":\"2021-06-08\"}", PaymentResponse.class);
         assertNotNull(paymentResponse);
         assertNotNull(paymentResponse.getProcessedOn());
         assertEquals(instant, paymentResponse.getProcessedOn());

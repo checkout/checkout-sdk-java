@@ -1,7 +1,6 @@
 package com.checkout.payments;
 
 import com.checkout.TestHelper;
-import com.checkout.common.CountryCode;
 import com.checkout.payments.request.PaymentCustomerRequest;
 import com.checkout.payments.response.PaymentResponse;
 import org.junit.jupiter.api.Test;
@@ -81,34 +80,6 @@ class CaptureTestIT extends AbstractPaymentsTestIT {
                         .locale("en-US")
                         .shippingPreference(ShippingPreference.SET_PROVIDED_ADDRESS)
                         .userAction(UserAction.PAY_NOW)
-                        .airlineData(Collections.singletonList(AirlineData.builder()
-                                .ticket(Ticket.builder()
-                                        .number("123654")
-                                        .issueDate("stringstri")
-                                        .issuingCarrierCode("st")
-                                        .travelAgencyName("agency")
-                                        .travelAgencyCode("code")
-                                        .build())
-                                .passenger(Passenger.builder()
-                                        .name(PassengerName.builder()
-                                                .fullName("a passenger")
-                                                .build())
-                                        .dateOfBirth("birth")
-                                        .countryCode(CountryCode.ES)
-                                        .build())
-                                .flightLegDetails(Collections.singletonList(FlightLegDetails.builder()
-                                        .flightNumber(0L)
-                                        .carrierCode("carrier")
-                                        .serviceClass("service")
-                                        .departureDate("date")
-                                        .departureTime("time")
-                                        .departureAirport("airport")
-                                        .arrivalAirport("arrival")
-                                        .stopoverCode("stopover")
-                                        .fareBasisCode("fare")
-                                        .build()))
-
-                                .build()))
                         .lineOfBusiness("Flights")
                         .build())
                 .metadata(metadata)
