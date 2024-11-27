@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public final class PaymentContextsAirlineData {
 
-    private List<PaymentContextsTicket> ticket;
+    private PaymentContextsTicket ticket;
 
     private List<PaymentContextsPassenger> passenger;
 

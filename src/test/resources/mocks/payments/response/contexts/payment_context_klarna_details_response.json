@@ -2,7 +2,7 @@
   "status": "Approved",
   "payment_request": {
     "source": {
-      "type": "paypal"
+      "type": "klarna"
     },
     "amount": 6540,
     "currency": "USD",

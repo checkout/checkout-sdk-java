@@ -16,7 +16,7 @@ public final class AirlineData {
 
     private Ticket ticket;
 
-    private Passenger passenger;
+    private List<Passenger> passenger;
 
     @SerializedName("flight_leg_details")
     private List<FlightLegDetails> flightLegDetails;

@@ -1,0 +1,92 @@
+{
+  "id": "pay_mnnf6wnp7fdupa2jechtgg5cr4",
+  "requested_on": "2024-08-13T15:14:28.1308176Z",
+  "source": {
+    "type": "klarna",
+    "account_holder": {
+      "first_name": "Eve",
+      "last_name": "Test",
+      "billing_address": {
+        "address_line1": "Bodestr. 1-3",
+        "city": "Berlin",
+        "zip": "10178",
+        "country": "DE",
+        "state": ""
+      },
+      "email": "generated_email_de+1698763875860@example.com",
+      "date_of_birth": "1992-01-01",
+      "phone": {
+        "number": "+4915257607960"
+      },
+      "identification": {}
+    }
+  },
+  "payment_type": "Installment",
+  "payment_plan": {
+    "financing": true
+  },
+  "items": [
+    {
+      "name": "OTR-AC Elite 90 Capsules",
+      "quantity": 1,
+      "unit_price": 4998,
+      "total_amount": 4998,
+      "tax_amount": 0,
+      "discount_amount": 0
+    },
+    {
+      "name": "Discount",
+      "quantity": 1,
+      "unit_price": 1000,
+      "total_amount": 1000,
+      "discount_amount": 0
+    }
+  ],
+  "amount": 3998,
+  "currency": "EUR",
+  "status": "Captured",
+  "approved": true,
+  "balances": {
+    "total_authorized": 3998,
+    "total_voided": 0,
+    "available_to_void": 0,
+    "total_captured": 3998,
+    "available_to_capture": 0,
+    "total_refunded": 0,
+    "available_to_refund": 3998
+  },
+  "shipping": {
+    "first_name": "Samuel",
+    "last_name": "Rudd",
+    "email": "srudd@email.com",
+    "address": {
+      "address_line1": "Rotherstraße 19",
+      "city": "Berlin",
+      "state": "",
+      "zip": "10245",
+      "country": "DE"
+    },
+    "phone": {
+      "number": "+4930774615846"
+    }
+  },
+  "processing": {
+    "partner_session_id": "43c4421b-605a-47c2-88bb-d5dd9025222b",
+    "partner_order_id": "dc3b8712-123a-45ef-bc3d-b356a158b31b",
+    "fraud_status": "ACCEPTED",
+    "locale": "en-GB",
+    "tax_amount": 0,
+    "shipping_amount": 0
+  },
+  "_links": {
+    "self": {
+      "href": "https://api.sandbox.checkout.com/payments/pay_mnnf6wnp7fdupa2jechtgg5cr4"
+    },
+    "actions": {
+      "href": "https://api.sandbox.checkout.com/payments/pay_mnnf6wnp7fdupa2jechtgg5cr4/actions"
+    },
+    "refund": {
+      "href": "https://api.sandbox.checkout.com/payments/pay_mnnf6wnp7fdupa2jechtgg5cr4/refunds"
+    }
+  }
+}
