@@ -38,6 +38,7 @@ public final class PaymentRequest {
 
     private Currency currency;
 
+    @Builder.Default
     @SerializedName("payment_type")
     private PaymentType paymentType = PaymentType.REGULAR;
 

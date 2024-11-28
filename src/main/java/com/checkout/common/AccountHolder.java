@@ -52,4 +52,6 @@ public final class AccountHolder {
 
     private AccountHolderIdentification identification;
 
+    private Boolean accountNameInquiry;
+
 }

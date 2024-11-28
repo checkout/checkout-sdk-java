@@ -1,5 +1,6 @@
 package com.checkout.payments.request.source;
 
+import com.checkout.common.AccountHolder;
 import com.checkout.common.Address;
 import com.checkout.common.Phone;
 import com.checkout.payments.NetworkTokenType;
@@ -44,6 +45,9 @@ public final class RequestNetworkTokenSource extends AbstractRequestSource {
 
     private Phone phone;
 
+    @SerializedName("account_holder")
+    private AccountHolder accountHolder;
+
     @Builder
     private RequestNetworkTokenSource(final String token,
                                       final Integer expiryMonth,
@@ -55,7 +59,8 @@ public final class RequestNetworkTokenSource extends AbstractRequestSource {
                                       final String name,
                                       final String cvv,
                                       final Address billingAddress,
-                                      final Phone phone) {
+                                      final Phone phone,
+                                      final AccountHolder accountHolder) {
         super(NETWORK_TOKEN);
         this.token = token;
         this.expiryMonth = expiryMonth;
@@ -68,6 +73,7 @@ public final class RequestNetworkTokenSource extends AbstractRequestSource {
         this.cvv = cvv;
         this.billingAddress = billingAddress;
         this.phone = phone;
+        this.accountHolder = accountHolder;
     }
 
     public RequestNetworkTokenSource() {

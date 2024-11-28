@@ -1,5 +1,6 @@
 package com.checkout.payments.request.source;
 
+import com.checkout.common.AccountHolder;
 import com.checkout.common.Address;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
@@ -28,18 +29,23 @@ public final class RequestTokenSource extends AbstractRequestSource {
     @SerializedName("store_for_future_use")
     private Boolean storeForFutureUse;
 
+    @SerializedName("account_holder")
+    private AccountHolder accountHolder;
+
     @Builder
     private RequestTokenSource(final String token,
                                final Address billingAddress,
                                final Phone phone,
                                final Boolean stored,
-                               final Boolean storeForFutureUse) {
+                               final Boolean storeForFutureUse,
+                               final AccountHolder accountHolder) {
         super(PaymentSourceType.TOKEN);
         this.token = token;
         this.billingAddress = billingAddress;
         this.phone = phone;
         this.stored = stored;
         this.storeForFutureUse = storeForFutureUse;
+        this.accountHolder = accountHolder;
     }
 
     public RequestTokenSource() {
