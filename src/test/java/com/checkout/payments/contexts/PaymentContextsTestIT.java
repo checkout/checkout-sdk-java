@@ -6,8 +6,11 @@ import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
 import com.checkout.common.Currency;
 import com.checkout.payments.PaymentType;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import static com.checkout.payments.AbstractPaymentsTestIT.APM_SERVICE_UNAVAILABLE;
+import static com.checkout.payments.AbstractPaymentsTestIT.PAYEE_NOT_ONBOARDED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -40,6 +43,28 @@ class PaymentContextsTestIT extends SandboxTestFixture {
         assertNotNull(response.getId());
         assertNotNull(response.getPartnerMetadata().getSessionId());
         assertNotNull(response.getPartnerMetadata().getClientToken());
+    }
+
+    @Disabled("Unavailable")
+    @Test
+    void shouldMakeAPaymentContextStcpayRequest() {
+
+        final PaymentContextsRequest request = TestHelper.createPaymentContextsStcpayRequest();
+
+        final PaymentContextsRequestResponse response = blocking(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request));
+
+        assertNotNull(response);
+        assertNotNull(response.getId());
+        assertNotNull(response.getPartnerMetadata().getSessionId());
+        assertNotNull(response.getPartnerMetadata().getClientToken());
+    }
+
+    @Test
+    void shouldMakeAPaymentContextTabbyRequest() {
+
+        final PaymentContextsRequest request = TestHelper.createPaymentContextsTabbyRequest();
+
+        checkErrorItem(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request), APM_SERVICE_UNAVAILABLE);
     }
 
     @Test

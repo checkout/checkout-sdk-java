@@ -26,6 +26,8 @@ import com.checkout.payments.links.PaymentLinkRequest;
 import com.checkout.payments.request.PaymentCustomerRequest;
 import com.checkout.payments.request.source.contexts.PaymentContextsKlarnaSource;
 import com.checkout.payments.request.source.contexts.PaymentContextsPayPalSource;
+import com.checkout.payments.request.source.contexts.PaymentContextsStcpaySource;
+import com.checkout.payments.request.source.contexts.PaymentContextsTabbySource;
 import lombok.SneakyThrows;
 
 import java.nio.file.Files;
@@ -245,6 +247,47 @@ public final class TestHelper {
                 .processingChannelId(requireNonNull(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID")))
                 .items(items)
                 .processing(processing)
+                .build();
+    }
+
+    public static PaymentContextsRequest createPaymentContextsStcpayRequest() {
+
+        final PaymentContextsStcpaySource source = PaymentContextsStcpaySource.builder().build();
+
+        final PaymentCustomerRequest customer = PaymentCustomerRequest.builder()
+                .phone(createPhone())
+                .build();
+
+        return PaymentContextsRequest.builder()
+                .source(source)
+                .amount(1000L)
+                .reference("ORD-1011-87AH")
+                .currency(Currency.SAR)
+                .customer(customer)
+                .processingChannelId(requireNonNull(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID")))
+                .build();
+    }
+
+    public static PaymentContextsRequest createPaymentContextsTabbyRequest() {
+
+        final PaymentContextsTabbySource source = PaymentContextsTabbySource.builder().build();
+
+        final PaymentCustomerRequest customer = PaymentCustomerRequest.builder()
+                .email(generateRandomEmail())
+                .name("Bruce Wayne")
+                .phone(createPhone())
+                .build();
+
+        return PaymentContextsRequest.builder()
+                .source(source)
+                .amount(1000L)
+                .reference("ORD-1011-87AH")
+                .currency(Currency.AED)
+                .customer(customer)
+                .processing(PaymentContextsProcessing.builder()
+                        .locale("ar-AE")
+                        .build())
+                .processingChannelId(requireNonNull(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID")))
                 .build();
     }
 

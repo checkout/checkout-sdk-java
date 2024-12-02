@@ -1,20 +1,18 @@
 package com.checkout.payments;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
 @Data
 @Builder
-public final class PaymentPlanType {
+public final class PaymentPlan {
 
     // Recurring
     @SerializedName("amount_variability")
-    private AmountVariability amountVariability;
+    private AmountVariabilityType amountVariabilityType;
 
     // Installment
     private Boolean financing;

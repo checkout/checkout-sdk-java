@@ -45,7 +45,7 @@ class PaymentLinksTestIT extends SandboxTestFixture {
         assertNotNull(paymentLinkResponse.getExpiresOn());
         assertNotNull(paymentLinkResponse.getLinks());
         assertTrue(paymentLinkResponse.getLinks().containsKey("redirect"));
-        assertNotNull(paymentLinkResponse.getWarnings());
+        assertEquals(paymentLinkResponse.getHttpStatusCode(), 201);
 
         final PaymentLinkDetailsResponse detailsResponse = blocking(() -> checkoutApi.paymentLinksClient().getPaymentLink(paymentLinkResponse.getId()));
         assertNotNull(detailsResponse);

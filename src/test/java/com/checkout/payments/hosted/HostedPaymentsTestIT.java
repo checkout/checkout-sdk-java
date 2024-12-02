@@ -27,7 +27,7 @@ class HostedPaymentsTestIT extends SandboxTestFixture {
         assertEquals(REFERENCE, response.getReference());
         assertNotNull(response.getLinks());
         assertTrue(response.getLinks().containsKey("redirect"));
-        assertNotNull(response.getWarnings());
+        assertEquals(response.getHttpStatusCode(), 201);
 
         final HostedPaymentDetailsResponse detailsResponse = blocking(() -> checkoutApi.hostedPaymentsClient().getHostedPaymentsPageDetails(response.getId()));
 

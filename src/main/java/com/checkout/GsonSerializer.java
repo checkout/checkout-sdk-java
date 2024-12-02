@@ -19,7 +19,6 @@ import com.checkout.issuing.controls.responses.create.MccCardControlResponse;
 import com.checkout.issuing.controls.responses.create.VelocityCardControlResponse;
 import com.checkout.payments.PaymentDestinationType;
 import com.checkout.payments.previous.PaymentAction;
-import com.checkout.payments.PaymentPlanType;
 import com.checkout.payments.sender.Sender;
 import com.checkout.payments.sender.SenderType;
 import com.checkout.webhooks.previous.WebhookResponse;
@@ -100,7 +99,9 @@ public class GsonSerializer implements Serializer {
             // Payment Contexts
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.payments.response.source.contexts.ResponseSource.class, CheckoutUtils.TYPE, true, com.checkout.payments.response.source.contexts.AlternativePaymentSourceResponse.class)
                     .registerSubtype(com.checkout.payments.response.source.contexts.PaymentContextsPayPalResponseSource.class, identifier(PaymentSourceType.PAYPAL))
-                    .registerSubtype(com.checkout.payments.response.source.contexts.PaymentContextsKlarnaResponseSource.class, identifier(PaymentSourceType.KLARNA)))
+                    .registerSubtype(com.checkout.payments.response.source.contexts.PaymentContextsKlarnaResponseSource.class, identifier(PaymentSourceType.KLARNA))
+                    .registerSubtype(com.checkout.payments.response.source.contexts.PaymentContextsStcpayResponseSource.class, identifier(PaymentSourceType.STCPAY))
+                    .registerSubtype(com.checkout.payments.response.source.contexts.PaymentContextsTabbyResponseSource.class, identifier(PaymentSourceType.TABBY)))
             // Payments - destination
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.payments.response.destination.PaymentResponseDestination.class, CheckoutUtils.TYPE, true, com.checkout.payments.response.destination.PaymentResponseAlternativeDestination.class)
                     .registerSubtype(com.checkout.payments.response.destination.PaymentResponseBankAccountDestination.class, identifier(PaymentDestinationType.BANK_ACCOUNT)))

@@ -1,19 +1,12 @@
 package com.checkout.payments.response.source.contexts;
 
-import com.checkout.common.PaymentSourceType;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
+@Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class PaymentContextsKlarnaResponseSource extends AbstractPaymentContextsResponseSource implements ResponseSource {
-
-    public PaymentContextsKlarnaResponseSource() {
-        super(PaymentSourceType.KLARNA);
-    }
 
 }

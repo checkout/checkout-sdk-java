@@ -62,8 +62,8 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                         .build())
                 .build();
 
-        final PaymentPlanType recurringPlan = PaymentPlanType.builder()
-                .amountVariability(AmountVariability.FIXED)
+        final PaymentPlan recurringPlan = PaymentPlan.builder()
+                .amountVariabilityType(AmountVariabilityType.FIXED)
                 .daysBetweenPayments(1)
                 .totalNumberOfPayments(1)
                 .currentPaymentNumber(1)

@@ -17,7 +17,7 @@ import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSData;
 import com.checkout.payments.request.PaymentInstruction;
 import com.checkout.payments.response.destination.PaymentResponseDestination;
-import com.checkout.payments.PaymentPlanType;
+import com.checkout.payments.PaymentPlan;
 import com.checkout.payments.response.source.ResponseSource;
 import com.checkout.payments.sender.Sender;
 import com.google.gson.annotations.SerializedName;
@@ -53,7 +53,7 @@ public final class GetPaymentResponse extends Resource {
     private PaymentType type;
 
     @SerializedName("payment_plan")
-    private PaymentPlanType paymentPlan;
+    private PaymentPlan paymentPlan;
 
     private String reference;
 

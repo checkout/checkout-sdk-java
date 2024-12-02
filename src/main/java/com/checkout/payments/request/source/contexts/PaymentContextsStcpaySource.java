@@ -12,11 +12,10 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class PaymentContextsPayPalSource extends AbstractRequestSource {
+public final class PaymentContextsStcpaySource extends AbstractRequestSource {
 
     @Builder
-    private PaymentContextsPayPalSource() {
-        super(PaymentSourceType.PAYPAL);
+    private PaymentContextsStcpaySource() {
+        super(PaymentSourceType.STCPAY);
     }
-
 }

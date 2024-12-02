@@ -115,5 +115,7 @@ public enum PaymentSourceType {
     @SerializedName("cvconnect")
     CV_CONNECT,
     @SerializedName("sequra")
-    SEQURA
+    SEQURA,
+    @SerializedName("tabby")
+    TABBY
 }
