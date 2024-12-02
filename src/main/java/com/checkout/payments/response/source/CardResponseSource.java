@@ -1,6 +1,7 @@
 package com.checkout.payments.response.source;
 
 import com.checkout.common.AccountHolder;
+import com.checkout.common.AccountHolderResponse;
 import com.checkout.common.Address;
 import com.checkout.common.CardCategory;
 import com.checkout.common.CardType;
@@ -88,6 +89,6 @@ public final class CardResponseSource extends AbstractResponseSource implements 
     private AccountUpdateStatusType accountUpdateStatus;
 
     @SerializedName("account_holder")
-    private AccountHolder accountHolder;
+    private AccountHolderResponse accountHolder;
 
 }
