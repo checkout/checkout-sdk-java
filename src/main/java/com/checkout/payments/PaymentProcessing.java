@@ -72,4 +72,9 @@ public final class PaymentProcessing {
     @SerializedName("merchant_category_code")
     private String merchantCategoryCode;
 
+    @SerializedName("scheme_merchant_id")
+    private Long schemeMerchantId;
+
+    private Boolean aft;
+
 }

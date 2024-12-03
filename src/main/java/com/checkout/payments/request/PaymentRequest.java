@@ -52,6 +52,8 @@ public final class PaymentRequest {
 
     private String description;
 
+    private Authentication authentication;
+
     @SerializedName("authorization_type")
     private AuthorizationType authorizationType;
 

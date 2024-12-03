@@ -8,6 +8,7 @@ import com.checkout.common.AccountHolderIdentificationType;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
+import com.checkout.payments.request.Authentication;
 import com.checkout.payments.request.AuthorizationRequest;
 import com.checkout.payments.request.PartialAuthorization;
 import com.checkout.payments.request.PaymentRequest;
@@ -17,6 +18,8 @@ import com.checkout.payments.response.PaymentResponse;
 import com.checkout.payments.sender.PaymentIndividualSender;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -107,6 +110,15 @@ class PaymentAuthorizationsTestIT extends SandboxTestFixture {
                 .enabled(true)
                 .build();
 
+        final List<PreferredExperiences> experiences = Arrays.asList(
+                PreferredExperiences.GOOGLE_SPA,
+                PreferredExperiences.THREE_DS
+        );
+
+        final Authentication authentication = Authentication.builder()
+                .preferredExperiences(experiences)
+                .build();
+
         final PaymentRequest request = PaymentRequest.builder()
                 .source(source)
                 .sender(sender)
@@ -119,6 +131,7 @@ class PaymentAuthorizationsTestIT extends SandboxTestFixture {
                 .successUrl(null)
                 .failureUrl(null)
                 .partialAuthorization(partialAuthorization)
+                .authentication(authentication)
                 .build();
 
         return blocking(() -> checkoutApi.paymentsClient().requestPayment(request));
