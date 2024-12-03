@@ -18,7 +18,8 @@ public final class ReconciliationQueryPaymentsFilter {
 
     private String reference;
 
+    @Builder.Default
     @Size(max = 500)
-    private Integer limit;
+    private Integer limit = 500;
 
 }
