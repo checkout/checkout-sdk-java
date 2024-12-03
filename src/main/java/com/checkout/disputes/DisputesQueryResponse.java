@@ -54,4 +54,10 @@ public final class DisputesQueryResponse extends HttpMetadata {
     @SerializedName("payment_mcc")
     private String paymentMcc;
 
+    @SerializedName("processing_channel_ids")
+    private String processingChannelIds;
+
+    @SerializedName("segment_ids")
+    private String SegmentIds;
+
 }

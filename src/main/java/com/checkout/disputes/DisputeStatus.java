@@ -36,7 +36,10 @@ public enum DisputeStatus {
     EVIDENCE_UNDER_REVIEW("evidence_under_review"),
 
     @SerializedName("arbitration_under_review")
-    ARBITRATION_UNDER_REVIEW("arbitration_under_review");
+    ARBITRATION_UNDER_REVIEW("arbitration_under_review"),
+
+    @SerializedName("arb_evidence_submitted")
+    ARB_EVIDENCE_SUBMITTED("arb_evidence_submitted");
 
     @Getter
     private final String status;

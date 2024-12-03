@@ -1,15 +1,18 @@
 package com.checkout.disputes;
 
+import com.checkout.HttpMetadata;
 import com.checkout.common.Resource;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.List;
+
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class DisputeEvidenceResponse extends Resource {
+public final class DisputeEvidenceResponse extends HttpMetadata {
 
     @SerializedName("proof_of_delivery_or_service_file")
     private String proofOfDeliveryOrServiceFile;
@@ -58,5 +61,20 @@ public final class DisputeEvidenceResponse extends Resource {
 
     @SerializedName("proof_of_delivery_or_service_date_text")
     private String proofOfDeliveryOrServiceDateText;
+
+    @SerializedName("arbitration_no_review_text")
+    private String arbitrationNoReviewText;
+
+    @SerializedName("arbitration_no_review_files")
+    private List<String> arbitrationNoReviewFiles;
+
+    @SerializedName("arbitration_review_required_text")
+    private String arbitrationReviewRequiredText;
+
+    @SerializedName("arbitration_review_required_files")
+    private List<String> arbitrationReviewRequiredFiles;
+
+    @SerializedName("compelling_evidence")
+    private CompellingEvidence compellingEvidence;
 
 }

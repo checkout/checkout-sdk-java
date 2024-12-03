@@ -122,7 +122,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         assertEquals(PaymentSourceType.IDEAL, paymentDetails.getSource().getType());
     }
 
-
+    @Disabled("payment method not supported")
     @Test
     void shouldMakeSofortPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()

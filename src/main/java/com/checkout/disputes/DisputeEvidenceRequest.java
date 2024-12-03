@@ -1,16 +1,16 @@
 package com.checkout.disputes;
 
-import com.checkout.common.Link;
+import com.checkout.common.Resource;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
-import java.util.Map;
+import java.util.List;
 
 @Data
 @Builder
-public final class DisputeEvidenceRequest {
+public final class DisputeEvidenceRequest extends Resource {
 
     @SerializedName("proof_of_delivery_or_service_file")
     private String proofOfDeliveryOrServiceFile;
@@ -67,7 +67,19 @@ public final class DisputeEvidenceRequest {
     @SerializedName("proof_of_delivery_or_service_date_text")
     private String proofOfDeliveryOrServiceDateText;
 
-    @SerializedName("_links")
-    private Map<String, Link> links;
+    @SerializedName("arbitration_no_review_text")
+    private String arbitrationNoReviewText;
+
+    @SerializedName("arbitration_no_review_files")
+    private List<String> arbitrationNoReviewFiles;
+
+    @SerializedName("arbitration_review_required_text")
+    private String arbitrationReviewRequiredText;
+
+    @SerializedName("arbitration_review_required_files")
+    private List<String> arbitrationReviewRequiredFiles;
+
+    @SerializedName("compelling_evidence")
+    private CompellingEvidence compellingEvidence;
 
 }
