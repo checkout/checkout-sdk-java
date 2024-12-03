@@ -7,6 +7,8 @@ import com.checkout.CheckoutSdk;
 import com.checkout.Environment;
 import com.checkout.TestHelper;
 import com.checkout.common.AccountHolder;
+import com.checkout.common.AccountHolderType;
+import com.checkout.common.AccountType;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
@@ -15,11 +17,13 @@ import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
 import com.checkout.payments.request.PaymentCustomerRequest;
 import com.checkout.payments.request.PaymentRequest;
+import com.checkout.payments.request.source.apm.RequestAchSource;
 import com.checkout.payments.request.source.apm.RequestAfterPaySource;
 import com.checkout.payments.request.source.apm.RequestAlipayPlusSource;
 import com.checkout.payments.request.source.apm.RequestAlmaSource;
 import com.checkout.payments.request.source.apm.RequestBancontactSource;
 import com.checkout.payments.request.source.apm.RequestBenefitSource;
+import com.checkout.payments.request.source.apm.RequestBizumSource;
 import com.checkout.payments.request.source.apm.RequestCvConnectSource;
 import com.checkout.payments.request.source.apm.RequestEpsSource;
 import com.checkout.payments.request.source.apm.RequestFawrySource;
@@ -29,10 +33,13 @@ import com.checkout.payments.request.source.apm.RequestIllicadoSource;
 import com.checkout.payments.request.source.apm.RequestKnetSource;
 import com.checkout.payments.request.source.apm.RequestMbwaySource;
 import com.checkout.payments.request.source.apm.RequestMultiBancoSource;
+import com.checkout.payments.request.source.apm.RequestOctopusSource;
 import com.checkout.payments.request.source.apm.RequestP24Source;
+import com.checkout.payments.request.source.apm.RequestPlaidSource;
 import com.checkout.payments.request.source.apm.RequestPostFinanceSource;
 import com.checkout.payments.request.source.apm.RequestQPaySource;
 import com.checkout.payments.request.source.apm.RequestSepaSource;
+import com.checkout.payments.request.source.apm.RequestSequraSource;
 import com.checkout.payments.request.source.apm.RequestSofortSource;
 import com.checkout.payments.request.source.apm.RequestStcPaySource;
 import com.checkout.payments.request.source.apm.RequestTamaraSource;
@@ -48,6 +55,7 @@ import java.util.UUID;
 
 import static com.checkout.TestHelper.createAddress;
 import static com.checkout.TestHelper.createPhone;
+import static com.checkout.TestHelper.getAccountHolder;
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -114,7 +122,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         assertEquals(PaymentSourceType.IDEAL, paymentDetails.getSource().getType());
     }
 
-
+    @Disabled("payment method not supported")
     @Test
     void shouldMakeSofortPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
@@ -277,6 +285,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     void shouldMakeEpsPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()
                 .source(RequestEpsSource.builder()
+                        .accountHolder(getAccountHolder())
                         .purpose("Mens black t-shirt L")
                         .build())
                 .currency(Currency.EUR)
@@ -564,5 +573,117 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .build();
 
         checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), APM_SERVICE_UNAVAILABLE);
+    }
+
+    @Test
+    void shouldMakeAchPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestAchSource.builder()
+                        .accountType(AccountType.SAVINGS)
+                        .country(CountryCode.GB)
+                        .accountNumber("8784738748973829")
+                        .bankCode("BANK")
+                        .accountHolder(AccountHolder.builder()
+                                .firstName("John")
+                                .lastName("Doe")
+                                .billingAddress(createAddress())
+                                .phone(createPhone())
+                                .build())
+                        .build())
+                .currency(Currency.USD)
+                .amount(10L)
+                .capture(true)
+                .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
+                .successUrl("https://testing.checkout.com/success")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
+        assertNotNull(paymentResponse);
+        assertEquals(PaymentStatus.PENDING, paymentResponse.getStatus());
+        assertNotNull(paymentResponse.getId());
+        assertTrue(paymentResponse.getSource() instanceof AlternativePaymentSourceResponse);
+
+        final AlternativePaymentSourceResponse sourceResponse = (AlternativePaymentSourceResponse) paymentResponse.getSource();
+        assertEquals(PaymentSourceType.ACH, sourceResponse.getType());
+    }
+
+    @Test
+    void shouldMakeBizumPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestBizumSource.builder()
+                        .mobileNumber("+447700900986")
+                        .build())
+                .currency(Currency.EUR)
+                .amount(10L)
+                .capture(true)
+                .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
+                .successUrl("https://testing.checkout.com/success")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), APM_SERVICE_UNAVAILABLE);
+    }
+
+    @Test
+    void shouldMakeOctopusPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(new RequestOctopusSource())
+                .currency(Currency.USD)
+                .amount(10L)
+                .capture(true)
+                .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
+                .successUrl("https://testing.checkout.com/success")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), APM_CURRENCY_NOT_SUPPORTED);
+    }
+
+    @Test
+    void shouldMakePlaidPayment() {
+        final RequestPlaidSource plaidSource = RequestPlaidSource.builder()
+                .token("token")
+                .accountHolder(AccountHolder.builder()
+                        .firstName("John")
+                        .lastName("Doe")
+                        .phone(createPhone())
+                        .billingAddress(createAddress())
+                        .type(AccountHolderType.INDIVIDUAL)
+                        .accountNameInquiry(false)
+                        .build())
+                .build();
+
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(plaidSource)
+                .currency(Currency.USD)
+                .amount(10L)
+                .capture(true)
+                .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
+                .successUrl("https://testing.checkout.com/success")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        final PaymentResponse paymentResponse = blocking(() -> paymentsClient.requestPayment(paymentRequest));
+
+        assertNotNull(paymentResponse);
+        assertNotNull(paymentResponse.getId());
+        assertEquals(202, paymentResponse.getHttpStatusCode());
+    }
+
+    @Test
+    void shouldMakeSequraPayment() {
+        final PaymentRequest paymentRequest = PaymentRequest.builder()
+                .source(RequestSequraSource.builder()
+                        .billingAddress(createAddress())
+                        .build())
+                .currency(Currency.EUR)
+                .amount(10L)
+                .capture(true)
+                .successUrl("https://testing.checkout.com/success")
+                .failureUrl("https://testing.checkout.com/failure")
+                .build();
+
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 }

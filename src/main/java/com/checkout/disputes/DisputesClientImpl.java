@@ -20,6 +20,7 @@ public class DisputesClientImpl extends AbstractClient implements DisputesClient
     private static final String ACCEPT_PATH = "accept";
     private static final String EVIDENCE_PATH = "evidence";
     private static final String SUBMITTED_PATH = "submitted";
+    private static final String ARBITRATION_PATH = "arbitration";
     private static final String SCHEME_FILES_PATH = "schemefiles";
 
     public DisputesClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration, final SdkAuthorizationType sdkAuthorizationType) {
@@ -87,6 +88,47 @@ public class DisputesClientImpl extends AbstractClient implements DisputesClient
     }
 
     @Override
+    public CompletableFuture<EmptyResponse> submitArbitrationEvidence(String disputeId) {
+        validateParams("disputeId", disputeId);
+        return apiClient.postAsync(
+                buildPath(DISPUTES_PATH, disputeId, EVIDENCE_PATH, ARBITRATION_PATH),
+                sdkAuthorization(),
+                EmptyResponse.class,
+                null,
+                null);
+    }
+
+    @Override
+    public CompletableFuture<DisputeCompiledSubmittedEvidenceResponse> getCompiledSubmittedEvidence(String disputeId) {
+        validateParams("disputeId", disputeId);
+        return apiClient.getAsync(
+                buildPath(DISPUTES_PATH, disputeId, EVIDENCE_PATH, SUBMITTED_PATH),
+                sdkAuthorization(),
+                DisputeCompiledSubmittedEvidenceResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<DisputeCompiledSubmittedEvidenceResponse> getCompiledSubmittedArbitrationEvidence(String disputeId) {
+        validateParams("disputeId", disputeId);
+        return apiClient.getAsync(
+                buildPath(DISPUTES_PATH, disputeId, EVIDENCE_PATH, ARBITRATION_PATH, SUBMITTED_PATH),
+                sdkAuthorization(),
+                DisputeCompiledSubmittedEvidenceResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<SchemeFileResponse> getDisputeSchemeFiles(final String disputeId) {
+        validateParams("disputeId", disputeId);
+        return apiClient.getAsync(
+                buildPath(DISPUTES_PATH, disputeId, SCHEME_FILES_PATH),
+                sdkAuthorization(),
+                SchemeFileResponse.class
+        );
+    }
+
+    @Override
     public CompletableFuture<IdResponse> uploadFile(final FileRequest fileRequest) {
         validateParams("fileRequest", fileRequest);
         return apiClient.submitFileAsync(
@@ -105,23 +147,4 @@ public class DisputesClientImpl extends AbstractClient implements DisputesClient
                 FileDetailsResponse.class);
     }
 
-    @Override
-    public CompletableFuture<DisputeCompiledSubmittedEvidenceResponse> getCompiledSubmittedEvidence(String disputeId) {
-        validateParams("disputeId", disputeId);
-        return apiClient.getAsync(
-                buildPath(DISPUTES_PATH, disputeId, EVIDENCE_PATH, SUBMITTED_PATH),
-                sdkAuthorization(),
-                DisputeCompiledSubmittedEvidenceResponse.class
-        );
-    }
-
-    @Override
-    public CompletableFuture<SchemeFileResponse> getDisputeSchemeFiles(final String disputeId) {
-        validateParams("disputeId", disputeId);
-        return apiClient.getAsync(
-                buildPath(DISPUTES_PATH, disputeId, SCHEME_FILES_PATH),
-                sdkAuthorization(),
-                SchemeFileResponse.class
-        );
-    }
 }

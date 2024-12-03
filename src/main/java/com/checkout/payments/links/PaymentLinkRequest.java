@@ -14,6 +14,7 @@ import com.checkout.payments.RiskRequest;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
 import com.checkout.payments.request.PaymentRetryRequest;
+import com.checkout.payments.sender.PaymentSender;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
@@ -90,6 +91,8 @@ public final class PaymentLinkRequest {
 
     @SerializedName("customer_retry")
     private PaymentRetryRequest customerRetry;
+
+    private PaymentSender sender;
 
     @SerializedName("processing_channel_id")
     private String processingChannelId;

@@ -53,4 +53,18 @@ public final class DisputeDetailsResponse extends Resource {
     @SerializedName("sub_entity_id")
     private String subEntityId;
 
+    private String reference;
+
+    @SerializedName("is_ce_candidate")
+    private Boolean isCeCandidate;
+
+    @SerializedName("evidence_list")
+    private List<EvidenceList> evidenceList;
+
+    @SerializedName("evidence_bundle")
+    private List<EvidenceBundle> evidenceBundle;
+
+    @SerializedName("segment_id")
+    private String segmentId;
+
 }

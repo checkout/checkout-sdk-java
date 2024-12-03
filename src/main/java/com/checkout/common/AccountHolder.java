@@ -1,55 +1,38 @@
 package com.checkout.common;
 
-import com.google.gson.annotations.SerializedName;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public final class AccountHolder {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public final class AccountHolder extends AccountHolderBase {
 
-    private AccountHolderType type;
+    private Boolean accountNameInquiry;
 
-    @SerializedName("full_name")
-    private String fullName;
-
-    @SerializedName("first_name")
-    private String firstName;
-
-    @SerializedName("middle_name")
-    private String middleName;
-
-    @SerializedName("last_name")
-    private String lastName;
-
-    private String email;
-
-    private String gender;
-
-    @SerializedName("company_name")
-    private String companyName;
-
-    @SerializedName("tax_id")
-    private String taxId;
-
-    @SerializedName("date_of_birth")
-    private String dateOfBirth;
-
-    @SerializedName("country_of_birth")
-    private CountryCode countryOfBirth;
-
-    @SerializedName("residential_status")
-    private String residentialStatus;
-
-    @SerializedName("billing_address")
-    private Address billingAddress;
-
-    private Phone phone;
-
-    private AccountHolderIdentification identification;
+    @Builder
+    private AccountHolder(
+            final AccountHolderType type,
+            final String fullName,
+            final String firstName,
+            final String middleName,
+            final String lastName,
+            final String email,
+            final String gender,
+            final String companyName,
+            final String taxId,
+            final String dateOfBirth,
+            final CountryCode countryOfBirth,
+            final String residentialStatus,
+            final Address billingAddress,
+            final Phone phone,
+            final AccountHolderIdentification identification,
+            final Boolean accountNameInquiry
+    ) {
+        super(type, fullName, firstName, middleName, lastName, email, gender, companyName, taxId, dateOfBirth, countryOfBirth, residentialStatus, billingAddress, phone, identification);
+        this.accountNameInquiry = accountNameInquiry;
+    }
 
 }

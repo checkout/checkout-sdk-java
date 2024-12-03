@@ -49,4 +49,6 @@ public final class PaymentDispute extends Resource {
     @SerializedName("has_refund")
     private Boolean hasRefund;
 
+    private String reference;
+
 }

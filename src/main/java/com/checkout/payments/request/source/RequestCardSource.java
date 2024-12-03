@@ -1,5 +1,6 @@
 package com.checkout.payments.request.source;
 
+import com.checkout.common.AccountHolder;
 import com.checkout.common.Address;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
@@ -38,6 +39,9 @@ public final class RequestCardSource extends AbstractRequestSource {
 
     private Phone phone;
 
+    @SerializedName("account_holder")
+    private AccountHolder accountHolder;
+
     @Builder
     private RequestCardSource(final String number,
                               final Integer expiryMonth,
@@ -47,7 +51,8 @@ public final class RequestCardSource extends AbstractRequestSource {
                               final Boolean stored,
                               final Boolean storeForFutureUse,
                               final Address billingAddress,
-                              final Phone phone) {
+                              final Phone phone,
+                              final AccountHolder accountHolder) {
         super(PaymentSourceType.CARD);
         this.number = number;
         this.expiryMonth = expiryMonth;
@@ -58,6 +63,7 @@ public final class RequestCardSource extends AbstractRequestSource {
         this.storeForFutureUse = storeForFutureUse;
         this.billingAddress = billingAddress;
         this.phone = phone;
+        this.accountHolder = accountHolder;
     }
 
     public RequestCardSource() {

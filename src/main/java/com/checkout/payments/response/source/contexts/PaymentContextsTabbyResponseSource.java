@@ -7,6 +7,6 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class PaymentContextsPayPalResponseSource extends AbstractPaymentContextsResponseSource implements ResponseSource {
+public final class PaymentContextsTabbyResponseSource extends AbstractPaymentContextsResponseSource implements ResponseSource {
 
 }

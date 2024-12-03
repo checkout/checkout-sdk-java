@@ -15,6 +15,10 @@ import com.checkout.payments.sender.PaymentSender;
 
 import java.util.UUID;
 
+import static com.checkout.TestHelper.createAddress;
+import static com.checkout.TestHelper.createPhone;
+import static com.checkout.TestHelper.getAccountHolder;
+
 public class CardSourceHelper {
 
     private static long amount = 10L;
@@ -65,6 +69,9 @@ public class CardSourceHelper {
                 .expiryMonth(CardSourceHelper.Visa.EXPIRY_MONTH)
                 .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
                 .cvv(Visa.CVV)
+                .billingAddress(createAddress())
+                .phone(createPhone())
+                .accountHolder(getAccountHolder())
                 .stored(false)
                 .build();
     }

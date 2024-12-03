@@ -1,7 +1,6 @@
 package com.checkout.payments;
 
 import com.checkout.CardSourceHelper;
-import com.checkout.CheckoutApiException;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.Address;
@@ -19,21 +18,13 @@ import com.checkout.payments.sender.PaymentIndividualSender;
 import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.function.Supplier;
 
 import static com.checkout.CardSourceHelper.getCardSourcePayment;
 import static com.checkout.CardSourceHelper.getCorporateSender;
 import static com.checkout.CardSourceHelper.getIndividualSender;
 import static com.checkout.CardSourceHelper.getRequestCardSource;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
 
@@ -41,6 +32,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
     public static final String PAYEE_NOT_ONBOARDED = "payee_not_onboarded";
     public static final String APM_SERVICE_UNAVAILABLE = "apm_service_unavailable";
     public static final String PAYMENT_METHOD_NOT_SUPPORTED = "payment_method_not_supported";
+    public static final String APM_CURRENCY_NOT_SUPPORTED = "currency_not_supported";
 
     public AbstractPaymentsTestIT() {
         super(PlatformType.DEFAULT);

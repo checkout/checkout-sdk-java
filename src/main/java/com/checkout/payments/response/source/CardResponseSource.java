@@ -1,11 +1,14 @@
 package com.checkout.payments.response.source;
 
+import com.checkout.common.AccountHolder;
+import com.checkout.common.AccountHolderResponse;
 import com.checkout.common.Address;
 import com.checkout.common.CardCategory;
 import com.checkout.common.CardType;
 import com.checkout.common.CardWalletType;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Phone;
+import com.checkout.payments.AccountUpdateStatusType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -81,5 +84,11 @@ public final class CardResponseSource extends AbstractResponseSource implements 
 
     @SerializedName("encrypted_card_number")
     private String encryptedCardNumber;
+
+    @SerializedName("account_update_status")
+    private AccountUpdateStatusType accountUpdateStatus;
+
+    @SerializedName("account_holder")
+    private AccountHolderResponse accountHolder;
 
 }

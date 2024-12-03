@@ -21,12 +21,16 @@ public interface DisputesClient {
 
     CompletableFuture<EmptyResponse> submitEvidence(String disputeId);
 
-    CompletableFuture<IdResponse> uploadFile(FileRequest fileRequest);
-
-    CompletableFuture<FileDetailsResponse> getFileDetails(String fileId);
+    CompletableFuture<EmptyResponse> submitArbitrationEvidence(String disputeId);
 
     CompletableFuture<DisputeCompiledSubmittedEvidenceResponse> getCompiledSubmittedEvidence(String disputeId);
 
+    CompletableFuture<DisputeCompiledSubmittedEvidenceResponse> getCompiledSubmittedArbitrationEvidence(String disputeId);
+
     CompletableFuture<SchemeFileResponse> getDisputeSchemeFiles(String disputeId);
+
+    CompletableFuture<IdResponse> uploadFile(FileRequest fileRequest);
+
+    CompletableFuture<FileDetailsResponse> getFileDetails(String fileId);
 
 }

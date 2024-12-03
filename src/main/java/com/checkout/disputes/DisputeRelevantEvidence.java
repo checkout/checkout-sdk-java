@@ -23,6 +23,12 @@ public enum DisputeRelevantEvidence {
     RECURRING_TRANSACTION_AGREEMENT,
 
     @SerializedName("additional_evidence")
-    ADDITIONAL_EVIDENCE
+    ADDITIONAL_EVIDENCE,
+
+    @SerializedName("arbitration_no_review")
+    ARBITRATION_NO_REVIEW,
+
+    @SerializedName("arbitration_review_required")
+    ARBITRATION_REVIEW_REQUIRED
 
 }

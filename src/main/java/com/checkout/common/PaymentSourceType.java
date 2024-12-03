@@ -14,6 +14,8 @@ public enum PaymentSourceType {
     NETWORK_TOKEN,
     @SerializedName("token")
     TOKEN,
+    @SerializedName("ach")
+    ACH,
     @SerializedName("customer")
     CUSTOMER,
     @SerializedName("applepay")
@@ -52,6 +54,10 @@ public enum PaymentSourceType {
     PAYPAL,
     @SerializedName("multibanco")
     MULTIBANCO,
+    @SerializedName("octopus")
+    OCTOPUS,
+    @SerializedName("plaid")
+    PLAID,
     @SerializedName("eps")
     EPS,
     @SerializedName("illicado")
@@ -62,6 +68,8 @@ public enum PaymentSourceType {
     P24,
     @SerializedName("benefitpay")
     BENEFITPAY,
+    @SerializedName("bizum")
+    BIZUM,
     @SerializedName("bancontact")
     BANCONTACT,
     @SerializedName("tamara")
@@ -105,6 +113,9 @@ public enum PaymentSourceType {
     @SerializedName("trustly")
     TRUSTLY,
     @SerializedName("cvconnect")
-    CV_CONNECT
-
+    CV_CONNECT,
+    @SerializedName("sequra")
+    SEQURA,
+    @SerializedName("tabby")
+    TABBY
 }

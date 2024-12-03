@@ -137,6 +137,21 @@ class DisputesClientImplTest {
     }
 
     @Test
+    void shouldSubmitArbitrationEvidence() throws ExecutionException, InterruptedException {
+
+        final EmptyResponse response = mock(EmptyResponse.class);
+
+        when(apiClient.postAsync(eq("disputes/dispute_id/evidence/arbitration"), eq(authorization), eq(EmptyResponse.class),
+                isNull(), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<EmptyResponse> future = client.submitArbitrationEvidence("dispute_id");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+    }
+
+    @Test
     void shouldSubmitDisputeEvidence() throws ExecutionException, InterruptedException {
 
         final EmptyResponse response = mock(EmptyResponse.class);
@@ -146,6 +161,19 @@ class DisputesClientImplTest {
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<EmptyResponse> future = client.submitEvidence("dispute_id");
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+    }
+
+    @Test
+    void shouldGetCompiledSubmittedArbitrationEvidence() throws ExecutionException, InterruptedException {
+        final DisputeCompiledSubmittedEvidenceResponse response = mock(DisputeCompiledSubmittedEvidenceResponse.class);
+
+        when(apiClient.getAsync("disputes/dispute_id/evidence/arbitration/submitted", authorization, DisputeCompiledSubmittedEvidenceResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<DisputeCompiledSubmittedEvidenceResponse> future = client.getCompiledSubmittedArbitrationEvidence("dispute_id");
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
