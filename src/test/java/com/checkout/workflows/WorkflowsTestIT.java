@@ -77,6 +77,14 @@ class WorkflowsTestIT extends AbstractWorkflowTestIT {
     }
 
     @Test
+    void shouldGetWorkflows() {
+        final GetWorkflowsResponse getWorkflowsResponse = blocking(() -> checkoutApi.workflowsClient().getWorkflows());
+        assertNotNull(getWorkflowsResponse);
+        assertNotNull(getWorkflowsResponse.getWorkflows());
+        assertFalse(getWorkflowsResponse.getWorkflows().isEmpty());
+    }
+
+    @Test
     void shouldCreateAndUpdateWorkflow() {
 
         final CreateWorkflowResponse createWorkflowResponse = createWorkflow();

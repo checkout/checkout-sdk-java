@@ -14,6 +14,7 @@ import com.checkout.instruments.previous.InstrumentCustomerRequest;
 import com.checkout.instruments.previous.InstrumentDetails;
 import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -82,6 +83,7 @@ class CustomersTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldGetCustomerDetailsWithInstrument() {
         final CardTokenResponse cardToken = blocking(() -> previousApi.tokensClient().requestCardToken(createValidTokenRequest()));
 

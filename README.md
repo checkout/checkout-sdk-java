@@ -52,13 +52,13 @@ dependencies {
 
 ## How to use the SDK
 
-This SDK can be used with two different pair of API keys provided by Checkout. However, using different API keys imply using specific API features. </br> 
+This SDK can be used with two different pair of API keys provided by Checkout. However, using different API keys imply using specific API features. </br>
 Please find in the table below the types of keys that can be used within this SDK.
 
 | Account System | Public Key (example)                    | Secret Key (example)                    |
 |----------------|-----------------------------------------|-----------------------------------------|
-| Default        | pk_pkhpdtvabcf7hdgpwnbhw7r2uic          | sk_m73dzypy7cf3gf5d2xr4k7sxo4e          |
-| Previous       | pk_g650ff27-7c42-4ce1-ae90-5691a188ee7b | sk_gk3517a8-3z01-45fq-b4bd-4282384b0a64 |
+| Default        | pk_abcdef123456ghijkl789mnopqr          | sk_123456ghijklm7890abcdefxyz           |
+| Previous       | pk_12345678-abcd-efgh-ijkl-mnopqrstuvwx | sk_abcdef12-3456-ghij-klmn-opqrstuvwxyz |
 
 Note: sandbox keys have a `sbox_` or `test_` identifier, for Default and Previous accounts respectively.
 
@@ -206,6 +206,19 @@ The execution of integration tests require the following environment variables s
 * For default account systems (NAS): `CHECKOUT_DEFAULT_PUBLIC_KEY` & `CHECKOUT_DEFAULT_SECRET_KEY`
 * For default account systems (OAuth): `CHECKOUT_DEFAULT_OAUTH_CLIENT_ID` & `CHECKOUT_DEFAULT_OAUTH_CLIENT_SECRET`
 * For Previous account systems (ABC): `CHECKOUT_PREVIOUS_PUBLIC_KEY` & `CHECKOUT_PREVIOUS_SECRET_KEY`
+
+## Telemetry
+Request telemetry is enabled by default in the Java SDK. Request latency is included in the telemetry data. Recording the request latency allows Checkout.com to continuously monitor and improve the merchant experience.
+
+Request telemetry can be disabled by opting out during CheckoutSdk builder step:
+```java
+final CheckoutApi checkoutApi = CheckoutSdk.builder()
+        .staticKeys()
+        .secretKey("secret_key")
+        .environment(Environment.PRODUCTION)
+        .recordTelemetry(false)
+        .build();
+```
 
 ## Code of Conduct
 

@@ -34,7 +34,7 @@ public class ApiClientImpl implements ApiClient {
 
     public ApiClientImpl(final CheckoutConfiguration configuration, final UriStrategy uriStrategy) {
         this.serializer = new GsonSerializer();
-        this.transport = new ApacheHttpClientTransport(uriStrategy.getUri(), configuration.getHttpClientBuilder(), configuration.getExecutor(), configuration.getTransportConfiguration());
+        this.transport = new ApacheHttpClientTransport(uriStrategy.getUri(), configuration.getHttpClientBuilder(), configuration.getExecutor(), configuration.getTransportConfiguration(), configuration);
     }
 
     @Override
