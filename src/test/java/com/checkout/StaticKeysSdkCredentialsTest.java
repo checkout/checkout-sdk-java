@@ -66,7 +66,7 @@ class StaticKeysSdkCredentialsTest {
 
         try {
             final StaticKeysSdkCredentials credentials = new StaticKeysSdkCredentials(VALID_DEFAULT_SK, similarDefaultPk);
-            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null, null);
+            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null, null, false);
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
@@ -74,7 +74,7 @@ class StaticKeysSdkCredentialsTest {
         }
         try {
             final StaticKeysSdkCredentials credentials = new StaticKeysSdkCredentials(similarDefaultSk, VALID_DEFAULT_PK);
-            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null, null);
+            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null, null, false);
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);

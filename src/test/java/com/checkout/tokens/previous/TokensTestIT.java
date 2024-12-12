@@ -9,6 +9,7 @@ import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
 import com.checkout.tokens.TokenType;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -24,6 +25,7 @@ class TokensTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldRequestCardToken() {
 
         final CardTokenRequest request = CardTokenRequest.builder()

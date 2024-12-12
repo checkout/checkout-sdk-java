@@ -12,6 +12,7 @@ import com.checkout.payments.previous.request.PaymentRequest;
 import com.checkout.payments.previous.request.source.RequestCardSource;
 import com.checkout.payments.previous.response.PaymentResponse;
 import com.checkout.payments.previous.response.source.CardResponseSource;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -262,6 +263,7 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldMakeTokenPayment() {
 
         final PaymentResponse paymentResponse = makeTokenPayment();

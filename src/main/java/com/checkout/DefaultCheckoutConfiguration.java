@@ -14,12 +14,14 @@ class DefaultCheckoutConfiguration implements CheckoutConfiguration {
     private final IEnvironment environment;
     private final EnvironmentSubdomain environmentSubdomain;
     private final TransportConfiguration transportConfiguration;
+    private final boolean recordTelemetry;
 
     DefaultCheckoutConfiguration(final SdkCredentials sdkCredentials,
                                  final IEnvironment environment,
                                  final HttpClientBuilder httpClientBuilder,
                                  final Executor executor,
-                                 final TransportConfiguration transportConfiguration) {
+                                 final TransportConfiguration transportConfiguration,
+                                 final boolean recordTelemetry) {
         validateParams("sdkCredentials", sdkCredentials, "environment", environment, "httpClientBuilder", httpClientBuilder, "executor", executor, "transportConfiguration", transportConfiguration);
         this.sdkCredentials = sdkCredentials;
         this.httpClientBuilder = httpClientBuilder;
@@ -27,6 +29,7 @@ class DefaultCheckoutConfiguration implements CheckoutConfiguration {
         this.environment = environment;
         this.environmentSubdomain = null;
         this.transportConfiguration = transportConfiguration;
+        this.recordTelemetry = recordTelemetry;
     }
 
     DefaultCheckoutConfiguration(final SdkCredentials sdkCredentials,
@@ -34,7 +37,8 @@ class DefaultCheckoutConfiguration implements CheckoutConfiguration {
                                  final EnvironmentSubdomain environmentSubdomain,
                                  final HttpClientBuilder httpClientBuilder,
                                  final Executor executor,
-                                 final TransportConfiguration transportConfiguration) {
+                                 final TransportConfiguration transportConfiguration,
+                                 final Boolean recordTelemetry) {
         validateParams("sdkCredentials", sdkCredentials, "environment", environment, "httpClientBuilder", httpClientBuilder, "executor", executor, "transportConfiguration", transportConfiguration);
         this.sdkCredentials = sdkCredentials;
         this.httpClientBuilder = httpClientBuilder;
@@ -42,6 +46,7 @@ class DefaultCheckoutConfiguration implements CheckoutConfiguration {
         this.environment = environment;
         this.environmentSubdomain = environmentSubdomain;
         this.transportConfiguration = transportConfiguration;
+        this.recordTelemetry = recordTelemetry;
     }
 
     @Override
@@ -72,5 +77,10 @@ class DefaultCheckoutConfiguration implements CheckoutConfiguration {
     @Override
     public TransportConfiguration getTransportConfiguration() {
         return transportConfiguration;
+    }
+
+    @Override
+    public Boolean isTelemetryEnabled() {
+        return this.recordTelemetry;
     }
 }

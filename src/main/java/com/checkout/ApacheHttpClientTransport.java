@@ -1,23 +1,10 @@
 package com.checkout;
 
-import static com.checkout.ClientOperation.POST;
-import static com.checkout.common.CheckoutUtils.ACCEPT_JSON;
-import static com.checkout.common.CheckoutUtils.PROJECT_NAME;
-import static com.checkout.common.CheckoutUtils.getVersionFromManifest;
-import static org.apache.http.HttpHeaders.ACCEPT;
-import static org.apache.http.HttpHeaders.AUTHORIZATION;
-import static org.apache.http.HttpHeaders.USER_AGENT;
-
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.stream.Collectors;
-
+import com.checkout.accounts.AccountsFileRequest;
+import com.checkout.common.AbstractFileRequest;
+import com.checkout.common.CheckoutUtils;
+import com.checkout.common.FileRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -42,12 +29,25 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import com.checkout.accounts.AccountsFileRequest;
-import com.checkout.common.AbstractFileRequest;
-import com.checkout.common.CheckoutUtils;
-import com.checkout.common.FileRequest;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
-import lombok.extern.slf4j.Slf4j;
+import static com.checkout.ClientOperation.POST;
+import static com.checkout.common.CheckoutUtils.ACCEPT_JSON;
+import static com.checkout.common.CheckoutUtils.PROJECT_NAME;
+import static com.checkout.common.CheckoutUtils.getVersionFromManifest;
+import static org.apache.http.HttpHeaders.ACCEPT;
+import static org.apache.http.HttpHeaders.AUTHORIZATION;
+import static org.apache.http.HttpHeaders.USER_AGENT;
 
 @Slf4j
 class ApacheHttpClientTransport implements Transport {
@@ -57,12 +57,22 @@ class ApacheHttpClientTransport implements Transport {
     private static final String FILE = "file";
     private static final String PURPOSE = "purpose";
     private static final String PATH = "path";
+
     private final URI baseUri;
     private final CloseableHttpClient httpClient;
     private final Executor executor;
     private final TransportConfiguration transportConfiguration;
+    private final CheckoutConfiguration configuration;
 
-    ApacheHttpClientTransport(final URI baseUri, final HttpClientBuilder httpClientBuilder, final Executor executor, final TransportConfiguration transportConfiguration) {
+    private static final ThreadLocal<Map<String, Object>> telemetryData = ThreadLocal.withInitial(HashMap::new);
+
+    ApacheHttpClientTransport(
+            final URI baseUri,
+            final HttpClientBuilder httpClientBuilder,
+            final Executor executor,
+            final TransportConfiguration transportConfiguration,
+            final CheckoutConfiguration configuration
+    ) {
         CheckoutUtils.validateParams("baseUri", baseUri, "httpClientBuilder", httpClientBuilder, "executor", executor);
         this.baseUri = baseUri;
         this.httpClient = httpClientBuilder
@@ -70,6 +80,7 @@ class ApacheHttpClientTransport implements Transport {
                 .build();
         this.executor = executor;
         this.transportConfiguration = transportConfiguration;
+        this.configuration = configuration;
     }
 
     @Override
@@ -154,15 +165,29 @@ class ApacheHttpClientTransport implements Transport {
         request.setHeader(ACCEPT, getAcceptHeader(clientOperation));
         request.setHeader(AUTHORIZATION, authorization.getAuthorizationHeader());
 
+        String currentRequestId = UUID.randomUUID().toString();
+
+        if (configuration.isTelemetryEnabled()) {
+            String telemetryHeader = generateTelemetryHeader(currentRequestId);
+            request.setHeader("cko-sdk-telemetry", telemetryHeader);
+        }
+
+        long startTime = System.currentTimeMillis();
+
         log.info("Request: " + Arrays.toString(sanitiseHeaders(request.getAllHeaders())));
         if (requestBody != null && request instanceof HttpEntityEnclosingRequest) {
             ((HttpEntityEnclosingRequestBase) request).setEntity(new StringEntity(requestBody, ContentType.APPLICATION_JSON));
         }
         try (final CloseableHttpResponse response = httpClient.execute(request)) {
+            long elapsed = System.currentTimeMillis() - startTime;
             log.info("Response: " + response.getStatusLine().getStatusCode() + " " + Arrays.toString(response.getAllHeaders()));
+
+            updateTelemetryData(currentRequestId, elapsed);
+
             final int statusCode = response.getStatusLine().getStatusCode();
             final Map<String, String> headers = Arrays.stream(response.getAllHeaders())
                     .collect(Collectors.toMap(Header::getName, Header::getValue));
+
             if (statusCode != HttpStatus.SC_NOT_FOUND && response.getEntity() != null && response.getEntity().getContent() != null) {
                 return Response.builder()
                         .statusCode(statusCode)
@@ -174,11 +199,31 @@ class ApacheHttpClientTransport implements Transport {
         } catch (final NoHttpResponseException e) {
             log.error("Target server failed to respond with a valid HTTP response.");
             return Response.builder().statusCode(HttpStatus.SC_GATEWAY_TIMEOUT).build();
-
         } catch (final Exception e) {
             log.error("Exception occurred during the execution of the client...", e);
         }
         return Response.builder().statusCode(transportConfiguration.getDefaultHttpStatusCode()).build();
+    }
+
+    private String generateTelemetryHeader(String currentRequestId) {
+        Map<String, Object> data = getTelemetryData();
+        String prevRequestId = (String) data.get("prevRequestId");
+        Long prevRequestDuration = (Long) data.get("prevRequestDuration");
+
+        return String.format("{\"requestId\":\"%s\",\"prevRequestId\":\"%s\",\"prevRequestDuration\":%d}",
+                currentRequestId,
+                prevRequestId != null ? prevRequestId : "N/A",
+                prevRequestDuration != null ? prevRequestDuration : 0);
+    }
+
+    private static void updateTelemetryData(String requestId, long duration) {
+        Map<String, Object> data = telemetryData.get();
+        data.put("prevRequestId", requestId);
+        data.put("prevRequestDuration", duration);
+    }
+
+    private static Map<String, Object> getTelemetryData() {
+        return telemetryData.get();
     }
 
     private Header[] sanitiseHeaders(final Header[] headers) {
@@ -210,5 +255,4 @@ class ApacheHttpClientTransport implements Transport {
             throw new CheckoutException(e);
         }
     }
-
 }

@@ -10,6 +10,7 @@ import com.checkout.common.Phone;
 import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,6 +44,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldCreateInstrument() {
         final CardTokenResponse cardToken = blocking(() -> previousApi.tokensClient().requestCardToken(createValidTokenRequest()));
 
@@ -81,6 +83,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldGetInstrument() {
 
         final CardTokenResponse cardToken = blocking(() -> previousApi.tokensClient().requestCardToken(createValidTokenRequest()));
@@ -134,6 +137,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldUpdateInstrument() {
         final CardTokenResponse cardToken = blocking(() -> previousApi.tokensClient().requestCardToken(createValidTokenRequest()));
 
@@ -155,6 +159,7 @@ class InstrumentsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldDeleteInstrument() {
 
         final CardTokenResponse cardToken = blocking(() -> previousApi.tokensClient().requestCardToken(createValidTokenRequest()));

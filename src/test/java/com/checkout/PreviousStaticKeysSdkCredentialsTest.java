@@ -64,7 +64,7 @@ class PreviousStaticKeysSdkCredentialsTest {
 
         try {
             final PreviousStaticKeysSdkCredentials credentials = new PreviousStaticKeysSdkCredentials(VALID_PREVIOUS_SK, similarDefaultPk);
-            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null, null);
+            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null, null, false);
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
@@ -72,7 +72,7 @@ class PreviousStaticKeysSdkCredentialsTest {
         }
         try {
             final PreviousStaticKeysSdkCredentials credentials = new PreviousStaticKeysSdkCredentials(similarDefaultSk, VALID_PREVIOUS_PK);
-            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null, null);
+            new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, null, null, null, false);
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);

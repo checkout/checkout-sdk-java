@@ -11,6 +11,7 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
     private EnvironmentSubdomain environmentSubdomain;
     private Executor executor = ForkJoinPool.commonPool();
     private TransportConfiguration transportConfiguration;
+    private Boolean recordTelemetry = true;
 
     public AbstractCheckoutSdkBuilder<T> environment(final IEnvironment environment) {
         this.environment = environment;
@@ -48,6 +49,11 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
         return environmentSubdomain;
     }
 
+    public AbstractCheckoutSdkBuilder<T> recordTelemetry(final Boolean recordTelemetry) {
+        this.recordTelemetry = recordTelemetry;
+        return this;
+    }
+
     protected abstract SdkCredentials getSdkCredentials();
 
     protected CheckoutConfiguration getCheckoutConfiguration() {
@@ -62,7 +68,7 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
     }
 
     private CheckoutConfiguration buildCheckoutConfiguration(final SdkCredentials sdkCredentials) {
-        return new DefaultCheckoutConfiguration(sdkCredentials, getEnvironment(), getEnvironmentSubdomain(), httpClientBuilder, executor, transportConfiguration);
+        return new DefaultCheckoutConfiguration(sdkCredentials, getEnvironment(), getEnvironmentSubdomain(), httpClientBuilder, executor, transportConfiguration, recordTelemetry);
     }
 
     public abstract T build();

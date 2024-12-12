@@ -18,4 +18,6 @@ public interface CheckoutConfiguration {
 
     TransportConfiguration getTransportConfiguration();
 
+    Boolean isTelemetryEnabled();
+
 }
