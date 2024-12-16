@@ -33,7 +33,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -64,7 +63,7 @@ class ApacheHttpClientTransport implements Transport {
     private final TransportConfiguration transportConfiguration;
     private final CheckoutConfiguration configuration;
 
-    private static final ThreadLocal<Map<String, Object>> telemetryData = ThreadLocal.withInitial(HashMap::new);
+    private static final ThreadLocal<RequestMetrics> telemetryData = ThreadLocal.withInitial(RequestMetrics::new);
 
     ApacheHttpClientTransport(
             final URI baseUri,
@@ -167,10 +166,7 @@ class ApacheHttpClientTransport implements Transport {
 
         String currentRequestId = UUID.randomUUID().toString();
 
-        if (configuration.isTelemetryEnabled()) {
-            String telemetryHeader = generateTelemetryHeader(currentRequestId);
-            request.setHeader("cko-sdk-telemetry", telemetryHeader);
-        }
+        addTelemetryHeader(request, currentRequestId);
 
         long startTime = System.currentTimeMillis();
 
@@ -197,33 +193,38 @@ class ApacheHttpClientTransport implements Transport {
             }
             return Response.builder().statusCode(statusCode).headers(headers).build();
         } catch (final NoHttpResponseException e) {
-            log.error("Target server failed to respond with a valid HTTP response.");
-            return Response.builder().statusCode(HttpStatus.SC_GATEWAY_TIMEOUT).build();
+            return handleException(e, "Target server failed to respond with a valid HTTP response.");
         } catch (final Exception e) {
-            log.error("Exception occurred during the execution of the client...", e);
+            return handleException(e, "Exception occurred during the execution of the client...");
         }
-        return Response.builder().statusCode(transportConfiguration.getDefaultHttpStatusCode()).build();
+    }
+
+    private void addTelemetryHeader(HttpUriRequest request, String currentRequestId) {
+        if (configuration.isTelemetryEnabled()) {
+            String telemetryHeader = generateTelemetryHeader(currentRequestId);
+            request.setHeader("cko-sdk-telemetry", telemetryHeader);
+        }
     }
 
     private String generateTelemetryHeader(String currentRequestId) {
-        Map<String, Object> data = getTelemetryData();
-        String prevRequestId = (String) data.get("prevRequestId");
-        Long prevRequestDuration = (Long) data.get("prevRequestDuration");
-
-        return String.format("{\"requestId\":\"%s\",\"prevRequestId\":\"%s\",\"prevRequestDuration\":%d}",
-                currentRequestId,
-                prevRequestId != null ? prevRequestId : "N/A",
-                prevRequestDuration != null ? prevRequestDuration : 0);
+        RequestMetrics metrics = getTelemetryData();
+        metrics.setRequestId(currentRequestId);
+        return metrics.toTelemetryHeader();
     }
 
     private static void updateTelemetryData(String requestId, long duration) {
-        Map<String, Object> data = telemetryData.get();
-        data.put("prevRequestId", requestId);
-        data.put("prevRequestDuration", duration);
+        RequestMetrics metrics = telemetryData.get();
+        metrics.setPrevRequestId(requestId);
+        metrics.setPrevRequestDuration(duration);
     }
 
-    private static Map<String, Object> getTelemetryData() {
+    private static RequestMetrics getTelemetryData() {
         return telemetryData.get();
+    }
+
+    private Response handleException(Exception e, String errorMessage) {
+        log.error(errorMessage, e);
+        return Response.builder().statusCode(transportConfiguration.getDefaultHttpStatusCode()).build();
     }
 
     private Header[] sanitiseHeaders(final Header[] headers) {
