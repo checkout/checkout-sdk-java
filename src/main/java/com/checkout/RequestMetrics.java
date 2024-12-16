@@ -1,17 +1,26 @@
 package com.checkout;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 public class RequestMetrics {
-    private String requestId;
-    private Long prevRequestDuration;
+
+    @SerializedName("prev_request_id")
     private String prevRequestId;
 
-    public RequestMetrics(Long prevRequestDuration, String prevRequestId) {
-        this.prevRequestDuration = prevRequestDuration;
-        this.prevRequestId = prevRequestId;
+    @SerializedName("request_id")
+    private String requestId;
+
+    @SerializedName("prev_request_duration")
+    private Long prevRequestDuration;
+
+    public String toTelemetryHeader() {
+        return String.format("{\"prev_request_id\":\"%s\",\"request_id\":\"%s\",\"prev_request_duration\":%d}",
+                prevRequestId != null ? prevRequestId : "N/A",
+                requestId != null ? requestId : "N/A",
+                prevRequestDuration != null ? prevRequestDuration : 0);
     }
 }
