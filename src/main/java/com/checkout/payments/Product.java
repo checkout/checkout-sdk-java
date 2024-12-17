@@ -5,10 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.Instant;
+
 @Data
 @Builder
 @AllArgsConstructor
 public final class Product {
+
+    private ProductType type;
 
     private String name;
 
@@ -46,5 +50,8 @@ public final class Product {
     private String url;
 
     private String sku;
+
+    @SerializedName("service_ends_on")
+    private Instant serviceEndsOn;
 
 }

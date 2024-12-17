@@ -38,6 +38,12 @@ public enum ProductType {
     INVOICE,
 
     @SerializedName("pay_later")
-    PAY_LATER
+    PAY_LATER,
+
+    @SerializedName("digital")
+    DIGITAL,
+
+    @SerializedName("physical")
+    PHYSICAL,
 
 }
