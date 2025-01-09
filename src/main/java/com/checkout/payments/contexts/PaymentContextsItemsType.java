@@ -9,4 +9,7 @@ public enum PaymentContextsItemsType {
 
     @SerializedName("digital")
     DIGITAL,
+
+    @SerializedName("discount")
+    DISCOUNT,
 }

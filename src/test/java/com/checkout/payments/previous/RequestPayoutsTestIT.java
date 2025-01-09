@@ -11,6 +11,7 @@ import com.checkout.payments.PaymentStatus;
 import com.checkout.payments.previous.request.PayoutRequest;
 import com.checkout.payments.previous.request.destination.PaymentRequestCardDestination;
 import com.checkout.payments.previous.response.PaymentResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -27,6 +28,7 @@ class RequestPayoutsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldRequestPayout() throws Exception {
 
         final PaymentRequestCardDestination paymentCardDestination = PaymentRequestCardDestination.builder()

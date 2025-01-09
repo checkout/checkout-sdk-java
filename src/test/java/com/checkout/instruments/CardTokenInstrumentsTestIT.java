@@ -86,7 +86,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
 
         final UpdateInstrumentCardRequest updateRequest = UpdateInstrumentCardRequest.builder()
                 .expiryMonth(12)
-                .expiryYear(2024)
+                .expiryYear(2030)
                 .name("John Doe")
                 .customer(UpdateCustomerRequest.builder().id(tokenInstrument.getCustomer().getId()).defaultCustomer(true).build())
                 .accountHolder(AccountHolder.builder()
@@ -118,7 +118,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
         assertNotNull(cardResponse.getId());
         assertNotNull(cardResponse.getFingerprint());
         assertEquals(12, cardResponse.getExpiryMonth());
-        assertEquals(2024, cardResponse.getExpiryYear());
+        assertEquals(2030, cardResponse.getExpiryYear());
         assertEquals("John", cardResponse.getAccountHolder().getFirstName());
         assertEquals("Doe", cardResponse.getAccountHolder().getLastName());
         assertTrue(cardResponse.getCustomer().isDefault());

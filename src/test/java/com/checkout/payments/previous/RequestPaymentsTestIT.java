@@ -179,6 +179,7 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldMakeCardPayment_3ds() {
 
         final PaymentResponse paymentResponse = make3dsCardPayment(false);

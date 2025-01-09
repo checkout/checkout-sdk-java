@@ -3,6 +3,7 @@ package com.checkout.payments.previous;
 import com.checkout.payments.RefundRequest;
 import com.checkout.payments.RefundResponse;
 import com.checkout.payments.previous.response.PaymentResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
 
     @Test
+    @Disabled("unavailable")
     void shouldRefundPayment() {
 
         final PaymentResponse paymentResponse = makeCardPayment(true, 10);
@@ -33,6 +35,7 @@ class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldRefundPaymentIdempotently() {
 
         final PaymentResponse paymentResponse = makeCardPayment(true, 10);
