@@ -27,8 +27,8 @@ public class CardSourceHelper {
 
         public static final String NAME = "Mr. Duke";
         public static final String NUMBER = "4242424242424242";
-        public static final int EXPIRY_MONTH = 6;
-        public static final int EXPIRY_YEAR = 2025;
+        public static final int EXPIRY_MONTH = 12;
+        public static final int EXPIRY_YEAR = 2030;
         public static final String CVV = "100";
 
     }
