@@ -4,15 +4,17 @@ import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public final class Product {
 
-    private ProductType type;
+    private Object type;
 
     private String name;
 
@@ -53,5 +55,13 @@ public final class Product {
 
     @SerializedName("service_ends_on")
     private Instant serviceEndsOn;
+
+    public ProductType getTypeAsEnum() {
+        return type instanceof ProductType ? (ProductType) type : null;
+    }
+
+    public String getTypeAsString() {
+        return type instanceof String ? (String) type : null;
+    }
 
 }

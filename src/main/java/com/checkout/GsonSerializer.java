@@ -18,6 +18,8 @@ import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.create.MccCardControlResponse;
 import com.checkout.issuing.controls.responses.create.VelocityCardControlResponse;
 import com.checkout.payments.PaymentDestinationType;
+import com.checkout.payments.Product;
+import com.checkout.payments.ProductType;
 import com.checkout.payments.previous.PaymentAction;
 import com.checkout.payments.sender.Sender;
 import com.checkout.payments.sender.SenderType;
@@ -36,8 +38,10 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
+import lombok.Getter;
 import org.apache.commons.lang3.EnumUtils;
 
 import java.lang.reflect.Type;
@@ -55,6 +59,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+@Getter
 public class GsonSerializer implements Serializer {
 
     private static final List<DateTimeFormatter> DEFAULT_FORMATTERS = Arrays.asList(
@@ -149,6 +154,7 @@ public class GsonSerializer implements Serializer {
             .registerTypeAdapter(WEBHOOKS_TYPE, webhooksResponseDeserializer())
             .registerTypeAdapter(PREVIOUS_PAYMENT_ACTIONS_TYPE, paymentActionsResponsePreviousDeserializer())
             .registerTypeAdapter(PAYMENT_ACTIONS_TYPE, paymentActionsResponseDeserializer())
+            .registerTypeAdapter(Product.class, getProductDeserializer())
             .create();
 
     private final Gson gson;
@@ -159,10 +165,6 @@ public class GsonSerializer implements Serializer {
 
     public GsonSerializer(final Gson gson) {
         this.gson = gson;
-    }
-
-    public Gson getGson() {
-        return gson;
     }
 
     @Override
@@ -276,18 +278,16 @@ public class GsonSerializer implements Serializer {
         return (json, typeOfT, context) -> {
             String dateString;
 
-            // Check if the JSON is a number or a string
             if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isNumber()) {
-                dateString = String.valueOf(json.getAsLong()); // Convert numeric value to string
+                dateString = String.valueOf(json.getAsLong());
             } else {
-                dateString = json.getAsString(); // Use the string value directly
+                dateString = json.getAsString();
             }
 
             try {
-                // Try parsing the string as an ISO-8601 Instant
                 return Instant.parse(dateString);
             } catch (final DateTimeParseException ex) {
-                if (dateString.matches("\\d{8}")) { // Handle numeric format yyyyMMdd
+                if (dateString.matches("\\d{8}")) {
                     try {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
                         LocalDateTime dateTime = LocalDate.parse(dateString, formatter).atStartOfDay();
@@ -296,8 +296,7 @@ public class GsonSerializer implements Serializer {
                         throw new JsonParseException("Failed to parse numeric date in format yyyyMMdd: " + dateString, e);
                     }
                 }
-                // Explicitly handle the yyyy-MM-dd format
-                if (dateString.length() == 10) { // Handle format yyyy-MM-dd
+                if (dateString.length() == 10) {
                     try {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                         LocalDate date = LocalDate.parse(dateString, formatter);
@@ -306,18 +305,79 @@ public class GsonSerializer implements Serializer {
                         throw new JsonParseException("Failed to parse date in format yyyy-MM-dd: " + dateString, e);
                     }
                 }
-                // Attempt parsing with the DEFAULT_FORMATTERS
                 for (final DateTimeFormatter formatter : DEFAULT_FORMATTERS) {
                     try {
                         final LocalDateTime dateTime = LocalDateTime.parse(dateString, formatter);
                         return dateTime.toInstant(ZoneOffset.UTC);
                     } catch (final DateTimeParseException ignored) {
-                        // Continue with the next formatter
                     }
                 }
-                // Rethrow the original exception if no format matches
                 throw ex;
             }
+        };
+    }
+
+    private static JsonDeserializer<Product> getProductDeserializer() {
+        return (json, typeOfT, context) -> {
+            Product product = new Product();
+            JsonObject jsonObject = json.getAsJsonObject();
+
+            JsonElement typeElement = jsonObject.get("type");
+            Object typeValue = null;
+
+            if (typeElement != null && typeElement.isJsonPrimitive()) {
+                String typeAsString = typeElement.getAsString();
+                if (EnumUtils.isValidEnumIgnoreCase(ProductType.class, typeAsString)) {
+                    typeValue = ProductType.valueOf(typeAsString.toUpperCase());
+                } else {
+                    typeValue = typeAsString;
+                }
+            }
+            product.setType(typeValue);
+
+
+            jsonObject.entrySet().stream()
+                .filter(entry -> !entry.getKey().equals("type"))
+                .forEach(entry -> {
+                    try {
+                        String jsonKey = entry.getKey();
+                        JsonElement jsonValue = entry.getValue();
+
+                        java.lang.reflect.Field field = Arrays.stream(Product.class.getDeclaredFields())
+                                .filter(f -> {
+                                    SerializedName annotation = f.getAnnotation(SerializedName.class);
+                                    return (annotation != null && annotation.value().equals(jsonKey)) || f.getName().equals(jsonKey);
+                                })
+                                .findFirst()
+                                .orElse(null);
+
+                        if (field != null) {
+                            field.setAccessible(true);
+                            Class<?> fieldType = field.getType();
+
+                            if (jsonValue.isJsonNull()) {
+                                field.set(product, null);
+                            } else if (fieldType.equals(String.class)) {
+                                field.set(product, jsonValue.getAsString());
+                            } else if (fieldType.equals(Long.class) || fieldType.equals(long.class)) {
+                                field.set(product, jsonValue.getAsLong());
+                            } else if (fieldType.equals(Instant.class)) {
+                                String dateString = jsonValue.getAsString();
+                                if (dateString.matches("\\d{4}-\\d{2}-\\d{2}")) {
+                                    dateString += "T00:00:00Z";
+                                }
+                                field.set(product, Instant.parse(dateString));
+                            } else {
+                                Object nestedObject = context.deserialize(jsonValue, fieldType);
+                                field.set(product, nestedObject);
+                            }
+                        }
+                    } catch (IllegalAccessException e) {
+                        System.err.println("Error setting field: " + entry.getKey() + ", " + e.getMessage());
+                    }
+                });
+
+            return product;
         };
     }
 }
