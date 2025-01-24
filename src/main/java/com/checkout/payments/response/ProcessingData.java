@@ -1,6 +1,7 @@
 package com.checkout.payments.response;
 
 import com.checkout.common.CountryCode;
+import com.checkout.payments.PanProcessedType;
 import com.checkout.payments.PreferredSchema;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
@@ -70,5 +71,11 @@ public final class ProcessingData {
 
     @SerializedName("scheme_merchant_id")
     private String schemeMerchantId;
+
+    @SerializedName("pan_type_processed")
+    private PanProcessedType panTypeProcessed;
+
+    @SerializedName("cko_network_token_available")
+    private Boolean ckoNetworkTokenAvailable;
 
 }
