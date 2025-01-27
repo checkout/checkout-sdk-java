@@ -149,6 +149,7 @@ public final class TestHelper {
                 .amount(1000L)
                 .reference(reference)
                 .currency(Currency.GBP)
+                .displayName("Payment Test Company")
                 .description("Payment for Gold Necklace")
                 .customer(createCustomer())
                 .shipping(ShippingDetails.builder()

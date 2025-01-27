@@ -36,6 +36,9 @@ public final class RequestNetworkTokenSource extends AbstractRequestSource {
 
     private Boolean stored;
 
+    @SerializedName("store_for_future_use")
+    private Boolean storeForFutureUse;
+
     private String name;
 
     private String cvv;
@@ -56,6 +59,7 @@ public final class RequestNetworkTokenSource extends AbstractRequestSource {
                                       final String cryptogram,
                                       final String eci,
                                       final Boolean stored,
+                                      final Boolean storeForFutureUse,
                                       final String name,
                                       final String cvv,
                                       final Address billingAddress,
@@ -69,6 +73,7 @@ public final class RequestNetworkTokenSource extends AbstractRequestSource {
         this.cryptogram = cryptogram;
         this.eci = eci;
         this.stored = stored;
+        this.storeForFutureUse = storeForFutureUse;
         this.name = name;
         this.cvv = cvv;
         this.billingAddress = billingAddress;

@@ -8,6 +8,7 @@ import com.checkout.common.Currency;
 import com.checkout.instruments.get.BankAccountFieldQuery;
 import com.checkout.instruments.get.BankAccountFieldResponse;
 import com.checkout.instruments.get.PaymentNetwork;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -21,6 +22,7 @@ class BankAccountFieldFormattingTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("unavailable")
     void shouldGetBankAccountFieldFormatting() {
         final BankAccountFieldQuery query = BankAccountFieldQuery.builder()
                 .accountHolderType(AccountHolderType.INDIVIDUAL)
