@@ -1,5 +1,6 @@
 package com.checkout.payments;
 
+import com.checkout.common.CountryCode;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
@@ -13,6 +14,12 @@ public final class PaymentProcessing {
 
     @SerializedName("acquirer_transaction_id")
     private String acquirerTransactionId;
+
+    @SerializedName("acquirer_name")
+    private String acquirerName;
+
+    @SerializedName("acquirer_country_code")
+    private CountryCode acquirerCountryCode;
 
     @SerializedName("recommendation_code")
     private String recommendationCode;
@@ -68,6 +75,9 @@ public final class PaymentProcessing {
 
     @SerializedName("cko_network_token_available")
     private Boolean ckoNetworkTokenAvailable;
+
+    @SerializedName("provision_network_token")
+    private Boolean provisionNetworkToken;
 
     @SerializedName("merchant_category_code")
     private String merchantCategoryCode;
