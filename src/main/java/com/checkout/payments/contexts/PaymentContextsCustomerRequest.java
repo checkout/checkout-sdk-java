@@ -16,7 +16,7 @@ import lombok.ToString;
 public class PaymentContextsCustomerRequest extends CustomerRequest {
 
     @SerializedName("email_verified")
-    private String emailVerified;
+    private Boolean emailVerified;
 
     private PaymentContextsCustomerSummary summary;
 
@@ -24,7 +24,7 @@ public class PaymentContextsCustomerRequest extends CustomerRequest {
     private PaymentContextsCustomerRequest(final String email,
                                            final String name,
                                            final Phone phone,
-                                           final String emailVerified,
+                                           final Boolean emailVerified,
                                            final PaymentContextsCustomerSummary summary) {
         super(email, name, phone);
         this.emailVerified = emailVerified;
