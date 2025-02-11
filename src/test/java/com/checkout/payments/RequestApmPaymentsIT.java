@@ -177,7 +177,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .reference("ORD-5023-4E89")
                 .processing(ProcessingSettings.builder().taxAmount(500L).shippingAmount(1000L).build())
                 .processingChannelId("pc_zs5fqhybzc2e3jmq3efvybybpq")
-                .customer(new CustomerRequest(null, "c.chapman@example.com", "Cecilia Chapman",
+                .customer(new CustomerRequest("c.chapman@example.com", "Cecilia Chapman",
                         Phone.builder().countryCode("+966").number("113 496 0000").build()))
                 .items(Collections.singletonList(Product.builder()
                         .name("Item name")

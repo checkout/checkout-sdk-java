@@ -12,7 +12,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class Order {
+public final class RefundOrder {
 
     private String name;
 

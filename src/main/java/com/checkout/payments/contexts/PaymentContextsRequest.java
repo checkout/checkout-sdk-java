@@ -1,7 +1,6 @@
 package com.checkout.payments.contexts;
 
 import com.checkout.common.Currency;
-import com.checkout.common.CustomerRequest;
 import com.checkout.payments.PaymentType;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.request.source.AbstractRequestSource;
@@ -37,7 +36,7 @@ public final class PaymentContextsRequest extends PaymentContexts {
             final String failureUrl,
             final List<PaymentContextsItems> items,
             final String authorizationType,
-            final CustomerRequest customer
+            final PaymentContextsCustomerRequest customer
     ) {
         super(amount, currency, paymentType, authorizationType, capture, customer, shipping, processing,
                 processingChannelId, reference, description, successUrl, failureUrl, items);

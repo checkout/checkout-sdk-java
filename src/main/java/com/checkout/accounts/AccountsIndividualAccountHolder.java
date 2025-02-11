@@ -24,8 +24,7 @@ public class AccountsIndividualAccountHolder extends AccountsAccountHolder {
     private String lastName;
 
     @Builder
-    private AccountsIndividualAccountHolder(final AccountHolderType type,
-                                            final String taxId,
+    private AccountsIndividualAccountHolder(final String taxId,
                                             final DateOfBirth dateOfBirth,
                                             final CountryCode countryOfBirth,
                                             final String residentialStatus,
@@ -35,7 +34,7 @@ public class AccountsIndividualAccountHolder extends AccountsAccountHolder {
                                             final String email,
                                             final String firstName,
                                             final String lastName) {
-        super(type, taxId, dateOfBirth, countryOfBirth, residentialStatus, billingAddress, phone, identification, email);
+        super(AccountHolderType.INDIVIDUAL, taxId, dateOfBirth, countryOfBirth, residentialStatus, billingAddress, phone, identification, email);
         this.firstName = firstName;
         this.lastName = lastName;
     }

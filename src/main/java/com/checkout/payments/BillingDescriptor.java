@@ -15,8 +15,6 @@ public final class BillingDescriptor {
 
     private String city;
 
-    // Not available in Previous
-
     private String reference;
 
 }

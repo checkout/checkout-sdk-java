@@ -21,8 +21,7 @@ public class AccountsCorporateAccountHolder extends AccountsAccountHolder {
     private String companyName;
 
     @Builder
-    private AccountsCorporateAccountHolder(final AccountHolderType type,
-                                           final String taxId,
+    private AccountsCorporateAccountHolder(final String taxId,
                                            final DateOfBirth dateOfBirth,
                                            final CountryCode countryOfBirth,
                                            final String residentialStatus,
@@ -31,7 +30,7 @@ public class AccountsCorporateAccountHolder extends AccountsAccountHolder {
                                            final AccountHolderIdentification identification,
                                            final String email,
                                            final String companyName) {
-        super(type, taxId, dateOfBirth, countryOfBirth, residentialStatus, billingAddress, phone, identification, email);
+        super(AccountHolderType.CORPORATE, taxId, dateOfBirth, countryOfBirth, residentialStatus, billingAddress, phone, identification, email);
         this.companyName = companyName;
     }
 }

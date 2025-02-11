@@ -161,7 +161,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
         final PreAuthenticationAssessmentRequest request = PreAuthenticationAssessmentRequest.builder()
                 .date(Instant.now())
                 .source(requestSource)
-                .customer(new CustomerRequest("id", TestHelper.generateRandomEmail(), "name", null))
+                .customer(new CustomerRequest(TestHelper.generateRandomEmail(), "name", null))
                 .payment(RiskPayment.builder().psp("CheckoutSdk.com").id("78453878").build())
                 .shipping(RiskShippingDetails.builder().address(
                         Address.builder()
@@ -213,7 +213,7 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
         final PreCaptureAssessmentRequest request = PreCaptureAssessmentRequest.builder()
                 .date(Instant.now())
                 .source(requestSource)
-                .customer(new CustomerRequest("id", TestHelper.generateRandomEmail(), "name", null))
+                .customer(new CustomerRequest(TestHelper.generateRandomEmail(), "name", null))
                 .payment(RiskPayment.builder().psp("CheckoutSdk.com").id("78453878").build())
                 .shipping(RiskShippingDetails.builder().address(
                         Address.builder()

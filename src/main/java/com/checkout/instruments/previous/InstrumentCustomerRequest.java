@@ -15,16 +15,19 @@ import lombok.ToString;
 @NoArgsConstructor
 public final class InstrumentCustomerRequest extends CustomerRequest {
 
+    private String id;
+
     @SerializedName("default")
     private boolean isDefault;
 
     @Builder
-    private InstrumentCustomerRequest(final String id,
-                                     final String email,
+    private InstrumentCustomerRequest(final String email,
                                      final String name,
-                                     final boolean isDefault,
-                                     final Phone phone) {
-        super(id, email, name, phone);
+                                      final Phone phone,
+                                     final String id,
+                                     final boolean isDefault) {
+        super(email, name, phone);
+        this.id = id;
         this.isDefault = isDefault;
     }
 
