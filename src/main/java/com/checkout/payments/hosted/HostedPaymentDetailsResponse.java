@@ -23,24 +23,11 @@ public final class HostedPaymentDetailsResponse extends Resource {
 
     private HostedPaymentStatus status;
 
-    @SerializedName("payment_id")
-    private String paymentId;
-
     private Long amount;
 
     private Currency currency;
 
-    private String reference;
-
-    private String description;
-
-    private CustomerResponse customer;
-
     private BillingInformation billing;
-
-    private List<Product> products;
-
-    private Map<String, Object> metadata;
 
     @SerializedName("success_url")
     private String successUrl;
@@ -50,6 +37,20 @@ public final class HostedPaymentDetailsResponse extends Resource {
 
     @SerializedName("failure_url")
     private String failureUrl;
+
+    @SerializedName("payment_id")
+    private String paymentId;
+
+    private String reference;
+
+    private String description;
+
+    private CustomerResponse customer;
+
+
+    private List<Product> products;
+
+    private Map<String, Object> metadata;
 
     @SerializedName("amount_allocations")
     private List<AmountAllocations> amountAllocations;

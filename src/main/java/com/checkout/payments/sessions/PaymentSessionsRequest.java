@@ -4,6 +4,7 @@ import com.checkout.common.AmountAllocations;
 import com.checkout.common.Currency;
 import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.BillingInformation;
+import com.checkout.payments.PaymentMethodConfiguration;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.PaymentType;
 import com.checkout.payments.ProcessingSettings;

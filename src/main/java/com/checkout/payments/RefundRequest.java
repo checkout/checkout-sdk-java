@@ -2,7 +2,7 @@ package com.checkout.payments;
 
 import com.checkout.common.AmountAllocations;
 import com.checkout.common.Destination;
-import com.checkout.payments.request.Order;
+import com.checkout.payments.request.RefundOrder;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +35,6 @@ public final class RefundRequest {
 
     private Destination destination;
 
-    private List<Order> items;
+    private List<RefundOrder> items;
 
 }

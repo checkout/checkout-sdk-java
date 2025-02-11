@@ -15,17 +15,19 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class PaymentCustomerRequest extends CustomerRequest {
 
+    private String id;
+
     @SerializedName("tax_number")
     private String taxNumber;
 
     @Builder
-    private PaymentCustomerRequest(final String id,
-                                   final String email,
+    private PaymentCustomerRequest(final String email,
                                    final String name,
                                    final Phone phone,
+                                   final String id,
                                    final String taxNumber) {
-        super(id, email, name, phone);
+        super(email, name, phone);
+        this.id = id;
         this.taxNumber = taxNumber;
     }
-
 }

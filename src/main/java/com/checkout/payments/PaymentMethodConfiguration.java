@@ -1,4 +1,4 @@
-package com.checkout.payments.sessions;
+package com.checkout.payments;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

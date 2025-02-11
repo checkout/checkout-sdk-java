@@ -164,7 +164,7 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
                 .source(source)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())
-                .customer(new CustomerRequest(null, TestHelper.generateRandomEmail(), null, null))
+                .customer(new CustomerRequest(TestHelper.generateRandomEmail(), null, null))
                 .amount(10L)
                 .currency(Currency.USD)
                 .threeDS(threeDSRequest)

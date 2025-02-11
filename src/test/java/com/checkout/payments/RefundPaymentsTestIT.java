@@ -4,7 +4,7 @@ import com.checkout.common.AccountType;
 import com.checkout.common.BankDetails;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Destination;
-import com.checkout.payments.request.Order;
+import com.checkout.payments.request.RefundOrder;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.source.RequestCardSource;
 import com.checkout.payments.response.PaymentResponse;
@@ -39,14 +39,14 @@ class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
         // capture
         capturePayment(paymentResponse.getId());
 
-        final Order order = Order.builder()
+        final RefundOrder refundOrder = RefundOrder.builder()
                 .name("Order Test")
                 .totalAmount(99L)
                 .quantity(88L)
                 .build();
 
-        final List<Order> orders = new ArrayList<>();
-        orders.add(order);
+        final List<RefundOrder> refundOrders = new ArrayList<>();
+        refundOrders.add(refundOrder);
 
         final BankDetails bank = BankDetails.builder()
                 .name("Lloyds TSB")
@@ -70,7 +70,7 @@ class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
         // refund
         final RefundRequest refundRequest = RefundRequest.builder()
                 .reference(UUID.randomUUID().toString())
-                .items(orders)
+                .items(refundOrders)
                 .destination(destination)
                 .build();
 

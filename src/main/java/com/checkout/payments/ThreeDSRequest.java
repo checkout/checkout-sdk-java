@@ -38,10 +38,6 @@ public final class ThreeDSRequest {
     @SerializedName("allow_upgrade")
     private Boolean allowUpgrade;
 
-    /**
-     * Not available on Previous
-     */
-
     @SerializedName("merchant_authentication_info")
     private MerchantAuthenticationInfo merchantAuthenticationInfo;
 
