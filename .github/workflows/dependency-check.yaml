@@ -20,7 +20,7 @@ jobs:
       - id: validate-wrapper
         uses: gradle/wrapper-validation-action@v1
       - id: cache-gradle-packages
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
