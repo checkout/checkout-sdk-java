@@ -19,7 +19,7 @@ import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.BillingInformation;
 import com.checkout.payments.Card;
 import com.checkout.payments.Googlepay;
-import com.checkout.payments.Locale;
+import com.checkout.payments.LocaleType;
 import com.checkout.payments.Payer;
 import com.checkout.payments.PaymentMethodConfiguration;
 import com.checkout.payments.PaymentRecipient;
@@ -223,7 +223,7 @@ public final class TestHelper {
             .successUrl("https://example.com/payments/success")
             .cancelUrl("https://example.com/payments/cancel")
             .failureUrl("https://example.com/payments/failure")
-            .locale(Locale.AR)
+            .locale(LocaleType.AR)
             .threeDS(ThreeDSRequest.builder()
                 .enabled(false)
                 .attemptN3D(false)

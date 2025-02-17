@@ -2,7 +2,7 @@ package com.checkout.payments;
 
 import com.google.gson.annotations.SerializedName;
 
-public enum Locale {
+public enum LocaleType {
 
     @SerializedName("ar")
     AR,

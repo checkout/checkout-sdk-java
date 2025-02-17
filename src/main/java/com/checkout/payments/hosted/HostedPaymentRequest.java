@@ -7,7 +7,7 @@ import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Product;
 import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.BillingInformation;
-import com.checkout.payments.Locale;
+import com.checkout.payments.LocaleType;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.PaymentType;
 import com.checkout.payments.ProcessingSettings;
@@ -91,7 +91,7 @@ public final class HostedPaymentRequest {
 
     private Map<String, Object> metadata;
 
-    private Locale locale;
+    private LocaleType locale;
 
     @SerializedName("3ds")
     private ThreeDSRequest threeDS;
