@@ -7,6 +7,7 @@ import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Product;
 import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.BillingInformation;
+import com.checkout.payments.PaymentInstruction;
 import com.checkout.payments.LocaleType;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.PaymentType;
@@ -101,7 +102,7 @@ public final class HostedPaymentRequest {
     @SerializedName("capture_on")
     private Instant captureOn;
 
-    private HostedPaymentInstruction instruction;
+    private PaymentInstruction instruction;
 
     @SerializedName("payment_method_configuration")
     private PaymentMethodConfiguration paymentMethodConfiguration;
