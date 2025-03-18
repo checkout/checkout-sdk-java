@@ -3,6 +3,7 @@ package com.checkout.payments.previous;
 import com.checkout.payments.VoidRequest;
 import com.checkout.payments.VoidResponse;
 import com.checkout.payments.previous.response.PaymentResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -10,6 +11,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@Disabled("unavailable")
 class VoidPaymentsTestIT extends AbstractPaymentsTestIT {
 
     @Test

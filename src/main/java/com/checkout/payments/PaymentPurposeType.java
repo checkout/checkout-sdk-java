@@ -1,4 +1,4 @@
-package com.checkout.payments.hosted;
+package com.checkout.payments;
 
 import com.google.gson.annotations.SerializedName;
 

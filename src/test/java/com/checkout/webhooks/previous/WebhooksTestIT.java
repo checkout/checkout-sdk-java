@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@Disabled("unstable")
+@Disabled("unavailable")
 class WebhooksTestIT extends SandboxTestFixture {
 
     protected WebhooksTestIT() {
@@ -65,7 +65,7 @@ class WebhooksTestIT extends SandboxTestFixture {
 
         final ItemsResponse<WebhookResponse> response = blocking(() -> previousApi.webhooksClient().retrieveWebhooks());
         assertNotNull(response);
-        assertTrue(response.getItems().size() >= 1);
+        assertTrue(!response.getItems().isEmpty());
 
         final WebhookResponse webhook2 = response.getItems().stream().filter(it -> webhook.getId().equals(it.getId())).findFirst().orElse(null);
         assertNotNull(webhook2);

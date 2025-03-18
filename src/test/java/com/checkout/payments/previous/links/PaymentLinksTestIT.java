@@ -7,6 +7,7 @@ import com.checkout.payments.links.PaymentLinkDetailsResponse;
 import com.checkout.payments.links.PaymentLinkRequest;
 import com.checkout.payments.links.PaymentLinkResponse;
 import com.checkout.payments.links.PaymentLinkStatus;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.anyOf;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Disabled("unavailable")
 class PaymentLinksTestIT extends SandboxTestFixture {
 
     static final String REFERENCE = "ORD-123A";

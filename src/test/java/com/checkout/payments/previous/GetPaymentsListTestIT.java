@@ -6,8 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import com.checkout.payments.PaymentsQueryFilter;
 import com.checkout.payments.previous.response.PaymentResponse;
 import com.checkout.payments.previous.response.PaymentsQueryResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled("unavailable")
 public class GetPaymentsListTestIT extends AbstractPaymentsTestIT {
 
     @Test

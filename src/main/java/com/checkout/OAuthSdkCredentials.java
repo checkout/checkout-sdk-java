@@ -73,15 +73,16 @@ final class OAuthSdkCredentials extends SdkCredentials {
 
     private synchronized OAuthAccessToken getAccessToken() {
         if (accessToken != null && accessToken.isValid()) {
+            log.debug("Using cached OAuth token");
             return accessToken;
         }
         final HttpPost httpPost = new HttpPost(authorizationUri);
         httpPost.setHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_FORM_URLENCODED.getMimeType());
         try {
             final List<NameValuePair> data = Arrays.asList(
+                    new BasicNameValuePair("grant_type", "client_credentials"),
                     new BasicNameValuePair("client_id", clientId),
                     new BasicNameValuePair("client_secret", clientSecret),
-                    new BasicNameValuePair("grant_type", "client_credentials"),
                     new BasicNameValuePair("scope", scopes.stream().map(OAuthScope::getScope).collect(Collectors.joining(" "))));
             httpPost.setEntity(new UrlEncodedFormEntity(data));
         } catch (final UnsupportedEncodingException ignore) {
@@ -91,27 +92,35 @@ final class OAuthSdkCredentials extends SdkCredentials {
         try (final CloseableHttpResponse response = client.execute(httpPost)) {
             final String json = EntityUtils.toString(response.getEntity(), Charsets.UTF_8);
             final OAuthServiceResponse oAuthServiceResponse = serializer.fromJson(json, OAuthServiceResponse.class);
+            if (oAuthServiceResponse == null) {
+                throw new CheckoutException(format("Invalid OAuth response: %s", json));
+            }
+
             if (oAuthServiceResponse.error != null) {
                 throw new CheckoutException(format("OAuth client_credentials authentication failed with error: %s", oAuthServiceResponse.error));
             }
-            accessToken = new OAuthAccessToken(oAuthServiceResponse.accessToken, now().plusSeconds(oAuthServiceResponse.expiresIn));
+
+            if (oAuthServiceResponse.accessToken == null) {
+                throw new CheckoutException(format("Invalid OAuth response: %s", json));
+            }
+
+            accessToken = new OAuthAccessToken(
+                    oAuthServiceResponse.accessToken,
+                    oAuthServiceResponse.tokenType,
+                    now().plusSeconds(oAuthServiceResponse.expiresIn)
+            );
+
+            log.debug("OAuth token successfully retrieved, expires at: {}", accessToken.getExpirationDate());
             return accessToken;
+
         } catch (final IOException e) {
             throw new CheckoutException("OAuth client_credentials authentication failed", e);
         }
 
     }
 
-    private static class OAuthServiceResponse {
-
-        @SerializedName("access_token")
-        String accessToken;
-
-        @SerializedName("expires_in")
-        Long expiresIn;
-
-        String error;
-
+    synchronized void setAccessToken(final OAuthAccessToken accessToken) {
+        this.accessToken = accessToken;
     }
 
     void setClient(final CloseableHttpClient client) {
@@ -126,8 +135,19 @@ final class OAuthSdkCredentials extends SdkCredentials {
         return accessToken;
     }
 
-    synchronized void setAccessToken(final OAuthAccessToken accessToken) {
-        this.accessToken = accessToken;
+    private static class OAuthServiceResponse {
+
+        @SerializedName("access_token")
+        String accessToken;
+
+        @SerializedName("token_type")
+        String tokenType;
+
+        @SerializedName("expires_in")
+        Long expiresIn;
+
+        String error;
+
     }
 
 }

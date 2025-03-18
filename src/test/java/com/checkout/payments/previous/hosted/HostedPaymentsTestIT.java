@@ -8,12 +8,14 @@ import com.checkout.payments.hosted.HostedPaymentDetailsResponse;
 import com.checkout.payments.hosted.HostedPaymentRequest;
 import com.checkout.payments.hosted.HostedPaymentResponse;
 import com.checkout.payments.hosted.HostedPaymentStatus;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Disabled("unavailable")
 class HostedPaymentsTestIT extends SandboxTestFixture {
 
     static final String REFERENCE = "ORD-123A";
