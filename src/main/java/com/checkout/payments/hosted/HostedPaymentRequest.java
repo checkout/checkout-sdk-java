@@ -45,8 +45,9 @@ public final class HostedPaymentRequest {
 
     private Long amount;
 
+    @Builder.Default
     @SerializedName("payment_type")
-    private PaymentType paymentType;
+    private PaymentType paymentType = PaymentType.REGULAR;
 
     @SerializedName("payment_ip")
     private String paymentIp;

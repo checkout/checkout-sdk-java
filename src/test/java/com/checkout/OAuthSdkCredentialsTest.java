@@ -18,11 +18,12 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.EnumSet;
+import java.util.Objects;
 
 import static com.checkout.PlatformType.DEFAULT_OAUTH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
@@ -86,7 +87,7 @@ class OAuthSdkCredentialsTest {
     void authorization_shouldNotGetWhenTheresAValidAccessToken() {
 
         final OAuthSdkCredentials credentials = new OAuthSdkCredentials(DEFAULT_CLIENT_BUILDER, Mockito.mock(URI.class), "client_id", "client_secret", EnumSet.allOf(OAuthScope.class));
-        credentials.setAccessToken(new OAuthAccessToken("y123", LocalDateTime.now().plusMinutes(5)));
+        credentials.setAccessToken(new OAuthAccessToken("y123", "Bearer", LocalDateTime.now().plusMinutes(5)));
         credentials.setClient(client);
         credentials.setSerializer(serializer);
 
@@ -114,11 +115,13 @@ class OAuthSdkCredentialsTest {
 
         final CloseableHttpResponse response = Mockito.mock(CloseableHttpResponse.class);
         when(response.getEntity()).thenReturn(entity);
-        when(client.execute(any(HttpPost.class))).thenReturn(response);
+        when(client.execute(Mockito.argThat(req -> req instanceof HttpPost &&
+                Objects.equals(req.getURI().toString(), "https://test.checkout.com/oauth/token"))))
+                .thenReturn(response);
 
         final OAuthSdkCredentials credentials = new OAuthSdkCredentials(
                 DEFAULT_CLIENT_BUILDER,
-                new URI("http://test.checkout.com/oauth/token"),
+                new URI("https://test.checkout.com/oauth/token"),
                 "client_id",
                 "client_secret",
                 EnumSet.allOf(OAuthScope.class));
@@ -156,12 +159,12 @@ class OAuthSdkCredentialsTest {
 
         final OAuthSdkCredentials credentials = new OAuthSdkCredentials(
                 DEFAULT_CLIENT_BUILDER,
-                new URI("http://test.checkout.com/oauth/token"),
+                new URI("https://test.checkout.com/oauth/token"),
                 "client_id",
                 "client_secret",
                 EnumSet.allOf(OAuthScope.class));
 
-        credentials.setAccessToken(new OAuthAccessToken("y987654321", LocalDateTime.now().minusSeconds(30)));
+        credentials.setAccessToken(new OAuthAccessToken("y987654321", "Bearer", LocalDateTime.now().minusSeconds(30)));
         credentials.setClient(client);
 
         final SdkAuthorization auth1 = credentials.getAuthorization(SdkAuthorizationType.PUBLIC_KEY_OR_OAUTH);
@@ -177,9 +180,8 @@ class OAuthSdkCredentialsTest {
     }
 
     @Test
-    void authorization_shouldFailAuthorizing() throws IOException, URISyntaxException {
-
-        final InputStream stream = new ByteArrayInputStream(("{ \"error\" : \"super_error\" }").getBytes());
+    void shouldThrowExceptionWhenOAuthResponseIsNull() throws IOException {
+        final InputStream stream = new ByteArrayInputStream("{}".getBytes());
 
         final HttpEntity entity = Mockito.mock(HttpEntity.class);
         when(entity.getContent()).thenReturn(stream);
@@ -190,24 +192,79 @@ class OAuthSdkCredentialsTest {
 
         final OAuthSdkCredentials credentials = new OAuthSdkCredentials(
                 DEFAULT_CLIENT_BUILDER,
-                new URI("http://test.checkout.com/oauth/token"),
-                "fake",
-                "fake",
+                URI.create("http://test.checkout.com/oauth/token"),
+                "client_id",
+                "client_secret",
                 EnumSet.allOf(OAuthScope.class));
 
-        credentials.setAccessToken(null);
         credentials.setClient(client);
 
-        try {
-            credentials.getAuthorization(SdkAuthorizationType.PUBLIC_KEY_OR_OAUTH);
-            fail();
-        } catch (final CheckoutException e) {
-            assertEquals("OAuth client_credentials authentication failed with error: super_error", e.getMessage());
-        }
+        CheckoutException exception = assertThrows(
+                CheckoutException.class,
+                () -> credentials.getAuthorization(SdkAuthorizationType.PUBLIC_KEY_OR_OAUTH)
+        );
 
-        final OAuthAccessToken accessToken = credentials.getOAuthAccessToken();
-        assertNull(accessToken);
+        assertEquals("Invalid OAuth response: {}", exception.getMessage());
+    }
 
+    @Test
+    void shouldThrowExceptionWhenAccessTokenIsNull() throws IOException {
+        final InputStream stream = new ByteArrayInputStream((
+                "{ \"access_token\": null, " +
+                        "\"token_type\": \"Bearer\", " +
+                        "\"expires_in\": 3600 }").getBytes());
+
+        final HttpEntity entity = Mockito.mock(HttpEntity.class);
+        when(entity.getContent()).thenReturn(stream);
+
+        final CloseableHttpResponse response = Mockito.mock(CloseableHttpResponse.class);
+        when(response.getEntity()).thenReturn(entity);
+        when(client.execute(any(HttpPost.class))).thenReturn(response);
+
+        final OAuthSdkCredentials credentials = new OAuthSdkCredentials(
+                DEFAULT_CLIENT_BUILDER,
+                URI.create("https://test.checkout.com/oauth/token"),
+                "client_id",
+                "client_secret",
+                EnumSet.allOf(OAuthScope.class));
+
+        credentials.setClient(client);
+
+        CheckoutException exception = assertThrows(
+                CheckoutException.class,
+                () -> credentials.getAuthorization(SdkAuthorizationType.PUBLIC_KEY_OR_OAUTH)
+        );
+
+        assertEquals("Invalid OAuth response: { \"access_token\": null, \"token_type\": \"Bearer\", \"expires_in\": 3600 }",
+                exception.getMessage());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenOAuthResponseContainsError() throws IOException {
+        final InputStream stream = new ByteArrayInputStream(("{ \"error\" : \"invalid_client\" }").getBytes());
+
+        final HttpEntity entity = Mockito.mock(HttpEntity.class);
+        when(entity.getContent()).thenReturn(stream);
+
+        final CloseableHttpResponse response = Mockito.mock(CloseableHttpResponse.class);
+        when(response.getEntity()).thenReturn(entity);
+        when(client.execute(any(HttpPost.class))).thenReturn(response);
+
+        final OAuthSdkCredentials credentials = new OAuthSdkCredentials(
+                DEFAULT_CLIENT_BUILDER,
+                URI.create("https://test.checkout.com/oauth/token"),
+                "client_id",
+                "client_secret",
+                EnumSet.allOf(OAuthScope.class));
+
+        credentials.setClient(client);
+
+        CheckoutException exception = assertThrows(
+                CheckoutException.class,
+                () -> credentials.getAuthorization(SdkAuthorizationType.PUBLIC_KEY_OR_OAUTH)
+        );
+
+        assertEquals("OAuth client_credentials authentication failed with error: invalid_client", exception.getMessage());
     }
 
 }

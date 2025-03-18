@@ -1,6 +1,5 @@
 package com.checkout.payments;
 
-import com.checkout.payments.hosted.PaymentPurposeType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

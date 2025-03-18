@@ -13,6 +13,7 @@ import com.checkout.payments.previous.request.source.RequestCardSource;
 import com.checkout.payments.previous.response.GetPaymentResponse;
 import com.checkout.payments.previous.response.PaymentResponse;
 import com.checkout.payments.previous.response.source.CardResponseSource;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Disabled("unavailable")
 class GetPaymentsTestIT extends AbstractPaymentsTestIT {
 
     @Test

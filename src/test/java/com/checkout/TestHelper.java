@@ -34,7 +34,7 @@ import com.checkout.payments.contexts.PaymentContextsItems;
 import com.checkout.payments.contexts.PaymentContextsProcessing;
 import com.checkout.payments.contexts.PaymentContextsRequest;
 import com.checkout.payments.hosted.HostedPaymentRequest;
-import com.checkout.payments.hosted.PaymentPurposeType;
+import com.checkout.payments.PaymentPurposeType;
 import com.checkout.payments.links.PaymentLinkRequest;
 import com.checkout.payments.request.PaymentRetryRequest;
 import com.checkout.payments.request.source.contexts.PaymentContextsKlarnaSource;

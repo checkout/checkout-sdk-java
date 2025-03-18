@@ -1,6 +1,5 @@
 package com.checkout.payments.contexts;
 
-import com.checkout.CheckoutApiException;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.checkout.payments.AbstractPaymentsTestIT.APM_SERVICE_UNAVAILABLE;
-import static com.checkout.payments.AbstractPaymentsTestIT.PAYEE_NOT_ONBOARDED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

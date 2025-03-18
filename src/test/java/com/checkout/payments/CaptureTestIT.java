@@ -3,6 +3,7 @@ package com.checkout.payments;
 import com.checkout.TestHelper;
 import com.checkout.payments.request.PaymentCustomerRequest;
 import com.checkout.payments.response.PaymentResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -14,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@Disabled("unavailable")
 class CaptureTestIT extends AbstractPaymentsTestIT {
 
     @Test

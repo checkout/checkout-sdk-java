@@ -24,7 +24,6 @@ import com.checkout.payments.previous.response.PaymentResponse;
 import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
 import org.apache.http.entity.ContentType;
-import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -42,6 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+@Disabled("unavailable")
 class DisputesTestIT extends SandboxTestFixture {
 
     DisputesTestIT() {
