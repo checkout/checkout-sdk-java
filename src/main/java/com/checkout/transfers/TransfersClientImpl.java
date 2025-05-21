@@ -18,13 +18,9 @@ public class TransfersClientImpl extends AbstractClient implements TransfersClie
     }
 
     @Override
-    public CompletableFuture<CreateTransferResponse> initiateTransferOfFunds(final CreateTransferRequest createTransferRequest) {
-        return requestInitiateTransferOfFunds(createTransferRequest, null);
-    }
-
-    @Override
     public CompletableFuture<CreateTransferResponse> initiateTransferOfFunds(final CreateTransferRequest createTransferRequest, final String idempotencyKey) {
-        return requestInitiateTransferOfFunds(createTransferRequest, idempotencyKey);
+        validateParams("createTransferRequest", createTransferRequest, "idempotencyKey", idempotencyKey);
+        return apiClient.postAsync(TRANSFERS_PATH, sdkAuthorization(), CreateTransferResponse.class, createTransferRequest, idempotencyKey);
     }
 
     @Override
@@ -33,9 +29,4 @@ public class TransfersClientImpl extends AbstractClient implements TransfersClie
         return apiClient.getAsync(buildPath(TRANSFERS_PATH, transferId), sdkAuthorization(), TransferDetailsResponse.class);
     }
 
-
-    private CompletableFuture<CreateTransferResponse> requestInitiateTransferOfFunds(final CreateTransferRequest createTransferRequest, final String idempotencyKey) {
-        validateParams("createTransferRequest", createTransferRequest);
-        return apiClient.postAsync(TRANSFERS_PATH, sdkAuthorization(), CreateTransferResponse.class, createTransferRequest, idempotencyKey);
-    }
 }

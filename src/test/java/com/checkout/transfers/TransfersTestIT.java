@@ -3,6 +3,7 @@ package com.checkout.transfers;
 import com.checkout.CheckoutApiException;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
+import com.checkout.common.Currency;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -27,6 +28,7 @@ class TransfersTestIT extends SandboxTestFixture {
                 .source(TransferSourceRequest.builder()
                         .id("ent_kidtcgc3ge5unf4a5i6enhnr5m")
                         .amount(100L)
+                        .currency(Currency.GBP)
                         .build())
                 .destination(TransferDestinationRequest.builder()
                         .id("ent_w4jelhppmfiufdnatam37wrfc4")
@@ -38,6 +40,13 @@ class TransfersTestIT extends SandboxTestFixture {
         final CreateTransferResponse response = blocking(() -> checkoutApi.transfersClient().initiateTransferOfFunds(transferRequest, idempotencyKey));
         assertNotNull(response.getId());
         assertEquals(TransferStatus.PENDING, response.getStatus());
+
+        final TransferDetailsResponse response2 = blocking(() -> checkoutApi.transfersClient().retrieveATransfer(response.getId()));
+
+        assertNotNull(response2.getId());
+        assertEquals(TransferStatus.PENDING, response2.getStatus());
+        assertEquals(100L, response2.getSource().getAmount());
+        assertEquals(Currency.GBP, response2.getSource().getCurrency());
 
         try {
             checkoutApi.transfersClient().initiateTransferOfFunds(transferRequest, idempotencyKey).get();

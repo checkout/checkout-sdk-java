@@ -577,6 +577,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), APM_SERVICE_UNAVAILABLE);
     }
 
+    @Disabled("unavailable")
     @Test
     void shouldMakeAchPayment() {
         final PaymentRequest paymentRequest = PaymentRequest.builder()

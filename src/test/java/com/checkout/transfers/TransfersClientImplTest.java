@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -57,10 +56,10 @@ class TransfersClientImplTest {
 
         final CreateTransferResponse response = mock(CreateTransferResponse.class);
 
-        when(apiClient.postAsync(eq("transfers"), eq(authorization), eq(CreateTransferResponse.class), any(CreateTransferRequest.class), isNull()))
+        when(apiClient.postAsync(eq("transfers"), eq(authorization), eq(CreateTransferResponse.class), any(CreateTransferRequest.class), eq("idempotency_key")))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<CreateTransferResponse> future = transfersClient.initiateTransferOfFunds(CreateTransferRequest.builder().build());
+        final CompletableFuture<CreateTransferResponse> future = transfersClient.initiateTransferOfFunds(CreateTransferRequest.builder().build(), "idempotency_key");
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
