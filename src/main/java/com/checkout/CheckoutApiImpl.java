@@ -12,6 +12,8 @@ import com.checkout.financial.FinancialClient;
 import com.checkout.financial.FinancialClientImpl;
 import com.checkout.forex.ForexClient;
 import com.checkout.forex.ForexClientImpl;
+import com.checkout.forward.ForwardClient;
+import com.checkout.forward.ForwardClientImpl;
 import com.checkout.instruments.InstrumentsClient;
 import com.checkout.instruments.InstrumentsClientImpl;
 import com.checkout.issuing.IssuingClient;
@@ -65,6 +67,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final IssuingClient issuingClient;
     private final PaymentContextsClient paymentContextsClient;
     private final PaymentSessionsClient paymentSessionsClient;
+    private final ForwardClient forwardClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         super(configuration);
@@ -90,7 +93,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
                 configuration);
         this.paymentContextsClient = new PaymentContextsClientImpl(this.apiClient, configuration);
         this.paymentSessionsClient = new PaymentSessionsClientImpl(this.apiClient, configuration);
-
+        this.forwardClient = new ForwardClientImpl(this.apiClient, configuration);
     }
 
     @Override
@@ -184,6 +187,9 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
 
     @Override
     public PaymentSessionsClient paymentSessionsClient() { return paymentSessionsClient; }
+
+    @Override
+    public ForwardClient forwardClient() { return forwardClient; }
 
     private ApiClient getFilesClient(final CheckoutConfiguration configuration) {
         return new ApiClientImpl(configuration, new FilesApiUriStrategy(configuration));

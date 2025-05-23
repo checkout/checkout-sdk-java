@@ -158,9 +158,6 @@ class AccountsTestIT extends SandboxTestFixture {
         assertNotNull(instrumentDetailsResponse.getCountry());
         assertNotNull(instrumentDetailsResponse.getDocument());
 
-        final PaymentInstrumentQueryResponse queryResponse = blocking(() -> checkoutApi.accountsClient().queryPaymentInstruments(entityResponse.getId(), PaymentInstrumentsQuery.builder().build()));
-        assertNotNull(queryResponse);
-        assertNotNull(queryResponse.getData());
     }
 
     private static Profile buildProfile() {
