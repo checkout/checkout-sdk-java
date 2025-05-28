@@ -14,7 +14,7 @@ jobs:
           distribution: 'temurin'
           java-version: '8'
       - id: validate-wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
       - id: build
         env:
           CHECKOUT_PROCESSING_CHANNEL_ID: ${{ secrets.IT_CHECKOUT_PROCESSING_CHANNEL_ID }}

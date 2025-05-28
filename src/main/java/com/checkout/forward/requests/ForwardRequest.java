@@ -1,11 +1,15 @@
 package com.checkout.forward.requests;
 
 import com.checkout.forward.requests.sources.AbstractSource;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public final class ForwardRequest {
 
     /**

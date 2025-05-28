@@ -43,7 +43,7 @@ public final class PaymentContextsProcessing {
     private UserAction userAction;
 
     @SerializedName("partner_customer_risk_data")
-    private PaymentContextsPartnerCustomerRiskData partnerCustomerRiskData;
+    private List<PaymentContextsPartnerCustomerRiskData> partnerCustomerRiskData;
 
     @SerializedName("custom_payment_method_ids")
     private List<String> customPaymentMethodIds;
