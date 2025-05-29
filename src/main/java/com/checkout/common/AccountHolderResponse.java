@@ -11,4 +11,6 @@ public final class AccountHolderResponse extends AccountHolderBase {
 
     private AccountNameInquiryType accountNameInquiry;
 
+    private AccountNameInquiryDetails accountNameInquiryDetails;
+
 }

@@ -47,10 +47,12 @@
       "locale": "en-US",
       "shipping_preference": "set_provided_address",
       "user_action": "pay_now",
-      "partner_customer_risk_data": {
-        "key": "string",
-        "value": "string"
-      },
+      "partner_customer_risk_data": [
+        {
+          "key": "string",
+          "value": "string"
+        }
+      ],
       "custom_payment_method_ids": [
         "string"
       ],
