@@ -73,7 +73,7 @@ public abstract class SandboxTestFixture {
                                 OAuthScope.ACCOUNTS, OAuthScope.SESSIONS_APP, OAuthScope.SESSIONS_BROWSER,
                                 OAuthScope.VAULT, OAuthScope.PAYOUTS_BANK_DETAILS, OAuthScope.DISPUTES,
                                 OAuthScope.TRANSFERS_CREATE, OAuthScope.TRANSFERS_VIEW, OAuthScope.BALANCES_VIEW,
-                                OAuthScope.VAULT_CARD_METADATA, OAuthScope.FINANCIAL_ACTIONS)
+                                OAuthScope.VAULT_CARD_METADATA, OAuthScope.FINANCIAL_ACTIONS, OAuthScope.FORWARD)
                         .environment(Environment.SANDBOX)
                         .executor(CUSTOM_EXECUTOR)
                         .build();

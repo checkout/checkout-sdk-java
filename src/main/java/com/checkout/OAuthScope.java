@@ -54,7 +54,8 @@ public enum OAuthScope {
     VAULT("vault"),
     VAULT_CARD_METADATA("vault:card-metadata"),
     VAULT_INSTRUMENTS("vault:instruments"),
-    VAULT_TOKENIZATION("vault:tokenization");
+    VAULT_TOKENIZATION("vault:tokenization"),
+    FORWARD("forward");
 
     private final String scope;
 
