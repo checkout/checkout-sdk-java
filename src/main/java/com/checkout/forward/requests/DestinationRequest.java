@@ -1,5 +1,6 @@
 package com.checkout.forward.requests;
 
+import com.checkout.forward.requests.signatures.AbstractSignature;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,5 +30,10 @@ public final class DestinationRequest {
      * payment instrument you specified. For example, {{card_number}} (Required, max 16384 characters)
      */
     private String body;
+
+    /**
+     * Optional configuration to add a signature to the forwarded HTTP request. (Optional)
+     */
+    private AbstractSignature signature;
 
 }
