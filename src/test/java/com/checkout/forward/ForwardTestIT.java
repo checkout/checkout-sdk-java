@@ -7,6 +7,8 @@ import com.checkout.forward.requests.ForwardRequest;
 import com.checkout.forward.requests.Headers;
 import com.checkout.forward.requests.MethodType;
 import com.checkout.forward.requests.NetworkToken;
+import com.checkout.forward.requests.signatures.DlocalParameters;
+import com.checkout.forward.requests.signatures.DlocalSignature;
 import com.checkout.forward.requests.sources.IdSource;
 import com.checkout.forward.responses.ForwardAnApiResponse;
 import com.checkout.forward.responses.GetForwardResponse;
@@ -77,11 +79,20 @@ public class ForwardTestIT extends SandboxTestFixture {
                 .raw(raw)
                 .build();
 
+        final DlocalParameters dlocalParameters = DlocalParameters.builder()
+                .SecretKey("9f439fe1a9f96e67b047d3c1a28c33a2e")
+                .build();
+
+        final DlocalSignature dlocalSignature = DlocalSignature.builder()
+                .dlocalParameters(dlocalParameters)
+                .build();
+
         final DestinationRequest destinationRequest = DestinationRequest.builder()
                 .method(MethodType.POST)
                 .url("https://example.com/payments")
                 .headers(headers)
                 .body("{\"amount\": 1000, \"currency\": \"USD\", \"reference\": \"some_reference\", \"source\": {\"type\": \"card\", \\\"number\\\": \\\"{{card_number}}\\\", \\\"expiry_month\\\": \\\"{{card_expiry_month}}\\\", \\\"expiry_year\\\": \\\"{{card_expiry_year_yyyy}}\\\", \\\"name\\\": \\\"Ali Farid\\\"}, \\\"payment_type\\\": \\\"Regular\\\", \\\"authorization_type\\\": \\\"Final\\\", \\\"capture\\\": true, \\\"processing_channel_id\\\": \\\"pc_xxxxxxxxxxx\\\", \\\"risk\\\": {\\\"enabled\\\": false}, \\\"merchant_initiated\\\": true}")
+                .signature(dlocalSignature)
                 .build();
 
         return ForwardRequest.builder()
