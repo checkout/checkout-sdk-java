@@ -14,6 +14,8 @@ import com.checkout.forex.ForexClient;
 import com.checkout.forex.ForexClientImpl;
 import com.checkout.forward.ForwardClient;
 import com.checkout.forward.ForwardClientImpl;
+import com.checkout.handlepaymentsandpayouts.flow.FlowClient;
+import com.checkout.handlepaymentsandpayouts.flow.FlowClientImpl;
 import com.checkout.instruments.InstrumentsClient;
 import com.checkout.instruments.InstrumentsClientImpl;
 import com.checkout.issuing.IssuingClient;
@@ -28,8 +30,6 @@ import com.checkout.payments.hosted.HostedPaymentsClient;
 import com.checkout.payments.hosted.HostedPaymentsClientImpl;
 import com.checkout.payments.links.PaymentLinksClient;
 import com.checkout.payments.links.PaymentLinksClientImpl;
-import com.checkout.payments.sessions.PaymentSessionsClient;
-import com.checkout.payments.sessions.PaymentSessionsClientImpl;
 import com.checkout.reports.ReportsClient;
 import com.checkout.reports.ReportsClientImpl;
 import com.checkout.risk.RiskClient;
@@ -66,7 +66,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final FinancialClient financialClient;
     private final IssuingClient issuingClient;
     private final PaymentContextsClient paymentContextsClient;
-    private final PaymentSessionsClient paymentSessionsClient;
+    private final FlowClient flowClient;
     private final ForwardClient forwardClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
@@ -92,7 +92,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
                 getFilesClient(configuration),
                 configuration);
         this.paymentContextsClient = new PaymentContextsClientImpl(this.apiClient, configuration);
-        this.paymentSessionsClient = new PaymentSessionsClientImpl(this.apiClient, configuration);
+        this.flowClient = new FlowClientImpl(this.apiClient, configuration);
         this.forwardClient = new ForwardClientImpl(this.apiClient, configuration);
     }
 
@@ -186,7 +186,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     public PaymentContextsClient paymentContextsClient() { return paymentContextsClient; }
 
     @Override
-    public PaymentSessionsClient paymentSessionsClient() { return paymentSessionsClient; }
+    public FlowClient flowClient() { return flowClient; }
 
     @Override
     public ForwardClient forwardClient() { return forwardClient; }

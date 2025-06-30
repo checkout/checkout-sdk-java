@@ -7,6 +7,7 @@ import com.checkout.disputes.DisputesClient;
 import com.checkout.financial.FinancialClient;
 import com.checkout.forex.ForexClient;
 import com.checkout.forward.ForwardClient;
+import com.checkout.handlepaymentsandpayouts.flow.FlowClient;
 import com.checkout.instruments.InstrumentsClient;
 import com.checkout.issuing.IssuingClient;
 import com.checkout.metadata.MetadataClient;
@@ -14,7 +15,6 @@ import com.checkout.payments.PaymentsClient;
 import com.checkout.payments.contexts.PaymentContextsClient;
 import com.checkout.payments.hosted.HostedPaymentsClient;
 import com.checkout.payments.links.PaymentLinksClient;
-import com.checkout.payments.sessions.PaymentSessionsClient;
 import com.checkout.reports.ReportsClient;
 import com.checkout.risk.RiskClient;
 import com.checkout.sessions.SessionsClient;
@@ -62,7 +62,7 @@ public interface CheckoutApi extends CheckoutApmApi {
 
     PaymentContextsClient paymentContextsClient();
 
-    PaymentSessionsClient paymentSessionsClient();
+    FlowClient flowClient();
 
     ForwardClient forwardClient();
 

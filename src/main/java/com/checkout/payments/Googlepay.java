@@ -1,7 +1,6 @@
 package com.checkout.payments;
 
 import com.checkout.common.AccountHolder;
-import com.checkout.payments.sessions.StorePaymentDetailsType;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
