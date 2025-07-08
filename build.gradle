@@ -2,10 +2,8 @@ plugins {
     id 'java-library'
     id 'signing'
     id 'maven-publish'
-    id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
-    id 'io.codearte.nexus-staging' version '0.21.2'
-    id 'com.gradle.build-scan' version '2.3'
-    id 'io.freefair.lombok' version '3.8.1'
+    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
+    id 'io.freefair.lombok' version '8.10.2'
     id "org.sonarqube" version "3.3"
     id 'jacoco'
     id "org.owasp.dependencycheck" version "7.1.0.1"
@@ -18,32 +16,31 @@ allprojects {
     }
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-dependencies {
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'org.slf4j:slf4j-api:1.7.30'
-    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
-    implementation 'org.apache.commons:commons-lang3:3.11'
-    implementation 'javax.validation:validation-api:2.0.1.Final'
-    implementation 'org.apache.httpcomponents:httpmime:4.5.13'
-
-    testImplementation(platform('org.junit:junit-bom:5.7.2'))
-    testImplementation('org.junit.jupiter:junit-jupiter')
-    testImplementation("org.junit.jupiter:junit-jupiter-params")
-    testImplementation 'org.hamcrest:hamcrest:2.2'
-    testImplementation 'org.mockito:mockito-inline:3.11.2'
-    testImplementation 'org.mockito:mockito-junit-jupiter:3.11.2'
-    testImplementation 'org.apache.logging.log4j:log4j-api:2.17.1'
-    testImplementation 'org.apache.logging.log4j:log4j-core:2.17.1'
-    testImplementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.17.1'
-    testImplementation 'org.apache.httpcomponents:httpclient:4.5.13'
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-buildScan {
-    termsOfServiceUrl = 'https://gradle.com/terms-of-service'
-    termsOfServiceAgree = 'yes'
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'org.slf4j:slf4j-api:2.0.16'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.14'
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+    implementation 'org.apache.httpcomponents:httpmime:4.5.14'
+    implementation 'commons-codec:commons-codec:1.15'
+
+    testImplementation(platform('org.junit:junit-bom:5.11.0'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+    testImplementation("org.junit.jupiter:junit-jupiter-params")
+    testImplementation 'org.hamcrest:hamcrest:3.0'
+    testImplementation 'org.mockito:mockito-inline:5.2.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.2.0'
+    testImplementation 'org.apache.logging.log4j:log4j-api:2.24.1'
+    testImplementation 'org.apache.logging.log4j:log4j-core:2.24.1'
+    testImplementation 'org.apache.logging.log4j:log4j-slf4j2-impl:2.24.1'
+    testImplementation 'org.apache.httpcomponents:httpclient:4.5.14'
 }
 
 test {
@@ -59,47 +56,47 @@ test {
 jacocoTestReport {
     dependsOn test
     reports {
-        xml.enabled true
+        xml.required = true
     }
 }
 
-task sourcesJar(type: Jar) {
+tasks.register('sourcesJar', Jar) {
     from sourceSets.main.allJava
     archiveClassifier = 'sources'
 }
 
-task javadocJar(type: Jar) {
+tasks.register('javadocJar', Jar) {
     from javadoc
     archiveClassifier = 'javadoc'
 }
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            from(components.java)
+        maven(MavenPublication) {
+            from components.java
             artifact sourcesJar
             artifact javadocJar
 
             pom {
-                name = project_name
+                name.set(project_name)
                 packaging = 'jar'
-                description = project_description
-                url = project_url
+                description.set(project_description)
+                url.set(project_url)
                 scm {
-                    connection = project_scm
-                    developerConnection = project_scm
-                    url = project_url
+                    connection.set(project_scm)
+                    developerConnection.set(project_scm)
+                    url.set(project_url)
                 }
                 licenses {
                     license {
-                        name = project_license_slug
-                        url = project_license_url
+                        name.set(project_license_slug)
+                        url.set(project_license_url)
                     }
                 }
                 developers {
                     developer {
-                        id = project_developer
-                        name = project_developer
+                        id.set(project_developer)
+                        name.set(project_developer)
                     }
                 }
             }
@@ -107,26 +104,17 @@ publishing {
     }
 }
 
-nexusStaging {
-    username = System.getenv("SONATYPE_USERNAME")
-    password = System.getenv("SONATYPE_PASSWORD")
-    stagingProfileId = "57cde3b2433ed7"
-    packageGroup = "com.checkout"
-    numberOfRetries = 100
-    delayBetweenRetriesInMillis = 5000
-}
-
 nexusPublishing {
-    connectTimeout = Duration.ofMinutes(15)
-    clientTimeout = Duration.ofMinutes(15)
     repositories {
         sonatype {
-            packageGroup = rootProject.nexusStaging.packageGroup
-            stagingProfileId = rootProject.nexusStaging.stagingProfileId
-            username = rootProject.nexusStaging.username
-            password = rootProject.nexusStaging.password
+            nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
+            username = System.getenv("SONATYPE_USERNAME")
+            password = System.getenv("SONATYPE_PASSWORD")
         }
     }
+    connectTimeout = Duration.ofMinutes(3)
+    clientTimeout = Duration.ofMinutes(3)
 }
 
 signing {
@@ -134,7 +122,7 @@ signing {
     def signingPassword = System.getenv('GPG_PASSPHRASE')
     required { signingKey != null && signingPassword != null && gradle.taskGraph.hasTask("publish") }
     useInMemoryPgpKeys(signingKey, signingPassword)
-    sign publishing.publications.mavenJava
+    sign publishing.publications.maven
 }
 
 jar {
@@ -152,7 +140,7 @@ sonarqube {
     }
 }
 
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
     // a collection to track failedTests
     ext.failedTests = []
 
