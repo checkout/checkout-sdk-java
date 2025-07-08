@@ -100,7 +100,7 @@ class PaymentAuthorizationsTestIT extends SandboxTestFixture {
                         .country(CountryCode.GB)
                         .build())
                 .identification(AccountHolderIdentification.builder()
-                        .type(AccountHolderIdentificationType.DRIVING_LICENCE)
+                        .type(AccountHolderIdentificationType.DRIVING_LICENSE)
                         .number("1234")
                         .issuingCountry(CountryCode.GB)
                         .build())
