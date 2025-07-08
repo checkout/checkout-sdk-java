@@ -12,11 +12,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - id: setup-java-8-build
+      - id: setup-java-11-build
         uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: '8'
+          java-version: '11'
       - id: validate-wrapper
         uses: gradle/wrapper-validation-action@v1
       - id: cache-gradle-packages

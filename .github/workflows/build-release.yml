@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: '8'
+          java-version: '11'
       - id: read-version
         run: echo "CURRENT_VERSION=$( grep "version" gradle.properties | awk -F "=" '{print $2}' )" >> $GITHUB_ENV
       - id: print-version
@@ -43,7 +43,7 @@ jobs:
           GPG_PASSPHRASE: '${{ secrets.GPG_PASSPHRASE }}'
           SONATYPE_PASSWORD: '${{ secrets.SONATYPE_PASSWORD }}'
           SONATYPE_USERNAME: '${{ secrets.SONATYPE_USERNAME }}'
-        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
+        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository --no-daemon --stacktrace
       - id: create-release
         uses: actions/create-release@v1
         env:

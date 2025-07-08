@@ -41,7 +41,7 @@ class TokensTestIT extends SandboxTestFixture {
         assertEquals(2025, response.getExpiryYear().intValue());
         assertEquals("VISA", response.getScheme());
         assertEquals("4242", response.getLast4());
-        assertEquals("424242", response.getBin());
+        assertEquals("42424242", response.getBin());
         assertEquals(CardType.CREDIT, response.getCardType());
         assertEquals(CardCategory.CONSUMER, response.getCardCategory());
         //assertEquals("JPMORGAN CHASE BANK NA", response.getIssuer());
