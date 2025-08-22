@@ -16,14 +16,17 @@ import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.checkout.common.AbstractFileRequest;
 import com.checkout.common.CheckoutUtils;
 import com.google.gson.reflect.TypeToken;
+import org.apache.http.NameValuePair;
 
 public class ApiClientImpl implements ApiClient {
 
@@ -174,6 +177,38 @@ public class ApiClientImpl implements ApiClient {
         return transport.invoke(clientOperation, path, authorization, request == null ? null : serializer.toJson(request), idempotencyKey, null)
                 .thenApply(this::errorCheck)
                 .thenApply(response -> deserialize(response, responseType));
+    }
+
+    public <T extends HttpMetadata> CompletableFuture<T> postFormUrlEncodedAsync(
+            final String path,
+            final SdkAuthorization authorization,
+            final List<NameValuePair> formParams,
+            final Class<T> responseType
+    ) {
+        validateParams(PATH, path, AUTHORIZATION, authorization, "formParams", formParams);
+
+        final String body = formParams.stream()
+                .map(p -> p.getName() + "=" + encode(p.getValue()))
+                .collect(Collectors.joining("&"));
+
+        return transport.invoke(
+                        ClientOperation.POST,
+                        path,
+                        authorization,
+                        body,
+                        null,
+                        null,
+                        "application/x-www-form-urlencoded"
+                ).thenApply(this::errorCheck)
+                .thenApply(response -> deserialize(response, responseType));
+    }
+
+    private String encode(final String value) {
+        try {
+            return java.net.URLEncoder.encode(value, "UTF-8");
+        } catch (java.io.UnsupportedEncodingException e) {
+            throw new CheckoutException("Failed to encode form param", e);
+        }
     }
 
     private Response errorCheck(final Response response) {

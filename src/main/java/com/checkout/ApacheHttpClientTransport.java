@@ -83,12 +83,14 @@ class ApacheHttpClientTransport implements Transport {
     }
 
     @Override
-    public CompletableFuture<Response> invoke(final ClientOperation clientOperation,
-                                              final String path,
-                                              final SdkAuthorization authorization,
-                                              final String requestBody,
-                                              final String idempotencyKey,
-                                              final Map<String, String> queryParams) {
+    public CompletableFuture<Response> invoke(
+            final ClientOperation clientOperation,
+            final String path,
+            final SdkAuthorization authorization,
+            final String requestBody,
+            final String idempotencyKey,
+            final Map<String, String> queryParams
+    ) {
         return CompletableFuture.supplyAsync(() -> {
             final HttpUriRequest request;
             switch (clientOperation) {
@@ -129,7 +131,40 @@ class ApacheHttpClientTransport implements Transport {
     }
 
     @Override
-    public CompletableFuture<Response> submitFile(final String path, final SdkAuthorization authorization, final AbstractFileRequest fileRequest) {
+    public CompletableFuture<Response> invoke(
+            final ClientOperation clientOperation,
+            final String path,
+            final SdkAuthorization authorization,
+            final String requestBody,
+            final String idempotencyKey,
+            final Map<String, String> queryParams,
+            final String contentType
+    ) {
+        return CompletableFuture.supplyAsync(() -> {
+            final HttpPost request = new HttpPost(getRequestUrl(path));
+
+            if (idempotencyKey != null) {
+                request.setHeader("Cko-Idempotency-Key", idempotencyKey);
+            }
+
+            request.setHeader("User-Agent", PROJECT_NAME + "/" + getVersionFromManifest());
+            request.setHeader("Accept", ACCEPT_JSON);
+            request.setHeader("Authorization", authorization.getAuthorizationHeader());
+
+            if (requestBody != null) {
+                request.setEntity(new StringEntity(requestBody, ContentType.parse(contentType)));
+            }
+
+            return performCall(authorization, null, request, clientOperation);
+        }, executor);
+    }
+
+    @Override
+    public CompletableFuture<Response> submitFile(
+            final String path,
+            final SdkAuthorization authorization,
+            final AbstractFileRequest fileRequest
+    ) {
         return CompletableFuture.supplyAsync(() -> {
             final HttpPost request = new HttpPost(getRequestUrl(path));
             request.setEntity(getMultipartFileEntity(fileRequest));
