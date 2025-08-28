@@ -5,6 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * provider
+ * Details of the device ID provider.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -12,12 +16,14 @@ import lombok.NoArgsConstructor;
 public final class Provider {
 
     /**
-     * The unique identifier for the device (Optional)
+     * The unique identifier for the device.
+     * [Optional]
      */
     private String id;
 
     /**
-     * The name of the provider that generated the device identifier (Optional)
+     * The name of the provider that generated the device identifier.
+     * [Optional]
      */
     private String name;
 

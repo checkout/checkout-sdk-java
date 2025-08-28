@@ -106,6 +106,9 @@ public final class ProcessingSettings {
     @SerializedName("shipping_info")
     private List<ShippingInfo> shippingInfo;
 
+    @SerializedName("provision_network_token")
+    private Boolean provisionNetworkToken;
+
     @SerializedName("pan_preference")
     private PanProcessedType panPreference;
 
