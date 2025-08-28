@@ -5,6 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * network
+ * Details of the device network.
+ * Either ipv4 or ipv6 is required field.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -12,27 +17,34 @@ import lombok.NoArgsConstructor;
 public final class Network {
 
     /**
-     * The device's IPV4 address. Not required if you provide the ipv6 field (Optional)
+     * The device's IPV4 address.
+     * Not required if you provide the ipv6 field.
+     * [Optional]
      */
     private String ipv4;
 
     /**
-     * The device's IPV6 address. Not required if you provide the ipv4 field (Optional)
+     * The device's IPV6 address.
+     * Not required if you provide the ipv4 field.
+     * [Optional]
      */
     private String ipv6;
 
     /**
-     * Specifies if the Tor network was used in the browser session (Optional)
+     * Specifies if the Tor network was used in the browser session.
+     * [Optional]
      */
     private Boolean tor;
 
     /**
-     * Specifies if a virtual private network (VPN) was used in the browser session (Optional)
+     * Specifies if a virtual private network (VPN) was used in the browser session.
+     * [Optional]
      */
     private Boolean vpn;
 
     /**
-     * Specifies if a proxy was used in the browser session (Optional)
+     * Specifies if a proxy was used in the browser session.
+     * [Optional]
      */
     private Boolean proxy;
 
