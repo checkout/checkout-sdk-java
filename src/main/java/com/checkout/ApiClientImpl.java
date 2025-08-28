@@ -179,6 +179,7 @@ public class ApiClientImpl implements ApiClient {
                 .thenApply(response -> deserialize(response, responseType));
     }
 
+    @Override
     public <T extends HttpMetadata> CompletableFuture<T> postFormUrlEncodedAsync(
             final String path,
             final SdkAuthorization authorization,
