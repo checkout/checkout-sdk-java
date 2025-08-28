@@ -12,7 +12,6 @@ import com.checkout.issuing.IssuingClientImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -38,7 +37,7 @@ public class IssuinClientImplRequestAnAccessTokenTest {
 
     @BeforeEach
     void setUp() {
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.)).thenReturn(authorization);
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
         when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
         client = new IssuingClientImpl(apiClient, configuration);
     }
