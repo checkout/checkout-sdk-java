@@ -20,7 +20,7 @@ public final class Device {
      * The contents of the HTTP User-Agent request header.
      * This field is required to process the device with the risk engine.
      * [Optional]
-     * <= 2048
+     * &lt;= 2048
      */
     @SerializedName("user_agent")
     private String userAgent;
@@ -148,7 +148,7 @@ public final class Device {
     /**
      * The exact content of the HTTP Accept headers as sent to the 3DS Requestor from the cardholder’s browser.
      * [Optional]
-     * <= 2048
+     * &lt;= 2048
      */
     @SerializedName("accept_header")
     private String acceptHeader;

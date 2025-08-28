@@ -29,6 +29,7 @@ public final class IndividualSender extends AbstractSender {
      * @deprecated This property will be removed in the future, and should be used with caution.
      * This field is deprecated. Use date_of_birth instead. The sender's date of birth, in the format yyyy-mm-dd.
      */
+    @Deprecated
     private Instant dob;
     /**
      * The sender's date of birth, in the format yyyy-mm-dd.

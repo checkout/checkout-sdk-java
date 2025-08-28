@@ -216,6 +216,7 @@ public final class PaymentSessionRequest {
      * The Customers IP address. Only IPv4 and IPv6 addresses are accepted.
      */
     @SerializedName("ip_address")
+    @Deprecated
     private String ipAddress;
 
 }

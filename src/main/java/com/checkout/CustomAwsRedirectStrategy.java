@@ -16,8 +16,6 @@ import static org.apache.http.HttpHeaders.ACCEPT;
  * then sends only the minimum set of headers necessary for subsequent requests
  * during the redirect. This behavior is intended to prevent the loss of authentication
  * or other critical headers during a redirect.
- * <p>
- * <p>
  * The purpose of this implementation is to exclude the original CKO Headers from the request that is sent.
  */
 public class CustomAwsRedirectStrategy extends DefaultRedirectStrategy {
