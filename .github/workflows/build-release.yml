@@ -19,7 +19,7 @@ jobs:
       - id: print-version
         run: echo "Releasing $CURRENT_VERSION"
       - id: validate-wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
       - id: build
         env:
           CHECKOUT_PROCESSING_CHANNEL_ID: ${{ secrets.IT_CHECKOUT_PROCESSING_CHANNEL_ID }}

@@ -3,16 +3,28 @@ package com.checkout.payments;
 import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.HttpMetadata;
 import com.checkout.ItemsResponse;
 import com.checkout.SdkAuthorizationType;
+import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.UnreferencedRefundRequest;
+import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.RequestAPaymentOrPayoutResponse;
+import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponseaccepted.RequestAPaymentOrPayoutResponseAccepted;
+import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.RequestAPaymentOrPayoutResponseCreated;
 import com.checkout.payments.request.AuthorizationRequest;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.PayoutRequest;
-import com.checkout.payments.response.*;
+import com.checkout.payments.response.AuthorizationResponse;
+import com.checkout.payments.response.GetPaymentResponse;
+import com.checkout.payments.response.PaymentResponse;
+import com.checkout.payments.response.PaymentsQueryResponse;
+import com.checkout.payments.response.PayoutResponse;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 import static com.checkout.common.CheckoutUtils.validateParams;
 
@@ -26,8 +38,14 @@ public final class PaymentsClientImpl extends AbstractClient implements Payments
     private static final String REVERSALS_PATH = "reversals";
     private static final String VOIDS_PATH = "voids";
 
+    private static final Map<Integer, Class<? extends HttpMetadata>> RESPONSE_MAPPINGS = new HashMap<>();
     private static final Type PAYMENT_ACTIONS_TYPE = new TypeToken<ItemsResponse<PaymentAction>>() {
     }.getType();
+
+    static {
+        RESPONSE_MAPPINGS.put(201, RequestAPaymentOrPayoutResponseCreated.class);
+        RESPONSE_MAPPINGS.put(202, RequestAPaymentOrPayoutResponseAccepted.class);
+    }
 
     public PaymentsClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
@@ -43,6 +61,31 @@ public final class PaymentsClientImpl extends AbstractClient implements Payments
     public CompletableFuture<PaymentResponse> requestPayment(final PaymentRequest paymentRequest, final String idempotencyKey) {
         validateParams("paymentRequest", paymentRequest, "idempotencyKey", idempotencyKey);
         return apiClient.postAsync(PAYMENTS_PATH, sdkAuthorization(), PaymentResponse.class, paymentRequest, idempotencyKey);
+    }
+
+    @Override
+    public CompletableFuture<RequestAPaymentOrPayoutResponse> requestPayment(final UnreferencedRefundRequest paymentRequest) {
+        validateParams("paymentRequest", paymentRequest);
+        return requestUnreferencedRefundPayment(paymentRequest, null);
+    }
+
+    @Override
+    public CompletableFuture<RequestAPaymentOrPayoutResponse> requestPayment(final UnreferencedRefundRequest paymentRequest, final String idempotencyKey) {
+        validateParams("paymentRequest", paymentRequest, "idempotencyKey", idempotencyKey);
+        return requestUnreferencedRefundPayment(paymentRequest, idempotencyKey);
+    }
+
+    private CompletableFuture<RequestAPaymentOrPayoutResponse> requestUnreferencedRefundPayment(final UnreferencedRefundRequest paymentRequest, final String idempotencyKey) {
+        return apiClient.postAsync(PAYMENTS_PATH, sdkAuthorization(), RESPONSE_MAPPINGS, paymentRequest, idempotencyKey)
+                .thenApply((Function<HttpMetadata, RequestAPaymentOrPayoutResponse>) resource -> {
+                    if (resource instanceof RequestAPaymentOrPayoutResponseCreated) {
+                        return new RequestAPaymentOrPayoutResponse((RequestAPaymentOrPayoutResponseCreated) resource);
+                    } else if (resource instanceof RequestAPaymentOrPayoutResponseAccepted) {
+                        return new RequestAPaymentOrPayoutResponse((RequestAPaymentOrPayoutResponseAccepted) resource);
+                    } else {
+                        throw new IllegalStateException("Unexpected mapping type " + resource.getClass());
+                    }
+                });
     }
 
     @Override

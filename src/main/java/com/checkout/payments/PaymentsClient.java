@@ -1,6 +1,8 @@
 package com.checkout.payments;
 
 import com.checkout.ItemsResponse;
+import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.UnreferencedRefundRequest;
+import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.RequestAPaymentOrPayoutResponse;
 import com.checkout.payments.request.AuthorizationRequest;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.PayoutRequest;
@@ -17,6 +19,10 @@ public interface PaymentsClient {
     CompletableFuture<PaymentResponse> requestPayment(PaymentRequest paymentRequest);
 
     CompletableFuture<PaymentResponse> requestPayment(PaymentRequest paymentRequest, final String idempotencyKey);
+
+    CompletableFuture<RequestAPaymentOrPayoutResponse> requestPayment(UnreferencedRefundRequest paymentRequest);
+
+    CompletableFuture<RequestAPaymentOrPayoutResponse> requestPayment(UnreferencedRefundRequest paymentRequest, final String idempotencyKey);
 
     CompletableFuture<PayoutResponse> requestPayout(PayoutRequest payoutRequest);
 
