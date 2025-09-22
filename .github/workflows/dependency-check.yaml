@@ -18,7 +18,7 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
       - id: validate-wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
       - id: cache-gradle-packages
         uses: actions/cache@v4
         with:
