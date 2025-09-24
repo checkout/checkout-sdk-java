@@ -22,7 +22,7 @@ public final class BillingAddress {
     /**
      * The first line of the address.
      * [Optional]
-     * <= 200
+     * &lt; 200
      */
     @SerializedName("address_line1")
     private String addressLine1;
@@ -30,7 +30,7 @@ public final class BillingAddress {
     /**
      * The second line of the address.
      * [Optional]
-     * <= 200
+     * &lt; 200
      */
     @SerializedName("address_line2")
     private String addressLine2;

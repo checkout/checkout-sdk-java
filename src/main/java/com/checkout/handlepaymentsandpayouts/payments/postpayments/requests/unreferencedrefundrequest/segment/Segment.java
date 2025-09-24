@@ -20,14 +20,14 @@ public final class Segment {
     /**
      * The brand of business segment.
      * [Optional]
-     * <= 50
+     * &lt; 50
      */
     private String brand;
 
     /**
      * The category of business segment.
      * [Optional]
-     * <= 50
+     * &lt; 50
      */
     @SerializedName("business_category")
     private String businessCategory;
@@ -35,7 +35,7 @@ public final class Segment {
     /**
      * The market of business segment.
      * [Optional]
-     * <= 50
+     * &lt; 50
      */
     private String market;
 

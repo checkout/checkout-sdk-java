@@ -128,7 +128,7 @@ public final class Processing {
     /**
      * Surcharge amount applied to the transaction in minor units
      * [Optional]
-     * >= 0
+     * &gt; 0
      */
     @SerializedName("surcharge_amount")
     private Integer surchargeAmount;

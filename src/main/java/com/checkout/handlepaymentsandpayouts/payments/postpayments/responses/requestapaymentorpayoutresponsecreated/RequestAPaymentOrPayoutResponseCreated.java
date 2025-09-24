@@ -83,7 +83,6 @@ public final class RequestAPaymentOrPayoutResponseCreated extends Resource {
     /**
      * The date/time the payment was processed
      * [Required]
-     * <date-time>
      */
     @SerializedName("processed_on")
     private Instant processedOn;

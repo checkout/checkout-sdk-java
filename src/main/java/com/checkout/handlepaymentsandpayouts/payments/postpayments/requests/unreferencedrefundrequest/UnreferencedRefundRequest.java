@@ -40,7 +40,7 @@ public final class UnreferencedRefundRequest {
     /**
      * The amount of the payment
      * [Required]
-     * >= 1
+     * &gt; 1
      */
     private Integer amount;
 
@@ -84,6 +84,7 @@ public final class UnreferencedRefundRequest {
      * non-primitive data types such as objects or arrays.
      * [Optional]
      */
+    @Builder.Default
     private Map<String, Object> metadata = new HashMap<>();
 
     /**
