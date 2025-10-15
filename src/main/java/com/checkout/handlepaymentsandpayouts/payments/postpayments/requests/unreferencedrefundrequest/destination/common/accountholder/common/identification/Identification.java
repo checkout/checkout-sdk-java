@@ -28,7 +28,7 @@ public final class Identification {
     /**
      * The account holder's identification number.
      * [Required]
-     * <= 25
+     * &lt;= 25
      */
     private String number;
 

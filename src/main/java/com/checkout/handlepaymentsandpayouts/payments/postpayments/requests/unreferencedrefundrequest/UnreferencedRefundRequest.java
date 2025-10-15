@@ -40,7 +40,7 @@ public final class UnreferencedRefundRequest {
     /**
      * The amount of the payment
      * [Required]
-     * >= 1
+     * &gt;= 1
      */
     private Integer amount;
 
