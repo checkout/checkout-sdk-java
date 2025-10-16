@@ -5,7 +5,10 @@ import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
 import com.checkout.tokens.TokensClient;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.hc.client5.http.config.ConnectionConfig;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.io.BasicHttpClientConnectionManager;
+import org.apache.hc.core5.util.TimeValue;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -32,7 +35,14 @@ import static org.junit.jupiter.api.Assertions.fail;
 public abstract class SandboxTestFixture {
 
     private static final Executor CUSTOM_EXECUTOR = Executors.newSingleThreadExecutor();
-    private static final HttpClientBuilder CUSTOM_HTTP_BUILDER = HttpClientBuilder.create().setConnectionTimeToLive(3, TimeUnit.SECONDS);
+    private static final BasicHttpClientConnectionManager CUSTOM_CONNECTION_MANAGER = new BasicHttpClientConnectionManager();
+    static  {
+      ConnectionConfig connectionConfig = ConnectionConfig.custom()
+          .setTimeToLive(TimeValue.ofSeconds(3))
+          .build();
+      CUSTOM_CONNECTION_MANAGER.setConnectionConfig(connectionConfig);
+    }
+    private static final HttpClientBuilder CUSTOM_HTTP_BUILDER = HttpClientBuilder.create().setConnectionManager(CUSTOM_CONNECTION_MANAGER);
     private static final int TRY_MAX_ATTEMPTS = 10;
 
     protected static final String SELF = "self";

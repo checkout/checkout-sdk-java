@@ -2,15 +2,13 @@ package com.checkout;
 
 import com.google.gson.Gson;
 import lombok.val;
-import org.apache.http.Header;
-import org.apache.http.ProtocolVersion;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.message.BasicStatusLine;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.hc.core5.http.message.BasicHeader;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -40,10 +38,8 @@ class CheckoutSdkTelemetryIntegrationTest {
         CloseableHttpClient httpClientMock = mock(CloseableHttpClient.class);
         CloseableHttpResponse responseMock = mock(CloseableHttpResponse.class);
 
-        when(responseMock.getStatusLine()).thenReturn(
-                new BasicStatusLine(new ProtocolVersion("HTTP", 1, 1), 200, "OK")
-        );
-        when(responseMock.getAllHeaders()).thenReturn(new Header[]{
+        when(responseMock.getCode()).thenReturn(200);
+        when(responseMock.getHeaders()).thenReturn(new Header[]{
                 new BasicHeader("Content-Type", "application/json"),
                 new BasicHeader("Cko-Request-Id", "test-request-id")
         });

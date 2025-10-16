@@ -102,7 +102,7 @@ class OAuthSdkCredentialsTest {
     }
 
     @Test
-    void authorization_shouldGetWhenTheresNoValidAccessToken() throws IOException, URISyntaxException {
+    void authorization_shouldGetWhenTheresNoValidAccessToken() throws Exception {
 
         final InputStream stream = new ByteArrayInputStream((
                 "{ \"access_token\" : \"y12345678\", " +
@@ -115,9 +115,14 @@ class OAuthSdkCredentialsTest {
 
         final CloseableHttpResponse response = Mockito.mock(CloseableHttpResponse.class);
         when(response.getEntity()).thenReturn(entity);
-        when(client.execute(Mockito.argThat(req -> req instanceof HttpPost &&
-                Objects.equals(req.getUri().toString(), "https://test.checkout.com/oauth/token"))))
-                .thenReturn(response);
+        when(client.execute(Mockito.argThat(req -> {
+          try {
+            return req instanceof HttpPost &&
+                Objects.equals(req.getUri().toString(), "https://test.checkout.com/oauth/token");
+          } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+          }
+        }))).thenReturn(response);
 
         final OAuthSdkCredentials credentials = new OAuthSdkCredentials(
                 DEFAULT_CLIENT_BUILDER,

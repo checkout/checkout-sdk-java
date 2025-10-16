@@ -11,7 +11,7 @@ import com.checkout.accounts.payout.schedule.response.GetScheduleResponse;
 import com.checkout.accounts.payout.schedule.response.VoidResponse;
 import com.checkout.common.Currency;
 import com.checkout.common.IdResponse;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

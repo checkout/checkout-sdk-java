@@ -18,7 +18,7 @@ import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsR
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
 import com.checkout.payments.VoidResponse;
-import org.apache.http.HttpStatus;
+import org.apache.hc.core5.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
