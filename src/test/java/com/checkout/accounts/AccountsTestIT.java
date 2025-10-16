@@ -13,7 +13,7 @@ import com.checkout.common.Currency;
 import com.checkout.common.IdResponse;
 import com.checkout.common.InstrumentType;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.http.entity.ContentType;
+import org.apache.hc.core5.http.ContentType;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

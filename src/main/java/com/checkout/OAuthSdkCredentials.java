@@ -3,16 +3,17 @@ package com.checkout;
 import com.google.gson.annotations.SerializedName;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.Charsets;
-import org.apache.http.HttpHeaders;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.core5.http.HttpHeaders;
+import org.apache.hc.core5.http.NameValuePair;
+import org.apache.hc.core5.http.ParseException;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.message.BasicNameValuePair;
+import org.apache.hc.core5.http.ContentType;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -78,16 +79,12 @@ final class OAuthSdkCredentials extends SdkCredentials {
         }
         final HttpPost httpPost = new HttpPost(authorizationUri);
         httpPost.setHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_FORM_URLENCODED.getMimeType());
-        try {
-            final List<NameValuePair> data = Arrays.asList(
-                    new BasicNameValuePair("grant_type", "client_credentials"),
-                    new BasicNameValuePair("client_id", clientId),
-                    new BasicNameValuePair("client_secret", clientSecret),
-                    new BasicNameValuePair("scope", scopes.stream().map(OAuthScope::getScope).collect(Collectors.joining(" "))));
-            httpPost.setEntity(new UrlEncodedFormEntity(data));
-        } catch (final UnsupportedEncodingException ignore) {
-            throw new CheckoutException("failed to encode oAuth URI");
-        }
+        final List<NameValuePair> data = Arrays.asList(
+                new BasicNameValuePair("grant_type", "client_credentials"),
+                new BasicNameValuePair("client_id", clientId),
+                new BasicNameValuePair("client_secret", clientSecret),
+                new BasicNameValuePair("scope", scopes.stream().map(OAuthScope::getScope).collect(Collectors.joining(" "))));
+        httpPost.setEntity(new UrlEncodedFormEntity(data));
         log.debug("requesting OAuth token using client_credentials flow");
         try (final CloseableHttpResponse response = client.execute(httpPost)) {
             final String json = EntityUtils.toString(response.getEntity(), Charsets.UTF_8);
@@ -112,11 +109,11 @@ final class OAuthSdkCredentials extends SdkCredentials {
 
             log.debug("OAuth token successfully retrieved, expires at: {}", accessToken.getExpirationDate());
             return accessToken;
-
+        } catch (final ParseException e) {
+            throw new CheckoutException("Failed to parse response body", e);
         } catch (final IOException e) {
             throw new CheckoutException("OAuth client_credentials authentication failed", e);
         }
-
     }
 
     synchronized void setAccessToken(final OAuthAccessToken accessToken) {

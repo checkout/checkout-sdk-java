@@ -2,7 +2,7 @@ package com.checkout;
 
 import java.util.concurrent.Executor;
 
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 
 public interface CheckoutConfiguration {
 

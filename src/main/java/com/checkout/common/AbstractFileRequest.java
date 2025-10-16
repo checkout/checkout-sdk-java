@@ -2,7 +2,7 @@ package com.checkout.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.apache.http.entity.ContentType;
+import org.apache.hc.core5.http.ContentType;
 
 import java.io.File;
 

@@ -5,29 +5,28 @@ import com.checkout.common.AbstractFileRequest;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.FileRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
-import org.apache.http.NoHttpResponseException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPatch;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.classic.methods.HttpDelete;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpPatch;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.classic.methods.HttpPut;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
+import org.apache.hc.client5.http.entity.mime.HttpMultipartMode;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.http.NameValuePair;
+import org.apache.hc.core5.http.NoHttpResponseException;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.hc.core5.http.message.BasicNameValuePair;
+import org.apache.hc.core5.http.message.StatusLine;
+import org.apache.hc.core5.net.URIBuilder;
+import org.apache.hc.core5.http.ContentType;
 
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -44,9 +43,9 @@ import static com.checkout.ClientOperation.POST;
 import static com.checkout.common.CheckoutUtils.ACCEPT_JSON;
 import static com.checkout.common.CheckoutUtils.PROJECT_NAME;
 import static com.checkout.common.CheckoutUtils.getVersionFromManifest;
-import static org.apache.http.HttpHeaders.ACCEPT;
-import static org.apache.http.HttpHeaders.AUTHORIZATION;
-import static org.apache.http.HttpHeaders.USER_AGENT;
+import static org.apache.hc.core5.http.HttpHeaders.ACCEPT;
+import static org.apache.hc.core5.http.HttpHeaders.AUTHORIZATION;
+import static org.apache.hc.core5.http.HttpHeaders.USER_AGENT;
 
 @Slf4j
 class ApacheHttpClientTransport implements Transport {
@@ -138,7 +137,7 @@ class ApacheHttpClientTransport implements Transport {
     }
 
     private HttpEntity getMultipartFileEntity(final AbstractFileRequest abstractFileRequest) {
-        final MultipartEntityBuilder builder = MultipartEntityBuilder.create().setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+        final MultipartEntityBuilder builder = MultipartEntityBuilder.create().setMode(HttpMultipartMode.EXTENDED);
         if (abstractFileRequest instanceof FileRequest) {
             final FileRequest fileRequest = (FileRequest) abstractFileRequest;
             builder.addBinaryBody(FILE, fileRequest.getFile(), fileRequest.getContentType(), fileRequest.getFile().getName())
@@ -159,8 +158,12 @@ class ApacheHttpClientTransport implements Transport {
                                  final String requestBody,
                                  final HttpUriRequest request,
                                  final ClientOperation clientOperation) {
-        log.info("{}: {}", clientOperation, request.getURI());
-        request.setHeader(USER_AGENT, PROJECT_NAME + "/" + getVersionFromManifest());
+      try {
+        log.info("{}: {}", clientOperation, request.getUri());
+      } catch (URISyntaxException e) {
+        throw new CheckoutException("Failed to parse URI", e);
+      }
+      request.setHeader(USER_AGENT, PROJECT_NAME + "/" + getVersionFromManifest());
         request.setHeader(ACCEPT, getAcceptHeader(clientOperation));
         request.setHeader(AUTHORIZATION, authorization.getAuthorizationHeader());
 
@@ -170,18 +173,18 @@ class ApacheHttpClientTransport implements Transport {
 
         long startTime = System.currentTimeMillis();
 
-        log.info("Request: " + Arrays.toString(sanitiseHeaders(request.getAllHeaders())));
-        if (requestBody != null && request instanceof HttpEntityEnclosingRequest) {
-            ((HttpEntityEnclosingRequestBase) request).setEntity(new StringEntity(requestBody, ContentType.APPLICATION_JSON));
+        log.info("Request: " + Arrays.toString(sanitiseHeaders(request.getHeaders())));
+        if (requestBody != null) {
+             request.setEntity(new StringEntity(requestBody, ContentType.APPLICATION_JSON));
         }
         try (final CloseableHttpResponse response = httpClient.execute(request)) {
             long elapsed = System.currentTimeMillis() - startTime;
-            log.info("Response: " + response.getStatusLine().getStatusCode() + " " + Arrays.toString(response.getAllHeaders()));
+            final int statusCode = response.getCode();
+            log.info("Response: " + statusCode + " " + Arrays.toString(response.getHeaders()));
 
             updateTelemetryData(currentRequestId, elapsed);
 
-            final int statusCode = response.getStatusLine().getStatusCode();
-            final Map<String, String> headers = Arrays.stream(response.getAllHeaders())
+            final Map<String, String> headers = Arrays.stream(response.getHeaders())
                     .collect(Collectors.toMap(Header::getName, Header::getValue));
 
             if (statusCode != HttpStatus.SC_NOT_FOUND && response.getEntity() != null && response.getEntity().getContent() != null) {

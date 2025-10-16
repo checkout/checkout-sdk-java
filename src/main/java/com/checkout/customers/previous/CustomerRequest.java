@@ -1,10 +1,10 @@
 package com.checkout.customers.previous;
 
 import com.checkout.common.Phone;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
 import java.util.Map;
 
 @Data

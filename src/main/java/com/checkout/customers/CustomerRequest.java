@@ -2,10 +2,10 @@ package com.checkout.customers;
 
 import com.checkout.common.Phone;
 import com.google.gson.annotations.SerializedName;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
 import java.util.Map;
 

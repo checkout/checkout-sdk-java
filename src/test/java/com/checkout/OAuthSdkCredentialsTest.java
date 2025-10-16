@@ -1,10 +1,10 @@
 package com.checkout;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.core5.http.HttpEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -116,7 +116,7 @@ class OAuthSdkCredentialsTest {
         final CloseableHttpResponse response = Mockito.mock(CloseableHttpResponse.class);
         when(response.getEntity()).thenReturn(entity);
         when(client.execute(Mockito.argThat(req -> req instanceof HttpPost &&
-                Objects.equals(req.getURI().toString(), "https://test.checkout.com/oauth/token"))))
+                Objects.equals(req.getUri().toString(), "https://test.checkout.com/oauth/token"))))
                 .thenReturn(response);
 
         final OAuthSdkCredentials credentials = new OAuthSdkCredentials(

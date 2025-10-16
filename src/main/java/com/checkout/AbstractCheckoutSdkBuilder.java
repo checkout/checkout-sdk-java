@@ -1,6 +1,6 @@
 package com.checkout;
 
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.ForkJoinPool;

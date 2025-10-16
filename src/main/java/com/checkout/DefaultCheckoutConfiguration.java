@@ -4,7 +4,7 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 
 import java.util.concurrent.Executor;
 
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 
 class DefaultCheckoutConfiguration implements CheckoutConfiguration {
 

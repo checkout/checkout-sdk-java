@@ -1,10 +1,10 @@
 package com.checkout.reconciliation.previous;
 
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.validation.constraints.Size;
 import java.time.Instant;
 
 @Data

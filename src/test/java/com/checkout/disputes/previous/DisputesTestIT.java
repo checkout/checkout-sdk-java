@@ -23,7 +23,7 @@ import com.checkout.payments.previous.request.source.RequestTokenSource;
 import com.checkout.payments.previous.response.PaymentResponse;
 import com.checkout.tokens.CardTokenRequest;
 import com.checkout.tokens.CardTokenResponse;
-import org.apache.http.entity.ContentType;
+import org.apache.hc.core5.http.ContentType;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 

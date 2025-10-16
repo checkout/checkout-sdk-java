@@ -1,6 +1,6 @@
 package com.checkout;
 
-import org.apache.http.HttpStatus;
+import org.apache.hc.core5.http.HttpStatus;
 
 public class DefaultTransportConfiguration implements TransportConfiguration {
 

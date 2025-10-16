@@ -10,7 +10,7 @@ import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.source.RequestCardSource;
 import com.checkout.payments.response.PaymentResponse;
 import com.checkout.payments.sender.PaymentIndividualSender;
-import org.apache.http.entity.ContentType;
+import org.apache.hc.core5.http.ContentType;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

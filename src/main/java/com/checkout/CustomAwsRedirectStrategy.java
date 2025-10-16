@@ -1,15 +1,15 @@
 package com.checkout;
 
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.ProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.DefaultRedirectStrategy;
-import org.apache.http.protocol.HttpContext;
+import org.apache.hc.client5.http.impl.DefaultRedirectStrategy;
+import org.apache.hc.core5.http.HttpException;
+import org.apache.hc.core5.http.HttpRequest;
+import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.core5.http.protocol.HttpContext;
+
+import java.net.URI;
 
 import static com.checkout.common.CheckoutUtils.ACCEPT_JSON;
-import static org.apache.http.HttpHeaders.ACCEPT;
+import static org.apache.hc.core5.http.HttpHeaders.ACCEPT;
 
 /**
  * LaxRedirectStrategy sends the original headers during the first request,
@@ -20,18 +20,14 @@ import static org.apache.http.HttpHeaders.ACCEPT;
  */
 public class CustomAwsRedirectStrategy extends DefaultRedirectStrategy {
 
-    public CustomAwsRedirectStrategy() {
-        super(new String[]{
-                HttpGet.METHOD_NAME
-        });
-    }
+  public CustomAwsRedirectStrategy() {
+    super();
+  }
 
-    @Override
-    public HttpUriRequest getRedirect(final HttpRequest request,
-                                      final HttpResponse response,
-                                      final HttpContext context) throws ProtocolException {
-        final HttpUriRequest redirect = super.getRedirect(request, response, context);
-        redirect.setHeader(ACCEPT, ACCEPT_JSON);
-        return redirect;
-    }
+  @Override
+  public URI getLocationURI(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException {
+    URI redirect = super.getLocationURI(request, response, context);
+    response.setHeader(ACCEPT, ACCEPT_JSON);
+    return redirect;
+  }
 }

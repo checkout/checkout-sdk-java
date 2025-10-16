@@ -2,7 +2,7 @@ package com.checkout.payments.previous.response;
 
 import com.checkout.HttpMetadata;
 import com.google.gson.annotations.SerializedName;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
