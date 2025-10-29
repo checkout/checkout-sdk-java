@@ -11,7 +11,7 @@ import com.checkout.payments.PaymentActionSummary;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.PaymentStatus;
 import com.checkout.payments.PaymentType;
-import com.checkout.payments.Product;
+import com.checkout.payments.ProductResponse;
 import com.checkout.payments.RiskAssessment;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSData;
@@ -97,7 +97,7 @@ public final class GetPaymentResponse extends Resource {
 
     private ProcessingData processing;
 
-    private List<Product> items;
+    private List<ProductResponse> items;
 
     private Map<String, Object> metadata;
 

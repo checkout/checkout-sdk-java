@@ -179,7 +179,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .processingChannelId("pc_zs5fqhybzc2e3jmq3efvybybpq")
                 .customer(new CustomerRequest("c.chapman@example.com", "Cecilia Chapman",
                         Phone.builder().countryCode("+966").number("113 496 0000").build()))
-                .items(Collections.singletonList(Product.builder()
+                .items(Collections.singletonList(ProductRequest.builder()
                         .name("Item name")
                         .quantity(3L)
                         .unitPrice(100L)

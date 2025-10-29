@@ -49,7 +49,7 @@ class CaptureTestIT extends AbstractPaymentsTestIT {
                         .phone(TestHelper.createPhone())
                         .fromAddressZip("10014")
                         .build())
-                .items(Collections.singletonList(Product.builder()
+                .items(Collections.singletonList(ProductRequest.builder()
                         .name("Kevlar batterang")
                         .quantity(2L)
                         .unitPrice(50L)

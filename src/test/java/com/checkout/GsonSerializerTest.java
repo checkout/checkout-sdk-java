@@ -5,7 +5,7 @@ import com.checkout.financial.FinancialActionsQueryResponse;
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
 import com.checkout.issuing.cards.responses.PhysicalCardDetailsResponse;
 import com.checkout.issuing.cards.responses.VirtualCardDetailsResponse;
-import com.checkout.payments.Product;
+import com.checkout.payments.ProductResponse;
 import com.checkout.payments.ProductType;
 import com.checkout.payments.contexts.PaymentContextDetailsResponse;
 import com.checkout.payments.previous.response.GetPaymentResponse;
@@ -175,34 +175,34 @@ class GsonSerializerTest {
 
     @Test
     void shouldDeserializeProductWithEnumType() {
-        String json = "{ \"type\": \"DIGITAL\", \"name\": \"Product Name\" }";
+        String json = "{ \"Type\": \"DIGITAL\", \"name\": \"Product Name\" }";
 
-        Product product = serializer.fromJson(json, Product.class);
+        ProductResponse productResponse = serializer.fromJson(json, ProductResponse.class);
 
-        assertNotNull(product);
-        assertEquals(ProductType.DIGITAL, product.getTypeAsEnum());
-        assertNull(product.getTypeAsString());
+        assertNotNull(productResponse);
+        assertEquals(ProductType.DIGITAL, productResponse.getTypeAsEnum());
+        assertNull(productResponse.getTypeAsString());
     }
 
     @Test
     void shouldDeserializeProductWithUnknownEnumValue() {
-        String json = "{ \"type\": \"UNKNOWN_VALUE\", \"name\": \"Product Name\", \"quantity\": 1, \"unit_price\": 1000 }";
+        String json = "{ \"Type\": \"UNKNOWN_VALUE\", \"name\": \"Product Name\", \"quantity\": 1, \"unit_price\": 1000 }";
 
-        Product product = serializer.fromJson(json, Product.class);
+        ProductResponse productResponse = serializer.fromJson(json, ProductResponse.class);
 
-        assertNotNull(product);
-        assertEquals("UNKNOWN_VALUE", product.getTypeAsString());
-        assertNull(product.getTypeAsEnum());
+        assertNotNull(productResponse);
+        assertEquals("UNKNOWN_VALUE", productResponse.getTypeAsString());
+        assertNull(productResponse.getTypeAsEnum());
     }
 
     @Test
     void shouldDeserializeProductWithNullType() {
-        String json = "{ \"type\": null, \"name\": \"Product Name\" }";
+        String json = "{ \"Type\": null, \"name\": \"Product Name\" }";
 
-        Product product = serializer.fromJson(json, Product.class);
+        ProductResponse productResponse = serializer.fromJson(json, ProductResponse.class);
 
-        assertNotNull(product);
-        assertNull(product.getType());
+        assertNotNull(productResponse);
+        assertNull(productResponse.getType());
     }
 
     @Test

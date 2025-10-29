@@ -1,5 +1,8 @@
 package com.checkout.payments;
 
+import com.checkout.common.CountryCode;
+import com.checkout.payments.request.ItemSubType;
+import com.checkout.payments.request.ItemType;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,9 +15,12 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public final class Product {
+public final class ProductRequest {
 
-    private Object type;
+    private ItemType type;
+
+    @SerializedName("sub_type")
+    private ItemSubType subType;
 
     private String name;
 
@@ -56,12 +62,10 @@ public final class Product {
     @SerializedName("service_ends_on")
     private Instant serviceEndsOn;
 
-    public ProductType getTypeAsEnum() {
-        return type instanceof ProductType ? (ProductType) type : null;
-    }
+    @SerializedName("purchase_country")
+    private CountryCode purchaseCountry;
 
-    public String getTypeAsString() {
-        return type instanceof String ? (String) type : null;
-    }
+    @SerializedName("foreign_retailer_amount")
+    private Long foreignRetailerAmount;
 
 }

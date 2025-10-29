@@ -1,5 +1,6 @@
 package com.checkout.payments;
 
+import com.checkout.common.CardType;
 import com.checkout.common.CountryCode;
 import com.checkout.common.ShippingInfo;
 import com.checkout.payments.previous.request.SenderInformation;
@@ -117,5 +118,14 @@ public final class ProcessingSettings {
 
     @SerializedName("senderInformation")
     private SenderInformation senderInformation;
+
+    @SerializedName("card_type")
+    private CardType cardType;
+
+    @SerializedName("affiliate_id")
+    private String affiliateId;
+
+    @SerializedName("affiliate_url")
+    private String affiliateUrl;
 
 }

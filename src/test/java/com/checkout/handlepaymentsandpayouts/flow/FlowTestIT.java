@@ -40,7 +40,7 @@ class FlowTestIT extends SandboxTestFixture {
                         .country(CountryCode.GB)
                         .build())
                 .phone(com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Phone.builder()
-                        .countryCode(CountryCode.US)
+                        .countryCode("+1")
                         .number("415 555 2671")
                         .build())
                 .build();
@@ -56,7 +56,7 @@ class FlowTestIT extends SandboxTestFixture {
                 .name("Jia Tsang")
                 .id("string")
                 .phone(com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Phone.builder()
-                        .countryCode(CountryCode.US)
+                        .countryCode("+1")
                         .number("415 555 2671")
                         .build())
                 .taxNumber("string")
@@ -72,7 +72,7 @@ class FlowTestIT extends SandboxTestFixture {
                         .country(CountryCode.GB)
                         .build())
                 .phone(com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Phone.builder()
-                        .countryCode(CountryCode.US)
+                        .countryCode("+1")
                         .number("415 555 2671")
                         .build())
                 .build();
