@@ -18,7 +18,7 @@ import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.create.MccCardControlResponse;
 import com.checkout.issuing.controls.responses.create.VelocityCardControlResponse;
 import com.checkout.payments.PaymentDestinationType;
-import com.checkout.payments.Product;
+import com.checkout.payments.ProductResponse;
 import com.checkout.payments.ProductType;
 import com.checkout.payments.previous.PaymentAction;
 import com.checkout.payments.sender.Sender;
@@ -202,7 +202,7 @@ public class GsonSerializer implements Serializer {
             .registerTypeAdapter(WEBHOOKS_TYPE, webhooksResponseDeserializer())
             .registerTypeAdapter(PREVIOUS_PAYMENT_ACTIONS_TYPE, paymentActionsResponsePreviousDeserializer())
             .registerTypeAdapter(PAYMENT_ACTIONS_TYPE, paymentActionsResponseDeserializer())
-            .registerTypeAdapter(Product.class, getProductDeserializer())
+            .registerTypeAdapter(ProductResponse.class, getProductDeserializer())
             .create();
 
     private final Gson gson;
@@ -365,12 +365,12 @@ public class GsonSerializer implements Serializer {
         };
     }
 
-    private static JsonDeserializer<Product> getProductDeserializer() {
+    private static JsonDeserializer<ProductResponse> getProductDeserializer() {
         return (json, typeOfT, context) -> {
-            Product product = new Product();
+            ProductResponse productResponse = new ProductResponse();
             JsonObject jsonObject = json.getAsJsonObject();
 
-            JsonElement typeElement = jsonObject.get("type");
+            JsonElement typeElement = jsonObject.get("Type");
             Object typeValue = null;
 
             if (typeElement != null && typeElement.isJsonPrimitive()) {
@@ -381,17 +381,17 @@ public class GsonSerializer implements Serializer {
                     typeValue = typeAsString;
                 }
             }
-            product.setType(typeValue);
+            productResponse.setType(typeValue);
 
 
             jsonObject.entrySet().stream()
-                .filter(entry -> !entry.getKey().equals("type"))
+                .filter(entry -> !entry.getKey().equals("Type"))
                 .forEach(entry -> {
                     try {
                         String jsonKey = entry.getKey();
                         JsonElement jsonValue = entry.getValue();
 
-                        java.lang.reflect.Field field = Arrays.stream(Product.class.getDeclaredFields())
+                        java.lang.reflect.Field field = Arrays.stream(ProductResponse.class.getDeclaredFields())
                                 .filter(f -> {
                                     SerializedName annotation = f.getAnnotation(SerializedName.class);
                                     return (annotation != null && annotation.value().equals(jsonKey)) || f.getName().equals(jsonKey);
@@ -404,20 +404,20 @@ public class GsonSerializer implements Serializer {
                             Class<?> fieldType = field.getType();
 
                             if (jsonValue.isJsonNull()) {
-                                field.set(product, null);
+                                field.set(productResponse, null);
                             } else if (fieldType.equals(String.class)) {
-                                field.set(product, jsonValue.getAsString());
+                                field.set(productResponse, jsonValue.getAsString());
                             } else if (fieldType.equals(Long.class) || fieldType.equals(long.class)) {
-                                field.set(product, jsonValue.getAsLong());
+                                field.set(productResponse, jsonValue.getAsLong());
                             } else if (fieldType.equals(Instant.class)) {
                                 String dateString = jsonValue.getAsString();
                                 if (dateString.matches("\\d{4}-\\d{2}-\\d{2}")) {
                                     dateString += "T00:00:00Z";
                                 }
-                                field.set(product, Instant.parse(dateString));
+                                field.set(productResponse, Instant.parse(dateString));
                             } else {
                                 Object nestedObject = context.deserialize(jsonValue, fieldType);
-                                field.set(product, nestedObject);
+                                field.set(productResponse, nestedObject);
                             }
                         }
                     } catch (IllegalAccessException e) {
@@ -425,7 +425,7 @@ public class GsonSerializer implements Serializer {
                     }
                 });
 
-            return product;
+            return productResponse;
         };
     }
 }

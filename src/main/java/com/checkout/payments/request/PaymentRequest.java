@@ -4,7 +4,7 @@ import com.checkout.common.AmountAllocations;
 import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
 import com.checkout.common.MarketplaceData;
-import com.checkout.payments.Product;
+import com.checkout.payments.ProductRequest;
 import com.checkout.payments.AuthorizationType;
 import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.PaymentRecipient;
@@ -108,7 +108,7 @@ public final class PaymentRequest {
 
     private ProcessingSettings processing;
 
-    private List<Product> items;
+    private List<ProductRequest> items;
 
     private PaymentRetryRequest retry;
 

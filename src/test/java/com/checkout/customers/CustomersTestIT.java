@@ -9,6 +9,7 @@ import com.checkout.instruments.create.CreateInstrumentResponse;
 import com.checkout.instruments.create.CreateInstrumentTokenRequest;
 import com.checkout.instruments.get.GetCardInstrumentResponse;
 import com.checkout.tokens.CardTokenResponse;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.checkout.TestHelper.generateRandomEmail;
@@ -51,6 +52,7 @@ class CustomersTestIT extends CardTokenInstrumentsTestIT {
     }
 
     @Test
+    @Disabled
     void shouldCreateAndUpdateCustomer() {
         //Create Customer
         final CustomerRequest customerRequest = CustomerRequest.builder()

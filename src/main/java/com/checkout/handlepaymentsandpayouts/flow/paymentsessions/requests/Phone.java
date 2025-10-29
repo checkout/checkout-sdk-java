@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests;
 
-import com.checkout.common.CountryCode;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +16,7 @@ public final class Phone {
      * The international country calling code.
      */
     @SerializedName("country_code")
-    private CountryCode countryCode;
+    private String countryCode;
 
     /**
      * The phone number.

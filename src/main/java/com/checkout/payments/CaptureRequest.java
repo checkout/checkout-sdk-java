@@ -35,7 +35,7 @@ public final class CaptureRequest {
 
     private ShippingDetails shipping;
 
-    private List<Product> items;
+    private List<ProductRequest> items;
 
     /**
      * @deprecated This property will be removed in the future, and should be used

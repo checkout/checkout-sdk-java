@@ -114,7 +114,7 @@ class PaymentsClientImplTest {
                 .processing(ProcessingSettings.builder()
                         .build())
                 .build();
-        request.setItems(Collections.singletonList(Product.builder()
+        request.setItems(Collections.singletonList(ProductRequest.builder()
                 .name("Item name")
                 .quantity(3L)
                 .unitPrice(100L)

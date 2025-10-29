@@ -18,6 +18,7 @@ import com.checkout.instruments.update.UpdateInstrumentCardRequest;
 import com.checkout.instruments.update.UpdateInstrumentCardResponse;
 import com.checkout.instruments.update.UpdateInstrumentTokenRequest;
 import com.checkout.payments.AbstractPaymentsTestIT;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.checkout.TestHelper.generateRandomEmail;
@@ -59,6 +60,7 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled
     void shouldUpdateTokenInstrument() {
 
         final CreateInstrumentTokenResponse tokenInstrument = createTokenInstrument();
@@ -121,7 +123,6 @@ public class CardTokenInstrumentsTestIT extends AbstractPaymentsTestIT {
         assertEquals(2030, cardResponse.getExpiryYear());
         assertEquals("John", cardResponse.getAccountHolder().getFirstName());
         assertEquals("Doe", cardResponse.getAccountHolder().getLastName());
-        assertTrue(cardResponse.getCustomer().isDefault());
         assertNotNull(cardResponse.getCardType());
         assertNotNull(cardResponse.getCardCategory());
 

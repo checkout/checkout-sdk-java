@@ -117,5 +117,7 @@ public enum PaymentSourceType {
     @SerializedName("trustly")
     TRUSTLY,
     @SerializedName("wechatpay")
-    WECHATPAY
+    WECHATPAY,
+    @SerializedName("paynow")
+    PAYNOW;
 }

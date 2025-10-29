@@ -5,6 +5,7 @@ import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.Phone;
+import com.checkout.payments.request.ItemType;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.source.RequestCardSource;
 import com.checkout.payments.response.GetPaymentResponse;
@@ -12,7 +13,6 @@ import com.checkout.payments.response.PaymentResponse;
 import com.checkout.payments.sender.PaymentIndividualSender;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -54,8 +54,8 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
     @Test
     void shouldGetPaymentWithItemsUsingEnumType() {
 
-        Product product = Product.builder()
-                .type(ProductType.DIGITAL)
+        ProductRequest productRequest = ProductRequest.builder()
+                .type(ItemType.DIGITAL)
                 .name("Test Product")
                 .quantity(1L)
                 .unitPrice(1000L)
@@ -67,7 +67,7 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
                 .amount(1000L)
                 .currency(Currency.EUR)
                 .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
-                .items(Collections.singletonList(product))
+                .items(Collections.singletonList(productRequest))
                 .build();
 
         PaymentResponse payment = blocking(() -> paymentsClient.requestPayment(request));
@@ -78,66 +78,22 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
         assertNotNull(paymentReturned.getItems());
         assertEquals(1, paymentReturned.getItems().size());
 
-        Product returnedProduct = paymentReturned.getItems().get(0);
-        assertEquals(ProductType.DIGITAL, returnedProduct.getTypeAsEnum());
-        assertEquals(ProductType.DIGITAL, returnedProduct.getType());
-        assertNull(returnedProduct.getTypeAsString());
-        assertEquals("Test Product", returnedProduct.getName());
-        assertEquals(1L, returnedProduct.getQuantity());
-        assertEquals(1000L, returnedProduct.getUnitPrice());
-    }
-
-    @Test
-    void shouldGetPaymentWithItemsUsingStringType() {
-
-        Product product = Product.builder()
-                .type("CustomType")
-                .name("Custom Product")
-                .quantity(2L)
-                .unitPrice(2000L)
-                .build();
-
-        PaymentRequest request = PaymentRequest.builder()
-                .source(getRequestCardSource())
-                .reference(UUID.randomUUID().toString())
-                .amount(2000L)
-                .currency(Currency.EUR)
-                .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
-                .items(Collections.singletonList(product))
-                .build();
-
-        PaymentResponse payment = blocking(() -> paymentsClient.requestPayment(request));
-
-        GetPaymentResponse paymentReturned = blocking(() -> paymentsClient.getPayment(payment.getId()));
-
-        assertNotNull(paymentReturned);
-        assertNotNull(paymentReturned.getItems());
-        assertEquals(1, paymentReturned.getItems().size());
-
-        Product returnedProduct = paymentReturned.getItems().get(0);
-        assertEquals("CustomType", returnedProduct.getTypeAsString());
-        assertEquals("CustomType", returnedProduct.getType());
-        assertNull(returnedProduct.getTypeAsEnum());
-        assertEquals("Custom Product", returnedProduct.getName());
-        assertEquals(2L, returnedProduct.getQuantity());
-        assertEquals(2000L, returnedProduct.getUnitPrice());
+        ProductResponse returnedProductResponse = paymentReturned.getItems().get(0);
+        assertEquals(ProductType.DIGITAL, returnedProductResponse.getTypeAsEnum());
+        assertNull(returnedProductResponse.getTypeAsString());
+        assertEquals("Test Product", returnedProductResponse.getName());
+        assertEquals(1L, returnedProductResponse.getQuantity());
+        assertEquals(1000L, returnedProductResponse.getUnitPrice());
     }
 
     @Test
     void shouldGetPaymentWithMultipleItems() {
 
-        Product enumProduct = Product.builder()
-                .type(ProductType.PHYSICAL)
+        ProductRequest productRequest = ProductRequest.builder()
+                .type(ItemType.PHYSICAL)
                 .name("Physical Product")
                 .quantity(1L)
                 .unitPrice(1500L)
-                .build();
-
-        Product stringProduct = Product.builder()
-                .type("CustomType")
-                .name("Custom Product")
-                .quantity(2L)
-                .unitPrice(3000L)
                 .build();
 
         PaymentRequest request = PaymentRequest.builder()
@@ -146,7 +102,7 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
                 .amount(4500L)
                 .currency(Currency.EUR)
                 .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
-                .items(Arrays.asList(enumProduct, stringProduct))
+                .items(Collections.singletonList(productRequest))
                 .build();
 
         PaymentResponse payment = blocking(() -> paymentsClient.requestPayment(request));
@@ -155,23 +111,14 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
 
         assertNotNull(paymentReturned);
         assertNotNull(paymentReturned.getItems());
-        assertEquals(2, paymentReturned.getItems().size());
+        assertEquals(1, paymentReturned.getItems().size());
 
-        Product returnedEnumProduct = paymentReturned.getItems().get(0);
-        assertEquals(ProductType.PHYSICAL, returnedEnumProduct.getTypeAsEnum());
-        assertEquals(ProductType.PHYSICAL, returnedEnumProduct.getType());
-        assertNull(returnedEnumProduct.getTypeAsString());
-        assertEquals("Physical Product", returnedEnumProduct.getName());
-        assertEquals(1L, returnedEnumProduct.getQuantity());
-        assertEquals(1500L, returnedEnumProduct.getUnitPrice());
-
-        Product returnedStringProduct = paymentReturned.getItems().get(1);
-        assertEquals("CustomType", returnedStringProduct.getTypeAsString());
-        assertEquals("CustomType", returnedStringProduct.getType());
-        assertNull(returnedStringProduct.getTypeAsEnum());
-        assertEquals("Custom Product", returnedStringProduct.getName());
-        assertEquals(2L, returnedStringProduct.getQuantity());
-        assertEquals(3000L, returnedStringProduct.getUnitPrice());
+        ProductResponse returnedEnumProductResponse = paymentReturned.getItems().get(0);
+        assertEquals(ProductType.PHYSICAL, returnedEnumProductResponse.getTypeAsEnum());
+        assertNull(returnedEnumProductResponse.getTypeAsString());
+        assertEquals("Physical Product", returnedEnumProductResponse.getName());
+        assertEquals(1L, returnedEnumProductResponse.getQuantity());
+        assertEquals(1500L, returnedEnumProductResponse.getUnitPrice());
     }
 
     @Test
