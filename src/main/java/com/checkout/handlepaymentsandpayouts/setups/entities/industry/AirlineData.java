@@ -1,0 +1,33 @@
+package com.checkout.handlepaymentsandpayouts.setups.entities.industry;
+
+import com.checkout.payments.contexts.PaymentContextsFlightLegDetails;
+import com.checkout.payments.contexts.PaymentContextsPassenger;
+import com.checkout.payments.contexts.PaymentContextsTicket;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class AirlineData {
+
+    /**
+     * The airline ticket information
+     */
+    private PaymentContextsTicket ticket;
+
+    /**
+     * List of passengers on the flight
+     */
+    private List<PaymentContextsPassenger> passengers;
+
+    /**
+     * Details of each leg of the flight journey
+     */
+    private List<PaymentContextsFlightLegDetails> flightLegDetails;
+}
