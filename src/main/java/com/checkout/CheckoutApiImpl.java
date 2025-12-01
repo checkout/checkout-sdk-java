@@ -16,6 +16,8 @@ import com.checkout.forward.ForwardClient;
 import com.checkout.forward.ForwardClientImpl;
 import com.checkout.handlepaymentsandpayouts.flow.FlowClient;
 import com.checkout.handlepaymentsandpayouts.flow.FlowClientImpl;
+import com.checkout.handlepaymentsandpayouts.setups.PaymentSetupsClient;
+import com.checkout.handlepaymentsandpayouts.setups.PaymentSetupsClientImpl;
 import com.checkout.instruments.InstrumentsClient;
 import com.checkout.instruments.InstrumentsClientImpl;
 import com.checkout.issuing.IssuingClient;
@@ -67,6 +69,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final IssuingClient issuingClient;
     private final PaymentContextsClient paymentContextsClient;
     private final FlowClient flowClient;
+    private final PaymentSetupsClient paymentSetupsClient;
     private final ForwardClient forwardClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
@@ -93,6 +96,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
                 configuration);
         this.paymentContextsClient = new PaymentContextsClientImpl(this.apiClient, configuration);
         this.flowClient = new FlowClientImpl(this.apiClient, configuration);
+        this.paymentSetupsClient = new PaymentSetupsClientImpl(this.apiClient, configuration);
         this.forwardClient = new ForwardClientImpl(this.apiClient, configuration);
     }
 
@@ -187,6 +191,9 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
 
     @Override
     public FlowClient flowClient() { return flowClient; }
+
+    @Override
+    public PaymentSetupsClient paymentSetupsClient() { return paymentSetupsClient; }
 
     @Override
     public ForwardClient forwardClient() { return forwardClient; }
