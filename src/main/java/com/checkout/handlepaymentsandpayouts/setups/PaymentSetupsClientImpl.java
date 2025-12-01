@@ -15,7 +15,7 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 /**
  * Implementation of the payment setup client.
  */
-public class PaymentSetupsClientImpl extends AbstractClient implements IPaymentSetupsClient {
+public class PaymentSetupsClientImpl extends AbstractClient implements PaymentSetupsClient {
 
     private static final String PAYMENT_SETUPS_PATH = "payments/setups";
 

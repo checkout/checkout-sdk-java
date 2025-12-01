@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class PaymentSetupsClientImplTest {
 
-    private IPaymentSetupsClient client;
+    private PaymentSetupsClient client;
 
     @Mock
     private ApiClient apiClient;

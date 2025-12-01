@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Client interface for payment setup operations.
  */
-public interface IPaymentSetupsClient {
+public interface PaymentSetupsClient {
 
     /**
      * Creates a new payment setup.
