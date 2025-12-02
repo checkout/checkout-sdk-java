@@ -32,7 +32,7 @@ public class PaymentMethodOption {
     private List<String> flags;
 
     /**
-     * The action configuration for STC Pay full payment
+     * The action configuration for the payment method option
      */
     private PaymentMethodAction action;
 }

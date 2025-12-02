@@ -31,22 +31,26 @@ public class PaymentSetupsClientImpl extends AbstractClient implements PaymentSe
      * @return CompletableFuture containing the payment setup response
      */
     @Override
-    public CompletableFuture<PaymentSetupsResponse> createPaymentSetup(final PaymentSetupsRequest paymentSetupsRequest) {
+    public CompletableFuture<PaymentSetupsResponse> createPaymentSetup(
+            final PaymentSetupsRequest paymentSetupsRequest) {
         validateParams("paymentSetupsRequest", paymentSetupsRequest);
-        return apiClient.postAsync(PAYMENT_SETUPS_PATH, sdkAuthorization(), PaymentSetupsResponse.class, paymentSetupsRequest, null);
+        return apiClient.postAsync(PAYMENT_SETUPS_PATH, sdkAuthorization(), PaymentSetupsResponse.class,
+                paymentSetupsRequest, null);
     }
 
     /**
      * Updates an existing payment setup.
      *
-     * @param id The payment setup ID
+     * @param id                   The payment setup ID
      * @param paymentSetupsRequest The payment setup request
      * @return CompletableFuture containing the payment setup response
      */
     @Override
-    public CompletableFuture<PaymentSetupsResponse> updatePaymentSetup(final String id, final PaymentSetupsRequest paymentSetupsRequest) {
+    public CompletableFuture<PaymentSetupsResponse> updatePaymentSetup(final String id,
+            final PaymentSetupsRequest paymentSetupsRequest) {
         validateParams("id", id, "paymentSetupsRequest", paymentSetupsRequest);
-        return apiClient.putAsync(buildPath(PAYMENT_SETUPS_PATH, id), sdkAuthorization(), PaymentSetupsResponse.class, paymentSetupsRequest);
+        return apiClient.putAsync(buildPath(PAYMENT_SETUPS_PATH, id), sdkAuthorization(), PaymentSetupsResponse.class,
+                paymentSetupsRequest);
     }
 
     /**
@@ -64,12 +68,15 @@ public class PaymentSetupsClientImpl extends AbstractClient implements PaymentSe
     /**
      * Confirms a payment setup.
      *
-     * @param id The payment setup ID
+     * @param id                    The payment setup ID
      * @param paymentMethodOptionId The payment method option ID
      * @return CompletableFuture containing the payment setup confirmation response
-     */    @Override
-    public CompletableFuture<PaymentSetupsConfirmResponse> confirmPaymentSetup(final String id, final String paymentMethodOptionId) {
+     */
+    @Override
+    public CompletableFuture<PaymentSetupsConfirmResponse> confirmPaymentSetup(final String id,
+            final String paymentMethodOptionId) {
         validateParams("id", id, "paymentMethodOptionId", paymentMethodOptionId);
-        return apiClient.postAsync(buildPath(PAYMENT_SETUPS_PATH, id, CONFIRM_PATH, paymentMethodOptionId), sdkAuthorization(), PaymentSetupsConfirmResponse.class, null, null);
+        return apiClient.postAsync(buildPath(PAYMENT_SETUPS_PATH, id, CONFIRM_PATH, paymentMethodOptionId),
+                sdkAuthorization(), PaymentSetupsConfirmResponse.class, null, null);
     }
 }
