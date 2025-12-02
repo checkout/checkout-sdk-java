@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Industry-specific payment setup information
+ */
 @Data
 @Builder
 @NoArgsConstructor

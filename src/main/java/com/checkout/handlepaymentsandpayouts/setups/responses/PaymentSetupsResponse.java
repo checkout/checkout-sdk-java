@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * Represents a payment setup response.
+ * Payment setup response
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -30,60 +30,60 @@ public class PaymentSetupsResponse extends HttpMetadata {
     private String id;
 
     /**
-     * The processing channel ID.
+     * The processing channel used for the payment setup
      */
     @SerializedName("processing_channel_id")
     private String processingChannelId;
 
     /**
-     * The payment amount in the minor currency unit.
+     * The payment amount. The exact format depends on the currency
      */
     private Long amount;
 
     /**
-     * The currency for the payment setup.
+     * The three-letter ISO currency code
      */
     private Currency currency;
 
     /**
-     * The type of payment.
+     * The type of payment method
      */
     @SerializedName("payment_type")
     private String paymentType;
 
     /**
-     * A unique identifier that can be used to reference the payment setup.
+     * The reference identifier for this payment setup
      */
     private String reference;
 
     /**
-     * A description of the payment setup.
+     * A description of the payment setup
      */
     private String description;
 
     /**
-     * Information about the payment methods.
+     * The payment method configuration for this setup
      */
     @SerializedName("payment_methods")
     private PaymentMethods paymentMethods;
 
     /**
-     * The URLs used for redirection after the payment is processed.
+     * The payment setup configuration settings
      */
     private Settings settings;
 
     /**
-     * The customer details.
+     * Details about the customer
      */
     private Customer customer;
 
     /**
-     * Order information.
+     * Details about the order associated with this payment setup
      */
     private Order order;
 
     /**
-     * Industry-specific information.
+     * Industry-specific information for specialized payment scenarios
      */
     private Industry industry;
 }

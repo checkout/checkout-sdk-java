@@ -6,6 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Tabby payment method configuration
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Tabby extends PaymentMethodBase {

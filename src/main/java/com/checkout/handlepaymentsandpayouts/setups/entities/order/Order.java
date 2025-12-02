@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Order information for payment setup
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -33,7 +36,7 @@ public class Order {
     private List<OrderSubMerchant> subMerchants;
 
     /**
-     * >= 0
+     * &gt;= 0
      * The discount amount applied to the order
      */
     @SerializedName("discount_amount")

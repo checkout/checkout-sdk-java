@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * Sub-merchant information for order
+ */
 @Data
 @Builder
 @NoArgsConstructor

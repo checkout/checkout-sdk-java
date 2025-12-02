@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Payment method action configuration
+ */
 @Data
 @Builder
 @NoArgsConstructor

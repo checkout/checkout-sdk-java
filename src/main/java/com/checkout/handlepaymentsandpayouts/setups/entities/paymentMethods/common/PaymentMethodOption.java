@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Payment method option configuration
+ */
 @Data
 @Builder
 @NoArgsConstructor

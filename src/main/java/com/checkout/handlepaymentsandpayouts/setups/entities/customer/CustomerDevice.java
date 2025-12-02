@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Customer device information
+ */
 @Data
 @Builder
 @NoArgsConstructor

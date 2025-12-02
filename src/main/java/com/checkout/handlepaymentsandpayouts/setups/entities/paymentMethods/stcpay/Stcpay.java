@@ -6,6 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * STC Pay payment method configuration
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Stcpay extends PaymentMethodBase {

@@ -6,6 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Bizum payment method configuration
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Bizum extends PaymentMethodBase {

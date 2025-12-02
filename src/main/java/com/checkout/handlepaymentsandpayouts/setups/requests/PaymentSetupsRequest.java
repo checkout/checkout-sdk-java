@@ -2,6 +2,7 @@ package com.checkout.handlepaymentsandpayouts.setups.requests;
 
 import com.checkout.HttpMetadata;
 import com.checkout.common.Currency;
+import com.checkout.payments.PaymentType;
 import com.checkout.handlepaymentsandpayouts.setups.entities.customer.Customer;
 import com.checkout.handlepaymentsandpayouts.setups.entities.industry.Industry;
 import com.checkout.handlepaymentsandpayouts.setups.entities.order.Order;
@@ -14,7 +15,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Represents a payment setup request.
+ * Payment setup request
  */
 @Data
 @Builder
@@ -23,60 +24,73 @@ import lombok.NoArgsConstructor;
 public class PaymentSetupsRequest {
 
     /**
-     * The processing channel ID.
+     * The processing channel to be used for the payment setup
+     * [Required]
      */
     @SerializedName("processing_channel_id")
     private String processingChannelId;
 
     /**
-     * The payment amount in the minor currency unit.
+     * The payment amount, in the minor currency unit. The exact format depends on the currency
+     * [Required]
      */
     private Long amount;
 
     /**
-     * The currency for the payment setup.
+     * The currency of the payment, as a three-letter ISO currency code
+     * [Required]
      */
     private Currency currency;
 
     /**
      * The type of payment.
+     //// You must provide this field for card payments in which the cardholder is not present. For example, if the transaction is a recurring payment, or a mail order/telephone order (MOTO) payment.
+     * Enum: "Regular" "Recurring" "MOTO" "Installment" "Unscheduled"
+     * [Optional]
      */
     @SerializedName("payment_type")
-    private String paymentType;
+    private PaymentType paymentType = PaymentType.REGULAR;
 
     /**
-     * A unique identifier that can be used to reference the payment setup.
+     * A reference you can use to identify the payment. For example, an order number
+     * [Optional]
      */
     private String reference;
 
     /**
-     * A description of the payment setup.
+     * A description of the payment setup
+     * [Optional]
      */
     private String description;
 
     /**
-     * Information about the payment methods.
+     * The payment methods that are enabled on your account and available for use
+     * [Optional]
      */
     @SerializedName("payment_methods")
     private PaymentMethods paymentMethods;
 
     /**
-     * The URLs used for redirection after the payment is processed.
+     * The payment setup configuration settings
+     * [Optional]
      */
     private Settings settings;
 
     /**
-     * The customer details.
+     * Details about the customer
+     * [Optional]
      */
     private Customer customer;
 
     /**
-     * Order information.
+     * Details about the order associated with this payment setup
+     * [Optional]
      */
     private Order order;
 
     /**
-     * Industry-specific information.
+     * Details for specific industries, including airline and accommodation industries
+     * [Optional]
      */
     private Industry industry;
 }

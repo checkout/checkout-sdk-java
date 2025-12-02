@@ -9,6 +9,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Payment methods configuration
+ */
 @Data
 @Builder
 @NoArgsConstructor

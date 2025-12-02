@@ -2,8 +2,8 @@ package com.checkout.handlepaymentsandpayouts.setups.responses;
 
 import com.checkout.HttpMetadata;
 import com.checkout.common.Currency;
-import com.checkout.handlepaymentsandpayouts.setups.responses.PaymentSetupSource;
 import com.checkout.payments.PaymentStatus;
+import com.checkout.handlepaymentsandpayouts.setups.responses.PaymentSetupSource;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import java.time.Instant;
 import java.util.Map;
 
 /**
- * Represents a payment setup confirmation response.
+ * Payment setup confirmation response
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -24,105 +24,99 @@ import java.util.Map;
 public class PaymentSetupsConfirmResponse extends HttpMetadata {
 
     /**
-     * The unique identifier of the payment.
+     * The payment's unique identifier
      */
     private String id;
 
     /**
-     * The unique identifier of the action.
+     * The unique identifier for the action performed against this payment
      */
     @SerializedName("action_id")
     private String actionId;
 
     /**
-     * The payment amount in the minor currency unit.
+     * The payment amount
      */
     private Long amount;
 
     /**
-     * The currency of the payment.
+     * The three-letter ISO currency code of the payment
      */
     private Currency currency;
 
     /**
-     * Whether the payment was approved.
+     * Whether or not the authorization or capture was successful
      */
     private Boolean approved;
 
     /**
-     * The current status of the payment.
+     * The status of the payment
      */
-    private String status;
+    private PaymentStatus status;
 
     /**
-     * The authorization code returned by the card issuer.
+     * The acquirer authorization code if the payment was authorized
      */
     @SerializedName("auth_code")
     private String authCode;
 
     /**
-     * The response code.
+     * The Gateway response code
      */
     @SerializedName("response_code")
     private String responseCode;
 
     /**
-     * The response summary.
+     * The Gateway response summary
      */
     @SerializedName("response_summary")
     private String responseSummary;
 
     /**
-     * 3D Secure information.
+     * Provides 3D Secure enrollment status if the payment was downgraded to non-3D Secure
      */
     @SerializedName("3ds")
     private Map<String, Object> threeDSecure;
 
     /**
-     * Risk information.
+     * Information relating to the risk assessment of the payment
      */
     private Map<String, Object> risk;
 
     /**
-     * The source information for the payment.
+     * The source of the payment
      */
     private PaymentSetupSource source;
 
     /**
-     * Customer information.
+     * The customer's details
      */
     private Map<String, Object> customer;
 
     /**
-     * The date and time when the payment was processed.
+     * The date and time at which the payment was processed
      */
     @SerializedName("processed_on")
     private Instant processedOn;
 
     /**
-     * A unique identifier that can be used to reference the payment.
+     * Your reference for the payment
      */
     private String reference;
 
     /**
-     * Processing information.
+     * The processing information
      */
     private Map<String, Object> processing;
 
     /**
-     * The Electronic Commerce Indicator.
+     * Electronic Commerce Indicator
      */
     private String eci;
 
     /**
-     * The scheme identifier.
+     * The scheme transaction identifier
      */
     @SerializedName("scheme_id")
     private String schemeId;
-
-    /**
-     * Links to related resources.
-     */
-    @SerializedName("_links")
-    private Map<String, Object> links;
 }

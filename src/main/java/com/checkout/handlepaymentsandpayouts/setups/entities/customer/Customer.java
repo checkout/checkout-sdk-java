@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Customer information for payment setup
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,7 +22,7 @@ public class Customer {
     private CustomerEmail email;
 
     /**
-     * <= 100 characters
+     * &lt;= 100 characters
      * The customer's full name
      */
     private String name;

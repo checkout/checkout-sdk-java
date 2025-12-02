@@ -1,6 +1,8 @@
 package com.checkout.handlepaymentsandpayouts.setups.responses;
 
+import com.checkout.common.Address;
 import com.checkout.common.PaymentSourceType;
+import com.checkout.common.Phone;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Represents a payment setup source.
+ * Source information for payment setup confirm response
  */
 @Data
 @Builder
@@ -17,17 +19,28 @@ import lombok.NoArgsConstructor;
 public class PaymentSetupSource {
 
     /**
-     * The payment source type.
+     * The type of the payment source
      */
     private PaymentSourceType type;
 
     /**
-     * The unique identifier of the payment setup source.
+     * The unique identifier of the payment source
      */
     private String id;
 
     /**
-     * The fingerprint of the payment setup source.
+     * The billing address associated with the payment source
+     */
+    @SerializedName("billing_address")
+    private Address billingAddress;
+
+    /**
+     * The phone number associated with the payment source
+     */
+    private Phone phone;
+
+    /**
+     * A unique fingerprint of the underlying card number
      */
     private String fingerprint;
 
@@ -42,72 +55,84 @@ public class PaymentSetupSource {
     private String customer;
 
     /**
-     * The scheme of the payment method.
+     * The card scheme
      */
     private String scheme;
 
     /**
-     * The last four digits of the payment method.
+     * The last four digits of the card number
      */
     @SerializedName("last_4")
     private String last4;
 
     /**
-     * The expiry month of the payment method.
+     * The expiry month of the card
      */
     @SerializedName("expiry_month")
     private Integer expiryMonth;
 
     /**
-     * The expiry year of the payment method.
+     * The expiry year of the card
      */
     @SerializedName("expiry_year")
     private Integer expiryYear;
 
     /**
-     * The name on the payment method.
+     * The cardholder's name
      */
     private String name;
 
     /**
-     * The BIN (Bank Identification Number) of the payment method.
+     * The card BIN
      */
     private String bin;
 
     /**
-     * The card type (Credit/Debit).
+     * The card type
      */
     @SerializedName("card_type")
     private String cardType;
 
     /**
-     * The card category.
+     * The card category
      */
     @SerializedName("card_category")
     private String cardCategory;
 
     /**
-     * The issuer of the payment method.
+     * The name of the card issuer
      */
     private String issuer;
 
     /**
-     * The issuer country of the payment method.
+     * The card issuer country ISO2 code
      */
     @SerializedName("issuer_country")
     private String issuerCountry;
 
     /**
-     * The product ID of the payment method.
-     */
-    @SerializedName("product_id")
-    private String productId;
-
-    /**
-     * The product type of the payment method.
+     * The card product type
      */
     @SerializedName("product_type")
     private String productType;
+
+    /**
+     * The Address Verification System check result
+     */
+    @SerializedName("avs_check")
+    private String avsCheck;
+
+    /**
+     * The CVV check result
+     */
+    @SerializedName("cvv_check")
+    private String cvvCheck;
+
+    /**
+     * The Payment Account Reference (PAR)
+     */
+    @SerializedName("payment_account_reference")
+    private String paymentAccountReference;
 
     /**
      * Nested card class for card-specific details.
@@ -117,34 +142,71 @@ public class PaymentSetupSource {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Card {
+        /**
+         * A unique fingerprint of the underlying card number
+         */
         private String fingerprint;
         
+        /**
+         * The last four digits of the card number
+         */
         @SerializedName("last_4")
         private String last4;
         
+        /**
+         * The expiry month of the card
+         */
         @SerializedName("expiry_month")
         private Integer expiryMonth;
         
+        /**
+         * The expiry year of the card
+         */
         @SerializedName("expiry_year")
         private Integer expiryYear;
         
+        /**
+         * The cardholder's name
+         */
         private String name;
+        
+        /**
+         * The card BIN
+         */
         private String bin;
         
+        /**
+         * The card type
+         */
         @SerializedName("card_type")
         private String cardType;
         
+        /**
+         * The card category
+         */
         @SerializedName("card_category")
         private String cardCategory;
         
+        /**
+         * The name of the card issuer
+         */
         private String issuer;
         
+        /**
+         * The card issuer country ISO2 code
+         */
         @SerializedName("issuer_country")
         private String issuerCountry;
         
+        /**
+         * The product ID of the payment method
+         */
         @SerializedName("product_id")
         private String productId;
         
+        /**
+         * The card product type
+         */
         @SerializedName("product_type")
         private String productType;
     }

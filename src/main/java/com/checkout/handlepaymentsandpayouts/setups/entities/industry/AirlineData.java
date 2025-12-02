@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Airline industry-specific data
+ */
 @Data
 @Builder
 @NoArgsConstructor
