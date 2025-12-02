@@ -3,6 +3,7 @@ package com.checkout.handlepaymentsandpayouts.setups.entities.industry;
 import com.checkout.payments.contexts.PaymentContextsFlightLegDetails;
 import com.checkout.payments.contexts.PaymentContextsPassenger;
 import com.checkout.payments.contexts.PaymentContextsTicket;
+import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
