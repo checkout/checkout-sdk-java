@@ -22,26 +22,26 @@ public interface PaymentSetupsClient {
     /**
      * Updates an existing payment setup.
      *
-     * @param paymentSetupId The payment setup ID
+     * @param id The payment setup ID
      * @param paymentSetupsRequest The payment setup request
      * @return CompletableFuture containing the payment setup response
      */
-    CompletableFuture<PaymentSetupsResponse> updatePaymentSetup(String paymentSetupId, PaymentSetupsRequest paymentSetupsRequest);
+    CompletableFuture<PaymentSetupsResponse> updatePaymentSetup(String id, PaymentSetupsRequest paymentSetupsRequest);
 
     /**
      * Retrieves a payment setup by ID.
      *
-     * @param paymentSetupId The payment setup ID
+     * @param id The payment setup ID
      * @return CompletableFuture containing the payment setup response
      */
-    CompletableFuture<PaymentSetupsResponse> getPaymentSetup(String paymentSetupId);
+    CompletableFuture<PaymentSetupsResponse> getPaymentSetup(String id);
 
     /**
      * Confirms a payment setup.
      *
-     * @param paymentSetupId The payment setup ID
+     * @param id The payment setup ID
      * @param paymentMethodOptionId The payment method option ID
      * @return CompletableFuture containing the payment setup confirmation response
      */
-    CompletableFuture<PaymentSetupsConfirmResponse> confirmPaymentSetup(String paymentSetupId, String paymentMethodOptionId);
+    CompletableFuture<PaymentSetupsConfirmResponse> confirmPaymentSetup(String id, String paymentMethodOptionId);
 }
