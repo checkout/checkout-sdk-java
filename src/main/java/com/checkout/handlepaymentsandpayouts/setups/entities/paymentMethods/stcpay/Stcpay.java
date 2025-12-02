@@ -1,7 +1,7 @@
-package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.stcpay;
+package com.checkout.handlepaymentsandpayouts.setups.entities;
 
-import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodBase;
-import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodOptions;
+import com.checkout.handlepaymentsandpayouts.setups.entities.PaymentMethodBase;
+import com.checkout.handlepaymentsandpayouts.setups.entities.PaymentMethodOptions;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

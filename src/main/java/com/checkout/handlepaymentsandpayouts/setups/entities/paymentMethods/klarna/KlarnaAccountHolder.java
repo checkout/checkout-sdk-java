@@ -1,4 +1,4 @@
-package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.klarna;
+package com.checkout.handlepaymentsandpayouts.setups.entities;
 
 import com.checkout.common.Address;
 import com.google.gson.annotations.SerializedName;

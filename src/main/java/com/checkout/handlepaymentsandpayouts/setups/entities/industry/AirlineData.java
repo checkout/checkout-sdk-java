@@ -1,4 +1,4 @@
-package com.checkout.handlepaymentsandpayouts.setups.entities.industry;
+package com.checkout.handlepaymentsandpayouts.setups.entities;
 
 import com.checkout.payments.contexts.PaymentContextsFlightLegDetails;
 import com.checkout.payments.contexts.PaymentContextsPassenger;

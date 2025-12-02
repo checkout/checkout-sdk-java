@@ -1,4 +1,4 @@
-package com.checkout.handlepaymentsandpayouts.setups.entities.industry;
+package com.checkout.handlepaymentsandpayouts.setups.entities;
 
 import com.checkout.payments.contexts.PaymentContextsAccommodationData;
 import com.google.gson.annotations.SerializedName;

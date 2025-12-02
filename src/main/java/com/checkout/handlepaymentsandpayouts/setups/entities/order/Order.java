@@ -1,4 +1,4 @@
-package com.checkout.handlepaymentsandpayouts.setups.entities.order;
+package com.checkout.handlepaymentsandpayouts.setups.entities;
 
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.contexts.PaymentContextsItems;

@@ -1,6 +1,6 @@
-package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common;
+package com.checkout.handlepaymentsandpayouts.setups.entities;
 
-import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodInitialization;
+import com.checkout.handlepaymentsandpayouts.setups.entities.PaymentMethodInitialization;
 import lombok.Data;
 
 import java.util.List;

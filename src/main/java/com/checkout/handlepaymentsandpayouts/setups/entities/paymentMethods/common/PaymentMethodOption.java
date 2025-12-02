@@ -1,4 +1,4 @@
-package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common;
+package com.checkout.handlepaymentsandpayouts.setups.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

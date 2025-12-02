@@ -1,4 +1,4 @@
-package com.checkout.handlepaymentsandpayouts.setups.entities.settings;
+package com.checkout.handlepaymentsandpayouts.setups.entities;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
