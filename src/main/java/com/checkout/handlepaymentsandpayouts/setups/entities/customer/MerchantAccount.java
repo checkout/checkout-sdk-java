@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 /**
  * Merchant account information
@@ -26,13 +26,13 @@ public class MerchantAccount {
      * The date when the customer's account was first registered with the merchant
      */
     @SerializedName("registration_date")
-    private LocalDate registrationDate;
+    private Instant registrationDate;
 
     /**
      * The date when the customer's account was last modified
      */
     @SerializedName("last_modified")
-    private LocalDate lastModified;
+    private Instant lastModified;
 
     /**
      * Indicates whether this is a returning customer
@@ -44,13 +44,13 @@ public class MerchantAccount {
      * The date of the customer's first transaction with the merchant
      */
     @SerializedName("first_transaction_date")
-    private LocalDate firstTransactionDate;
+    private Instant firstTransactionDate;
 
     /**
      * The date of the customer's most recent transaction with the merchant
      */
     @SerializedName("last_transaction_date")
-    private LocalDate lastTransactionDate;
+    private Instant lastTransactionDate;
 
     /**
      * The total number of orders the customer has placed with the merchant

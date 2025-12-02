@@ -32,5 +32,6 @@ public class AirlineData {
     /**
      * Details of each leg of the flight journey
      */
+    @SerializedName("flight_leg_details")
     private List<PaymentContextsFlightLegDetails> flightLegDetails;
 }

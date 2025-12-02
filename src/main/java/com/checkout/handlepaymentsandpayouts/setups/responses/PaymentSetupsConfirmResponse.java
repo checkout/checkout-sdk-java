@@ -4,6 +4,10 @@ import com.checkout.HttpMetadata;
 import com.checkout.common.Currency;
 import com.checkout.payments.PaymentStatus;
 import com.checkout.handlepaymentsandpayouts.setups.responses.PaymentSetupSource;
+import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.threeds.Threeds;
+import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.risk.Risk;
+import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.customer.Customer;
+import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.processing.Processing;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +15,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import java.time.Instant;
-import java.util.Map;
 
 /**
  * Payment setup confirmation response
@@ -76,12 +79,12 @@ public class PaymentSetupsConfirmResponse extends HttpMetadata {
      * Provides 3D Secure enrollment status if the payment was downgraded to non-3D Secure
      */
     @SerializedName("3ds")
-    private Map<String, Object> threeDSecure;
+    private Threeds threeDSecure;
 
     /**
      * Information relating to the risk assessment of the payment
      */
-    private Map<String, Object> risk;
+    private Risk risk;
 
     /**
      * The source of the payment
@@ -91,7 +94,7 @@ public class PaymentSetupsConfirmResponse extends HttpMetadata {
     /**
      * The customer's details
      */
-    private Map<String, Object> customer;
+    private Customer customer;
 
     /**
      * The date and time at which the payment was processed
@@ -107,7 +110,7 @@ public class PaymentSetupsConfirmResponse extends HttpMetadata {
     /**
      * The processing information
      */
-    private Map<String, Object> processing;
+    private Processing processing;
 
     /**
      * Electronic Commerce Indicator
