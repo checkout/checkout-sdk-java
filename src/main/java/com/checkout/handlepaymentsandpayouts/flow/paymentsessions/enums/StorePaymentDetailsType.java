@@ -11,5 +11,7 @@ public enum StorePaymentDetailsType {
     @SerializedName("disabled")
     DISABLED,
     @SerializedName("enabled")
-    ENABLED
+    ENABLED,
+    @SerializedName("collect_consent")
+    COLLECT_CONSENT
 }
