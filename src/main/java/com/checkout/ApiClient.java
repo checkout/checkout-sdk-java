@@ -34,4 +34,31 @@ public interface ApiClient {
 
     <T extends HttpMetadata> CompletableFuture<T> submitFileAsync(String path, SdkAuthorization authorization, AbstractFileRequest request, Class<T> responseType);
 
+    // Synchronous methods
+    <T extends HttpMetadata> T get(String path, SdkAuthorization authorization, Class<T> responseType);
+
+    <T extends HttpMetadata> T get(String path, SdkAuthorization authorization, Type responseType);
+
+    <T extends HttpMetadata> T put(String path, SdkAuthorization authorization, Class<T> responseType, Object request);
+
+    <T extends HttpMetadata> T post(String path, SdkAuthorization authorization, Class<T> responseType, Object request, String idempotencyKey);
+
+    <T extends HttpMetadata> T patch(String path, SdkAuthorization authorization, Type type, Object request, String idempotencyKey);
+
+    <T extends HttpMetadata> T post(String path, SdkAuthorization authorization, Type responseType, Object request, String idempotencyKey);
+
+    <T extends HttpMetadata> T patch(String path, SdkAuthorization authorization, Class<T> responseType, Object request, String idempotencyKey);
+
+    HttpMetadata post(String path, SdkAuthorization authorization, Map<Integer, Class<? extends HttpMetadata>> resultTypeMappings, Object request, String idempotencyKey);
+
+    EmptyResponse delete(String path, SdkAuthorization authorization);
+
+    <T extends HttpMetadata> T delete(String path, SdkAuthorization authorization, Class<T> responseType);
+
+    <T extends HttpMetadata> T query(String path, SdkAuthorization authorization, Object filter, Class<T> responseType);
+
+    ContentResponse queryCsvContent(String path, SdkAuthorization authorization, Object filter, String targetFile);
+
+    <T extends HttpMetadata> T submitFile(String path, SdkAuthorization authorization, AbstractFileRequest request, Class<T> responseType);
+
 }

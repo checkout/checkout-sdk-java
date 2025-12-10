@@ -8,4 +8,9 @@ public interface TokensClient {
 
     CompletableFuture<TokenResponse> requestWalletToken(WalletTokenRequest walletTokenRequest);
 
+    // Synchronous methods
+    CardTokenResponse requestCardTokenSync(CardTokenRequest cardTokenRequest);
+
+    TokenResponse requestWalletTokenSync(WalletTokenRequest walletTokenRequest);
+
 }

@@ -225,4 +225,73 @@ public class ApiClientImpl implements ApiClient {
         return result;
     }
 
+    // Synchronous method implementations
+    @Override
+    public <T extends HttpMetadata> T get(final String path, final SdkAuthorization authorization, final Class<T> responseType) {
+        return getAsync(path, authorization, responseType).join();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends HttpMetadata> T get(final String path, final SdkAuthorization authorization, final Type responseType) {
+        return (T) getAsync(path, authorization, responseType).join();
+    }
+
+    @Override
+    public <T extends HttpMetadata> T put(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request) {
+        return putAsync(path, authorization, responseType, request).join();
+    }
+
+    @Override
+    public <T extends HttpMetadata> T post(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request, final String idempotencyKey) {
+        return postAsync(path, authorization, responseType, request, idempotencyKey).join();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends HttpMetadata> T patch(final String path, final SdkAuthorization authorization, final Type type, final Object request, final String idempotencyKey) {
+        return (T) patchAsync(path, authorization, type, request, idempotencyKey).join();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends HttpMetadata> T post(final String path, final SdkAuthorization authorization, final Type responseType, final Object request, final String idempotencyKey) {
+        return (T) postAsync(path, authorization, responseType, request, idempotencyKey).join();
+    }
+
+    @Override
+    public <T extends HttpMetadata> T patch(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request, final String idempotencyKey) {
+        return patchAsync(path, authorization, responseType, request, idempotencyKey).join();
+    }
+
+    @Override
+    public HttpMetadata post(final String path, final SdkAuthorization authorization, final Map<Integer, Class<? extends HttpMetadata>> resultTypeMappings, final Object request, final String idempotencyKey) {
+        return postAsync(path, authorization, resultTypeMappings, request, idempotencyKey).join();
+    }
+
+    @Override
+    public EmptyResponse delete(final String path, final SdkAuthorization authorization) {
+        return deleteAsync(path, authorization).join();
+    }
+
+    @Override
+    public <T extends HttpMetadata> T delete(final String path, final SdkAuthorization authorization, final Class<T> responseType) {
+        return deleteAsync(path, authorization, responseType).join();
+    }
+
+    @Override
+    public <T extends HttpMetadata> T query(final String path, final SdkAuthorization authorization, final Object filter, final Class<T> responseType) {
+        return queryAsync(path, authorization, filter, responseType).join();
+    }
+
+    @Override
+    public ContentResponse queryCsvContent(final String path, final SdkAuthorization authorization, final Object filter, final String targetFile) {
+        return queryCsvContentAsync(path, authorization, filter, targetFile).join();
+    }
+
+    @Override
+    public <T extends HttpMetadata> T submitFile(final String path, final SdkAuthorization authorization, final AbstractFileRequest request, final Class<T> responseType) {
+        return submitFileAsync(path, authorization, request, responseType).join();
+    }
+
 }

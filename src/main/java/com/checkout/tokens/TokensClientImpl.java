@@ -29,4 +29,16 @@ public class TokensClientImpl extends AbstractClient implements TokensClient {
         return apiClient.postAsync(TOKENS_PATH, sdkAuthorization(), TokenResponse.class, walletTokenRequest, null);
     }
 
+    @Override
+    public CardTokenResponse requestCardTokenSync(final CardTokenRequest cardTokenRequest) {
+        validateParams("cardTokenRequest", cardTokenRequest);
+        return apiClient.post(TOKENS_PATH, sdkAuthorization(), CardTokenResponse.class, cardTokenRequest, null);
+    }
+
+    @Override
+    public TokenResponse requestWalletTokenSync(final WalletTokenRequest walletTokenRequest) {
+        validateParams("walletTokenRequest", walletTokenRequest);
+        return apiClient.post(TOKENS_PATH, sdkAuthorization(), TokenResponse.class, walletTokenRequest, null);
+    }
+
 }
