@@ -39,6 +39,11 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
+import java.util.function.Supplier;
+
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.RateLimiter;
+import io.github.resilience4j.retry.Retry;
 
 import static com.checkout.ClientOperation.POST;
 import static com.checkout.common.CheckoutUtils.ACCEPT_JSON;
@@ -135,6 +140,92 @@ class ApacheHttpClientTransport implements Transport {
             request.setEntity(getMultipartFileEntity(fileRequest));
             return performCall(authorization, null, request, POST);
         }, executor);
+    }
+
+    @Override
+    public Response invokeSync(final ClientOperation clientOperation,
+                               final String path,
+                               final SdkAuthorization authorization,
+                               final String requestBody,
+                               final String idempotencyKey,
+                               final Map<String, String> queryParams) {
+        final HttpUriRequest request;
+        switch (clientOperation) {
+            case GET:
+            case GET_CSV_CONTENT:
+                request = new HttpGet(getRequestUrl(path));
+                break;
+            case PUT:
+                request = new HttpPut(getRequestUrl(path));
+                break;
+            case POST:
+                request = new HttpPost(getRequestUrl(path));
+                break;
+            case DELETE:
+                request = new HttpDelete(getRequestUrl(path));
+                break;
+            case PATCH:
+                request = new HttpPatch(getRequestUrl(path));
+                break;
+            case QUERY:
+                final List<NameValuePair> params = queryParams.entrySet().stream()
+                        .map(entry -> new BasicNameValuePair(entry.getKey(), entry.getValue()))
+                        .collect(Collectors.toList());
+                try {
+                    request = new HttpGet(new URIBuilder(getRequestUrl(path)).addParameters(params).build());
+                } catch (final URISyntaxException e) {
+                    throw new CheckoutException(e);
+                }
+                break;
+            default:
+                throw new UnsupportedOperationException("Unsupported HTTP Method: " + clientOperation);
+        }
+        if (idempotencyKey != null) {
+            request.setHeader(CKO_IDEMPOTENCY_KEY, idempotencyKey);
+        }
+        
+        final Supplier<Response> callSupplier = () -> performCall(authorization, requestBody, request, clientOperation);
+        return executeWithResilience4j(callSupplier);
+    }
+
+    @Override
+    public Response submitFileSync(final String path, final SdkAuthorization authorization, final AbstractFileRequest fileRequest) {
+        final HttpPost request = new HttpPost(getRequestUrl(path));
+        request.setEntity(getMultipartFileEntity(fileRequest));
+        
+        final Supplier<Response> callSupplier = () -> performCall(authorization, null, request, POST);
+        return executeWithResilience4j(callSupplier);
+    }
+
+    /**
+     * Executes a supplier function with Resilience4j components (Circuit Breaker, Retry, Rate Limiter)
+     * if they are configured. Otherwise, executes the supplier directly.
+     */
+    private Response executeWithResilience4j(final Supplier<Response> supplier) {
+        final Resilience4jConfiguration resilience4jConfig = configuration.getResilience4jConfiguration();
+        
+        if (resilience4jConfig == null) {
+            return supplier.get();
+        }
+        
+        Supplier<Response> decoratedSupplier = supplier;
+        
+        // Apply Rate Limiter if configured
+        if (resilience4jConfig.hasRateLimiter()) {
+            decoratedSupplier = RateLimiter.decorateSupplier(resilience4jConfig.getRateLimiter(), decoratedSupplier);
+        }
+        
+        // Apply Retry if configured
+        if (resilience4jConfig.hasRetry()) {
+            decoratedSupplier = Retry.decorateSupplier(resilience4jConfig.getRetry(), decoratedSupplier);
+        }
+        
+        // Apply Circuit Breaker if configured (should be last to wrap everything)
+        if (resilience4jConfig.hasCircuitBreaker()) {
+            decoratedSupplier = CircuitBreaker.decorateSupplier(resilience4jConfig.getCircuitBreaker(), decoratedSupplier);
+        }
+        
+        return decoratedSupplier.get();
     }
 
     private HttpEntity getMultipartFileEntity(final AbstractFileRequest abstractFileRequest) {

@@ -13,6 +13,8 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
     private Executor executor = ForkJoinPool.commonPool();
     private TransportConfiguration transportConfiguration;
     private Boolean recordTelemetry = true;
+    private Boolean synchronous = false;
+    private Resilience4jConfiguration resilience4jConfiguration;
 
     public AbstractCheckoutSdkBuilder<T> environment(final IEnvironment environment) {
         this.environment = environment;
@@ -55,6 +57,16 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
         return this;
     }
 
+    public AbstractCheckoutSdkBuilder<T> synchronous(final Boolean synchronous) {
+        this.synchronous = synchronous;
+        return this;
+    }
+
+    public AbstractCheckoutSdkBuilder<T> resilience4jConfiguration(final Resilience4jConfiguration resilience4jConfiguration) {
+        this.resilience4jConfiguration = resilience4jConfiguration;
+        return this;
+    }
+
     protected abstract SdkCredentials getSdkCredentials();
 
     protected CheckoutConfiguration getCheckoutConfiguration() {
@@ -69,7 +81,7 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
     }
 
     private CheckoutConfiguration buildCheckoutConfiguration(final SdkCredentials sdkCredentials) {
-        return new DefaultCheckoutConfiguration(sdkCredentials, getEnvironment(), getEnvironmentSubdomain(), httpClientBuilder, executor, transportConfiguration, recordTelemetry);
+        return new DefaultCheckoutConfiguration(sdkCredentials, getEnvironment(), getEnvironmentSubdomain(), httpClientBuilder, executor, transportConfiguration, recordTelemetry, synchronous, resilience4jConfiguration);
     }
 
     public abstract T build();

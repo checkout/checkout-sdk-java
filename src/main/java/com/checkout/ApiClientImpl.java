@@ -225,4 +225,117 @@ public class ApiClientImpl implements ApiClient {
         return result;
     }
 
+    // Synchronous methods
+    @Override
+    public <T extends HttpMetadata> T get(final String path, final SdkAuthorization authorization, final Class<T> responseType) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(GET, path, authorization, null, null, responseType);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T get(final String path, final SdkAuthorization authorization, final Type responseType) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(GET, path, authorization, null, null, responseType);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T put(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(PUT, path, authorization, request, null, responseType);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T patch(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request, final String idempotencyKey) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(PATCH, path, authorization, request, idempotencyKey, responseType);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T patch(final String path, final SdkAuthorization authorization, final Type type, final Object request, final String idempotencyKey) {
+        validateParams(PATH, path, AUTHORIZATION, authorization, "type", type, "request", request);
+        return sendRequestSync(PATCH, path, authorization, request, idempotencyKey, type);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T post(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request, final String idempotencyKey) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(POST, path, authorization, request, idempotencyKey, responseType);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T post(final String path, final SdkAuthorization authorization, final Type responseType, final Object request, final String idempotencyKey) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(POST, path, authorization, request, idempotencyKey, responseType);
+    }
+
+    @Override
+    public EmptyResponse delete(final String path, final SdkAuthorization authorization) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(DELETE, path, authorization, null, null, EmptyResponse.class);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T delete(final String path, final SdkAuthorization authorization, final Class<T> responseType) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(DELETE, path, authorization, null, null, responseType);
+    }
+
+    @Override
+    public HttpMetadata post(final String path, final SdkAuthorization authorization, final Map<Integer, Class<? extends HttpMetadata>> resultTypeMappings, final Object request, final String idempotencyKey) {
+        validateParams(PATH, path, AUTHORIZATION, authorization, "resultTypeMappings", resultTypeMappings);
+        final Response response = transport.invokeSync(POST, path, authorization, serializer.toJson(request), idempotencyKey, null);
+        final Response checkedResponse = errorCheck(response);
+        final Class<? extends HttpMetadata> responseType = resultTypeMappings.get(checkedResponse.getStatusCode());
+        if (responseType == null) {
+            throw new IllegalStateException("The status code " + checkedResponse.getStatusCode() + " is not mapped to a result type");
+        }
+        return deserialize(checkedResponse, responseType);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T query(final String path,
+                                            final SdkAuthorization authorization,
+                                            final Object filter,
+                                            final Class<T> responseType) {
+        validateParams(PATH, path, AUTHORIZATION, authorization, "filter", filter);
+        final Map<String, String> params = serializer.fromJson(serializer.toJson(filter),
+                new TypeToken<Map<String, String>>() {
+                }.getType());
+        final Response response = transport.invokeSync(QUERY, path, authorization, null, null, params);
+        final Response checkedResponse = errorCheck(response);
+        return deserialize(checkedResponse, responseType);
+    }
+
+    @Override
+    public ContentResponse queryCsvContent(final String path,
+                                          final SdkAuthorization authorization,
+                                          final Object filter,
+                                          final String targetFile) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        Map<String, String> params = new HashMap<>();
+        if (filter != null) {
+            params = serializer.fromJson(serializer.toJson(filter),
+                    new TypeToken<Map<String, String>>() {
+                    }.getType());
+        }
+        final Response response = transport.invokeSync(QUERY, path, authorization, null, null, params);
+        final Response checkedResponse = errorCheck(response);
+        return transform(processAndGetContent(targetFile, checkedResponse), checkedResponse);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T submitFile(final String path, final SdkAuthorization authorization,
+                                                 final AbstractFileRequest request, final Class<T> responseType) {
+        validateParams(PATH, path, AUTHORIZATION, authorization, "fileRequest", request);
+        final Response response = transport.submitFileSync(path, authorization, request);
+        final Response checkedResponse = errorCheck(response);
+        return deserialize(checkedResponse, responseType);
+    }
+
+    private <T extends HttpMetadata> T sendRequestSync(final ClientOperation clientOperation, final String path, final SdkAuthorization authorization, final Object request, final String idempotencyKey, final Type responseType) {
+        final Response response = transport.invokeSync(clientOperation, path, authorization, request == null ? null : serializer.toJson(request), idempotencyKey, null);
+        final Response checkedResponse = errorCheck(response);
+        return deserialize(checkedResponse, responseType);
+    }
+
 }
