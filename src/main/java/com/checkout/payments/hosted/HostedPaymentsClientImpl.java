@@ -19,13 +19,36 @@ public class HostedPaymentsClientImpl extends AbstractClient implements HostedPa
 
     @Override
     public CompletableFuture<HostedPaymentResponse> createHostedPaymentsPageSession(final HostedPaymentRequest hostedPaymentRequest) {
-        validateParams("hostedPaymentRequest", hostedPaymentRequest);
+        prepareCreateHostedPaymentsPageSession(hostedPaymentRequest);
         return apiClient.postAsync(HOSTED_PAYMENTS_PATH, sdkAuthorization(), HostedPaymentResponse.class, hostedPaymentRequest, null);
     }
 
     @Override
     public CompletableFuture<HostedPaymentDetailsResponse> getHostedPaymentsPageDetails(final String hostedPaymentId) {
+        final String path = prepareGetHostedPaymentsPageDetails(hostedPaymentId);
+        return apiClient.getAsync(path, sdkAuthorization(), HostedPaymentDetailsResponse.class);
+    }
+
+    // Synchronous methods
+    @Override
+    public HostedPaymentResponse createHostedPaymentsPageSessionSync(final HostedPaymentRequest hostedPaymentRequest) {
+        prepareCreateHostedPaymentsPageSession(hostedPaymentRequest);
+        return apiClient.post(HOSTED_PAYMENTS_PATH, sdkAuthorization(), HostedPaymentResponse.class, hostedPaymentRequest, null);
+    }
+
+    @Override
+    public HostedPaymentDetailsResponse getHostedPaymentsPageDetailsSync(final String hostedPaymentId) {
+        final String path = prepareGetHostedPaymentsPageDetails(hostedPaymentId);
+        return apiClient.get(path, sdkAuthorization(), HostedPaymentDetailsResponse.class);
+    }
+
+    // Common methods
+    protected void prepareCreateHostedPaymentsPageSession(final HostedPaymentRequest hostedPaymentRequest) {
+        validateParams("hostedPaymentRequest", hostedPaymentRequest);
+    }
+
+    protected String prepareGetHostedPaymentsPageDetails(final String hostedPaymentId) {
         validateParams("hostedPayment", hostedPaymentId);
-        return apiClient.getAsync(buildPath(HOSTED_PAYMENTS_PATH, hostedPaymentId), sdkAuthorization(), HostedPaymentDetailsResponse.class);
+        return buildPath(HOSTED_PAYMENTS_PATH, hostedPaymentId);
     }
 }
