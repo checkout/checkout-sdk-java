@@ -4,3 +4,4 @@ build/
 bin/
 lombok.config
 .DS_Store
+.vscode/
