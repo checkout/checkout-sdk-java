@@ -19,13 +19,36 @@ public class PaymentContextsClientImpl extends AbstractClient implements Payment
 
     @Override
     public CompletableFuture<PaymentContextsRequestResponse> requestPaymentContexts(final PaymentContextsRequest paymentContextsRequest) {
-        validateParams("paymentContextsRequest", paymentContextsRequest);
+        prepareRequestPaymentContexts(paymentContextsRequest);
         return apiClient.postAsync(PAYMENT_CONTEXTS_PATH, sdkAuthorization(), PaymentContextsRequestResponse.class, paymentContextsRequest, null);
     }
 
     @Override
     public CompletableFuture<PaymentContextDetailsResponse> getPaymentContextDetails(final String paymentContextId) {
+        final String path = prepareGetPaymentContextDetails(paymentContextId);
+        return apiClient.getAsync(path, sdkAuthorization(), PaymentContextDetailsResponse.class);
+    }
+
+    // Synchronous methods
+    @Override
+    public PaymentContextsRequestResponse requestPaymentContextsSync(final PaymentContextsRequest paymentContextsRequest) {
+        prepareRequestPaymentContexts(paymentContextsRequest);
+        return apiClient.post(PAYMENT_CONTEXTS_PATH, sdkAuthorization(), PaymentContextsRequestResponse.class, paymentContextsRequest, null);
+    }
+
+    @Override
+    public PaymentContextDetailsResponse getPaymentContextDetailsSync(final String paymentContextId) {
+        final String path = prepareGetPaymentContextDetails(paymentContextId);
+        return apiClient.get(path, sdkAuthorization(), PaymentContextDetailsResponse.class);
+    }
+
+    // Common methods
+    protected void prepareRequestPaymentContexts(final PaymentContextsRequest paymentContextsRequest) {
+        validateParams("paymentContextsRequest", paymentContextsRequest);
+    }
+
+    protected String prepareGetPaymentContextDetails(final String paymentContextId) {
         validateParams("paymentContextId", paymentContextId);
-        return apiClient.getAsync(buildPath(PAYMENT_CONTEXTS_PATH, paymentContextId), sdkAuthorization(), PaymentContextDetailsResponse.class);
+        return buildPath(PAYMENT_CONTEXTS_PATH, paymentContextId);
     }
 }
