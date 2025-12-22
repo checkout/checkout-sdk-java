@@ -15,4 +15,13 @@ public interface CustomersClient {
 
     CompletableFuture<EmptyResponse> delete(String customerId);
 
+    // Synchronous methods
+    CustomerResponse getSync(String customerId);
+
+    IdResponse createSync(CustomerRequest customerRequest);
+
+    EmptyResponse updateSync(String customerId, CustomerRequest customerRequest);
+
+    EmptyResponse deleteSync(String customerId);
+
 }
