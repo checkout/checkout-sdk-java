@@ -45,8 +45,6 @@ class TokensClientImplTest {
 
     @BeforeEach
     void setUp() {
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.PUBLIC_KEY)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
         client = new TokensClientImpl(apiClient, configuration);
     }
 
@@ -89,6 +87,7 @@ class TokensClientImplTest {
         final CardTokenRequest request = createMockCardTokenRequest();
         final CardTokenResponse expectedResponse = mock(CardTokenResponse.class);
 
+        setUpAuthorizationMocks();
         when(apiClient.postAsync(eq("tokens"), eq(authorization), eq(CardTokenResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
@@ -99,10 +98,11 @@ class TokensClientImplTest {
     }
 
     @Test
-    void shouldRequestApplePayToken() throws ExecutionException, InterruptedException {
+    void shouldRequestApplePayToken() throws ExecutionException, InterruptedException {                
         final ApplePayTokenRequest request = createMockApplePayTokenRequest();
         final TokenResponse expectedResponse = mock(TokenResponse.class);
 
+        setUpAuthorizationMocks();
         when(apiClient.postAsync(eq("tokens"), eq(authorization), eq(TokenResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
@@ -117,6 +117,7 @@ class TokensClientImplTest {
         final GooglePayTokenRequest request = createMockGooglePayTokenRequest();
         final TokenResponse expectedResponse = mock(TokenResponse.class);
 
+        setUpAuthorizationMocks();
         when(apiClient.postAsync(eq("tokens"), eq(authorization), eq(TokenResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
@@ -132,6 +133,7 @@ class TokensClientImplTest {
         final CardTokenRequest request = createMockCardTokenRequest();
         final CardTokenResponse expectedResponse = mock(CardTokenResponse.class);
 
+        setUpAuthorizationMocks();
         when(apiClient.post(eq("tokens"), eq(authorization), eq(CardTokenResponse.class), eq(request), isNull()))
                 .thenReturn(expectedResponse);
 
@@ -145,6 +147,7 @@ class TokensClientImplTest {
         final ApplePayTokenRequest request = createMockApplePayTokenRequest();
         final TokenResponse expectedResponse = mock(TokenResponse.class);
 
+        setUpAuthorizationMocks();
         when(apiClient.post(eq("tokens"), eq(authorization), eq(TokenResponse.class), eq(request), isNull()))
                 .thenReturn(expectedResponse);
 
@@ -158,6 +161,7 @@ class TokensClientImplTest {
         final GooglePayTokenRequest request = createMockGooglePayTokenRequest();
         final TokenResponse expectedResponse = mock(TokenResponse.class);
 
+        setUpAuthorizationMocks();
         when(apiClient.post(eq("tokens"), eq(authorization), eq(TokenResponse.class), eq(request), isNull()))
                 .thenReturn(expectedResponse);
 
@@ -167,6 +171,11 @@ class TokensClientImplTest {
     }
 
     // Common methods
+    private void setUpAuthorizationMocks() {
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.PUBLIC_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+    }
+
     private CardTokenRequest createMockCardTokenRequest() {
         return CardTokenRequest.builder().number("123").expiryMonth(3).expiryYear(2030).build();
     }
