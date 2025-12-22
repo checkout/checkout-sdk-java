@@ -47,35 +47,6 @@ class PaymentContextsClientImplTest {
 
     @Test
     void shouldRequestPaymentContexts() throws ExecutionException, InterruptedException {
-        final PaymentContextsRequestResponse response = testRequestPaymentContextsAsync();
-        
-        assertNotNull(response);
-    }
-
-    @Test
-    void shouldGetAPaymentContext() throws ExecutionException, InterruptedException {
-        final PaymentContextDetailsResponse response = testGetPaymentContextDetailsAsync();
-        
-        assertNotNull(response);
-    }
-
-    // Synchronous methods
-    @Test
-    void shouldRequestPaymentContextsSync() {
-        final PaymentContextsRequestResponse response = testRequestPaymentContextsSync();
-        
-        assertNotNull(response);
-    }
-
-    @Test
-    void shouldGetAPaymentContextSync() {
-        final PaymentContextDetailsResponse response = testGetPaymentContextDetailsSync();
-        
-        assertNotNull(response);
-    }
-
-    // Common test logic methods
-    private PaymentContextsRequestResponse testRequestPaymentContextsAsync() throws ExecutionException, InterruptedException {
         final PaymentContextsRequest request = createMockPaymentContextsRequest();
         final PaymentContextsRequestResponse expectedResponse = mock(PaymentContextsRequestResponse.class);
 
@@ -86,25 +57,11 @@ class PaymentContextsClientImplTest {
         final CompletableFuture<PaymentContextsRequestResponse> future = client.requestPaymentContexts(request);
         final PaymentContextsRequestResponse actualResponse = future.get();
         
-        assertEquals(expectedResponse, actualResponse);
-        return actualResponse;
+        validateResponse(expectedResponse, actualResponse);
     }
 
-    private PaymentContextsRequestResponse testRequestPaymentContextsSync() {
-        final PaymentContextsRequest request = createMockPaymentContextsRequest();
-        final PaymentContextsRequestResponse expectedResponse = mock(PaymentContextsRequestResponse.class);
-
-        when(apiClient.post(eq("payment-contexts"), eq(authorization), eq(PaymentContextsRequestResponse.class),
-                eq(request), isNull()))
-                .thenReturn(expectedResponse);
-
-        final PaymentContextsRequestResponse actualResponse = client.requestPaymentContextsSync(request);
-        
-        assertEquals(expectedResponse, actualResponse);
-        return actualResponse;
-    }
-
-    private PaymentContextDetailsResponse testGetPaymentContextDetailsAsync() throws ExecutionException, InterruptedException {
+    @Test
+    void shouldGetAPaymentContext() throws ExecutionException, InterruptedException {
         final PaymentContextDetailsResponse expectedResponse = mock(PaymentContextDetailsResponse.class);
 
         when(apiClient.getAsync(
@@ -116,11 +73,26 @@ class PaymentContextsClientImplTest {
         final CompletableFuture<PaymentContextDetailsResponse> future = client.getPaymentContextDetails("payment_context_id");
         final PaymentContextDetailsResponse actualResponse = future.get();
         
-        assertEquals(expectedResponse, actualResponse);
-        return actualResponse;
+        validateResponse(expectedResponse, actualResponse);
     }
 
-    private PaymentContextDetailsResponse testGetPaymentContextDetailsSync() {
+    // Synchronous methods
+    @Test
+    void shouldRequestPaymentContextsSync() {
+        final PaymentContextsRequest request = createMockPaymentContextsRequest();
+        final PaymentContextsRequestResponse expectedResponse = mock(PaymentContextsRequestResponse.class);
+
+        when(apiClient.post(eq("payment-contexts"), eq(authorization), eq(PaymentContextsRequestResponse.class),
+                eq(request), isNull()))
+                .thenReturn(expectedResponse);
+
+        final PaymentContextsRequestResponse actualResponse = client.requestPaymentContextsSync(request);
+        
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldGetAPaymentContextSync() {
         final PaymentContextDetailsResponse expectedResponse = mock(PaymentContextDetailsResponse.class);
 
         when(apiClient.get(
@@ -131,12 +103,17 @@ class PaymentContextsClientImplTest {
 
         final PaymentContextDetailsResponse actualResponse = client.getPaymentContextDetailsSync("payment_context_id");
         
-        assertEquals(expectedResponse, actualResponse);
-        return actualResponse;
+        validateResponse(expectedResponse, actualResponse);
     }
 
+    // Common methods
     private PaymentContextsRequest createMockPaymentContextsRequest() {
         return mock(PaymentContextsRequest.class);
+    }
+
+    private <T> void validateResponse(T expectedResponse, T actualResponse) {
+        assertEquals(expectedResponse, actualResponse);
+        assertNotNull(actualResponse);
     }
 
 }

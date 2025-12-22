@@ -19,36 +19,41 @@ public class PaymentContextsClientImpl extends AbstractClient implements Payment
 
     @Override
     public CompletableFuture<PaymentContextsRequestResponse> requestPaymentContexts(final PaymentContextsRequest paymentContextsRequest) {
-        prepareRequestPaymentContexts(paymentContextsRequest);
+        validatePaymentContextsRequest(paymentContextsRequest);
         return apiClient.postAsync(PAYMENT_CONTEXTS_PATH, sdkAuthorization(), PaymentContextsRequestResponse.class, paymentContextsRequest, null);
     }
 
     @Override
     public CompletableFuture<PaymentContextDetailsResponse> getPaymentContextDetails(final String paymentContextId) {
-        final String path = prepareGetPaymentContextDetails(paymentContextId);
+        validatePaymentContextId(paymentContextId);
+        final String path = buildPaymentContextPath(paymentContextId);
         return apiClient.getAsync(path, sdkAuthorization(), PaymentContextDetailsResponse.class);
     }
 
     // Synchronous methods
     @Override
     public PaymentContextsRequestResponse requestPaymentContextsSync(final PaymentContextsRequest paymentContextsRequest) {
-        prepareRequestPaymentContexts(paymentContextsRequest);
+        validatePaymentContextsRequest(paymentContextsRequest);
         return apiClient.post(PAYMENT_CONTEXTS_PATH, sdkAuthorization(), PaymentContextsRequestResponse.class, paymentContextsRequest, null);
     }
 
     @Override
     public PaymentContextDetailsResponse getPaymentContextDetailsSync(final String paymentContextId) {
-        final String path = prepareGetPaymentContextDetails(paymentContextId);
+        validatePaymentContextId(paymentContextId);
+        final String path = buildPaymentContextPath(paymentContextId);
         return apiClient.get(path, sdkAuthorization(), PaymentContextDetailsResponse.class);
     }
 
     // Common methods
-    protected void prepareRequestPaymentContexts(final PaymentContextsRequest paymentContextsRequest) {
+    protected void validatePaymentContextsRequest(final PaymentContextsRequest paymentContextsRequest) {
         validateParams("paymentContextsRequest", paymentContextsRequest);
     }
 
-    protected String prepareGetPaymentContextDetails(final String paymentContextId) {
+    protected void validatePaymentContextId(final String paymentContextId) {
         validateParams("paymentContextId", paymentContextId);
+    }
+
+    protected String buildPaymentContextPath(final String paymentContextId) {
         return buildPath(PAYMENT_CONTEXTS_PATH, paymentContextId);
     }
 }

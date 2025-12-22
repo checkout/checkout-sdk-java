@@ -21,16 +21,31 @@ class TokensTestIT extends SandboxTestFixture {
 
     @Test
     void shouldRequestCardToken() {
-
         final CardTokenRequest request = CardTokenRequest.builder()
                 .number(TestCardSource.VISA.getNumber())
                 .expiryMonth(TestCardSource.VISA.getExpiryMonth())
                 .expiryYear(TestCardSource.VISA.getExpiryYear())
                 .build();
-
         final CardTokenResponse response = blocking(() -> checkoutApi.tokensClient().requestCardToken(request));
+        
+        validateCardTokenResponse(response);
+    }
 
+    // Synchronous test methods
+    @Test
+    void shouldRequestCardTokenSync() {
+        final CardTokenRequest request = CardTokenRequest.builder()
+                .number(TestCardSource.VISA.getNumber())
+                .expiryMonth(TestCardSource.VISA.getExpiryMonth())
+                .expiryYear(TestCardSource.VISA.getExpiryYear())
+                .build();
+        final CardTokenResponse response = checkoutApi.tokensClient().requestCardTokenSync(request);
+        
+        validateCardTokenResponse(response);
+    }
 
+    // Common validation methods
+    private void validateCardTokenResponse(CardTokenResponse response) {
         assertNotNull(response);
         assertEquals(TokenType.CARD, response.getType());
         assertTrue(response.getToken().startsWith("tok"));
@@ -48,7 +63,6 @@ class TokensTestIT extends SandboxTestFixture {
         //assertEquals(CountryCode.US, response.getIssuerCountry());
         //assertEquals("A", response.getProductId());
         //assertEquals("Visa Traditional", response.getProductType());
-
     }
 
 }
