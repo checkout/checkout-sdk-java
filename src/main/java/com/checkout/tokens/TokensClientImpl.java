@@ -19,7 +19,7 @@ public class TokensClientImpl extends AbstractClient implements TokensClient {
 
     @Override
     public CompletableFuture<CardTokenResponse> requestCardToken(final CardTokenRequest cardTokenRequest) {
-        validateCardTokenrequest(cardTokenRequest);
+        validateCardTokenRequest(cardTokenRequest);
         return apiClient.postAsync(TOKENS_PATH, sdkAuthorization(), CardTokenResponse.class, cardTokenRequest, null);
     }
 
@@ -32,7 +32,7 @@ public class TokensClientImpl extends AbstractClient implements TokensClient {
     // Synchronous methods
     @Override
     public CardTokenResponse requestCardTokenSync(final CardTokenRequest cardTokenRequest) {
-        validateCardTokenrequest(cardTokenRequest);
+        validateCardTokenRequest(cardTokenRequest);
         return apiClient.post(TOKENS_PATH, sdkAuthorization(), CardTokenResponse.class, cardTokenRequest, null);
     }
 
@@ -43,7 +43,7 @@ public class TokensClientImpl extends AbstractClient implements TokensClient {
     }
 
     // Common methods
-    protected void validateCardTokenrequest(final CardTokenRequest cardTokenRequest) {
+    protected void validateCardTokenRequest(final CardTokenRequest cardTokenRequest) {
         validateParams("cardTokenRequest", cardTokenRequest);
     }
 
