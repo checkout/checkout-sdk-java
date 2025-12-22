@@ -182,6 +182,17 @@ public abstract class SandboxTestFixture {
         }
     }
 
+    protected <T> void checkErrorItemSync(final Supplier<T> supplier, final String errorItem) {
+        try {
+            supplier.get();
+            fail();
+        } catch (final Exception exception) {
+            assertTrue(exception instanceof CheckoutApiException);
+            final List<String> error_codes = (List<String>) ((CheckoutApiException) exception).getErrorDetails().get("error_codes");
+            assertThat(error_codes, hasItem(errorItem));
+        }
+    }
+
     public static class DisputesQueryResponseHasItems extends BaseMatcher<DisputesQueryResponse> {
 
         @Override
