@@ -57,20 +57,17 @@ class RiskClientImplTest {
     @Test
     void shouldRequestPreAuthenticationRiskScan() throws ExecutionException, InterruptedException {
 
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
-
-        final PreAuthenticationAssessmentRequest request = mock(PreAuthenticationAssessmentRequest.class);
-        final PreAuthenticationAssessmentResponse response = mock(PreAuthenticationAssessmentResponse.class);
+        setupMockCredentials();
+        
+        final PreAuthenticationAssessmentRequest request = createPreAuthenticationRequest();
+        final PreAuthenticationAssessmentResponse response = createPreAuthenticationResponse();
 
         when(apiClient.postAsync(eq(PRE_AUTHENTICATION_PATH), eq(authorization), eq(PreAuthenticationAssessmentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<PreAuthenticationAssessmentResponse> preAuthenticationAssessmentResponse = riskClient.requestPreAuthenticationRiskScan(request);
 
-        assertNotNull(preAuthenticationAssessmentResponse.get());
-        assertEquals(response, preAuthenticationAssessmentResponse.get());
-
+        validatePreAuthenticationResponse(preAuthenticationAssessmentResponse.get(), response);
     }
 
     @Test
@@ -80,31 +77,26 @@ class RiskClientImplTest {
             riskClient.requestPreAuthenticationRiskScan(null);
             fail();
         } catch (final Exception e) {
-            assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("preAuthenticationAssessmentRequest cannot be null", e.getMessage());
+            validateArgumentException(e, "preAuthenticationAssessmentRequest cannot be null");
         }
 
         verifyNoInteractions(apiClient);
-
     }
 
     @Test
     void shouldRequestPreCaptureRiskScan() throws ExecutionException, InterruptedException {
 
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
-
-        final PreCaptureAssessmentRequest request = mock(PreCaptureAssessmentRequest.class);
-        final PreCaptureAssessmentResponse response = mock(PreCaptureAssessmentResponse.class);
+        setupMockCredentials();
+        
+        final PreCaptureAssessmentRequest request = createPreCaptureRequest();
+        final PreCaptureAssessmentResponse response = createPreCaptureResponse();
 
         when(apiClient.postAsync(eq(PRE_CAPTURE_PATH), eq(authorization), eq(PreCaptureAssessmentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<PreCaptureAssessmentResponse> responseCompletableFuture = riskClient.requestPreCaptureRiskScan(request);
 
-        assertNotNull(responseCompletableFuture.get());
-        assertEquals(response, responseCompletableFuture.get());
-
+        validatePreCaptureResponse(responseCompletableFuture.get(), response);
     }
 
     @Test
@@ -114,12 +106,106 @@ class RiskClientImplTest {
             riskClient.requestPreCaptureRiskScan(null);
             fail();
         } catch (final Exception e) {
-            assertTrue(e instanceof CheckoutArgumentException);
-            assertEquals("preCaptureAssessmentRequest cannot be null", e.getMessage());
+            validateArgumentException(e, "preCaptureAssessmentRequest cannot be null");
         }
 
         verifyNoInteractions(apiClient);
+    }
 
+    // Synchronous method tests
+    @Test
+    void shouldRequestPreAuthenticationRiskScanSync() {
+
+        setupMockCredentials();
+        
+        final PreAuthenticationAssessmentRequest request = createPreAuthenticationRequest();
+        final PreAuthenticationAssessmentResponse response = createPreAuthenticationResponse();
+
+        when(apiClient.post(eq(PRE_AUTHENTICATION_PATH), eq(authorization), eq(PreAuthenticationAssessmentResponse.class), eq(request), isNull()))
+                .thenReturn(response);
+
+        final PreAuthenticationAssessmentResponse preAuthenticationAssessmentResponse = riskClient.requestPreAuthenticationRiskScanSync(request);
+
+        validatePreAuthenticationResponse(preAuthenticationAssessmentResponse, response);
+    }
+
+    @Test
+    void preAuthenticationRiskScanSync_shouldThrowOnNullRequest() {
+
+        try {
+            riskClient.requestPreAuthenticationRiskScanSync(null);
+            fail();
+        } catch (final Exception e) {
+            validateArgumentException(e, "preAuthenticationAssessmentRequest cannot be null");
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldRequestPreCaptureRiskScanSync() {
+
+        setupMockCredentials();
+        
+        final PreCaptureAssessmentRequest request = createPreCaptureRequest();
+        final PreCaptureAssessmentResponse response = createPreCaptureResponse();
+
+        when(apiClient.post(eq(PRE_CAPTURE_PATH), eq(authorization), eq(PreCaptureAssessmentResponse.class), eq(request), isNull()))
+                .thenReturn(response);
+
+        final PreCaptureAssessmentResponse responseResult = riskClient.requestPreCaptureRiskScanSync(request);
+
+        validatePreCaptureResponse(responseResult, response);
+    }
+
+    @Test
+    void preCaptureRiskScanSync_shouldThrowOnNullRequest() {
+
+        try {
+            riskClient.requestPreCaptureRiskScanSync(null);
+            fail();
+        } catch (final Exception e) {
+            validateArgumentException(e, "preCaptureAssessmentRequest cannot be null");
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    // Common methods
+    private void setupMockCredentials() {
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+    }
+
+    private PreAuthenticationAssessmentRequest createPreAuthenticationRequest() {
+        return mock(PreAuthenticationAssessmentRequest.class);
+    }
+
+    private PreAuthenticationAssessmentResponse createPreAuthenticationResponse() {
+        return mock(PreAuthenticationAssessmentResponse.class);
+    }
+
+    private PreCaptureAssessmentRequest createPreCaptureRequest() {
+        return mock(PreCaptureAssessmentRequest.class);
+    }
+
+    private PreCaptureAssessmentResponse createPreCaptureResponse() {
+        return mock(PreCaptureAssessmentResponse.class);
+    }
+
+    private void validatePreAuthenticationResponse(PreAuthenticationAssessmentResponse actual, PreAuthenticationAssessmentResponse expected) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    private void validatePreCaptureResponse(PreCaptureAssessmentResponse actual, PreCaptureAssessmentResponse expected) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    private void validateArgumentException(Exception exception, String expectedMessage) {
+        assertTrue(exception instanceof CheckoutArgumentException);
+        assertEquals(expectedMessage, exception.getMessage());
     }
 
 }
