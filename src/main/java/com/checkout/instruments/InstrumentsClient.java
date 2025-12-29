@@ -24,4 +24,15 @@ public interface InstrumentsClient {
     CompletableFuture<EmptyResponse> delete(String instrumentId);
 
     CompletableFuture<BankAccountFieldResponse> getBankAccountFieldFormatting(CountryCode country, Currency currency, BankAccountFieldQuery query);
+
+    // Synchronous methods
+    <T extends CreateInstrumentResponse> T createSync(CreateInstrumentRequest createInstrumentRequest);
+
+    GetInstrumentResponse getSync(String instrumentId);
+
+    <T extends UpdateInstrumentResponse> T updateSync(String instrumentId, UpdateInstrumentRequest updateInstrumentRequest);
+
+    EmptyResponse deleteSync(String instrumentId);
+
+    BankAccountFieldResponse getBankAccountFieldFormattingSync(CountryCode country, Currency currency, BankAccountFieldQuery query);
 }

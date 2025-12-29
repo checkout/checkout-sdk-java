@@ -70,73 +70,154 @@ class InstrumentsClientImplTest {
 
     @Test
     void shouldCreateInstrument() throws ExecutionException, InterruptedException {
-
-        final CreateInstrumentBankAccountRequest request = Mockito.mock(CreateInstrumentBankAccountRequest.class);
-        final CreateInstrumentBankAccountResponse response = Mockito.mock(CreateInstrumentBankAccountResponse.class);
+        final CreateInstrumentBankAccountRequest request = createMockBankAccountRequest();
+        final CreateInstrumentBankAccountResponse expectedResponse = Mockito.mock(CreateInstrumentBankAccountResponse.class);
 
         when(apiClient.postAsync(eq(INSTRUMENTS), any(SdkAuthorization.class), eq(CREATE_TYPE), eq(request), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(response));
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<CreateInstrumentBankAccountResponse> future = instrumentsClient.create(request);
+        final CreateInstrumentBankAccountResponse actualResponse = future.get();
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
-
+        validateResponse(expectedResponse, actualResponse);
     }
 
     @Test
     void shouldGetInstrument() throws ExecutionException, InterruptedException {
-
-        final GetInstrumentResponse response = Mockito.mock(GetBankAccountInstrumentResponse.class);
+        final GetInstrumentResponse expectedResponse = Mockito.mock(GetBankAccountInstrumentResponse.class);
 
         when(apiClient.getAsync(eq(INSTRUMENTS + "/" + "123"), any(SdkAuthorization.class), eq(GET_TYPE)))
-                .thenReturn(CompletableFuture.completedFuture(response));
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<GetInstrumentResponse> future = instrumentsClient.get("123");
+        final GetInstrumentResponse actualResponse = future.get();
 
-        assertNotNull(future.get());
-
+        validateResponse(expectedResponse, actualResponse);
     }
 
     @Test
     void shouldUpdateInstrument() throws ExecutionException, InterruptedException {
-
-        final UpdateInstrumentCardRequest request = Mockito.mock(UpdateInstrumentCardRequest.class);
-        final UpdateInstrumentCardResponse response = Mockito.mock(UpdateInstrumentCardResponse.class);
+        final UpdateInstrumentCardRequest request = createMockUpdateCardRequest();
+        final UpdateInstrumentCardResponse expectedResponse = Mockito.mock(UpdateInstrumentCardResponse.class);
 
         when(apiClient.patchAsync(eq(INSTRUMENTS + "/" + "123"), any(SdkAuthorization.class), eq(UPDATE_TYPE), eq(request), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(response));
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<UpdateInstrumentCardResponse> future = instrumentsClient.update("123", request);
+        final UpdateInstrumentCardResponse actualResponse = future.get();
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
-
+        validateResponse(expectedResponse, actualResponse);
     }
 
     @Test
     void shouldDeleteInstrument() throws ExecutionException, InterruptedException {
-
-        final EmptyResponse response = Mockito.mock(EmptyResponse.class);
+        final EmptyResponse expectedResponse = Mockito.mock(EmptyResponse.class);
 
         when(apiClient.deleteAsync(eq(INSTRUMENTS + "/" + "123"), any(SdkAuthorization.class)))
-                .thenReturn(CompletableFuture.completedFuture(response));
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<EmptyResponse> future = instrumentsClient.delete("123");
+        final EmptyResponse actualResponse = future.get();
 
-        assertNotNull(future.get());
-
+        validateResponse(expectedResponse, actualResponse);
     }
 
     @Test
     void shouldGetBankAccountFieldFormatting() throws ExecutionException, InterruptedException {
         when(sdkCredentials.getAuthorization(SdkAuthorizationType.OAUTH)).thenReturn(authorization);
-        when(apiClient.queryAsync(eq("validation/bank-accounts/GB/GBP"), any(SdkAuthorization.class), any(BankAccountFieldQuery.class), eq(BankAccountFieldResponse.class)))
-                .thenReturn(CompletableFuture.completedFuture(new BankAccountFieldResponse()));
+        final BankAccountFieldResponse expectedResponse = new BankAccountFieldResponse();
+        final BankAccountFieldQuery query = createMockBankAccountFieldQuery();
+        
+        when(apiClient.queryAsync(eq("validation/bank-accounts/GB/GBP"), any(SdkAuthorization.class), eq(query), eq(BankAccountFieldResponse.class)))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
-        final CompletableFuture<BankAccountFieldResponse> response = instrumentsClient.getBankAccountFieldFormatting(CountryCode.GB, Currency.GBP, BankAccountFieldQuery.builder().build());
+        final CompletableFuture<BankAccountFieldResponse> future = instrumentsClient.getBankAccountFieldFormatting(CountryCode.GB, Currency.GBP, query);
+        final BankAccountFieldResponse actualResponse = future.get();
 
-        assertNotNull(response.get());
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    // Synchronous methods
+    @Test
+    void shouldCreateInstrumentSync() {
+        final CreateInstrumentBankAccountRequest request = createMockBankAccountRequest();
+        final CreateInstrumentBankAccountResponse expectedResponse = Mockito.mock(CreateInstrumentBankAccountResponse.class);
+
+        when(apiClient.post(eq(INSTRUMENTS), any(SdkAuthorization.class), eq(CREATE_TYPE), eq(request), isNull()))
+                .thenReturn(expectedResponse);
+
+        final CreateInstrumentBankAccountResponse actualResponse = instrumentsClient.createSync(request);
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldGetInstrumentSync() {
+        final GetInstrumentResponse expectedResponse = Mockito.mock(GetBankAccountInstrumentResponse.class);
+
+        when(apiClient.get(eq(INSTRUMENTS + "/" + "123"), any(SdkAuthorization.class), eq(GET_TYPE)))
+                .thenReturn(expectedResponse);
+
+        final GetInstrumentResponse actualResponse = instrumentsClient.getSync("123");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldUpdateInstrumentSync() {
+        final UpdateInstrumentCardRequest request = createMockUpdateCardRequest();
+        final UpdateInstrumentCardResponse expectedResponse = Mockito.mock(UpdateInstrumentCardResponse.class);
+
+        when(apiClient.patch(eq(INSTRUMENTS + "/" + "123"), any(SdkAuthorization.class), eq(UPDATE_TYPE), eq(request), isNull()))
+                .thenReturn(expectedResponse);
+
+        final UpdateInstrumentCardResponse actualResponse = instrumentsClient.updateSync("123", request);
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldDeleteInstrumentSync() {
+        final EmptyResponse expectedResponse = Mockito.mock(EmptyResponse.class);
+
+        when(apiClient.delete(eq(INSTRUMENTS + "/" + "123"), any(SdkAuthorization.class)))
+                .thenReturn(expectedResponse);
+
+        final EmptyResponse actualResponse = instrumentsClient.deleteSync("123");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldGetBankAccountFieldFormattingSync() {
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.OAUTH)).thenReturn(authorization);
+        final BankAccountFieldResponse expectedResponse = new BankAccountFieldResponse();
+        final BankAccountFieldQuery query = createMockBankAccountFieldQuery();
+        
+        when(apiClient.query(eq("validation/bank-accounts/GB/GBP"), any(SdkAuthorization.class), eq(query), eq(BankAccountFieldResponse.class)))
+                .thenReturn(expectedResponse);
+
+        final BankAccountFieldResponse actualResponse = instrumentsClient.getBankAccountFieldFormattingSync(CountryCode.GB, Currency.GBP, query);
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    // Common methods
+    private CreateInstrumentBankAccountRequest createMockBankAccountRequest() {
+        return Mockito.mock(CreateInstrumentBankAccountRequest.class);
+    }
+
+    private UpdateInstrumentCardRequest createMockUpdateCardRequest() {
+        return Mockito.mock(UpdateInstrumentCardRequest.class);
+    }
+
+    private BankAccountFieldQuery createMockBankAccountFieldQuery() {
+        return BankAccountFieldQuery.builder().build();
+    }
+
+    private <T> void validateResponse(T expectedResponse, T actualResponse) {
+        assertEquals(expectedResponse, actualResponse);
+        assertNotNull(actualResponse);
     }
 
 }
