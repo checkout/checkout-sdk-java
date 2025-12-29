@@ -7,4 +7,9 @@ public interface ForexClient {
     CompletableFuture<QuoteResponse> requestQuote(QuoteRequest quoteRequest);
 
     CompletableFuture<RatesQueryResponse> getRates(RatesQueryFilter ratesQuery);
+
+    // Synchronous methods
+    QuoteResponse requestQuoteSync(QuoteRequest quoteRequest);
+
+    RatesQueryResponse getRatesSync(RatesQueryFilter ratesQuery);
 }
