@@ -33,62 +33,41 @@ abstract class AbstractSessionsTestIT extends SandboxTestFixture {
                                                      final ChallengeIndicator challengeIndicator,
                                                      final TransactionType transactionType) {
 
-        final SessionRequest sessionRequest = SessionRequest.builder()
-                .source(SessionCardSource.builder()
-                        .email(TestHelper.generateRandomEmail())
-                        .expiryMonth(CardSourceHelper.Visa.EXPIRY_MONTH)
-                        .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
-                        .number(CardSourceHelper.Visa.NUMBER)
-                        .name("John Doe")
-                        .billingAddress(SessionAddress.builderSessionAddress()
-                                .addressLine1("Address Line 1")
-                                .addressLine2("Address Line 2")
-                                .addressLine3("Address Line 3")
-                                .city("City")
-                                .country(CountryCode.GB)
-                                .build())
-                        .homePhone(Phone.builder().number("0204567895").countryCode("234").build())
-                        .workPhone(Phone.builder().number("0204567895").countryCode("234").build())
-                        .mobilePhone(Phone.builder().number("0204567895").countryCode("234").build())
-                        .build())
-                .amount(6540L)
-                .currency(Currency.USD)
-                .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
-                .marketplace(SessionMarketplaceData.builder().subEntityId("ent_ocw5i74vowfg2edpy66izhts2u").build())
-                .authenticationType(AuthenticationType.REGULAR)
-                .authenticationCategory(authenticationCategory)
-                .challengeIndicator(challengeIndicator)
-                .billingDescriptor(SessionsBillingDescriptor.builder().name("SUPERHEROES.COM").build())
-                .reference("ORD-5023-4E89")
-                .transactionType(transactionType)
-                .shippingAddress(SessionAddress.builderSessionAddress()
-                        .addressLine1("Checkout.com")
-                        .addressLine2("ABC building")
-                        .addressLine3("14 Wells Mews")
-                        .city("London")
-                        .country(CountryCode.GB)
-                        .state("ENG")
-                        .zip("W1T 4TJ")
-                        .build())
-                .completion(NonHostedCompletionInfo.builder()
-                        .callbackUrl("https://merchant.com/callback")
-                        .build()
-                )
-                .channelData(channelData)
-                .build();
-
+        final SessionRequest sessionRequest = createNonHostedSessionRequest(channelData, authenticationCategory, challengeIndicator, transactionType);
         return blocking(() -> checkoutApi.sessionsClient().requestSession(sessionRequest));
-
     }
 
     protected SessionResponse createHostedSession() {
+        final SessionRequest sessionRequest = createHostedSessionRequest();
+        return blocking(() -> checkoutApi.sessionsClient().requestSession(sessionRequest));
+    }
 
-        final SessionRequest sessionRequest = SessionRequest.builder()
-                .source(SessionCardSource.builder()
-                        .expiryMonth(1)
-                        .expiryYear(2030)
-                        .number("4485040371536584")
-                        .build())
+    // Common methods
+    protected SessionRequest createNonHostedSessionRequest(final ChannelData channelData,
+                                                          final Category authenticationCategory,
+                                                          final ChallengeIndicator challengeIndicator,
+                                                          final TransactionType transactionType) {
+        return SessionRequest.builder()
+                .source(createSessionCardSource())
+                .amount(6540L)
+                .currency(Currency.USD)
+                .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
+                .marketplace(createSessionMarketplaceData())
+                .authenticationType(AuthenticationType.REGULAR)
+                .authenticationCategory(authenticationCategory)
+                .challengeIndicator(challengeIndicator)
+                .billingDescriptor(createSessionsBillingDescriptor())
+                .reference("ORD-5023-4E89")
+                .transactionType(transactionType)
+                .shippingAddress(createShippingAddress())
+                .completion(createNonHostedCompletionInfo())
+                .channelData(channelData)
+                .build();
+    }
+
+    protected SessionRequest createHostedSessionRequest() {
+        return SessionRequest.builder()
+                .source(createHostedSessionCardSource())
                 .amount(100L)
                 .currency(Currency.USD)
                 .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
@@ -97,22 +76,78 @@ abstract class AbstractSessionsTestIT extends SandboxTestFixture {
                 .challengeIndicator(ChallengeIndicator.NO_PREFERENCE)
                 .reference("ORD-5023-4E89")
                 .transactionType(TransactionType.GOODS_SERVICE)
-                .shippingAddress(SessionAddress.builderSessionAddress()
-                        .addressLine1("Checkout.com")
-                        .addressLine2("90 Tottenham Court Road")
-                        .city("London")
-                        .state("ENG")
-                        .country(CountryCode.GB)
-                        .zip("W1T 4TJ")
-                        .build())
-                .completion(HostedCompletionInfo.builder()
-                        .successUrl("http://example.com/sessions/success")
-                        .failureUrl("http://example.com/sessions/fail")
-                        .build())
+                .shippingAddress(createShippingAddress())
+                .completion(createHostedCompletionInfo())
                 .build();
+    }
 
-        return blocking(() -> checkoutApi.sessionsClient().requestSession(sessionRequest));
+    protected SessionCardSource createSessionCardSource() {
+        return SessionCardSource.builder()
+                .email(TestHelper.generateRandomEmail())
+                .expiryMonth(CardSourceHelper.Visa.EXPIRY_MONTH)
+                .expiryYear(CardSourceHelper.Visa.EXPIRY_YEAR)
+                .number(CardSourceHelper.Visa.NUMBER)
+                .name("John Doe")
+                .billingAddress(createBillingAddress())
+                .homePhone(createPhone())
+                .workPhone(createPhone())
+                .mobilePhone(createPhone())
+                .build();
+    }
 
+    protected SessionCardSource createHostedSessionCardSource() {
+        return SessionCardSource.builder()
+                .expiryMonth(1)
+                .expiryYear(2030)
+                .number("4485040371536584")
+                .build();
+    }
+
+    protected SessionAddress createBillingAddress() {
+        return SessionAddress.builderSessionAddress()
+                .addressLine1("Address Line 1")
+                .addressLine2("Address Line 2")
+                .addressLine3("Address Line 3")
+                .city("City")
+                .country(CountryCode.GB)
+                .build();
+    }
+
+    protected SessionAddress createShippingAddress() {
+        return SessionAddress.builderSessionAddress()
+                .addressLine1("Checkout.com")
+                .addressLine2("ABC building")
+                .addressLine3("14 Wells Mews")
+                .city("London")
+                .country(CountryCode.GB)
+                .state("ENG")
+                .zip("W1T 4TJ")
+                .build();
+    }
+
+    protected Phone createPhone() {
+        return Phone.builder().number("0204567895").countryCode("234").build();
+    }
+
+    protected SessionMarketplaceData createSessionMarketplaceData() {
+        return SessionMarketplaceData.builder().subEntityId("ent_ocw5i74vowfg2edpy66izhts2u").build();
+    }
+
+    protected SessionsBillingDescriptor createSessionsBillingDescriptor() {
+        return SessionsBillingDescriptor.builder().name("SUPERHEROES.COM").build();
+    }
+
+    protected NonHostedCompletionInfo createNonHostedCompletionInfo() {
+        return NonHostedCompletionInfo.builder()
+                .callbackUrl("https://merchant.com/callback")
+                .build();
+    }
+
+    protected HostedCompletionInfo createHostedCompletionInfo() {
+        return HostedCompletionInfo.builder()
+                .successUrl("http://example.com/sessions/success")
+                .failureUrl("http://example.com/sessions/fail")
+                .build();
     }
 
     protected static ChannelData browserSession() {
