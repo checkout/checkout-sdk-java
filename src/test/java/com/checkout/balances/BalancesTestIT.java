@@ -15,11 +15,33 @@ class BalancesTestIT extends SandboxTestFixture {
 
     @Test
     void shouldRetrieveEntityBalances() {
-        final BalancesQuery query = BalancesQuery.builder()
+        final BalancesQuery query = createBalancesQuery();
+
+        final BalancesResponse balancesResponse =
+                blocking(() -> checkoutApi.balancesClient().retrieveEntityBalances("ent_kidtcgc3ge5unf4a5i6enhnr5m", query));
+
+        validateBalancesResponse(balancesResponse);
+    }
+
+    // Synchronous test methods
+    @Test
+    void shouldRetrieveEntityBalancesSync() {
+        final BalancesQuery query = createBalancesQuery();
+
+        final BalancesResponse balancesResponse =
+                checkoutApi.balancesClient().retrieveEntityBalancesSync("ent_kidtcgc3ge5unf4a5i6enhnr5m", query);
+
+        validateBalancesResponse(balancesResponse);
+    }
+
+    // Common methods
+    private BalancesQuery createBalancesQuery() {
+        return BalancesQuery.builder()
                 .query("currency:" + Currency.GBP)
                 .build();
+    }
 
-        final BalancesResponse balancesResponse = blocking(() -> checkoutApi.balancesClient().retrieveEntityBalances("ent_kidtcgc3ge5unf4a5i6enhnr5m", query));
+    private void validateBalancesResponse(final BalancesResponse balancesResponse) {
         assertNotNull(balancesResponse);
         assertNotNull(balancesResponse.getData());
         for (final CurrencyAccountBalance balance : balancesResponse.getData()) {
@@ -28,5 +50,4 @@ class BalancesTestIT extends SandboxTestFixture {
             assertNotNull(balance.getBalances());
         }
     }
-
 }
