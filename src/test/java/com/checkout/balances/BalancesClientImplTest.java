@@ -52,16 +52,40 @@ class BalancesClientImplTest {
 
     @Test
     void shouldRetrieveEntityBalances() throws ExecutionException, InterruptedException {
+        final BalancesQuery query = createBalancesQuery();
+        final BalancesResponse expectedResponse = mock(BalancesResponse.class);
 
-        final BalancesResponse balancesResponse = mock(BalancesResponse.class);
-        when(apiClient.queryAsync(eq("balances/entity_id"), any(SdkAuthorization.class), any(BalancesQuery.class), eq(BalancesResponse.class)))
-                .thenReturn(CompletableFuture.completedFuture(balancesResponse));
+        when(apiClient.queryAsync(eq("balances/entity_id"), any(SdkAuthorization.class), eq(query), eq(BalancesResponse.class)))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
-        final CompletableFuture<BalancesResponse> future = balancesClient.retrieveEntityBalances("entity_id", BalancesQuery.builder().build());
+        final CompletableFuture<BalancesResponse> future = balancesClient.retrieveEntityBalances("entity_id", query);
 
-        assertNotNull(future.get());
-        assertEquals(balancesResponse, future.get());
+        final BalancesResponse actualResponse = future.get();
 
+        validateResponse(expectedResponse, actualResponse);
     }
 
+    // Synchronous methods
+    @Test
+    void shouldRetrieveEntityBalancesSync() {
+        final BalancesQuery query = createBalancesQuery();
+        final BalancesResponse expectedResponse = mock(BalancesResponse.class);
+
+        when(apiClient.query(eq("balances/entity_id"), any(SdkAuthorization.class), eq(query), eq(BalancesResponse.class)))
+                .thenReturn(expectedResponse);
+
+        final BalancesResponse actualResponse = balancesClient.retrieveEntityBalancesSync("entity_id", query);
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    // Common methods
+    private BalancesQuery createBalancesQuery() {
+        return BalancesQuery.builder().build();
+    }
+
+    private <T> void validateResponse(final T expectedResponse, final T actualResponse) {
+        assertEquals(expectedResponse, actualResponse);
+        assertNotNull(actualResponse);
+    }
 }
