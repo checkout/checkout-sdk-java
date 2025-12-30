@@ -2,6 +2,7 @@ package com.checkout.reports;
 
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
+import com.checkout.ContentResponse;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
@@ -47,28 +48,94 @@ class ReportsClientImplTest {
 
     @Test
     void shouldGetAllReports() throws ExecutionException, InterruptedException {
-        final ReportsQuery query = mock(ReportsQuery.class);
-        final ReportsResponse response = mock(ReportsResponse.class);
+        final ReportsQuery query = createReportsQuery();
+        final ReportsResponse expectedResponse = mock(ReportsResponse.class);
 
         when(apiClient.queryAsync(eq("reports"), any(SdkAuthorization.class), eq(query), eq(ReportsResponse.class)))
-                .thenReturn(CompletableFuture.completedFuture(response));
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<ReportsResponse> future = client.getAllReports(query);
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
+        final ReportsResponse actualResponse = future.get();
+
+        validateResponse(expectedResponse, actualResponse);
     }
 
     @Test
     void shouldGetReportDetails() throws ExecutionException, InterruptedException {
-        final ReportDetailsResponse response = mock(ReportDetailsResponse.class);
+        final ReportDetailsResponse expectedResponse = mock(ReportDetailsResponse.class);
 
         when(apiClient.getAsync(eq("reports/rpt_1234"), any(SdkAuthorization.class), eq(ReportDetailsResponse.class)))
-                .thenReturn(CompletableFuture.completedFuture(response));
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<ReportDetailsResponse> future = client.getReportDetails("rpt_1234");
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
+        final ReportDetailsResponse actualResponse = future.get();
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldGetReportFile() throws ExecutionException, InterruptedException {
+        final ContentResponse expectedResponse = mock(ContentResponse.class);
+
+        when(apiClient.queryCsvContentAsync(eq("reports/rpt_1234/files/file_1234"),
+                any(SdkAuthorization.class), eq(null), eq(null)))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<ContentResponse> future = client.getReportFile("rpt_1234", "file_1234");
+
+        final ContentResponse actualResponse = future.get();
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    // Synchronous methods
+    @Test
+    void shouldGetAllReportsSync() {
+        final ReportsQuery query = createReportsQuery();
+        final ReportsResponse expectedResponse = mock(ReportsResponse.class);
+
+        when(apiClient.query(eq("reports"), any(SdkAuthorization.class), eq(query), eq(ReportsResponse.class)))
+                .thenReturn(expectedResponse);
+
+        final ReportsResponse actualResponse = client.getAllReportsSync(query);
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldGetReportDetailsSync() {
+        final ReportDetailsResponse expectedResponse = mock(ReportDetailsResponse.class);
+
+        when(apiClient.get(eq("reports/rpt_1234"), any(SdkAuthorization.class), eq(ReportDetailsResponse.class)))
+                .thenReturn(expectedResponse);
+
+        final ReportDetailsResponse actualResponse = client.getReportDetailsSync("rpt_1234");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldGetReportFileSync() {
+        final ContentResponse expectedResponse = mock(ContentResponse.class);
+
+        when(apiClient.queryCsvContent(eq("reports/rpt_1234/files/file_1234"),
+                any(SdkAuthorization.class), eq(null), eq(null)))
+                .thenReturn(expectedResponse);
+
+        final ContentResponse actualResponse = client.getReportFileSync("rpt_1234", "file_1234");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    // Common methods
+    private ReportsQuery createReportsQuery() {
+        return mock(ReportsQuery.class);
+    }
+
+    private <T> void validateResponse(final T expectedResponse, final T actualResponse) {
+        assertEquals(expectedResponse, actualResponse);
+        assertNotNull(actualResponse);
     }
 }
