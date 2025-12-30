@@ -21,8 +21,44 @@ class TransfersTestIT extends SandboxTestFixture {
 
     @Test
     void shouldInitiateTransferOfFunds_idempotently() {
+        final CreateTransferRequest transferRequest = createTransferRequest();
+        final String idempotencyKey = UUID.randomUUID().toString();
 
-        final CreateTransferRequest transferRequest = CreateTransferRequest.builder()
+        final CreateTransferResponse response =
+                blocking(() -> checkoutApi.transfersClient().initiateTransferOfFunds(transferRequest, idempotencyKey));
+
+        validateInitialTransferResponse(response);
+
+        try {
+            checkoutApi.transfersClient().initiateTransferOfFunds(transferRequest, idempotencyKey).get();
+            fail("Should not get here!");
+        } catch (final InterruptedException | ExecutionException e) {
+            validateIdempotencyConflict(e.getCause());
+        }
+    }
+
+    // Synchronous test methods
+    @Test
+    void shouldInitiateTransferOfFundsSync_idempotently() {
+        final CreateTransferRequest transferRequest = createTransferRequest();
+        final String idempotencyKey = UUID.randomUUID().toString();
+
+        final CreateTransferResponse response =
+                checkoutApi.transfersClient().initiateTransferOfFundsSync(transferRequest, idempotencyKey);
+
+        validateInitialTransferResponse(response);
+
+        try {
+            checkoutApi.transfersClient().initiateTransferOfFundsSync(transferRequest, idempotencyKey);
+            fail("Should not get here!");
+        } catch (final CheckoutApiException e) {
+            validateIdempotencyConflict(e);
+        }
+    }
+
+    // Common methods
+    private CreateTransferRequest createTransferRequest() {
+        return CreateTransferRequest.builder()
                 .transferType(TransferType.COMMISSION)
                 .source(TransferSourceRequest.builder()
                         .id("ent_kidtcgc3ge5unf4a5i6enhnr5m")
@@ -32,21 +68,16 @@ class TransfersTestIT extends SandboxTestFixture {
                         .id("ent_w4jelhppmfiufdnatam37wrfc4")
                         .build())
                 .build();
-
-        final String idempotencyKey = UUID.randomUUID().toString();
-
-        final CreateTransferResponse response = blocking(() -> checkoutApi.transfersClient().initiateTransferOfFunds(transferRequest, idempotencyKey));
-        assertNotNull(response.getId());
-        assertEquals(TransferStatus.PENDING, response.getStatus());
-
-        try {
-            checkoutApi.transfersClient().initiateTransferOfFunds(transferRequest, idempotencyKey).get();
-            fail("Should not get here!");
-        } catch (final InterruptedException | ExecutionException e) {
-            assertTrue(e.getCause() instanceof CheckoutApiException);
-            final CheckoutApiException checkoutException = (CheckoutApiException) e.getCause();
-            assertEquals(409, checkoutException.getHttpStatusCode());
-        }
     }
 
+    private void validateInitialTransferResponse(final CreateTransferResponse response) {
+        assertNotNull(response.getId());
+        assertEquals(TransferStatus.PENDING, response.getStatus());
+    }
+
+    private void validateIdempotencyConflict(final Throwable throwable) {
+        assertTrue(throwable instanceof CheckoutApiException);
+        final CheckoutApiException checkoutException = (CheckoutApiException) throwable;
+        assertEquals(409, checkoutException.getHttpStatusCode());
+    }
 }
