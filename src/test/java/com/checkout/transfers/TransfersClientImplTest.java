@@ -51,35 +51,109 @@ class TransfersClientImplTest {
         this.transfersClient = new TransfersClientImpl(apiClient, checkoutConfiguration);
     }
 
-
     @Test
     void shouldInitiateTransferOfFunds() throws ExecutionException, InterruptedException {
+        final CreateTransferRequest request = createTransferRequest();
+        final CreateTransferResponse expectedResponse = mock(CreateTransferResponse.class);
 
-        final CreateTransferResponse response = mock(CreateTransferResponse.class);
+        when(apiClient.postAsync(eq("transfers"), eq(authorization), eq(CreateTransferResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
-        when(apiClient.postAsync(eq("transfers"), eq(authorization), eq(CreateTransferResponse.class), any(CreateTransferRequest.class), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(response));
+        final CompletableFuture<CreateTransferResponse> future = transfersClient.initiateTransferOfFunds(request);
 
-        final CompletableFuture<CreateTransferResponse> future = transfersClient.initiateTransferOfFunds(CreateTransferRequest.builder().build());
+        final CreateTransferResponse actualResponse = future.get();
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
+        validateCreateTransferResponse(expectedResponse, actualResponse);
+    }
 
+    @Test
+    void shouldInitiateTransferOfFundsWithIdempotencyKey() throws ExecutionException, InterruptedException {
+        final CreateTransferRequest request = createTransferRequest();
+        final String idempotencyKey = "idempotency_key";
+        final CreateTransferResponse expectedResponse = mock(CreateTransferResponse.class);
+
+        when(apiClient.postAsync(eq("transfers"), eq(authorization), eq(CreateTransferResponse.class), eq(request), eq(idempotencyKey)))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<CreateTransferResponse> future =
+                transfersClient.initiateTransferOfFunds(request, idempotencyKey);
+
+        final CreateTransferResponse actualResponse = future.get();
+
+        validateCreateTransferResponse(expectedResponse, actualResponse);
     }
 
     @Test
     void shouldRetrieveATransfer() throws ExecutionException, InterruptedException {
+        final String transferId = "transfer_id";
+        final TransferDetailsResponse expectedResponse = mock(TransferDetailsResponse.class);
 
-        final TransferDetailsResponse response = mock(TransferDetailsResponse.class);
+        when(apiClient.getAsync(eq("transfers/" + transferId), eq(authorization), eq(TransferDetailsResponse.class)))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
-        when(apiClient.getAsync("transfers/transfer_id", authorization, TransferDetailsResponse.class))
-                .thenReturn(CompletableFuture.completedFuture(response));
+        final CompletableFuture<TransferDetailsResponse> future = transfersClient.retrieveATransfer(transferId);
 
-        final CompletableFuture<TransferDetailsResponse> future = transfersClient.retrieveATransfer("transfer_id");
+        final TransferDetailsResponse actualResponse = future.get();
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
-
+        validateTransferDetailsResponse(expectedResponse, actualResponse);
     }
 
+    // Synchronous methods
+    @Test
+    void shouldInitiateTransferOfFundsSync() {
+        final CreateTransferRequest request = createTransferRequest();
+        final CreateTransferResponse expectedResponse = mock(CreateTransferResponse.class);
+
+        when(apiClient.post(eq("transfers"), eq(authorization), eq(CreateTransferResponse.class), eq(request), isNull()))
+                .thenReturn(expectedResponse);
+
+        final CreateTransferResponse actualResponse = transfersClient.initiateTransferOfFundsSync(request);
+
+        validateCreateTransferResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldInitiateTransferOfFundsWithIdempotencyKeySync() {
+        final CreateTransferRequest request = createTransferRequest();
+        final String idempotencyKey = "idempotency_key";
+        final CreateTransferResponse expectedResponse = mock(CreateTransferResponse.class);
+
+        when(apiClient.post(eq("transfers"), eq(authorization), eq(CreateTransferResponse.class), eq(request), eq(idempotencyKey)))
+                .thenReturn(expectedResponse);
+
+        final CreateTransferResponse actualResponse =
+                transfersClient.initiateTransferOfFundsSync(request, idempotencyKey);
+
+        validateCreateTransferResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldRetrieveATransferSync() {
+        final String transferId = "transfer_id";
+        final TransferDetailsResponse expectedResponse = mock(TransferDetailsResponse.class);
+
+        when(apiClient.get(eq("transfers/" + transferId), eq(authorization), eq(TransferDetailsResponse.class)))
+                .thenReturn(expectedResponse);
+
+        final TransferDetailsResponse actualResponse = transfersClient.retrieveATransferSync(transferId);
+
+        validateTransferDetailsResponse(expectedResponse, actualResponse);
+    }
+
+    // Common methods
+    private CreateTransferRequest createTransferRequest() {
+        return CreateTransferRequest.builder().build();
+    }
+
+    private void validateCreateTransferResponse(final CreateTransferResponse expectedResponse,
+                                                final CreateTransferResponse actualResponse) {
+        assertNotNull(actualResponse);
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    private void validateTransferDetailsResponse(final TransferDetailsResponse expectedResponse,
+                                                 final TransferDetailsResponse actualResponse) {
+        assertNotNull(actualResponse);
+        assertEquals(expectedResponse, actualResponse);
+    }
 }

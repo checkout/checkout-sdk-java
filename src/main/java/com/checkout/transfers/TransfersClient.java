@@ -14,4 +14,15 @@ public interface TransfersClient {
 
     CompletableFuture<TransferDetailsResponse> retrieveATransfer(String transferId);
 
+    // Synchronous methods
+    /**
+     * @deprecated Transfers of funds always requires idempotency key
+     */
+    @Deprecated
+    CreateTransferResponse initiateTransferOfFundsSync(CreateTransferRequest createTransferRequest);
+
+    CreateTransferResponse initiateTransferOfFundsSync(CreateTransferRequest createTransferRequest, String idempotencyKey);
+
+    TransferDetailsResponse retrieveATransferSync(String transferId);
+
 }
