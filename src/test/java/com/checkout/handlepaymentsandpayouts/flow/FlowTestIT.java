@@ -8,8 +8,19 @@ import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.Exemptio
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.IdentificationType;
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.PanPreferenceType;
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.PurposeType;
+import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.AmountAllocation;
+import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Billing;
+import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.BillingDescriptor;
+import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.CustomerRetry;
+import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Instruction;
+import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Item;
+import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.PaymentMethodConfiguration;
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.PaymentSessionRequest;
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.sender.IndividualSender;
+import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Processing;
+import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Risk;
+import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Shipping;
+import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.sender.InstrumentSender;
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.responses.PaymentSessionResponse;
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessionscomplete.requests.PaymentSessionWithPaymentRequest;
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessionscomplete.responses.PaymentSessionWithPaymentResponse;
@@ -18,8 +29,6 @@ import com.checkout.handlepaymentsandpayouts.flow.paymentsessionssubmit.response
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -32,27 +41,21 @@ class FlowTestIT extends SandboxTestFixture {
 
     @Test
     void shouldMakeAPaymentSessionsRequest() {
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Billing billing = createStandardBilling();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.BillingDescriptor billingDescriptor = createStandardBillingDescriptor();
-        //final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Customer customer = createStandardCustomer();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Shipping shipping = createStandardShipping();
-        //final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Recipient recipient = createStandardRecipient();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Processing processing = createStandardProcessing();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Instruction instruction = createStandardInstruction();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Billing billing = createBilling();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.BillingDescriptor billingDescriptor = createBillingDescriptor();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Shipping shipping = createShipping();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Processing processing = createProcessing();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Instruction instruction = createInstruction();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.PaymentMethodConfiguration paymentMethodConfiguration = createPaymentMethodConfiguration();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Item item = createItem();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.AmountAllocation amountAllocation = createAmountAllocation();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Risk risk = createRisk();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Threeds threeds = createThreeds();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.sender.InstrumentSender sender = createInstrumentSender();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.CustomerRetry customerRetry = createCustomerRetry();
 
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.PaymentMethodConfiguration paymentMethodConfiguration = com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.PaymentMethodConfiguration.builder().build();
-
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Item item = createStandardItem();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.AmountAllocation amountAllocation = createStandardAmountAllocation();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Risk risk = createStandardRisk();
-        final HashMap<String, Object> metadata = createStandardMetadata();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Threeds threeds = createStandardThreeds();
-
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.sender.InstrumentSender sender = com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.sender.InstrumentSender.builder()
-                .reference("8285282045818")
-                .build();
-
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.CustomerRetry customerRetry = createStandardCustomerRetry();
+        final HashMap<String, Object> metadata = new java.util.HashMap<>();
+        metadata.put("coupon_code", "NY2018");
 
         final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.PaymentSessionRequest request = com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.PaymentSessionRequest.builder()
                 .amount(1000L)
@@ -96,35 +99,79 @@ class FlowTestIT extends SandboxTestFixture {
 
         final PaymentSessionResponse response = blocking(() -> checkoutApi.flowClient().requestPaymentSession(request));
 
-        assertNotNull(response);
-        assertNotNull(response.getId());
-        assertNotNull(response.getPaymentSessionToken());
-        assertNotNull(response.getPaymentSessionSecret());
-        assertNotNull(response.getLinks());
+        validatePaymentSessionResponse(response);
     }
 
+    @Disabled("Use on demand")
     @Test
-    void shouldMakeAPaymentSessionsRequestWithIndividualSender() {
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Billing billing = createStandardBilling();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.BillingDescriptor billingDescriptor = createStandardBillingDescriptor();
-        //final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Customer customer = createStandardCustomer();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Shipping shipping = createStandardShipping();
-        //final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Recipient recipient = createStandardRecipient();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Processing processing = createStandardProcessing();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Instruction instruction = createStandardInstruction();
+    void shouldMakeAPaymentSessionWithPaymentRequest() {
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessionscomplete.requests.Billing billing = createBillingShort();
 
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.PaymentMethodConfiguration paymentMethodConfiguration = com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.PaymentMethodConfiguration.builder().build();
+        final PaymentSessionWithPaymentRequest request =
+                PaymentSessionWithPaymentRequest.builder()
+                        .sessionData("session_data_example")
+                        .amount(1000L)
+                        .currency(Currency.GBP)
+                        .reference("ORD-123A")
+                        .billing(billing)
+                        .successUrl("https://example.com/payments/success")
+                        .failureUrl("https://example.com/payments/failure")
+                        .build();
 
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Item item = createStandardItem();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.AmountAllocation amountAllocation = createStandardAmountAllocation();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Risk risk = createStandardRisk();
-        final HashMap<String, Object> metadata = createStandardMetadata();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Threeds threeds = createStandardThreeds();
+        final PaymentSessionWithPaymentResponse response =
+                blocking(() -> checkoutApi.flowClient().requestPaymentSessionWithPayment(request));
 
-        // Use IndividualSender with dateOfBirth instead of InstrumentSender
-        final IndividualSender sender = createIndividualSender();
+        validatePaymentSessionWithPaymentResponse(response);
+    }
 
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.CustomerRetry customerRetry = createStandardCustomerRetry();
+    @Disabled("Use on demand")
+    @Test
+    void shouldSubmitPaymentSession() {
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Billing billing = createBillingShort2();
+        final PaymentSessionRequest sessionRequest = PaymentSessionRequest.builder()
+                .amount(1000L)
+                .currency(Currency.GBP)
+                .reference("ORD-123A")
+                .billing(billing)
+                .successUrl("https://example.com/payments/success")
+                .failureUrl("https://example.com/payments/failure")
+                .build();
+
+        final PaymentSessionResponse sessionResponse = blocking(() -> checkoutApi.flowClient().requestPaymentSession(sessionRequest));
+        validatePaymentSessionResponseShort(sessionResponse);
+
+        final SubmitPaymentSessionRequest submitRequest =
+                SubmitPaymentSessionRequest.builder()
+                        .sessionData("session_data_example")
+                        .amount(1000L)
+                        .reference("ORD-123A")
+                        .ipAddress("90.197.169.245")
+                        .build();
+
+        final SubmitPaymentSessionResponse submitResponse =
+                blocking(() -> checkoutApi.flowClient().submitPaymentSessions(sessionResponse.getId(), submitRequest));
+
+        validateSubmitPaymentSessionResponse(submitResponse);
+    }
+
+    // Synchronous methods
+    @Test
+    void shouldMakeAPaymentSessionsRequestSync() {
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Billing billing = createBilling();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.BillingDescriptor billingDescriptor = createBillingDescriptor();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Shipping shipping = createShipping();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Processing processing = createProcessing();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Instruction instruction = createInstruction();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.PaymentMethodConfiguration paymentMethodConfiguration = createPaymentMethodConfiguration();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Item item = createItem();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.AmountAllocation amountAllocation = createAmountAllocation();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Risk risk = createRisk();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Threeds threeds = createThreeds();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.sender.InstrumentSender sender = createInstrumentSender();
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.CustomerRetry customerRetry = createCustomerRetry();
+
+        final HashMap<String, Object> metadata = new java.util.HashMap<>();
+        metadata.put("coupon_code", "NY2018");
 
         final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.PaymentSessionRequest request = com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.PaymentSessionRequest.builder()
                 .amount(1000L)
@@ -154,72 +201,119 @@ class FlowTestIT extends SandboxTestFixture {
                 .capture(true)
                 .captureOn(java.time.Instant.parse("2024-01-01T09:15:30Z"))
                 //.expiresOn(java.time.Instant.parse("2024-01-01T09:15:30Z"))
-                .enabledPaymentMethods(createEnabledPaymentMethods())
-                .disabledPaymentMethods(createDisabledPaymentMethods())
+                .enabledPaymentMethods(java.util.Arrays.asList(
+                        com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.EnabledPaymentMethodsType.CARD,
+                        com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.EnabledPaymentMethodsType.APPLEPAY,
+                        com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.EnabledPaymentMethodsType.GOOGLEPAY))
+                .disabledPaymentMethods(java.util.Arrays.asList(
+                        com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.DisabledPaymentMethodsType.EPS,
+                        com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.DisabledPaymentMethodsType.IDEAL,
+                        com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.DisabledPaymentMethodsType.KNET))
                 .customerRetry(customerRetry)
                 .ipAddress("90.197.169.245")
                 .build();
 
-        final PaymentSessionResponse response = blocking(() -> checkoutApi.flowClient().requestPaymentSession(request));
+        final PaymentSessionResponse response = checkoutApi.flowClient().requestPaymentSessionSync(request);
 
-        verifyPaymentSessionResponse(response);
+        validatePaymentSessionResponse(response);
     }
 
     @Disabled("Use on demand")
     @Test
-    void shouldSubmitPaymentSession() {
-        final PaymentSessionRequest sessionRequest = createBasicPaymentSessionRequest();
+    void shouldMakeAPaymentSessionWithPaymentRequestSync() {
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessionscomplete.requests.Billing billing = createBillingShort();
 
-        final PaymentSessionResponse sessionResponse = blocking(() -> checkoutApi.flowClient().requestPaymentSession(sessionRequest));
-        assertNotNull(sessionResponse);
-        assertNotNull(sessionResponse.getId());
+        final PaymentSessionWithPaymentRequest request =
+                PaymentSessionWithPaymentRequest.builder()
+                        .sessionData("session_data_example")
+                        .amount(1000L)
+                        .currency(Currency.GBP)
+                        .reference("ORD-123A")
+                        .billing(billing)
+                        .successUrl("https://example.com/payments/success")
+                        .failureUrl("https://example.com/payments/failure")
+                        .build();
 
-        final SubmitPaymentSessionRequest submitRequest = createStandardSubmitRequest();
+        final PaymentSessionWithPaymentResponse response = checkoutApi.flowClient().requestPaymentSessionWithPaymentSync(request);
+
+        validatePaymentSessionWithPaymentResponse(response);
+    }
+
+    @Disabled("Use on demand")
+    @Test
+    void shouldSubmitPaymentSessionSync() {
+        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Billing billing = createBillingShort2();
+        final PaymentSessionRequest sessionRequest = PaymentSessionRequest.builder()
+                .amount(1000L)
+                .currency(Currency.GBP)
+                .reference("ORD-123A")
+                .billing(billing)
+                .successUrl("https://example.com/payments/success")
+                .failureUrl("https://example.com/payments/failure")
+                .build();
+
+        final PaymentSessionResponse sessionResponse = checkoutApi.flowClient().requestPaymentSessionSync(sessionRequest);
+        validatePaymentSessionResponseShort(sessionResponse);
+
+        final SubmitPaymentSessionRequest submitRequest =
+                SubmitPaymentSessionRequest.builder()
+                        .sessionData("session_data_example")
+                        .amount(1000L)
+                        .reference("ORD-123A")
+                        .ipAddress("90.197.169.245")
+                        .build();
 
         final SubmitPaymentSessionResponse submitResponse =
-                blocking(() -> checkoutApi.flowClient().submitPaymentSessions(sessionResponse.getId(), submitRequest));
+                checkoutApi.flowClient().submitPaymentSessionsSync(sessionResponse.getId(), submitRequest);
 
-        verifySubmitPaymentSessionResponse(submitResponse);
+        validateSubmitPaymentSessionResponse(submitResponse);
     }
 
-    @Disabled("Use on demand")
-    @Test
-    void shouldMakeAPaymentSessionWithPaymentRequest() {
-        final PaymentSessionWithPaymentRequest request = createPaymentSessionWithPaymentRequest();
-
-        final PaymentSessionWithPaymentResponse response =
-                blocking(() -> checkoutApi.flowClient().requestPaymentSessionWithPayment(request));
-
-        verifyPaymentSessionWithPaymentResponse(response);
-    }
-
-    // common methods
-    private static com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Address createStandardAddress() {
-        return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Address.builder()
-                .addressLine1("123 High St.")
-                .addressLine2("Flat 456")
-                .city("London")
-                .state("str")
-                .zip("SW1A 1AA")
-                .country(CountryCode.GB)
-                .build();
-    }
-
-    private static com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Phone createStandardPhone() {
-        return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Phone.builder()
-                .countryCode("+1")
-                .number("415 555 2671")
-                .build();
-    }
-
-    private static com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Billing createStandardBilling() {
+    // Common methods
+    private Billing createBilling() {
         return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Billing.builder()
-                .address(createStandardAddress())
-                .phone(createStandardPhone())
+                .address(com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Address.builder()
+                        .addressLine1("123 High St.")
+                        .addressLine2("Flat 456")
+                        .city("London")
+                        .state("str")
+                        .zip("SW1A 1AA")
+                        .country(CountryCode.GB)
+                        .build())
+                .phone(com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Phone.builder()
+                        .countryCode("+1")
+                        .number("415 555 2671")
+                        .build())
                 .build();
     }
 
-    private static com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.BillingDescriptor createStandardBillingDescriptor() {
+    private com.checkout.handlepaymentsandpayouts.flow.paymentsessionscomplete.requests.Billing createBillingShort() {
+        return com.checkout.handlepaymentsandpayouts.flow.paymentsessionscomplete.requests.Billing.builder()
+                .address(com.checkout.handlepaymentsandpayouts.flow.paymentsessionscomplete.requests.Address.builder()
+                        .addressLine1("23 High St.")
+                        .addressLine2("Flat 456")
+                        .city("London")
+                        .state("str")
+                        .zip("SW1A 1AA")
+                        .country(CountryCode.GB)
+                        .build())
+                .build();
+    }
+
+    private com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Billing createBillingShort2() {
+        return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Billing.builder()
+                .address(com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Address.builder()
+                        .addressLine1("23 High St.")
+                        .addressLine2("Flat 456")
+                        .city("London")
+                        .state("str")
+                        .zip("SW1A 1AA")
+                        .country(CountryCode.GB)
+                        .build())
+                .build();
+    }
+
+    private BillingDescriptor createBillingDescriptor() {
         return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.BillingDescriptor.builder()
                 .name("string")
                 .city("string")
@@ -227,34 +321,24 @@ class FlowTestIT extends SandboxTestFixture {
                 .build();
     }
 
-    private static com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Customer createStandardCustomer() {
-        return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Customer.builder()
-                .email("jia.tsang@example.com")
-                .name("Jia Tsang")
-                .id("string")
-                .phone(createStandardPhone())
-                .taxNumber("string")
-                .build();
-    }
-
-    private static com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Shipping createStandardShipping() {
+    private Shipping createShipping() {
         return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Shipping.builder()
-                .address(createStandardAddress())
-                .phone(createStandardPhone())
+                .address(com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Address.builder()
+                        .addressLine1("123 High St.")
+                        .addressLine2("Flat 456")
+                        .city("London")
+                        .state("str")
+                        .zip("SW1A 1AA")
+                        .country(CountryCode.GB)
+                        .build())
+                .phone(com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Phone.builder()
+                        .countryCode("+1")
+                        .number("415 555 2671")
+                        .build())
                 .build();
     }
 
-    private static com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Recipient createStandardRecipient() {
-        return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Recipient.builder()
-                .dob(LocalDateTime.parse("1985-05-15T00:00:00").toInstant(ZoneOffset.UTC))
-                .accountNumber("5555554444")
-                .address(createStandardAddress())
-                .firstName("Jia")
-                .lastName("Tsang")
-                .build();
-    }
-
-    private static com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Processing createStandardProcessing() {
+    private Processing createProcessing() {
         return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Processing.builder()
                 .aft(true)
                 .discountAmount(0.0)
@@ -278,13 +362,17 @@ class FlowTestIT extends SandboxTestFixture {
                 .build();
     }
 
-    private static com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Instruction createStandardInstruction() {
+    private Instruction createInstruction() {
         return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Instruction.builder()
                 .purpose(PurposeType.DONATIONS)
                 .build();
     }
 
-    private static com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Item createStandardItem() {
+    private PaymentMethodConfiguration createPaymentMethodConfiguration() {
+        return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.PaymentMethodConfiguration.builder().build();
+    }
+
+    private Item createItem() {
         return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Item.builder()
                 .reference("string")
                 .commodityCode("string")
@@ -300,7 +388,7 @@ class FlowTestIT extends SandboxTestFixture {
                 .build();
     }
 
-    private static com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.AmountAllocation createStandardAmountAllocation() {
+    private AmountAllocation createAmountAllocation() {
         return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.AmountAllocation.builder()
                 .id("string")
                 .amount(1L)
@@ -312,13 +400,13 @@ class FlowTestIT extends SandboxTestFixture {
                 .build();
     }
 
-    private static com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Risk createStandardRisk() {
+    private Risk createRisk() {
         return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Risk.builder()
                 .enabled(false)
                 .build();
     }
 
-    private static com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Threeds createStandardThreeds() {
+    private com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Threeds createThreeds() {
         return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Threeds.builder()
                 .enabled(false)
                 .attemptN3d(false)
@@ -328,124 +416,30 @@ class FlowTestIT extends SandboxTestFixture {
                 .build();
     }
 
-    private static com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.CustomerRetry createStandardCustomerRetry() {
+    private InstrumentSender createInstrumentSender() {
+        return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.sender.InstrumentSender.builder()
+                .reference("8285282045818")
+                .build();
+    }
+    private CustomerRetry createCustomerRetry() {
         return com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.CustomerRetry.builder()
                 .maxAttempts(2L)
                 .build();
     }
 
-    private static IndividualSender createIndividualSender() {
-        return IndividualSender.builder()
-                .firstName("John")
-                .lastName("Doe")
-                .dateOfBirth("1990-05-15")
-                .address(com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Address.builder()
-                        .addressLine1("456 Elm Street")
-                        .addressLine2("Suite 200")
-                        .city("Boston")
-                        .state("MA")
-                        .zip("02101")
-                        .country(CountryCode.US)
-                        .build())
-                .identification(com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Identification.builder()
-                        .type(IdentificationType.DRIVING_LICENCE)
-                        .number("D123456789")
-                        .issuingCountry("US")
-                        .build())
-                .reference("SENDER-REF-001")
-                .build();
-    }
-
-    private static HashMap<String, Object> createStandardMetadata() {
-        final HashMap<String, Object> metadata = new HashMap<>();
-        metadata.put("coupon_code", "NY2018");
-        return metadata;
-    }
-
-    // Additional utility methods
-    private static com.checkout.handlepaymentsandpayouts.flow.paymentsessionscomplete.requests.Address createCompleteRequestAddress() {
-        return com.checkout.handlepaymentsandpayouts.flow.paymentsessionscomplete.requests.Address.builder()
-                .addressLine1("23 High St.")
-                .addressLine2("Flat 456")
-                .city("London")
-                .state("str")
-                .zip("SW1A 1AA")
-                .country(CountryCode.GB)
-                .build();
-    }
-
-    private static com.checkout.handlepaymentsandpayouts.flow.paymentsessionscomplete.requests.Billing createCompleteRequestBilling() {
-        return com.checkout.handlepaymentsandpayouts.flow.paymentsessionscomplete.requests.Billing.builder()
-                .address(createCompleteRequestAddress())
-                .build();
-    }
-
-    private static PaymentSessionRequest createBasicPaymentSessionRequest() {
-        return PaymentSessionRequest.builder()
-                .amount(1000L)
-                .currency(Currency.GBP)
-                .reference("ORD-123A")
-                .billing(createStandardBilling())
-                .successUrl("https://example.com/payments/success")
-                .failureUrl("https://example.com/payments/failure")
-                .build();
-    }
-
-    private static SubmitPaymentSessionRequest createStandardSubmitRequest() {
-        return SubmitPaymentSessionRequest.builder()
-                .sessionData("session_data_example")
-                .amount(1000L)
-                .reference("ORD-123A")
-                .ipAddress("90.197.169.245")
-                .build();
-    }
-
-    private static PaymentSessionWithPaymentRequest createPaymentSessionWithPaymentRequest() {
-        return PaymentSessionWithPaymentRequest.builder()
-                .sessionData("session_data_example")
-                .amount(1000L)
-                .currency(Currency.GBP)
-                .reference("ORD-123A")
-                .billing(createCompleteRequestBilling())
-                .successUrl("https://example.com/payments/success")
-                .failureUrl("https://example.com/payments/failure")
-                .build();
-    }
-
-    private static java.util.List<com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.EnabledPaymentMethodsType> createEnabledPaymentMethods() {
-        return java.util.Arrays.asList(
-                com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.EnabledPaymentMethodsType.CARD,
-                com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.EnabledPaymentMethodsType.APPLEPAY,
-                com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.EnabledPaymentMethodsType.GOOGLEPAY);
-    }
-
-    private static java.util.List<com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.DisabledPaymentMethodsType> createDisabledPaymentMethods() {
-        return java.util.Arrays.asList(
-                com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.DisabledPaymentMethodsType.EPS,
-                com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.DisabledPaymentMethodsType.IDEAL,
-                com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.DisabledPaymentMethodsType.KNET);
-    }
-
-    // Response assertion helpers
-    private void verifyPaymentSessionResponse(PaymentSessionResponse response) {
+    private void validatePaymentSessionResponseShort(final PaymentSessionResponse response) {
         assertNotNull(response);
         assertNotNull(response.getId());
+    }
+
+    private void validatePaymentSessionResponse(final PaymentSessionResponse response) {
+        validatePaymentSessionResponseShort(response);
         assertNotNull(response.getPaymentSessionToken());
         assertNotNull(response.getPaymentSessionSecret());
         assertNotNull(response.getLinks());
     }
 
-    private void verifySubmitPaymentSessionResponse(SubmitPaymentSessionResponse response) {
-        assertNotNull(response);
-        assertNotNull(response.getId());
-        assertNotNull(response.getStatus());
-        assertNotNull(response.getType());
-        if (response.getHttpStatusCode() == 202) {
-            assertNotNull(response.getAction());
-        }
-    }
-
-    private void verifyPaymentSessionWithPaymentResponse(PaymentSessionWithPaymentResponse response) {
+    private void validatePaymentSessionWithPaymentResponse(final PaymentSessionWithPaymentResponse response) {
         assertNotNull(response);
         assertNotNull(response.getId());
         assertNotNull(response.getStatus());
@@ -457,4 +451,13 @@ class FlowTestIT extends SandboxTestFixture {
         }
     }
 
+    private void validateSubmitPaymentSessionResponse(final SubmitPaymentSessionResponse submitResponse) {
+        assertNotNull(submitResponse);
+        assertNotNull(submitResponse.getId());
+        assertNotNull(submitResponse.getStatus());
+        assertNotNull(submitResponse.getType());
+        if (submitResponse.getHttpStatusCode() == 202) {
+            assertNotNull(submitResponse.getAction());
+        }
+    }
 }

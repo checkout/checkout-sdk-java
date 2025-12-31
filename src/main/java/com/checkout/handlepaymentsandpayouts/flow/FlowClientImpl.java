@@ -30,7 +30,7 @@ public class FlowClientImpl extends AbstractClient implements FlowClient {
             final PaymentSessionRequest paymentSessionRequest
     ) {
 
-        validateParams("paymentSessionRequest", paymentSessionRequest);
+        validatePaymentSessionRequest(paymentSessionRequest);
 
         return apiClient.postAsync(
                 PAYMENT_SESSIONS_PATH,
@@ -45,16 +45,16 @@ public class FlowClientImpl extends AbstractClient implements FlowClient {
     @Override
     public CompletableFuture<SubmitPaymentSessionResponse> submitPaymentSessions(
             final String paymentId,
-            final SubmitPaymentSessionRequest submitPaymentSessionsRequest
+            final SubmitPaymentSessionRequest submitPaymentSessionRequest
     ) {
 
-        validateParams("paymentId", paymentId,"submitPaymentSessionsRequest", submitPaymentSessionsRequest);
+        validateSubmitPaymentSessionRequest(paymentId, submitPaymentSessionRequest);
 
         return apiClient.postAsync(
                 buildPath(PAYMENT_SESSIONS_PATH, paymentId, SUBMIT_PATH),
                 sdkAuthorization(),
                 SubmitPaymentSessionResponse.class,
-                submitPaymentSessionsRequest,
+                submitPaymentSessionRequest,
                 null
         );
     }
@@ -64,7 +64,7 @@ public class FlowClientImpl extends AbstractClient implements FlowClient {
             final PaymentSessionWithPaymentRequest paymentSessionWithPaymentRequest
     ) {
 
-        validateParams("paymentSessionWithPaymentRequest", paymentSessionWithPaymentRequest);
+        validatePaymentSessionWithPaymentRequest(paymentSessionWithPaymentRequest);
 
         return apiClient.postAsync(
                 buildPath(PAYMENT_SESSIONS_PATH, COMPLETE_PATH),
@@ -76,4 +76,71 @@ public class FlowClientImpl extends AbstractClient implements FlowClient {
 
     }
 
+    // Synchronous methods
+    @Override
+    public PaymentSessionResponse requestPaymentSessionSync(
+            final PaymentSessionRequest paymentSessionRequest
+    ) {
+
+        validatePaymentSessionRequest(paymentSessionRequest);
+
+        return apiClient.post(
+                PAYMENT_SESSIONS_PATH,
+                sdkAuthorization(),
+                PaymentSessionResponse.class,
+                paymentSessionRequest,
+                null
+        );
+
+    }
+
+    @Override
+    public SubmitPaymentSessionResponse submitPaymentSessionsSync(
+            final String paymentId,
+            final SubmitPaymentSessionRequest submitPaymentSessionRequest
+    ) {
+
+        validateSubmitPaymentSessionRequest(paymentId, submitPaymentSessionRequest);
+
+        return apiClient.post(
+                buildPath(PAYMENT_SESSIONS_PATH, paymentId, SUBMIT_PATH),
+                sdkAuthorization(),
+                SubmitPaymentSessionResponse.class,
+                submitPaymentSessionRequest,
+                null
+        );
+    }
+
+    @Override
+    public PaymentSessionWithPaymentResponse requestPaymentSessionWithPaymentSync(
+            final PaymentSessionWithPaymentRequest paymentSessionWithPaymentRequest
+    ) {
+
+        validatePaymentSessionWithPaymentRequest(paymentSessionWithPaymentRequest);
+
+        return apiClient.post(
+                buildPath(PAYMENT_SESSIONS_PATH, COMPLETE_PATH),
+                sdkAuthorization(),
+                PaymentSessionWithPaymentResponse.class,
+                paymentSessionWithPaymentRequest,
+                null
+        );
+
+    }
+
+    // Common methods
+    void validatePaymentSessionRequest(final PaymentSessionRequest paymentSessionRequest)
+    {
+        validateParams("paymentSessionRequest", paymentSessionRequest);
+    }
+
+    void validateSubmitPaymentSessionRequest(final String paymentId, final SubmitPaymentSessionRequest submitPaymentSessionRequest)
+    {
+        validateParams("paymentId", paymentId,"submitPaymentSessionRequest", submitPaymentSessionRequest);
+    }
+
+    void validatePaymentSessionWithPaymentRequest(final PaymentSessionWithPaymentRequest paymentSessionWithPaymentRequest)
+    {
+        validateParams("paymentSessionWithPaymentRequest", paymentSessionWithPaymentRequest);
+    }
 }
