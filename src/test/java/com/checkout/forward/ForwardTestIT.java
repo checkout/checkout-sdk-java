@@ -31,13 +31,11 @@ public class ForwardTestIT extends SandboxTestFixture {
     @Test
     void shouldForwardAnApiRequest() {
 
-        final ForwardRequest request = getForwardRequest();
+        final ForwardRequest request = createForwardRequest();
 
         final ForwardAnApiResponse response = blocking(() -> checkoutApi.forwardClient().forwardAnApiRequest(request));
 
-        assertNotNull(response);
-        assertNotNull(response.getRequestId());
-        assertNotNull(response.getDestinationResponse());
+        validateForwardAnApiResponse(response);
 
     }
 
@@ -45,23 +43,44 @@ public class ForwardTestIT extends SandboxTestFixture {
     @Test
     void shouldGetForwardRequest() {
 
-        final ForwardRequest request = getForwardRequest();
+        final ForwardRequest request = createForwardRequest();
 
         final ForwardAnApiResponse forwardResponse = blocking(() -> checkoutApi.forwardClient().forwardAnApiRequest(request));
 
         final GetForwardResponse response = blocking(() -> checkoutApi.forwardClient().getForwardRequest(forwardResponse.getRequestId()));
 
-        assertNotNull(response);
-        assertNotNull(response.getRequestId());
-        assertNotNull(response.getEntityId());
-        assertNotNull(response.getDestinationRequest());
-        assertNotNull(response.getCreatedOn());
-        assertNotNull(response.getReference());
-        assertNotNull(response.getDestinationResponse());
+        validateGetForwardResponse(response);
 
     }
 
-    private static ForwardRequest getForwardRequest() {
+    // Sync methods
+    @Disabled("This test requires a valid id or Token source")
+    @Test
+    void shouldForwardAnApiRequestSync() {
+
+        final ForwardRequest request = createForwardRequest();
+
+        final ForwardAnApiResponse response = checkoutApi.forwardClient().forwardAnApiRequestSync(request);
+
+        validateForwardAnApiResponse(response);
+
+    }
+
+    @Disabled("This test requires a valid id or Token source")
+    @Test
+    void shouldGetForwardRequestSync() {
+
+        final ForwardRequest request = createForwardRequest();
+
+        final ForwardAnApiResponse forwardResponse = checkoutApi.forwardClient().forwardAnApiRequestSync(request);
+        final GetForwardResponse response = checkoutApi.forwardClient().getForwardRequestSync(forwardResponse.getRequestId());
+
+        validateGetForwardResponse(response);
+
+    }
+
+    // Common methods
+    private static ForwardRequest createForwardRequest() {
         final IdSource source = IdSource.builder()
                 .id("src_v5rgkf3gdtpuzjqesyxmyodnya")
                 .build();
@@ -104,4 +123,19 @@ public class ForwardTestIT extends SandboxTestFixture {
                 .build();
     }
 
+    private void validateForwardAnApiResponse(final ForwardAnApiResponse response) {
+        assertNotNull(response);
+        assertNotNull(response.getRequestId());
+        assertNotNull(response.getDestinationResponse());
+    }
+
+    private void validateGetForwardResponse(final GetForwardResponse response) {
+        assertNotNull(response);
+        assertNotNull(response.getRequestId());
+        assertNotNull(response.getEntityId());
+        assertNotNull(response.getDestinationRequest());
+        assertNotNull(response.getCreatedOn());
+        assertNotNull(response.getReference());
+        assertNotNull(response.getDestinationResponse());
+    }
 }

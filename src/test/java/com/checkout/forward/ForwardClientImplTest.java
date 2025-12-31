@@ -60,22 +60,60 @@ public class ForwardClientImplTest {
 
         final CompletableFuture<ForwardAnApiResponse> future = client.forwardAnApiRequest(request);
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
+        validateForwardAnApiResponse(response, future.get());
     }
 
     @Test
     void shouldGetForwardRequest() throws ExecutionException, InterruptedException {
         final String forwardId = "forward_id";
-        final GetForwardResponse response =mock(GetForwardResponse.class);
+        final GetForwardResponse response = mock(GetForwardResponse.class);
 
         when(apiClient.getAsync(eq("forward/" + forwardId), eq(authorization), eq(GetForwardResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<GetForwardResponse> future = client.getForwardRequest(forwardId);
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
+        validateForwardResponse(response, future.get());
+    }
+
+    // Synchronous methods
+    @Test
+    void shouldForwardAnApiRequestSync() throws ExecutionException, InterruptedException {
+
+        final ForwardRequest request = mock(ForwardRequest.class);
+        final ForwardAnApiResponse response = mock(ForwardAnApiResponse.class);
+
+        when(apiClient.post(eq("forward"), eq(authorization), eq(ForwardAnApiResponse.class),
+                eq(request), isNull()))
+                .thenReturn(response);
+
+        final ForwardAnApiResponse result = client.forwardAnApiRequestSync(request);
+
+        validateForwardAnApiResponse(response, result);
+    }
+
+    @Test
+    void shouldGetForwardRequestSync() throws ExecutionException, InterruptedException {
+        final String forwardId = "forward_id";
+        final GetForwardResponse response = mock(GetForwardResponse.class);
+
+        when(apiClient.get(eq("forward/" + forwardId), eq(authorization), eq(GetForwardResponse.class)))
+                .thenReturn(response);
+
+        final GetForwardResponse result = client.getForwardRequestSync(forwardId);
+
+        validateForwardResponse(response, result);
+    }
+
+    // Common methods
+    private void validateForwardAnApiResponse(final ForwardAnApiResponse response, final ForwardAnApiResponse result) {
+        assertNotNull(result);
+        assertEquals(response, result);
+    }
+
+    private void validateForwardResponse(final GetForwardResponse response, final GetForwardResponse result) {
+        assertNotNull(result);
+        assertEquals(response, result);
     }
 
 }
