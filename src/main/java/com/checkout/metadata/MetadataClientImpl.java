@@ -18,8 +18,19 @@ public class MetadataClientImpl extends AbstractClient implements MetadataClient
 
     @Override
     public CompletableFuture<CardMetadataResponse> requestCardMetadata(final CardMetadataRequest cardMetadataRequest) {
-        CheckoutUtils.validateParams("cardMetadataRequest", cardMetadataRequest);
+        validateCardMetadataRequest(cardMetadataRequest);
         return apiClient.postAsync("metadata/card", sdkAuthorization(), CardMetadataResponse.class, cardMetadataRequest, null);
     }
 
+    // Synchronous methods
+    @Override
+    public CardMetadataResponse requestCardMetadataSync(final CardMetadataRequest cardMetadataRequest) {
+        validateCardMetadataRequest(cardMetadataRequest);
+        return apiClient.post("metadata/card", sdkAuthorization(), CardMetadataResponse.class, cardMetadataRequest, null);
+    }
+
+    // Common methods
+    private void validateCardMetadataRequest(final CardMetadataRequest cardMetadataRequest) {
+        CheckoutUtils.validateParams("cardMetadataRequest", cardMetadataRequest);
+    }
 }
