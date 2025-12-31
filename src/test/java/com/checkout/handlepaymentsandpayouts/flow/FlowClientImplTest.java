@@ -54,8 +54,8 @@ class FlowClientImplTest {
     @Test
     void shouldRequestPaymentSessions() throws ExecutionException, InterruptedException {
 
-        final PaymentSessionRequest request = mock(PaymentSessionRequest.class);
-        final PaymentSessionResponse response = mock(PaymentSessionResponse.class);
+        final PaymentSessionRequest request = createPaymentSessionRequest();
+        final PaymentSessionResponse response = createPaymentSessionResponse();
 
         when(apiClient.postAsync(eq("payment-sessions"), eq(authorization), eq(PaymentSessionResponse.class),
                 eq(request), isNull()))
@@ -63,41 +63,117 @@ class FlowClientImplTest {
 
         final CompletableFuture<PaymentSessionResponse> future = client.requestPaymentSession(request);
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
-
+        validatePaymentSessionResponse(future.get(), response);
     }
 
     @Test
     void shouldSubmitPaymentSessions() throws ExecutionException, InterruptedException {
         final String paymentId = "pay_mbabizu24mvu3mela5njyhpit4";
-        final SubmitPaymentSessionRequest request = mock(SubmitPaymentSessionRequest.class);
-        final SubmitPaymentSessionResponse response = mock(SubmitPaymentSessionResponse.class);
+        final SubmitPaymentSessionRequest request = createSubmitPaymentSessionRequest();
+        final SubmitPaymentSessionResponse response = createSubmitPaymentSessionResponse();
 
         when(apiClient.postAsync(eq("payment-sessions/" + paymentId + "/submit"), eq(authorization), eq(SubmitPaymentSessionResponse.class),
                 eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<SubmitPaymentSessionResponse> future =
-                client.submitPaymentSessions(paymentId, request);
+        final CompletableFuture<SubmitPaymentSessionResponse> future = client.submitPaymentSessions(paymentId, request);
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
+        validateSubmitPaymentSessionResponse(future.get(), response);
     }
 
     @Test
     void shouldRequestPaymentSessionWithPayment() throws ExecutionException, InterruptedException {
-        final PaymentSessionWithPaymentRequest request = mock(PaymentSessionWithPaymentRequest.class);
-        final PaymentSessionWithPaymentResponse response = mock(PaymentSessionWithPaymentResponse.class);
+        final PaymentSessionWithPaymentRequest request = createPaymentSessionWithPaymentRequest();
+        final PaymentSessionWithPaymentResponse response = createPaymentSessionWithPaymentResponse();
 
         when(apiClient.postAsync(eq("payment-sessions/complete"), eq(authorization), eq(PaymentSessionWithPaymentResponse.class),
                 eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<PaymentSessionWithPaymentResponse> future =
-                client.requestPaymentSessionWithPayment(request);
+        final CompletableFuture<PaymentSessionWithPaymentResponse> future = client.requestPaymentSessionWithPayment(request);
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
+        validatePaymentSessionWithPaymentResponse(future.get(), response);
+    }
+
+    // Synchronous methods
+    @Test
+    void shouldRequestPaymentSessionsSync() throws ExecutionException, InterruptedException {
+
+        final PaymentSessionRequest request = createPaymentSessionRequest();
+        final PaymentSessionResponse response = createPaymentSessionResponse();
+
+        when(apiClient.post(eq("payment-sessions"), eq(authorization), eq(PaymentSessionResponse.class),
+                eq(request), isNull()))
+                .thenReturn(response);
+
+        PaymentSessionResponse result = client.requestPaymentSessionSync(request);
+
+        validatePaymentSessionResponse(result, response);
+
+    }
+
+    @Test
+    void shouldSubmitPaymentSessionsSync() throws ExecutionException, InterruptedException {
+        final String paymentId = "pay_mbabizu24mvu3mela5njyhpit4";
+        final SubmitPaymentSessionRequest request = createSubmitPaymentSessionRequest();
+        final SubmitPaymentSessionResponse response = createSubmitPaymentSessionResponse();
+
+        when(apiClient.post(eq("payment-sessions/" + paymentId + "/submit"), eq(authorization), eq(SubmitPaymentSessionResponse.class),
+                eq(request), isNull()))
+                .thenReturn(response);
+
+        final SubmitPaymentSessionResponse result = client.submitPaymentSessionsSync(paymentId, request);
+
+        validateSubmitPaymentSessionResponse(result, response);
+    }
+
+    @Test
+    void shouldRequestPaymentSessionWithPaymentSync() throws ExecutionException, InterruptedException {
+        final PaymentSessionWithPaymentRequest request = createPaymentSessionWithPaymentRequest();
+        final PaymentSessionWithPaymentResponse response = createPaymentSessionWithPaymentResponse();
+
+        when(apiClient.post(eq("payment-sessions/complete"), eq(authorization), eq(PaymentSessionWithPaymentResponse.class),
+                eq(request), isNull()))
+                .thenReturn(response);
+
+        final PaymentSessionWithPaymentResponse result = client.requestPaymentSessionWithPaymentSync(request);
+
+        validatePaymentSessionWithPaymentResponse(result, response);
+    }
+
+    // Common methods
+    private PaymentSessionRequest createPaymentSessionRequest() {
+        return mock(PaymentSessionRequest.class);
+    }
+
+    private PaymentSessionResponse createPaymentSessionResponse() {
+        return mock(PaymentSessionResponse.class);
+    }
+    private SubmitPaymentSessionRequest createSubmitPaymentSessionRequest() {
+        return mock(SubmitPaymentSessionRequest.class);
+    }
+    private SubmitPaymentSessionResponse createSubmitPaymentSessionResponse() {
+        return mock(SubmitPaymentSessionResponse.class);
+    }
+    private PaymentSessionWithPaymentRequest createPaymentSessionWithPaymentRequest() {
+        return mock(PaymentSessionWithPaymentRequest.class);
+    }
+    private PaymentSessionWithPaymentResponse createPaymentSessionWithPaymentResponse() {
+        return mock(PaymentSessionWithPaymentResponse.class);
+    }
+
+    private void validatePaymentSessionResponse(PaymentSessionResponse actual, PaymentSessionResponse expected) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    private void validateSubmitPaymentSessionResponse(SubmitPaymentSessionResponse actual, SubmitPaymentSessionResponse expected) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    private void validatePaymentSessionWithPaymentResponse(PaymentSessionWithPaymentResponse actual, PaymentSessionWithPaymentResponse expected) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
     }
 }
