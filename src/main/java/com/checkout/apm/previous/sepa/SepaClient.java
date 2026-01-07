@@ -12,4 +12,13 @@ public interface SepaClient {
 
     CompletableFuture<SepaResource> cancelMandateViaPPRO(String mandateId);
 
+    // Synchronous methods
+    MandateResponse getMandateSync(String mandateId);
+
+    SepaResource cancelMandateSync(String mandateId);
+
+    MandateResponse getMandateViaPPROSync(String mandateId);
+
+    SepaResource cancelMandateViaPPROSync(String mandateId);
+
 }
