@@ -64,7 +64,7 @@ class SourcesClientImplTest {
     @Test
     void shouldCreateSepaSource() throws ExecutionException, InterruptedException {
         final SepaSourceRequest request = createSepaSourceRequest();
-        final SepaSourceResponse expectedResponse = mock(SepaSourceResponse.class);
+        final SepaSourceResponse expectedResponse = createSepaSourceResponse();
 
         when(apiClient.postAsync(eq("sources"), eq(authorization), eq(SepaSourceResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(expectedResponse));
@@ -79,7 +79,7 @@ class SourcesClientImplTest {
     @Test
     void shouldCreateSepaSourceSync() {
         final SepaSourceRequest request = createSepaSourceRequest();
-        final SepaSourceResponse expectedResponse = mock(SepaSourceResponse.class);
+        final SepaSourceResponse expectedResponse = createSepaSourceResponse();
 
         when(apiClient.post(eq("sources"), eq(authorization), eq(SepaSourceResponse.class), eq(request), isNull()))
                 .thenReturn(expectedResponse);
@@ -94,6 +94,10 @@ class SourcesClientImplTest {
         return mock(SepaSourceRequest.class);
     }
 
+    private SepaSourceResponse createSepaSourceResponse() {
+        return mock(SepaSourceResponse.class);
+    }
+    
     private void validateResponse(final SepaSourceResponse expectedResponse, final SepaSourceResponse actualResponse) {
         assertEquals(expectedResponse, actualResponse);
         assertNotNull(actualResponse);
