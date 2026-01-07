@@ -1,18 +1,19 @@
 package com.checkout.sources.previous;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Phone;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Disabled("unavailable")
 class SourcesTestIT extends SandboxTestFixture {
@@ -27,14 +28,20 @@ class SourcesTestIT extends SandboxTestFixture {
         final SepaSourceRequest sourceRequest = createSepaSourceRequest();
         final SepaSourceResponse sourceResponse = previousApi.sourcesClient().createSepaSource(sourceRequest).get();
 
-        assertNotNull(sourceResponse);
-        assertFalse(StringUtils.isEmpty(sourceResponse.getId()));
-        assertEquals("10000", sourceResponse.getResponseCode());
-        assertNotNull(sourceResponse.getResponseData());
-        assertEquals(SourceType.SEPA, sourceResponse.getType());
-        assertTrue(sourceResponse.getResponseData().containsKey("mandate_reference"));
+        validateSepaSourceResponse(sourceResponse);
     }
 
+    // Synchronous methods
+    @Test
+    @Disabled("not available")
+    void shouldCreateSepaSourceSync() {
+        final SepaSourceRequest sourceRequest = createSepaSourceRequest();
+        final SepaSourceResponse sourceResponse = previousApi.sourcesClient().createSepaSourceSync(sourceRequest);
+
+        validateSepaSourceResponse(sourceResponse);
+    }
+
+    // Common methods
     private SepaSourceRequest createSepaSourceRequest() {
         final Address billingAddress = new Address();
         billingAddress.setAddressLine1("CheckoutSdk.com");
@@ -64,5 +71,14 @@ class SourcesTestIT extends SandboxTestFixture {
                 .build();
 
         return request;
+    }
+
+    private void validateSepaSourceResponse(final SepaSourceResponse sourceResponse) {
+        assertNotNull(sourceResponse);
+        assertFalse(StringUtils.isEmpty(sourceResponse.getId()));
+        assertEquals("10000", sourceResponse.getResponseCode());
+        assertNotNull(sourceResponse.getResponseData());
+        assertEquals(SourceType.SEPA, sourceResponse.getType());
+        assertTrue(sourceResponse.getResponseData().containsKey("mandate_reference"));
     }
 }
