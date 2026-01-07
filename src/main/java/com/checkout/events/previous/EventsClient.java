@@ -1,9 +1,9 @@
 package com.checkout.events.previous;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.checkout.EmptyResponse;
 import com.checkout.ItemsResponse;
-
-import java.util.concurrent.CompletableFuture;
 
 public interface EventsClient {
 
@@ -18,5 +18,18 @@ public interface EventsClient {
     CompletableFuture<EmptyResponse> retryWebhook(String eventId, String webhookId);
 
     CompletableFuture<EmptyResponse> retryAllWebhooks(String eventId);
+
+    // Synchronous methods
+    ItemsResponse<EventTypes> retrieveAllEventTypesSync(String version);
+
+    EventsPageResponse retrieveEventsSync(RetrieveEventsRequest retrieveEventsRequest);
+
+    EventResponse retrieveEventSync(String eventId);
+
+    EventNotificationResponse retrieveEventNotificationSync(String eventId, String notificationId);
+
+    EmptyResponse retryWebhookSync(String eventId, String webhookId);
+
+    EmptyResponse retryAllWebhooksSync(String eventId);
 
 }
