@@ -25,26 +25,68 @@ public class KlarnaClientImpl extends AbstractClient implements KlarnaClient {
 
     @Override
     public CompletableFuture<CreditSessionResponse> createCreditSession(final CreditSessionRequest creditSessionRequest) {
-        validateParams("creditSessionRequest", creditSessionRequest);
+        validateCreditSessionRequest(creditSessionRequest);
         return apiClient.postAsync(buildPath(getBaseURL(), CREDIT_SESSIONS), sdkAuthorization(), CreditSessionResponse.class, creditSessionRequest, null);
     }
 
     @Override
     public CompletableFuture<CreditSession> getCreditSession(final String sessionId) {
-        validateParams("sessionId", sessionId);
+        validateSessionId(sessionId);
         return apiClient.getAsync(buildPath(getBaseURL(), CREDIT_SESSIONS, sessionId), sdkAuthorization(), CreditSession.class);
     }
 
     @Override
     public CompletableFuture<CaptureResponse> capturePayment(final String paymentId, final OrderCaptureRequest captureRequest) {
-        validateParams("paymentId", paymentId, "captureRequest", captureRequest);
+        validatePaymentIdAndCaptureRequest(paymentId, captureRequest);
         return apiClient.postAsync(buildPath(getBaseURL(), ORDERS, paymentId, CAPTURES), sdkAuthorization(), CaptureResponse.class, captureRequest, null);
     }
 
     @Override
     public CompletableFuture<VoidResponse> voidPayment(final String paymentId, final VoidRequest voidRequest) {
-        validateParams("paymentId", paymentId, "voidRequest", voidRequest);
+        validatePaymentIdAndVoidRequest(paymentId, voidRequest);
         return apiClient.postAsync(buildPath(getBaseURL(), ORDERS, paymentId, VOIDS), sdkAuthorization(), VoidResponse.class, voidRequest, null);
+    }
+
+    // Synchronous methods
+    @Override
+    public CreditSessionResponse createCreditSessionSync(final CreditSessionRequest creditSessionRequest) {
+        validateCreditSessionRequest(creditSessionRequest);
+        return apiClient.post(buildPath(getBaseURL(), CREDIT_SESSIONS), sdkAuthorization(), CreditSessionResponse.class, creditSessionRequest, null);
+    }
+
+    @Override
+    public CreditSession getCreditSessionSync(final String sessionId) {
+        validateSessionId(sessionId);
+        return apiClient.get(buildPath(getBaseURL(), CREDIT_SESSIONS, sessionId), sdkAuthorization(), CreditSession.class);
+    }
+
+    @Override
+    public CaptureResponse capturePaymentSync(final String paymentId, final OrderCaptureRequest captureRequest) {
+        validatePaymentIdAndCaptureRequest(paymentId, captureRequest);
+        return apiClient.post(buildPath(getBaseURL(), ORDERS, paymentId, CAPTURES), sdkAuthorization(), CaptureResponse.class, captureRequest, null);
+    }
+
+    @Override
+    public VoidResponse voidPaymentSync(final String paymentId, final VoidRequest voidRequest) {
+        validatePaymentIdAndVoidRequest(paymentId, voidRequest);
+        return apiClient.post(buildPath(getBaseURL(), ORDERS, paymentId, VOIDS), sdkAuthorization(), VoidResponse.class, voidRequest, null);
+    }
+
+    // Common methods
+    protected void validateCreditSessionRequest(final CreditSessionRequest creditSessionRequest) {
+        validateParams("creditSessionRequest", creditSessionRequest);
+    }
+
+    protected void validateSessionId(final String sessionId) {
+        validateParams("sessionId", sessionId);
+    }
+
+    protected void validatePaymentIdAndCaptureRequest(final String paymentId, final OrderCaptureRequest captureRequest) {
+        validateParams("paymentId", paymentId, "captureRequest", captureRequest);
+    }
+
+    protected void validatePaymentIdAndVoidRequest(final String paymentId, final VoidRequest voidRequest) {
+        validateParams("paymentId", paymentId, "voidRequest", voidRequest);
     }
 
     private String getBaseURL() {
