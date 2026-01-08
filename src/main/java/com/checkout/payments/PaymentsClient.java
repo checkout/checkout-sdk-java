@@ -1,5 +1,7 @@
 package com.checkout.payments;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.checkout.ItemsResponse;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.UnreferencedRefundRequest;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.RequestAPaymentOrPayoutResponse;
@@ -11,8 +13,6 @@ import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
 import com.checkout.payments.response.PaymentsQueryResponse;
 import com.checkout.payments.response.PayoutResponse;
-
-import java.util.concurrent.CompletableFuture;
 
 public interface PaymentsClient {
 
@@ -69,5 +69,60 @@ public interface PaymentsClient {
     CompletableFuture<VoidResponse> voidPayment(String paymentId, VoidRequest voidRequest);
 
     CompletableFuture<VoidResponse> voidPayment(String paymentId, VoidRequest voidRequest, String idempotencyKey);
+
+    // Synchronous methods
+    PaymentResponse requestPaymentSync(PaymentRequest paymentRequest);
+
+    PaymentResponse requestPaymentSync(PaymentRequest paymentRequest, String idempotencyKey);
+
+    RequestAPaymentOrPayoutResponse requestPaymentSync(UnreferencedRefundRequest paymentRequest);
+
+    RequestAPaymentOrPayoutResponse requestPaymentSync(UnreferencedRefundRequest paymentRequest, String idempotencyKey);
+
+    PayoutResponse requestPayoutSync(PayoutRequest payoutRequest);
+
+    PayoutResponse requestPayoutSync(PayoutRequest payoutRequest, String idempotencyKey);
+
+    PaymentsQueryResponse getPaymentsListSync(PaymentsQueryFilter queryFilter);
+
+    GetPaymentResponse getPaymentSync(String paymentId);
+
+    ItemsResponse<PaymentAction> getPaymentActionsSync(String paymentId);
+
+    AuthorizationResponse incrementPaymentAuthorizationSync(String paymentId, AuthorizationRequest authorizationRequest);
+
+    AuthorizationResponse incrementPaymentAuthorizationSync(String paymentId, AuthorizationRequest authorizationRequest, String idempotencyKey);
+
+    CaptureResponse capturePaymentSync(String paymentId);
+
+    CaptureResponse capturePaymentSync(String paymentId, String idempotencyKey);
+
+    CaptureResponse capturePaymentSync(String paymentId, CaptureRequest captureRequest);
+
+    CaptureResponse capturePaymentSync(String paymentId, CaptureRequest captureRequest, String idempotencyKey);
+
+    RefundResponse refundPaymentSync(String paymentId);
+
+    RefundResponse refundPaymentSync(String paymentId, String idempotencyKey);
+
+    RefundResponse refundPaymentSync(String paymentId, RefundRequest refundRequest);
+
+    RefundResponse refundPaymentSync(String paymentId, RefundRequest refundRequest, String idempotencyKey);
+
+    ReverseResponse reversePaymentSync(String paymentId);
+
+    ReverseResponse reversePaymentSync(String paymentId, String idempotencyKey);
+
+    ReverseResponse reversePaymentSync(String paymentId, ReverseRequest reverseRequest);
+
+    ReverseResponse reversePaymentSync(String paymentId, ReverseRequest reverseRequest, String idempotencyKey);
+
+    VoidResponse voidPaymentSync(String paymentId);
+
+    VoidResponse voidPaymentSync(String paymentId, String idempotencyKey);
+
+    VoidResponse voidPaymentSync(String paymentId, VoidRequest voidRequest);
+
+    VoidResponse voidPaymentSync(String paymentId, VoidRequest voidRequest, String idempotencyKey);
 
 }
