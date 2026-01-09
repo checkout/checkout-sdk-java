@@ -1,11 +1,11 @@
 package com.checkout.disputes;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.checkout.EmptyResponse;
 import com.checkout.common.FileDetailsResponse;
 import com.checkout.common.FileRequest;
 import com.checkout.common.IdResponse;
-
-import java.util.concurrent.CompletableFuture;
 
 public interface DisputesClient {
 
@@ -32,5 +32,30 @@ public interface DisputesClient {
     CompletableFuture<IdResponse> uploadFile(FileRequest fileRequest);
 
     CompletableFuture<FileDetailsResponse> getFileDetails(String fileId);
+
+    // Synchronous methods
+    DisputesQueryResponse querySync(DisputesQueryFilter queryFilter);
+
+    DisputeDetailsResponse getDisputeDetailsSync(String disputeId);
+
+    EmptyResponse acceptSync(String disputeId);
+
+    EmptyResponse putEvidenceSync(String disputeId, DisputeEvidenceRequest disputeEvidence);
+
+    DisputeEvidenceResponse getEvidenceSync(String disputeId);
+
+    EmptyResponse submitEvidenceSync(String disputeId);
+
+    EmptyResponse submitArbitrationEvidenceSync(String disputeId);
+
+    DisputeCompiledSubmittedEvidenceResponse getCompiledSubmittedEvidenceSync(String disputeId);
+
+    DisputeCompiledSubmittedEvidenceResponse getCompiledSubmittedArbitrationEvidenceSync(String disputeId);
+
+    SchemeFileResponse getDisputeSchemeFilesSync(String disputeId);
+
+    IdResponse uploadFileSync(FileRequest fileRequest);
+
+    FileDetailsResponse getFileDetailsSync(String fileId);
 
 }
