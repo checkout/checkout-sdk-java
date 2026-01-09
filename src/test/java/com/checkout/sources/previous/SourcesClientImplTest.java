@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -44,8 +45,8 @@ class SourcesClientImplTest {
 
     @BeforeEach
     void setUp() {
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+        lenient().when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        lenient().when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
         client = new SourcesClientImpl(apiClient, configuration);
     }
 
@@ -76,6 +77,18 @@ class SourcesClientImplTest {
     }
 
     // Synchronous methods
+    @Test
+    void shouldThrowException_whenRequestIsNullSync() {
+        try {
+            client.createSepaSourceSync(null);
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("sepaSourceRequest cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
     @Test
     void shouldCreateSepaSourceSync() {
         final SepaSourceRequest request = createSepaSourceRequest();
