@@ -21,8 +21,6 @@ import com.checkout.payments.sender.PaymentSender;
 
 public class CardSourceHelper {
 
-    private static long amount = 10L;
-
     public static class Visa {
 
         public static final String NAME = "Mr. Duke";
@@ -83,7 +81,7 @@ public class CardSourceHelper {
                 .sender(sender)
                 .capture(false)
                 .reference(UUID.randomUUID().toString())
-                .amount(amount)
+                .amount(10L)
                 .currency(Currency.EUR)
                 .threeDS(threeDSRequest)
                 .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
@@ -93,8 +91,19 @@ public class CardSourceHelper {
     }
 
     public static PaymentRequest getCardSourcePaymentForDispute(final RequestCardSource cardSource, final PaymentSender sender, final boolean three3ds) {
-        amount = 1040L;
-        return getCardSourcePayment(cardSource, sender, three3ds);
+        final ThreeDSRequest threeDSRequest = ThreeDSRequest.builder().enabled(three3ds).challengeIndicator(ChallengeIndicator.NO_CHALLENGE_REQUESTED).build();
+        return PaymentRequest.builder()
+                .source(cardSource)
+                .sender(sender)
+                .capture(false)
+                .reference(UUID.randomUUID().toString())
+                .amount(1040L)
+                .currency(Currency.EUR)
+                .threeDS(threeDSRequest)
+                .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
+                .successUrl(three3ds ? "https://test.checkout.com/success" : null)
+                .failureUrl(three3ds ? "https://test.checkout.com/failure" : null)
+                .build();
     }
 
 }
