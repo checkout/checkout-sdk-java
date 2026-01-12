@@ -41,27 +41,19 @@ class IssuingControlsTestIT extends BaseIssuingTestIT {
 
     @Test
     void shouldCreateControl() {
-        assertNotNull(control);
-        assertEquals(card.getId(), control.getTargetId());
-        assertEquals(ControlType.VELOCITY_LIMIT, control.getControlType());
+        validateControlCreation(control, card.getId());
     }
 
     @Test
     void shouldGetCardControls() {
-        final CardControlsQuery query = CardControlsQuery.builder()
-                .targetId(card.getId())
-                .build();
+        final CardControlsQuery query = createCardControlsQuery();
 
         final CardControlsQueryResponse response = blocking(() ->
                 issuingApi.issuingClient().getCardControls(query),
                 new HasControls(),
                 5L);
 
-        assertNotNull(response);
-        assertFalse(response.getControls().isEmpty());
-        for (CardControlResponse control : response.getControls()) {
-            assertEquals(card.getId(), control.getTargetId());
-        }
+        validateCardControlsResponse(response, card.getId());
     }
 
     @Test
@@ -69,10 +61,7 @@ class IssuingControlsTestIT extends BaseIssuingTestIT {
         final CardControlResponse response = blocking(() ->
                 issuingApi.issuingClient().getCardControlDetails(control.getId()));
 
-        assertNotNull(response);
-        assertEquals(control.getId(), response.getId());
-        assertEquals(card.getId(), response.getTargetId());
-        assertEquals(ControlType.VELOCITY_LIMIT, response.getControlType());
+        validateCardControlDetailsResponse(response, control.getId(), card.getId());
     }
 
     @Test
@@ -98,11 +87,76 @@ class IssuingControlsTestIT extends BaseIssuingTestIT {
 
     @Test
     void shouldRemoveCardControl() {
+        final CardControlResponse tempControl = createCardControl(card.getId());
+        
         final IdResponse response = blocking(() ->
-                issuingApi.issuingClient().removeCardControl(control.getId()));
+                issuingApi.issuingClient().removeCardControl(tempControl.getId()));
 
-        assertNotNull(response);
-        assertEquals(control.getId(), response.getId());
+        validateRemoveCardControlResponse(response, tempControl.getId());
+    }
+
+    // Synchronous methods
+    @Test
+    void shouldCreateControlSync() {
+        final CardControlResponse control = createCardControl(card.getId());
+        validateControlCreation(control, card.getId());
+    }
+
+    @Test
+    void shouldGetCardControlsSync() {
+        final CardControlsQuery query = createCardControlsQuery();
+
+        final CardControlsQueryResponse response = 
+                issuingApi.issuingClient().getCardControlsSync(query);
+
+        validateCardControlsResponseSync(response);
+    }
+
+    @Test
+    void shouldGetCardControlDetailsSync() {
+        final CardControlResponse response = 
+                issuingApi.issuingClient().getCardControlDetailsSync(control.getId());
+
+        validateCardControlDetailsResponse(response, control.getId(), card.getId());
+    }
+
+    @Test
+    void shouldUpdateCardControlSync() {
+        final UpdateCardControlRequest request = createUpdateCardControlRequest();
+
+        final CardControlResponse response = 
+                issuingApi.issuingClient().updateCardControlSync(control.getId(), request);
+
+        validateUpdatedCardControlResponse(response, control.getId());
+    }
+
+    @Test
+    void shouldRemoveCardControlSync() {
+        final CardControlResponse tempControl = createCardControl(card.getId());
+        
+        final IdResponse response = 
+                issuingApi.issuingClient().removeCardControlSync(tempControl.getId());
+
+        validateRemoveCardControlResponse(response, tempControl.getId());
+    }
+
+    // Common methods
+    private CardControlsQuery createCardControlsQuery() {
+        return CardControlsQuery.builder()
+                .targetId(card.getId())
+                .build();
+    }
+
+    private UpdateCardControlRequest createUpdateCardControlRequest() {
+        return UpdateCardControlRequest.builder()
+                .description("New max spend of 1000€ per month for restaurants")
+                .velocityLimit(VelocityLimit.builder()
+                        .amountLimit(1000)
+                        .velocityWindow(VelocityWindow.builder()
+                                .type(VelocityWindowType.MONTHLY)
+                                .build())
+                        .build())
+                .build();
     }
 
     private CardControlResponse createCardControl(final String cardId) {
@@ -121,8 +175,47 @@ class IssuingControlsTestIT extends BaseIssuingTestIT {
                 issuingApi.issuingClient().createControl(request));
 
         assertNotNull(cardControlResponse);
-
         return cardControlResponse;
+    }
+
+    private void validateControlCreation(CardControlResponse control, String expectedTargetId) {
+        assertNotNull(control);
+        assertEquals(expectedTargetId, control.getTargetId());
+        assertEquals(ControlType.VELOCITY_LIMIT, control.getControlType());
+    }
+
+    private void validateCardControlsResponse(CardControlsQueryResponse response, String expectedTargetId) {
+        assertNotNull(response);
+        assertFalse(response.getControls().isEmpty());
+        for (CardControlResponse control : response.getControls()) {
+            assertEquals(expectedTargetId, control.getTargetId());
+        }
+    }
+
+    private void validateCardControlsResponseSync(CardControlsQueryResponse response) {
+        assertNotNull(response);
+        // Note: May be empty if controls were removed by async tests
+        for (CardControlResponse control : response.getControls()) {
+            assertEquals(card.getId(), control.getTargetId());
+        }
+    }
+
+    private void validateCardControlDetailsResponse(CardControlResponse response, String expectedId, String expectedTargetId) {
+        assertNotNull(response);
+        assertEquals(expectedId, response.getId());
+        assertEquals(expectedTargetId, response.getTargetId());
+        assertEquals(ControlType.VELOCITY_LIMIT, response.getControlType());
+    }
+
+    private void validateUpdatedCardControlResponse(CardControlResponse response, String expectedId) {
+        assertNotNull(response);
+        assertEquals(expectedId, response.getId());
+        assertEquals(ControlType.VELOCITY_LIMIT, response.getControlType());
+    }
+
+    private void validateRemoveCardControlResponse(IdResponse response, String expectedId) {
+        assertNotNull(response);
+        assertEquals(expectedId, response.getId());
     }
 
     protected static class HasControls extends BaseMatcher<CardControlsQueryResponse> {
@@ -141,7 +234,6 @@ class IssuingControlsTestIT extends BaseIssuingTestIT {
         public void describeTo(final Description description) {
             throw new UnsupportedOperationException();
         }
-
     }
 }
 

@@ -86,4 +86,56 @@ public interface IssuingClient {
             final String authorizationId,
             final CardAuthorizationReversalRequest cardAuthorizationReversalRequest
     );
+
+    // Synchronous methods
+    CardholderResponse createCardholderSync(CardholderRequest cardholderRequest);
+
+    CardholderDetailsResponse getCardholderSync(String cardholderId);
+
+    CardholderCardsResponse getCardholderCardsSync(String cardholderId);
+
+    CardResponse createCardSync(CardRequest cardRequest);
+
+    CardDetailsResponse getCardDetailsSync(String cardId);
+
+    ThreeDSEnrollmentResponse enrollThreeDSSync(String cardId, ThreeDSEnrollmentRequest enrollmentRequest);
+
+    ThreeDSUpdateResponse updateThreeDSSync(String cardId, ThreeDSUpdateRequest threeDSUpdateRequest);
+
+    ThreeDSEnrollmentDetailsResponse getCardThreeDSDetailsSync(String cardId);
+
+    VoidResponse activateCardSync(String cardId);
+
+    CardCredentialsResponse getCardCredentialsSync(String cardId, CardCredentialsQuery queryFilter);
+
+    VoidResponse revokeCardSync(String cardId, RevokeCardRequest revokeCardRequest);
+
+    VoidResponse suspendCardSync(String cardId, SuspendCardRequest suspendCardRequest);
+
+    CardControlResponse createControlSync(CardControlRequest cardControlRequest);
+
+    CardControlsQueryResponse getCardControlsSync(CardControlsQuery queryFilter);
+
+    CardControlResponse getCardControlDetailsSync(String controlId);
+
+    CardControlResponse updateCardControlSync(String controlId, UpdateCardControlRequest updateCardControlRequest);
+
+    IdResponse removeCardControlSync(String controlId);
+
+    CardAuthorizationResponse simulateAuthorizationSync(CardAuthorizationRequest cardAuthorizationRequest);
+
+    CardAuthorizationIncrementingResponse simulateIncrementingAuthorizationSync(
+            String authorizationId,
+            CardAuthorizationIncrementingRequest cardAuthorizationIncrementingRequest
+    );
+
+    EmptyResponse simulateClearingSync(
+            String authorizationId,
+            CardAuthorizationClearingRequest cardAuthorizationClearingRequest
+    );
+
+    CardAuthorizationReversalResponse simulateReversalSync(
+            String authorizationId,
+            CardAuthorizationReversalRequest cardAuthorizationReversalRequest
+    );
 }

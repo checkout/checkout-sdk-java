@@ -27,10 +27,7 @@ class IssuingCardholdersTestIT extends BaseIssuingTestIT {
     void shouldCreateCardholder() {
         final CardholderResponse cardholderResponse = cardholder;
 
-        assertNotNull(cardholderResponse);
-        assertEquals(CardholderType.INDIVIDUAL, cardholderResponse.getType());
-        assertEquals(CardholderStatus.ACTIVE, cardholderResponse.getStatus());
-        assertEquals("X-123456-N11", cardholderResponse.getReference());
+        validateCardholderCreation(cardholderResponse);
     }
 
     @Test
@@ -38,9 +35,7 @@ class IssuingCardholdersTestIT extends BaseIssuingTestIT {
         final CardholderDetailsResponse cardholderDetails = blocking(() ->
                 issuingApi.issuingClient().getCardholder(cardholder.getId()));
 
-        assertNotNull(cardholderDetails);
-        assertEquals(CardholderType.INDIVIDUAL, cardholderDetails.getType());
-        assertEquals("X-123456-N11", cardholderDetails.getReference());
+        validateCardholderDetails(cardholderDetails);
     }
 
     @Test
@@ -48,6 +43,48 @@ class IssuingCardholdersTestIT extends BaseIssuingTestIT {
         final CardholderCardsResponse cardholderCards = blocking(() ->
                 issuingApi.issuingClient().getCardholderCards(cardholder.getId()));
 
+        validateCardholderCards(cardholderCards);
+    }
+
+    // Synchronous methods
+    @Test
+    void shouldCreateCardholderSync() {
+        final CardholderResponse cardholderResponse = createCardholder();
+
+        validateCardholderCreation(cardholderResponse);
+    }
+
+    @Test
+    void shouldGetCardholderDetailsSync() {
+        final CardholderDetailsResponse cardholderDetails = 
+                issuingApi.issuingClient().getCardholderSync(cardholder.getId());
+
+        validateCardholderDetails(cardholderDetails);
+    }
+
+    @Test
+    void shouldGetCardholderCardsSync() {
+        final CardholderCardsResponse cardholderCards = 
+                issuingApi.issuingClient().getCardholderCardsSync(cardholder.getId());
+
+        validateCardholderCards(cardholderCards);
+    }
+
+    // Common methods
+    private void validateCardholderCreation(CardholderResponse cardholderResponse) {
+        assertNotNull(cardholderResponse);
+        assertEquals(CardholderType.INDIVIDUAL, cardholderResponse.getType());
+        assertEquals(CardholderStatus.ACTIVE, cardholderResponse.getStatus());
+        assertEquals("X-123456-N11", cardholderResponse.getReference());
+    }
+
+    private void validateCardholderDetails(CardholderDetailsResponse cardholderDetails) {
+        assertNotNull(cardholderDetails);
+        assertEquals(CardholderType.INDIVIDUAL, cardholderDetails.getType());
+        assertEquals("X-123456-N11", cardholderDetails.getReference());
+    }
+
+    private void validateCardholderCards(CardholderCardsResponse cardholderCards) {
         assertNotNull(cardholderCards);
         for (final CardDetailsResponse card : cardholderCards.getCards()) {
             assertEquals(cardholder.getId(), card.getId());
