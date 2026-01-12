@@ -271,6 +271,12 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
     }
 
     // Common methods
+    private Map<Currency, UpdateScheduleRequest> buildScheduleRequestMap(final Currency currency, final UpdateScheduleRequest updateScheduleRequest) {
+        final Map<Currency, UpdateScheduleRequest> request = new EnumMap<>(Currency.class);
+        request.put(currency, updateScheduleRequest);
+        return request;
+    }
+
     private void validateAccountsFileRequest(final AccountsFileRequest accountsFileRequest) {
         validateParams("accountsFileRequest", accountsFileRequest);
     }
@@ -309,12 +315,6 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
 
     private void validateEntityIdCurrencyAndRequest(final String entityId, final Currency currency, final UpdateScheduleRequest updateScheduleRequest) {
         validateParams("entityId", entityId, "currency", currency, "updateScheduleRequest", updateScheduleRequest);
-    }
-
-    private Map<Currency, UpdateScheduleRequest> buildScheduleRequestMap(final Currency currency, final UpdateScheduleRequest updateScheduleRequest) {
-        final Map<Currency, UpdateScheduleRequest> request = new EnumMap<>(Currency.class);
-        request.put(currency, updateScheduleRequest);
-        return request;
     }
 
 }
