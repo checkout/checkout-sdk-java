@@ -209,6 +209,8 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 
+    // 2026/01/16 DR - APM is currently unavailable, temporary skipping the stcPay failing tests
+    @Disabled("APM is currently unavailable, temporary skipping the stcPay failing tests")
     @Test
     void shouldMakeStcPayPayment() throws ExecutionException, InterruptedException {
         final PaymentRequest paymentRequest = createStcPayPaymentRequest();
@@ -417,6 +419,8 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         checkErrorItemSync(() -> paymentsClient.requestPaymentSync(paymentRequest), PAYEE_NOT_ONBOARDED);
     }
 
+    // 2026/01/16 DR - APM is currently unavailable, temporary skipping the stcPay failing tests
+    @Disabled("APM is currently unavailable, temporary skipping the stcPay failing tests")
     @Test
     void shouldMakeStcPayPaymentSync() {
         final PaymentRequest paymentRequest = createStcPayPaymentRequest();
