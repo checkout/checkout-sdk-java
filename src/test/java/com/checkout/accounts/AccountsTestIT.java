@@ -35,7 +35,136 @@ class AccountsTestIT extends SandboxTestFixture {
     @Test
     void shouldCreateGetAndUpdateOnboardIndividualEntity() {
         final String randomReference = RandomStringUtils.random(15, true, true);
-        final OnboardEntityRequest onboardEntityRequest = OnboardEntityRequest.builder()
+        final OnboardEntityRequest onboardEntityRequest = buildIndividualEntity(randomReference);
+
+        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(onboardEntityRequest));
+        validateEntityCreationResponse(entityResponse, randomReference);
+
+        final OnboardEntityDetailsResponse entityDetailsResponse = blocking(() -> checkoutApi.accountsClient().getEntity(entityResponse.getId()));
+        validateIndividualEntityDetails(entityDetailsResponse, onboardEntityRequest, randomReference);
+
+        onboardEntityRequest.getIndividual().setFirstName("Jhon");
+        final OnboardEntityResponse updatedEntityResponse = blocking(() -> checkoutApi.accountsClient().updateEntity(onboardEntityRequest, entityResponse.getId()));
+        assertNotNull(updatedEntityResponse);
+
+        final OnboardEntityDetailsResponse verifyUpdated = blocking(() -> checkoutApi.accountsClient().getEntity(entityResponse.getId()));
+        assertEquals(onboardEntityRequest.getIndividual().getFirstName(), verifyUpdated.getIndividual().getFirstName());
+    }
+
+    @Test
+    void shouldCreateGetAndUpdateOnboardCompanyEntity() {
+        final String randomReference = RandomStringUtils.random(15, true, true);
+        final OnboardEntityRequest onboardEntityRequest = buildCompanyEntity(randomReference);
+
+        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(onboardEntityRequest));
+        validateEntityCreationResponse(entityResponse, randomReference);
+
+        final OnboardEntityDetailsResponse entityDetailsResponse = blocking(() -> checkoutApi.accountsClient().getEntity(entityResponse.getId()));
+        validateCompanyEntityDetails(entityDetailsResponse, onboardEntityRequest, randomReference);
+    }
+
+    @Test
+    void shouldUploadAccountsFile() throws URISyntaxException {
+        final IdResponse fileResponse = uploadFile();
+        validateFileUploadResponse(fileResponse);
+    }
+
+    @Test
+    void shouldCreateAndRetrievePaymentInstrument() throws URISyntaxException {
+        final CheckoutApi checkoutApi = getAccountsCheckoutApi();
+
+        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient()
+                .createEntity(buildCompanyEntity(RandomStringUtils.random(15, true, true))));
+        assertNotNull(entityResponse);
+        assertNotNull(entityResponse.getId());
+
+        final IdResponse file = uploadFile();
+        final PaymentInstrumentRequest instrumentRequest = buildPaymentInstrumentRequest(file.getId());
+
+        final IdResponse instrumentResponse = blocking(() -> checkoutApi.accountsClient().createPaymentInstrument(entityResponse.getId(), instrumentRequest));
+        assertNotNull(instrumentResponse);
+        assertNotNull(instrumentResponse.getId());
+
+        final PaymentInstrumentDetailsResponse instrumentDetailsResponse = blocking(() -> checkoutApi.accountsClient().retrievePaymentInstrumentDetails(entityResponse.getId(), instrumentResponse.getId()));
+        validatePaymentInstrumentDetailsResponse(instrumentDetailsResponse);
+    }
+
+    // Synchronous methods
+    @Test
+    void shouldCreateGetAndUpdateOnboardIndividualEntitySync() {
+        final String randomReference = RandomStringUtils.random(15, true, true);
+        final OnboardEntityRequest onboardEntityRequest = buildIndividualEntity(randomReference);
+
+        final OnboardEntityResponse entityResponse = checkoutApi.accountsClient().createEntitySync(onboardEntityRequest);
+        validateEntityCreationResponse(entityResponse, randomReference);
+
+        final OnboardEntityDetailsResponse entityDetailsResponse = checkoutApi.accountsClient().getEntitySync(entityResponse.getId());
+        validateIndividualEntityDetails(entityDetailsResponse, onboardEntityRequest, randomReference);
+
+        onboardEntityRequest.getIndividual().setFirstName("Jhon");
+        final OnboardEntityResponse updatedEntityResponse = checkoutApi.accountsClient().updateEntitySync(onboardEntityRequest, entityResponse.getId());
+        assertNotNull(updatedEntityResponse);
+
+        final OnboardEntityDetailsResponse verifyUpdated = checkoutApi.accountsClient().getEntitySync(entityResponse.getId());
+        assertEquals(onboardEntityRequest.getIndividual().getFirstName(), verifyUpdated.getIndividual().getFirstName());
+    }
+
+    @Test
+    void shouldCreateGetAndUpdateOnboardCompanyEntitySync() {
+        final String randomReference = RandomStringUtils.random(15, true, true);
+        final OnboardEntityRequest onboardEntityRequest = buildCompanyEntity(randomReference);
+
+        final OnboardEntityResponse entityResponse = checkoutApi.accountsClient().createEntitySync(onboardEntityRequest);
+        validateEntityCreationResponse(entityResponse, randomReference);
+
+        final OnboardEntityDetailsResponse entityDetailsResponse = checkoutApi.accountsClient().getEntitySync(entityResponse.getId());
+        validateCompanyEntityDetails(entityDetailsResponse, onboardEntityRequest, randomReference);
+    }
+
+    @Test
+    void shouldUploadAccountsFileSync() throws URISyntaxException {
+        final IdResponse fileResponse = uploadFileSync();
+        validateFileUploadResponse(fileResponse);
+    }
+
+    @Test
+    void shouldCreateAndRetrievePaymentInstrumentSync() throws URISyntaxException {
+        final CheckoutApi checkoutApi = getAccountsCheckoutApi();
+
+        final OnboardEntityResponse entityResponse = checkoutApi.accountsClient()
+                .createEntitySync(buildCompanyEntity(RandomStringUtils.random(15, true, true)));
+        assertNotNull(entityResponse);
+        assertNotNull(entityResponse.getId());
+
+        final IdResponse file = uploadFileSync();
+        final PaymentInstrumentRequest instrumentRequest = buildPaymentInstrumentRequest(file.getId());
+
+        final IdResponse instrumentResponse = checkoutApi.accountsClient().createPaymentInstrumentSync(entityResponse.getId(), instrumentRequest);
+        assertNotNull(instrumentResponse);
+        assertNotNull(instrumentResponse.getId());
+
+        final PaymentInstrumentDetailsResponse instrumentDetailsResponse = checkoutApi.accountsClient().retrievePaymentInstrumentDetailsSync(entityResponse.getId(), instrumentResponse.getId());
+        validatePaymentInstrumentDetailsResponse(instrumentDetailsResponse);
+    }
+
+    // Common methods
+    private IdResponse uploadFileSync() throws URISyntaxException {
+        final URL resource = getClass().getClassLoader().getResource("checkout.jpeg");
+        final File file = new File(resource.toURI());
+        final AccountsFileRequest fileRequest = AccountsFileRequest.builder()
+                .file(file)
+                .contentType(ContentType.IMAGE_JPEG)
+                .purpose(AccountsFilePurpose.BANK_VERIFICATION)
+                .build();
+        final IdResponse fileResponse = checkoutApi.accountsClient().submitFileSync(fileRequest);
+        assertNotNull(fileResponse);
+        assertNotNull(fileResponse.getId());
+        return fileResponse;
+    }
+
+    // Common methods
+    private OnboardEntityRequest buildIndividualEntity(final String randomReference) {
+        return OnboardEntityRequest.builder()
                 .reference(randomReference)
                 .contactDetails(ContactDetails.builder()
                         .phone(buildAccountPhone())
@@ -63,72 +192,10 @@ class AccountsTestIT extends SandboxTestFixture {
                                 .build())
                         .build())
                 .build();
-        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(onboardEntityRequest));
-        assertNotNull(entityResponse);
-        final String entityId = entityResponse.getId();
-        assertNotNull(entityId);
-        assertEquals(randomReference, entityResponse.getReference());
-
-        final OnboardEntityDetailsResponse entityDetailsResponse = blocking(() -> checkoutApi.accountsClient().getEntity(entityId));
-        assertNotNull(entityDetailsResponse);
-        assertEquals(entityId, entityDetailsResponse.getId());
-        assertEquals(randomReference, entityDetailsResponse.getReference());
-        assertEquals(onboardEntityRequest.getContactDetails(), entityDetailsResponse.getContactDetails());
-        assertNotNull(entityDetailsResponse.getIndividual());
-        assertEquals(onboardEntityRequest.getIndividual().getFirstName(), entityDetailsResponse.getIndividual().getFirstName());
-        assertEquals(onboardEntityRequest.getIndividual().getTradingName(), entityDetailsResponse.getIndividual().getTradingName());
-        assertEquals(onboardEntityRequest.getIndividual().getNationalTaxId(), entityDetailsResponse.getIndividual().getNationalTaxId());
-        assertEquals(onboardEntityRequest.getIndividual().getDateOfBirth(), entityDetailsResponse.getIndividual().getDateOfBirth());
-
-        onboardEntityRequest.getIndividual().setFirstName("Jhon");
-        final OnboardEntityResponse updatedEntityResponse = blocking(() -> checkoutApi.accountsClient().updateEntity(onboardEntityRequest, entityId));
-        assertNotNull(updatedEntityResponse);
-
-        final OnboardEntityDetailsResponse verifyUpdated = blocking(() -> checkoutApi.accountsClient().getEntity(entityId));
-        assertNotNull(verifyUpdated);
-        assertEquals(onboardEntityRequest.getIndividual().getFirstName(), verifyUpdated.getIndividual().getFirstName());
-
     }
 
-    @Test
-    void shouldCreateGetAndUpdateOnboardCompanyEntity() {
-        final String randomReference = RandomStringUtils.random(15, true, true);
-        final OnboardEntityRequest onboardEntityRequest = buildCompanyEntity(randomReference);
-
-        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(onboardEntityRequest));
-        assertNotNull(entityResponse);
-        final String entityId = entityResponse.getId();
-        assertNotNull(entityId);
-        assertEquals(randomReference, entityResponse.getReference());
-
-        final OnboardEntityDetailsResponse entityDetailsResponse = blocking(() -> checkoutApi.accountsClient().getEntity(entityId));
-        assertNotNull(entityDetailsResponse);
-        assertEquals(entityId, entityDetailsResponse.getId());
-        assertEquals(randomReference, entityDetailsResponse.getReference());
-        assertEquals(onboardEntityRequest.getContactDetails(), entityDetailsResponse.getContactDetails());
-        assertNotNull(entityDetailsResponse.getCompany());
-        assertEquals(onboardEntityRequest.getCompany().getBusinessType(), entityDetailsResponse.getCompany().getBusinessType());
-        assertEquals(onboardEntityRequest.getCompany().getLegalName(), entityDetailsResponse.getCompany().getLegalName());
-        assertEquals(onboardEntityRequest.getCompany().getTradingName(), entityDetailsResponse.getCompany().getTradingName());
-    }
-
-    @Test
-    void shouldUploadAccountsFile() throws URISyntaxException {
-        uploadFile();
-    }
-
-    @Test
-    void shouldCreateAndRetrievePaymentInstrument() throws URISyntaxException {
-        final CheckoutApi checkoutApi = getAccountsCheckoutApi();
-
-        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient()
-                .createEntity(buildCompanyEntity(RandomStringUtils.random(15, true, true))));
-        assertNotNull(entityResponse);
-        assertNotNull(entityResponse.getId());
-
-        final IdResponse file = uploadFile();
-
-        final PaymentInstrumentRequest instrumentRequest = PaymentInstrumentRequest.builder()
+    private PaymentInstrumentRequest buildPaymentInstrumentRequest(final String fileId) {
+        return PaymentInstrumentRequest.builder()
                 .label("Barclays")
                 .type(InstrumentType.BANK_ACCOUNT)
                 .currency(Currency.GBP)
@@ -140,15 +207,50 @@ class AccountsTestIT extends SandboxTestFixture {
                         .build())
                 .document(InstrumentDocument.builder()
                         .type("bank_statement")
-                        .fileId(file.getId())
+                        .fileId(fileId)
                         .build())
                 .build();
+    }
 
-        final IdResponse instrumentResponse = blocking(() -> checkoutApi.accountsClient().createPaymentInstrument(entityResponse.getId(), instrumentRequest));
-        assertNotNull(instrumentResponse);
-        assertNotNull(instrumentResponse.getId());
+    private void validateEntityCreationResponse(final OnboardEntityResponse entityResponse, final String expectedReference) {
+        assertNotNull(entityResponse);
+        assertNotNull(entityResponse.getId());
+        assertEquals(expectedReference, entityResponse.getReference());
+    }
 
-        final PaymentInstrumentDetailsResponse instrumentDetailsResponse = blocking(() -> checkoutApi.accountsClient().retrievePaymentInstrumentDetails(entityResponse.getId(), instrumentResponse.getId()));
+    private void validateIndividualEntityDetails(final OnboardEntityDetailsResponse entityDetailsResponse, 
+                                               final OnboardEntityRequest onboardEntityRequest, 
+                                               final String expectedReference) {
+        assertNotNull(entityDetailsResponse);
+        assertNotNull(entityDetailsResponse.getId());
+        assertEquals(expectedReference, entityDetailsResponse.getReference());
+        assertEquals(onboardEntityRequest.getContactDetails(), entityDetailsResponse.getContactDetails());
+        assertNotNull(entityDetailsResponse.getIndividual());
+        assertEquals(onboardEntityRequest.getIndividual().getFirstName(), entityDetailsResponse.getIndividual().getFirstName());
+        assertEquals(onboardEntityRequest.getIndividual().getTradingName(), entityDetailsResponse.getIndividual().getTradingName());
+        assertEquals(onboardEntityRequest.getIndividual().getNationalTaxId(), entityDetailsResponse.getIndividual().getNationalTaxId());
+        assertEquals(onboardEntityRequest.getIndividual().getDateOfBirth(), entityDetailsResponse.getIndividual().getDateOfBirth());
+    }
+
+    private void validateCompanyEntityDetails(final OnboardEntityDetailsResponse entityDetailsResponse, 
+                                            final OnboardEntityRequest onboardEntityRequest, 
+                                            final String expectedReference) {
+        assertNotNull(entityDetailsResponse);
+        assertNotNull(entityDetailsResponse.getId());
+        assertEquals(expectedReference, entityDetailsResponse.getReference());
+        assertEquals(onboardEntityRequest.getContactDetails(), entityDetailsResponse.getContactDetails());
+        assertNotNull(entityDetailsResponse.getCompany());
+        assertEquals(onboardEntityRequest.getCompany().getBusinessType(), entityDetailsResponse.getCompany().getBusinessType());
+        assertEquals(onboardEntityRequest.getCompany().getLegalName(), entityDetailsResponse.getCompany().getLegalName());
+        assertEquals(onboardEntityRequest.getCompany().getTradingName(), entityDetailsResponse.getCompany().getTradingName());
+    }
+
+    private void validateFileUploadResponse(final IdResponse fileResponse) {
+        assertNotNull(fileResponse);
+        assertNotNull(fileResponse.getId());
+    }
+
+    private void validatePaymentInstrumentDetailsResponse(final PaymentInstrumentDetailsResponse instrumentDetailsResponse) {
         assertNotNull(instrumentDetailsResponse);
         assertNotNull(instrumentDetailsResponse.getId());
         assertNotNull(instrumentDetailsResponse.getStatus());
@@ -157,7 +259,6 @@ class AccountsTestIT extends SandboxTestFixture {
         assertNotNull(instrumentDetailsResponse.getCurrency());
         assertNotNull(instrumentDetailsResponse.getCountry());
         assertNotNull(instrumentDetailsResponse.getDocument());
-
     }
 
     private static Profile buildProfile() {

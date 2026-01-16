@@ -19,14 +19,36 @@ public class TokensClientImpl extends AbstractClient implements TokensClient {
 
     @Override
     public CompletableFuture<CardTokenResponse> requestCardToken(final CardTokenRequest cardTokenRequest) {
-        validateParams("cardTokenRequest", cardTokenRequest);
+        validateCardTokenRequest(cardTokenRequest);
         return apiClient.postAsync(TOKENS_PATH, sdkAuthorization(), CardTokenResponse.class, cardTokenRequest, null);
     }
 
     @Override
     public CompletableFuture<TokenResponse> requestWalletToken(final WalletTokenRequest walletTokenRequest) {
-        validateParams("walletTokenRequest", walletTokenRequest);
+        validateWalletTokenRequest(walletTokenRequest);
         return apiClient.postAsync(TOKENS_PATH, sdkAuthorization(), TokenResponse.class, walletTokenRequest, null);
+    }
+
+    // Synchronous methods
+    @Override
+    public CardTokenResponse requestCardTokenSync(final CardTokenRequest cardTokenRequest) {
+        validateCardTokenRequest(cardTokenRequest);
+        return apiClient.post(TOKENS_PATH, sdkAuthorization(), CardTokenResponse.class, cardTokenRequest, null);
+    }
+
+    @Override
+    public TokenResponse requestWalletTokenSync(final WalletTokenRequest walletTokenRequest) {
+        validateWalletTokenRequest(walletTokenRequest);
+        return apiClient.post(TOKENS_PATH, sdkAuthorization(), TokenResponse.class, walletTokenRequest, null);
+    }
+
+    // Common methods
+    protected void validateCardTokenRequest(final CardTokenRequest cardTokenRequest) {
+        validateParams("cardTokenRequest", cardTokenRequest);
+    }
+
+    protected void validateWalletTokenRequest(final WalletTokenRequest walletTokenRequest) {
+        validateParams("walletTokenRequest", walletTokenRequest);
     }
 
 }

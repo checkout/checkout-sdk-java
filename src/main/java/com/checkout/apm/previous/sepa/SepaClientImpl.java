@@ -23,26 +23,56 @@ public class SepaClientImpl extends AbstractClient implements SepaClient {
 
     @Override
     public CompletableFuture<MandateResponse> getMandate(final String mandateId) {
-        validateParams(MANDATE_ID, mandateId);
+        validateMandateId(mandateId);
         return apiClient.getAsync(buildPath(SEPA_MANDATES, mandateId), sdkAuthorization(), MandateResponse.class);
     }
 
     @Override
     public CompletableFuture<SepaResource> cancelMandate(final String mandateId) {
-        validateParams(MANDATE_ID, mandateId);
+        validateMandateId(mandateId);
         return apiClient.postAsync(buildPath(SEPA_MANDATES, mandateId, CANCEL), sdkAuthorization(), SepaResource.class, null, null);
     }
 
     @Override
     public CompletableFuture<MandateResponse> getMandateViaPPRO(final String mandateId) {
-        validateParams(MANDATE_ID, mandateId);
+        validateMandateId(mandateId);
         return apiClient.getAsync(buildPath(APMS, PPRO, SEPA_MANDATES, mandateId), sdkAuthorization(), MandateResponse.class);
     }
 
     @Override
     public CompletableFuture<SepaResource> cancelMandateViaPPRO(final String mandateId) {
-        validateParams(MANDATE_ID, mandateId);
+        validateMandateId(mandateId);
         return apiClient.postAsync(buildPath(APMS, PPRO, SEPA_MANDATES, mandateId, CANCEL), sdkAuthorization(), SepaResource.class, null, null);
+    }
+
+    // Synchronous methods
+    @Override
+    public MandateResponse getMandateSync(final String mandateId) {
+        validateMandateId(mandateId);
+        return apiClient.get(buildPath(SEPA_MANDATES, mandateId), sdkAuthorization(), MandateResponse.class);
+    }
+
+    @Override
+    public SepaResource cancelMandateSync(final String mandateId) {
+        validateMandateId(mandateId);
+        return apiClient.post(buildPath(SEPA_MANDATES, mandateId, CANCEL), sdkAuthorization(), SepaResource.class, null, null);
+    }
+
+    @Override
+    public MandateResponse getMandateViaPPROSync(final String mandateId) {
+        validateMandateId(mandateId);
+        return apiClient.get(buildPath(APMS, PPRO, SEPA_MANDATES, mandateId), sdkAuthorization(), MandateResponse.class);
+    }
+
+    @Override
+    public SepaResource cancelMandateViaPPROSync(final String mandateId) {
+        validateMandateId(mandateId);
+        return apiClient.post(buildPath(APMS, PPRO, SEPA_MANDATES, mandateId, CANCEL), sdkAuthorization(), SepaResource.class, null, null);
+    }
+
+    // Common methods
+    protected void validateMandateId(final String mandateId) {
+        validateParams(MANDATE_ID, mandateId);
     }
 
 }

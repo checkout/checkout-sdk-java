@@ -8,4 +8,7 @@ import java.util.concurrent.CompletableFuture;
 public interface MetadataClient {
 
     CompletableFuture<CardMetadataResponse> requestCardMetadata(CardMetadataRequest cardMetadataRequest);
+
+    // Synchronous methods
+    CardMetadataResponse requestCardMetadataSync(CardMetadataRequest cardMetadataRequest);
 }

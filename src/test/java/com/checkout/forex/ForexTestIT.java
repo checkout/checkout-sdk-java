@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+// 2025-12-29 DRY - Should we keep all these Forex disabled tests AJ?
+
 class ForexTestIT extends SandboxTestFixture {
 
 
@@ -21,14 +23,63 @@ class ForexTestIT extends SandboxTestFixture {
     @Test
     void shouldRequestQuote() {
 
-        final QuoteRequest request = QuoteRequest.builder()
+        final QuoteRequest request = createQuoteRequest();
+        final QuoteResponse response = blocking(() -> checkoutApi.forexClient().requestQuote(request));
+
+        validateQuoteResponse(response, request);
+    }
+
+    @Disabled("Skipping because processing_channel_id is invalid")
+    @Test
+    void shouldGetRates() {
+
+        final RatesQueryFilter request = createRatesQueryFilter();
+        final RatesQueryResponse response = blocking(() -> checkoutApi.forexClient().getRates(request));
+
+        validateRatesQueryResponse(response, request);
+    }
+
+    // Synchronous method tests
+    @Disabled("Temporarily skipped")
+    @Test
+    void shouldRequestQuoteSync() {
+
+        final QuoteRequest request = createQuoteRequest();
+        final QuoteResponse response = checkoutApi.forexClient().requestQuoteSync(request);
+
+        validateQuoteResponse(response, request);
+    }
+
+    @Disabled("Skipping because processing_channel_id is invalid")
+    @Test
+    void shouldGetRatesSync() {
+
+        final RatesQueryFilter request = createRatesQueryFilter();
+        final RatesQueryResponse response = checkoutApi.forexClient().getRatesSync(request);
+
+        validateRatesQueryResponse(response, request);
+    }
+
+    // Common methods
+    private QuoteRequest createQuoteRequest() {
+        return QuoteRequest.builder()
                 .sourceCurrency(Currency.GBP)
                 .sourceAmount(30000L)
                 .destinationCurrency(Currency.USD)
                 .processChannelId("pc_abcdefghijklmnopqrstuvwxyz")
                 .build();
-        final QuoteResponse response = blocking(() -> checkoutApi.forexClient().requestQuote(request));
+    }
 
+    private RatesQueryFilter createRatesQueryFilter() {
+        return RatesQueryFilter.builder()
+                .product("card_payouts")
+                .source(ForexSource.VISA)
+                .currencyPairs("GBPEUR,USDNOK,JPNCAD")
+                .processChannelId("pc_abcdefghijklmnopqrstuvwxyz")
+                .build();
+    }
+
+    private void validateQuoteResponse(QuoteResponse response, QuoteRequest request) {
         assertNotNull(response);
         assertNotNull(response.getId());
         assertEquals(request.getSourceCurrency(), response.getSourceCurrency());
@@ -40,18 +91,7 @@ class ForexTestIT extends SandboxTestFixture {
         assertFalse(response.isSingleUse());
     }
 
-    @Disabled("Skipping because processing_channel_id is invalid")
-    @Test
-    void shouldGetRates() {
-
-        final RatesQueryFilter request = RatesQueryFilter.builder()
-                .product("card_payouts")
-                .source(ForexSource.VISA)
-                .currencyPairs("GBPEUR,USDNOK,JPNCAD")
-                .processChannelId("pc_abcdefghijklmnopqrstuvwxyz")
-                .build();
-        final RatesQueryResponse response = blocking(() -> checkoutApi.forexClient().getRates(request));
-
+    private void validateRatesQueryResponse(RatesQueryResponse response, RatesQueryFilter request) {
         assertNotNull(response);
         assertNotNull(response.getProduct());
         assertNotNull(response.getSource());

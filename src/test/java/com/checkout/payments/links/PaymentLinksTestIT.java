@@ -27,9 +27,44 @@ class PaymentLinksTestIT extends SandboxTestFixture {
 
     @Test
     void shouldCreateAndGetPaymentsLink() {
+        final PaymentLinkRequest paymentLinksRequest = createPaymentLinksRequest();
 
+        final PaymentLinkResponse paymentLinkResponse =
+                blocking(() -> checkoutApi.paymentLinksClient().createPaymentLink(paymentLinksRequest));
+
+        validateCreatePaymentLinkResponse(paymentLinkResponse, paymentLinksRequest);
+
+        final PaymentLinkDetailsResponse detailsResponse =
+                blocking(() -> checkoutApi.paymentLinksClient().getPaymentLink(paymentLinkResponse.getId()));
+
+        validatePaymentLinkDetailsResponse(detailsResponse, paymentLinkResponse, paymentLinksRequest);
+    }
+
+    // Synchronous test methods
+    @Test
+    void shouldCreateAndGetPaymentsLinkSync() {
+        final PaymentLinkRequest paymentLinksRequest = createPaymentLinksRequest();
+
+        final PaymentLinkResponse paymentLinkResponse =
+                checkoutApi.paymentLinksClient().createPaymentLinkSync(paymentLinksRequest);
+
+        validateCreatePaymentLinkResponse(paymentLinkResponse, paymentLinksRequest);
+
+        final PaymentLinkDetailsResponse detailsResponse =
+                checkoutApi.paymentLinksClient().getPaymentLinkSync(paymentLinkResponse.getId());
+
+        validatePaymentLinkDetailsResponse(detailsResponse, paymentLinkResponse, paymentLinksRequest);
+    }
+
+    // Common methods
+    private PaymentLinkRequest createPaymentLinksRequest() {
         final PaymentLinkRequest paymentLinksRequest = TestHelper.createPaymentLinksRequest(REFERENCE);
-        paymentLinksRequest.setAmountAllocations(Collections.singletonList(AmountAllocations.builder()
+        paymentLinksRequest.setAmountAllocations(Collections.singletonList(createAmountAllocation()));
+        return paymentLinksRequest;
+    }
+
+    private AmountAllocations createAmountAllocation() {
+        return AmountAllocations.builder()
                 .id("ent_sdioy6bajpzxyl3utftdp7legq")
                 .amount(100L)
                 .reference(UUID.randomUUID().toString())
@@ -37,20 +72,26 @@ class PaymentLinksTestIT extends SandboxTestFixture {
                         .amount(1L)
                         .percentage(0.1)
                         .build())
-                .build()));
-        final PaymentLinkResponse paymentLinkResponse = blocking(() -> checkoutApi.paymentLinksClient().createPaymentLink(paymentLinksRequest));
+                .build();
+    }
 
+    private void validateCreatePaymentLinkResponse(final PaymentLinkResponse paymentLinkResponse,
+                                                   final PaymentLinkRequest paymentLinksRequest) {
         assertNotNull(paymentLinkResponse);
         assertEquals(REFERENCE, paymentLinkResponse.getReference());
         assertNotNull(paymentLinkResponse.getExpiresOn());
         assertNotNull(paymentLinkResponse.getLinks());
         assertTrue(paymentLinkResponse.getLinks().containsKey("redirect"));
-        assertEquals(paymentLinkResponse.getHttpStatusCode(), 201);
+        assertEquals(201, paymentLinkResponse.getHttpStatusCode());
+    }
 
-        final PaymentLinkDetailsResponse detailsResponse = blocking(() -> checkoutApi.paymentLinksClient().getPaymentLink(paymentLinkResponse.getId()));
+    private void validatePaymentLinkDetailsResponse(final PaymentLinkDetailsResponse detailsResponse,
+                                                    final PaymentLinkResponse paymentLinkResponse,
+                                                    final PaymentLinkRequest paymentLinksRequest) {
         assertNotNull(detailsResponse);
         assertEquals(paymentLinkResponse.getId(), detailsResponse.getId());
-        assertThat(detailsResponse.getStatus(), anyOf(equalTo(PaymentLinkStatus.ACTIVE), equalTo(PaymentLinkStatus.PAYMENT_RECEIVED), equalTo(PaymentLinkStatus.EXPIRED)));
+        assertThat(detailsResponse.getStatus(), anyOf(equalTo(PaymentLinkStatus.ACTIVE),
+                equalTo(PaymentLinkStatus.PAYMENT_RECEIVED), equalTo(PaymentLinkStatus.EXPIRED)));
         assertNotNull(detailsResponse.getExpiresOn());
         assertEquals(paymentLinksRequest.getReturnUrl(), detailsResponse.getReturnUrl());
         assertEquals(paymentLinksRequest.getAmount(), detailsResponse.getAmount());

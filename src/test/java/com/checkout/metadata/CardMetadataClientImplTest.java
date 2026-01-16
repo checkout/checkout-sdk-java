@@ -55,9 +55,28 @@ class CardMetadataClientImplTest {
 
         final CompletableFuture<CardMetadataResponse> future = client.requestCardMetadata(request);
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
-
+        validateCardMetadataResponse(response, future.get());
     }
 
+    // Synchronous methods
+    @Test
+    void shouldRequestCardMetadataSync() throws ExecutionException, InterruptedException {
+
+        final CardMetadataRequest request = mock(CardMetadataRequest.class);
+        final CardMetadataResponse response = mock(CardMetadataResponse.class);
+
+        when(apiClient.post(eq("metadata/card"), eq(authorization), eq(CardMetadataResponse.class),
+                eq(request), isNull()))
+                .thenReturn(response);
+
+        final CardMetadataResponse result = client.requestCardMetadataSync(request);
+
+        validateCardMetadataResponse(response, result);
+    }
+
+    // Common methods
+    private void validateCardMetadataResponse(final CardMetadataResponse response, final CardMetadataResponse result) {
+        assertNotNull(result);
+        assertEquals(response, result);
+    }
 }

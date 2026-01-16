@@ -158,9 +158,6 @@ class SessionsClientImplTest {
     @Test
     void getSessionDetails_shouldThrowOnNullRequest() {
 
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.OAUTH)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
-
         try {
             sessionsClient.getSessionDetails(null);
             fail();
@@ -177,11 +174,19 @@ class SessionsClientImplTest {
     void getSessionDetails_shouldThrowOnSessionSecret() {
 
         try {
-            sessionsClient.getSessionDetails(null, null);
+            sessionsClient.getSessionDetails(null, "id");
             fail();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
             assertEquals("sessionSecret cannot be null", e.getMessage());
+        }
+
+        try {
+            sessionsClient.getSessionDetails("secret", null);
+            fail();
+        } catch (final Exception e) {
+            assertTrue(e instanceof CheckoutArgumentException);
+            assertEquals("sessionId cannot be null", e.getMessage());
         }
 
         verifyNoInteractions(apiClient);
@@ -225,9 +230,6 @@ class SessionsClientImplTest {
 
     @Test
     void updateSession_shouldThrowOnNullRequest() {
-
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.OAUTH)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
 
         try {
             sessionsClient.updateSession(null, null);
@@ -316,9 +318,6 @@ class SessionsClientImplTest {
     @Test
     void completeSession_shouldThrowOnNullRequest() {
 
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.OAUTH)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
-
         try {
             sessionsClient.completeSession(null);
             fail();
@@ -381,9 +380,6 @@ class SessionsClientImplTest {
 
     @Test
     void update3dsMethodCompletionIndicator_shouldThrowOnNullRequest() {
-
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.OAUTH)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
 
         try {
             sessionsClient.update3dsMethodCompletionIndicator(null, null);

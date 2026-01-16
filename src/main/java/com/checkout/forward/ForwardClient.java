@@ -23,4 +23,9 @@ public interface ForwardClient {
      */
     CompletableFuture<GetForwardResponse> getForwardRequest(String forwardId);
 
+    // Synchronous methods
+    ForwardAnApiResponse forwardAnApiRequestSync(ForwardRequest forwardRequest);
+    
+    GetForwardResponse getForwardRequestSync(String forwardId);
+
 }

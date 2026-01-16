@@ -26,4 +26,15 @@ public class IdealClientImpl extends AbstractClient implements IdealClient {
         return apiClient.getAsync(buildPath(IDEAL_EXTERNAL_PATH, ISSUERS), sdkAuthorization(), IssuerResponse.class);
     }
 
+    // Synchronous methods
+    @Override
+    public IdealInfo getInfoSync() {
+        return apiClient.get(buildPath(IDEAL_EXTERNAL_PATH), sdkAuthorization(), IdealInfo.class);
+    }
+
+    @Override
+    public IssuerResponse getIssuersSync() {
+        return apiClient.get(buildPath(IDEAL_EXTERNAL_PATH, ISSUERS), sdkAuthorization(), IssuerResponse.class);
+    }
+
 }

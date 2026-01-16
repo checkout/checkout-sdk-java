@@ -14,17 +14,22 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class TokensClientImplTest {
+
+    private TokensClient client;
 
     @Mock
     private ApiClient apiClient;
@@ -38,74 +43,144 @@ class TokensClientImplTest {
     @Mock
     private SdkAuthorization authorization;
 
-    private TokensClient tokensClient;
-
     @BeforeEach
-    void setup() {
-        this.tokensClient = new TokensClientImpl(apiClient, configuration);
+    void setUp() {
+        client = new TokensClientImpl(apiClient, configuration);
     }
 
     @Test
     void shouldThrowExceptionIfApiClientIsNull() {
-
         try {
             new TokensClientImpl(null, configuration);
             fail();
         } catch (final CheckoutArgumentException checkoutArgumentException) {
             assertEquals("apiClient cannot be null", checkoutArgumentException.getMessage());
         }
-
     }
 
     @Test
     void shouldThrowException_whenRequestIsNull_cardToken() {
-
         try {
-            tokensClient.requestCardToken((CardTokenRequest) null);
+            client.requestCardToken((CardTokenRequest) null);
             fail();
         } catch (final CheckoutArgumentException checkoutArgumentException) {
             assertEquals("cardTokenRequest cannot be null", checkoutArgumentException.getMessage());
         }
 
         verifyNoInteractions(apiClient);
-
-    }
-
-    @Test
-    void shouldRequestCardToken() {
-
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.PUBLIC_KEY)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
-
-        final CardTokenRequest cardTokenRequest = CardTokenRequest.builder().number("123").expiryMonth(3).expiryYear(2030).build();
-
-        tokensClient.requestCardToken(cardTokenRequest);
-
-        verify(apiClient).postAsync(eq("tokens"), eq(authorization), eq(CardTokenResponse.class), eq(cardTokenRequest), isNull());
-
     }
 
     @Test
     void shouldThrowException_whenRequestIsNull_walletToken() {
-
         try {
-
-            tokensClient.requestWalletToken((WalletTokenRequest) null);
+            client.requestWalletToken((WalletTokenRequest) null);
             fail();
         } catch (final CheckoutArgumentException checkoutArgumentException) {
             assertEquals("walletTokenRequest cannot be null", checkoutArgumentException.getMessage());
         }
 
         verifyNoInteractions(apiClient);
-
     }
 
     @Test
-    void shouldRequestApplePayToken() {
+    void shouldRequestCardToken() throws ExecutionException, InterruptedException {
+        final CardTokenRequest request = createMockCardTokenRequest();
+        final CardTokenResponse expectedResponse = mock(CardTokenResponse.class);
 
+        setUpAuthorizationMocks();
+        when(apiClient.postAsync(eq("tokens"), eq(authorization), eq(CardTokenResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<CardTokenResponse> future = client.requestCardToken(request);
+        final CardTokenResponse actualResponse = future.get();
+        
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldRequestApplePayToken() throws ExecutionException, InterruptedException {                
+        final ApplePayTokenRequest request = createMockApplePayTokenRequest();
+        final TokenResponse expectedResponse = mock(TokenResponse.class);
+
+        setUpAuthorizationMocks();
+        when(apiClient.postAsync(eq("tokens"), eq(authorization), eq(TokenResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<TokenResponse> future = client.requestWalletToken(request);
+        final TokenResponse actualResponse = future.get();
+        
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldRequestGooglePayToken() throws ExecutionException, InterruptedException {
+        final GooglePayTokenRequest request = createMockGooglePayTokenRequest();
+        final TokenResponse expectedResponse = mock(TokenResponse.class);
+
+        setUpAuthorizationMocks();
+        when(apiClient.postAsync(eq("tokens"), eq(authorization), eq(TokenResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<TokenResponse> future = client.requestWalletToken(request);
+        final TokenResponse actualResponse = future.get();
+        
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    // Synchronous methods
+    @Test
+    void shouldRequestCardTokenSync() {
+        final CardTokenRequest request = createMockCardTokenRequest();
+        final CardTokenResponse expectedResponse = mock(CardTokenResponse.class);
+
+        setUpAuthorizationMocks();
+        when(apiClient.post(eq("tokens"), eq(authorization), eq(CardTokenResponse.class), eq(request), isNull()))
+                .thenReturn(expectedResponse);
+
+        final CardTokenResponse actualResponse = client.requestCardTokenSync(request);
+        
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldRequestApplePayTokenSync() {
+        final ApplePayTokenRequest request = createMockApplePayTokenRequest();
+        final TokenResponse expectedResponse = mock(TokenResponse.class);
+
+        setUpAuthorizationMocks();
+        when(apiClient.post(eq("tokens"), eq(authorization), eq(TokenResponse.class), eq(request), isNull()))
+                .thenReturn(expectedResponse);
+
+        final TokenResponse actualResponse = client.requestWalletTokenSync(request);
+        
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldRequestGooglePayTokenSync() {
+        final GooglePayTokenRequest request = createMockGooglePayTokenRequest();
+        final TokenResponse expectedResponse = mock(TokenResponse.class);
+
+        setUpAuthorizationMocks();
+        when(apiClient.post(eq("tokens"), eq(authorization), eq(TokenResponse.class), eq(request), isNull()))
+                .thenReturn(expectedResponse);
+
+        final TokenResponse actualResponse = client.requestWalletTokenSync(request);
+        
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    // Common methods
+    private void setUpAuthorizationMocks() {
         when(sdkCredentials.getAuthorization(SdkAuthorizationType.PUBLIC_KEY)).thenReturn(authorization);
         when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+    }
 
+    private CardTokenRequest createMockCardTokenRequest() {
+        return CardTokenRequest.builder().number("123").expiryMonth(3).expiryYear(2030).build();
+    }
+
+    private ApplePayTokenRequest createMockApplePayTokenRequest() {
         final String signature = "MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCAMIID5j" +
                 "CCA4ugAwIBAgIIaGD2mdnMpw8wCgYIKoZIzj0EAwIwejEuMCwGA1UEAwwlQXBwbGUgQXBwbGljYXRpb24gS" +
                 "W50ZWdyYXRpb24gQ0EgLSBHMzEmMCQGA1UECwwdQXBwbGUgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkxEzAR" +
@@ -126,36 +201,26 @@ class TokensClientImplTest {
                 .signature(signature)
                 .build();
 
-        final ApplePayTokenRequest applePayTokenRequest = ApplePayTokenRequest.builder()
+        return ApplePayTokenRequest.builder()
                 .applePayTokenData(applePayTokenData)
                 .build();
-
-        tokensClient.requestWalletToken(applePayTokenRequest);
-
-        verify(apiClient).postAsync(eq("tokens"), eq(authorization), eq(TokenResponse.class), eq(applePayTokenRequest), isNull());
-
     }
 
-    @Test
-    void shouldRequestGooglePayToken() {
-
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.PUBLIC_KEY)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
-
+    private GooglePayTokenRequest createMockGooglePayTokenRequest() {
         final GooglePayTokenData googlePayTokenData = GooglePayTokenData.builder()
                 .signature("TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ")
                 .protocolVersion("ECv1")
                 .signedMessage("Signed Message")
                 .build();
 
-        final GooglePayTokenRequest googlePayTokenRequest = GooglePayTokenRequest.builder()
+        return GooglePayTokenRequest.builder()
                 .googlePayTokenData(googlePayTokenData)
                 .build();
+    }
 
-        tokensClient.requestWalletToken(googlePayTokenRequest);
-
-        verify(apiClient).postAsync(eq("tokens"), eq(authorization), eq(TokenResponse.class), eq(googlePayTokenRequest), isNull());
-
+    private <T> void validateResponse(T expectedResponse, T actualResponse) {
+        assertEquals(expectedResponse, actualResponse);
+        assertNotNull(actualResponse);
     }
 
 }

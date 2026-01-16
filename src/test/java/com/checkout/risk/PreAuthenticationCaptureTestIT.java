@@ -47,8 +47,79 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
     @Disabled("unavailable")
     @Test
     void shouldPreAuthenticate_card() {
+        final CardSourcePrism cardSourcePrism = createCardSource();
+        
+        final PreAuthenticationAssessmentResponse authenticationAssessmentResponse = blocking(() -> checkoutApi.riskClient().requestPreAuthenticationRiskScan(createPreAuthenticationRequest(cardSourcePrism)));
+        validatePreAuthenticationResponse(authenticationAssessmentResponse);
+        
+        final PreCaptureAssessmentResponse preCaptureAssessmentResponse = blocking(() -> checkoutApi.riskClient().requestPreCaptureRiskScan(createPreCaptureRequest(cardSourcePrism)));
+        validatePreCaptureResponse(preCaptureAssessmentResponse);
+    }
 
-        final CardSourcePrism cardSourcePrism = CardSourcePrism.builder()
+    @Disabled("unavailable")
+    @Test
+    void shouldPreAuthenticate_customer() {
+        final CustomerSourcePrism customerSourcePrism = createCustomerSource();
+        
+        final PreAuthenticationAssessmentResponse authenticationAssessmentResponse = blocking(() -> checkoutApi.riskClient().requestPreAuthenticationRiskScan(createPreAuthenticationRequest(customerSourcePrism)));
+        validatePreAuthenticationResponse(authenticationAssessmentResponse);
+        
+        final PreCaptureAssessmentResponse preCaptureAssessmentResponse = blocking(() -> checkoutApi.riskClient().requestPreCaptureRiskScan(createPreCaptureRequest(customerSourcePrism)));
+        validatePreCaptureResponse(preCaptureAssessmentResponse);
+    }
+
+    @Disabled("unavailable")
+    @Test
+    void shouldPreAuthenticate_id() {
+        final IdSourcePrism idSourcePrism = createIdSource();
+        
+        final PreAuthenticationAssessmentResponse authenticationAssessmentResponse = blocking(() -> checkoutApi.riskClient().requestPreAuthenticationRiskScan(createPreAuthenticationRequest(idSourcePrism)));
+        validatePreAuthenticationResponse(authenticationAssessmentResponse);
+        
+        final PreCaptureAssessmentResponse preCaptureAssessmentResponse = blocking(() -> checkoutApi.riskClient().requestPreCaptureRiskScan(createPreCaptureRequest(idSourcePrism)));
+        validatePreCaptureResponse(preCaptureAssessmentResponse);
+    }
+
+    // Synchronous test methods
+    @Disabled("unavailable")
+    @Test
+    void shouldPreAuthenticate_cardSync() {
+        final CardSourcePrism cardSourcePrism = createCardSource();
+        
+        final PreAuthenticationAssessmentResponse authenticationAssessmentResponse = checkoutApi.riskClient().requestPreAuthenticationRiskScanSync(createPreAuthenticationRequest(cardSourcePrism));
+        validatePreAuthenticationResponse(authenticationAssessmentResponse);
+        
+        final PreCaptureAssessmentResponse preCaptureAssessmentResponse = checkoutApi.riskClient().requestPreCaptureRiskScanSync(createPreCaptureRequest(cardSourcePrism));
+        validatePreCaptureResponse(preCaptureAssessmentResponse);
+    }
+
+    @Disabled("unavailable")
+    @Test
+    void shouldPreAuthenticate_customerSync() {
+        final CustomerSourcePrism customerSourcePrism = createCustomerSource();
+        
+        final PreAuthenticationAssessmentResponse authenticationAssessmentResponse = checkoutApi.riskClient().requestPreAuthenticationRiskScanSync(createPreAuthenticationRequest(customerSourcePrism));
+        validatePreAuthenticationResponse(authenticationAssessmentResponse);
+        
+        final PreCaptureAssessmentResponse preCaptureAssessmentResponse = checkoutApi.riskClient().requestPreCaptureRiskScanSync(createPreCaptureRequest(customerSourcePrism));
+        validatePreCaptureResponse(preCaptureAssessmentResponse);
+    }
+
+    @Disabled("unavailable")
+    @Test
+    void shouldPreAuthenticate_idSync() {
+        final IdSourcePrism idSourcePrism = createIdSource();
+        
+        final PreAuthenticationAssessmentResponse authenticationAssessmentResponse = checkoutApi.riskClient().requestPreAuthenticationRiskScanSync(createPreAuthenticationRequest(idSourcePrism));
+        validatePreAuthenticationResponse(authenticationAssessmentResponse);
+        
+        final PreCaptureAssessmentResponse preCaptureAssessmentResponse = checkoutApi.riskClient().requestPreCaptureRiskScanSync(createPreCaptureRequest(idSourcePrism));
+        validatePreCaptureResponse(preCaptureAssessmentResponse);
+    }
+
+    // Common methods for setup and validation
+    private CardSourcePrism createCardSource() {
+        return CardSourcePrism.builder()
                 .billingAddress(Address.builder()
                         .addressLine1("123 Street")
                         .addressLine2("Hollywood Avenue")
@@ -62,17 +133,9 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                 .number(CardSourceHelper.Visa.NUMBER)
                 .phone(TestHelper.createPhone())
                 .build();
-
-        final PreAuthenticationAssessmentResponse authenticationAssessmentResponse = testAuthenticationAssessmentRequest(cardSourcePrism);
-
-        testPreCaptureAssessmentRequest(cardSourcePrism, authenticationAssessmentResponse.getAssessmentId());
-
     }
 
-    @Disabled("unavailable")
-    @Test
-    void shouldPreAuthenticate_customer() {
-
+    private CustomerSourcePrism createCustomerSource() {
         final com.checkout.customers.CustomerRequest customerRequest = com.checkout.customers.CustomerRequest.builder()
                 .email(generateRandomEmail())
                 .name("Testing")
@@ -83,20 +146,13 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                 .build();
 
         final String customerId = blocking(() -> checkoutApi.customersClient().create(customerRequest)).getId();
-
-        final CustomerSourcePrism customerSourcePrism = CustomerSourcePrism.builder()
-                .id(customerId).build();
-
-        final PreAuthenticationAssessmentResponse authenticationAssessmentResponse = testAuthenticationAssessmentRequest(customerSourcePrism);
-
-        testPreCaptureAssessmentRequest(customerSourcePrism, authenticationAssessmentResponse.getAssessmentId());
-
+        
+        return CustomerSourcePrism.builder()
+                .id(customerId)
+                .build();
     }
 
-    @Disabled("unavailable")
-    @Test
-    void shouldPreAuthenticate_id() {
-
+    private IdSourcePrism createIdSource() {
         final com.checkout.customers.CustomerRequest customerRequest = com.checkout.customers.CustomerRequest.builder()
                 .email(generateRandomEmail())
                 .name("Testing")
@@ -141,18 +197,14 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
 
         final CreateInstrumentResponse response = blocking(() -> checkoutApi.instrumentsClient().create(createInstrumentTokenRequest));
 
-        final IdSourcePrism idSourcePrism = IdSourcePrism.builder()
-                .id(response.getId()).cvv(TestCardSource.VISA.getCvv()).build();
-
-        final PreAuthenticationAssessmentResponse authenticationAssessmentResponse = testAuthenticationAssessmentRequest(idSourcePrism);
-
-        testPreCaptureAssessmentRequest(idSourcePrism, authenticationAssessmentResponse.getAssessmentId());
-
+        return IdSourcePrism.builder()
+                .id(response.getId())
+                .cvv(TestCardSource.VISA.getCvv())
+                .build();
     }
 
-    private PreAuthenticationAssessmentResponse testAuthenticationAssessmentRequest(final RiskPaymentRequestSource requestSource) {
-
-        final PreAuthenticationAssessmentRequest request = PreAuthenticationAssessmentRequest.builder()
+    private PreAuthenticationAssessmentRequest createPreAuthenticationRequest(final RiskPaymentRequestSource requestSource) {
+        return PreAuthenticationAssessmentRequest.builder()
                 .date(Instant.now())
                 .source(requestSource)
                 .customer(new CustomerRequest(TestHelper.generateRandomEmail(), "name", null))
@@ -171,41 +223,13 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                 .description("Set of 3 masks")
                 .amount(6540L)
                 .currency(Currency.GBP)
-                .device(Device.builder()
-                        .ip("90.197.169.245")
-                        .location(Location.builder().longitude("0.1313").latitude("51.5107").build())
-                        .type("Phone")
-                        .os("ISO")
-                        .model("iPhone X")
-                        .date(Instant.now())
-                        .userAgent("Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1")
-                        .fingerprint("34304a9e3fg09302")
-                        .build())
-                .metadata(Stream.of(
-                        new AbstractMap.SimpleImmutableEntry<>("VoucherCode", "loyalty_10"),
-                        new AbstractMap.SimpleImmutableEntry<>("discountApplied", "10"),
-                        new AbstractMap.SimpleImmutableEntry<>("customer_id", "2190EF321"))
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
+                .device(createRiskDevice())
+                .metadata(createPreAuthMetadata())
                 .build();
-
-        final PreAuthenticationAssessmentResponse response = blocking(() -> checkoutApi.riskClient().requestPreAuthenticationRiskScan(request));
-
-        assertNotNull(response);
-
-        assertNotNull(response.getAssessmentId());
-        assertNotNull(response.getResult());
-        assertNotNull(response.getResult().getDecision());
-        assertNotNull(response.getLink("pre_capture"));
-        assertNotNull(response.getLink("self"));
-        assertNotNull(response.getLink("pre_capture").getLink());
-        assertNotNull(response.getLink("self").getLink());
-
-        return response;
     }
 
-    private void testPreCaptureAssessmentRequest(final RiskPaymentRequestSource requestSource, final String assessmentId) {
-
-        final PreCaptureAssessmentRequest request = PreCaptureAssessmentRequest.builder()
+    private PreCaptureAssessmentRequest createPreCaptureRequest(final RiskPaymentRequestSource requestSource) {
+        return PreCaptureAssessmentRequest.builder()
                 .date(Instant.now())
                 .source(requestSource)
                 .customer(new CustomerRequest(TestHelper.generateRandomEmail(), "name", null))
@@ -222,21 +246,8 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                 ).build())
                 .amount(6540L)
                 .currency(Currency.GBP)
-                .device(Device.builder()
-                        .ip("90.197.169.245")
-                        .location(Location.builder().longitude("0.1313").latitude("51.5107").build())
-                        .type("Phone")
-                        .os("ISO")
-                        .model("iPhone X")
-                        .date(Instant.now())
-                        .userAgent("Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1")
-                        .fingerprint("34304a9e3fg09302")
-                        .build())
-                .metadata(Stream.of(
-                        new AbstractMap.SimpleImmutableEntry<>("VoucherCode", "loyalty_10"),
-                        new AbstractMap.SimpleImmutableEntry<>("discountApplied", "10"),
-                        new AbstractMap.SimpleImmutableEntry<>("customer_id", "2190EF321"))
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)))
+                .device(createRiskDevice())
+                .metadata(createPreCaptureMetadata())
                 .authenticationResult(AuthenticationResult.builder()
                         .attempted(true)
                         .challenged(true)
@@ -250,9 +261,49 @@ class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
                         .cvvResult("N")
                         .build())
                 .build();
+    }
 
-        final PreCaptureAssessmentResponse response = blocking(() -> checkoutApi.riskClient().requestPreCaptureRiskScan(request));
+    private Device createRiskDevice() {
+        return Device.builder()
+                .ip("90.197.169.245")
+                .location(Location.builder().longitude("0.1313").latitude("51.5107").build())
+                .type("Phone")
+                .os("ISO")
+                .model("iPhone X")
+                .date(Instant.now())
+                .userAgent("Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1")
+                .fingerprint("34304a9e3fg09302")
+                .build();
+    }
 
+    private Map<String, String> createPreAuthMetadata() {
+        return Stream.of(
+                new AbstractMap.SimpleImmutableEntry<>("VoucherCode", "loyalty_10"),
+                new AbstractMap.SimpleImmutableEntry<>("discountApplied", "10"),
+                new AbstractMap.SimpleImmutableEntry<>("customer_id", "2190EF321"))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    private Map<String, Object> createPreCaptureMetadata() {
+        return Stream.of(
+                new AbstractMap.SimpleImmutableEntry<>("VoucherCode", "loyalty_10"),
+                new AbstractMap.SimpleImmutableEntry<>("discountApplied", "10"),
+                new AbstractMap.SimpleImmutableEntry<>("customer_id", "2190EF321"))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    private void validatePreAuthenticationResponse(final PreAuthenticationAssessmentResponse response) {
+        assertNotNull(response);
+        assertNotNull(response.getAssessmentId());
+        assertNotNull(response.getResult());
+        assertNotNull(response.getResult().getDecision());
+        assertNotNull(response.getLink("pre_capture"));
+        assertNotNull(response.getLink("self"));
+        assertNotNull(response.getLink("pre_capture").getLink());
+        assertNotNull(response.getLink("self").getLink());
+    }
+
+    private void validatePreCaptureResponse(final PreCaptureAssessmentResponse response) {
         assertNotNull(response);
         assertNotNull(response.getAssessmentId());
         assertNotNull(response.getResult());

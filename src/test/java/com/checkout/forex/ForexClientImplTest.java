@@ -40,16 +40,16 @@ class ForexClientImplTest {
 
     @BeforeEach
     void setUp() {
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.OAUTH)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
         client = new ForexClientImpl(apiClient, configuration);
     }
 
     @Test
     void shouldRequestQuote() throws ExecutionException, InterruptedException {
 
-        final QuoteRequest request = mock(QuoteRequest.class);
-        final QuoteResponse response = mock(QuoteResponse.class);
+        setupMockCredentials();
+
+        final QuoteRequest request = createQuoteRequest();
+        final QuoteResponse response = createQuoteResponse();
 
         when(apiClient.postAsync(eq("forex/quotes"), eq(authorization), eq(QuoteResponse.class),
                 eq(request), isNull()))
@@ -57,20 +57,16 @@ class ForexClientImplTest {
 
         final CompletableFuture<QuoteResponse> future = client.requestQuote(request);
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
+        validateQuoteResponse(future.get(), response);
     }
 
     @Test
     void shouldGetRates() throws ExecutionException, InterruptedException {
 
-        final RatesQueryFilter request = RatesQueryFilter.builder()
-                .product("card_payouts")
-                .source(ForexSource.VISA)
-                .currencyPairs("GBPEUR,USDNOK,JPNCAD")
-                .processChannelId("pc_abcdefghijklmnopqrstuvwxyz")
-                .build();
-        final RatesQueryResponse response = mock(RatesQueryResponse.class);
+        setupMockCredentials();
+
+        final RatesQueryFilter request = createRatesQueryFilter();
+        final RatesQueryResponse response = createRatesQueryResponse();
 
         when(apiClient.queryAsync(eq("forex/rates"), eq(authorization), eq(request),
                 eq(RatesQueryResponse.class)))
@@ -78,8 +74,79 @@ class ForexClientImplTest {
 
         final CompletableFuture<RatesQueryResponse> future = client.getRates(request);
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
+        validateRatesQueryResponse(future.get(), response);
+    }
+
+    // Synchronous method tests
+    @Test
+    void shouldRequestQuoteSync() {
+
+        setupMockCredentials();
+
+        final QuoteRequest request = createQuoteRequest();
+        final QuoteResponse response = createQuoteResponse();
+
+        when(apiClient.post(eq("forex/quotes"), eq(authorization), eq(QuoteResponse.class),
+                eq(request), isNull()))
+                .thenReturn(response);
+
+        final QuoteResponse result = client.requestQuoteSync(request);
+
+        validateQuoteResponse(result, response);
+    }
+
+    @Test
+    void shouldGetRatesSync() {
+
+        setupMockCredentials();
+
+        final RatesQueryFilter request = createRatesQueryFilter();
+        final RatesQueryResponse response = createRatesQueryResponse();
+
+        when(apiClient.query(eq("forex/rates"), eq(authorization), eq(request),
+                eq(RatesQueryResponse.class)))
+                .thenReturn(response);
+
+        final RatesQueryResponse result = client.getRatesSync(request);
+
+        validateRatesQueryResponse(result, response);
+    }
+
+    // Common methods
+    private void setupMockCredentials() {
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.OAUTH)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+    }
+
+    private QuoteRequest createQuoteRequest() {
+        return mock(QuoteRequest.class);
+    }
+
+    private QuoteResponse createQuoteResponse() {
+        return mock(QuoteResponse.class);
+    }
+
+    private RatesQueryFilter createRatesQueryFilter() {
+        return RatesQueryFilter.builder()
+                .product("card_payouts")
+                .source(ForexSource.VISA)
+                .currencyPairs("GBPEUR,USDNOK,JPNCAD")
+                .processChannelId("pc_abcdefghijklmnopqrstuvwxyz")
+                .build();
+    }
+
+    private RatesQueryResponse createRatesQueryResponse() {
+        return mock(RatesQueryResponse.class);
+    }
+
+    private void validateQuoteResponse(QuoteResponse actual, QuoteResponse expected) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    private void validateRatesQueryResponse(RatesQueryResponse actual, RatesQueryResponse expected) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
     }
 
 }

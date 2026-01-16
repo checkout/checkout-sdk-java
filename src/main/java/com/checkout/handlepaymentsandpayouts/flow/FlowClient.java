@@ -22,4 +22,15 @@ public interface FlowClient {
             PaymentSessionWithPaymentRequest paymentSessionRequest
     );
 
+    // Synchronous methods
+    PaymentSessionResponse requestPaymentSessionSync(PaymentSessionRequest paymentSessionRequest);
+
+    SubmitPaymentSessionResponse submitPaymentSessionsSync(
+            String paymentId,
+            SubmitPaymentSessionRequest submitPaymentSessionRequest
+    );
+
+    PaymentSessionWithPaymentResponse requestPaymentSessionWithPaymentSync(
+            PaymentSessionWithPaymentRequest paymentSessionRequest
+    );
 }

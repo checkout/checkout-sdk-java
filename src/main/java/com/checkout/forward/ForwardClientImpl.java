@@ -21,13 +21,35 @@ public class ForwardClientImpl extends AbstractClient implements ForwardClient {
 
     @Override
     public CompletableFuture<ForwardAnApiResponse> forwardAnApiRequest(final ForwardRequest forwardRequest) {
-        CheckoutUtils.validateParams("forwardRequest", forwardRequest);
+        validateForwardRequest(forwardRequest);
         return apiClient.postAsync(FORWARD_PATH, sdkAuthorization(), ForwardAnApiResponse.class, forwardRequest, null);
     }
 
     @Override
     public CompletableFuture<GetForwardResponse> getForwardRequest(final String forwardId) {
-        CheckoutUtils.validateParams("forwardId", forwardId);
+        validateForwardId(forwardId);
         return apiClient.getAsync(buildPath(FORWARD_PATH, forwardId), sdkAuthorization(), GetForwardResponse.class);
+    }
+
+    // Synchronous methods
+    @Override
+    public ForwardAnApiResponse forwardAnApiRequestSync(final ForwardRequest forwardRequest) {
+        validateForwardRequest(forwardRequest);
+        return apiClient.post(FORWARD_PATH, sdkAuthorization(), ForwardAnApiResponse.class, forwardRequest, null);
+    }
+
+    @Override
+    public GetForwardResponse getForwardRequestSync(final String forwardId) {
+        validateForwardId(forwardId);
+        return apiClient.get(buildPath(FORWARD_PATH, forwardId), sdkAuthorization(), GetForwardResponse.class);
+    }
+
+    // Common methods
+    private void validateForwardId(final String forwardId) {
+        CheckoutUtils.validateParams("forwardId", forwardId);
+    }
+
+    private void validateForwardRequest(final ForwardRequest forwardRequest) {
+        CheckoutUtils.validateParams("forwardRequest", forwardRequest);
     }
 }

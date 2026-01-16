@@ -24,14 +24,36 @@ public class RiskClientImpl extends AbstractClient implements RiskClient {
 
     @Override
     public CompletableFuture<PreAuthenticationAssessmentResponse> requestPreAuthenticationRiskScan(final PreAuthenticationAssessmentRequest preAuthenticationAssessmentRequest) {
-        validateParams("preAuthenticationAssessmentRequest", preAuthenticationAssessmentRequest);
+        validatePreAuthenticationRequest(preAuthenticationAssessmentRequest);
         return apiClient.postAsync(PRE_AUTHENTICATION_PATH, sdkAuthorization(), PreAuthenticationAssessmentResponse.class, preAuthenticationAssessmentRequest, null);
     }
 
     @Override
     public CompletableFuture<PreCaptureAssessmentResponse> requestPreCaptureRiskScan(final PreCaptureAssessmentRequest preCaptureAssessmentRequest) {
-        validateParams("preCaptureAssessmentRequest", preCaptureAssessmentRequest);
+        validatePreCaptureRequest(preCaptureAssessmentRequest);
         return apiClient.postAsync(PRE_CAPTURE_PATH, sdkAuthorization(), PreCaptureAssessmentResponse.class, preCaptureAssessmentRequest, null);
+    }
+
+    // Synchronous methods
+    @Override
+    public PreAuthenticationAssessmentResponse requestPreAuthenticationRiskScanSync(final PreAuthenticationAssessmentRequest preAuthenticationAssessmentRequest) {
+        validatePreAuthenticationRequest(preAuthenticationAssessmentRequest);
+        return apiClient.post(PRE_AUTHENTICATION_PATH, sdkAuthorization(), PreAuthenticationAssessmentResponse.class, preAuthenticationAssessmentRequest, null);
+    }
+
+    @Override
+    public PreCaptureAssessmentResponse requestPreCaptureRiskScanSync(final PreCaptureAssessmentRequest preCaptureAssessmentRequest) {
+        validatePreCaptureRequest(preCaptureAssessmentRequest);
+        return apiClient.post(PRE_CAPTURE_PATH, sdkAuthorization(), PreCaptureAssessmentResponse.class, preCaptureAssessmentRequest, null);
+    }
+
+    // Common methods
+    private void validatePreAuthenticationRequest(final PreAuthenticationAssessmentRequest preAuthenticationAssessmentRequest) {
+        validateParams("preAuthenticationAssessmentRequest", preAuthenticationAssessmentRequest);
+    }
+
+    private void validatePreCaptureRequest(final PreCaptureAssessmentRequest preCaptureAssessmentRequest) {
+        validateParams("preCaptureAssessmentRequest", preCaptureAssessmentRequest);
     }
 
 }

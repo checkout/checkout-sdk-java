@@ -8,4 +8,9 @@ public interface HostedPaymentsClient {
 
     CompletableFuture<HostedPaymentDetailsResponse> getHostedPaymentsPageDetails(String hostedPaymentId);
 
+    // Synchronous methods
+    HostedPaymentResponse createHostedPaymentsPageSessionSync(HostedPaymentRequest hostedPaymentRequest);
+
+    HostedPaymentDetailsResponse getHostedPaymentsPageDetailsSync(String hostedPaymentId);
+
 }

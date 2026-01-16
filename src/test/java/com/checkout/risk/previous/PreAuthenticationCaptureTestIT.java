@@ -41,6 +41,8 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+// 2025-12-29 DRY - Should we keep all these Risk deprecated tests AJ?
+
 @Disabled("unavailable")
 class PreAuthenticationCaptureTestIT extends SandboxTestFixture {
 

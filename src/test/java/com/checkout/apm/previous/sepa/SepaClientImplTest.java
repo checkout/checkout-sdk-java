@@ -40,69 +40,120 @@ class SepaClientImplTest {
 
     @BeforeEach
     void setUp() {
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
-        when(checkoutConfiguration.getSdkCredentials()).thenReturn(sdkCredentials);
+        setUpAuthorizationMocks();
         this.sepaClient = new SepaClientImpl(apiClient, checkoutConfiguration);
     }
 
     @Test
     void shouldGetMandate() throws ExecutionException, InterruptedException {
-
-        final MandateResponse response = mock(MandateResponse.class);
+        final MandateResponse expectedResponse = mock(MandateResponse.class);
 
         when(apiClient.getAsync("sepa/mandates/mandate_id", authorization, MandateResponse.class))
-                .thenReturn(CompletableFuture.completedFuture(response));
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<MandateResponse> future = sepaClient.getMandate("mandate_id");
+        final MandateResponse actualResponse = future.get();
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
-
+        validateResponse(expectedResponse, actualResponse);
     }
 
     @Test
     void shouldCancelMandate() throws ExecutionException, InterruptedException {
-
-        final SepaResource response = mock(SepaResource.class);
+        final SepaResource expectedResponse = mock(SepaResource.class);
 
         when(apiClient.postAsync(eq("sepa/mandates/mandate_id/cancel"), eq(authorization), eq(SepaResource.class), isNull(), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(response));
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<SepaResource> future = sepaClient.cancelMandate("mandate_id");
+        final SepaResource actualResponse = future.get();
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
-
+        validateResponse(expectedResponse, actualResponse);
     }
 
     @Test
     void shouldGetMandateViaPPRO() throws ExecutionException, InterruptedException {
-
-        final MandateResponse response = mock(MandateResponse.class);
+        final MandateResponse expectedResponse = mock(MandateResponse.class);
 
         when(apiClient.getAsync("apms/ppro/sepa/mandates/mandate_id", authorization, MandateResponse.class))
-                .thenReturn(CompletableFuture.completedFuture(response));
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<MandateResponse> future = sepaClient.getMandateViaPPRO("mandate_id");
+        final MandateResponse actualResponse = future.get();
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
-
+        validateResponse(expectedResponse, actualResponse);
     }
 
     @Test
     void shouldCancelMandateViaPPRO() throws ExecutionException, InterruptedException {
-
-        final SepaResource response = mock(SepaResource.class);
+        final SepaResource expectedResponse = mock(SepaResource.class);
 
         when(apiClient.postAsync(eq("apms/ppro/sepa/mandates/mandate_id/cancel"), eq(authorization), eq(SepaResource.class), isNull(), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(response));
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<SepaResource> future = sepaClient.cancelMandateViaPPRO("mandate_id");
+        final SepaResource actualResponse = future.get();
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
+        validateResponse(expectedResponse, actualResponse);
+    }
 
+    // Synchronous methods
+    @Test
+    void shouldGetMandateSync() {
+        final MandateResponse expectedResponse = mock(MandateResponse.class);
+
+        when(apiClient.get("sepa/mandates/mandate_id", authorization, MandateResponse.class))
+                .thenReturn(expectedResponse);
+
+        final MandateResponse actualResponse = sepaClient.getMandateSync("mandate_id");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldCancelMandateSync() {
+        final SepaResource expectedResponse = mock(SepaResource.class);
+
+        when(apiClient.post(eq("sepa/mandates/mandate_id/cancel"), eq(authorization), eq(SepaResource.class), isNull(), isNull()))
+                .thenReturn(expectedResponse);
+
+        final SepaResource actualResponse = sepaClient.cancelMandateSync("mandate_id");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldGetMandateViaPPROSync() {
+        final MandateResponse expectedResponse = mock(MandateResponse.class);
+
+        when(apiClient.get("apms/ppro/sepa/mandates/mandate_id", authorization, MandateResponse.class))
+                .thenReturn(expectedResponse);
+
+        final MandateResponse actualResponse = sepaClient.getMandateViaPPROSync("mandate_id");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldCancelMandateViaPPROSync() {
+        final SepaResource expectedResponse = mock(SepaResource.class);
+
+        when(apiClient.post(eq("apms/ppro/sepa/mandates/mandate_id/cancel"), eq(authorization), eq(SepaResource.class), isNull(), isNull()))
+                .thenReturn(expectedResponse);
+
+        final SepaResource actualResponse = sepaClient.cancelMandateViaPPROSync("mandate_id");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    // Common methods
+    private void setUpAuthorizationMocks() {
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY)).thenReturn(authorization);
+        when(checkoutConfiguration.getSdkCredentials()).thenReturn(sdkCredentials);
+    }
+
+    private <T> void validateResponse(T expectedResponse, T actualResponse) {
+        assertEquals(expectedResponse, actualResponse);
+        assertNotNull(actualResponse);
     }
 
 }

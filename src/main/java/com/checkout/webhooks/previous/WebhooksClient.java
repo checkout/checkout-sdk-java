@@ -19,4 +19,18 @@ public interface WebhooksClient {
 
     CompletableFuture<EmptyResponse> removeWebhook(String webhookId);
 
+    // Sync methods
+
+    ItemsResponse<WebhookResponse> retrieveWebhooksSync();
+
+    WebhookResponse registerWebhookSync(WebhookRequest webhookRequest);
+
+    WebhookResponse registerWebhookSync(WebhookRequest webhookRequest, String idempotencyKey);
+
+    WebhookResponse retrieveWebhookSync(String webhookId);
+
+    WebhookResponse updateWebhookSync(String webhookId, WebhookRequest webhookRequest);
+
+    EmptyResponse removeWebhookSync(String webhookId);
+
 }
