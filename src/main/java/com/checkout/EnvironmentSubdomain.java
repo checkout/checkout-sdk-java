@@ -11,8 +11,8 @@ public class EnvironmentSubdomain {
     private URI oAuthAuthorizationApi;
 
     public EnvironmentSubdomain(IEnvironment environment, String subdomain) {
-        checkoutApi = addSubdomainToUrlEnvironment(environment.getCheckoutApi(), subdomain);
-        oAuthAuthorizationApi = addSubdomainToUrlEnvironment(environment.getOAuthAuthorizationApi(), subdomain);
+        checkoutApi = createUrlWithSubdomain(environment.getCheckoutApi(), subdomain);
+        oAuthAuthorizationApi = createUrlWithSubdomain(environment.getOAuthAuthorizationApi(), subdomain);
     }
 
     public URI getCheckoutApi() {
@@ -32,7 +32,7 @@ public class EnvironmentSubdomain {
      * @param subdomain the subdomain to prepend
      * @return the transformed URI with subdomain, or original URI if subdomain is invalid
      */
-    private static URI addSubdomainToUrlEnvironment(URI originalUrl, String subdomain) {
+    private static URI createUrlWithSubdomain(URI originalUrl, String subdomain) {
         URI newEnvironment = null;
         try {
             newEnvironment = new URI(originalUrl.toString());
