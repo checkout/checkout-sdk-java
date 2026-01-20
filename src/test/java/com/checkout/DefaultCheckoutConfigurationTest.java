@@ -52,7 +52,7 @@ class DefaultCheckoutConfigurationTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"a", "ab", "abc", "abc1", "12345domain"})
+    @ValueSource(strings = {"a", "ab", "abc", "abc1", "12345domain", "a1b2c3d4", "12345678", "abcdefgh", "1234doma"})
     void shouldCreateConfigurationWithSubdomain(String subdomain) {
 
         final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
@@ -60,6 +60,7 @@ class DefaultCheckoutConfigurationTest {
 
         final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, environmentSubdomain, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, DEFAULT_TRANSPORT_CONFIGURATION, false);
         assertEquals("https://" + subdomain + ".api.sandbox.checkout.com/", configuration.getEnvironmentSubdomain().getCheckoutApi().toString());
+        assertEquals("https://" + subdomain + ".access.sandbox.checkout.com/connect/token", configuration.getEnvironmentSubdomain().getOAuthAuthorizationApi().toString());
     }
 
     @ParameterizedTest
@@ -71,6 +72,19 @@ class DefaultCheckoutConfigurationTest {
 
         final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, environmentSubdomain, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, DEFAULT_TRANSPORT_CONFIGURATION, false);
         assertEquals("https://api.sandbox.checkout.com/", configuration.getEnvironmentSubdomain().getCheckoutApi().toString());
+        assertEquals("https://access.sandbox.checkout.com/connect/token", configuration.getEnvironmentSubdomain().getOAuthAuthorizationApi().toString());
+    }
+
+    @Test
+    void shouldCreateConfigurationWithSubdomainForProduction() {
+
+        final String subdomain = "1234prod";
+        final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
+        final EnvironmentSubdomain environmentSubdomain = new EnvironmentSubdomain(Environment.PRODUCTION, subdomain);
+
+        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, environmentSubdomain, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, DEFAULT_TRANSPORT_CONFIGURATION, false);
+        assertEquals("https://" + subdomain + ".api.checkout.com/", configuration.getEnvironmentSubdomain().getCheckoutApi().toString());
+        assertEquals("https://" + subdomain + ".access.checkout.com/connect/token", configuration.getEnvironmentSubdomain().getOAuthAuthorizationApi().toString());
     }
 
     @Test

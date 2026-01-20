@@ -8,32 +8,47 @@ import java.util.regex.Matcher;
 public class EnvironmentSubdomain {
 
     private URI checkoutApi;
+    private URI oAuthAuthorizationApi;
 
     public EnvironmentSubdomain(IEnvironment environment, String subdomain) {
-        checkoutApi = addSubdomainToApiUrlEnvironment(environment, subdomain);
+        checkoutApi = addSubdomainToUrlEnvironment(environment.getCheckoutApi(), subdomain);
+        oAuthAuthorizationApi = addSubdomainToUrlEnvironment(environment.getOAuthAuthorizationApi(), subdomain);
     }
 
     public URI getCheckoutApi() {
         return checkoutApi;
     }
 
-    private static URI addSubdomainToApiUrlEnvironment(IEnvironment environment, String subdomain) {
-        URI apiUrl = environment.getCheckoutApi();
+    public URI getOAuthAuthorizationApi() {
+        return oAuthAuthorizationApi;
+    }
+
+    /**
+     * Applies subdomain transformation to any given URI.
+     * If the subdomain is valid (alphanumeric pattern), prepends it to the host.
+     * Otherwise, returns the original URI unchanged.
+     *
+     * @param originalUrl the original URI to transform
+     * @param subdomain the subdomain to prepend
+     * @return the transformed URI with subdomain, or original URI if subdomain is invalid
+     */
+    private static URI addSubdomainToUrlEnvironment(URI originalUrl, String subdomain) {
         URI newEnvironment = null;
         try {
-            newEnvironment = new URI(apiUrl.toString());
+            newEnvironment = new URI(originalUrl.toString());
         } catch (final URISyntaxException e) {
             throw new CheckoutException(e);
         }
+        
         Pattern pattern = Pattern.compile("^[0-9a-z]+$");
         Matcher matcher = pattern.matcher(subdomain);
         if (matcher.matches()) {
-            String host = apiUrl.getHost();
-            String scheme = apiUrl.getScheme();
-            int port = apiUrl.getPort();
+            String host = originalUrl.getHost();
+            String scheme = originalUrl.getScheme();
+            int port = originalUrl.getPort();
             String newHost = subdomain + "." + host;
             try {
-                newEnvironment = new URI(scheme, null, newHost, port, apiUrl.getPath(), apiUrl.getQuery(), apiUrl.getFragment());
+                newEnvironment = new URI(scheme, null, newHost, port, originalUrl.getPath(), originalUrl.getQuery(), originalUrl.getFragment());
             } catch (final URISyntaxException e) {
                 throw new CheckoutException(e);
             }
