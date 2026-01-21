@@ -34,7 +34,7 @@ public final class IndividualSender extends AbstractSender {
     /**
      * The sender's date of birth, in the format yyyy-mm-dd.
      */
-    private Instant dateOfBirth;
+    private String dateOfBirth;
     /**
      * The sender's address
      */
@@ -51,7 +51,7 @@ public final class IndividualSender extends AbstractSender {
             final String firstName,
             final String lastName,
             final Instant dob,
-            final Instant dateOfBirth,
+            final String dateOfBirth,
             final Address address,
             final Identification identification,
             final String reference
