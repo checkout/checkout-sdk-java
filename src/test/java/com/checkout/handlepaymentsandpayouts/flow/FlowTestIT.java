@@ -34,9 +34,9 @@ class FlowTestIT extends SandboxTestFixture {
     void shouldMakeAPaymentSessionsRequest() {
         final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Billing billing = createStandardBilling();
         final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.BillingDescriptor billingDescriptor = createStandardBillingDescriptor();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Customer customer = createStandardCustomer();
+        //final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Customer customer = createStandardCustomer();
         final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Shipping shipping = createStandardShipping();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Recipient recipient = createStandardRecipient();
+        //final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Recipient recipient = createStandardRecipient();
         final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Processing processing = createStandardProcessing();
         final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Instruction instruction = createStandardInstruction();
 
@@ -107,9 +107,9 @@ class FlowTestIT extends SandboxTestFixture {
     void shouldMakeAPaymentSessionsRequestWithIndividualSender() {
         final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Billing billing = createStandardBilling();
         final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.BillingDescriptor billingDescriptor = createStandardBillingDescriptor();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Customer customer = createStandardCustomer();
+        //final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Customer customer = createStandardCustomer();
         final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Shipping shipping = createStandardShipping();
-        final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Recipient recipient = createStandardRecipient();
+        //final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Recipient recipient = createStandardRecipient();
         final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Processing processing = createStandardProcessing();
         final com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Instruction instruction = createStandardInstruction();
 
