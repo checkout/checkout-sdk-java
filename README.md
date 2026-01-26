@@ -239,6 +239,262 @@ final CheckoutApi checkoutApi = CheckoutSdk.builder()
 - **`setDefaultConnectionConfig(ConnectionConfig)`**: Set default connection configuration
 - **`setDefaultSocketConfig(SocketConfig)`**: Set socket configuration including timeouts
 
+## Advanced Customization for Different Throughput Requirements
+
+This section provides specific configuration patterns for different application requirements, focusing on rate limiting and HTTP connection pool optimization.
+
+### Basic Rate Limiting
+
+For applications that need to limit the rate of requests to respect API limits or prevent overwhelming the service, you can configure rate limiting without full resilience patterns.
+
+#### Simple Rate Limiting Setup
+
+```java
+// Basic rate limiting - 50 requests per second
+final RateLimiterConfig rateLimiterConfig = RateLimiterConfig.custom()
+        .limitForPeriod(50)                                // 50 requests
+        .limitRefreshPeriod(Duration.ofSeconds(1))         // Per second
+        .timeoutDuration(Duration.ofSeconds(2))            // Wait up to 2 seconds for permission
+        .build();
+
+final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.builder()
+        .withRateLimiter(rateLimiterConfig)
+        .build();
+
+final CheckoutApi checkoutApi = CheckoutSdk.builder()
+        .staticKeys()
+        .secretKey("secret_key")
+        .environment(Environment.PRODUCTION)
+        .synchronous(true)                                 // Required for rate limiting
+        .resilience4jConfiguration(resilience4jConfig)
+        .build();
+```
+
+#### Common Rate Limiting Patterns
+
+```java
+// Conservative rate limiting for production environments
+final RateLimiterConfig conservativeRateLimit = RateLimiterConfig.custom()
+        .limitForPeriod(20)                                // 20 requests per minute
+        .limitRefreshPeriod(Duration.ofMinutes(1))
+        .timeoutDuration(Duration.ofSeconds(10))           // Longer wait for production
+        .build();
+
+// Burst-friendly rate limiting
+final RateLimiterConfig burstRateLimit = RateLimiterConfig.custom()
+        .limitForPeriod(100)                               // Allow bursts of 100 requests
+        .limitRefreshPeriod(Duration.ofSeconds(10))        // Per 10 seconds
+        .timeoutDuration(Duration.ofMillis(500))           // Quick timeout for bursts
+        .build();
+
+// High-throughput rate limiting
+final RateLimiterConfig highThroughputLimit = RateLimiterConfig.custom()
+        .limitForPeriod(500)                               // 500 requests
+        .limitRefreshPeriod(Duration.ofSeconds(1))         // Per second
+        .timeoutDuration(Duration.ofSeconds(1))            // Fast fail if limit exceeded
+        .build();
+```
+
+### HTTP Connection Pool Optimization by Throughput
+
+Configure your HTTP connection pool based on your application's expected throughput and concurrency requirements.
+
+#### Low Throughput Applications (< 100 requests/minute)
+
+Suitable for small applications, background tasks, or services with infrequent API calls.
+
+```java
+final HttpClientBuilder lowThroughputClient = HttpClientBuilder.create()
+        .setMaxConnTotal(5)                                // Small total pool
+        .setMaxConnPerRoute(2)                             // Limited connections per endpoint
+        .setConnectionTimeToLive(60, TimeUnit.SECONDS)    // Keep connections alive longer
+        .evictIdleConnections(30, TimeUnit.SECONDS)       // Cleanup idle connections
+        .build();
+
+final Executor lowThroughputExecutor = Executors.newFixedThreadPool(2);
+
+final CheckoutApi checkoutApi = CheckoutSdk.builder()
+        .staticKeys()
+        .secretKey("secret_key")
+        .environment(Environment.PRODUCTION)
+        .executor(lowThroughputExecutor)
+        .httpClientBuilder(lowThroughputClient)
+        .build();
+```
+
+#### Medium Throughput Applications (100-1000 requests/minute)
+
+Suitable for typical web applications, APIs, and moderate-load services.
+
+```java
+final HttpClientBuilder mediumThroughputClient = HttpClientBuilder.create()
+        .setMaxConnTotal(20)                               // Moderate total pool
+        .setMaxConnPerRoute(10)                            // Balance connections per route
+        .setConnectionTimeToLive(45, TimeUnit.SECONDS)    // Moderate connection lifetime
+        .evictIdleConnections(20, TimeUnit.SECONDS)       // Regular cleanup
+        .setDefaultConnectionConfig(ConnectionConfig.custom()
+                .setConnectTimeout(5000)                   // 5 second connect timeout
+                .setSocketTimeout(10000)                   // 10 second read timeout
+                .build())
+        .build();
+
+final Executor mediumThroughputExecutor = Executors.newFixedThreadPool(10);
+
+final CheckoutApi checkoutApi = CheckoutSdk.builder()
+        .staticKeys()
+        .secretKey("secret_key")
+        .environment(Environment.PRODUCTION)
+        .executor(mediumThroughputExecutor)
+        .httpClientBuilder(mediumThroughputClient)
+        .build();
+```
+
+#### High Throughput Applications (> 1000 requests/minute)
+
+Suitable for high-load applications, payment processors, and enterprise systems.
+
+```java
+final HttpClientBuilder highThroughputClient = HttpClientBuilder.create()
+        .setMaxConnTotal(200)                              // Large total pool
+        .setMaxConnPerRoute(50)                            // Many connections per route
+        .setConnectionTimeToLive(30, TimeUnit.SECONDS)    // Shorter connection lifetime for freshness
+        .evictIdleConnections(15, TimeUnit.SECONDS)       // Aggressive idle cleanup
+        .setDefaultConnectionConfig(ConnectionConfig.custom()
+                .setConnectTimeout(3000)                   // Fast connect timeout
+                .setSocketTimeout(8000)                    // Moderate read timeout
+                .build())
+        .setDefaultSocketConfig(SocketConfig.custom()
+                .setSoTimeout(8000)                        // Socket timeout alignment
+                .setTcpNoDelay(true)                       // Disable Nagle's algorithm for low latency
+                .build())
+        .build();
+
+final Executor highThroughputExecutor = Executors.newFixedThreadPool(50);
+
+// Optional: Add rate limiting to prevent overwhelming the API
+final RateLimiterConfig rateLimiterConfig = RateLimiterConfig.custom()
+        .limitForPeriod(200)                               // 200 requests per second
+        .limitRefreshPeriod(Duration.ofSeconds(1))
+        .timeoutDuration(Duration.ofMillis(100))           // Fast timeout for high throughput
+        .build();
+
+final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.builder()
+        .withRateLimiter(rateLimiterConfig)
+        .build();
+
+final CheckoutApi checkoutApi = CheckoutSdk.builder()
+        .staticKeys()
+        .secretKey("secret_key")
+        .environment(Environment.PRODUCTION)
+        .synchronous(true)                                 // Required for rate limiting
+        .executor(highThroughputExecutor)
+        .httpClientBuilder(highThroughputClient)
+        .resilience4jConfiguration(resilience4jConfig)
+        .build();
+```
+
+#### Ultra-High Throughput Applications (Enterprise/Payment Processors)
+
+For mission-critical applications requiring maximum performance and reliability.
+
+```java
+final HttpClientBuilder ultraHighThroughputClient = HttpClientBuilder.create()
+        .setMaxConnTotal(500)                             // Very large pool
+        .setMaxConnPerRoute(100)                          // Maximum connections per endpoint
+        .setConnectionTimeToLive(20, TimeUnit.SECONDS)    // Short lifetime for optimal freshness
+        .evictIdleConnections(10, TimeUnit.SECONDS)       // Aggressive cleanup
+        .setConnectionManagerShared(false)                // Dedicated connection manager
+        .setDefaultConnectionConfig(ConnectionConfig.custom()
+                .setConnectTimeout(2000)                   // Very fast connect
+                .setSocketTimeout(5000)                    // Quick read timeout
+                .build())
+        .setDefaultSocketConfig(SocketConfig.custom()
+                .setSoTimeout(5000)
+                .setTcpNoDelay(true)                       // Low latency
+                .setSoKeepAlive(true)                      // Keep connections alive
+                .setSoReuseAddress(true)                   // Reuse addresses quickly
+                .build())
+        .setRetryHandler(new DefaultHttpRequestRetryHandler(0, false)) // No automatic retries (use Resilience4j instead)
+        .build();
+
+final Executor ultraHighThroughputExecutor = Executors.newFixedThreadPool(100);
+
+// Comprehensive resilience configuration
+final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.builder()
+        .withRetry(RetryConfig.custom()
+                .maxAttempts(2)                            // Fast retries only
+                .waitDuration(Duration.ofMillis(100))
+                .build())
+        .withCircuitBreaker(CircuitBreakerConfig.custom()
+                .failureRateThreshold(20)                 // Sensitive to failures
+                .waitDurationInOpenState(Duration.ofSeconds(10))
+                .slidingWindowSize(100)
+                .minimumNumberOfCalls(50)
+                .build())
+        .withRateLimiter(RateLimiterConfig.custom()
+                .limitForPeriod(1000)                      // 1000 requests per second
+                .limitRefreshPeriod(Duration.ofSeconds(1))
+                .timeoutDuration(Duration.ofMillis(50))    // Very fast timeout
+                .build())
+        .build();
+
+final CheckoutApi checkoutApi = CheckoutSdk.builder()
+        .staticKeys()
+        .secretKey("secret_key")
+        .environment(Environment.PRODUCTION)
+        .synchronous(true)
+        .executor(ultraHighThroughputExecutor)
+        .httpClientBuilder(ultraHighThroughputClient)
+        .resilience4jConfiguration(resilience4jConfig)
+        .build();
+```
+
+### Performance Tuning Guidelines
+
+#### Connection Pool Sizing Rules of Thumb
+
+- **MaxConnTotal**: Should be at least 2-3x your expected concurrent requests
+- **MaxConnPerRoute**: Usually 50-80% of MaxConnTotal for single-endpoint applications
+- **Thread Pool Size**: Should match or slightly exceed MaxConnPerRoute
+- **Connection TTL**: Shorter for high-load (10-30s), longer for low-load (60-300s)
+
+#### Memory and Resource Considerations
+
+```java
+// Memory-conscious configuration for resource-constrained environments
+final HttpClientBuilder memoryOptimizedClient = HttpClientBuilder.create()
+        .setMaxConnTotal(10)                               // Minimal memory footprint
+        .setMaxConnPerRoute(5)
+        .setConnectionTimeToLive(120, TimeUnit.SECONDS)   // Longer TTL to reduce churn
+        .evictIdleConnections(60, TimeUnit.SECONDS)
+        .setDefaultConnectionConfig(ConnectionConfig.custom()
+                .setBufferSize(4096)                       // Smaller buffers
+                .build())
+        .build();
+```
+
+#### Monitoring and Observability
+
+When using custom configurations, monitor these metrics:
+
+- **Connection Pool Utilization**: Ensure pools aren't exhausted
+- **Request Rate**: Verify rate limiting effectiveness  
+- **Response Times**: Monitor impact of connection pooling
+- **Error Rates**: Track timeouts and connection failures
+- **Circuit Breaker States**: Monitor open/closed states
+- **Memory Usage**: Watch for connection pool memory impact
+
+### Common Patterns Summary
+
+| Use Case | MaxConnTotal | MaxConnPerRoute | Thread Pool | Rate Limit (req/sec) |
+|----------|-------------|----------------|-------------|-------------------|
+| Low Load | 5-10 | 2-5 | 2-5 | 1-10 |
+| Medium Load | 20-50 | 10-25 | 10-25 | 10-100 |
+| High Load | 100-200 | 25-50 | 25-100 | 100-500 |
+| Ultra High Load | 300-500 | 50-100 | 50-200 | 500-1000+ |
+
+Choose configurations based on your specific requirements, monitoring results, and adjusting as needed for optimal performance.
+
 ## Retry Strategy and Resilience Configuration
 
 The SDK includes built-in resilience patterns using the [Resilience4j](https://github.com/resilience4j/resilience4j) library to handle transient errors and improve reliability.
