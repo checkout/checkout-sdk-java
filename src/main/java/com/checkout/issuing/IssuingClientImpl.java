@@ -4,7 +4,11 @@ import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.EmptyResponse;
+import com.checkout.PlatformType;
+import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
+import com.checkout.cardissuing.cardholderaccesstokens.requests.RequestAnAccessTokenRequest;
+import com.checkout.cardissuing.cardholderaccesstokens.responses.RequestAnAccessTokenResponse;
 import com.checkout.common.IdResponse;
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
 import com.checkout.issuing.cardholders.CardholderDetailsResponse;
@@ -59,6 +63,12 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     private static final String SUSPEND_PATH = "suspend";
 
     private static final String CONTROLS_PATH = "controls";
+
+    private static final String ACCESS_PATH = "access";
+
+    private static final String CONNECT_PATH = "connect";
+
+    private static final String TOKEN_PATH = "token";
 
     private static final String SIMULATE_PATH = "simulate";
 
@@ -275,6 +285,19 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 buildPath(ISSUING_PATH, CONTROLS_PATH, controlId),
                 sdkAuthorization(),
                 IdResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<RequestAnAccessTokenResponse> RequestAnAccessToken (
+        final RequestAnAccessTokenRequest requestAnAccessTokenRequest
+    ) {
+        validateParams("requestAnAccessTokenRequest", requestAnAccessTokenRequest);
+        return apiClient.postFormUrlEncodedAsync(
+                buildPath(ISSUING_PATH, ACCESS_PATH, CONNECT_PATH, TOKEN_PATH),
+                new SdkAuthorization(PlatformType.DEFAULT, ""),
+                requestAnAccessTokenRequest.toFormParams(),
+                RequestAnAccessTokenResponse.class
         );
     }
 

@@ -1,6 +1,8 @@
 package com.checkout.issuing;
 
 import com.checkout.EmptyResponse;
+import com.checkout.cardissuing.cardholderaccesstokens.requests.RequestAnAccessTokenRequest;
+import com.checkout.cardissuing.cardholderaccesstokens.responses.RequestAnAccessTokenResponse;
 import com.checkout.common.IdResponse;
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
 import com.checkout.issuing.cardholders.CardholderDetailsResponse;
@@ -69,6 +71,8 @@ public interface IssuingClient {
     CompletableFuture<CardControlResponse> updateCardControl(final String controlId, final UpdateCardControlRequest updateCardControlRequest);
 
     CompletableFuture<IdResponse> removeCardControl(final String controlId);
+
+    CompletableFuture<RequestAnAccessTokenResponse> RequestAnAccessToken(final RequestAnAccessTokenRequest requestAnAccessTokenRequest);
 
     CompletableFuture<CardAuthorizationResponse> simulateAuthorization(final CardAuthorizationRequest cardAuthorizationRequest);
 

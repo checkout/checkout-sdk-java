@@ -1,8 +1,10 @@
 package com.checkout;
 
 import com.checkout.common.AbstractFileRequest;
+import org.apache.http.NameValuePair;
 
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -23,6 +25,8 @@ public interface ApiClient {
     <T extends HttpMetadata> CompletableFuture<T> patchAsync(String path, SdkAuthorization authorization, Class<T> responseType, Object request, String idempotencyKey);
 
     CompletableFuture<? extends HttpMetadata> postAsync(String path, SdkAuthorization authorization, Map<Integer, Class<? extends HttpMetadata>> resultTypeMappings, Object request, String idempotencyKey);
+
+    <T extends HttpMetadata> CompletableFuture<T> postFormUrlEncodedAsync(String path, SdkAuthorization authorization, List<NameValuePair> formParams, Class<T> responseType);
 
     CompletableFuture<EmptyResponse> deleteAsync(String path, SdkAuthorization authorization);
 
