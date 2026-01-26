@@ -165,7 +165,11 @@ You don't need to specify all the previous URI's, only the ones for the modules 
 
 ## Custom HttpClient
 
-Sometimes you need a custom thread pool, or any custom http property, so you can provide your own httpClient configuration as follows.
+The SDK allows you to customize the underlying HTTP client and executor configurations to meet your specific needs, such as custom connection pooling, proxy settings, timeout configurations, or multithreaded operations.
+
+### Basic HttpClient Configuration
+
+You can provide your own `HttpClientBuilder` to customize HTTP connection properties:
 
 ```java
 final HttpClientBuilder customHttpClient = HttpClientBuilder.create()
@@ -179,6 +183,452 @@ final CheckoutApi checkoutApi = CheckoutSdk.builder()
         .environmentSubdomain("subdomain") // optional, Merchant-specific DNS name
         .httpClientBuilder(customHttpClient) // optional for a custom HttpClient
         .build();
+```
+
+### Custom Executor
+
+You can provide a custom `Executor` for handling asynchronous operations. By default, the SDK uses `ForkJoinPool.commonPool()`.
+
+```java
+final Executor customExecutor = Executors.newSingleThreadExecutor();
+
+final CheckoutApi checkoutApi = CheckoutSdk.builder()
+        .staticKeys()
+        .secretKey("secret_key")
+        .environment(Environment.PRODUCTION)  // required
+        .executor(customExecutor) // optional for a custom Executor Service
+        .build();
+```
+
+### Multithreaded Configuration for High-Performance Applications
+
+For applications requiring high concurrency and performance, you can configure both a custom executor with a larger thread pool and an HTTP client optimized for connection pooling:
+
+```java
+// Configure HttpClient for high concurrency
+final HttpClientBuilder multithreadedHttpClient = HttpClientBuilder.create()
+        .setMaxConnTotal(200)                             // Maximum total connections
+        .setMaxConnPerRoute(100)                          // Maximum connections per route/destination
+        .setConnectionTimeToLive(60, TimeUnit.SECONDS)    // Connection time-to-live
+        .evictIdleConnections(30, TimeUnit.SECONDS);      // Evict idle connections after 30 seconds
+
+// Configure a fixed thread pool executor
+final Executor multithreadedExecutor = Executors.newFixedThreadPool(100);
+
+final CheckoutApi checkoutApi = CheckoutSdk.builder()
+        .staticKeys()
+        .secretKey("secret_key")
+        .environment(Environment.PRODUCTION)  // required
+        .executor(multithreadedExecutor)      // custom thread pool for async operations
+        .httpClientBuilder(multithreadedHttpClient) // custom HTTP client for connection pooling
+        .build();
+```
+
+**Configuration Options Explained:**
+
+- **`executor(Executor)`**: Configures the executor service for handling asynchronous operations. Default is `ForkJoinPool.commonPool()`.
+- **`httpClientBuilder(HttpClientBuilder)`**: Configures the Apache HttpClient settings. Default is `HttpClientBuilder.create()`.
+
+**Common HttpClient Settings:**
+
+- **`setMaxConnTotal(int)`**: Maximum number of total connections across all routes
+- **`setMaxConnPerRoute(int)`**: Maximum number of connections per specific route/destination
+- **`setConnectionTimeToLive(long, TimeUnit)`**: Connection lifetime before being evicted from the pool
+- **`evictIdleConnections(long, TimeUnit)`**: Time after which idle connections are evicted
+- **`setProxy(HttpHost)`**: Configure HTTP proxy server
+- **`setDefaultConnectionConfig(ConnectionConfig)`**: Set default connection configuration
+- **`setDefaultSocketConfig(SocketConfig)`**: Set socket configuration including timeouts
+
+## Retry Strategy and Resilience Configuration
+
+The SDK includes built-in resilience patterns using the [Resilience4j](https://github.com/resilience4j/resilience4j) library to handle transient errors and improve reliability.
+
+### Supported Resilience Patterns
+
+The SDK supports three main resilience patterns:
+- **Retry**: Automatically retries failed requests
+- **Circuit Breaker**: Prevents cascading failures by temporarily stopping requests to failing services
+- **Rate Limiter**: Controls the rate of requests to prevent overloading
+
+### Libraries Used
+
+- **Resilience4j Circuit Breaker**: `io.github.resilience4j:resilience4j-circuitbreaker:1.7.1`
+- **Resilience4j Retry**: `io.github.resilience4j:resilience4j-retry:1.7.1` 
+- **Resilience4j Rate Limiter**: `io.github.resilience4j:resilience4j-ratelimiter:1.7.1`
+
+### How It Works
+
+The resilience patterns are applied as decorators around your HTTP requests in the following order:
+1. **Rate Limiter** (if configured) - Controls request rate
+2. **Retry** (if configured) - Retries failed requests
+3. **Circuit Breaker** (if configured) - Wraps everything to prevent cascading failures
+
+### Transient Errors Handled
+
+The retry mechanism can handle various types of transient errors, including:
+- Network connectivity issues (timeouts, connection refused)
+- HTTP 5xx server errors (500, 502, 503, 504)
+- Temporary service unavailability
+- Rate limiting responses (429)
+
+### Basic Resilience Configuration
+
+#### Using Default Configuration
+
+```java
+final CheckoutApi checkoutApi = CheckoutSdk.builder()
+        .staticKeys()
+        .secretKey("secret_key")
+        .environment(Environment.PRODUCTION)
+        .resilience4jConfiguration(Resilience4jConfiguration.defaultConfiguration())
+        .build();
+```
+
+**Default settings include:**
+- **Circuit Breaker**: 50% failure rate threshold, 30-second wait duration, 10-request sliding window
+- **Retry**: 3 maximum attempts, 500ms wait duration between attempts
+
+#### Individual Component Configuration
+
+```java
+final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.builder()
+        .withDefaultRetry()
+        .withDefaultCircuitBreaker()
+        .withDefaultRateLimiter()
+        .build();
+
+final CheckoutApi checkoutApi = CheckoutSdk.builder()
+        .staticKeys()
+        .secretKey("secret_key")
+        .environment(Environment.PRODUCTION)
+        .synchronous(true)
+        .resilience4jConfiguration(resilience4jConfig)
+        .build();
+```
+
+### Custom Resilience Configuration
+Default behavior: Asynchronous mode
+Resilience4j: NOT applied by default
+Transport: Uses async methods (transport.invoke(), transport.submitFile())
+Performance: Faster, non-blocking execution but no automatic retries
+
+To enable synchronous mode with Resilience4j patterns, you need to explicitly set:
+```java
+    CheckoutSdk.builder()    .synchronous(true)
+```
+So the SDK is designed to be async-first by default, which makes sense for most modern applications that prefer non-blocking operations.
+
+```java
+// SYNC transport (with Resilience4j)
+@Override
+public Response invokeSync(...) {
+    // ... build request ...
+    final Supplier<Response> callSupplier = () -> performCall(...);
+    return executeWithResilience4j(callSupplier);  // ← Resilience4j applied here
+}
+
+// ASYNC transport (no Resilience4j)
+@Override
+public CompletableFuture<Response> invoke(...) {
+    return CompletableFuture.supplyAsync(() -> {
+        // ... build request ...
+        return performCall(...);  // ← Direct call, no Resilience4j
+    }, executor);
+}
+```
+
+#### Custom Retry Configuration
+
+```java
+final RetryConfig retryConfig = RetryConfig.custom()
+        .maxAttempts(5)                                    // Maximum retry attempts
+        .waitDuration(Duration.ofMillis(1000))             // Wait time between retries
+        .retryOnException(throwable -> 
+            throwable instanceof CheckoutApiException &&   // Retry on API exceptions
+            ((CheckoutApiException) throwable).getHttpStatusCode() >= 500) // Only 5xx errors
+        .build();
+
+final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.builder()
+        .withRetry(retryConfig)
+        .build();
+```
+
+#### Custom Circuit Breaker Configuration
+
+```java
+final CircuitBreakerConfig circuitBreakerConfig = CircuitBreakerConfig.custom()
+        .failureRateThreshold(60)                          // Open circuit at 60% failure rate
+        .waitDurationInOpenState(Duration.ofSeconds(60))   // Wait 60 seconds before trying again
+        .slidingWindowSize(20)                             // Consider last 20 requests
+        .minimumNumberOfCalls(10)                          // Minimum calls before evaluation
+        .permittedNumberOfCallsInHalfOpenState(5)          // Calls allowed in half-open state
+        .build();
+
+final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.builder()
+        .withCircuitBreaker(circuitBreakerConfig)
+        .build();
+```
+
+#### Custom Rate Limiter Configuration
+
+```java
+final RateLimiterConfig rateLimiterConfig = RateLimiterConfig.custom()
+        .limitForPeriod(50)                                // 50 requests
+        .limitRefreshPeriod(Duration.ofSeconds(1))         // Per second
+        .timeoutDuration(Duration.ofSeconds(2))            // Wait up to 2 seconds for permission
+        .build();
+
+final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.builder()
+        .withRateLimiter(rateLimiterConfig)
+        .build();
+```
+
+#### Complete Custom Configuration
+
+```java
+final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.builder()
+        .withRetry(RetryConfig.custom()
+                .maxAttempts(3)
+                .waitDuration(Duration.ofMillis(500))
+                .retryOnException(throwable -> 
+                    throwable instanceof CheckoutApiException &&
+                    ((CheckoutApiException) throwable).getHttpStatusCode() >= 500)
+                .build())
+        .withCircuitBreaker(CircuitBreakerConfig.custom()
+                .failureRateThreshold(50)
+                .waitDurationInOpenState(Duration.ofSeconds(30))
+                .slidingWindowSize(10)
+                .build())
+        .withRateLimiter(RateLimiterConfig.custom()
+                .limitForPeriod(100)
+                .limitRefreshPeriod(Duration.ofSeconds(1))
+                .timeoutDuration(Duration.ofSeconds(5))
+                .build())
+        .build();
+
+final CheckoutApi checkoutApi = CheckoutSdk.builder()
+        .staticKeys()
+        .secretKey("secret_key")
+        .environment(Environment.PRODUCTION)
+        .synchronous(true)
+        .resilience4jConfiguration(resilience4jConfig)
+        .build();
+```
+
+**Important Notes:**
+- Resilience4j configuration only works with **synchronous** mode (`synchronous(true)`)
+- For asynchronous operations, implement your own retry logic using CompletableFuture patterns
+- All resilience patterns are optional - configure only what you need
+- Circuit breaker helps prevent cascading failures in microservice architectures
+- Rate limiter helps respect API rate limits and prevent overwhelming the service
+
+## Asynchronous and Synchronous Operations
+
+The SDK provides flexibility in how you handle API operations by supporting both asynchronous and synchronous execution modes. **All client methods return `CompletableFuture`** regardless of the mode, maintaining a consistent API interface.
+
+### Operation Modes
+
+The SDK can be configured to operate in two different modes:
+
+#### Asynchronous Mode (Default)
+- **Configuration**: `synchronous(false)` or omit the setting (default)
+- **Behavior**: HTTP requests are executed asynchronously using the configured executor
+- **Transport**: Uses `Transport.invoke()` and `Transport.submitFile()` methods
+- **Resilience**: Resilience4j patterns are **NOT** supported in async mode
+- **Performance**: Non-blocking execution, better for high-throughput applications
+
+#### Synchronous Mode
+- **Configuration**: `synchronous(true)`
+- **Behavior**: HTTP requests are executed synchronously but wrapped in `CompletableFuture` using the executor, even async ops will be executed synchronous is this mode is activated
+- **Transport**: Uses `Transport.invokeSync()` and `Transport.submitFileSync()` methods  
+- **Resilience**: Full Resilience4j support (retry, circuit breaker, rate limiter)
+- **Performance**: Blocking execution with enhanced reliability patterns
+
+### How the Transport Layer Works
+
+#### Asynchronous Transport Behavior
+
+In asynchronous mode, the transport layer:
+
+1. **Immediate Return**: Methods return `CompletableFuture` immediately
+2. **Async HTTP Execution**: HTTP calls are made asynchronously using Apache HttpClient
+3. **Thread Pool**: Uses the configured executor for CompletableFuture operations
+4. **Non-blocking**: The calling thread is not blocked during HTTP execution
+
+```java
+// Asynchronous mode configuration
+final CheckoutApi asyncApi = CheckoutSdk.builder()
+        .staticKeys()
+        .secretKey("secret_key")
+        .environment(Environment.PRODUCTION)
+        .synchronous(false) // or omit (default)
+        .executor(Executors.newFixedThreadPool(20)) // Custom thread pool for async operations
+        .build();
+
+// Usage - returns immediately, HTTP call happens asynchronously
+CompletableFuture<PaymentResponse> future = asyncApi.paymentsClient().requestPayment(request);
+
+// Process result when available
+future.thenAccept(response -> {
+    System.out.println("Payment ID: " + response.getId());
+});
+```
+
+#### Synchronous Transport Behavior
+
+In synchronous mode, the transport layer:
+
+1. **Blocking HTTP Call**: HTTP request is made synchronously with resilience patterns applied
+2. **Wrapped in CompletableFuture**: Result is wrapped in a `CompletableFuture` using the executor
+3. **Resilience4j Applied**: Retry, circuit breaker, and rate limiting are applied during the synchronous HTTP call
+4. **Consistent API**: Same `CompletableFuture` return type as async mode
+
+```java
+// Synchronous mode configuration with resilience
+final CheckoutApi syncApi = CheckoutSdk.builder()
+        .staticKeys()
+        .secretKey("secret_key")
+        .environment(Environment.PRODUCTION)
+        .synchronous(true) // Enable synchronous mode
+        .resilience4jConfiguration(Resilience4jConfiguration.defaultConfiguration())
+        .executor(Executors.newFixedThreadPool(10)) // Thread pool for wrapping sync calls
+        .build();
+
+// Usage - HTTP call executes synchronously with resilience patterns, then wrapped in CompletableFuture
+CompletableFuture<PaymentResponse> future = syncApi.paymentsClient().requestPayment(request);
+
+// Can still use async patterns
+future.thenAccept(response -> {
+    System.out.println("Payment ID: " + response.getId());
+});
+```
+
+### Client Implementation Details
+
+All client methods follow the same pattern regardless of mode:
+
+```java
+// Example from PaymentsClient - same signature for both modes
+CompletableFuture<PaymentResponse> requestPayment(PaymentRequest paymentRequest);
+```
+
+#### Internal Implementation (ApiClient Layer)
+
+The `ApiClientImpl.executeAsyncOrSync()` method determines the execution path:
+
+```java
+private <T> CompletableFuture<T> executeAsyncOrSync(
+    Supplier<T> syncOperation,           // Calls transport.invokeSync() with Resilience4j
+    Supplier<CompletableFuture<T>> asyncOperation // Calls transport.invoke() directly
+) {
+    if (configuration.isSynchronous()) {
+        // Execute sync operation in executor to maintain async interface
+        return CompletableFuture.supplyAsync(syncOperation, executor);
+    }
+    return asyncOperation.get(); // Direct async execution
+}
+```
+
+### Performance Characteristics
+
+#### Asynchronous Mode
+- **Pros**:
+  - Non-blocking execution
+  - Better resource utilization for I/O bound operations
+  - Suitable for high-throughput applications
+  - Lower memory footprint per request
+- **Cons**:
+  - No built-in resilience patterns
+  - Must implement retry logic manually
+  - More complex error handling
+
+#### Synchronous Mode  
+- **Pros**:
+  - Built-in resilience patterns (retry, circuit breaker, rate limiting)
+  - Simplified error handling with automatic retries
+  - Easier debugging and testing
+  - Transient error handling out-of-the-box
+- **Cons**:
+  - Blocking HTTP execution (but mitigated by executor wrapping)
+  - Higher resource usage due to resilience overhead
+  - Not suitable for very high-throughput scenarios
+
+### Choosing the Right Mode
+
+#### Use Asynchronous Mode When:
+- Building high-throughput applications
+- Implementing custom retry/resilience logic
+- Working with reactive programming patterns
+- Resource efficiency is critical
+- You need fine-grained control over error handling
+
+#### Use Synchronous Mode When:
+- You need robust error handling and retries
+- Working in distributed/microservice environments
+- Reliability is more important than raw performance
+- You want built-in transient error handling
+- Implementing payment processing where consistency is critical
+
+### Example Comparison
+
+```java
+// Both modes have identical client interfaces
+PaymentRequest request = PaymentRequest.builder()
+        .source(cardSource)
+        .amount(1000L)
+        .currency(Currency.USD)
+        .build();
+
+// Asynchronous - fast return, manual error handling
+CompletableFuture<PaymentResponse> asyncResult = asyncApi.paymentsClient()
+        .requestPayment(request)
+        .exceptionally(throwable -> {
+            // Manual retry logic if needed
+            if (shouldRetry(throwable)) {
+                return retryPayment(request);
+            }
+            throw new CompletionException(throwable);
+        });
+
+// Synchronous - built-in resilience, automatic retries
+CompletableFuture<PaymentResponse> syncResult = syncApi.paymentsClient()
+        .requestPayment(request);
+        // Resilience4j automatically handles retries for transient errors
+
+// Both return CompletableFuture - same API!
+```
+
+### Thread Pool Considerations
+
+- **Async Mode**: Executor primarily used for CompletableFuture operations, HTTP I/O is non-blocking
+- **Sync Mode**: Executor used to wrap synchronous operations, size should account for concurrent blocking calls
+- **Recommendation**: Use larger thread pools for sync mode to handle blocking operations
+
+### Error Handling Differences
+
+#### Asynchronous Mode
+```java
+future.exceptionally(throwable -> {
+    if (throwable instanceof CheckoutApiException) {
+        CheckoutApiException apiEx = (CheckoutApiException) throwable;
+        if (apiEx.getHttpStatusCode() >= 500) {
+            // Manual retry logic
+            return retryOperation();
+        }
+    }
+    return handleError(throwable);
+});
+```
+
+#### Synchronous Mode
+```java
+// Resilience4j automatically handles retries for configured conditions
+future.thenAccept(response -> {
+    // Success handling - retries already attempted if needed
+}).exceptionally(throwable -> {
+    // Only called after all retry attempts failed
+    return handleFinalError(throwable);
+});
 ```
 
 ## Logging
