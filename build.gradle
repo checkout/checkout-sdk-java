@@ -34,8 +34,8 @@ dependencies {
     testImplementation('org.junit.jupiter:junit-jupiter')
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation 'org.hamcrest:hamcrest:3.0'
-    testImplementation 'org.mockito:mockito-inline:5.2.0'
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.2.0'
+    testImplementation 'org.mockito:mockito-inline:5.21.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.21.0'
     testImplementation 'org.apache.logging.log4j:log4j-api:2.25.2'
     testImplementation 'org.apache.logging.log4j:log4j-core:2.25.2'
     testImplementation 'org.apache.logging.log4j:log4j-slf4j2-impl:2.25.2'
