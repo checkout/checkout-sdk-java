@@ -55,7 +55,12 @@ public final class CheckoutSdkBuilder {
                 if (environment == null) {
                     throw new CheckoutArgumentException("Invalid configuration. Please specify an Environment or a specific OAuth authorizationURI.");
                 }
-                this.authorizationUri = environment.getOAuthAuthorizationApi();
+                final EnvironmentSubdomain envSubdomain = getEnvironmentSubdomain();
+                if (envSubdomain != null) {
+                    this.authorizationUri = envSubdomain.getOAuthAuthorizationApi();
+                } else {
+                    this.authorizationUri = environment.getOAuthAuthorizationApi();
+                }
             }
             final OAuthSdkCredentials credentials = new OAuthSdkCredentials(httpClientBuilder, authorizationUri, clientId, clientSecret, scopes);
             credentials.initOAuthAccess();
