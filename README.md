@@ -52,7 +52,7 @@ dependencies {
 
 ## How to use the SDK
 
-This SDK can be used with two different pair of API keys provided by Checkout. However, using different API keys imply using specific API features. </br>
+This SDK can be used with two different pair of API keys provided by Checkout. However, using different API keys implies using specific API features. </br>
 Please find in the table below the types of keys that can be used within this SDK.
 
 | Account System | Public Key (example)                    | Secret Key (example)                    |
@@ -525,7 +525,10 @@ The retry mechanism can handle various types of transient errors, including:
 ```java
 final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.builder()
         .withDefaultRetry()
-        .withDefaultRateLimiter()
+        // Not recommended, deactivated by default
+        //.withDefaultRateLimiter()
+        // Not recommended, deactivated by default
+        //.withDefaultCircuitBreaker()
         .build();
 
 final CheckoutApi checkoutApi = CheckoutSdk.builder()
@@ -627,16 +630,18 @@ final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.b
                     throwable instanceof CheckoutApiException &&
                     ((CheckoutApiException) throwable).getHttpStatusCode() >= 500)
                 .build())
-        .withRateLimiter(RateLimiterConfig.custom()           // Not reccommend, deactivated by default
-                .limitForPeriod(100)
-                .limitRefreshPeriod(Duration.ofSeconds(1))
-                .timeoutDuration(Duration.ofSeconds(5))
-                .build())
-        .withCircuitBreaker(CircuitBreakerConfig.custom()     // Not reccommend, deactivated by default
-                .failureRateThreshold(50)
-                .waitDurationInOpenState(Duration.ofSeconds(30))
-                .slidingWindowSize(10)
-                .build())
+        // Not recommended, deactivated by default
+        //.withRateLimiter(RateLimiterConfig.custom()           
+        //        .limitForPeriod(100)
+        //        .limitRefreshPeriod(Duration.ofSeconds(1))
+        //        .timeoutDuration(Duration.ofSeconds(5))
+        //        .build())
+        // Not recommended, deactivated by default
+        //.withCircuitBreaker(CircuitBreakerConfig.custom()
+        //        .failureRateThreshold(50)
+        //        .waitDurationInOpenState(Duration.ofSeconds(30))
+        //        .slidingWindowSize(10)
+        //        .build())
         .build();
 
 final CheckoutApi checkoutApi = CheckoutSdk.builder()
