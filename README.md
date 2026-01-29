@@ -425,13 +425,7 @@ final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.b
                 .maxAttempts(2)                            // Fast retries only
                 .waitDuration(Duration.ofMillis(100))
                 .build())
-        .withCircuitBreaker(CircuitBreakerConfig.custom()
-                .failureRateThreshold(20)                 // Sensitive to failures
-                .waitDurationInOpenState(Duration.ofSeconds(10))
-                .slidingWindowSize(100)
-                .minimumNumberOfCalls(50)
-                .build())
-        .withRateLimiter(RateLimiterConfig.custom()
+        .withRateLimiter(RateLimiterConfig.custom()        // Not recommended, deactivated by default
                 .limitForPeriod(1000)                      // 1000 requests per second
                 .limitRefreshPeriod(Duration.ofSeconds(1))
                 .timeoutDuration(Duration.ofMillis(50))    // Very fast timeout
@@ -481,7 +475,6 @@ When using custom configurations, monitor these metrics:
 - **Request Rate**: Verify rate limiting effectiveness  
 - **Response Times**: Monitor impact of connection pooling
 - **Error Rates**: Track timeouts and connection failures
-- **Circuit Breaker States**: Monitor open/closed states
 - **Memory Usage**: Watch for connection pool memory impact
 
 ### Common Patterns Summary
@@ -503,21 +496,21 @@ The SDK includes built-in resilience patterns using the [Resilience4j](https://g
 
 The SDK supports three main resilience patterns:
 - **Retry**: Automatically retries failed requests
-- **Circuit Breaker**: Prevents cascading failures by temporarily stopping requests to failing services
 - **Rate Limiter**: Controls the rate of requests to prevent overloading
+- **Circuit Breaker**: Prevents cascading failures by temporarily stopping requests to failing services
 
 ### Libraries Used
 
-- **Resilience4j Circuit Breaker**: `io.github.resilience4j:resilience4j-circuitbreaker:1.7.1`
 - **Resilience4j Retry**: `io.github.resilience4j:resilience4j-retry:1.7.1` 
 - **Resilience4j Rate Limiter**: `io.github.resilience4j:resilience4j-ratelimiter:1.7.1`
+- **Resilience4j Circuit Breaker**: `io.github.resilience4j:resilience4j-circuitbreaker:1.7.1`
 
 ### How It Works
 
 The resilience patterns are applied as decorators around your HTTP requests in the following order:
 1. **Rate Limiter** (if configured) - Controls request rate
 2. **Retry** (if configured) - Retries failed requests
-3. **Circuit Breaker** (if configured) - Wraps everything to prevent cascading failures
+3. **Circuit Breaker** (if configured) - Wraps everything to prevent cascading failures (by default deactivated)
 
 ### Transient Errors Handled
 
@@ -527,29 +520,11 @@ The retry mechanism can handle various types of transient errors, including:
 - Temporary service unavailability
 - Rate limiting responses (429)
 
-### Basic Resilience Configuration
-
-#### Using Default Configuration
-
-```java
-final CheckoutApi checkoutApi = CheckoutSdk.builder()
-        .staticKeys()
-        .secretKey("secret_key")
-        .environment(Environment.PRODUCTION)
-        .resilience4jConfiguration(Resilience4jConfiguration.defaultConfiguration())
-        .build();
-```
-
-**Default settings include:**
-- **Circuit Breaker**: 50% failure rate threshold, 30-second wait duration, 10-request sliding window
-- **Retry**: 3 maximum attempts, 500ms wait duration between attempts
-
 #### Individual Component Configuration
 
 ```java
 final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.builder()
         .withDefaultRetry()
-        .withDefaultCircuitBreaker()
         .withDefaultRateLimiter()
         .build();
 
@@ -609,7 +584,23 @@ final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.b
         .build();
 ```
 
-#### Custom Circuit Breaker Configuration
+#### Custom Rate Limiter Configuration
+(Not recommended, deactivated by default)
+
+```java
+final RateLimiterConfig rateLimiterConfig = RateLimiterConfig.custom()
+        .limitForPeriod(50)                                // 50 requests
+        .limitRefreshPeriod(Duration.ofSeconds(1))         // Per second
+        .timeoutDuration(Duration.ofSeconds(2))            // Wait up to 2 seconds for permission
+        .build();
+
+final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.builder()
+        .withRateLimiter(rateLimiterConfig)
+        .build();
+```
+
+#### Custom Circuit Breaker Configuration 
+(Not recommended, deactivated by default, wrap instead a custom circuit breaker at the application level)
 
 ```java
 final CircuitBreakerConfig circuitBreakerConfig = CircuitBreakerConfig.custom()
@@ -625,20 +616,6 @@ final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.b
         .build();
 ```
 
-#### Custom Rate Limiter Configuration
-
-```java
-final RateLimiterConfig rateLimiterConfig = RateLimiterConfig.custom()
-        .limitForPeriod(50)                                // 50 requests
-        .limitRefreshPeriod(Duration.ofSeconds(1))         // Per second
-        .timeoutDuration(Duration.ofSeconds(2))            // Wait up to 2 seconds for permission
-        .build();
-
-final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.builder()
-        .withRateLimiter(rateLimiterConfig)
-        .build();
-```
-
 #### Complete Custom Configuration
 
 ```java
@@ -650,15 +627,15 @@ final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.b
                     throwable instanceof CheckoutApiException &&
                     ((CheckoutApiException) throwable).getHttpStatusCode() >= 500)
                 .build())
-        .withCircuitBreaker(CircuitBreakerConfig.custom()
-                .failureRateThreshold(50)
-                .waitDurationInOpenState(Duration.ofSeconds(30))
-                .slidingWindowSize(10)
-                .build())
-        .withRateLimiter(RateLimiterConfig.custom()
+        .withRateLimiter(RateLimiterConfig.custom()           // Not reccommend, deactivated by default
                 .limitForPeriod(100)
                 .limitRefreshPeriod(Duration.ofSeconds(1))
                 .timeoutDuration(Duration.ofSeconds(5))
+                .build())
+        .withCircuitBreaker(CircuitBreakerConfig.custom()     // Not reccommend, deactivated by default
+                .failureRateThreshold(50)
+                .waitDurationInOpenState(Duration.ofSeconds(30))
+                .slidingWindowSize(10)
                 .build())
         .build();
 
@@ -675,7 +652,6 @@ final CheckoutApi checkoutApi = CheckoutSdk.builder()
 - Resilience4j configuration only works with **synchronous** mode (`synchronous(true)`)
 - For asynchronous operations, implement your own retry logic using CompletableFuture patterns
 - All resilience patterns are optional - configure only what you need
-- Circuit breaker helps prevent cascading failures in microservice architectures
 - Rate limiter helps respect API rate limits and prevent overwhelming the service
 
 ## Asynchronous and Synchronous Operations
@@ -697,7 +673,7 @@ The SDK can be configured to operate in two different modes:
 - **Configuration**: `synchronous(true)`
 - **Behavior**: HTTP requests are executed synchronously but wrapped in `CompletableFuture` using the executor, even async ops will be executed synchronous is this mode is activated
 - **Transport**: Uses `Transport.invokeSync()` and `Transport.submitFileSync()` methods  
-- **Resilience**: Full Resilience4j support (retry, circuit breaker, rate limiter)
+- **Resilience**: Full Resilience4j support (retry, rate limiter, circuit breaker)
 - **Performance**: Blocking execution with enhanced reliability patterns
 
 ### How the Transport Layer Works
@@ -736,7 +712,7 @@ In synchronous mode, the transport layer:
 
 1. **Blocking HTTP Call**: HTTP request is made synchronously with resilience patterns applied
 2. **Wrapped in CompletableFuture**: Result is wrapped in a `CompletableFuture` using the executor
-3. **Resilience4j Applied**: Retry, circuit breaker, and rate limiting are applied during the synchronous HTTP call
+3. **Resilience4j Applied**: Retry, rate limiting and circuit breaker are applied during the synchronous HTTP call
 4. **Consistent API**: Same `CompletableFuture` return type as async mode
 
 ```java
@@ -800,7 +776,7 @@ private <T> CompletableFuture<T> executeAsyncOrSync(
 
 #### Synchronous Mode  
 - **Pros**:
-  - Built-in resilience patterns (retry, circuit breaker, rate limiting)
+  - Built-in resilience patterns (retry, rate limiting, circuit breaker)
   - Simplified error handling with automatic retries
   - Easier debugging and testing
   - Transient error handling out-of-the-box
@@ -812,7 +788,6 @@ private <T> CompletableFuture<T> executeAsyncOrSync(
 ### Choosing the Right Mode
 
 #### Use Asynchronous Mode When:
-- Building high-throughput applications
 - Implementing custom retry/resilience logic
 - Working with reactive programming patterns
 - Resource efficiency is critical
