@@ -303,9 +303,9 @@ The retry mechanism can handle various types of transient errors, including:
 ```java
 final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.builder()
         .withDefaultRetry()
-        // Not recommended, deactivated by default
+        // Deactivated by default
         //.withDefaultRateLimiter()
-        // Not recommended, deactivated by default
+        // Deactivated by default
         //.withDefaultCircuitBreaker()
         .build();
 
@@ -366,7 +366,7 @@ final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.b
 ```
 
 #### Custom Rate Limiter Configuration
-(Not recommended, deactivated by default)
+(deactivated by default)
 
 ```java
 final RateLimiterConfig rateLimiterConfig = RateLimiterConfig.custom()
@@ -381,7 +381,7 @@ final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.b
 ```
 
 #### Custom Circuit Breaker Configuration 
-(Not recommended, deactivated by default, wrap instead a custom circuit breaker at the application level)
+(deactivated by default)
 
 ```java
 final CircuitBreakerConfig circuitBreakerConfig = CircuitBreakerConfig.custom()
@@ -408,13 +408,13 @@ final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.b
                     throwable instanceof CheckoutApiException &&
                     ((CheckoutApiException) throwable).getHttpStatusCode() >= 500)
                 .build())
-        // Not recommended, deactivated by default
+        // Deactivated by default
         //.withRateLimiter(RateLimiterConfig.custom()           
         //        .limitForPeriod(100)
         //        .limitRefreshPeriod(Duration.ofSeconds(1))
         //        .timeoutDuration(Duration.ofSeconds(5))
         //        .build())
-        // Not recommended, deactivated by default
+        // Deactivated by default
         //.withCircuitBreaker(CircuitBreakerConfig.custom()
         //        .failureRateThreshold(50)
         //        .waitDurationInOpenState(Duration.ofSeconds(30))
