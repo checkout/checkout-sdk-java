@@ -323,7 +323,6 @@ System.out.println("Payment ID: " + response.getId());
 
 #### Use Synchronous Mode When:
 - You need robust error handling and retries
-- Working in distributed/microservice environments
 - Reliability is more important than raw performance
 - You want built-in transient error handling
 - Implementing payment processing where consistency is critical
