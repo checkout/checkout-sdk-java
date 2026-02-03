@@ -182,25 +182,57 @@ final CheckoutApi checkoutApi = CheckoutSdk.builder()
 
 ## Asynchronous and Synchronous Operations
 
-The SDK provides flexibility in how you handle API operations by supporting both asynchronous and synchronous execution modes. **All client methods return `CompletableFuture`** regardless of the mode, maintaining a consistent API interface.
+The SDK provides flexibility in how you handle API operations by supporting both asynchronous and synchronous execution modes. You can freely use the async and sync functions of each client, and they will return **CompletableFuture<ResponseObject>** or **ResponseObject** respectively, both functions are existing in all client, maintaining a consistent API interface. For example, the flow client looks like:
 
-### Operation Modes
+```java
+        public interface FlowClient {
+
+        CompletableFuture<PaymentSessionResponse> requestPaymentSession(PaymentSessionRequest paymentSessionRequest);
+
+        CompletableFuture<SubmitPaymentSessionResponse> submitPaymentSessions(
+                String paymentId,
+                SubmitPaymentSessionRequest submitPaymentSessionRequest
+        );
+
+        CompletableFuture<PaymentSessionWithPaymentResponse> requestPaymentSessionWithPayment(
+                PaymentSessionWithPaymentRequest paymentSessionRequest
+        );
+
+        // Synchronous methods
+        PaymentSessionResponse requestPaymentSessionSync(PaymentSessionRequest paymentSessionRequest);
+
+        SubmitPaymentSessionResponse submitPaymentSessionsSync(
+                String paymentId,
+                SubmitPaymentSessionRequest submitPaymentSessionRequest
+        );
+
+        PaymentSessionWithPaymentResponse requestPaymentSessionWithPaymentSync(
+                PaymentSessionWithPaymentRequest paymentSessionRequest
+        );
+        }
+```
+
+The default operation mode of the SDK is async, so you can use async and sync functions freely, or combine them.
+
+### Aync/Sync Operation Mode
 
 The SDK can be configured to operate in two different modes:
 
 #### Asynchronous Mode (Default)
 - **Configuration**: `synchronous(false)` or omit the setting (default)
-- **Behavior**: HTTP requests are executed asynchronously using the configured executor
+- **Behavior**: HTTP requests are executed asynchronously using the configured executor (except the specific sync methods)
 - **Transport**: Uses `Transport.invoke()` and `Transport.submitFile()` methods
 - **Resilience**: Resilience4j patterns are **NOT** supported in async mode
 - **Performance**: Non-blocking execution, better for high-throughput applications
+- **Return**: CompletableFuture<ResponseObject>
 
 #### Synchronous Mode
 - **Configuration**: `synchronous(true)`
-- **Behavior**: HTTP requests are executed synchronously but wrapped in `CompletableFuture` using the executor, even async ops will be executed synchronous is this mode is activated
+- **Behavior**: HTTP requests are executed synchronously, even async ops will be executed synchronous is this mode is activated!!!
 - **Transport**: Uses `Transport.invokeSync()` and `Transport.submitFileSync()` methods  
 - **Resilience**: Full Resilience4j support (retry, rate limiter, circuit breaker)
 - **Performance**: Blocking execution with enhanced reliability patterns
+- **Return**: ResponseObject
 
 ### How the Transport Layer Works
 
@@ -211,7 +243,7 @@ In asynchronous mode, the transport layer:
 1. **Immediate Return**: Methods return `CompletableFuture` immediately
 2. **Async HTTP Execution**: HTTP calls are made asynchronously using Apache HttpClient
 3. **Thread Pool**: Uses the configured executor for CompletableFuture operations
-4. **Non-blocking**: The calling thread is not blocked during HTTP execution
+4. **Non-blocking**: The calling thread is NOT blocked during HTTP execution
 
 ```java
 // Asynchronous mode configuration
@@ -237,9 +269,9 @@ future.thenAccept(response -> {
 In synchronous mode, the transport layer:
 
 1. **Blocking HTTP Call**: HTTP request is made synchronously with resilience patterns applied
-2. **Wrapped in CompletableFuture**: Result is wrapped in a `CompletableFuture` using the executor
+2. **Wrapped in CompletableFuture**: Result are returned directly as response objects when the call completes
 3. **Resilience4j Applied**: Retry, rate limiting and circuit breaker are applied during the synchronous HTTP call
-4. **Consistent API**: Same `CompletableFuture` return type as async mode
+4. **Blocking**: The calling thread is blocked during HTTP execution until the call ends
 
 ```java
 // Synchronous mode configuration with resilience
@@ -252,39 +284,9 @@ final CheckoutApi syncApi = CheckoutSdk.builder()
         .executor(Executors.newFixedThreadPool(10)) // Thread pool for wrapping sync calls
         .build();
 
-// Usage - HTTP call executes synchronously with resilience patterns, then wrapped in CompletableFuture
-CompletableFuture<PaymentResponse> future = syncApi.paymentsClient().requestPayment(request);
-
-// Can still use async patterns
-future.thenAccept(response -> {
-    System.out.println("Payment ID: " + response.getId());
-});
-```
-
-### Client Implementation Details
-
-All client methods follow the same pattern regardless of mode:
-
-```java
-// Example from PaymentsClient - same signature for both modes
-CompletableFuture<PaymentResponse> requestPayment(PaymentRequest paymentRequest);
-```
-
-#### Internal Implementation (ApiClient Layer)
-
-The `ApiClientImpl.executeAsyncOrSync()` method determines the execution path:
-
-```java
-private <T> CompletableFuture<T> executeAsyncOrSync(
-    Supplier<T> syncOperation,           // Calls transport.invokeSync() with Resilience4j
-    Supplier<CompletableFuture<T>> asyncOperation // Calls transport.invoke() directly
-) {
-    if (configuration.isSynchronous()) {
-        // Execute sync operation in executor to maintain async interface
-        return CompletableFuture.supplyAsync(syncOperation, executor);
-    }
-    return asyncOperation.get(); // Direct async execution
-}
+// Usage - HTTP call executes synchronously with resilience patterns
+PaymentResponse response = syncApi.paymentsClient().requestPaymentSync(request);
+System.out.println("Payment ID: " + response.getId());
 ```
 
 ### Performance Characteristics
@@ -329,7 +331,7 @@ private <T> CompletableFuture<T> executeAsyncOrSync(
 ### Example Comparison
 
 ```java
-// Both modes have identical client interfaces
+// Both modes have identical parameters for the interfaces
 PaymentRequest request = PaymentRequest.builder()
         .source(cardSource)
         .amount(1000L)
@@ -337,8 +339,7 @@ PaymentRequest request = PaymentRequest.builder()
         .build();
 
 // Asynchronous - fast return, manual error handling
-CompletableFuture<PaymentResponse> asyncResult = asyncApi.paymentsClient()
-        .requestPayment(request)
+CompletableFuture<PaymentResponse> asyncResult = asyncApi.paymentsClient().requestPayment(request)
         .exceptionally(throwable -> {
             // Manual retry logic if needed
             if (shouldRetry(throwable)) {
@@ -348,8 +349,7 @@ CompletableFuture<PaymentResponse> asyncResult = asyncApi.paymentsClient()
         });
 
 // Synchronous - built-in resilience, automatic retries
-CompletableFuture<PaymentResponse> syncResult = syncApi.paymentsClient()
-        .requestPayment(request);
+PaymentResponse syncResult = syncApi.paymentsClient().requestPaymentSync(request);
         // Resilience4j automatically handles retries for transient errors
 
 // Both return CompletableFuture - same API!
@@ -360,33 +360,6 @@ CompletableFuture<PaymentResponse> syncResult = syncApi.paymentsClient()
 - **Async Mode**: Executor primarily used for CompletableFuture operations, HTTP I/O is non-blocking
 - **Sync Mode**: Executor used to wrap synchronous operations, size should account for concurrent blocking calls
 - **Recommendation**: Use larger thread pools for sync mode to handle blocking operations
-
-### Error Handling Differences
-
-#### Asynchronous Mode
-```java
-future.exceptionally(throwable -> {
-    if (throwable instanceof CheckoutApiException) {
-        CheckoutApiException apiEx = (CheckoutApiException) throwable;
-        if (apiEx.getHttpStatusCode() >= 500) {
-            // Manual retry logic
-            return retryOperation();
-        }
-    }
-    return handleError(throwable);
-});
-```
-
-#### Synchronous Mode
-```java
-// Resilience4j automatically handles retries for configured conditions
-future.thenAccept(response -> {
-    // Success handling - retries already attempted if needed
-}).exceptionally(throwable -> {
-    // Only called after all retry attempts failed
-    return handleFinalError(throwable);
-});
-```
 
 ## Custom Environment
 
