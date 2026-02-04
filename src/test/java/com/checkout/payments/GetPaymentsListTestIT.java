@@ -25,8 +25,8 @@ public class GetPaymentsListTestIT extends AbstractPaymentsTestIT {
     // Synchronous methods
     @Test
     void shouldQueryPaymentsSync() throws InterruptedException {
-        final PaymentResponse payment = makeCardPayment(false);
-        final PaymentsQueryFilter query = createPaymentsQuery(payment.getReference());
+        PaymentResponse payment = makeCardPayment(false);
+        PaymentsQueryFilter query = createPaymentsQuery(payment.getReference());
 
         Thread.sleep(2000); // to ensure the payment is indexed before querying 
         
