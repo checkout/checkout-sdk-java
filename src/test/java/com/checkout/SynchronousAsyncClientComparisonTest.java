@@ -172,8 +172,6 @@ class SynchronousAsyncClientComparisonTest {
         System.out.println("Asynchronous call time: " + TimeUnit.NANOSECONDS.toMicros(asyncTime) + " microseconds");
 
         // Same return type!
-
-        System.out.println("\nBoth return CompletableFuture<PaymentResponse>");
         System.out.println("Difference: Synchronous executes HTTP call before returning CompletableFuture");
         System.out.println("           Asynchronous returns CompletableFuture immediately, HTTP call happens later");
     }
