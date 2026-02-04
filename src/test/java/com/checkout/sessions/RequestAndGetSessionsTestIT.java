@@ -186,7 +186,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         assertFalse(response.getCompleted());
     }
 
-    private void validateGetSessionResponse(GetSessionResponse getSessionResponse, CreateSessionOkResponse originalResponse, Category category, TransactionType transactionType) {
+    private void validateGetSessionResponse(GetSessionResponse getSessionResponse, Category category, TransactionType transactionType) {
         assertNotNull(getSessionResponse);
         assertNotNull(getSessionResponse.getId());
         assertNotNull(getSessionResponse.getSessionSecret());
