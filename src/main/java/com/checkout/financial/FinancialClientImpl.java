@@ -17,7 +17,7 @@ public class FinancialClientImpl extends AbstractClient implements FinancialClie
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
     }
 
-    public CompletableFuture<FinancialActionsQueryResponse> query(final FinancialActionsQueryFilter queryFilter) {
+    public CompletableFuture<FinancialActionsQueryResponse> query(FinancialActionsQueryFilter queryFilter) {
         validateFinancialActionsQueryFilter(queryFilter);
         return apiClient.queryAsync(
                 FINANCIAL_ACTIONS_PATH,
@@ -27,7 +27,7 @@ public class FinancialClientImpl extends AbstractClient implements FinancialClie
     }
 
     // Synchronous methods
-    public FinancialActionsQueryResponse querySync(final FinancialActionsQueryFilter queryFilter) {
+    public FinancialActionsQueryResponse querySync(FinancialActionsQueryFilter queryFilter) {
         validateFinancialActionsQueryFilter(queryFilter);
         return apiClient.query(
                 FINANCIAL_ACTIONS_PATH,
