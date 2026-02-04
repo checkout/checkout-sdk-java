@@ -2,7 +2,6 @@
 
 [![build-status](https://github.com/checkout/checkout-sdk-java/workflows/build-master/badge.svg)](https://github.com/checkout/checkout-sdk-java/actions/workflows/build-master.yml)
 ![CodeQL](https://github.com/checkout/checkout-sdk-java/workflows/CodeQL/badge.svg)
-[![OWASP-Dependency-Check](https://github.com/checkout/checkout-sdk-java/actions/workflows/dependency-check.yaml/badge.svg?branch=master)](https://github.com/checkout/checkout-sdk-java/actions/workflows/dependency-check.yaml)
 
 ![build-status](https://github.com/checkout/checkout-sdk-java/workflows/build-release/badge.svg)
 [![GitHub release](https://img.shields.io/github/release/checkout/checkout-sdk-java.svg)](https://GitHub.com/checkout/checkout-sdk-java/releases/)
