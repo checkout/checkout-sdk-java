@@ -55,10 +55,10 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         validateCreatedSessionResponse(response, category, transactionType);
 
         final GetSessionResponse getSessionResponse = blocking(() -> checkoutApi.sessionsClient().getSessionDetails(response.getId()));
-        validateGetSessionResponse(getSessionResponse, response, category, transactionType);
+        validateGetSessionResponse(getSessionResponse, category, transactionType);
 
         final GetSessionResponse getSessionSecretSessionResponse = blocking(() -> checkoutApi.sessionsClient().getSessionDetails(response.getSessionSecret(), response.getId()));
-        validateGetSessionSecretResponse(getSessionSecretSessionResponse, response, category, transactionType);
+        validateGetSessionSecretResponse(getSessionSecretSessionResponse, category, transactionType);
     }
 
     @ParameterizedTest
@@ -76,7 +76,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         validateAppSessionResponse(response, category);
 
         final GetSessionResponse getSessionResponse = blocking(() -> checkoutApi.sessionsClient().getSessionDetails(response.getId()));
-        validateAppGetSessionResponse(getSessionResponse, response, category, transactionType);
+        validateAppGetSessionResponse(getSessionResponse, category, transactionType);
     }
 
     @Disabled("Not supported")
@@ -95,7 +95,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         validateMerchantInitiatedSessionResponse(response, category, transactionType);
 
         final GetSessionResponse getSessionResponse = blocking(() -> checkoutApi.sessionsClient().getSessionDetails(response.getId()));
-        validateMerchantInitiatedGetSessionResponse(getSessionResponse, response, category, transactionType);
+        validateMerchantInitiatedGetSessionResponse(getSessionResponse, category, transactionType);
     }
 
     // Synchronous method tests
@@ -114,10 +114,10 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         validateCreatedSessionResponse(response, category, transactionType);
 
         final GetSessionResponse getSessionResponse = checkoutApi.sessionsClient().getSessionDetailsSync(response.getId());
-        validateGetSessionResponse(getSessionResponse, response, category, transactionType);
+        validateGetSessionResponse(getSessionResponse, category, transactionType);
 
         final GetSessionResponse getSessionSecretSessionResponse = checkoutApi.sessionsClient().getSessionDetailsSync(response.getSessionSecret(), response.getId());
-        validateGetSessionSecretResponse(getSessionSecretSessionResponse, response, category, transactionType);
+        validateGetSessionSecretResponse(getSessionSecretSessionResponse, category, transactionType);
     }
 
     @ParameterizedTest
@@ -135,7 +135,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         validateAppSessionResponse(response, category);
 
         final GetSessionResponse getSessionResponse = checkoutApi.sessionsClient().getSessionDetailsSync(response.getId());
-        validateAppGetSessionResponse(getSessionResponse, response, category, transactionType);
+        validateAppGetSessionResponse(getSessionResponse, category, transactionType);
     }
 
     @Disabled("Not supported")
@@ -154,7 +154,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         validateMerchantInitiatedSessionResponse(response, category, transactionType);
 
         final GetSessionResponse getSessionResponse = checkoutApi.sessionsClient().getSessionDetailsSync(response.getId());
-        validateMerchantInitiatedGetSessionResponse(getSessionResponse, response, category, transactionType);
+        validateMerchantInitiatedGetSessionResponse(getSessionResponse, category, transactionType);
     }
 
     // Common methods
@@ -210,7 +210,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         assertFalse(getSessionResponse.getCompleted());
     }
 
-    private void validateGetSessionSecretResponse(GetSessionResponse getSessionSecretSessionResponse, CreateSessionOkResponse originalResponse, Category category, TransactionType transactionType) {
+    private void validateGetSessionSecretResponse(GetSessionResponse getSessionSecretSessionResponse, Category category, TransactionType transactionType) {
         assertNull(getSessionSecretSessionResponse.getCertificates());
         assertNull(getSessionSecretSessionResponse.getSessionSecret());
 
@@ -251,7 +251,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         assertNotNull(response.getLink("callback_url"));
     }
 
-    private void validateAppGetSessionResponse(GetSessionResponse getSessionResponse, CreateSessionOkResponse originalResponse, Category category, TransactionType transactionType) {
+    private void validateAppGetSessionResponse(GetSessionResponse getSessionResponse, Category category, TransactionType transactionType) {
         assertNotNull(getSessionResponse);
         assertNotNull(getSessionResponse.getId());
         assertNotNull(getSessionResponse.getSessionSecret());
@@ -296,7 +296,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         assertFalse(response.getCompleted());
     }
 
-    private void validateMerchantInitiatedGetSessionResponse(GetSessionResponse getSessionResponse, CreateSessionOkResponse originalResponse, Category category, TransactionType transactionType) {
+    private void validateMerchantInitiatedGetSessionResponse(GetSessionResponse getSessionResponse, Category category, TransactionType transactionType) {
         assertNotNull(getSessionResponse);
         assertNotNull(getSessionResponse.getId());
         assertNotNull(getSessionResponse.getSessionSecret());
