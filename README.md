@@ -223,7 +223,7 @@ The SDK can be configured to operate in two different modes:
 - **Behavior**: HTTP requests are executed asynchronously using the configured executor (except the specific sync methods)
 - **Transport**: Uses `Transport.invoke()` and `Transport.submitFile()` methods
 - **Resilience**: Resilience4j patterns are **NOT** supported in async mode
-- **Performance**: Non-blocking execution, better for high-throughput applications
+- **Performance**: Non-blocking execution
 - **Return**: CompletableFuture<ResponseObject>
 
 #### Synchronous Mode
