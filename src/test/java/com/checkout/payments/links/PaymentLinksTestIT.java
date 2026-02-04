@@ -32,7 +32,7 @@ class PaymentLinksTestIT extends SandboxTestFixture {
         final PaymentLinkResponse paymentLinkResponse =
                 blocking(() -> checkoutApi.paymentLinksClient().createPaymentLink(paymentLinksRequest));
 
-        validateCreatePaymentLinkResponse(paymentLinkResponse, paymentLinksRequest);
+        validateCreatePaymentLinkResponse(paymentLinkResponse);
 
         final PaymentLinkDetailsResponse detailsResponse =
                 blocking(() -> checkoutApi.paymentLinksClient().getPaymentLink(paymentLinkResponse.getId()));
@@ -48,7 +48,7 @@ class PaymentLinksTestIT extends SandboxTestFixture {
         final PaymentLinkResponse paymentLinkResponse =
                 checkoutApi.paymentLinksClient().createPaymentLinkSync(paymentLinksRequest);
 
-        validateCreatePaymentLinkResponse(paymentLinkResponse, paymentLinksRequest);
+        validateCreatePaymentLinkResponse(paymentLinkResponse);
 
         final PaymentLinkDetailsResponse detailsResponse =
                 checkoutApi.paymentLinksClient().getPaymentLinkSync(paymentLinkResponse.getId());
@@ -75,8 +75,7 @@ class PaymentLinksTestIT extends SandboxTestFixture {
                 .build();
     }
 
-    private void validateCreatePaymentLinkResponse(final PaymentLinkResponse paymentLinkResponse,
-                                                   final PaymentLinkRequest paymentLinksRequest) {
+    private void validateCreatePaymentLinkResponse(final PaymentLinkResponse paymentLinkResponse) {
         assertNotNull(paymentLinkResponse);
         assertEquals(REFERENCE, paymentLinkResponse.getReference());
         assertNotNull(paymentLinkResponse.getExpiresOn());
