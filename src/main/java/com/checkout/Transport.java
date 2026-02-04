@@ -11,4 +11,8 @@ public interface Transport {
 
     CompletableFuture<Response> submitFile(String path, SdkAuthorization authorization, AbstractFileRequest fileRequest);
 
+    Response invokeSync(ClientOperation clientOperation, String path, SdkAuthorization authorization, String jsonRequest, String idempotencyKey, Map<String, String> queryParams);
+
+    Response submitFileSync(String path, SdkAuthorization authorization, AbstractFileRequest fileRequest);
+
 }

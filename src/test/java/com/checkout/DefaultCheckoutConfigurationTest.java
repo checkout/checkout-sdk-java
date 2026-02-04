@@ -4,6 +4,7 @@ import static java.net.URI.create;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -203,6 +204,73 @@ class DefaultCheckoutConfigurationTest {
         }
 
         executorService.shutdown();
+    }
+
+    @Test
+    void shouldCreateConfigurationWithSynchronousFlag() {
+        final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
+
+        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(
+                credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR,
+                DEFAULT_TRANSPORT_CONFIGURATION, false, true, null);
+
+        assertEquals(Environment.PRODUCTION, configuration.getEnvironment());
+        assertTrue(configuration.isSynchronous());
+        assertNull(configuration.getResilience4jConfiguration());
+    }
+
+    @Test
+    void shouldCreateConfigurationWithResilience4jConfiguration() {
+        final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
+        final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.builder()
+                .withDefaultCircuitBreaker()
+                .build();
+
+        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(
+                credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR,
+                DEFAULT_TRANSPORT_CONFIGURATION, false, false, resilience4jConfig);
+
+        assertEquals(Environment.PRODUCTION, configuration.getEnvironment());
+        assertFalse(configuration.isSynchronous());
+        assertNotNull(configuration.getResilience4jConfiguration());
+        assertTrue(configuration.getResilience4jConfiguration().hasCircuitBreaker());
+    }
+
+    @Test
+    void shouldCreateConfigurationWithAllNewParameters() {
+        final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
+        final Resilience4jConfiguration resilience4jConfig = Resilience4jConfiguration.defaultConfiguration();
+
+        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(
+                credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR,
+                DEFAULT_TRANSPORT_CONFIGURATION, false, true, resilience4jConfig);
+
+        assertEquals(Environment.PRODUCTION, configuration.getEnvironment());
+        assertTrue(configuration.isSynchronous());
+        assertNotNull(configuration.getResilience4jConfiguration());
+    }
+
+    @Test
+    void shouldMaintainBackwardCompatibility() {
+        final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
+
+        // Old constructor signature should still work
+        final CheckoutConfiguration config1 = new DefaultCheckoutConfiguration(
+                credentials, Environment.PRODUCTION, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR,
+                DEFAULT_TRANSPORT_CONFIGURATION, false);
+
+        // Should have default values for new parameters
+        assertFalse(config1.isSynchronous()); // Default is false
+        assertNull(config1.getResilience4jConfiguration()); // Default is null
+
+        // Constructor with subdomain should also work
+        final EnvironmentSubdomain subdomain = new EnvironmentSubdomain(Environment.SANDBOX, "test");
+        final CheckoutConfiguration config2 = new DefaultCheckoutConfiguration(
+                credentials, Environment.SANDBOX, subdomain, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR,
+                DEFAULT_TRANSPORT_CONFIGURATION, false);
+
+        assertFalse(config2.isSynchronous());
+        assertNull(config2.getResilience4jConfiguration());
     }
 
 }

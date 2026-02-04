@@ -20,4 +20,8 @@ public interface CheckoutConfiguration {
 
     Boolean isTelemetryEnabled();
 
+    Boolean isSynchronous();
+
+    Resilience4jConfiguration getResilience4jConfiguration();
+
 }

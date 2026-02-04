@@ -41,49 +41,79 @@ class IssuingTestingTestIT extends BaseIssuingTestIT {
 
     @Test
     void shouldSimulateAuthorization() {
-        assertNotNull(transaction);
-        assertEquals(TransactionStatus.AUTHORIZED, transaction.getStatus());
+        validateAuthorizationResponse(transaction);
     }
 
     @Test
     void shouldSimulateIncrementingAuthorization() {
-        final CardAuthorizationIncrementingRequest request = CardAuthorizationIncrementingRequest.builder()
-                .amount(1)
-                .build();
+        final CardAuthorizationIncrementingRequest request = createIncrementingRequest();
 
         final CardAuthorizationIncrementingResponse response = blocking(() ->
                 issuingApi.issuingClient().simulateIncrementingAuthorization(transaction.getId(), request));
 
-        assertNotNull(response);
-        assertEquals(TransactionStatus.AUTHORIZED, response.getStatus());
+        validateIncrementingAuthorizationResponse(response);
     }
 
     @Test
     void shouldSimulateClearing() {
-        final CardAuthorizationClearingRequest request = CardAuthorizationClearingRequest.builder()
-                .amount(1)
-                .build();
+        final CardAuthorizationClearingRequest request = createClearingRequest();
 
         final EmptyResponse response = blocking(() ->
                 issuingApi.issuingClient().simulateClearing(transaction.getId(), request));
 
-        assertNotNull(response);
-        assertEquals(202, response.getHttpStatusCode());
+        validateClearingResponse(response);
     }
 
     @Test
     void shouldSimulateReversal() {
-        final CardAuthorizationReversalRequest request = CardAuthorizationReversalRequest.builder()
-                .amount(1)
-                .build();
+        final CardAuthorizationReversalRequest request = createReversalRequest();
 
         final CardAuthorizationReversalResponse response = blocking(() ->
                 issuingApi.issuingClient().simulateReversal(transaction.getId(), request));
 
-        assertNotNull(response);
-        assertEquals(ReversalStatus.REVERSED, response.getStatus());
+        validateReversalResponse(response);
     }
 
+    // Synchronous methods
+    @Test
+    void shouldSimulateAuthorizationSync() {
+        validateAuthorizationResponse(transaction);
+    }
+
+    @Test
+    void shouldSimulateIncrementingAuthorizationSync() {
+        final CardAuthorizationResponse newTransaction = getCardAuthorizationResponse();
+        final CardAuthorizationIncrementingRequest request = createIncrementingRequest();
+
+        final CardAuthorizationIncrementingResponse response = 
+                issuingApi.issuingClient().simulateIncrementingAuthorizationSync(newTransaction.getId(), request);
+
+        validateIncrementingAuthorizationResponse(response);
+    }
+
+    @Test
+    void shouldSimulateClearingSync() {
+        final CardAuthorizationResponse newTransaction = getCardAuthorizationResponse();
+        final CardAuthorizationClearingRequest request = createClearingRequest();
+
+        final EmptyResponse response = 
+                issuingApi.issuingClient().simulateClearingSync(newTransaction.getId(), request);
+
+        validateClearingResponse(response);
+    }
+
+    @Test
+    void shouldSimulateReversalSync() {
+        final CardAuthorizationResponse newTransaction = getCardAuthorizationResponse();
+        final CardAuthorizationReversalRequest request = createReversalRequest();
+
+        final CardAuthorizationReversalResponse response = 
+                issuingApi.issuingClient().simulateReversalSync(newTransaction.getId(), request);
+
+        validateReversalResponse(response);
+    }
+
+    // Common methods
     private CardAuthorizationResponse getCardAuthorizationResponse() {
         final CardAuthorizationRequest authorizationRequest = CardAuthorizationRequest.builder()
                 .card(CardSimulation.builder()
@@ -105,4 +135,43 @@ class IssuingTestingTestIT extends BaseIssuingTestIT {
                 issuingApi.issuingClient().simulateAuthorization(authorizationRequest));
         return authorizationResponse;
     }
+
+    private CardAuthorizationIncrementingRequest createIncrementingRequest() {
+        return CardAuthorizationIncrementingRequest.builder()
+                .amount(1)
+                .build();
+    }
+
+    private CardAuthorizationClearingRequest createClearingRequest() {
+        return CardAuthorizationClearingRequest.builder()
+                .amount(1)
+                .build();
+    }
+
+    private CardAuthorizationReversalRequest createReversalRequest() {
+        return CardAuthorizationReversalRequest.builder()
+                .amount(1)
+                .build();
+    }
+
+    private void validateAuthorizationResponse(CardAuthorizationResponse response) {
+        assertNotNull(response);
+        assertEquals(TransactionStatus.AUTHORIZED, response.getStatus());
+    }
+
+    private void validateIncrementingAuthorizationResponse(CardAuthorizationIncrementingResponse response) {
+        assertNotNull(response);
+        assertEquals(TransactionStatus.AUTHORIZED, response.getStatus());
+    }
+
+    private void validateClearingResponse(EmptyResponse response) {
+        assertNotNull(response);
+        assertEquals(202, response.getHttpStatusCode());
+    }
+
+    private void validateReversalResponse(CardAuthorizationReversalResponse response) {
+        assertNotNull(response);
+        assertEquals(ReversalStatus.REVERSED, response.getStatus());
+    }
+
 }

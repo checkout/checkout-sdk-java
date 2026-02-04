@@ -11,4 +11,11 @@ public interface ReportsClient {
     CompletableFuture<ReportDetailsResponse> getReportDetails(String reportId);
 
     CompletableFuture<ContentResponse> getReportFile(String reportId, String fileId);
+
+    // Synchronous methods
+    ReportsResponse getAllReportsSync(ReportsQuery query);
+
+    ReportDetailsResponse getReportDetailsSync(String reportId);
+
+    ContentResponse getReportFileSync(String reportId, String fileId);
 }

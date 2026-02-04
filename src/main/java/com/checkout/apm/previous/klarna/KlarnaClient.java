@@ -16,4 +16,13 @@ public interface KlarnaClient {
 
     CompletableFuture<VoidResponse> voidPayment(String paymentId, VoidRequest voidRequest);
 
+    // Synchronous methods
+    CreditSessionResponse createCreditSessionSync(CreditSessionRequest creditSessionRequest);
+
+    CreditSession getCreditSessionSync(String sessionId);
+
+    CaptureResponse capturePaymentSync(String paymentId, OrderCaptureRequest captureRequest);
+
+    VoidResponse voidPaymentSync(String paymentId, VoidRequest voidRequest);
+
 }

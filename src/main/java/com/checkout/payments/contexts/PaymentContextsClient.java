@@ -8,4 +8,9 @@ public interface PaymentContextsClient {
 
     CompletableFuture<PaymentContextDetailsResponse> getPaymentContextDetails(String paymentContextId);
 
+    // Synchronous methods
+    PaymentContextsRequestResponse requestPaymentContextsSync(PaymentContextsRequest paymentContextsRequest);
+
+    PaymentContextDetailsResponse getPaymentContextDetailsSync(String paymentContextId);
+
 }

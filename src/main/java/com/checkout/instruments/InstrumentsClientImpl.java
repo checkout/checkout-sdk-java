@@ -35,32 +35,80 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
 
     @Override
     public <T extends CreateInstrumentResponse> CompletableFuture<T> create(final CreateInstrumentRequest createInstrumentRequest) {
-        CheckoutUtils.validateParams("createInstrumentRequest", createInstrumentRequest);
+        validateInstrumentRequest(createInstrumentRequest);
         return apiClient.postAsync(INSTRUMENTS_PATH, sdkAuthorization(), CREATE_TYPE, createInstrumentRequest, null);
     }
 
     @Override
     public CompletableFuture<GetInstrumentResponse> get(final String instrumentId) {
-        CheckoutUtils.validateParams("instrumentId", instrumentId);
+        validateInstrumentId(instrumentId);
         return apiClient.getAsync(buildPath(INSTRUMENTS_PATH, instrumentId), sdkAuthorization(), GET_TYPE);
     }
 
     @Override
     public <T extends UpdateInstrumentResponse> CompletableFuture<T> update(final String instrumentId, final UpdateInstrumentRequest updateInstrumentRequest) {
-        CheckoutUtils.validateParams("instrumentId", instrumentId, "updateInstrumentRequest", updateInstrumentRequest);
+        validateInstrumentIdAndRequest(instrumentId, updateInstrumentRequest);
         return apiClient.patchAsync(buildPath(INSTRUMENTS_PATH, instrumentId), sdkAuthorization(), UPDATE_TYPE, updateInstrumentRequest, null);
     }
 
     @Override
     public CompletableFuture<EmptyResponse> delete(final String instrumentId) {
-        CheckoutUtils.validateParams("instrumentId", instrumentId);
+        validateInstrumentId(instrumentId);
         return apiClient.deleteAsync(buildPath(INSTRUMENTS_PATH, instrumentId), sdkAuthorization());
     }
 
     @Override
     public CompletableFuture<BankAccountFieldResponse> getBankAccountFieldFormatting(final CountryCode country, final Currency currency, final BankAccountFieldQuery query) {
-        CheckoutUtils.validateParams("country", country, "currency", currency, "query", query);
+        validateBankAccountFieldParams(country, currency, query);
         return apiClient.queryAsync(buildPath(VALIDATION_PATH, country.name(), currency.name()), sdkAuthorization(SdkAuthorizationType.OAUTH), query, BankAccountFieldResponse.class);
+    }
+
+    // Synchronous methods
+    @Override
+    public <T extends CreateInstrumentResponse> T createSync(final CreateInstrumentRequest createInstrumentRequest) {
+        validateInstrumentRequest(createInstrumentRequest);
+        return apiClient.post(INSTRUMENTS_PATH, sdkAuthorization(), CREATE_TYPE, createInstrumentRequest, null);
+    }
+
+    @Override
+    public GetInstrumentResponse getSync(final String instrumentId) {
+        validateInstrumentId(instrumentId);
+        return apiClient.get(buildPath(INSTRUMENTS_PATH, instrumentId), sdkAuthorization(), GET_TYPE);
+    }
+
+    @Override
+    public <T extends UpdateInstrumentResponse> T updateSync(final String instrumentId, final UpdateInstrumentRequest updateInstrumentRequest) {
+        validateInstrumentIdAndRequest(instrumentId, updateInstrumentRequest);
+        return apiClient.patch(buildPath(INSTRUMENTS_PATH, instrumentId), sdkAuthorization(), UPDATE_TYPE, updateInstrumentRequest, null);
+    }
+
+    @Override
+    public EmptyResponse deleteSync(final String instrumentId) {
+        validateInstrumentId(instrumentId);
+        return apiClient.delete(buildPath(INSTRUMENTS_PATH, instrumentId), sdkAuthorization());
+    }
+
+    @Override
+    public BankAccountFieldResponse getBankAccountFieldFormattingSync(final CountryCode country, final Currency currency, final BankAccountFieldQuery query) {
+        validateBankAccountFieldParams(country, currency, query);
+        return apiClient.query(buildPath(VALIDATION_PATH, country.name(), currency.name()), sdkAuthorization(SdkAuthorizationType.OAUTH), query, BankAccountFieldResponse.class);
+    }
+
+    // Common methods
+    protected void validateInstrumentRequest(final CreateInstrumentRequest createInstrumentRequest) {
+        CheckoutUtils.validateParams("createInstrumentRequest", createInstrumentRequest);
+    }
+
+    protected void validateInstrumentId(final String instrumentId) {
+        CheckoutUtils.validateParams("instrumentId", instrumentId);
+    }
+
+    protected void validateInstrumentIdAndRequest(final String instrumentId, final UpdateInstrumentRequest updateInstrumentRequest) {
+        CheckoutUtils.validateParams("instrumentId", instrumentId, "updateInstrumentRequest", updateInstrumentRequest);
+    }
+
+    protected void validateBankAccountFieldParams(final CountryCode country, final Currency currency, final BankAccountFieldQuery query) {
+        CheckoutUtils.validateParams("country", country, "currency", currency, "query", query);
     }
 
 }

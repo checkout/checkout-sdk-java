@@ -5,8 +5,6 @@ import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
-import com.checkout.disputes.DisputesQueryFilter;
-import com.checkout.disputes.DisputesQueryResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,7 +54,27 @@ public class FinancialClientImplTest {
 
         final CompletableFuture<FinancialActionsQueryResponse> future = client.query(query);
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
+        validateFinancialActionsQueryResponse(response, future.get());
+    }
+
+    // Synchronous methods
+    @Test
+    void shouldQueryFinancialActionsSync() throws ExecutionException, InterruptedException {
+
+        final FinancialActionsQueryFilter query = mock(FinancialActionsQueryFilter.class);
+        final FinancialActionsQueryResponse response = mock(FinancialActionsQueryResponse.class);
+
+        when(apiClient.query("financial-actions", authorization, query, FinancialActionsQueryResponse.class))
+                .thenReturn(response);
+
+        final FinancialActionsQueryResponse result = client.querySync(query);
+
+        validateFinancialActionsQueryResponse(response, result);
+    }
+
+    // Common methods
+    private void validateFinancialActionsQueryResponse(final FinancialActionsQueryResponse response, final FinancialActionsQueryResponse result) {
+        assertNotNull(result);
+        assertEquals(response, result);
     }
 }

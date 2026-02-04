@@ -54,6 +54,22 @@ public abstract class SandboxTestFixture {
                         .httpClientBuilder(CUSTOM_HTTP_BUILDER)
                         .build();
                 break;
+            case MULTITHREADED:
+                HttpClientBuilder httpClientBuilder = HttpClientBuilder.create()
+                                                        .setMaxConnTotal(200)           // Total connections
+                                                        .setMaxConnPerRoute(100)     // Connections per destination
+                                                        .setConnectionTimeToLive(60, TimeUnit.SECONDS)
+                                                        .evictIdleConnections(30, TimeUnit.SECONDS);
+
+                this.checkoutApi = CheckoutSdk.builder()
+                        .staticKeys()
+                        .publicKey(requireNonNull(System.getenv("CHECKOUT_DEFAULT_PUBLIC_KEY")))
+                        .secretKey(requireNonNull(System.getenv("CHECKOUT_DEFAULT_SECRET_KEY")))
+                        .environment(Environment.SANDBOX)
+                        .executor(Executors.newFixedThreadPool(100))
+                        .httpClientBuilder(httpClientBuilder)
+                        .build();
+                break;
             case DEFAULT:
                 this.checkoutApi = CheckoutSdk.builder()
                         .staticKeys()
@@ -178,6 +194,17 @@ public abstract class SandboxTestFixture {
         } catch (final InterruptedException | ExecutionException exception) {
             assertTrue(exception.getCause() instanceof CheckoutApiException);
             final List<String> error_codes = (List<String>) ((CheckoutApiException) exception.getCause()).getErrorDetails().get("error_codes");
+            assertThat(error_codes, hasItem(errorItem));
+        }
+    }
+
+    protected <T> void checkErrorItemSync(final Supplier<T> supplier, final String errorItem) {
+        try {
+            supplier.get();
+            fail();
+        } catch (final Exception exception) {
+            assertTrue(exception instanceof CheckoutApiException);
+            final List<String> error_codes = (List<String>) ((CheckoutApiException) exception).getErrorDetails().get("error_codes");
             assertThat(error_codes, hasItem(errorItem));
         }
     }

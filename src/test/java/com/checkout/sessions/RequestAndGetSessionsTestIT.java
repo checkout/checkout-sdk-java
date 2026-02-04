@@ -49,11 +49,121 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         final ChannelData browserSession = browserSession();
 
         final SessionResponse sessionResponse = createNonHostedSession(browserSession, category, challengeIndicator, transactionType);
-
-        assertNotNull(sessionResponse);
-        assertNotNull(sessionResponse.getCreated());
+        validateSessionResponse(sessionResponse);
 
         final CreateSessionOkResponse response = sessionResponse.getCreated();
+        validateCreatedSessionResponse(response, category, transactionType);
+
+        final GetSessionResponse getSessionResponse = blocking(() -> checkoutApi.sessionsClient().getSessionDetails(response.getId()));
+        validateGetSessionResponse(getSessionResponse, category, transactionType);
+
+        final GetSessionResponse getSessionSecretSessionResponse = blocking(() -> checkoutApi.sessionsClient().getSessionDetails(response.getSessionSecret(), response.getId()));
+        validateGetSessionSecretResponse(getSessionSecretSessionResponse, category, transactionType);
+    }
+
+    @ParameterizedTest
+    @MethodSource("sessionsTypes_appSession")
+    void shouldRequestAndGetCardSession_appSession(final Category category,
+                                                   final ChallengeIndicator challengeIndicator,
+                                                   final TransactionType transactionType) {
+
+        final ChannelData appSession = appSession();
+
+        final SessionResponse sessionResponse = createNonHostedSession(appSession, category, challengeIndicator, transactionType);
+        validateSessionResponse(sessionResponse);
+
+        final CreateSessionOkResponse response = sessionResponse.getCreated();
+        validateAppSessionResponse(response, category);
+
+        final GetSessionResponse getSessionResponse = blocking(() -> checkoutApi.sessionsClient().getSessionDetails(response.getId()));
+        validateAppGetSessionResponse(getSessionResponse, category, transactionType);
+    }
+
+    @Disabled("Not supported")
+    @ParameterizedTest
+    @MethodSource("sessionsTypes_merchantInitiatedSession")
+    void shouldRequestAndGetCardSession_merchantInitiatedSession(final Category category,
+                                                                 final ChallengeIndicator challengeIndicator,
+                                                                 final TransactionType transactionType) {
+
+        final ChannelData merchantInitiatedSession = merchantInitiatedSession();
+
+        final SessionResponse sessionResponse = createNonHostedSession(merchantInitiatedSession, category, challengeIndicator, transactionType);
+        validateSessionResponse(sessionResponse);
+
+        final CreateSessionOkResponse response = sessionResponse.getCreated();
+        validateMerchantInitiatedSessionResponse(response, category, transactionType);
+
+        final GetSessionResponse getSessionResponse = blocking(() -> checkoutApi.sessionsClient().getSessionDetails(response.getId()));
+        validateMerchantInitiatedGetSessionResponse(getSessionResponse, category, transactionType);
+    }
+
+    // Synchronous method tests
+    @ParameterizedTest
+    @MethodSource("sessionsTypes_browserSession")
+    void shouldRequestAndGetCardSessionSync_browserSession(final Category category,
+                                                           final ChallengeIndicator challengeIndicator,
+                                                           final TransactionType transactionType) {
+
+        final ChannelData browserSession = browserSession();
+
+        final SessionResponse sessionResponse = checkoutApi.sessionsClient().requestSessionSync(createNonHostedSessionRequest(browserSession, category, challengeIndicator, transactionType));
+        validateSessionResponse(sessionResponse);
+
+        final CreateSessionOkResponse response = sessionResponse.getCreated();
+        validateCreatedSessionResponse(response, category, transactionType);
+
+        final GetSessionResponse getSessionResponse = checkoutApi.sessionsClient().getSessionDetailsSync(response.getId());
+        validateGetSessionResponse(getSessionResponse, category, transactionType);
+
+        final GetSessionResponse getSessionSecretSessionResponse = checkoutApi.sessionsClient().getSessionDetailsSync(response.getSessionSecret(), response.getId());
+        validateGetSessionSecretResponse(getSessionSecretSessionResponse, category, transactionType);
+    }
+
+    @ParameterizedTest
+    @MethodSource("sessionsTypes_appSession")
+    void shouldRequestAndGetCardSessionSync_appSession(final Category category,
+                                                       final ChallengeIndicator challengeIndicator,
+                                                       final TransactionType transactionType) {
+
+        final ChannelData appSession = appSession();
+
+        final SessionResponse sessionResponse = checkoutApi.sessionsClient().requestSessionSync(createNonHostedSessionRequest(appSession, category, challengeIndicator, transactionType));
+        validateSessionResponse(sessionResponse);
+
+        final CreateSessionOkResponse response = sessionResponse.getCreated();
+        validateAppSessionResponse(response, category);
+
+        final GetSessionResponse getSessionResponse = checkoutApi.sessionsClient().getSessionDetailsSync(response.getId());
+        validateAppGetSessionResponse(getSessionResponse, category, transactionType);
+    }
+
+    @Disabled("Not supported")
+    @ParameterizedTest
+    @MethodSource("sessionsTypes_merchantInitiatedSession")
+    void shouldRequestAndGetCardSessionSync_merchantInitiatedSession(final Category category,
+                                                                     final ChallengeIndicator challengeIndicator,
+                                                                     final TransactionType transactionType) {
+
+        final ChannelData merchantInitiatedSession = merchantInitiatedSession();
+
+        final SessionResponse sessionResponse = checkoutApi.sessionsClient().requestSessionSync(createNonHostedSessionRequest(merchantInitiatedSession, category, challengeIndicator, transactionType));
+        validateSessionResponse(sessionResponse);
+
+        final CreateSessionOkResponse response = sessionResponse.getCreated();
+        validateMerchantInitiatedSessionResponse(response, category, transactionType);
+
+        final GetSessionResponse getSessionResponse = checkoutApi.sessionsClient().getSessionDetailsSync(response.getId());
+        validateMerchantInitiatedGetSessionResponse(getSessionResponse, category, transactionType);
+    }
+
+    // Common methods
+    private void validateSessionResponse(SessionResponse sessionResponse) {
+        assertNotNull(sessionResponse);
+        assertNotNull(sessionResponse.getCreated());
+    }
+
+    private void validateCreatedSessionResponse(CreateSessionOkResponse response, Category category, TransactionType transactionType) {
         assertNotNull(response.getId());
         assertNotNull(response.getSessionSecret());
         assertNotNull(response.getTransactionId());
@@ -74,11 +184,10 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         assertNotNull(response.getSelfLink());
         assertNotNull(response.getLink("callback_url"));
         assertFalse(response.getCompleted());
+    }
 
-        final GetSessionResponse getSessionResponse = blocking(() -> checkoutApi.sessionsClient().getSessionDetails(response.getId()));
-
+    private void validateGetSessionResponse(GetSessionResponse getSessionResponse, Category category, TransactionType transactionType) {
         assertNotNull(getSessionResponse);
-
         assertNotNull(getSessionResponse.getId());
         assertNotNull(getSessionResponse.getSessionSecret());
         assertNotNull(getSessionResponse.getTransactionId());
@@ -99,16 +208,15 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         assertNotNull(getSessionResponse.getSelfLink());
         assertNotNull(getSessionResponse.getLink("callback_url"));
         assertFalse(getSessionResponse.getCompleted());
+    }
 
-        final GetSessionResponse getSessionSecretSessionResponse = blocking(() -> checkoutApi.sessionsClient().getSessionDetails(response.getSessionSecret(), response.getId()));
-
+    private void validateGetSessionSecretResponse(GetSessionResponse getSessionSecretSessionResponse, Category category, TransactionType transactionType) {
         assertNull(getSessionSecretSessionResponse.getCertificates());
         assertNull(getSessionSecretSessionResponse.getSessionSecret());
 
         assertNotNull(getSessionSecretSessionResponse.getId());
         assertNotNull(getSessionSecretSessionResponse.getTransactionId());
         assertNotNull(getSessionSecretSessionResponse.getAmount());
-
         assertNotNull(getSessionSecretSessionResponse.getDs());
         assertNotNull(getSessionSecretSessionResponse.getAcs());
         assertNotNull(getSessionSecretSessionResponse.getCard());
@@ -124,23 +232,9 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         assertNotNull(getSessionSecretSessionResponse.getSelfLink());
         assertNotNull(getSessionSecretSessionResponse.getLink("callback_url"));
         assertFalse(getSessionSecretSessionResponse.getCompleted());
-
     }
 
-    @ParameterizedTest
-    @MethodSource("sessionsTypes_appSession")
-    void shouldRequestAndGetCardSession_appSession(final Category category,
-                                                   final ChallengeIndicator challengeIndicator,
-                                                   final TransactionType transactionType) {
-
-        final ChannelData appSession = appSession();
-
-        final SessionResponse sessionResponse = createNonHostedSession(appSession, category, challengeIndicator, transactionType);
-
-        assertNotNull(sessionResponse);
-        assertNotNull(sessionResponse.getCreated());
-
-        final CreateSessionOkResponse response = sessionResponse.getCreated();
+    private void validateAppSessionResponse(CreateSessionOkResponse response, Category category) {
         assertNotNull(response.getId());
         assertNotNull(response.getSessionSecret());
         assertNotNull(response.getTransactionId());
@@ -155,11 +249,10 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
 
         assertNotNull(response.getSelfLink());
         assertNotNull(response.getLink("callback_url"));
+    }
 
-        final GetSessionResponse getSessionResponse = blocking(() -> checkoutApi.sessionsClient().getSessionDetails(response.getId()));
-
+    private void validateAppGetSessionResponse(GetSessionResponse getSessionResponse, Category category, TransactionType transactionType) {
         assertNotNull(getSessionResponse);
-
         assertNotNull(getSessionResponse.getId());
         assertNotNull(getSessionResponse.getSessionSecret());
         assertNotNull(getSessionResponse.getTransactionId());
@@ -180,24 +273,9 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         assertNotNull(getSessionResponse.getSelfLink());
         assertNotNull(getSessionResponse.getLink("callback_url"));
         assertFalse(getSessionResponse.getCompleted());
-
     }
 
-    @Disabled("Not supported")
-    @ParameterizedTest
-    @MethodSource("sessionsTypes_merchantInitiatedSession")
-    void shouldRequestAndGetCardSession_merchantInitiatedSession(final Category category,
-                                                                 final ChallengeIndicator challengeIndicator,
-                                                                 final TransactionType transactionType) {
-
-        final ChannelData merchantInitiatedSession = merchantInitiatedSession();
-
-        final SessionResponse sessionResponse = createNonHostedSession(merchantInitiatedSession, category, challengeIndicator, transactionType);
-
-        assertNotNull(sessionResponse);
-        assertNotNull(sessionResponse.getCreated());
-
-        final CreateSessionOkResponse response = sessionResponse.getCreated();
+    private void validateMerchantInitiatedSessionResponse(CreateSessionOkResponse response, Category category, TransactionType transactionType) {
         assertNotNull(response.getId());
         assertNotNull(response.getSessionSecret());
         assertNotNull(response.getTransactionId());
@@ -216,11 +294,10 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         assertNotNull(response.getSelfLink());
         assertNotNull(response.getLink("callback_url"));
         assertFalse(response.getCompleted());
+    }
 
-        final GetSessionResponse getSessionResponse = blocking(() -> checkoutApi.sessionsClient().getSessionDetails(response.getId()));
-
+    private void validateMerchantInitiatedGetSessionResponse(GetSessionResponse getSessionResponse, Category category, TransactionType transactionType) {
         assertNotNull(getSessionResponse);
-
         assertNotNull(getSessionResponse.getId());
         assertNotNull(getSessionResponse.getSessionSecret());
         assertNotNull(getSessionResponse.getTransactionId());
@@ -241,7 +318,6 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
         assertNotNull(getSessionResponse.getSelfLink());
         assertNotNull(getSessionResponse.getLink("callback_url"));
         assertFalse(getSessionResponse.getCompleted());
-
     }
 
 }

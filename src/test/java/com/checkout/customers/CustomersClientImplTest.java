@@ -48,64 +48,120 @@ class CustomersClientImplTest {
     }
 
     @Test
-    void shouldCreateCustomer() throws ExecutionException, InterruptedException {
+    void shouldGetCustomer() throws ExecutionException, InterruptedException {
+        final CustomerResponse expectedResponse = mock(CustomerResponse.class);
 
-        final CustomerRequest request = mock(CustomerRequest.class);
-        final IdResponse response = mock(IdResponse.class);
+        when(apiClient.getAsync("customers/customer_id", authorization, CustomerResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<CustomerResponse> future = client.get("customer_id");
+        final CustomerResponse actualResponse = future.get();
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldCreateCustomer() throws ExecutionException, InterruptedException {
+        final CustomerRequest request = createMockCustomerRequest();
+        final IdResponse expectedResponse = mock(IdResponse.class);
 
         when(apiClient.postAsync(eq("customers"), eq(authorization), eq(IdResponse.class),
                 eq(request), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(response));
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<IdResponse> future = client.create(request);
+        final IdResponse actualResponse = future.get();
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
-
+        validateResponse(expectedResponse, actualResponse);
     }
 
     @Test
-    void shouldGetCustomers() throws ExecutionException, InterruptedException {
-
-        final CustomerResponse response = mock(CustomerResponse.class);
-        when(apiClient.getAsync("customers/customer_id", authorization,
-                CustomerResponse.class))
-                .thenReturn(CompletableFuture.completedFuture(response));
-
-        final CompletableFuture<CustomerResponse> future = client.get("customer_id");
-
-        assertNotNull(future.get());
-
-    }
-
-    @Test
-    void shouldUpdateInstrument() throws ExecutionException, InterruptedException {
-
-        final CustomerRequest request = mock(CustomerRequest.class);
-        final EmptyResponse response = mock(EmptyResponse.class);
+    void shouldUpdateCustomer() throws ExecutionException, InterruptedException {
+        final CustomerRequest request = createMockCustomerRequest();
+        final EmptyResponse expectedResponse = mock(EmptyResponse.class);
 
         when(apiClient.patchAsync(eq("customers/customer_id"), eq(authorization),
                 eq(EmptyResponse.class), eq(request), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(response));
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<EmptyResponse> future = client.update("customer_id", request);
+        final EmptyResponse actualResponse = future.get();
 
-        assertNotNull(future.get());
-        assertEquals(response, future.get());
-
+        validateResponse(expectedResponse, actualResponse);
     }
 
     @Test
-    void shouldDeleteInstrument() throws ExecutionException, InterruptedException {
-
-        final EmptyResponse response = mock(EmptyResponse.class);
+    void shouldDeleteCustomer() throws ExecutionException, InterruptedException {
+        final EmptyResponse expectedResponse = mock(EmptyResponse.class);
 
         when(apiClient.deleteAsync("customers/customer_id", authorization))
-                .thenReturn(CompletableFuture.completedFuture(response));
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<EmptyResponse> future = client.delete("customer_id");
+        final EmptyResponse actualResponse = future.get();
 
-        assertNotNull(future.get());
-
+        validateResponse(expectedResponse, actualResponse);
     }
+
+    // Synchronous methods
+    @Test
+    void shouldGetCustomerSync() {
+        final CustomerResponse expectedResponse = mock(CustomerResponse.class);
+        
+        when(apiClient.get("customers/customer_id", authorization, CustomerResponse.class))
+                .thenReturn(expectedResponse);
+
+        final CustomerResponse actualResponse = client.getSync("customer_id");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldCreateCustomerSync() {
+        final CustomerRequest request = createMockCustomerRequest();
+        final IdResponse expectedResponse = mock(IdResponse.class);
+
+        when(apiClient.post(eq("customers"), eq(authorization), eq(IdResponse.class), eq(request), isNull()))
+                .thenReturn(expectedResponse);
+
+        final IdResponse actualResponse = client.createSync(request);
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldUpdateCustomerSync() {
+        final CustomerRequest request = createMockCustomerRequest();
+        final EmptyResponse expectedResponse = mock(EmptyResponse.class);
+
+        when(apiClient.patch(eq("customers/customer_id"), eq(authorization), eq(EmptyResponse.class), eq(request), isNull()))
+                .thenReturn(expectedResponse);
+
+        final EmptyResponse actualResponse = client.updateSync("customer_id", request);
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldDeleteCustomerSync() {
+        final EmptyResponse expectedResponse = mock(EmptyResponse.class);
+
+        when(apiClient.delete("customers/customer_id", authorization))
+                .thenReturn(expectedResponse);
+
+        final EmptyResponse actualResponse = client.deleteSync("customer_id");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    // Common methods
+    private CustomerRequest createMockCustomerRequest() {
+        return mock(CustomerRequest.class);
+    }
+
+    private <T> void validateResponse(T expectedResponse, T actualResponse) {
+        assertEquals(expectedResponse, actualResponse);
+        assertNotNull(actualResponse);
+    }
+
 }

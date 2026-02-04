@@ -22,17 +22,23 @@ java {
 
 
 dependencies {
-    implementation 'com.google.code.gson:gson:2.10.1'
-    implementation 'org.slf4j:slf4j-api:2.0.16'
+    implementation 'com.google.code.gson:gson:2.13.2'
+    implementation 'org.slf4j:slf4j-api:2.0.17'
     implementation 'org.apache.httpcomponents:httpclient:4.5.14'
     implementation 'org.apache.commons:commons-lang3:3.19.0'
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'org.apache.httpcomponents:httpmime:4.5.14'
     implementation 'commons-codec:commons-codec:1.19.0'
+    implementation 'io.github.resilience4j:resilience4j-circuitbreaker:1.7.1'
+    implementation 'io.github.resilience4j:resilience4j-retry:1.7.1'
+    implementation 'io.github.resilience4j:resilience4j-ratelimiter:1.7.1'
 
     testImplementation(platform('org.junit:junit-bom:5.11.0'))
     testImplementation('org.junit.jupiter:junit-jupiter')
     testImplementation("org.junit.jupiter:junit-jupiter-params")
+    testImplementation('org.junit.jupiter:junit-jupiter-engine')
+    testImplementation('org.junit.platform:junit-platform-engine')
+    testImplementation('org.junit.platform:junit-platform-launcher')
     testImplementation 'org.hamcrest:hamcrest:3.0'
     testImplementation 'org.mockito:mockito-inline:5.2.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.2.0'

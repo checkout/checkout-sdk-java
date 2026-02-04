@@ -53,9 +53,25 @@ class IdealClientImplTest {
 
         final CompletableFuture<IssuerResponse> future = idealClient.getIssuers();
 
-        assertNotNull(future.get());
-        assertEquals(issuerResponse, future.get());
+        validateIssuerResponse(future.get());
 
     }
 
+    // Synchronous methods
+    @Test
+    void shouldGetIssuersSync() throws ExecutionException, InterruptedException {
+
+        when(apiClient.get("/ideal-external/issuers", authorization, IssuerResponse.class))
+                .thenReturn(issuerResponse);
+
+        final IssuerResponse response = idealClient.getIssuersSync();
+
+        validateIssuerResponse(response);
+
+    }
+
+    private void validateIssuerResponse(final IssuerResponse response) {
+        assertNotNull(response);
+        assertEquals(issuerResponse, response);
+    }
 }

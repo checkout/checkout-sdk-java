@@ -19,23 +19,47 @@ public class TransfersClientImpl extends AbstractClient implements TransfersClie
 
     @Override
     public CompletableFuture<CreateTransferResponse> initiateTransferOfFunds(final CreateTransferRequest createTransferRequest) {
-        return requestInitiateTransferOfFunds(createTransferRequest, null);
+        validateCreateTransferRequest(createTransferRequest);
+        return apiClient.postAsync(TRANSFERS_PATH, sdkAuthorization(), CreateTransferResponse.class, createTransferRequest, null);
     }
 
     @Override
     public CompletableFuture<CreateTransferResponse> initiateTransferOfFunds(final CreateTransferRequest createTransferRequest, final String idempotencyKey) {
-        return requestInitiateTransferOfFunds(createTransferRequest, idempotencyKey);
+        validateCreateTransferRequest(createTransferRequest);
+        return apiClient.postAsync(TRANSFERS_PATH, sdkAuthorization(), CreateTransferResponse.class, createTransferRequest, idempotencyKey);
     }
 
     @Override
     public CompletableFuture<TransferDetailsResponse> retrieveATransfer(final String transferId) {
-        validateParams("transferId", transferId);
+        validateTransferId(transferId);
         return apiClient.getAsync(buildPath(TRANSFERS_PATH, transferId), sdkAuthorization(), TransferDetailsResponse.class);
     }
 
+    // Synchronous methods
+    @Override
+    public CreateTransferResponse initiateTransferOfFundsSync(final CreateTransferRequest createTransferRequest) {
+        validateCreateTransferRequest(createTransferRequest);
+        return apiClient.post(TRANSFERS_PATH, sdkAuthorization(), CreateTransferResponse.class, createTransferRequest, null);
+    }
 
-    private CompletableFuture<CreateTransferResponse> requestInitiateTransferOfFunds(final CreateTransferRequest createTransferRequest, final String idempotencyKey) {
+    @Override
+    public CreateTransferResponse initiateTransferOfFundsSync(final CreateTransferRequest createTransferRequest, final String idempotencyKey) {
+        validateCreateTransferRequest(createTransferRequest);
+        return apiClient.post(TRANSFERS_PATH, sdkAuthorization(), CreateTransferResponse.class, createTransferRequest, idempotencyKey);
+    }
+
+    @Override
+    public TransferDetailsResponse retrieveATransferSync(final String transferId) {
+        validateTransferId(transferId);
+        return apiClient.get(buildPath(TRANSFERS_PATH, transferId), sdkAuthorization(), TransferDetailsResponse.class);
+    }
+
+    // Common methods
+    protected void validateCreateTransferRequest(final CreateTransferRequest createTransferRequest) {
         validateParams("createTransferRequest", createTransferRequest);
-        return apiClient.postAsync(TRANSFERS_PATH, sdkAuthorization(), CreateTransferResponse.class, createTransferRequest, idempotencyKey);
+    }
+
+    protected void validateTransferId(final String transferId) {
+        validateParams("transferId", transferId);
     }
 }

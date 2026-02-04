@@ -31,78 +31,112 @@ public class ApiClientImpl implements ApiClient {
     private static final String PATH = "path";
     private final Serializer serializer;
     private final Transport transport;
+    private final CheckoutConfiguration configuration;
+    private final java.util.concurrent.Executor executor;
 
     public ApiClientImpl(final CheckoutConfiguration configuration, final UriStrategy uriStrategy) {
         this.serializer = new GsonSerializer();
+        this.configuration = configuration;
+        this.executor = configuration.getExecutor();
         this.transport = new ApacheHttpClientTransport(uriStrategy.getUri(), configuration.getHttpClientBuilder(), configuration.getExecutor(), configuration.getTransportConfiguration(), configuration);
     }
 
     @Override
     public <T extends HttpMetadata> CompletableFuture<T> getAsync(final String path, final SdkAuthorization authorization, final Class<T> responseType) {
         validateParams(PATH, path, AUTHORIZATION, authorization);
-        return sendRequestAsync(GET, path, authorization, null, null, responseType);
+        return executeAsyncOrSync(
+                () -> get(path, authorization, responseType),
+                () -> sendRequestAsync(GET, path, authorization, null, null, responseType)
+        );
     }
 
     @Override
     public <T extends HttpMetadata> CompletableFuture<T> getAsync(final String path, final SdkAuthorization authorization, final Type responseType) {
         validateParams(PATH, path, AUTHORIZATION, authorization);
-        return sendRequestAsync(GET, path, authorization, null, null, responseType);
+        return executeAsyncOrSync(
+                () -> get(path, authorization, responseType),
+                () -> sendRequestAsync(GET, path, authorization, null, null, responseType)
+        );
     }
 
     @Override
     public <T extends HttpMetadata> CompletableFuture<T> putAsync(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request) {
         validateParams(PATH, path, AUTHORIZATION, authorization);
-        return sendRequestAsync(PUT, path, authorization, request, null, responseType);
+        return executeAsyncOrSync(
+                () -> put(path, authorization, responseType, request),
+                () -> sendRequestAsync(PUT, path, authorization, request, null, responseType)
+        );
     }
 
     @Override
     public <T extends HttpMetadata> CompletableFuture<T> patchAsync(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request, final String idempotencyKey) {
         validateParams(PATH, path, AUTHORIZATION, authorization);
-        return sendRequestAsync(PATCH, path, authorization, request, idempotencyKey, responseType);
+        return executeAsyncOrSync(
+                () -> patch(path, authorization, responseType, request, idempotencyKey),
+                () -> sendRequestAsync(PATCH, path, authorization, request, idempotencyKey, responseType)
+        );
     }
 
     @Override
     public <T extends HttpMetadata> CompletableFuture<T> patchAsync(final String path, final SdkAuthorization authorization, final Type type, final Object request, final String idempotencyKey) {
         validateParams(PATH, path, AUTHORIZATION, authorization, "type", type, "request", request);
-        return sendRequestAsync(PATCH, path, authorization, request, idempotencyKey, type);
+        return executeAsyncOrSync(
+                () -> patch(path, authorization, type, request, idempotencyKey),
+                () -> sendRequestAsync(PATCH, path, authorization, request, idempotencyKey, type)
+        );
     }
 
     @Override
     public <T extends HttpMetadata> CompletableFuture<T> postAsync(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request, final String idempotencyKey) {
         validateParams(PATH, path, AUTHORIZATION, authorization);
-        return sendRequestAsync(POST, path, authorization, request, idempotencyKey, responseType);
+        return executeAsyncOrSync(
+                () -> post(path, authorization, responseType, request, idempotencyKey),
+                () -> sendRequestAsync(POST, path, authorization, request, idempotencyKey, responseType)
+        );
     }
 
     @Override
     public <T extends HttpMetadata> CompletableFuture<T> postAsync(final String path, final SdkAuthorization authorization, final Type responseType, final Object request, final String idempotencyKey) {
         validateParams(PATH, path, AUTHORIZATION, authorization);
-        return sendRequestAsync(POST, path, authorization, request, idempotencyKey, responseType);
+        return executeAsyncOrSync(
+                () -> post(path, authorization, responseType, request, idempotencyKey),
+                () -> sendRequestAsync(POST, path, authorization, request, idempotencyKey, responseType)
+        );
     }
 
     @Override
     public CompletableFuture<EmptyResponse> deleteAsync(final String path, final SdkAuthorization authorization) {
         validateParams(PATH, path, AUTHORIZATION, authorization);
-        return sendRequestAsync(DELETE, path, authorization, null, null, EmptyResponse.class);
+        return executeAsyncOrSync(
+                () -> delete(path, authorization),
+                () -> sendRequestAsync(DELETE, path, authorization, null, null, EmptyResponse.class)
+        );
     }
 
     @Override
     public <T extends HttpMetadata> CompletableFuture<T> deleteAsync(String path, SdkAuthorization authorization, Class<T> responseType) {
         validateParams(PATH, path, AUTHORIZATION, authorization);
-        return sendRequestAsync(DELETE, path, authorization, null, null, responseType);
+        return executeAsyncOrSync(
+                () -> delete(path, authorization, responseType),
+                () -> sendRequestAsync(DELETE, path, authorization, null, null, responseType)
+        );
     }
 
     @Override
     public CompletableFuture<? extends HttpMetadata> postAsync(final String path, final SdkAuthorization authorization, final Map<Integer, Class<? extends HttpMetadata>> resultTypeMappings, final Object request, final String idempotencyKey) {
         validateParams(PATH, path, AUTHORIZATION, authorization, "resultTypeMappings", resultTypeMappings);
-        return transport.invoke(POST, path, authorization, serializer.toJson(request), idempotencyKey, null)
-                .thenApply(this::errorCheck)
-                .thenApply(response -> {
-                    final Class<? extends HttpMetadata> responseType = resultTypeMappings.get(response.getStatusCode());
-                    if (responseType == null) {
-                        throw new IllegalStateException("The status code " + response.getStatusCode() + " is not mapped to a result type");
-                    }
-                    return deserialize(response, responseType);
-                });
+        return executeAsyncOrSync(
+                () -> post(path, authorization, resultTypeMappings, request, idempotencyKey),
+                () -> transport.invoke(POST, path, authorization, serializer.toJson(request), idempotencyKey, null)
+                        .thenApply(this::errorCheck)
+                        .thenApply(response -> {
+                            final Class<? extends HttpMetadata> responseType = resultTypeMappings.get(response.getStatusCode());
+                            if (responseType == null) {
+                                throw new IllegalStateException("The status code " + response.getStatusCode() + " is not mapped to a result type");
+                            }
+                            return deserialize(response, responseType);
+                        })
+        );
     }
 
     @Override
@@ -111,12 +145,17 @@ public class ApiClientImpl implements ApiClient {
                                                                     final Object filter,
                                                                     final Class<T> responseType) {
         validateParams(PATH, path, AUTHORIZATION, authorization, "filter", filter);
-        final Map<String, String> params = serializer.fromJson(serializer.toJson(filter),
-                new TypeToken<Map<String, String>>() {
-                }.getType());
-        return transport.invoke(QUERY, path, authorization, null, null, params)
-                .thenApply(this::errorCheck)
-                .thenApply(response -> deserialize(response, responseType));
+        return executeAsyncOrSync(
+                () -> query(path, authorization, filter, responseType),
+                () -> {
+                    final Map<String, String> params = serializer.fromJson(serializer.toJson(filter),
+                            new TypeToken<Map<String, String>>() {
+                            }.getType());
+                    return transport.invoke(QUERY, path, authorization, null, null, params)
+                            .thenApply(this::errorCheck)
+                            .thenApply(response -> deserialize(response, responseType));
+                }
+        );
     }
 
     @Override
@@ -125,15 +164,20 @@ public class ApiClientImpl implements ApiClient {
                                                                    final Object filter,
                                                                    final String targetFile) {
         validateParams(PATH, path, AUTHORIZATION, authorization);
-        Map<String, String> params = new HashMap<>();
-        if (filter != null) {
-            params = serializer.fromJson(serializer.toJson(filter),
-                    new TypeToken<Map<String, String>>() {
-                    }.getType());
-        }
-        return transport.invoke(QUERY, path, authorization, null, null, params)
-                .thenApply(this::errorCheck)
-                .thenApply(body -> transform(processAndGetContent(targetFile, body), body));
+        return executeAsyncOrSync(
+                () -> queryCsvContent(path, authorization, filter, targetFile),
+                () -> {
+                    Map<String, String> params = new HashMap<>();
+                    if (filter != null) {
+                        params = serializer.fromJson(serializer.toJson(filter),
+                                new TypeToken<Map<String, String>>() {
+                                }.getType());
+                    }
+                    return transport.invoke(QUERY, path, authorization, null, null, params)
+                            .thenApply(this::errorCheck)
+                            .thenApply(body -> transform(processAndGetContent(targetFile, body), body));
+                }
+        );
     }
 
     @SuppressWarnings("squid:S3516")
@@ -165,9 +209,25 @@ public class ApiClientImpl implements ApiClient {
     public <T extends HttpMetadata> CompletableFuture<T> submitFileAsync(final String path, final SdkAuthorization authorization,
                                                                          final AbstractFileRequest request, final Class<T> responseType) {
         validateParams(PATH, path, AUTHORIZATION, authorization, "fileRequest", request);
-        return transport.submitFile(path, authorization, request)
-                .thenApply(this::errorCheck)
-                .thenApply(response -> deserialize(response, responseType));
+        return executeAsyncOrSync(
+                () -> submitFile(path, authorization, request, responseType),
+                () -> transport.submitFile(path, authorization, request)
+                        .thenApply(this::errorCheck)
+                        .thenApply(response -> deserialize(response, responseType))
+        );
+    }
+
+    /**
+     * Helper method that executes a synchronous operation and wraps it in a CompletableFuture
+     * when in synchronous mode, or executes asynchronously when in async mode.
+     * This ensures Resilience4j is applied in synchronous mode while maintaining async behavior.
+     */
+    private <T> CompletableFuture<T> executeAsyncOrSync(final java.util.function.Supplier<T> syncOperation, final java.util.function.Supplier<CompletableFuture<T>> asyncOperation) {
+        if (configuration.isSynchronous()) {
+            // Execute sync operation (which has Resilience4j) in executor to avoid blocking
+            return CompletableFuture.supplyAsync(syncOperation, executor);
+        }
+        return asyncOperation.get();
     }
 
     private <T extends HttpMetadata> CompletableFuture<T> sendRequestAsync(final ClientOperation clientOperation, final String path, final SdkAuthorization authorization, final Object request, final String idempotencyKey, final Type responseType) {
@@ -223,6 +283,119 @@ public class ApiClientImpl implements ApiClient {
         result.setHttpStatusCode(response.getStatusCode());
         result.setResponseHeaders(response.getHeaders());
         return result;
+    }
+
+    // Synchronous methods
+    @Override
+    public <T extends HttpMetadata> T get(final String path, final SdkAuthorization authorization, final Class<T> responseType) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(GET, path, authorization, null, null, responseType);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T get(final String path, final SdkAuthorization authorization, final Type responseType) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(GET, path, authorization, null, null, responseType);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T put(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(PUT, path, authorization, request, null, responseType);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T patch(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request, final String idempotencyKey) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(PATCH, path, authorization, request, idempotencyKey, responseType);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T patch(final String path, final SdkAuthorization authorization, final Type type, final Object request, final String idempotencyKey) {
+        validateParams(PATH, path, AUTHORIZATION, authorization, "type", type, "request", request);
+        return sendRequestSync(PATCH, path, authorization, request, idempotencyKey, type);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T post(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request, final String idempotencyKey) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(POST, path, authorization, request, idempotencyKey, responseType);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T post(final String path, final SdkAuthorization authorization, final Type responseType, final Object request, final String idempotencyKey) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(POST, path, authorization, request, idempotencyKey, responseType);
+    }
+
+    @Override
+    public EmptyResponse delete(final String path, final SdkAuthorization authorization) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(DELETE, path, authorization, null, null, EmptyResponse.class);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T delete(final String path, final SdkAuthorization authorization, final Class<T> responseType) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(DELETE, path, authorization, null, null, responseType);
+    }
+
+    @Override
+    public HttpMetadata post(final String path, final SdkAuthorization authorization, final Map<Integer, Class<? extends HttpMetadata>> resultTypeMappings, final Object request, final String idempotencyKey) {
+        validateParams(PATH, path, AUTHORIZATION, authorization, "resultTypeMappings", resultTypeMappings);
+        final Response response = transport.invokeSync(POST, path, authorization, serializer.toJson(request), idempotencyKey, null);
+        final Response checkedResponse = errorCheck(response);
+        final Class<? extends HttpMetadata> responseType = resultTypeMappings.get(checkedResponse.getStatusCode());
+        if (responseType == null) {
+            throw new IllegalStateException("The status code " + checkedResponse.getStatusCode() + " is not mapped to a result type");
+        }
+        return deserialize(checkedResponse, responseType);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T query(final String path,
+                                            final SdkAuthorization authorization,
+                                            final Object filter,
+                                            final Class<T> responseType) {
+        validateParams(PATH, path, AUTHORIZATION, authorization, "filter", filter);
+        final Map<String, String> params = serializer.fromJson(serializer.toJson(filter),
+                new TypeToken<Map<String, String>>() {
+                }.getType());
+        final Response response = transport.invokeSync(QUERY, path, authorization, null, null, params);
+        final Response checkedResponse = errorCheck(response);
+        return deserialize(checkedResponse, responseType);
+    }
+
+    @Override
+    public ContentResponse queryCsvContent(final String path,
+                                          final SdkAuthorization authorization,
+                                          final Object filter,
+                                          final String targetFile) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        Map<String, String> params = new HashMap<>();
+        if (filter != null) {
+            params = serializer.fromJson(serializer.toJson(filter),
+                    new TypeToken<Map<String, String>>() {
+                    }.getType());
+        }
+        final Response response = transport.invokeSync(QUERY, path, authorization, null, null, params);
+        final Response checkedResponse = errorCheck(response);
+        return transform(processAndGetContent(targetFile, checkedResponse), checkedResponse);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T submitFile(final String path, final SdkAuthorization authorization,
+                                                 final AbstractFileRequest request, final Class<T> responseType) {
+        validateParams(PATH, path, AUTHORIZATION, authorization, "fileRequest", request);
+        final Response response = transport.submitFileSync(path, authorization, request);
+        final Response checkedResponse = errorCheck(response);
+        return deserialize(checkedResponse, responseType);
+    }
+
+    private <T extends HttpMetadata> T sendRequestSync(final ClientOperation clientOperation, final String path, final SdkAuthorization authorization, final Object request, final String idempotencyKey, final Type responseType) {
+        final Response response = transport.invokeSync(clientOperation, path, authorization, request == null ? null : serializer.toJson(request), idempotencyKey, null);
+        final Response checkedResponse = errorCheck(response);
+        return deserialize(checkedResponse, responseType);
     }
 
 }

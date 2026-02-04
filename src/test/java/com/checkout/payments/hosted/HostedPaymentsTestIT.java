@@ -22,15 +22,38 @@ class HostedPaymentsTestIT extends SandboxTestFixture {
     void shouldCreateAndGetHostedPayments() {
         final HostedPaymentRequest request = TestHelper.createHostedPaymentRequest(REFERENCE);
         final HostedPaymentResponse response = blocking(() -> checkoutApi.hostedPaymentsClient().createHostedPaymentsPageSession(request));
+        
+        validateHostedPaymentResponse(response);
+
+        final HostedPaymentDetailsResponse detailsResponse = blocking(() -> checkoutApi.hostedPaymentsClient().getHostedPaymentsPageDetails(response.getId()));
+
+        validateHostedPaymentDetailsResponse(detailsResponse);
+    }
+
+    // Synchronous methods
+    @Test
+    void shouldCreateAndGetHostedPaymentsSync() {
+        final HostedPaymentRequest request = TestHelper.createHostedPaymentRequest(REFERENCE);
+        final HostedPaymentResponse response = checkoutApi.hostedPaymentsClient().createHostedPaymentsPageSessionSync(request);
+        
+        validateHostedPaymentResponse(response);
+
+        final HostedPaymentDetailsResponse detailsResponse = checkoutApi.hostedPaymentsClient().getHostedPaymentsPageDetailsSync(response.getId());
+
+        validateHostedPaymentDetailsResponse(detailsResponse);
+    }
+
+    // Common validation methods
+    private void validateHostedPaymentResponse(HostedPaymentResponse response) {
         assertNotNull(response);
         assertNotNull(response.getId());
         assertEquals(REFERENCE, response.getReference());
         assertNotNull(response.getLinks());
         assertTrue(response.getLinks().containsKey("redirect"));
         assertEquals(response.getHttpStatusCode(), 201);
+    }
 
-        final HostedPaymentDetailsResponse detailsResponse = blocking(() -> checkoutApi.hostedPaymentsClient().getHostedPaymentsPageDetails(response.getId()));
-
+    private void validateHostedPaymentDetailsResponse(HostedPaymentDetailsResponse detailsResponse) {
         assertNotNull(detailsResponse);
         assertNotNull(detailsResponse.getId());
         assertNotNull(detailsResponse.getReference());
@@ -43,6 +66,5 @@ class HostedPaymentsTestIT extends SandboxTestFixture {
         assertNotNull(detailsResponse.getFailureUrl());
         assertNotNull(detailsResponse.getSuccessUrl());
         assertNotNull(detailsResponse.getCancelUrl());
-
     }
 }

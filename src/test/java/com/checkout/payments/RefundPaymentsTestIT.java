@@ -1,20 +1,5 @@
 package com.checkout.payments;
 
-import com.checkout.common.AccountType;
-import com.checkout.common.BankDetails;
-import com.checkout.common.CountryCode;
-import com.checkout.common.Destination;
-import com.checkout.payments.request.RefundOrder;
-import com.checkout.payments.request.PaymentRequest;
-import com.checkout.payments.request.source.RequestCardSource;
-import com.checkout.payments.response.PaymentResponse;
-import com.checkout.payments.sender.PaymentCorporateSender;
-import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import static com.checkout.CardSourceHelper.getCardSourcePayment;
 import static com.checkout.CardSourceHelper.getCorporateSender;
 import static com.checkout.CardSourceHelper.getRequestCardSource;
@@ -23,11 +8,26 @@ import static com.checkout.TestHelper.getAccountHolder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.junit.jupiter.api.Test;
+
+import com.checkout.common.AccountType;
+import com.checkout.common.BankDetails;
+import com.checkout.common.CountryCode;
+import com.checkout.common.Destination;
+import com.checkout.payments.request.PaymentRequest;
+import com.checkout.payments.request.RefundOrder;
+import com.checkout.payments.request.source.RequestCardSource;
+import com.checkout.payments.response.PaymentResponse;
+import com.checkout.payments.sender.PaymentCorporateSender;
+
 class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
 
     @Test
     void shouldRefundCardPayment() {
-
         final RequestCardSource source = getRequestCardSource();
         final PaymentCorporateSender sender = getCorporateSender();
         final PaymentRequest request = getCardSourcePayment(source, sender, false);
@@ -39,6 +39,74 @@ class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
         // capture
         capturePayment(paymentResponse.getId());
 
+        // refund
+        final RefundRequest refundRequest = createComplexRefundRequest();
+        final RefundResponse refundResponse = blocking(() -> paymentsClient.refundPayment(paymentResponse.getId(), refundRequest));
+
+        validateRefundResponse(refundResponse);
+    }
+
+    @Test
+    void shouldRefundTokenPayment() {
+        // Make Payment
+        final PaymentResponse paymentResponse = makeTokenPayment();
+        assertNotNull(paymentResponse.getLink("capture"));
+
+        // Capture Payment
+        capturePayment(paymentResponse.getId());
+
+        // Refund
+        final RefundRequest refundRequest = createSimpleRefundRequest();
+        final RefundResponse refundResponse = blocking(() -> paymentsClient.refundPayment(paymentResponse.getId(), refundRequest));
+
+        validateRefundResponse(refundResponse);
+    }
+
+    // Synchronous methods
+    @Test
+    void shouldRefundCardPaymentSync() {
+        final RequestCardSource source = getRequestCardSource();
+        final PaymentCorporateSender sender = getCorporateSender();
+        final PaymentRequest request = getCardSourcePayment(source, sender, false);
+
+        // payment
+        final PaymentResponse paymentResponse = makeCardPayment(request);
+        assertNotNull(paymentResponse.getLink("capture"));
+
+        // capture
+        capturePayment(paymentResponse.getId());
+
+        // refund
+        final RefundRequest refundRequest = createComplexRefundRequest();
+        final RefundResponse refundResponse = paymentsClient.refundPaymentSync(paymentResponse.getId(), refundRequest);
+
+        validateRefundResponse(refundResponse);
+    }
+
+    @Test
+    void shouldRefundTokenPaymentSync() {
+        // Make Payment
+        final PaymentResponse paymentResponse = makeTokenPayment();
+        assertNotNull(paymentResponse.getLink("capture"));
+
+        // Capture Payment
+        capturePayment(paymentResponse.getId());
+
+        // Refund
+        final RefundRequest refundRequest = createSimpleRefundRequest();
+        final RefundResponse refundResponse = paymentsClient.refundPaymentSync(paymentResponse.getId(), refundRequest);
+
+        validateRefundResponse(refundResponse);
+    }
+
+    // Common methods
+    private RefundRequest createSimpleRefundRequest() {
+        return RefundRequest.builder()
+                .reference(UUID.randomUUID().toString())
+                .build();
+    }
+
+    private RefundRequest createComplexRefundRequest() {
         final RefundOrder refundOrder = RefundOrder.builder()
                 .name("Order Test")
                 .totalAmount(99L)
@@ -67,44 +135,18 @@ class RefundPaymentsTestIT extends AbstractPaymentsTestIT {
                 .bank(bank)
                 .build();
 
-        // refund
-        final RefundRequest refundRequest = RefundRequest.builder()
+        return RefundRequest.builder()
                 .reference(UUID.randomUUID().toString())
                 .items(refundOrders)
                 .destination(destination)
                 .build();
-
-        final RefundResponse refundResponse = blocking(() -> paymentsClient.refundPayment(paymentResponse.getId(), refundRequest));
-
-        assertNotNull(refundResponse);
-        assertNotNull(refundResponse.getActionId());
-        assertNotNull(refundResponse.getReference());
-        assertEquals(1, refundResponse.getLinks().size());
-
     }
 
-    @Test
-    void shouldRefundTokenPayment() {
-
-        // Make Payment
-        final PaymentResponse paymentResponse = makeTokenPayment();
-        assertNotNull(paymentResponse.getLink("capture"));
-
-        // Capture Payment
-        capturePayment(paymentResponse.getId());
-
-        // Refund
-        final RefundRequest refundRequest = RefundRequest.builder()
-                .reference(UUID.randomUUID().toString())
-                .build();
-
-        final RefundResponse refundResponse = blocking(() -> paymentsClient.refundPayment(paymentResponse.getId(), refundRequest));
-
+    private void validateRefundResponse(RefundResponse refundResponse) {
         assertNotNull(refundResponse);
         assertNotNull(refundResponse.getActionId());
         assertNotNull(refundResponse.getReference());
         assertEquals(1, refundResponse.getLinks().size());
-
     }
 
 }

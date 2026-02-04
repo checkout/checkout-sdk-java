@@ -19,4 +19,9 @@ public interface RiskClient {
 
     CompletableFuture<PreCaptureAssessmentResponse> requestPreCaptureRiskScan(PreCaptureAssessmentRequest preCaptureAssessmentRequest);
 
+    // Synchronous methods
+    PreAuthenticationAssessmentResponse requestPreAuthenticationRiskScanSync(PreAuthenticationAssessmentRequest preAuthenticationAssessmentRequest);
+
+    PreCaptureAssessmentResponse requestPreCaptureRiskScanSync(PreCaptureAssessmentRequest preCaptureAssessmentRequest);
+
 }
