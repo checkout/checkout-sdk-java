@@ -295,7 +295,6 @@ System.out.println("Payment ID: " + response.getId());
 - **Pros**:
   - Non-blocking execution
   - Better resource utilization for I/O bound operations
-  - Suitable for high-throughput applications
   - Lower memory footprint per request
 - **Cons**:
   - No built-in resilience patterns
@@ -311,7 +310,6 @@ System.out.println("Payment ID: " + response.getId());
 - **Cons**:
   - Blocking HTTP execution (but mitigated by executor wrapping)
   - Higher resource usage due to resilience overhead
-  - Not suitable for very high-throughput scenarios
 
 ### Choosing the Right Mode
 
