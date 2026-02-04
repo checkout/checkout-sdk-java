@@ -274,6 +274,7 @@ class IssuingCardsTestIT extends BaseIssuingTestIT {
     private void validateCardCreation(CardResponse cardResponse, String expectedCardholderId) {
         assertNotNull(cardResponse);
         assertNotNull(cardResponse.getId());
+        assertEquals(expectedCardholderId, cardResponse.getId());
     }
 
     private void validateCardDetails(CardDetailsResponse cardDetails, String expectedCardId) {

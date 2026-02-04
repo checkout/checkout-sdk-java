@@ -131,7 +131,7 @@ class PaymentsLoadTest extends AbstractPaymentsTestIT {
         PerformanceMetrics syncMetrics = runMultiThreadedTest(_numThreads, _callsPerThread, false);
 
         // Print comparison
-        printComparisonResults(asyncMetrics, syncMetrics, totalCalls);
+        printComparisonResults(asyncMetrics, syncMetrics);
     }
 
     // Common methods
@@ -234,7 +234,7 @@ class PaymentsLoadTest extends AbstractPaymentsTestIT {
         return new ThreadMetrics(totalResponseTime, successCount, failureCount);
     }
 
-    private void printComparisonResults(PerformanceMetrics pm1, PerformanceMetrics pm2, int totalCalls) {
+    private void printComparisonResults(PerformanceMetrics pm1, PerformanceMetrics pm2) {
         System.out.println("\n======================================================================================");
         System.out.println("PERFORMANCE COMPARISON RESULTS");
         System.out.println("======================================================================================");
