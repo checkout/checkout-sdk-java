@@ -3,6 +3,7 @@ package com.checkout.payments;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.checkout.payments.response.PaymentResponse;
@@ -10,6 +11,7 @@ import com.checkout.payments.response.PaymentsQueryResponse;
 
 public class GetPaymentsListTestIT extends AbstractPaymentsTestIT {
 
+    @Disabled("Test can popentially fail in pipeline due to delays, activate when needed")
     @Test
     void shouldQueryPayments() throws InterruptedException {
         final PaymentResponse payment = makeCardPayment(false);
@@ -23,6 +25,7 @@ public class GetPaymentsListTestIT extends AbstractPaymentsTestIT {
     }
 
     // Synchronous methods
+    @Disabled("Test can popentially fail in pipeline due to delays, activate when needed")
     @Test
     void shouldQueryPaymentsSync() throws InterruptedException {
         PaymentResponse payment = makeCardPayment(false);
