@@ -33,7 +33,7 @@ dependencies {
     implementation 'io.github.resilience4j:resilience4j-retry:1.7.1'
     implementation 'io.github.resilience4j:resilience4j-ratelimiter:1.7.1'
 
-    testImplementation(platform('org.junit:junit-bom:5.11.0'))
+    testImplementation(platform('org.junit:junit-bom:6.0.2'))
     testImplementation('org.junit.jupiter:junit-jupiter')
     testImplementation("org.junit.jupiter:junit-jupiter-params")
     testImplementation('org.junit.jupiter:junit-jupiter-engine')
