@@ -27,7 +27,5 @@ public enum ExemptionType {
     @SerializedName("data_share")
     DATA_SHARE,
     @SerializedName("other")
-    OTHER,
-    @SerializedName("no_preference")
-    NO_PREFERENCE
+    OTHER
 }

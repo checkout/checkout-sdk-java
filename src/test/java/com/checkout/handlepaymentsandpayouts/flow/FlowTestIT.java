@@ -5,7 +5,6 @@ import com.checkout.SandboxTestFixture;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.ExemptionType;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.IdentificationType;
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.PanPreferenceType;
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.PurposeType;
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.AmountAllocation;
@@ -16,7 +15,6 @@ import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Instr
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Item;
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.PaymentMethodConfiguration;
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.PaymentSessionRequest;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.sender.IndividualSender;
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Processing;
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Risk;
 import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Shipping;
