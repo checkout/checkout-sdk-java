@@ -41,10 +41,12 @@ public final class Threeds {
     private ChallengeIndicatorType challengeIndicator = ChallengeIndicatorType.NO_PREFERENCE;
 
     /**
+     * Default: "other"
      * Specifies an exemption reason for the payment to not be processed using 3D Secure authentication. For more
      * information on 3DS exemptions, refer to our SCA compliance guide.
      */
-    private ExemptionType exemption;
+    @Builder.Default
+    private ExemptionType exemption = ExemptionType.OTHER;
 
     /**
      * Default: true
