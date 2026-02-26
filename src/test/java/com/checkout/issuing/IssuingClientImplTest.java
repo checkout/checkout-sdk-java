@@ -30,6 +30,7 @@ import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
 import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
+import com.checkout.issuing.testing.requests.CardAuthorizationRefundsRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
 import com.checkout.issuing.testing.responses.CardAuthorizationIncrementingResponse;
@@ -432,6 +433,25 @@ public class IssuingClientImplTest {
         }
 
         @Test
+        void shouldSimulateAuthorizationRefund() throws ExecutionException, InterruptedException {
+            final CardAuthorizationRefundsRequest request = createCardAuthorizationRefundsRequest();
+            final EmptyResponse response = createEmptyResponse();
+
+            when(apiClient.postAsync(
+                    "issuing/simulate/authorizations/authorization_id/refunds",
+                    authorization,
+                    EmptyResponse.class,
+                    request,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<EmptyResponse> future =
+                    client.simulateRefund("authorization_id", request);
+
+            validateEmptyResponse(response, future.get());
+        }
+
+        @Test
         void shouldSimulateAuthorizationReversal() throws ExecutionException, InterruptedException {
             final CardAuthorizationReversalRequest request = createCardAuthorizationReversalRequest();
             final CardAuthorizationReversalResponse response = createCardAuthorizationReversalResponse();
@@ -807,6 +827,24 @@ public class IssuingClientImplTest {
         }
 
         @Test
+        void shouldSimulateAuthorizationRefundSync() {
+            final CardAuthorizationRefundsRequest request = createCardAuthorizationRefundsRequest();
+            final EmptyResponse expectedResponse = createEmptyResponse();
+
+            when(apiClient.post(
+                    "issuing/simulate/authorizations/authorization_id/refunds",
+                    authorization,
+                    EmptyResponse.class,
+                    request,
+                    null
+            )).thenReturn(expectedResponse);
+
+            final EmptyResponse actualResponse = client.simulateRefundSync("authorization_id", request);
+
+            validateEmptyResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
         void shouldSimulateAuthorizationReversalSync() {
             final CardAuthorizationReversalRequest request = createCardAuthorizationReversalRequest();
             final CardAuthorizationReversalResponse expectedResponse = createCardAuthorizationReversalResponse();
@@ -941,6 +979,10 @@ public class IssuingClientImplTest {
 
     private EmptyResponse createEmptyResponse() {
         return mock(EmptyResponse.class);
+    }
+
+    private CardAuthorizationRefundsRequest createCardAuthorizationRefundsRequest() {
+        return mock(CardAuthorizationRefundsRequest.class);
     }
 
     private CardAuthorizationReversalRequest createCardAuthorizationReversalRequest() {

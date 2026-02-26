@@ -24,6 +24,7 @@ import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
 import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
 import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
+import com.checkout.issuing.testing.requests.CardAuthorizationRefundsRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
@@ -82,6 +83,11 @@ public interface IssuingClient {
             final CardAuthorizationClearingRequest cardAuthorizationClearingRequest
     );
 
+    CompletableFuture<EmptyResponse> simulateRefund(
+            final String authorizationId,
+            final CardAuthorizationRefundsRequest cardAuthorizationRefundsRequest
+    );
+
     CompletableFuture<CardAuthorizationReversalResponse> simulateReversal(
             final String authorizationId,
             final CardAuthorizationReversalRequest cardAuthorizationReversalRequest
@@ -132,6 +138,11 @@ public interface IssuingClient {
     EmptyResponse simulateClearingSync(
             String authorizationId,
             CardAuthorizationClearingRequest cardAuthorizationClearingRequest
+    );
+
+    EmptyResponse simulateRefundSync(
+            final String authorizationId,
+            final CardAuthorizationRefundsRequest cardAuthorizationRefundsRequest
     );
 
     CardAuthorizationReversalResponse simulateReversalSync(

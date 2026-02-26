@@ -28,6 +28,7 @@ import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
 import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
 import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
+import com.checkout.issuing.testing.requests.CardAuthorizationRefundsRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
@@ -65,6 +66,8 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     private static final String AUTHORIZATIONS_PATH = "authorizations";
 
     private static final String PRESENTMENTS_PATH = "presentments";
+
+    private static final String REFUNDS_PATH = "refunds";
 
     private static final String REVERSALS_PATH = "reversals";
 
@@ -319,6 +322,22 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 null
         );
     }
+
+    @Override
+    public CompletableFuture<EmptyResponse> simulateRefund(
+            String authorizationId,
+            CardAuthorizationRefundsRequest cardAuthorizationRefundsRequest
+    ) {
+        validateAuthorizationIdAndRefundRequest(authorizationId, cardAuthorizationRefundsRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, SIMULATE_PATH, AUTHORIZATIONS_PATH, authorizationId, REFUNDS_PATH),
+                sdkAuthorization(),
+                EmptyResponse.class,
+                cardAuthorizationRefundsRequest,
+                null
+        );
+    }
+
 
     @Override
     public CompletableFuture<CardAuthorizationReversalResponse> simulateReversal(
@@ -585,6 +604,21 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
+    public EmptyResponse simulateRefundSync(
+            String authorizationId,
+            CardAuthorizationRefundsRequest cardAuthorizationRefundsRequest
+    ) {
+        validateAuthorizationIdAndRefundRequest(authorizationId, cardAuthorizationRefundsRequest);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, SIMULATE_PATH, AUTHORIZATIONS_PATH, authorizationId, REFUNDS_PATH),
+                sdkAuthorization(),
+                EmptyResponse.class,
+                cardAuthorizationRefundsRequest,
+                null
+        );
+    }
+
+    @Override
     public CardAuthorizationReversalResponse simulateReversalSync(
             String authorizationId,
             CardAuthorizationReversalRequest cardAuthorizationReversalRequest
@@ -662,6 +696,10 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     private void validateAuthorizationIdAndClearingRequest(final String authorizationId, final CardAuthorizationClearingRequest cardAuthorizationClearingRequest) {
         validateParams("authorizationId", authorizationId, "cardAuthorizationClearingRequest", cardAuthorizationClearingRequest);
+    }
+
+    private void validateAuthorizationIdAndRefundRequest(final String authorizationId, final CardAuthorizationRefundsRequest cardAuthorizationRefundsRequest) {
+        validateParams("authorizationId", authorizationId, "cardAuthorizationRefundsRequest", cardAuthorizationRefundsRequest);
     }
 
     private void validateAuthorizationIdAndReversalRequest(final String authorizationId, final CardAuthorizationReversalRequest cardAuthorizationReversalRequest) {
