@@ -7,7 +7,9 @@ import com.checkout.issuing.cardholders.CardholderAccessTokenResponse;
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
 import com.checkout.issuing.cardholders.CardholderDetailsResponse;
 import com.checkout.issuing.cardholders.CardholderRequest;
+import com.checkout.issuing.cardholders.CardholderUpdateRequest;
 import com.checkout.issuing.cardholders.CardholderResponse;
+import com.checkout.issuing.cardholders.CardholderUpdateResponse;
 import com.checkout.issuing.cards.requests.create.CardRequest;
 import com.checkout.issuing.cards.requests.credentials.CardCredentialsQuery;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSEnrollmentRequest;
@@ -42,6 +44,8 @@ public interface IssuingClient {
     CompletableFuture<CardholderAccessTokenResponse> requestCardholderAccessToken(CardholderAccessTokenRequest cardholderAccessTokenRequest);
 
     CompletableFuture<CardholderResponse> createCardholder(CardholderRequest cardholderRequest);
+
+    CompletableFuture<CardholderUpdateResponse> updateCardholder(CardholderUpdateRequest cardholderUpdateRequest, String cardholderId);
 
     CompletableFuture<CardholderDetailsResponse> getCardholder(String cardholderId);
 
@@ -101,6 +105,8 @@ public interface IssuingClient {
     CardholderAccessTokenResponse requestCardholderAccessTokenSync(CardholderAccessTokenRequest cardholderAccessTokenRequest);
 
     CardholderResponse createCardholderSync(CardholderRequest cardholderRequest);
+
+    CardholderUpdateResponse updateCardholderSync(CardholderUpdateRequest cardholderUpdateRequest, String cardholderId);
 
     CardholderDetailsResponse getCardholderSync(String cardholderId);
 

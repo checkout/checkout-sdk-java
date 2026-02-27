@@ -12,7 +12,9 @@ import com.checkout.issuing.cardholders.CardholderDetailsResponse;
 import com.checkout.issuing.cardholders.CardholderAccessTokenRequest;
 import com.checkout.issuing.cardholders.CardholderAccessTokenResponse;
 import com.checkout.issuing.cardholders.CardholderRequest;
+import com.checkout.issuing.cardholders.CardholderUpdateRequest;
 import com.checkout.issuing.cardholders.CardholderResponse;
+import com.checkout.issuing.cardholders.CardholderUpdateResponse;
 import com.checkout.issuing.cards.requests.create.CardRequest;
 import com.checkout.issuing.cards.requests.credentials.CardCredentialsQuery;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSEnrollmentRequest;
@@ -119,6 +121,19 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 buildPath(ISSUING_PATH, CARDHOLDERS_PATH, cardholderId),
                 sdkAuthorization(),
                 CardholderDetailsResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<CardholderUpdateResponse> updateCardholder(final CardholderUpdateRequest cardholderRequest, 
+                                                                        final String cardholderId) {
+        validateParams("cardholderId", cardholderId);
+        return apiClient.patchAsync(
+                buildPath(ISSUING_PATH, CARDHOLDERS_PATH, cardholderId),
+                sdkAuthorization(),
+                CardholderUpdateResponse.class,
+                cardholderRequest,
+                null
         );
     }
 
@@ -414,6 +429,19 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 buildPath(ISSUING_PATH, CARDHOLDERS_PATH, cardholderId),
                 sdkAuthorization(),
                 CardholderDetailsResponse.class
+        );
+    }
+
+    @Override
+    public CardholderUpdateResponse updateCardholderSync(final CardholderUpdateRequest cardholderRequest, 
+                                                                        final String cardholderId) {
+        validateParams("cardholderId", cardholderId);
+        return apiClient.patch(
+                buildPath(ISSUING_PATH, CARDHOLDERS_PATH, cardholderId),
+                sdkAuthorization(),
+                CardholderUpdateResponse.class,
+                cardholderRequest,
+                null
         );
     }
 

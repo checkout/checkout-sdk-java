@@ -12,7 +12,9 @@ import com.checkout.issuing.cardholders.CardholderDetailsResponse;
 import com.checkout.issuing.cardholders.CardholderAccessTokenRequest;
 import com.checkout.issuing.cardholders.CardholderAccessTokenResponse;
 import com.checkout.issuing.cardholders.CardholderRequest;
+import com.checkout.issuing.cardholders.CardholderUpdateRequest;
 import com.checkout.issuing.cardholders.CardholderResponse;
+import com.checkout.issuing.cardholders.CardholderUpdateResponse;
 import com.checkout.issuing.cards.requests.create.VirtualCardRequest;
 import com.checkout.issuing.cards.requests.credentials.CardCredentialsQuery;
 import com.checkout.issuing.cards.requests.enrollment.PasswordThreeDSEnrollmentRequest;
@@ -150,6 +152,24 @@ public class IssuingClientImplTest {
             final CompletableFuture<CardholderAccessTokenResponse> future = client.requestCardholderAccessToken(request);
 
             validateCardholderAccessTokenResponse(response, future.get());
+        }
+
+        @Test
+        void shouldUpdateCardholder() throws ExecutionException, InterruptedException {
+            final CardholderUpdateRequest request = createCardholderUpdateRequest();
+            final CardholderUpdateResponse response = createCardholderUpdateResponse();
+
+            when(apiClient.patchAsync(
+                    "issuing/cardholders/cardholder_id",
+                    authorization,
+                    CardholderUpdateResponse.class,
+                    request,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<CardholderUpdateResponse> future = client.updateCardholder(request, "cardholder_id");
+
+            validateCardholderUpdateResponse(response, future.get());
         }
     }
 
@@ -564,6 +584,24 @@ public class IssuingClientImplTest {
 
             validateCardholderAccessTokenResponse(expectedResponse, actualResponse);
         }
+
+        @Test
+        void shouldUpdateCardholderSync() {
+            final CardholderUpdateRequest request = createCardholderUpdateRequest();
+            final CardholderUpdateResponse expectedResponse = createCardholderUpdateResponse();
+
+            when(apiClient.patch(
+                    "issuing/cardholders/cardholder_id",
+                    authorization,
+                    CardholderUpdateResponse.class,
+                    request,
+                    null
+            )).thenReturn(expectedResponse);
+
+            final CardholderUpdateResponse actualResponse = client.updateCardholderSync(request, "cardholder_id");
+
+            validateCardholderUpdateResponse(expectedResponse, actualResponse);
+        }
     }
 
     @Nested
@@ -923,6 +961,14 @@ public class IssuingClientImplTest {
         return mock(CardholderAccessTokenResponse.class);
     }
 
+    private CardholderUpdateRequest createCardholderUpdateRequest() {
+        return mock(CardholderUpdateRequest.class);
+    }
+
+    private CardholderUpdateResponse createCardholderUpdateResponse() {
+        return mock(CardholderUpdateResponse.class);
+    }
+
     private CardholderDetailsResponse createCardholderDetailsResponse() {
         return mock(CardholderDetailsResponse.class);
     }
@@ -1049,6 +1095,11 @@ public class IssuingClientImplTest {
     }
 
     private void validateCardholderAccessTokenResponse(CardholderAccessTokenResponse expected, CardholderAccessTokenResponse actual) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    private void validateCardholderUpdateResponse(CardholderUpdateResponse expected, CardholderUpdateResponse actual) {
         assertNotNull(actual);
         assertEquals(expected, actual);
     }
