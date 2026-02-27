@@ -19,14 +19,20 @@ import com.checkout.issuing.cards.requests.create.CardRequest;
 import com.checkout.issuing.cards.requests.credentials.CardCredentialsQuery;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSEnrollmentRequest;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSUpdateRequest;
+import com.checkout.issuing.cards.requests.renew.RenewCardRequest;
+import com.checkout.issuing.cards.requests.revocation.ScheduleRevocationRequest;
 import com.checkout.issuing.cards.requests.revoke.RevokeCardRequest;
 import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
+import com.checkout.issuing.cards.requests.update.UpdateCardRequest;
 import com.checkout.issuing.cards.responses.CardDetailsResponse;
 import com.checkout.issuing.cards.responses.CardResponse;
 import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
+import com.checkout.issuing.cards.responses.renew.CardRenewalResponse;
+import com.checkout.issuing.cards.responses.revocation.ScheduleRevocationResponse;
+import com.checkout.issuing.cards.responses.update.UpdateCardResponse;
 import com.checkout.issuing.controls.requests.create.CardControlRequest;
 import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
@@ -81,6 +87,10 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     private static final String REVERSALS_PATH = "reversals";
 
+    private static final String RENEW_PATH = "renew";
+
+    private static final String SCHEDULE_REVOCATION_PATH = "schedule-revocation";
+
     private static final String ACCESS_TOKEN_PATH = "access/connect/token";
 
     public IssuingClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
@@ -125,14 +135,14 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
-    public CompletableFuture<CardholderUpdateResponse> updateCardholder(final CardholderUpdateRequest cardholderRequest, 
-                                                                        final String cardholderId) {
-        validateParams("cardholderId", cardholderId);
+    public CompletableFuture<CardholderUpdateResponse> updateCardholder(final String cardholderId,
+                                                            final CardholderUpdateRequest cardholderUpdateRequest) {
+        validateParams("cardholderId", cardholderId, "cardholderUpdateRequest", cardholderUpdateRequest);
         return apiClient.patchAsync(
                 buildPath(ISSUING_PATH, CARDHOLDERS_PATH, cardholderId),
                 sdkAuthorization(),
                 CardholderUpdateResponse.class,
-                cardholderRequest,
+                cardholderUpdateRequest,
                 null
         );
     }
@@ -394,6 +404,52 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
+    public CompletableFuture<UpdateCardResponse> updateCard(final String cardId, final UpdateCardRequest updateCardRequest) {
+        validateParams("cardId", cardId);
+        return apiClient.patchAsync(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId),
+                sdkAuthorization(),
+                UpdateCardResponse.class,
+                updateCardRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<CardRenewalResponse> renewCard(final String cardId, final RenewCardRequest renewCardRequest) {
+        validateParams("cardId", cardId, "renewCardRequest", renewCardRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId, RENEW_PATH),
+                sdkAuthorization(),
+                CardRenewalResponse.class,
+                renewCardRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<ScheduleRevocationResponse> scheduleCardRevocation(final String cardId, final ScheduleRevocationRequest scheduleRevocationRequest) {
+        validateParams("cardId", cardId, "scheduleRevocationRequest", scheduleRevocationRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId, SCHEDULE_REVOCATION_PATH),
+                sdkAuthorization(),
+                ScheduleRevocationResponse.class,
+                scheduleRevocationRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<VoidResponse> deleteScheduledRevocation(final String cardId) {
+        validateParams("cardId", cardId);
+        return apiClient.deleteAsync(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId, SCHEDULE_REVOCATION_PATH),
+                sdkAuthorization(),
+                VoidResponse.class
+        );
+    }
+
     // Synchronous methods
     @Override
     public CardholderAccessTokenResponse requestCardholderAccessTokenSync(final CardholderAccessTokenRequest cardholderAccessTokenRequest) {
@@ -433,14 +489,13 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
-    public CardholderUpdateResponse updateCardholderSync(final CardholderUpdateRequest cardholderRequest, 
-                                                                        final String cardholderId) {
-        validateParams("cardholderId", cardholderId);
+    public CardholderUpdateResponse updateCardholderSync(final String cardholderId, final CardholderUpdateRequest cardholderUpdateRequest) {
+        validateParams("cardholderId", cardholderId, "cardholderUpdateRequest", cardholderUpdateRequest);
         return apiClient.patch(
                 buildPath(ISSUING_PATH, CARDHOLDERS_PATH, cardholderId),
                 sdkAuthorization(),
                 CardholderUpdateResponse.class,
-                cardholderRequest,
+                cardholderUpdateRequest,
                 null
         );
     }
@@ -698,6 +753,52 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 CardAuthorizationReversalResponse.class,
                 cardAuthorizationReversalRequest,
                 null
+        );
+    }
+
+    @Override
+    public UpdateCardResponse updateCardSync(final String cardId, final UpdateCardRequest updateCardRequest) {
+        validateParams("cardId", cardId);
+        return apiClient.patch(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId),
+                sdkAuthorization(),
+                UpdateCardResponse.class,
+                updateCardRequest,
+                null
+        );
+    }
+
+    @Override
+    public CardRenewalResponse renewCardSync(final String cardId, final RenewCardRequest renewCardRequest) {
+        validateParams("cardId", cardId, "renewCardRequest", renewCardRequest);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId, RENEW_PATH),
+                sdkAuthorization(),
+                CardRenewalResponse.class,
+                renewCardRequest,
+                null
+        );
+    }
+
+    @Override
+    public ScheduleRevocationResponse scheduleCardRevocationSync(final String cardId, final ScheduleRevocationRequest scheduleRevocationRequest) {
+        validateParams("cardId", cardId, "scheduleRevocationRequest", scheduleRevocationRequest);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId, SCHEDULE_REVOCATION_PATH),
+                sdkAuthorization(),
+                ScheduleRevocationResponse.class,
+                scheduleRevocationRequest,
+                null
+        );
+    }
+
+    @Override
+    public VoidResponse deleteScheduledRevocationSync(final String cardId) {
+        validateParams("cardId", cardId);
+        return apiClient.delete(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId, SCHEDULE_REVOCATION_PATH),
+                sdkAuthorization(),
+                VoidResponse.class
         );
     }
 

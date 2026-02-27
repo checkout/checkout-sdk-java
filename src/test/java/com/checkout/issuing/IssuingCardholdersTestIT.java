@@ -67,7 +67,7 @@ class IssuingCardholdersTestIT extends BaseIssuingTestIT {
         final CardholderUpdateRequest request = createCardholderUpdateRequest();
 
         final CardholderUpdateResponse response = blocking(() ->
-                issuingApi.issuingClient().updateCardholder(request, cardholder.getId()));
+                issuingApi.issuingClient().updateCardholder(cardholder.getId(), request));
 
         validateCardholderUpdateResponse(response);
     }
@@ -84,7 +84,7 @@ class IssuingCardholdersTestIT extends BaseIssuingTestIT {
         // Update the cardholder
         final CardholderUpdateRequest updateRequest = createCardholderUpdateRequestForVerification();
         final CardholderUpdateResponse updateResponse = blocking(() ->
-                issuingApi.issuingClient().updateCardholder(updateRequest, createResponse.getId()));
+                issuingApi.issuingClient().updateCardholder(createResponse.getId(), updateRequest));
 
         validateCardholderUpdateResponse(updateResponse);
 
@@ -134,7 +134,7 @@ class IssuingCardholdersTestIT extends BaseIssuingTestIT {
         final CardholderUpdateRequest request = createCardholderUpdateRequest();
 
         final CardholderUpdateResponse response = 
-                issuingApi.issuingClient().updateCardholderSync(request, cardholder.getId());
+                issuingApi.issuingClient().updateCardholderSync(cardholder.getId(), request);
 
         validateCardholderUpdateResponse(response);
     }
@@ -151,7 +151,7 @@ class IssuingCardholdersTestIT extends BaseIssuingTestIT {
         // Update the cardholder
         final CardholderUpdateRequest updateRequest = createCardholderUpdateRequestForVerification();
         final CardholderUpdateResponse updateResponse = 
-                issuingApi.issuingClient().updateCardholderSync(updateRequest, createResponse.getId());
+                issuingApi.issuingClient().updateCardholderSync(createResponse.getId(), updateRequest);
 
         validateCardholderUpdateResponse(updateResponse);
 

@@ -167,7 +167,7 @@ public class IssuingClientImplTest {
                     null
             )).thenReturn(CompletableFuture.completedFuture(response));
 
-            final CompletableFuture<CardholderUpdateResponse> future = client.updateCardholder(request, "cardholder_id");
+            final CompletableFuture<CardholderUpdateResponse> future = client.updateCardholder("cardholder_id", request);
 
             validateCardholderUpdateResponse(response, future.get());
         }
@@ -598,7 +598,7 @@ public class IssuingClientImplTest {
                     null
             )).thenReturn(expectedResponse);
 
-            final CardholderUpdateResponse actualResponse = client.updateCardholderSync(request, "cardholder_id");
+            final CardholderUpdateResponse actualResponse = client.updateCardholderSync("cardholder_id", request);
 
             validateCardholderUpdateResponse(expectedResponse, actualResponse);
         }

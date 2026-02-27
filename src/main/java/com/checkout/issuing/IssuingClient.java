@@ -14,14 +14,20 @@ import com.checkout.issuing.cards.requests.create.CardRequest;
 import com.checkout.issuing.cards.requests.credentials.CardCredentialsQuery;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSEnrollmentRequest;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSUpdateRequest;
+import com.checkout.issuing.cards.requests.renew.RenewCardRequest;
+import com.checkout.issuing.cards.requests.revocation.ScheduleRevocationRequest;
 import com.checkout.issuing.cards.requests.revoke.RevokeCardRequest;
 import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
+import com.checkout.issuing.cards.requests.update.UpdateCardRequest;
 import com.checkout.issuing.cards.responses.CardDetailsResponse;
 import com.checkout.issuing.cards.responses.CardResponse;
 import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
+import com.checkout.issuing.cards.responses.renew.CardRenewalResponse;
+import com.checkout.issuing.cards.responses.revocation.ScheduleRevocationResponse;
+import com.checkout.issuing.cards.responses.update.UpdateCardResponse;
 import com.checkout.issuing.controls.requests.create.CardControlRequest;
 import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
@@ -45,7 +51,7 @@ public interface IssuingClient {
 
     CompletableFuture<CardholderResponse> createCardholder(CardholderRequest cardholderRequest);
 
-    CompletableFuture<CardholderUpdateResponse> updateCardholder(CardholderUpdateRequest cardholderUpdateRequest, String cardholderId);
+    CompletableFuture<CardholderUpdateResponse> updateCardholder(String cardholderId, CardholderUpdateRequest cardholderUpdateRequest);
 
     CompletableFuture<CardholderDetailsResponse> getCardholder(String cardholderId);
 
@@ -101,12 +107,20 @@ public interface IssuingClient {
             final CardAuthorizationReversalRequest cardAuthorizationReversalRequest
     );
 
+    CompletableFuture<UpdateCardResponse> updateCard(final String cardId, final UpdateCardRequest updateCardRequest);
+
+    CompletableFuture<CardRenewalResponse> renewCard(final String cardId, final RenewCardRequest renewCardRequest);
+
+    CompletableFuture<ScheduleRevocationResponse> scheduleCardRevocation(final String cardId, final ScheduleRevocationRequest scheduleRevocationRequest);
+
+    CompletableFuture<VoidResponse> deleteScheduledRevocation(final String cardId);
+
     // Synchronous methods
     CardholderAccessTokenResponse requestCardholderAccessTokenSync(CardholderAccessTokenRequest cardholderAccessTokenRequest);
 
     CardholderResponse createCardholderSync(CardholderRequest cardholderRequest);
 
-    CardholderUpdateResponse updateCardholderSync(CardholderUpdateRequest cardholderUpdateRequest, String cardholderId);
+    CardholderUpdateResponse updateCardholderSync(String cardholderId, CardholderUpdateRequest cardholderUpdateRequest);
 
     CardholderDetailsResponse getCardholderSync(String cardholderId);
 
@@ -161,4 +175,12 @@ public interface IssuingClient {
             String authorizationId,
             CardAuthorizationReversalRequest cardAuthorizationReversalRequest
     );
+
+    UpdateCardResponse updateCardSync(String cardId, UpdateCardRequest updateCardRequest);
+
+    CardRenewalResponse renewCardSync(String cardId, RenewCardRequest renewCardRequest);
+
+    ScheduleRevocationResponse scheduleCardRevocationSync(String cardId, ScheduleRevocationRequest scheduleRevocationRequest);
+
+    VoidResponse deleteScheduledRevocationSync(String cardId);
 }
