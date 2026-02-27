@@ -9,6 +9,8 @@ import com.checkout.SdkCredentials;
 import com.checkout.common.IdResponse;
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
 import com.checkout.issuing.cardholders.CardholderDetailsResponse;
+import com.checkout.issuing.cardholders.CardholderAccessTokenRequest;
+import com.checkout.issuing.cardholders.CardholderAccessTokenResponse;
 import com.checkout.issuing.cardholders.CardholderRequest;
 import com.checkout.issuing.cardholders.CardholderResponse;
 import com.checkout.issuing.cards.requests.create.VirtualCardRequest;
@@ -48,8 +50,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -126,6 +132,24 @@ public class IssuingClientImplTest {
             final CompletableFuture<CardholderCardsResponse> future = client.getCardholderCards("cardholder_id");
 
             validateCardholderCardsResponse(response, future.get());
+        }
+
+        @Test
+        void shouldRequestCardholderAccessToken() throws ExecutionException, InterruptedException {
+            final CardholderAccessTokenRequest request = createCardholderAccessTokenRequest();
+            final CardholderAccessTokenResponse response = createCardholderAccessTokenResponse();
+
+            when(apiClient.postAsync(
+                    eq("issuing/access/connect/token"),
+                    eq(authorization),
+                    eq(CardholderAccessTokenResponse.class),
+                    any(UrlEncodedFormEntity.class),
+                    eq(null)
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<CardholderAccessTokenResponse> future = client.requestCardholderAccessToken(request);
+
+            validateCardholderAccessTokenResponse(response, future.get());
         }
     }
 
@@ -522,6 +546,24 @@ public class IssuingClientImplTest {
 
             validateCardholderCardsResponse(expectedResponse, actualResponse);
         }
+
+        @Test
+        void shouldRequestCardholderAccessTokenSync() {
+            final CardholderAccessTokenRequest request = createCardholderAccessTokenRequest();
+            final CardholderAccessTokenResponse expectedResponse = createCardholderAccessTokenResponse();
+
+            when(apiClient.post(
+                    eq("issuing/access/connect/token"),
+                    eq(authorization),
+                    eq(CardholderAccessTokenResponse.class),
+                    any(UrlEncodedFormEntity.class),
+                    eq(null)
+            )).thenReturn(expectedResponse);
+
+            final CardholderAccessTokenResponse actualResponse = client.requestCardholderAccessTokenSync(request);
+
+            validateCardholderAccessTokenResponse(expectedResponse, actualResponse);
+        }
     }
 
     @Nested
@@ -873,6 +915,14 @@ public class IssuingClientImplTest {
         return mock(CardholderResponse.class);
     }
 
+    private CardholderAccessTokenRequest createCardholderAccessTokenRequest() {
+        return mock(CardholderAccessTokenRequest.class);
+    }
+
+    private CardholderAccessTokenResponse createCardholderAccessTokenResponse() {
+        return mock(CardholderAccessTokenResponse.class);
+    }
+
     private CardholderDetailsResponse createCardholderDetailsResponse() {
         return mock(CardholderDetailsResponse.class);
     }
@@ -994,6 +1044,11 @@ public class IssuingClientImplTest {
     }
 
     private void validateCardholderResponse(CardholderResponse expected, CardholderResponse actual) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    private void validateCardholderAccessTokenResponse(CardholderAccessTokenResponse expected, CardholderAccessTokenResponse actual) {
         assertNotNull(actual);
         assertEquals(expected, actual);
     }

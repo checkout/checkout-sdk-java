@@ -4,10 +4,13 @@ import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.EmptyResponse;
+import com.checkout.GsonSerializer;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.common.IdResponse;
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
 import com.checkout.issuing.cardholders.CardholderDetailsResponse;
+import com.checkout.issuing.cardholders.CardholderAccessTokenRequest;
+import com.checkout.issuing.cardholders.CardholderAccessTokenResponse;
 import com.checkout.issuing.cardholders.CardholderRequest;
 import com.checkout.issuing.cardholders.CardholderResponse;
 import com.checkout.issuing.cards.requests.create.CardRequest;
@@ -37,7 +40,12 @@ import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
 import com.checkout.issuing.testing.responses.CardAuthorizationReversalResponse;
 import com.checkout.payments.VoidResponse;
 
+import io.vavr.concurrent.Task;
+
+import java.io.UnsupportedEncodingException;
 import java.util.concurrent.CompletableFuture;
+
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 
 import static com.checkout.common.CheckoutUtils.validateParams;
 
@@ -71,8 +79,25 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     private static final String REVERSALS_PATH = "reversals";
 
+    private static final String ACCESS_TOKEN_PATH = "access/connect/token";
+
     public IssuingClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
+    }
+
+    @Override
+    public CompletableFuture<CardholderAccessTokenResponse> requestCardholderAccessToken(final CardholderAccessTokenRequest cardholderAccessTokenRequest) {
+        validateParams("cardholderAccessTokenRequest", cardholderAccessTokenRequest);
+
+        final UrlEncodedFormEntity form = createFormUrlEncodedContent(cardholderAccessTokenRequest);
+
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, ACCESS_TOKEN_PATH),
+                sdkAuthorization(),
+                CardholderAccessTokenResponse.class,
+                form,
+                null
+        );
     }
 
     @Override
@@ -356,6 +381,21 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     // Synchronous methods
     @Override
+    public CardholderAccessTokenResponse requestCardholderAccessTokenSync(final CardholderAccessTokenRequest cardholderAccessTokenRequest) {
+        validateParams("cardholderAccessTokenRequest", cardholderAccessTokenRequest);
+
+        UrlEncodedFormEntity form = createFormUrlEncodedContent(cardholderAccessTokenRequest);
+        
+        return apiClient.post(
+                buildPath(ISSUING_PATH, ACCESS_TOKEN_PATH),
+                sdkAuthorization(),
+                CardholderAccessTokenResponse.class,
+                form,
+                null
+        );
+    }
+
+    @Override
     public CardholderResponse createCardholderSync(final CardholderRequest cardholderRequest) {
         validateCardholderRequest(cardholderRequest);
         return apiClient.post(
@@ -634,6 +674,14 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     // Common methods
+    private UrlEncodedFormEntity createFormUrlEncodedContent(final CardholderAccessTokenRequest cardholderAccessTokenRequest) {
+        try {
+            return GsonSerializer.createFormUrlEncodedContent(cardholderAccessTokenRequest);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Error creating form url encoded content", e);
+        }
+    }
+
     private void validateCardholderRequest(final CardholderRequest cardholderRequest) {
         validateParams("cardholderRequest", cardholderRequest);
     }

@@ -2,6 +2,8 @@ package com.checkout.issuing;
 
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
 import com.checkout.issuing.cardholders.CardholderDetailsResponse;
+import com.checkout.issuing.cardholders.CardholderAccessTokenRequest;
+import com.checkout.issuing.cardholders.CardholderAccessTokenResponse;
 import com.checkout.issuing.cardholders.CardholderResponse;
 import com.checkout.issuing.cardholders.CardholderStatus;
 import com.checkout.issuing.cardholders.CardholderType;
@@ -46,6 +48,16 @@ class IssuingCardholdersTestIT extends BaseIssuingTestIT {
         validateCardholderCards(cardholderCards);
     }
 
+    @Test
+    void shouldRequestCardholderAccessToken() {
+        final CardholderAccessTokenRequest request = createCardholderAccessTokenRequest();
+
+        final CardholderAccessTokenResponse response = blocking(() ->
+                issuingApi.issuingClient().requestCardholderAccessToken(request));
+
+        validateCardholderAccessTokenResponse(response);
+    }
+
     // Synchronous methods
     @Test
     void shouldCreateCardholderSync() {
@@ -70,7 +82,35 @@ class IssuingCardholdersTestIT extends BaseIssuingTestIT {
         validateCardholderCards(cardholderCards);
     }
 
+    @Test
+    void shouldRequestCardholderAccessTokenSync() {
+        final CardholderAccessTokenRequest request = createCardholderAccessTokenRequest();
+
+        final CardholderAccessTokenResponse response = 
+                issuingApi.issuingClient().requestCardholderAccessTokenSync(request);
+
+        validateCardholderAccessTokenResponse(response);
+    }
+
     // Common methods
+    private CardholderAccessTokenRequest createCardholderAccessTokenRequest() {
+        return CardholderAccessTokenRequest.builder()
+                .grantType("client_credentials")
+                .clientID(System.getenv("CHECKOUT_DEFAULT_OAUTH_ISSUING_CLIENT_ID"))
+                .clientSecret(System.getenv("CHECKOUT_DEFAULT_OAUTH_ISSUING_CLIENT_SECRET"))
+                .cardholderId(cardholder.getId())
+                .singleUse(true)
+                .build();
+    }
+
+    private void validateCardholderAccessTokenResponse(CardholderAccessTokenResponse response) {
+        assertNotNull(response);
+        assertNotNull(response.getAccessToken());
+        assertNotNull(response.getTokenType());
+        assertNotNull(response.getExpiresIn());
+        // Note: Scope might be null in some cases according to OAuth spec
+    }
+
     private void validateCardholderCreation(CardholderResponse cardholderResponse) {
         assertNotNull(cardholderResponse);
         assertEquals(CardholderType.INDIVIDUAL, cardholderResponse.getType());

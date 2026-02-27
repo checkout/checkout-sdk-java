@@ -2,6 +2,8 @@ package com.checkout.issuing;
 
 import com.checkout.EmptyResponse;
 import com.checkout.common.IdResponse;
+import com.checkout.issuing.cardholders.CardholderAccessTokenRequest;
+import com.checkout.issuing.cardholders.CardholderAccessTokenResponse;
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
 import com.checkout.issuing.cardholders.CardholderDetailsResponse;
 import com.checkout.issuing.cardholders.CardholderRequest;
@@ -36,6 +38,8 @@ import com.checkout.payments.VoidResponse;
 import java.util.concurrent.CompletableFuture;
 
 public interface IssuingClient {
+
+    CompletableFuture<CardholderAccessTokenResponse> requestCardholderAccessToken(CardholderAccessTokenRequest cardholderAccessTokenRequest);
 
     CompletableFuture<CardholderResponse> createCardholder(CardholderRequest cardholderRequest);
 
@@ -94,6 +98,8 @@ public interface IssuingClient {
     );
 
     // Synchronous methods
+    CardholderAccessTokenResponse requestCardholderAccessTokenSync(CardholderAccessTokenRequest cardholderAccessTokenRequest);
+
     CardholderResponse createCardholderSync(CardholderRequest cardholderRequest);
 
     CardholderDetailsResponse getCardholderSync(String cardholderId);
