@@ -8,16 +8,9 @@ import java.util.List;
 
 @Data
 @Builder
-public class VelocityLimit {
+public class MidLimit {
 
-    @SerializedName("amount_limit")
-    private Integer amountLimit;
-
-    @SerializedName("velocity_window")
-    private VelocityWindow velocityWindow;
-
-    @SerializedName("mcc_list")
-    private List<String> mccList;
+    private String type;
 
     @SerializedName("mid_list")
     private List<String> midList;

@@ -35,8 +35,17 @@ import com.checkout.issuing.cards.responses.update.UpdateCardResponse;
 import com.checkout.issuing.controls.requests.create.CardControlRequest;
 import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
+import com.checkout.issuing.controls.requests.controlgroup.CreateControlGroupRequest;
+import com.checkout.issuing.controls.requests.controlgroup.ControlGroupQuery;
+import com.checkout.issuing.controls.requests.controlprofile.CreateControlProfileRequest;
+import com.checkout.issuing.controls.requests.controlprofile.ControlProfileQuery;
+import com.checkout.issuing.controls.requests.controlprofile.UpdateControlProfileRequest;
 import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
+import com.checkout.issuing.controls.responses.controlgroup.ControlGroupResponse;
+import com.checkout.issuing.controls.responses.controlgroup.ControlGroupsQueryResponse;
+import com.checkout.issuing.controls.responses.controlprofile.ControlProfileResponse;
+import com.checkout.issuing.controls.responses.controlprofile.ControlProfilesQueryResponse;
 import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRefundsRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
@@ -75,6 +84,10 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     private static final String SUSPEND_PATH = "suspend";
 
     private static final String CONTROLS_PATH = "controls";
+
+    private static final String CONTROL_GROUPS_PATH = "control-groups";
+
+    private static final String CONTROL_PROFILES_PATH = "control-profiles";
 
     private static final String SIMULATE_PATH = "simulate";
 
@@ -327,6 +340,128 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 buildPath(ISSUING_PATH, CONTROLS_PATH, controlId),
                 sdkAuthorization(),
                 IdResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<ControlGroupResponse> createControlGroup(final CreateControlGroupRequest createControlGroupRequest) {
+        validateParams("createControlGroupRequest", createControlGroupRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_GROUPS_PATH),
+                sdkAuthorization(),
+                ControlGroupResponse.class,
+                createControlGroupRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<ControlGroupsQueryResponse> getControlGroups(final ControlGroupQuery controlGroupQuery) {
+        validateParams("controlGroupQuery", controlGroupQuery);
+        return apiClient.queryAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_GROUPS_PATH),
+                sdkAuthorization(),
+                controlGroupQuery,
+                ControlGroupsQueryResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<ControlGroupResponse> getControlGroupDetails(final String controlGroupId) {
+        validateParams("controlGroupId", controlGroupId);
+        return apiClient.getAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_GROUPS_PATH, controlGroupId),
+                sdkAuthorization(),
+                ControlGroupResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<IdResponse> removeControlGroup(final String controlGroupId) {
+        validateParams("controlGroupId", controlGroupId);
+        return apiClient.deleteAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_GROUPS_PATH, controlGroupId),
+                sdkAuthorization(),
+                IdResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<ControlProfileResponse> createControlProfile(final CreateControlProfileRequest createControlProfileRequest) {
+        validateParams("createControlProfileRequest", createControlProfileRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH),
+                sdkAuthorization(),
+                ControlProfileResponse.class,
+                createControlProfileRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<ControlProfilesQueryResponse> getControlProfiles(final ControlProfileQuery controlProfileQuery) {
+        validateParams("controlProfileQuery", controlProfileQuery);
+        return apiClient.queryAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH),
+                sdkAuthorization(),
+                controlProfileQuery,
+                ControlProfilesQueryResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<ControlProfileResponse> getControlProfileDetails(final String controlProfileId) {
+        validateParams("controlProfileId", controlProfileId);
+        return apiClient.getAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId),
+                sdkAuthorization(),
+                ControlProfileResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<ControlProfileResponse> updateControlProfile(final String controlProfileId, final UpdateControlProfileRequest updateControlProfileRequest) {
+        validateParams("controlProfileId", controlProfileId, "updateControlProfileRequest", updateControlProfileRequest);
+        return apiClient.patchAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId),
+                sdkAuthorization(),
+                ControlProfileResponse.class,
+                updateControlProfileRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<EmptyResponse> removeControlProfile(final String controlProfileId) {
+        validateParams("controlProfileId", controlProfileId);
+        return apiClient.deleteAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId),
+                sdkAuthorization(),
+                EmptyResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<VoidResponse> addTargetToControlProfile(final String controlProfileId, final String targetId) {
+        validateParams("controlProfileId", controlProfileId, "targetId", targetId);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId, "add", targetId),
+                sdkAuthorization(),
+                VoidResponse.class,
+                null,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<VoidResponse> removeTargetFromControlProfile(final String controlProfileId, final String targetId) {
+        validateParams("controlProfileId", controlProfileId, "targetId", targetId);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId, "remove", targetId),
+                sdkAuthorization(),
+                VoidResponse.class,
+                null,
+                null
         );
     }
 
@@ -680,6 +815,130 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 buildPath(ISSUING_PATH, CONTROLS_PATH, controlId),
                 sdkAuthorization(),
                 IdResponse.class
+        );
+    }
+
+    @Override
+    public ControlGroupResponse createControlGroupSync(final CreateControlGroupRequest createControlGroupRequest) {
+        validateParams("createControlGroupRequest", createControlGroupRequest);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_GROUPS_PATH),
+                sdkAuthorization(),
+                ControlGroupResponse.class,
+                createControlGroupRequest,
+                null
+        );
+    }
+
+    @Override
+    public ControlGroupsQueryResponse getControlGroupsSync(final ControlGroupQuery controlGroupQuery) {
+        validateParams("controlGroupQuery", controlGroupQuery);
+        return apiClient.query(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_GROUPS_PATH),
+                sdkAuthorization(),
+                controlGroupQuery,
+                ControlGroupsQueryResponse.class
+        );
+    }
+
+    @Override
+    public ControlGroupResponse getControlGroupDetailsSync(final String controlGroupId) {
+        validateParams("controlGroupId", controlGroupId);
+        return apiClient.get(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_GROUPS_PATH, controlGroupId),
+                sdkAuthorization(),
+                ControlGroupResponse.class
+        );
+    }
+
+    @Override
+    public IdResponse removeControlGroupSync(final String controlGroupId) {
+        validateParams("controlGroupId", controlGroupId);
+        return apiClient.delete(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_GROUPS_PATH, controlGroupId),
+                sdkAuthorization(),
+                IdResponse.class
+        );
+    }
+
+    // Sync - Control Profile methods
+
+    @Override
+    public ControlProfileResponse createControlProfileSync(final CreateControlProfileRequest createControlProfileRequest) {
+        validateParams("createControlProfileRequest", createControlProfileRequest);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH),
+                sdkAuthorization(),
+                ControlProfileResponse.class,
+                createControlProfileRequest,
+                null
+        );
+    }
+
+    @Override
+    public ControlProfilesQueryResponse getControlProfilesSync(final ControlProfileQuery controlProfileQuery) {
+        validateParams("controlProfileQuery", controlProfileQuery);
+        return apiClient.query(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH),
+                sdkAuthorization(),
+                controlProfileQuery,
+                ControlProfilesQueryResponse.class
+        );
+    }
+
+    @Override
+    public ControlProfileResponse getControlProfileDetailsSync(final String controlProfileId) {
+        validateParams("controlProfileId", controlProfileId);
+        return apiClient.get(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId),
+                sdkAuthorization(),
+                ControlProfileResponse.class
+        );
+    }
+
+    @Override
+    public ControlProfileResponse updateControlProfileSync(final String controlProfileId, final UpdateControlProfileRequest updateControlProfileRequest) {
+        validateParams("controlProfileId", controlProfileId, "updateControlProfileRequest", updateControlProfileRequest);
+        return apiClient.patch(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId),
+                sdkAuthorization(),
+                ControlProfileResponse.class,
+                updateControlProfileRequest,
+                null
+        );
+    }
+
+    @Override
+    public EmptyResponse removeControlProfileSync(final String controlProfileId) {
+        validateParams("controlProfileId", controlProfileId);
+        return apiClient.delete(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId),
+                sdkAuthorization(),
+                EmptyResponse.class
+        );
+    }
+
+    @Override
+    public VoidResponse addTargetToControlProfileSync(final String controlProfileId, final String targetId) {
+        validateParams("controlProfileId", controlProfileId, "targetId", targetId);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId, "add", targetId),
+                sdkAuthorization(),
+                VoidResponse.class,
+                null,
+                null
+        );
+    }
+
+    @Override
+    public VoidResponse removeTargetFromControlProfileSync(final String controlProfileId, final String targetId) {
+        validateParams("controlProfileId", controlProfileId, "targetId", targetId);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId, "remove", targetId),
+                sdkAuthorization(),
+                VoidResponse.class,
+                null,
+                null
         );
     }
 

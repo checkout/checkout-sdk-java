@@ -30,8 +30,17 @@ import com.checkout.issuing.cards.responses.update.UpdateCardResponse;
 import com.checkout.issuing.controls.requests.create.CardControlRequest;
 import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
+import com.checkout.issuing.controls.requests.controlgroup.CreateControlGroupRequest;
+import com.checkout.issuing.controls.requests.controlgroup.ControlGroupQuery;
+import com.checkout.issuing.controls.requests.controlprofile.CreateControlProfileRequest;
+import com.checkout.issuing.controls.requests.controlprofile.ControlProfileQuery;
+import com.checkout.issuing.controls.requests.controlprofile.UpdateControlProfileRequest;
 import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
+import com.checkout.issuing.controls.responses.controlgroup.ControlGroupResponse;
+import com.checkout.issuing.controls.responses.controlgroup.ControlGroupsQueryResponse;
+import com.checkout.issuing.controls.responses.controlprofile.ControlProfileResponse;
+import com.checkout.issuing.controls.responses.controlprofile.ControlProfilesQueryResponse;
 import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRefundsRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
@@ -83,6 +92,30 @@ public interface IssuingClient {
     CompletableFuture<CardControlResponse> updateCardControl(final String controlId, final UpdateCardControlRequest updateCardControlRequest);
 
     CompletableFuture<IdResponse> removeCardControl(final String controlId);
+
+    CompletableFuture<ControlGroupResponse> createControlGroup(final CreateControlGroupRequest createControlGroupRequest);
+
+    CompletableFuture<ControlGroupsQueryResponse> getControlGroups(final ControlGroupQuery controlGroupQuery);
+
+    CompletableFuture<ControlGroupResponse> getControlGroupDetails(final String controlGroupId);
+
+    CompletableFuture<IdResponse> removeControlGroup(final String controlGroupId);
+
+    // Async - Control Profile methods
+    
+    CompletableFuture<ControlProfileResponse> createControlProfile(final CreateControlProfileRequest createControlProfileRequest);
+
+    CompletableFuture<ControlProfilesQueryResponse> getControlProfiles(final ControlProfileQuery controlProfileQuery);
+
+    CompletableFuture<ControlProfileResponse> getControlProfileDetails(final String controlProfileId);
+
+    CompletableFuture<ControlProfileResponse> updateControlProfile(final String controlProfileId, final UpdateControlProfileRequest updateControlProfileRequest);
+
+    CompletableFuture<EmptyResponse> removeControlProfile(final String controlProfileId);
+
+    CompletableFuture<VoidResponse> addTargetToControlProfile(final String controlProfileId, final String targetId);
+
+    CompletableFuture<VoidResponse> removeTargetFromControlProfile(final String controlProfileId, final String targetId);
 
     CompletableFuture<CardAuthorizationResponse> simulateAuthorization(final CardAuthorizationRequest cardAuthorizationRequest);
 
@@ -152,6 +185,30 @@ public interface IssuingClient {
     CardControlResponse updateCardControlSync(String controlId, UpdateCardControlRequest updateCardControlRequest);
 
     IdResponse removeCardControlSync(String controlId);
+
+    ControlGroupResponse createControlGroupSync(CreateControlGroupRequest createControlGroupRequest);
+
+    ControlGroupsQueryResponse getControlGroupsSync(ControlGroupQuery controlGroupQuery);
+
+    ControlGroupResponse getControlGroupDetailsSync(String controlGroupId);
+
+    IdResponse removeControlGroupSync(String controlGroupId);
+
+    // Sync - Control Profile methods
+    
+    ControlProfileResponse createControlProfileSync(CreateControlProfileRequest createControlProfileRequest);
+
+    ControlProfilesQueryResponse getControlProfilesSync(ControlProfileQuery controlProfileQuery);
+
+    ControlProfileResponse getControlProfileDetailsSync(String controlProfileId);
+
+    ControlProfileResponse updateControlProfileSync(String controlProfileId, UpdateControlProfileRequest updateControlProfileRequest);
+
+    EmptyResponse removeControlProfileSync(String controlProfileId);
+
+    VoidResponse addTargetToControlProfileSync(String controlProfileId, String targetId);
+
+    VoidResponse removeTargetFromControlProfileSync(String controlProfileId, String targetId);
 
     CardAuthorizationResponse simulateAuthorizationSync(CardAuthorizationRequest cardAuthorizationRequest);
 

@@ -1,7 +1,7 @@
 package com.checkout.issuing.controls.responses.create;
 
 import com.checkout.issuing.controls.requests.ControlType;
-import com.checkout.issuing.controls.requests.MccLimit;
+import com.checkout.issuing.controls.requests.MidLimit;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -13,18 +13,18 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class MccCardControlResponse extends CardControlResponse {
+public class MidCardControlResponse extends CardControlResponse {
 
-    @SerializedName("mcc_limit")
-    private MccLimit mccLimit;
+    @SerializedName("mid_limit")
+    private MidLimit midLimit;
 
     @Builder
-    private MccCardControlResponse(final MccLimit mccLimit) {
-        super(ControlType.MCC_LIMIT);
-        this.mccLimit = mccLimit;
+    private MidCardControlResponse(final MidLimit midLimit) {
+        super(ControlType.MID_LIMIT);
+        this.midLimit = midLimit;
     }
 
-    public MccCardControlResponse() {
-        super(ControlType.MCC_LIMIT);
+    public MidCardControlResponse() {
+        super(ControlType.MID_LIMIT);
     }
 }
