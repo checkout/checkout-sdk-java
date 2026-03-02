@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CardMetadata {
+public class IssuingCardMetadata {
 
     @SerializedName("udf1")
     private String udf1;

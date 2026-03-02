@@ -1,8 +1,7 @@
 package com.checkout.issuing.cards.requests.renew;
 
-import com.checkout.issuing.cards.CardType;
 import com.checkout.issuing.cards.requests.create.ShippingInstruction;
-import com.checkout.issuing.cards.requests.update.CardMetadata;
+import com.checkout.issuing.cards.requests.update.IssuingCardMetadata;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -22,9 +21,9 @@ public class PhysicalCardRenewRequest extends RenewCardRequest {
     @Builder
     private PhysicalCardRenewRequest(final String displayName,
                                     final String reference,
-                                    final CardMetadata metadata,
+                                    final IssuingCardMetadata metadata,
                                     final ShippingInstruction shippingInstructions) {
-        super(CardType.PHYSICAL, displayName, reference, metadata);
+        super(displayName, reference, metadata);
         this.shippingInstructions = shippingInstructions;
     }
 }

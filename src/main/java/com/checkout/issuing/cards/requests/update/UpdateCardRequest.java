@@ -14,7 +14,7 @@ public class UpdateCardRequest {
 
     private String reference;
 
-    private CardMetadata metadata;
+    private IssuingCardMetadata metadata;
 
     @SerializedName("expiry_month")
     private Integer expiryMonth;

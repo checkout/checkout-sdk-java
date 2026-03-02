@@ -25,8 +25,7 @@ import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
-import com.checkout.issuing.cards.responses.renew.CardRenewalResponse;
-import com.checkout.issuing.cards.responses.revocation.ScheduleRevocationResponse;
+import com.checkout.issuing.cards.responses.renew.RenewCardResponse;
 import com.checkout.issuing.cards.responses.update.UpdateCardResponse;
 import com.checkout.issuing.controls.requests.create.CardControlRequest;
 import com.checkout.issuing.controls.requests.query.CardControlsQuery;
@@ -109,9 +108,9 @@ public interface IssuingClient {
 
     CompletableFuture<UpdateCardResponse> updateCard(final String cardId, final UpdateCardRequest updateCardRequest);
 
-    CompletableFuture<CardRenewalResponse> renewCard(final String cardId, final RenewCardRequest renewCardRequest);
+    CompletableFuture<RenewCardResponse> renewCard(final String cardId, final RenewCardRequest renewCardRequest);
 
-    CompletableFuture<ScheduleRevocationResponse> scheduleCardRevocation(final String cardId, final ScheduleRevocationRequest scheduleRevocationRequest);
+    CompletableFuture<VoidResponse> scheduleCardRevocation(final String cardId, final ScheduleRevocationRequest scheduleRevocationRequest);
 
     CompletableFuture<VoidResponse> deleteScheduledRevocation(final String cardId);
 
@@ -178,9 +177,9 @@ public interface IssuingClient {
 
     UpdateCardResponse updateCardSync(String cardId, UpdateCardRequest updateCardRequest);
 
-    CardRenewalResponse renewCardSync(String cardId, RenewCardRequest renewCardRequest);
+    RenewCardResponse renewCardSync(String cardId, RenewCardRequest renewCardRequest);
 
-    ScheduleRevocationResponse scheduleCardRevocationSync(String cardId, ScheduleRevocationRequest scheduleRevocationRequest);
+    VoidResponse scheduleCardRevocationSync(String cardId, ScheduleRevocationRequest scheduleRevocationRequest);
 
     VoidResponse deleteScheduledRevocationSync(String cardId);
 }

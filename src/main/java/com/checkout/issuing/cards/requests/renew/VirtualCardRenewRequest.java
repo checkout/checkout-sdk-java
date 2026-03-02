@@ -1,7 +1,6 @@
 package com.checkout.issuing.cards.requests.renew;
 
-import com.checkout.issuing.cards.CardType;
-import com.checkout.issuing.cards.requests.update.CardMetadata;
+import com.checkout.issuing.cards.requests.update.IssuingCardMetadata;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,7 +16,7 @@ public class VirtualCardRenewRequest extends RenewCardRequest {
     @Builder
     private VirtualCardRenewRequest(final String displayName,
                                    final String reference,
-                                   final CardMetadata metadata) {
-        super(CardType.VIRTUAL, displayName, reference, metadata);
+                                   final IssuingCardMetadata metadata) {
+        super(displayName, reference, metadata);
     }
 }

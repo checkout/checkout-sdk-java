@@ -30,8 +30,7 @@ import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
-import com.checkout.issuing.cards.responses.renew.CardRenewalResponse;
-import com.checkout.issuing.cards.responses.revocation.ScheduleRevocationResponse;
+import com.checkout.issuing.cards.responses.renew.RenewCardResponse;
 import com.checkout.issuing.cards.responses.update.UpdateCardResponse;
 import com.checkout.issuing.controls.requests.create.CardControlRequest;
 import com.checkout.issuing.controls.requests.query.CardControlsQuery;
@@ -406,7 +405,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     @Override
     public CompletableFuture<UpdateCardResponse> updateCard(final String cardId, final UpdateCardRequest updateCardRequest) {
-        validateParams("cardId", cardId);
+        validateParams("cardId", cardId, "updateCardRequest", updateCardRequest);
         return apiClient.patchAsync(
                 buildPath(ISSUING_PATH, CARDS_PATH, cardId),
                 sdkAuthorization(),
@@ -417,24 +416,24 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
-    public CompletableFuture<CardRenewalResponse> renewCard(final String cardId, final RenewCardRequest renewCardRequest) {
+    public CompletableFuture<RenewCardResponse> renewCard(final String cardId, final RenewCardRequest renewCardRequest) {
         validateParams("cardId", cardId, "renewCardRequest", renewCardRequest);
         return apiClient.postAsync(
                 buildPath(ISSUING_PATH, CARDS_PATH, cardId, RENEW_PATH),
                 sdkAuthorization(),
-                CardRenewalResponse.class,
+                RenewCardResponse.class,
                 renewCardRequest,
                 null
         );
     }
 
     @Override
-    public CompletableFuture<ScheduleRevocationResponse> scheduleCardRevocation(final String cardId, final ScheduleRevocationRequest scheduleRevocationRequest) {
+    public CompletableFuture<VoidResponse> scheduleCardRevocation(final String cardId, final ScheduleRevocationRequest scheduleRevocationRequest) {
         validateParams("cardId", cardId, "scheduleRevocationRequest", scheduleRevocationRequest);
         return apiClient.postAsync(
                 buildPath(ISSUING_PATH, CARDS_PATH, cardId, SCHEDULE_REVOCATION_PATH),
                 sdkAuthorization(),
-                ScheduleRevocationResponse.class,
+                VoidResponse.class,
                 scheduleRevocationRequest,
                 null
         );
@@ -758,7 +757,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     @Override
     public UpdateCardResponse updateCardSync(final String cardId, final UpdateCardRequest updateCardRequest) {
-        validateParams("cardId", cardId);
+        validateParams("cardId", cardId, "updateCardRequest", updateCardRequest);
         return apiClient.patch(
                 buildPath(ISSUING_PATH, CARDS_PATH, cardId),
                 sdkAuthorization(),
@@ -769,24 +768,24 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
-    public CardRenewalResponse renewCardSync(final String cardId, final RenewCardRequest renewCardRequest) {
+    public RenewCardResponse renewCardSync(final String cardId, final RenewCardRequest renewCardRequest) {
         validateParams("cardId", cardId, "renewCardRequest", renewCardRequest);
         return apiClient.post(
                 buildPath(ISSUING_PATH, CARDS_PATH, cardId, RENEW_PATH),
                 sdkAuthorization(),
-                CardRenewalResponse.class,
+                RenewCardResponse.class,
                 renewCardRequest,
                 null
         );
     }
 
     @Override
-    public ScheduleRevocationResponse scheduleCardRevocationSync(final String cardId, final ScheduleRevocationRequest scheduleRevocationRequest) {
+    public VoidResponse scheduleCardRevocationSync(final String cardId, final ScheduleRevocationRequest scheduleRevocationRequest) {
         validateParams("cardId", cardId, "scheduleRevocationRequest", scheduleRevocationRequest);
         return apiClient.post(
                 buildPath(ISSUING_PATH, CARDS_PATH, cardId, SCHEDULE_REVOCATION_PATH),
                 sdkAuthorization(),
-                ScheduleRevocationResponse.class,
+                VoidResponse.class,
                 scheduleRevocationRequest,
                 null
         );
