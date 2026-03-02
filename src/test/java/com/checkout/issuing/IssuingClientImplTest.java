@@ -37,6 +37,15 @@ import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
 import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
+import com.checkout.issuing.controls.requests.controlgroup.CreateControlGroupRequest;
+import com.checkout.issuing.controls.requests.controlgroup.ControlGroupQuery;
+import com.checkout.issuing.controls.responses.controlgroup.ControlGroupResponse;
+import com.checkout.issuing.controls.responses.controlgroup.ControlGroupsQueryResponse;
+import com.checkout.issuing.controls.requests.controlprofile.CreateControlProfileRequest;
+import com.checkout.issuing.controls.requests.controlprofile.ControlProfileQuery;
+import com.checkout.issuing.controls.requests.controlprofile.UpdateControlProfileRequest;
+import com.checkout.issuing.controls.responses.controlprofile.ControlProfileResponse;
+import com.checkout.issuing.controls.responses.controlprofile.ControlProfilesQueryResponse;
 import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRefundsRequest;
@@ -589,6 +598,196 @@ public class IssuingClientImplTest {
         }
     }
 
+    @Nested
+    @DisplayName("Control Groups")
+    class ControlGroups {
+        @Test
+        void shouldCreateControlGroup() throws ExecutionException, InterruptedException {
+            final CreateControlGroupRequest request = createCreateControlGroupRequest();
+            final ControlGroupResponse response = createControlGroupResponse();
+
+            when(apiClient.postAsync(
+                    "issuing/controls/control-groups",
+                    authorization,
+                    ControlGroupResponse.class,
+                    request,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<ControlGroupResponse> future = client.createControlGroup(request);
+
+            validateControlGroupResponse(response, future.get());
+        }
+
+        @Test
+        void shouldGetControlGroupDetails() throws ExecutionException, InterruptedException {
+            final ControlGroupResponse response = createControlGroupResponse();
+
+            when(apiClient.getAsync(
+                    "issuing/controls/control-groups/group_id",
+                    authorization,
+                    ControlGroupResponse.class
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<ControlGroupResponse> future = client.getControlGroupDetails("group_id");
+
+            validateControlGroupResponse(response, future.get());
+        }
+
+        @Test
+        void shouldQueryControlGroups() throws ExecutionException, InterruptedException {
+            final ControlGroupQuery query = createControlGroupQuery();
+            final ControlGroupsQueryResponse response = createControlGroupsQueryResponse();
+
+            when(apiClient.queryAsync(
+                    "issuing/controls/control-groups",
+                    authorization,
+                    query,
+                    ControlGroupsQueryResponse.class
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<ControlGroupsQueryResponse> future = client.getControlGroups(query);
+
+            validateControlGroupsQueryResponse(response, future.get());
+        }
+
+        @Test
+        void shouldRemoveControlGroup() throws ExecutionException, InterruptedException {
+            final IdResponse response = createIdResponse();
+
+            when(apiClient.deleteAsync(
+                    "issuing/controls/control-groups/group_id",
+                    authorization,
+                    IdResponse.class
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<IdResponse> future = client.removeControlGroup("group_id");
+
+            validateIdResponse(response, future.get());
+        }
+    }
+
+    @Nested
+    @DisplayName("Control Profiles")
+    class ControlProfiles {
+        @Test
+        void shouldCreateControlProfile() throws ExecutionException, InterruptedException {
+            final CreateControlProfileRequest request = createCreateControlProfileRequest();
+            final ControlProfileResponse response = createControlProfileResponse();
+
+            when(apiClient.postAsync(
+                    "issuing/controls/control-profiles",
+                    authorization,
+                    ControlProfileResponse.class,
+                    request,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<ControlProfileResponse> future = client.createControlProfile(request);
+
+            validateControlProfileResponse(response, future.get());
+        }
+
+        @Test
+        void shouldGetControlProfileDetails() throws ExecutionException, InterruptedException {
+            final ControlProfileResponse response = createControlProfileResponse();
+
+            when(apiClient.getAsync(
+                    "issuing/controls/control-profiles/profile_id",
+                    authorization,
+                    ControlProfileResponse.class
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<ControlProfileResponse> future = client.getControlProfileDetails("profile_id");
+
+            validateControlProfileResponse(response, future.get());
+        }
+
+        @Test
+        void shouldQueryControlProfiles() throws ExecutionException, InterruptedException {
+            final ControlProfileQuery query = createControlProfileQuery();
+            final ControlProfilesQueryResponse response = createControlProfilesQueryResponse();
+
+            when(apiClient.queryAsync(
+                    "issuing/controls/control-profiles",
+                    authorization,
+                    query,
+                    ControlProfilesQueryResponse.class
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<ControlProfilesQueryResponse> future = client.getControlProfiles(query);
+
+            validateControlProfilesQueryResponse(response, future.get());
+        }
+
+        @Test
+        void shouldUpdateControlProfile() throws ExecutionException, InterruptedException {
+            final UpdateControlProfileRequest request = createUpdateControlProfileRequest();
+            final ControlProfileResponse response = createControlProfileResponse();
+
+            when(apiClient.patchAsync(
+                    "issuing/controls/control-profiles/profile_id",
+                    authorization,
+                    ControlProfileResponse.class,
+                    request,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<ControlProfileResponse> future = client.updateControlProfile("profile_id", request);
+
+            validateControlProfileResponse(response, future.get());
+        }
+
+        @Test
+        void shouldRemoveControlProfile() throws ExecutionException, InterruptedException {
+            final EmptyResponse response = createEmptyResponse();
+
+            when(apiClient.deleteAsync(
+                    "issuing/controls/control-profiles/profile_id",
+                    authorization,
+                    EmptyResponse.class
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<EmptyResponse> future = client.removeControlProfile("profile_id");
+
+            validateEmptyResponse(response, future.get());
+        }
+
+        @Test
+        void shouldAddTargetToControlProfile() throws ExecutionException, InterruptedException {
+            final VoidResponse response = createVoidResponse();
+
+            when(apiClient.postAsync(
+                    "issuing/controls/control-profiles/profile_id/add/target_id",
+                    authorization,
+                    VoidResponse.class,
+                    null,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<VoidResponse> future = client.addTargetToControlProfile("profile_id", "target_id");
+
+            validateVoidResponse(response, future.get());
+        }
+
+        @Test
+        void shouldRemoveTargetFromControlProfile() throws ExecutionException, InterruptedException {
+            final VoidResponse response = createVoidResponse();
+
+            when(apiClient.postAsync(
+                    "issuing/controls/control-profiles/profile_id/remove/target_id",
+                    authorization,
+                    VoidResponse.class,
+                    null,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<VoidResponse> future = client.removeTargetFromControlProfile("profile_id", "target_id");
+
+            validateVoidResponse(response, future.get());
+        }
+    }
+
     // Synchronous methods
     @Nested
     @DisplayName("Cardholders Sync")
@@ -1087,6 +1286,196 @@ public class IssuingClientImplTest {
         }
     }
 
+    @Nested
+    @DisplayName("Control Groups Sync")
+    class ControlGroupsSync {
+        @Test
+        void shouldCreateControlGroupSync() {
+            final CreateControlGroupRequest request = createCreateControlGroupRequest();
+            final ControlGroupResponse expectedResponse = createControlGroupResponse();
+
+            when(apiClient.post(
+                    "issuing/controls/control-groups",
+                    authorization,
+                    ControlGroupResponse.class,
+                    request,
+                    null
+            )).thenReturn(expectedResponse);
+
+            final ControlGroupResponse actualResponse = client.createControlGroupSync(request);
+
+            validateControlGroupResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldGetControlGroupDetailsSync() {
+            final ControlGroupResponse expectedResponse = createControlGroupResponse();
+
+            when(apiClient.get(
+                    "issuing/controls/control-groups/group_id",
+                    authorization,
+                    ControlGroupResponse.class
+            )).thenReturn(expectedResponse);
+
+            final ControlGroupResponse actualResponse = client.getControlGroupDetailsSync("group_id");
+
+            validateControlGroupResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldQueryControlGroupsSync() {
+            final ControlGroupQuery query = createControlGroupQuery();
+            final ControlGroupsQueryResponse expectedResponse = createControlGroupsQueryResponse();
+
+            when(apiClient.query(
+                    "issuing/controls/control-groups",
+                    authorization,
+                    query,
+                    ControlGroupsQueryResponse.class
+            )).thenReturn(expectedResponse);
+
+            final ControlGroupsQueryResponse actualResponse = client.getControlGroupsSync(query);
+
+            validateControlGroupsQueryResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldRemoveControlGroupSync() {
+            final IdResponse expectedResponse = createIdResponse();
+
+            when(apiClient.delete(
+                    "issuing/controls/control-groups/group_id",
+                    authorization,
+                    IdResponse.class
+            )).thenReturn(expectedResponse);
+
+            final IdResponse actualResponse = client.removeControlGroupSync("group_id");
+
+            validateIdResponse(expectedResponse, actualResponse);
+        }
+    }
+
+    @Nested
+    @DisplayName("Control Profiles Sync")
+    class ControlProfilesSync {
+        @Test
+        void shouldCreateControlProfileSync() {
+            final CreateControlProfileRequest request = createCreateControlProfileRequest();
+            final ControlProfileResponse expectedResponse = createControlProfileResponse();
+
+            when(apiClient.post(
+                    "issuing/controls/control-profiles",
+                    authorization,
+                    ControlProfileResponse.class,
+                    request,
+                    null
+            )).thenReturn(expectedResponse);
+
+            final ControlProfileResponse actualResponse = client.createControlProfileSync(request);
+
+            validateControlProfileResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldGetControlProfileDetailsSync() {
+            final ControlProfileResponse expectedResponse = createControlProfileResponse();
+
+            when(apiClient.get(
+                    "issuing/controls/control-profiles/profile_id",
+                    authorization,
+                    ControlProfileResponse.class
+            )).thenReturn(expectedResponse);
+
+            final ControlProfileResponse actualResponse = client.getControlProfileDetailsSync("profile_id");
+
+            validateControlProfileResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldQueryControlProfilesSync() {
+            final ControlProfileQuery query = createControlProfileQuery();
+            final ControlProfilesQueryResponse expectedResponse = createControlProfilesQueryResponse();
+
+            when(apiClient.query(
+                    "issuing/controls/control-profiles",
+                    authorization,
+                    query,
+                    ControlProfilesQueryResponse.class
+            )).thenReturn(expectedResponse);
+
+            final ControlProfilesQueryResponse actualResponse = client.getControlProfilesSync(query);
+
+            validateControlProfilesQueryResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldUpdateControlProfileSync() {
+            final UpdateControlProfileRequest request = createUpdateControlProfileRequest();
+            final ControlProfileResponse expectedResponse = createControlProfileResponse();
+
+            when(apiClient.patch(
+                    "issuing/controls/control-profiles/profile_id",
+                    authorization,
+                    ControlProfileResponse.class,
+                    request,
+                    null
+            )).thenReturn(expectedResponse);
+
+            final ControlProfileResponse actualResponse = client.updateControlProfileSync("profile_id", request);
+
+            validateControlProfileResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldRemoveControlProfileSync() {
+            final EmptyResponse expectedResponse = createEmptyResponse();
+
+            when(apiClient.delete(
+                    "issuing/controls/control-profiles/profile_id",
+                    authorization,
+                    EmptyResponse.class
+            )).thenReturn(expectedResponse);
+
+            final EmptyResponse actualResponse = client.removeControlProfileSync("profile_id");
+
+            validateEmptyResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldAddTargetToControlProfileSync() {
+            final VoidResponse expectedResponse = createVoidResponse();
+
+            when(apiClient.post(
+                    "issuing/controls/control-profiles/profile_id/add/target_id",
+                    authorization,
+                    VoidResponse.class,
+                    null,
+                    null
+            )).thenReturn(expectedResponse);
+
+            final VoidResponse actualResponse = client.addTargetToControlProfileSync("profile_id", "target_id");
+
+            validateVoidResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldRemoveTargetFromControlProfileSync() {
+            final VoidResponse expectedResponse = createVoidResponse();
+
+            when(apiClient.post(
+                    "issuing/controls/control-profiles/profile_id/remove/target_id",
+                    authorization,
+                    VoidResponse.class,
+                    null,
+                    null
+            )).thenReturn(expectedResponse);
+
+            final VoidResponse actualResponse = client.removeTargetFromControlProfileSync("profile_id", "target_id");
+
+            validateVoidResponse(expectedResponse, actualResponse);
+        }
+    }
+
     // Common methods
     private CardholderRequest createCardholderRequest() {
         return mock(CardholderRequest.class);
@@ -1353,6 +1742,64 @@ public class IssuingClientImplTest {
     }
 
     private void validateRenewCardResponse(RenewCardResponse expected, RenewCardResponse actual) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    // Control Group common methods
+    private CreateControlGroupRequest createCreateControlGroupRequest() {
+        return mock(CreateControlGroupRequest.class);
+    }
+
+    private ControlGroupQuery createControlGroupQuery() {
+        return mock(ControlGroupQuery.class);
+    }
+
+    private ControlGroupResponse createControlGroupResponse() {
+        return mock(ControlGroupResponse.class);
+    }
+
+    private ControlGroupsQueryResponse createControlGroupsQueryResponse() {
+        return mock(ControlGroupsQueryResponse.class);
+    }
+
+    private void validateControlGroupResponse(ControlGroupResponse expected, ControlGroupResponse actual) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    private void validateControlGroupsQueryResponse(ControlGroupsQueryResponse expected, ControlGroupsQueryResponse actual) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    // Control Profile common methods
+    private CreateControlProfileRequest createCreateControlProfileRequest() {
+        return mock(CreateControlProfileRequest.class);
+    }
+
+    private ControlProfileQuery createControlProfileQuery() {
+        return mock(ControlProfileQuery.class);
+    }
+
+    private UpdateControlProfileRequest createUpdateControlProfileRequest() {
+        return mock(UpdateControlProfileRequest.class);
+    }
+
+    private ControlProfileResponse createControlProfileResponse() {
+        return mock(ControlProfileResponse.class);
+    }
+
+    private ControlProfilesQueryResponse createControlProfilesQueryResponse() {
+        return mock(ControlProfilesQueryResponse.class);
+    }
+
+    private void validateControlProfileResponse(ControlProfileResponse expected, ControlProfileResponse actual) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    private void validateControlProfilesQueryResponse(ControlProfilesQueryResponse expected, ControlProfilesQueryResponse actual) {
         assertNotNull(actual);
         assertEquals(expected, actual);
     }

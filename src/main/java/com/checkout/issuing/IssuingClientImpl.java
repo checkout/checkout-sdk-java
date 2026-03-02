@@ -861,8 +861,6 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
-    // Sync - Control Profile methods
-
     @Override
     public ControlProfileResponse createControlProfileSync(final CreateControlProfileRequest createControlProfileRequest) {
         validateParams("createControlProfileRequest", createControlProfileRequest);
