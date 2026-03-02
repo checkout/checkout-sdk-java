@@ -19,14 +19,19 @@ import com.checkout.issuing.cards.requests.create.VirtualCardRequest;
 import com.checkout.issuing.cards.requests.credentials.CardCredentialsQuery;
 import com.checkout.issuing.cards.requests.enrollment.PasswordThreeDSEnrollmentRequest;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSUpdateRequest;
+import com.checkout.issuing.cards.requests.renew.RenewCardRequest;
+import com.checkout.issuing.cards.requests.revocation.ScheduleRevocationRequest;
 import com.checkout.issuing.cards.requests.revoke.RevokeCardRequest;
 import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
+import com.checkout.issuing.cards.requests.update.UpdateCardRequest;
 import com.checkout.issuing.cards.responses.CardDetailsResponse;
 import com.checkout.issuing.cards.responses.CardResponse;
 import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
+import com.checkout.issuing.cards.responses.renew.RenewCardResponse;
+import com.checkout.issuing.cards.responses.update.UpdateCardResponse;
 import com.checkout.issuing.controls.requests.create.CardControlRequest;
 import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
@@ -326,6 +331,75 @@ public class IssuingClientImplTest {
             )).thenReturn(CompletableFuture.completedFuture(response));
 
             final CompletableFuture<VoidResponse> future = client.suspendCard("card_id", request);
+
+            validateVoidResponse(response, future.get());
+        }
+
+        @Test
+        void shouldUpdateCard() throws ExecutionException, InterruptedException {
+            final UpdateCardRequest request = createUpdateCardRequest();
+            final UpdateCardResponse response = createUpdateCardResponse();
+
+            when(apiClient.patchAsync(
+                    "issuing/cards/card_id",
+                    authorization,
+                    UpdateCardResponse.class,
+                    request,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<UpdateCardResponse> future = client.updateCard("card_id", request);
+
+            validateUpdateCardResponse(response, future.get());
+        }
+
+        @Test
+        void shouldRenewCard() throws ExecutionException, InterruptedException {
+            final RenewCardRequest request = createRenewCardRequest();
+            final RenewCardResponse response = createRenewCardResponse();
+
+            when(apiClient.postAsync(
+                    "issuing/cards/card_id/renew",
+                    authorization,
+                    RenewCardResponse.class,
+                    request,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<RenewCardResponse> future = client.renewCard("card_id", request);
+
+            validateRenewCardResponse(response, future.get());
+        }
+
+        @Test
+        void shouldScheduleCardRevocation() throws ExecutionException, InterruptedException {
+            final ScheduleRevocationRequest request = createScheduleRevocationRequest();
+            final VoidResponse response = createVoidResponse();
+
+            when(apiClient.postAsync(
+                    "issuing/cards/card_id/schedule-revocation",
+                    authorization,
+                    VoidResponse.class,
+                    request,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<VoidResponse> future = client.scheduleCardRevocation("card_id", request);
+
+            validateVoidResponse(response, future.get());
+        }
+
+        @Test
+        void shouldDeleteScheduledRevocation() throws ExecutionException, InterruptedException {
+            final VoidResponse response = createVoidResponse();
+
+            when(apiClient.deleteAsync(
+                    "issuing/cards/card_id/schedule-revocation",
+                    authorization,
+                    VoidResponse.class
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<VoidResponse> future = client.deleteScheduledRevocation("card_id");
 
             validateVoidResponse(response, future.get());
         }
@@ -760,6 +834,75 @@ public class IssuingClientImplTest {
 
             validateVoidResponse(expectedResponse, actualResponse);
         }
+
+        @Test
+        void shouldUpdateCardSync() {
+            final UpdateCardRequest request = createUpdateCardRequest();
+            final UpdateCardResponse expectedResponse = createUpdateCardResponse();
+
+            when(apiClient.patch(
+                    "issuing/cards/card_id",
+                    authorization,
+                    UpdateCardResponse.class,
+                    request,
+                    null
+            )).thenReturn(expectedResponse);
+
+            final UpdateCardResponse actualResponse = client.updateCardSync("card_id", request);
+
+            validateUpdateCardResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldRenewCardSync() {
+            final RenewCardRequest request = createRenewCardRequest();
+            final RenewCardResponse expectedResponse = createRenewCardResponse();
+
+            when(apiClient.post(
+                    "issuing/cards/card_id/renew",
+                    authorization,
+                    RenewCardResponse.class,
+                    request,
+                    null
+            )).thenReturn(expectedResponse);
+
+            final RenewCardResponse actualResponse = client.renewCardSync("card_id", request);
+
+            validateRenewCardResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldScheduleCardRevocationSync() {
+            final ScheduleRevocationRequest request = createScheduleRevocationRequest();
+            final VoidResponse expectedResponse = createVoidResponse();
+
+            when(apiClient.post(
+                    "issuing/cards/card_id/schedule-revocation",
+                    authorization,
+                    VoidResponse.class,
+                    request,
+                    null
+            )).thenReturn(expectedResponse);
+
+            final VoidResponse actualResponse = client.scheduleCardRevocationSync("card_id", request);
+
+            validateVoidResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldDeleteScheduledRevocationSync() {
+            final VoidResponse expectedResponse = createVoidResponse();
+
+            when(apiClient.delete(
+                    "issuing/cards/card_id/schedule-revocation",
+                    authorization,
+                    VoidResponse.class
+            )).thenReturn(expectedResponse);
+
+            final VoidResponse actualResponse = client.deleteScheduledRevocationSync("card_id");
+
+            validateVoidResponse(expectedResponse, actualResponse);
+        }
     }
 
     @Nested
@@ -1029,6 +1172,26 @@ public class IssuingClientImplTest {
         return mock(SuspendCardRequest.class);
     }
 
+    private UpdateCardRequest createUpdateCardRequest() {
+        return mock(UpdateCardRequest.class);
+    }
+
+    private UpdateCardResponse createUpdateCardResponse() {
+        return mock(UpdateCardResponse.class);
+    }
+
+    private RenewCardRequest createRenewCardRequest() {
+        return mock(RenewCardRequest.class);
+    }
+
+    private RenewCardResponse createRenewCardResponse() {
+        return mock(RenewCardResponse.class);
+    }
+
+    private ScheduleRevocationRequest createScheduleRevocationRequest() {
+        return mock(ScheduleRevocationRequest.class);
+    }
+
     private CardControlRequest createCardControlRequest() {
         return mock(CardControlRequest.class);
     }
@@ -1180,6 +1343,16 @@ public class IssuingClientImplTest {
     }
 
     private void validateCardAuthorizationReversalResponse(CardAuthorizationReversalResponse expected, CardAuthorizationReversalResponse actual) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    private void validateUpdateCardResponse(UpdateCardResponse expected, UpdateCardResponse actual) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    private void validateRenewCardResponse(RenewCardResponse expected, RenewCardResponse actual) {
         assertNotNull(actual);
         assertEquals(expected, actual);
     }
