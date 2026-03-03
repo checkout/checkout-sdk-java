@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.setups.requests;
 
-import com.checkout.HttpMetadata;
 import com.checkout.common.Currency;
 import com.checkout.payments.PaymentType;
 import com.checkout.handlepaymentsandpayouts.setups.entities.customer.Customer;
@@ -49,7 +48,6 @@ public class PaymentSetupsRequest {
      * [Optional]
      */
     @Builder.Default
-    @SerializedName("payment_type")
     private PaymentType paymentType = PaymentType.REGULAR;
 
     /**

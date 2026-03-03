@@ -8,7 +8,6 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.order.Order;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
 import com.checkout.handlepaymentsandpayouts.setups.entities.settings.Settings;
 import com.checkout.payments.PaymentType;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,7 +32,6 @@ public class PaymentSetupsResponse extends Resource {
     /**
      * The processing channel used for the payment setup
      */
-    @SerializedName("processing_channel_id")
     private String processingChannelId;
 
     /**
@@ -49,7 +47,6 @@ public class PaymentSetupsResponse extends Resource {
     /**
      * The type of payment method
      */
-    @SerializedName("payment_type")
     private PaymentType paymentType;
 
     /**
@@ -65,7 +62,6 @@ public class PaymentSetupsResponse extends Resource {
     /**
      * The payment method configuration for this setup
      */
-    @SerializedName("payment_methods")
     private PaymentMethods paymentMethods;
 
     /**
