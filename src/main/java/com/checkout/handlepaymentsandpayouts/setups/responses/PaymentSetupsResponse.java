@@ -1,6 +1,6 @@
 package com.checkout.handlepaymentsandpayouts.setups.responses;
 
-import com.checkout.HttpMetadata;
+import com.checkout.common.Resource;
 import com.checkout.common.Currency;
 import com.checkout.handlepaymentsandpayouts.setups.entities.customer.Customer;
 import com.checkout.handlepaymentsandpayouts.setups.entities.industry.Industry;
@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentSetupsResponse extends HttpMetadata {
+public class PaymentSetupsResponse extends Resource {
 
     /**
      * The unique identifier of the payment setup.

@@ -1,9 +1,8 @@
 package com.checkout.handlepaymentsandpayouts.setups.responses;
 
-import com.checkout.HttpMetadata;
+import com.checkout.common.Resource;
 import com.checkout.common.Currency;
 import com.checkout.payments.PaymentStatus;
-import com.checkout.handlepaymentsandpayouts.setups.responses.PaymentSetupSource;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.threeds.Threeds;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.risk.Risk;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.customer.Customer;
@@ -27,7 +26,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentSetupsConfirmResponse extends HttpMetadata {
+public class PaymentSetupsConfirmResponse extends Resource {
 
     /**
      * The payment's unique identifier
