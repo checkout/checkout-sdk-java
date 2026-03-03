@@ -22,6 +22,12 @@ import com.checkout.identities.faceauthentications.FaceAuthenticationClient;
 import com.checkout.identities.faceauthentications.FaceAuthenticationClientImpl;
 import com.checkout.identities.applicants.ApplicantClient;
 import com.checkout.identities.applicants.ApplicantClientImpl;
+import com.checkout.identities.identityverification.IdentityVerificationClient;
+import com.checkout.identities.identityverification.IdentityVerificationClientImpl;
+import com.checkout.identities.iddocumentverification.IdDocumentVerificationClient;
+import com.checkout.identities.iddocumentverification.IdDocumentVerificationClientImpl;
+import com.checkout.identities.amlscreening.AmlScreeningClient;
+import com.checkout.identities.amlscreening.AmlScreeningClientImpl;
 import com.checkout.instruments.InstrumentsClient;
 import com.checkout.instruments.InstrumentsClientImpl;
 import com.checkout.issuing.IssuingClient;
@@ -77,6 +83,9 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final ForwardClient forwardClient;
     private final FaceAuthenticationClient faceAuthenticationClient;
     private final ApplicantClient applicantClient;
+    private final IdentityVerificationClient identityVerificationClient;
+    private final IdDocumentVerificationClient idDocumentVerificationClient;
+    private final AmlScreeningClient amlScreeningClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         super(configuration);
@@ -106,6 +115,9 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.forwardClient = new ForwardClientImpl(this.apiClient, configuration);
         this.faceAuthenticationClient = new FaceAuthenticationClientImpl(this.apiClient, configuration);
         this.applicantClient = new ApplicantClientImpl(this.apiClient, configuration);
+        this.identityVerificationClient = new IdentityVerificationClientImpl(this.apiClient, configuration);
+        this.idDocumentVerificationClient = new IdDocumentVerificationClientImpl(this.apiClient, configuration);
+        this.amlScreeningClient = new AmlScreeningClientImpl(this.apiClient, configuration);
     }
 
     @Override
@@ -211,6 +223,15 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
 
     @Override
     public ApplicantClient applicantClient() { return applicantClient; }
+
+    @Override
+    public IdentityVerificationClient identityVerificationClient() { return identityVerificationClient; }
+
+    @Override
+    public IdDocumentVerificationClient idDocumentVerificationClient() { return idDocumentVerificationClient; }
+
+    @Override
+    public AmlScreeningClient amlScreeningClient() { return amlScreeningClient; }
 
     private ApiClient getFilesClient(final CheckoutConfiguration configuration) {
         return new ApiClientImpl(configuration, new FilesApiUriStrategy(configuration));
