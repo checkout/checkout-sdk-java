@@ -2,6 +2,7 @@ package com.checkout.identities.iddocumentverification;
 
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
+import com.checkout.identities.entities.DeclaredData;
 import com.checkout.identities.iddocumentverification.requests.IdDocumentVerificationAttemptRequest;
 import com.checkout.identities.iddocumentverification.requests.IdDocumentVerificationRequest;
 import com.checkout.identities.iddocumentverification.responses.IdDocumentVerificationAttemptResponse;
@@ -248,7 +249,7 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
         return IdDocumentVerificationRequest.builder()
                 .applicantId("aplt_" + generateRandomString(8))
                 .userJourneyId("usj_" + generateRandomString(26))
-                .declaredData(IdDocumentVerificationRequest.DeclaredData.builder()
+                .declaredData(DeclaredData.builder()
                         .name("John Doe")
                         .build())
                 .build();

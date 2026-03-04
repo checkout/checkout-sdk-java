@@ -1,6 +1,6 @@
 package com.checkout.identities.iddocumentverification.responses;
 
-import com.checkout.identities.entities.BaseAttemptResponse;
+import com.checkout.identities.entities.BaseIdentityResponseStatus;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -10,6 +10,6 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class IdDocumentVerificationAttemptResponse extends BaseAttemptResponse<IdDocumentVerificationAttemptStatus> {
+public class IdDocumentVerificationAttemptResponse extends BaseIdentityResponseStatus<IdDocumentVerificationAttemptStatus> {
     // All fields are inherited from BaseAttemptResponse and BaseIdentityResponse
 }

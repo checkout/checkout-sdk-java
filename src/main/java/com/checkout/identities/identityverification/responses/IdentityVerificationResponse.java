@@ -1,80 +1,66 @@
 package com.checkout.identities.identityverification.responses;
 
-import com.checkout.common.Resource;
+import com.checkout.identities.entities.Face;
+import com.checkout.identities.entities.VerifiedIdentity;
+import com.checkout.identities.entities.DocumentDetails;
 import com.checkout.identities.entities.BaseIdentityResponseStatus;
-import com.google.gson.annotations.SerializedName;
+import com.checkout.identities.entities.DeclaredData;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-import java.time.Instant;
+import java.util.List;
 
 /**
  * Response for identity verification operations
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class IdentityVerificationResponse extends BaseIdentityResponseStatus<IdentityVerificationStatus> {
 
-    @SerializedName("id")
-    private String id;
+    /**
+     * The applicant's unique identifier.
+     */
+    private String applicantId;
 
-    @SerializedName("created_on")
-    private Instant createdOn;
+    /**
+     * Your configuration ID.
+     */
+    private String userJourneyId;
 
-    @SerializedName("last_attempt_id")
-    private String lastAttemptId;
+    /**
+     * The personal details provided by the applicant.
+     */
+    private DeclaredData declaredData;
 
-    @SerializedName("applicant")
-    private IdentityVerificationApplicant applicant;
+    /**
+     * The URL to redirect the applicant to after the attempt.
+     * (Only present in create-and-open response)
+     */
+    private String redirectUrl;
 
-    @SerializedName("check_status")
-    private CheckStatus checkStatus;
+    /**
+     * One or more codes that provide more information about risks associated with the verification.
+     */
+    private List<String> riskLabels;
 
-    @SerializedName("report")
-    private Report report;
+    /**
+     * The details of the applicant's identity documents.
+     */
+    private List<DocumentDetails> documents;
 
-    @Data
-    @EqualsAndHashCode(callSuper=false)
-    public static class IdentityVerificationApplicant extends Resource {
-        
-        @SerializedName("id")
-        private String id;
-        
-        @SerializedName("date_of_birth")
-        private String dateOfBirth;
-        
-        @SerializedName("first_name")
-        private String firstName;
-        
-        @SerializedName("last_name")
-        private String lastName;
-        
-        @SerializedName("phone_number")
-        private String phoneNumber;
-        
-        @SerializedName("email")
-        private String email;
-    }
+    /**
+     * The details of the image of the applicant's face extracted from the video.
+     */
+    private Face face;
 
-    @Data
-    @EqualsAndHashCode(callSuper=false)
-    public static class CheckStatus extends Resource {
-        
-        @SerializedName("document_check")
-        private String documentCheck;
-        
-        @SerializedName("face_authentication")
-        private String faceAuthentication;
-        
-        @SerializedName("liveness_check")
-        private String livenessCheck;
-    }
-
-    @Data
-    @EqualsAndHashCode(callSuper=false)
-    public static class Report extends Resource {
-        
-        @SerializedName("is_downloadable")
-        private Boolean isDownloadable;
-    }
+    /**
+     * The details of the applicant's verified identity.
+     */
+    private VerifiedIdentity verifiedIdentity;
 }

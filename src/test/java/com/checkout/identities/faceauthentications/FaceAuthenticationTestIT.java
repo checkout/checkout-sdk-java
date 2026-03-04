@@ -2,6 +2,7 @@ package com.checkout.identities.faceauthentications;
 
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
+import com.checkout.identities.entities.ClientInformation;
 import com.checkout.identities.faceauthentications.requests.FaceAuthenticationAttemptRequest;
 import com.checkout.identities.faceauthentications.requests.FaceAuthenticationRequest;
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationAttemptResponse;
@@ -262,7 +263,7 @@ class FaceAuthenticationTestIT extends SandboxTestFixture {
     private static FaceAuthenticationAttemptRequest createFaceAuthenticationAttemptRequest() {
         return FaceAuthenticationAttemptRequest.builder()
                 .redirectUrl("https://example.com/redirect?session=" + generateRandomString(10))
-                .clientInformation(FaceAuthenticationAttemptRequest.ClientInformation.builder()
+                .clientInformation(ClientInformation.builder()
                         .preSelectedResidenceCountry("GB")
                         .preSelectedLanguage("en-US")
                         .build())
