@@ -1,5 +1,6 @@
 package com.checkout.identities.iddocumentverification.requests;
 
+import com.checkout.identities.entities.DeclaredData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,19 +32,4 @@ public class IdDocumentVerificationRequest {
      * [Required]
      */
     private DeclaredData declaredData;
-
-    /**
-     * Declared data nested class
-     */
-    @Data
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class DeclaredData {
-        /**
-         * The applicant's name.
-         * [Required]
-         */
-        private String name;
-    }
 }
