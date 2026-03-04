@@ -1,7 +1,7 @@
 package com.checkout.identities.identityverification.responses;
 
 import com.checkout.common.Resource;
-import com.checkout.identities.faceauthentications.responses.BaseIdentityResponse;
+import com.checkout.identities.entities.BaseIdentityResponseStatus;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,7 +13,7 @@ import java.time.Instant;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class IdentityVerificationResponse extends BaseIdentityResponse<IdentityVerificationStatus> {
+public class IdentityVerificationResponse extends BaseIdentityResponseStatus<IdentityVerificationStatus> {
 
     @SerializedName("id")
     private String id;

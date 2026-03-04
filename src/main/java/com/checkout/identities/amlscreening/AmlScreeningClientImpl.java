@@ -41,14 +41,14 @@ public class AmlScreeningClientImpl extends AbstractClient implements AmlScreeni
     /**
      * Retrieve an AML screening
      *
-     * @param amlScreeningId the AML screening ID
+     * @param amlVerificationId the AML verification ID
      * @return a {@link CompletableFuture} containing the {@link AmlScreeningResponse}
      */
     @Override
     public CompletableFuture<AmlScreeningResponse> getAmlScreeningAsync(
-            final String amlScreeningId) {
-        validateParams("amlScreeningId", amlScreeningId);
-        return apiClient.getAsync(buildPath(AML_VERIFICATIONS_PATH, amlScreeningId), sdkAuthorization(),
+            final String amlVerificationId) {
+        validateParams("amlVerificationId", amlVerificationId);
+        return apiClient.getAsync(buildPath(AML_VERIFICATIONS_PATH, amlVerificationId), sdkAuthorization(),
                 AmlScreeningResponse.class);
     }
 
@@ -70,13 +70,13 @@ public class AmlScreeningClientImpl extends AbstractClient implements AmlScreeni
     /**
      * Retrieve an AML screening
      *
-     * @param amlScreeningId the AML screening ID
+     * @param amlVerificationId the AML verification ID
      * @return a {@link AmlScreeningResponse}
      */
     @Override
-    public AmlScreeningResponse getAmlScreening(final String amlScreeningId) {
-        validateParams("amlScreeningId", amlScreeningId);
-        return apiClient.get(buildPath(AML_VERIFICATIONS_PATH, amlScreeningId), sdkAuthorization(),
+    public AmlScreeningResponse getAmlScreening(final String amlVerificationId) {
+        validateParams("amlVerificationId", amlVerificationId);
+        return apiClient.get(buildPath(AML_VERIFICATIONS_PATH, amlVerificationId), sdkAuthorization(),
                 AmlScreeningResponse.class);
     }
 

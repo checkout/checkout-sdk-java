@@ -1,4 +1,4 @@
-package com.checkout.identities.faceauthentications.responses;
+package com.checkout.identities.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

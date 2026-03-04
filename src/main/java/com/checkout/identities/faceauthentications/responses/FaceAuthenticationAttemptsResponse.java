@@ -1,7 +1,6 @@
 package com.checkout.identities.faceauthentications.responses;
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +21,6 @@ public class FaceAuthenticationAttemptsResponse extends Resource {
     /**
      * The total number of attempts.
      */
-    @SerializedName("total_count")
     private Integer totalCount;
 
     /**

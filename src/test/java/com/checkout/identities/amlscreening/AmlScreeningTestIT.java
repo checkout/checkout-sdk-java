@@ -4,6 +4,8 @@ import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.identities.amlscreening.requests.AmlScreeningRequest;
 import com.checkout.identities.amlscreening.responses.AmlScreeningResponse;
+import com.checkout.identities.entities.SearchParameters;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -83,7 +85,7 @@ class AmlScreeningTestIT extends SandboxTestFixture {
     private static AmlScreeningRequest createAmlScreeningRequest() {
         return AmlScreeningRequest.builder()
                 .applicantId("aplt_" + generateRandomString(8))
-                .searchParameters(AmlScreeningRequest.SearchParameters.builder()
+                .searchParameters(SearchParameters.builder()
                         .configurationIdentifier(UUID.randomUUID().toString())
                         .build())
                 .monitored(false)

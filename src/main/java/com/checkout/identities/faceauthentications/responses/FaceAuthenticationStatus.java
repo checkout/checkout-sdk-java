@@ -7,22 +7,31 @@ import com.google.gson.annotations.SerializedName;
  */
 public enum FaceAuthenticationStatus {
 
+    @SerializedName("approved")
+    APPROVED,
+
+    @SerializedName("capture_in_progress")
+    CAPTURE_IN_PROGRESS,
+
+    @SerializedName("checks_in_progress")
+    CHECKS_IN_PROGRESS,
+
+    @SerializedName("created")
+    CREATED,
+
+    @SerializedName("declined")
+    DECLINED,
+
+    @SerializedName("inconclusive")
+    INCONCLUSIVE,
+
     @SerializedName("pending")
     PENDING,
 
-    @SerializedName("processing")
-    PROCESSING,
+    @SerializedName("refused")
+    REFUSED,
 
-    @SerializedName("completed")
-    COMPLETED,
-
-    @SerializedName("failed")
-    FAILED,
-
-    @SerializedName("expired")
-    EXPIRED,
-
-    @SerializedName("rejected")
-    REJECTED
-
+    @SerializedName("retry_required")
+    RETRY_REQUIRED
+    
 }

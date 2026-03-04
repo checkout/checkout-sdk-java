@@ -1,7 +1,7 @@
 package com.checkout.identities.identityverification.responses;
 
 import com.checkout.common.Resource;
-import com.checkout.identities.faceauthentications.responses.BaseAttemptResponse;
+import com.checkout.identities.entities.BaseAttemptResponse;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

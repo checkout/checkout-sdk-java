@@ -1,6 +1,5 @@
 package com.checkout.identities.applicants.requests;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +17,6 @@ public class ApplicantRequest {
     /**
      * Your reference for the applicant.
      */
-    @SerializedName("external_applicant_id")
     private String externalApplicantId;
 
     /**
@@ -29,6 +27,5 @@ public class ApplicantRequest {
     /**
      * The applicant's full name.
      */
-    @SerializedName("external_applicant_name")
     private String externalApplicantName;
 }

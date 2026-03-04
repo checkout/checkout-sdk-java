@@ -1,7 +1,7 @@
 package com.checkout.identities.applicants.responses;
 
-import com.checkout.identities.faceauthentications.responses.BaseIdentityResponse;
-import com.google.gson.annotations.SerializedName;
+import com.checkout.identities.entities.BaseIdentityResponse;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,12 +16,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApplicantResponse extends BaseIdentityResponse<ApplicantStatus> {
+public class ApplicantResponse extends BaseIdentityResponse{
 
     /**
      * Your reference for the applicant.
      */
-    @SerializedName("external_applicant_id")
     private String externalApplicantId;
 
     /**
@@ -32,6 +31,5 @@ public class ApplicantResponse extends BaseIdentityResponse<ApplicantStatus> {
     /**
      * The applicant's full name.
      */
-    @SerializedName("external_applicant_name")
     private String externalApplicantName;
 }

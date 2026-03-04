@@ -1,4 +1,4 @@
-package com.checkout.identities.amlscreening;
+package com.checkout.identities.amlscreening.responses;
 
 import com.google.gson.annotations.SerializedName;
 

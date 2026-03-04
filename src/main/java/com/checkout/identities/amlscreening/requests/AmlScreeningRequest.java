@@ -1,7 +1,8 @@
 package com.checkout.identities.amlscreening.requests;
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
+import com.checkout.identities.entities.SearchParameters;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,23 +19,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AmlScreeningRequest extends Resource {
 
-    @SerializedName("applicant_id")
     private String applicantId;
 
-    @SerializedName("search_parameters")
     private SearchParameters searchParameters;
 
-    @SerializedName("monitored")
     private Boolean monitored;
 
-    @Data
-    @Builder
-    @EqualsAndHashCode(callSuper = false)
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class SearchParameters extends Resource {
-
-        @SerializedName("configuration_identifier")
-        private String configurationIdentifier;
-    }
 }

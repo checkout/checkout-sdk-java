@@ -163,7 +163,6 @@ class ApplicantTestIT extends SandboxTestFixture {
         assertEquals(request.getExternalApplicantId(), response.getExternalApplicantId());
         assertEquals(request.getEmail(), response.getEmail());
         assertEquals(request.getExternalApplicantName(), response.getExternalApplicantName());
-        assertNotNull(response.getStatus());
         assertNotNull(response.getCreatedOn());
         validateCommonApplicantFields(response);
     }
@@ -174,7 +173,6 @@ class ApplicantTestIT extends SandboxTestFixture {
         assertEquals(created.getExternalApplicantId(), retrieved.getExternalApplicantId());
         assertEquals(created.getEmail(), retrieved.getEmail());
         assertEquals(created.getExternalApplicantName(), retrieved.getExternalApplicantName());
-        assertNotNull(retrieved.getStatus());
         validateCommonApplicantFields(retrieved);
     }
 
@@ -184,7 +182,6 @@ class ApplicantTestIT extends SandboxTestFixture {
         assertTrue(response.getId().startsWith("aplt_"));
         assertEquals(request.getEmail(), response.getEmail());
         assertEquals(request.getExternalApplicantName(), response.getExternalApplicantName());
-        assertNotNull(response.getStatus());
         assertNotNull(response.getModifiedOn());
         validateCommonApplicantFields(response);
     }
@@ -193,7 +190,6 @@ class ApplicantTestIT extends SandboxTestFixture {
         assertNotNull(response);
         assertNotNull(response.getId());
         assertTrue(response.getId().startsWith("aplt_"));
-        assertNotNull(response.getStatus());
         // After anonymization, personal data may be removed or modified
         validateCommonApplicantFields(response);
     }

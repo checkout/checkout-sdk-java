@@ -1,5 +1,7 @@
 package com.checkout.identities.faceauthentications.responses;
 
+import com.checkout.identities.entities.BaseAttemptResponse;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

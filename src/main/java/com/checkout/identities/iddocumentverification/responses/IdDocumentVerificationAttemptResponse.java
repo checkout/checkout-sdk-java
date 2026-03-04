@@ -1,6 +1,7 @@
 package com.checkout.identities.iddocumentverification.responses;
 
-import com.checkout.identities.faceauthentications.responses.BaseAttemptResponse;
+import com.checkout.identities.entities.BaseAttemptResponse;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

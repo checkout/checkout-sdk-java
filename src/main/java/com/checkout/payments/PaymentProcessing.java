@@ -76,6 +76,15 @@ public final class PaymentProcessing {
     @SerializedName("cko_network_token_available")
     private Boolean ckoNetworkTokenAvailable;
 
+    @SerializedName("purchase_country")
+    private CountryCode purchaseCountry;
+
+    @SerializedName("scheme_merchant_id")
+    private String schemeMerchantId;
+
+    @SerializedName("foreign_retailer_amount")
+    private Long foreignRetailerAmount;
+
     @SerializedName("provision_network_token")
     private Boolean provisionNetworkToken;
 

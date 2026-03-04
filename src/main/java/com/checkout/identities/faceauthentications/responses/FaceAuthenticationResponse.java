@@ -1,11 +1,14 @@
 package com.checkout.identities.faceauthentications.responses;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+
+import com.checkout.identities.entities.BaseIdentityResponseStatus;
 
 /**
  * Face authentication response
@@ -13,8 +16,24 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-public class FaceAuthenticationResponse extends BaseVerificationResponse<FaceAuthenticationStatus> {
+public class FaceAuthenticationResponse extends BaseIdentityResponseStatus<FaceAuthenticationStatus> {
+
+    /**
+     * The applicant's unique identifier.
+     */
+    private String applicantId;
+
+    /**
+     * Your configuration ID.
+     */
+    private String userJourneyId;
+
+    /**
+     * One or more codes that provide more information about risks associated with the verification.
+     */
+    private List<String> riskLabels;
 
     /**
      * The details of the image of the applicant's face extracted from the video.
@@ -32,7 +51,6 @@ public class FaceAuthenticationResponse extends BaseVerificationResponse<FaceAut
         /**
          * The URL to the face image.
          */
-        @SerializedName("image_signed_url")
         private String imageSignedUrl;
     }
 }
