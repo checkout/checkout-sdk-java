@@ -84,4 +84,7 @@ public final class PaymentProcessing {
 
     private Boolean aft;
 
+    @SerializedName("bizum_payment_id")
+    private String bizumPaymentId;
+
 }
