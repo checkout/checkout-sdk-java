@@ -48,6 +48,7 @@ public class PaymentSetupsRequest {
      * Enum: "Regular" "Recurring" "MOTO" "Installment" "Unscheduled"
      * [Optional]
      */
+    @Builder.Default
     @SerializedName("payment_type")
     private PaymentType paymentType = PaymentType.REGULAR;
 
