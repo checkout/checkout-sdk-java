@@ -7,7 +7,7 @@ public enum PaymentType {
     @SerializedName("Installment")
     INSTALLMENT,
 
-    @SerializedName("Moto")
+    @SerializedName(value = "Moto", alternate = "MOTO")
     MOTO,
 
     @SerializedName("PayLater")
@@ -16,10 +16,9 @@ public enum PaymentType {
     @SerializedName("Recurring")
     RECURRING,
 
-    @SerializedName("Regular")
+    @SerializedName(value ="Regular", alternate = {"REGULAR", "regular"})
     REGULAR,
 
     @SerializedName("Unscheduled")
     UNSCHEDULED
-
 }
