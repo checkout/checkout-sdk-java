@@ -1,4 +1,4 @@
-package com.checkout.networkTokens.entities;
+package com.checkout.networktokens.entities;
 
 import lombok.Data;
 

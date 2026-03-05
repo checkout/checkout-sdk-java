@@ -1,7 +1,7 @@
-package com.checkout.networkTokens.requests;
+package com.checkout.networktokens.requests;
 
-import com.checkout.networkTokens.entities.DeletionReason;
-import com.checkout.networkTokens.entities.InitiatedBy;
+import com.checkout.networktokens.entities.DeletionReason;
+import com.checkout.networktokens.entities.InitiatedBy;
 
 import lombok.Builder;
 import lombok.Data;

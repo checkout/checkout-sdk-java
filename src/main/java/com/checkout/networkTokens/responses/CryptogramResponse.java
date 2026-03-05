@@ -1,4 +1,4 @@
-package com.checkout.networkTokens.responses;
+package com.checkout.networktokens.responses;
 
 import com.checkout.common.Resource;
 import lombok.Data;

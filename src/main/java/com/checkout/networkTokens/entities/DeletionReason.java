@@ -1,17 +1,12 @@
-package com.checkout.networkTokens.entities;
+package com.checkout.networktokens.entities;
+
+import com.google.gson.annotations.SerializedName;
 
 public enum DeletionReason {
     
-    FRAUD("fraud"),
-    OTHER("other");
+    @SerializedName("fraud")
+    FRAUD,
 
-    private final String reason;
-
-    DeletionReason(final String reason) {
-        this.reason = reason;
-    }
-
-    public String getReason() {
-        return reason;
-    }
+    @SerializedName("other")
+    OTHER
 }

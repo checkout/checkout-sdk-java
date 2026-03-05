@@ -12,7 +12,7 @@ import com.checkout.handlepaymentsandpayouts.setups.PaymentSetupsClient;
 import com.checkout.instruments.InstrumentsClient;
 import com.checkout.issuing.IssuingClient;
 import com.checkout.metadata.MetadataClient;
-import com.checkout.networkTokens.NetworkTokensClient;
+import com.checkout.networktokens.NetworkTokensClient;
 import com.checkout.payments.PaymentsClient;
 import com.checkout.payments.contexts.PaymentContextsClient;
 import com.checkout.payments.hosted.HostedPaymentsClient;

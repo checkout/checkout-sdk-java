@@ -1,11 +1,11 @@
-package com.checkout.networkTokens;
+package com.checkout.networktokens;
 
 import com.checkout.EmptyResponse;
-import com.checkout.networkTokens.requests.DeleteNetworkTokenRequest;
-import com.checkout.networkTokens.requests.ProvisionNetworkTokenRequest;
-import com.checkout.networkTokens.requests.RequestCryptogramRequest;
-import com.checkout.networkTokens.responses.CryptogramResponse;
-import com.checkout.networkTokens.responses.NetworkTokenResponse;
+import com.checkout.networktokens.requests.DeleteNetworkTokenRequest;
+import com.checkout.networktokens.requests.ProvisionNetworkTokenRequest;
+import com.checkout.networktokens.requests.RequestCryptogramRequest;
+import com.checkout.networktokens.responses.CryptogramResponse;
+import com.checkout.networktokens.responses.NetworkTokenResponse;
 
 import java.util.concurrent.CompletableFuture;
 
