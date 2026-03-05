@@ -2,9 +2,7 @@ package com.checkout.issuing.controls.responses.controlgroup;
 
 import com.checkout.common.Resource;
 import com.checkout.issuing.controls.requests.controlgroup.ControlGroupControl;
-import com.checkout.issuing.controls.requests.controlgroup.ControlGroupControlTypeAdapter;
 import com.checkout.issuing.controls.requests.controlgroup.ControlGroupFailIf;
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,7 +24,6 @@ public class ControlGroupResponse extends Resource {
     @SerializedName("fail_if")
     private ControlGroupFailIf failIf;
 
-    @JsonAdapter(ControlGroupControlTypeAdapter.class)
     private List<ControlGroupControl> controls;
 
     @SerializedName("is_editable")

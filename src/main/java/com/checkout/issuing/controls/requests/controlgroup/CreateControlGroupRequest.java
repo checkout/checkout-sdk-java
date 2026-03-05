@@ -1,6 +1,5 @@
 package com.checkout.issuing.controls.requests.controlgroup;
 
-import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +20,6 @@ public class CreateControlGroupRequest {
     @SerializedName("fail_if")
     private ControlGroupFailIf failIf;
 
-    @JsonAdapter(ControlGroupControlTypeAdapter.class)
     private List<ControlGroupControl> controls;
 
     private String description;

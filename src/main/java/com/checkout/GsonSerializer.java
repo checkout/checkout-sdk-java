@@ -202,6 +202,11 @@ public class GsonSerializer implements Serializer {
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(CardControlResponse.class, CheckoutUtils.CONTROL_TYPE)
                     .registerSubtype(VelocityCardControlResponse.class, identifier(ControlType.VELOCITY_LIMIT))
                     .registerSubtype(MccCardControlResponse.class, identifier(ControlType.MCC_LIMIT)))
+            // Issuing CS2 - ControlGroupControl
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.issuing.controls.requests.controlgroup.ControlGroupControl.class, CheckoutUtils.CONTROL_TYPE)
+                    .registerSubtype(com.checkout.issuing.controls.requests.controlgroup.VelocityControlGroupControl.class, identifier(ControlType.VELOCITY_LIMIT))
+                    .registerSubtype(com.checkout.issuing.controls.requests.controlgroup.MccControlGroupControl.class, identifier(ControlType.MCC_LIMIT))
+                    .registerSubtype(com.checkout.issuing.controls.requests.controlgroup.MidControlGroupControl.class, identifier(ControlType.MID_LIMIT)))
             // Adapters when API returns an array
             .registerTypeAdapter(EVENT_TYPES_TYPE, eventTypesResponseDeserializer())
             .registerTypeAdapter(WORKFLOWS_EVENT_TYPES_TYPE, workflowEventTypesResponseDeserializer())
