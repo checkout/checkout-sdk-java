@@ -1,19 +1,17 @@
-package com.checkout.networkTokens.entities;
+package com.checkout.networktokens.entities;
+
+import com.google.gson.annotations.SerializedName;
 
 public enum TransactionType {
-    
-    ECOM("ecom"),
-    RECURRING("recurring"),
-    POS("pos"),
-    AFT("aft");
+    @SerializedName("ecom")  
+    ECOM,
 
-    private final String transactionType;
+    @SerializedName("recurring")
+    RECURRING,
 
-    TransactionType(final String transactionType) {
-        this.transactionType = transactionType;
-    }
+    @SerializedName("pos")
+    POS,
 
-    public String getTransactionType() {
-        return transactionType;
-    }
+    @SerializedName("aft")
+    AFT
 }

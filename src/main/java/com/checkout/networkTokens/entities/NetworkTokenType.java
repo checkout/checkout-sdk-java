@@ -1,17 +1,11 @@
-package com.checkout.networkTokens.entities;
+package com.checkout.networktokens.entities;
+
+import com.google.gson.annotations.SerializedName;
 
 public enum NetworkTokenType {
+    @SerializedName("vts")
+    VTS,
     
-    VTS("vts"),
-    MDES("mdes");
-
-    private final String type;
-
-    NetworkTokenType(final String type) {
-        this.type = type;
-    }
-
-    public String getType() {
-        return type;
-    }
+    @SerializedName("mdes")
+    MDES
 }

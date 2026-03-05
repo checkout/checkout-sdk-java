@@ -1,8 +1,8 @@
-package com.checkout.networkTokens.responses;
+package com.checkout.networktokens.responses;
 
 import com.checkout.common.Resource;
-import com.checkout.networkTokens.entities.CardDetails;
-import com.checkout.networkTokens.entities.NetworkTokenDetails;
+import com.checkout.networktokens.entities.CardDetails;
+import com.checkout.networktokens.entities.NetworkTokenDetails;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

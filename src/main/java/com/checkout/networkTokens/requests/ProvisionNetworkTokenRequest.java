@@ -1,6 +1,7 @@
-package com.checkout.networkTokens.requests;
+package com.checkout.networktokens.requests;
 
-import com.checkout.networkTokens.requests.sources.AbstractNetworkTokenSource;
+import com.checkout.networktokens.entities.AbstractNetworkTokenSource;
+
 import lombok.Builder;
 import lombok.Data;
 

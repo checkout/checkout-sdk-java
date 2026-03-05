@@ -1,20 +1,20 @@
-package com.checkout.networkTokens.entities;
+package com.checkout.networktokens.entities;
+
+import com.google.gson.annotations.SerializedName;
 
 public enum NetworkTokenState {
+    @SerializedName("active")
+    ACTIVE,
     
-    ACTIVE("active"),
-    SUSPENDED("suspended"),
-    INACTIVE("inactive"),
-    DECLINED("declined"),
-    REQUESTED("requested");
+    @SerializedName("suspended")
+    SUSPENDED,
+    
+    @SerializedName("inactive")
+    INACTIVE,
 
-    private final String state;
+    @SerializedName("declined")
+    DECLINED,
 
-    NetworkTokenState(final String state) {
-        this.state = state;
-    }
-
-    public String getState() {
-        return state;
-    }
+    @SerializedName("requested")
+    REQUESTED
 }

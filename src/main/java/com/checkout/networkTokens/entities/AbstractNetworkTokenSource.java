@@ -1,6 +1,5 @@
-package com.checkout.networkTokens.requests.sources;
+package com.checkout.networktokens.entities;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,7 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public abstract class AbstractNetworkTokenSource {
 
-    @SerializedName("type")
     private NetworkTokenSourceType type;
 
     public AbstractNetworkTokenSource(final NetworkTokenSourceType type) {

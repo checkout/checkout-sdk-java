@@ -55,6 +55,7 @@ public enum OAuthScope {
     VAULT_CARD_METADATA("vault:card-metadata"),
     VAULT_INSTRUMENTS("vault:instruments"),
     VAULT_TOKENIZATION("vault:tokenization"),
+    VAULT_NETWORK_TOKENS("vault:network-tokens"),
     FORWARD("forward"),
     FORWARD_SECRETS("forward:secrets");
 

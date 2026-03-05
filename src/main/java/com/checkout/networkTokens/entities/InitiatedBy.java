@@ -1,17 +1,11 @@
-package com.checkout.networkTokens.entities;
+package com.checkout.networktokens.entities;
+
+import com.google.gson.annotations.SerializedName;
 
 public enum InitiatedBy {
+    @SerializedName("cardholder")
+    CARDHOLDER,
     
-    CARDHOLDER("cardholder"),
-    TOKEN_REQUESTOR("token_requestor");
-
-    private final String initiatedBy;
-
-    InitiatedBy(final String initiatedBy) {
-        this.initiatedBy = initiatedBy;
-    }
-
-    public String getInitiatedBy() {
-        return initiatedBy;
-    }
+    @SerializedName("token_requestor")
+    TOKEN_REQUESTOR
 }

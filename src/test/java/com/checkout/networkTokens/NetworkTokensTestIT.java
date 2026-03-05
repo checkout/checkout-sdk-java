@@ -3,23 +3,23 @@ package com.checkout.networkTokens;
 import com.checkout.EmptyResponse;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
-import com.checkout.networkTokens.entities.DeletionReason;
-import com.checkout.networkTokens.entities.InitiatedBy;
-import com.checkout.networkTokens.entities.TransactionType;
-import com.checkout.networkTokens.requests.DeleteNetworkTokenRequest;
-import com.checkout.networkTokens.requests.ProvisionNetworkTokenRequest;
-import com.checkout.networkTokens.requests.RequestCryptogramRequest;
-import com.checkout.networkTokens.requests.sources.CardNetworkTokenSource;
-import com.checkout.networkTokens.requests.sources.IdNetworkTokenSource;
-import com.checkout.networkTokens.responses.CryptogramResponse;
-import com.checkout.networkTokens.responses.NetworkTokenResponse;
-import org.junit.jupiter.api.Disabled;
+import com.checkout.networktokens.entities.CardNetworkTokenSource;
+import com.checkout.networktokens.entities.DeletionReason;
+import com.checkout.networktokens.entities.IdNetworkTokenSource;
+import com.checkout.networktokens.entities.InitiatedBy;
+import com.checkout.networktokens.entities.TransactionType;
+import com.checkout.networktokens.requests.DeleteNetworkTokenRequest;
+import com.checkout.networktokens.requests.ProvisionNetworkTokenRequest;
+import com.checkout.networktokens.requests.RequestCryptogramRequest;
+import com.checkout.networktokens.responses.CryptogramResponse;
+import com.checkout.networktokens.responses.NetworkTokenResponse;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Disabled("Network token endpoints not yet available in test environment")
+@Disabled("Network token scope not enable for our credentials in test environment")
 public class NetworkTokensTestIT extends SandboxTestFixture {
 
     public NetworkTokensTestIT() {
