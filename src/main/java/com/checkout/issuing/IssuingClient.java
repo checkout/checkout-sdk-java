@@ -2,28 +2,47 @@ package com.checkout.issuing;
 
 import com.checkout.EmptyResponse;
 import com.checkout.common.IdResponse;
+import com.checkout.issuing.cardholders.CardholderAccessTokenRequest;
+import com.checkout.issuing.cardholders.CardholderAccessTokenResponse;
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
 import com.checkout.issuing.cardholders.CardholderDetailsResponse;
 import com.checkout.issuing.cardholders.CardholderRequest;
+import com.checkout.issuing.cardholders.CardholderUpdateRequest;
 import com.checkout.issuing.cardholders.CardholderResponse;
+import com.checkout.issuing.cardholders.CardholderUpdateResponse;
 import com.checkout.issuing.cards.requests.create.CardRequest;
 import com.checkout.issuing.cards.requests.credentials.CardCredentialsQuery;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSEnrollmentRequest;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSUpdateRequest;
+import com.checkout.issuing.cards.requests.renew.RenewCardRequest;
+import com.checkout.issuing.cards.requests.revocation.ScheduleRevocationRequest;
 import com.checkout.issuing.cards.requests.revoke.RevokeCardRequest;
 import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
+import com.checkout.issuing.cards.requests.update.UpdateCardRequest;
 import com.checkout.issuing.cards.responses.CardDetailsResponse;
 import com.checkout.issuing.cards.responses.CardResponse;
 import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
+import com.checkout.issuing.cards.responses.renew.RenewCardResponse;
+import com.checkout.issuing.cards.responses.update.UpdateCardResponse;
 import com.checkout.issuing.controls.requests.create.CardControlRequest;
 import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
+import com.checkout.issuing.controls.requests.controlgroup.CreateControlGroupRequest;
+import com.checkout.issuing.controls.requests.controlgroup.ControlGroupQuery;
+import com.checkout.issuing.controls.requests.controlprofile.CreateControlProfileRequest;
+import com.checkout.issuing.controls.requests.controlprofile.ControlProfileQuery;
+import com.checkout.issuing.controls.requests.controlprofile.UpdateControlProfileRequest;
 import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
+import com.checkout.issuing.controls.responses.controlgroup.ControlGroupResponse;
+import com.checkout.issuing.controls.responses.controlgroup.ControlGroupsQueryResponse;
+import com.checkout.issuing.controls.responses.controlprofile.ControlProfileResponse;
+import com.checkout.issuing.controls.responses.controlprofile.ControlProfilesQueryResponse;
 import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
+import com.checkout.issuing.testing.requests.CardAuthorizationRefundsRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
@@ -36,7 +55,11 @@ import java.util.concurrent.CompletableFuture;
 
 public interface IssuingClient {
 
+    CompletableFuture<CardholderAccessTokenResponse> requestCardholderAccessToken(CardholderAccessTokenRequest cardholderAccessTokenRequest);
+
     CompletableFuture<CardholderResponse> createCardholder(CardholderRequest cardholderRequest);
+
+    CompletableFuture<CardholderUpdateResponse> updateCardholder(String cardholderId, CardholderUpdateRequest cardholderUpdateRequest);
 
     CompletableFuture<CardholderDetailsResponse> getCardholder(String cardholderId);
 
@@ -70,6 +93,30 @@ public interface IssuingClient {
 
     CompletableFuture<IdResponse> removeCardControl(final String controlId);
 
+    CompletableFuture<ControlGroupResponse> createControlGroup(final CreateControlGroupRequest createControlGroupRequest);
+
+    CompletableFuture<ControlGroupsQueryResponse> getControlGroups(final ControlGroupQuery controlGroupQuery);
+
+    CompletableFuture<ControlGroupResponse> getControlGroupDetails(final String controlGroupId);
+
+    CompletableFuture<IdResponse> removeControlGroup(final String controlGroupId);
+
+    // Async - Control Profile methods
+    
+    CompletableFuture<ControlProfileResponse> createControlProfile(final CreateControlProfileRequest createControlProfileRequest);
+
+    CompletableFuture<ControlProfilesQueryResponse> getControlProfiles(final ControlProfileQuery controlProfileQuery);
+
+    CompletableFuture<ControlProfileResponse> getControlProfileDetails(final String controlProfileId);
+
+    CompletableFuture<ControlProfileResponse> updateControlProfile(final String controlProfileId, final UpdateControlProfileRequest updateControlProfileRequest);
+
+    CompletableFuture<EmptyResponse> removeControlProfile(final String controlProfileId);
+
+    CompletableFuture<VoidResponse> addTargetToControlProfile(final String controlProfileId, final String targetId);
+
+    CompletableFuture<VoidResponse> removeTargetFromControlProfile(final String controlProfileId, final String targetId);
+
     CompletableFuture<CardAuthorizationResponse> simulateAuthorization(final CardAuthorizationRequest cardAuthorizationRequest);
 
     CompletableFuture<CardAuthorizationIncrementingResponse> simulateIncrementingAuthorization(
@@ -82,13 +129,30 @@ public interface IssuingClient {
             final CardAuthorizationClearingRequest cardAuthorizationClearingRequest
     );
 
+    CompletableFuture<EmptyResponse> simulateRefund(
+            final String authorizationId,
+            final CardAuthorizationRefundsRequest cardAuthorizationRefundsRequest
+    );
+
     CompletableFuture<CardAuthorizationReversalResponse> simulateReversal(
             final String authorizationId,
             final CardAuthorizationReversalRequest cardAuthorizationReversalRequest
     );
 
+    CompletableFuture<UpdateCardResponse> updateCard(final String cardId, final UpdateCardRequest updateCardRequest);
+
+    CompletableFuture<RenewCardResponse> renewCard(final String cardId, final RenewCardRequest renewCardRequest);
+
+    CompletableFuture<VoidResponse> scheduleCardRevocation(final String cardId, final ScheduleRevocationRequest scheduleRevocationRequest);
+
+    CompletableFuture<VoidResponse> deleteScheduledRevocation(final String cardId);
+
     // Synchronous methods
+    CardholderAccessTokenResponse requestCardholderAccessTokenSync(CardholderAccessTokenRequest cardholderAccessTokenRequest);
+
     CardholderResponse createCardholderSync(CardholderRequest cardholderRequest);
+
+    CardholderUpdateResponse updateCardholderSync(String cardholderId, CardholderUpdateRequest cardholderUpdateRequest);
 
     CardholderDetailsResponse getCardholderSync(String cardholderId);
 
@@ -122,6 +186,30 @@ public interface IssuingClient {
 
     IdResponse removeCardControlSync(String controlId);
 
+    ControlGroupResponse createControlGroupSync(CreateControlGroupRequest createControlGroupRequest);
+
+    ControlGroupsQueryResponse getControlGroupsSync(ControlGroupQuery controlGroupQuery);
+
+    ControlGroupResponse getControlGroupDetailsSync(String controlGroupId);
+
+    IdResponse removeControlGroupSync(String controlGroupId);
+
+    // Sync - Control Profile methods
+    
+    ControlProfileResponse createControlProfileSync(CreateControlProfileRequest createControlProfileRequest);
+
+    ControlProfilesQueryResponse getControlProfilesSync(ControlProfileQuery controlProfileQuery);
+
+    ControlProfileResponse getControlProfileDetailsSync(String controlProfileId);
+
+    ControlProfileResponse updateControlProfileSync(String controlProfileId, UpdateControlProfileRequest updateControlProfileRequest);
+
+    EmptyResponse removeControlProfileSync(String controlProfileId);
+
+    VoidResponse addTargetToControlProfileSync(String controlProfileId, String targetId);
+
+    VoidResponse removeTargetFromControlProfileSync(String controlProfileId, String targetId);
+
     CardAuthorizationResponse simulateAuthorizationSync(CardAuthorizationRequest cardAuthorizationRequest);
 
     CardAuthorizationIncrementingResponse simulateIncrementingAuthorizationSync(
@@ -134,8 +222,21 @@ public interface IssuingClient {
             CardAuthorizationClearingRequest cardAuthorizationClearingRequest
     );
 
+    EmptyResponse simulateRefundSync(
+            final String authorizationId,
+            final CardAuthorizationRefundsRequest cardAuthorizationRefundsRequest
+    );
+
     CardAuthorizationReversalResponse simulateReversalSync(
             String authorizationId,
             CardAuthorizationReversalRequest cardAuthorizationReversalRequest
     );
+
+    UpdateCardResponse updateCardSync(String cardId, UpdateCardRequest updateCardRequest);
+
+    RenewCardResponse renewCardSync(String cardId, RenewCardRequest renewCardRequest);
+
+    VoidResponse scheduleCardRevocationSync(String cardId, ScheduleRevocationRequest scheduleRevocationRequest);
+
+    VoidResponse deleteScheduledRevocationSync(String cardId);
 }

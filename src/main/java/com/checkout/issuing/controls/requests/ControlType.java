@@ -7,6 +7,8 @@ public enum ControlType {
     @SerializedName("velocity_limit")
     VELOCITY_LIMIT,
     @SerializedName("mcc_limit")
-    MCC_LIMIT
+    MCC_LIMIT,
+    @SerializedName("mid_limit")
+    MID_LIMIT
 
 }

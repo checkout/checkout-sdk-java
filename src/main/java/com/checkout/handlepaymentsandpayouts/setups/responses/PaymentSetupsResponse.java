@@ -1,6 +1,6 @@
 package com.checkout.handlepaymentsandpayouts.setups.responses;
 
-import com.checkout.HttpMetadata;
+import com.checkout.common.Resource;
 import com.checkout.common.Currency;
 import com.checkout.handlepaymentsandpayouts.setups.entities.customer.Customer;
 import com.checkout.handlepaymentsandpayouts.setups.entities.industry.Industry;
@@ -8,7 +8,6 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.order.Order;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
 import com.checkout.handlepaymentsandpayouts.setups.entities.settings.Settings;
 import com.checkout.payments.PaymentType;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentSetupsResponse extends HttpMetadata {
+public class PaymentSetupsResponse extends Resource {
 
     /**
      * The unique identifier of the payment setup.
@@ -33,7 +32,6 @@ public class PaymentSetupsResponse extends HttpMetadata {
     /**
      * The processing channel used for the payment setup
      */
-    @SerializedName("processing_channel_id")
     private String processingChannelId;
 
     /**
@@ -49,7 +47,6 @@ public class PaymentSetupsResponse extends HttpMetadata {
     /**
      * The type of payment method
      */
-    @SerializedName("payment_type")
     private PaymentType paymentType;
 
     /**
@@ -65,7 +62,6 @@ public class PaymentSetupsResponse extends HttpMetadata {
     /**
      * The payment method configuration for this setup
      */
-    @SerializedName("payment_methods")
     private PaymentMethods paymentMethods;
 
     /**

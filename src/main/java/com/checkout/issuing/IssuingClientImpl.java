@@ -4,30 +4,50 @@ import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.EmptyResponse;
+import com.checkout.GsonSerializer;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.common.IdResponse;
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
 import com.checkout.issuing.cardholders.CardholderDetailsResponse;
+import com.checkout.issuing.cardholders.CardholderAccessTokenRequest;
+import com.checkout.issuing.cardholders.CardholderAccessTokenResponse;
 import com.checkout.issuing.cardholders.CardholderRequest;
+import com.checkout.issuing.cardholders.CardholderUpdateRequest;
 import com.checkout.issuing.cardholders.CardholderResponse;
+import com.checkout.issuing.cardholders.CardholderUpdateResponse;
 import com.checkout.issuing.cards.requests.create.CardRequest;
 import com.checkout.issuing.cards.requests.credentials.CardCredentialsQuery;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSEnrollmentRequest;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSUpdateRequest;
+import com.checkout.issuing.cards.requests.renew.RenewCardRequest;
+import com.checkout.issuing.cards.requests.revocation.ScheduleRevocationRequest;
 import com.checkout.issuing.cards.requests.revoke.RevokeCardRequest;
 import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
+import com.checkout.issuing.cards.requests.update.UpdateCardRequest;
 import com.checkout.issuing.cards.responses.CardDetailsResponse;
 import com.checkout.issuing.cards.responses.CardResponse;
 import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
+import com.checkout.issuing.cards.responses.renew.RenewCardResponse;
+import com.checkout.issuing.cards.responses.update.UpdateCardResponse;
 import com.checkout.issuing.controls.requests.create.CardControlRequest;
 import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
+import com.checkout.issuing.controls.requests.controlgroup.CreateControlGroupRequest;
+import com.checkout.issuing.controls.requests.controlgroup.ControlGroupQuery;
+import com.checkout.issuing.controls.requests.controlprofile.CreateControlProfileRequest;
+import com.checkout.issuing.controls.requests.controlprofile.ControlProfileQuery;
+import com.checkout.issuing.controls.requests.controlprofile.UpdateControlProfileRequest;
 import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
+import com.checkout.issuing.controls.responses.controlgroup.ControlGroupResponse;
+import com.checkout.issuing.controls.responses.controlgroup.ControlGroupsQueryResponse;
+import com.checkout.issuing.controls.responses.controlprofile.ControlProfileResponse;
+import com.checkout.issuing.controls.responses.controlprofile.ControlProfilesQueryResponse;
 import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
+import com.checkout.issuing.testing.requests.CardAuthorizationRefundsRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
@@ -36,7 +56,12 @@ import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
 import com.checkout.issuing.testing.responses.CardAuthorizationReversalResponse;
 import com.checkout.payments.VoidResponse;
 
+import io.vavr.concurrent.Task;
+
+import java.io.UnsupportedEncodingException;
 import java.util.concurrent.CompletableFuture;
+
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 
 import static com.checkout.common.CheckoutUtils.validateParams;
 
@@ -60,16 +85,43 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     private static final String CONTROLS_PATH = "controls";
 
+    private static final String CONTROL_GROUPS_PATH = "control-groups";
+
+    private static final String CONTROL_PROFILES_PATH = "control-profiles";
+
     private static final String SIMULATE_PATH = "simulate";
 
     private static final String AUTHORIZATIONS_PATH = "authorizations";
 
     private static final String PRESENTMENTS_PATH = "presentments";
 
+    private static final String REFUNDS_PATH = "refunds";
+
     private static final String REVERSALS_PATH = "reversals";
+
+    private static final String RENEW_PATH = "renew";
+
+    private static final String SCHEDULE_REVOCATION_PATH = "schedule-revocation";
+
+    private static final String ACCESS_TOKEN_PATH = "access/connect/token";
 
     public IssuingClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
+    }
+
+    @Override
+    public CompletableFuture<CardholderAccessTokenResponse> requestCardholderAccessToken(final CardholderAccessTokenRequest cardholderAccessTokenRequest) {
+        validateParams("cardholderAccessTokenRequest", cardholderAccessTokenRequest);
+
+        final UrlEncodedFormEntity form = createFormUrlEncodedContent(cardholderAccessTokenRequest);
+
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, ACCESS_TOKEN_PATH),
+                sdkAuthorization(),
+                CardholderAccessTokenResponse.class,
+                form,
+                null
+        );
     }
 
     @Override
@@ -91,6 +143,19 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 buildPath(ISSUING_PATH, CARDHOLDERS_PATH, cardholderId),
                 sdkAuthorization(),
                 CardholderDetailsResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<CardholderUpdateResponse> updateCardholder(final String cardholderId,
+                                                            final CardholderUpdateRequest cardholderUpdateRequest) {
+        validateParams("cardholderId", cardholderId, "cardholderUpdateRequest", cardholderUpdateRequest);
+        return apiClient.patchAsync(
+                buildPath(ISSUING_PATH, CARDHOLDERS_PATH, cardholderId),
+                sdkAuthorization(),
+                CardholderUpdateResponse.class,
+                cardholderUpdateRequest,
+                null
         );
     }
 
@@ -279,6 +344,128 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
+    public CompletableFuture<ControlGroupResponse> createControlGroup(final CreateControlGroupRequest createControlGroupRequest) {
+        validateParams("createControlGroupRequest", createControlGroupRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_GROUPS_PATH),
+                sdkAuthorization(),
+                ControlGroupResponse.class,
+                createControlGroupRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<ControlGroupsQueryResponse> getControlGroups(final ControlGroupQuery controlGroupQuery) {
+        validateParams("controlGroupQuery", controlGroupQuery);
+        return apiClient.queryAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_GROUPS_PATH),
+                sdkAuthorization(),
+                controlGroupQuery,
+                ControlGroupsQueryResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<ControlGroupResponse> getControlGroupDetails(final String controlGroupId) {
+        validateParams("controlGroupId", controlGroupId);
+        return apiClient.getAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_GROUPS_PATH, controlGroupId),
+                sdkAuthorization(),
+                ControlGroupResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<IdResponse> removeControlGroup(final String controlGroupId) {
+        validateParams("controlGroupId", controlGroupId);
+        return apiClient.deleteAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_GROUPS_PATH, controlGroupId),
+                sdkAuthorization(),
+                IdResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<ControlProfileResponse> createControlProfile(final CreateControlProfileRequest createControlProfileRequest) {
+        validateParams("createControlProfileRequest", createControlProfileRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH),
+                sdkAuthorization(),
+                ControlProfileResponse.class,
+                createControlProfileRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<ControlProfilesQueryResponse> getControlProfiles(final ControlProfileQuery controlProfileQuery) {
+        validateParams("controlProfileQuery", controlProfileQuery);
+        return apiClient.queryAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH),
+                sdkAuthorization(),
+                controlProfileQuery,
+                ControlProfilesQueryResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<ControlProfileResponse> getControlProfileDetails(final String controlProfileId) {
+        validateParams("controlProfileId", controlProfileId);
+        return apiClient.getAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId),
+                sdkAuthorization(),
+                ControlProfileResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<ControlProfileResponse> updateControlProfile(final String controlProfileId, final UpdateControlProfileRequest updateControlProfileRequest) {
+        validateParams("controlProfileId", controlProfileId, "updateControlProfileRequest", updateControlProfileRequest);
+        return apiClient.patchAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId),
+                sdkAuthorization(),
+                ControlProfileResponse.class,
+                updateControlProfileRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<EmptyResponse> removeControlProfile(final String controlProfileId) {
+        validateParams("controlProfileId", controlProfileId);
+        return apiClient.deleteAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId),
+                sdkAuthorization(),
+                EmptyResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<VoidResponse> addTargetToControlProfile(final String controlProfileId, final String targetId) {
+        validateParams("controlProfileId", controlProfileId, "targetId", targetId);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId, "add", targetId),
+                sdkAuthorization(),
+                VoidResponse.class,
+                null,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<VoidResponse> removeTargetFromControlProfile(final String controlProfileId, final String targetId) {
+        validateParams("controlProfileId", controlProfileId, "targetId", targetId);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId, "remove", targetId),
+                sdkAuthorization(),
+                VoidResponse.class,
+                null,
+                null
+        );
+    }
+
+    @Override
     public CompletableFuture<CardAuthorizationResponse> simulateAuthorization(final CardAuthorizationRequest cardAuthorizationRequest) {
         validateParams("cardAuthorizationRequest", cardAuthorizationRequest);
         return apiClient.postAsync(
@@ -321,6 +508,22 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
+    public CompletableFuture<EmptyResponse> simulateRefund(
+            String authorizationId,
+            CardAuthorizationRefundsRequest cardAuthorizationRefundsRequest
+    ) {
+        validateAuthorizationIdAndRefundRequest(authorizationId, cardAuthorizationRefundsRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, SIMULATE_PATH, AUTHORIZATIONS_PATH, authorizationId, REFUNDS_PATH),
+                sdkAuthorization(),
+                EmptyResponse.class,
+                cardAuthorizationRefundsRequest,
+                null
+        );
+    }
+
+
+    @Override
     public CompletableFuture<CardAuthorizationReversalResponse> simulateReversal(
             String authorizationId,
             CardAuthorizationReversalRequest cardAuthorizationReversalRequest
@@ -335,7 +538,68 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
+    public CompletableFuture<UpdateCardResponse> updateCard(final String cardId, final UpdateCardRequest updateCardRequest) {
+        validateParams("cardId", cardId, "updateCardRequest", updateCardRequest);
+        return apiClient.patchAsync(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId),
+                sdkAuthorization(),
+                UpdateCardResponse.class,
+                updateCardRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<RenewCardResponse> renewCard(final String cardId, final RenewCardRequest renewCardRequest) {
+        validateParams("cardId", cardId, "renewCardRequest", renewCardRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId, RENEW_PATH),
+                sdkAuthorization(),
+                RenewCardResponse.class,
+                renewCardRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<VoidResponse> scheduleCardRevocation(final String cardId, final ScheduleRevocationRequest scheduleRevocationRequest) {
+        validateParams("cardId", cardId, "scheduleRevocationRequest", scheduleRevocationRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId, SCHEDULE_REVOCATION_PATH),
+                sdkAuthorization(),
+                VoidResponse.class,
+                scheduleRevocationRequest,
+                null
+        );
+    }
+
+    @Override
+    public CompletableFuture<VoidResponse> deleteScheduledRevocation(final String cardId) {
+        validateParams("cardId", cardId);
+        return apiClient.deleteAsync(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId, SCHEDULE_REVOCATION_PATH),
+                sdkAuthorization(),
+                VoidResponse.class
+        );
+    }
+
     // Synchronous methods
+    @Override
+    public CardholderAccessTokenResponse requestCardholderAccessTokenSync(final CardholderAccessTokenRequest cardholderAccessTokenRequest) {
+        validateParams("cardholderAccessTokenRequest", cardholderAccessTokenRequest);
+
+        UrlEncodedFormEntity form = createFormUrlEncodedContent(cardholderAccessTokenRequest);
+        
+        return apiClient.post(
+                buildPath(ISSUING_PATH, ACCESS_TOKEN_PATH),
+                sdkAuthorization(),
+                CardholderAccessTokenResponse.class,
+                form,
+                null
+        );
+    }
+
     @Override
     public CardholderResponse createCardholderSync(final CardholderRequest cardholderRequest) {
         validateCardholderRequest(cardholderRequest);
@@ -355,6 +619,18 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 buildPath(ISSUING_PATH, CARDHOLDERS_PATH, cardholderId),
                 sdkAuthorization(),
                 CardholderDetailsResponse.class
+        );
+    }
+
+    @Override
+    public CardholderUpdateResponse updateCardholderSync(final String cardholderId, final CardholderUpdateRequest cardholderUpdateRequest) {
+        validateParams("cardholderId", cardholderId, "cardholderUpdateRequest", cardholderUpdateRequest);
+        return apiClient.patch(
+                buildPath(ISSUING_PATH, CARDHOLDERS_PATH, cardholderId),
+                sdkAuthorization(),
+                CardholderUpdateResponse.class,
+                cardholderUpdateRequest,
+                null
         );
     }
 
@@ -543,6 +819,128 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
+    public ControlGroupResponse createControlGroupSync(final CreateControlGroupRequest createControlGroupRequest) {
+        validateParams("createControlGroupRequest", createControlGroupRequest);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_GROUPS_PATH),
+                sdkAuthorization(),
+                ControlGroupResponse.class,
+                createControlGroupRequest,
+                null
+        );
+    }
+
+    @Override
+    public ControlGroupsQueryResponse getControlGroupsSync(final ControlGroupQuery controlGroupQuery) {
+        validateParams("controlGroupQuery", controlGroupQuery);
+        return apiClient.query(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_GROUPS_PATH),
+                sdkAuthorization(),
+                controlGroupQuery,
+                ControlGroupsQueryResponse.class
+        );
+    }
+
+    @Override
+    public ControlGroupResponse getControlGroupDetailsSync(final String controlGroupId) {
+        validateParams("controlGroupId", controlGroupId);
+        return apiClient.get(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_GROUPS_PATH, controlGroupId),
+                sdkAuthorization(),
+                ControlGroupResponse.class
+        );
+    }
+
+    @Override
+    public IdResponse removeControlGroupSync(final String controlGroupId) {
+        validateParams("controlGroupId", controlGroupId);
+        return apiClient.delete(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_GROUPS_PATH, controlGroupId),
+                sdkAuthorization(),
+                IdResponse.class
+        );
+    }
+
+    @Override
+    public ControlProfileResponse createControlProfileSync(final CreateControlProfileRequest createControlProfileRequest) {
+        validateParams("createControlProfileRequest", createControlProfileRequest);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH),
+                sdkAuthorization(),
+                ControlProfileResponse.class,
+                createControlProfileRequest,
+                null
+        );
+    }
+
+    @Override
+    public ControlProfilesQueryResponse getControlProfilesSync(final ControlProfileQuery controlProfileQuery) {
+        validateParams("controlProfileQuery", controlProfileQuery);
+        return apiClient.query(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH),
+                sdkAuthorization(),
+                controlProfileQuery,
+                ControlProfilesQueryResponse.class
+        );
+    }
+
+    @Override
+    public ControlProfileResponse getControlProfileDetailsSync(final String controlProfileId) {
+        validateParams("controlProfileId", controlProfileId);
+        return apiClient.get(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId),
+                sdkAuthorization(),
+                ControlProfileResponse.class
+        );
+    }
+
+    @Override
+    public ControlProfileResponse updateControlProfileSync(final String controlProfileId, final UpdateControlProfileRequest updateControlProfileRequest) {
+        validateParams("controlProfileId", controlProfileId, "updateControlProfileRequest", updateControlProfileRequest);
+        return apiClient.patch(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId),
+                sdkAuthorization(),
+                ControlProfileResponse.class,
+                updateControlProfileRequest,
+                null
+        );
+    }
+
+    @Override
+    public EmptyResponse removeControlProfileSync(final String controlProfileId) {
+        validateParams("controlProfileId", controlProfileId);
+        return apiClient.delete(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId),
+                sdkAuthorization(),
+                EmptyResponse.class
+        );
+    }
+
+    @Override
+    public VoidResponse addTargetToControlProfileSync(final String controlProfileId, final String targetId) {
+        validateParams("controlProfileId", controlProfileId, "targetId", targetId);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId, "add", targetId),
+                sdkAuthorization(),
+                VoidResponse.class,
+                null,
+                null
+        );
+    }
+
+    @Override
+    public VoidResponse removeTargetFromControlProfileSync(final String controlProfileId, final String targetId) {
+        validateParams("controlProfileId", controlProfileId, "targetId", targetId);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, CONTROLS_PATH, CONTROL_PROFILES_PATH, controlProfileId, "remove", targetId),
+                sdkAuthorization(),
+                VoidResponse.class,
+                null,
+                null
+        );
+    }
+
+    @Override
     public CardAuthorizationResponse simulateAuthorizationSync(final CardAuthorizationRequest cardAuthorizationRequest) {
         validateCardAuthorizationRequest(cardAuthorizationRequest);
         return apiClient.post(
@@ -585,6 +983,21 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
+    public EmptyResponse simulateRefundSync(
+            String authorizationId,
+            CardAuthorizationRefundsRequest cardAuthorizationRefundsRequest
+    ) {
+        validateAuthorizationIdAndRefundRequest(authorizationId, cardAuthorizationRefundsRequest);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, SIMULATE_PATH, AUTHORIZATIONS_PATH, authorizationId, REFUNDS_PATH),
+                sdkAuthorization(),
+                EmptyResponse.class,
+                cardAuthorizationRefundsRequest,
+                null
+        );
+    }
+
+    @Override
     public CardAuthorizationReversalResponse simulateReversalSync(
             String authorizationId,
             CardAuthorizationReversalRequest cardAuthorizationReversalRequest
@@ -599,7 +1012,61 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
+    public UpdateCardResponse updateCardSync(final String cardId, final UpdateCardRequest updateCardRequest) {
+        validateParams("cardId", cardId, "updateCardRequest", updateCardRequest);
+        return apiClient.patch(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId),
+                sdkAuthorization(),
+                UpdateCardResponse.class,
+                updateCardRequest,
+                null
+        );
+    }
+
+    @Override
+    public RenewCardResponse renewCardSync(final String cardId, final RenewCardRequest renewCardRequest) {
+        validateParams("cardId", cardId, "renewCardRequest", renewCardRequest);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId, RENEW_PATH),
+                sdkAuthorization(),
+                RenewCardResponse.class,
+                renewCardRequest,
+                null
+        );
+    }
+
+    @Override
+    public VoidResponse scheduleCardRevocationSync(final String cardId, final ScheduleRevocationRequest scheduleRevocationRequest) {
+        validateParams("cardId", cardId, "scheduleRevocationRequest", scheduleRevocationRequest);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId, SCHEDULE_REVOCATION_PATH),
+                sdkAuthorization(),
+                VoidResponse.class,
+                scheduleRevocationRequest,
+                null
+        );
+    }
+
+    @Override
+    public VoidResponse deleteScheduledRevocationSync(final String cardId) {
+        validateParams("cardId", cardId);
+        return apiClient.delete(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId, SCHEDULE_REVOCATION_PATH),
+                sdkAuthorization(),
+                VoidResponse.class
+        );
+    }
+
     // Common methods
+    private UrlEncodedFormEntity createFormUrlEncodedContent(final CardholderAccessTokenRequest cardholderAccessTokenRequest) {
+        try {
+            return GsonSerializer.createFormUrlEncodedContent(cardholderAccessTokenRequest);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Error creating form url encoded content", e);
+        }
+    }
+
     private void validateCardholderRequest(final CardholderRequest cardholderRequest) {
         validateParams("cardholderRequest", cardholderRequest);
     }
@@ -662,6 +1129,10 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     private void validateAuthorizationIdAndClearingRequest(final String authorizationId, final CardAuthorizationClearingRequest cardAuthorizationClearingRequest) {
         validateParams("authorizationId", authorizationId, "cardAuthorizationClearingRequest", cardAuthorizationClearingRequest);
+    }
+
+    private void validateAuthorizationIdAndRefundRequest(final String authorizationId, final CardAuthorizationRefundsRequest cardAuthorizationRefundsRequest) {
+        validateParams("authorizationId", authorizationId, "cardAuthorizationRefundsRequest", cardAuthorizationRefundsRequest);
     }
 
     private void validateAuthorizationIdAndReversalRequest(final String authorizationId, final CardAuthorizationReversalRequest cardAuthorizationReversalRequest) {
