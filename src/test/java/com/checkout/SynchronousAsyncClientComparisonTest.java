@@ -14,7 +14,6 @@ import java.util.concurrent.TimeoutException;
 import static com.checkout.TestHelper.VALID_DEFAULT_PK;
 import static com.checkout.TestHelper.VALID_DEFAULT_SK;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test to demonstrate that you can create both synchronous and asynchronous clients
