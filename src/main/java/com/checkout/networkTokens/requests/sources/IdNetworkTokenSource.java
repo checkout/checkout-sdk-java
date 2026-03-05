@@ -1,0 +1,19 @@
+package com.checkout.networkTokens.requests.sources;
+
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class IdNetworkTokenSource extends AbstractNetworkTokenSource {
+
+    private String id;
+
+    @Builder
+    public IdNetworkTokenSource(final String id) {
+        super(NetworkTokenSourceType.ID);
+        this.id = id;
+    }
+
+}

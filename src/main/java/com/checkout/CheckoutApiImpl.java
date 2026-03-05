@@ -24,6 +24,8 @@ import com.checkout.issuing.IssuingClient;
 import com.checkout.issuing.IssuingClientImpl;
 import com.checkout.metadata.MetadataClient;
 import com.checkout.metadata.MetadataClientImpl;
+import com.checkout.networkTokens.NetworkTokensClient;
+import com.checkout.networkTokens.NetworkTokensClientImpl;
 import com.checkout.payments.PaymentsClient;
 import com.checkout.payments.PaymentsClientImpl;
 import com.checkout.payments.contexts.PaymentContextsClient;
@@ -71,6 +73,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final FlowClient flowClient;
     private final PaymentSetupsClient paymentSetupsClient;
     private final ForwardClient forwardClient;
+    private final NetworkTokensClient networkTokensClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         super(configuration);
@@ -98,6 +101,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.flowClient = new FlowClientImpl(this.apiClient, configuration);
         this.paymentSetupsClient = new PaymentSetupsClientImpl(this.apiClient, configuration);
         this.forwardClient = new ForwardClientImpl(this.apiClient, configuration);
+        this.networkTokensClient = new NetworkTokensClientImpl(this.apiClient, configuration);
     }
 
     @Override
@@ -197,6 +201,9 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
 
     @Override
     public ForwardClient forwardClient() { return forwardClient; }
+
+    @Override
+    public NetworkTokensClient networkTokensClient() { return networkTokensClient; }
 
     private ApiClient getFilesClient(final CheckoutConfiguration configuration) {
         return new ApiClientImpl(configuration, new FilesApiUriStrategy(configuration));
