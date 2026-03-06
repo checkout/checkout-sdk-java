@@ -49,6 +49,10 @@ import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
 import com.checkout.issuing.testing.responses.CardAuthorizationIncrementingResponse;
 import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
 import com.checkout.issuing.testing.responses.CardAuthorizationReversalResponse;
+import com.checkout.issuing.disputes.requests.CreateDisputeRequest;
+import com.checkout.issuing.disputes.requests.EscalateDisputeRequest;
+import com.checkout.issuing.disputes.requests.SubmitDisputeRequest;
+import com.checkout.issuing.disputes.responses.DisputeResponse;
 import com.checkout.payments.VoidResponse;
 
 import java.util.concurrent.CompletableFuture;
@@ -146,6 +150,15 @@ public interface IssuingClient {
     CompletableFuture<VoidResponse> scheduleCardRevocation(final String cardId, final ScheduleRevocationRequest scheduleRevocationRequest);
 
     CompletableFuture<VoidResponse> deleteScheduledRevocation(final String cardId);
+    CompletableFuture<DisputeResponse> createDispute(final CreateDisputeRequest createDisputeRequest, String idempotencyKey);
+
+    CompletableFuture<DisputeResponse> getDispute(final String disputeId);
+
+    CompletableFuture<VoidResponse> cancelDispute(final String disputeId, String idempotencyKey);
+
+    CompletableFuture<VoidResponse> escalateDispute(final String disputeId, String idempotencyKey, final EscalateDisputeRequest escalateDisputeRequest);
+
+    CompletableFuture<DisputeResponse> submitDispute(final String disputeId, String idempotencyKey, final SubmitDisputeRequest submitDisputeRequest);
 
     // Synchronous methods
     CardholderAccessTokenResponse requestCardholderAccessTokenSync(CardholderAccessTokenRequest cardholderAccessTokenRequest);
@@ -239,4 +252,13 @@ public interface IssuingClient {
     VoidResponse scheduleCardRevocationSync(String cardId, ScheduleRevocationRequest scheduleRevocationRequest);
 
     VoidResponse deleteScheduledRevocationSync(String cardId);
+    DisputeResponse createDisputeSync(CreateDisputeRequest createDisputeRequest, String idempotencyKey);
+
+    DisputeResponse getDisputeSync(String disputeId);
+
+    VoidResponse cancelDisputeSync(String disputeId, String idempotencyKey);
+
+    VoidResponse escalateDisputeSync(String disputeId, String idempotencyKey, EscalateDisputeRequest escalateDisputeRequest);
+
+    DisputeResponse submitDisputeSync(String disputeId, String idempotencyKey, SubmitDisputeRequest submitDisputeRequest);
 }

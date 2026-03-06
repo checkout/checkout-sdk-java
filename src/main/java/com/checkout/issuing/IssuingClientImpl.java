@@ -54,9 +54,11 @@ import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
 import com.checkout.issuing.testing.responses.CardAuthorizationIncrementingResponse;
 import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
 import com.checkout.issuing.testing.responses.CardAuthorizationReversalResponse;
+import com.checkout.issuing.disputes.requests.CreateDisputeRequest;
+import com.checkout.issuing.disputes.requests.EscalateDisputeRequest;
+import com.checkout.issuing.disputes.requests.SubmitDisputeRequest;
+import com.checkout.issuing.disputes.responses.DisputeResponse;
 import com.checkout.payments.VoidResponse;
-
-import io.vavr.concurrent.Task;
 
 import java.io.UnsupportedEncodingException;
 import java.util.concurrent.CompletableFuture;
@@ -104,6 +106,13 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     private static final String SCHEDULE_REVOCATION_PATH = "schedule-revocation";
 
     private static final String ACCESS_TOKEN_PATH = "access/connect/token";
+    private static final String DISPUTES_PATH = "disputes";
+
+    private static final String CANCEL_PATH = "cancel";
+
+    private static final String ESCALATE_PATH = "escalate";
+
+    private static final String SUBMIT_PATH = "submit";
 
     public IssuingClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
@@ -559,7 +568,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 RenewCardResponse.class,
                 renewCardRequest,
                 null
-        );
+    );
     }
 
     @Override
@@ -581,6 +590,62 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 buildPath(ISSUING_PATH, CARDS_PATH, cardId, SCHEDULE_REVOCATION_PATH),
                 sdkAuthorization(),
                 VoidResponse.class
+        );
+    }
+
+    public CompletableFuture<DisputeResponse> createDispute(final CreateDisputeRequest createDisputeRequest, String idempotencyKey) {
+        validateCreateDisputeRequest(createDisputeRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, DISPUTES_PATH),
+                sdkAuthorization(),
+                DisputeResponse.class,
+                createDisputeRequest,
+                idempotencyKey
+        );
+    }
+
+    public CompletableFuture<DisputeResponse> getDispute(final String disputeId) {
+        validateDisputeId(disputeId);
+        return apiClient.getAsync(
+                buildPath(ISSUING_PATH, DISPUTES_PATH, disputeId),
+                sdkAuthorization(),
+                DisputeResponse.class
+        );
+    }
+
+    public CompletableFuture<VoidResponse> cancelDispute(final String disputeId, String idempotencyKey) {
+        validateDisputeId(disputeId);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, DISPUTES_PATH, disputeId, CANCEL_PATH),
+                sdkAuthorization(),
+                VoidResponse.class,
+                null,
+                idempotencyKey     
+        );
+    }
+
+    public CompletableFuture<VoidResponse> escalateDispute(final String disputeId, String idempotencyKey, 
+                                                                final EscalateDisputeRequest escalateDisputeRequest) {
+        validateDisputeIdAndEscalateRequest(disputeId, escalateDisputeRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, DISPUTES_PATH, disputeId, ESCALATE_PATH),
+                sdkAuthorization(),
+                VoidResponse.class,
+                escalateDisputeRequest,
+                idempotencyKey
+        );
+    }
+
+    @Override
+    public CompletableFuture<DisputeResponse> submitDispute(final String disputeId, String idempotencyKey, 
+                                                                final SubmitDisputeRequest submitDisputeRequest) {
+        validateDisputeIdAndSubmitRequest(disputeId, submitDisputeRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, DISPUTES_PATH, disputeId, SUBMIT_PATH),
+                sdkAuthorization(),
+                DisputeResponse.class,
+                submitDisputeRequest,
+                idempotencyKey
         );
     }
 
@@ -1058,6 +1123,62 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    public DisputeResponse createDisputeSync(final CreateDisputeRequest createDisputeRequest, String idempotencyKey) {
+        validateCreateDisputeRequest(createDisputeRequest);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, DISPUTES_PATH),
+                sdkAuthorization(),
+                DisputeResponse.class,
+                createDisputeRequest,
+                idempotencyKey
+        );
+    }
+
+    public DisputeResponse getDisputeSync(final String disputeId) {
+        validateDisputeId(disputeId);
+        return apiClient.get(
+                buildPath(ISSUING_PATH, DISPUTES_PATH, disputeId),
+                sdkAuthorization(),
+                DisputeResponse.class
+        );
+    }
+
+    public VoidResponse cancelDisputeSync(final String disputeId, String idempotencyKey) {
+        validateDisputeId(disputeId);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, DISPUTES_PATH, disputeId, CANCEL_PATH),
+                sdkAuthorization(),
+                VoidResponse.class,
+                null,
+                idempotencyKey
+        );
+    }
+
+    public VoidResponse escalateDisputeSync(final String disputeId, String idempotencyKey,
+                                                final EscalateDisputeRequest escalateDisputeRequest) {
+        validateDisputeIdAndEscalateRequest(disputeId, escalateDisputeRequest);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, DISPUTES_PATH, disputeId, ESCALATE_PATH),
+                sdkAuthorization(),
+                VoidResponse.class,
+                escalateDisputeRequest,
+                idempotencyKey
+        );
+    }
+
+    @Override
+    public DisputeResponse submitDisputeSync(final String disputeId, String idempotencyKey,
+                                                final SubmitDisputeRequest submitDisputeRequest) {
+        validateDisputeIdAndSubmitRequest(disputeId, submitDisputeRequest);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, DISPUTES_PATH, disputeId, SUBMIT_PATH),
+                sdkAuthorization(),
+                DisputeResponse.class,
+                submitDisputeRequest,
+                idempotencyKey
+        );
+    }
+
     // Common methods
     private UrlEncodedFormEntity createFormUrlEncodedContent(final CardholderAccessTokenRequest cardholderAccessTokenRequest) {
         try {
@@ -1137,5 +1258,21 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     private void validateAuthorizationIdAndReversalRequest(final String authorizationId, final CardAuthorizationReversalRequest cardAuthorizationReversalRequest) {
         validateParams("authorizationId", authorizationId, "cardAuthorizationReversalRequest", cardAuthorizationReversalRequest);
+    }
+
+    private void validateCreateDisputeRequest(final CreateDisputeRequest createDisputeRequest) {
+        validateParams("createDisputeRequest", createDisputeRequest);
+    }
+
+    private void validateDisputeId(final String disputeId) {
+        validateParams("disputeId", disputeId);
+    }
+
+    private void validateDisputeIdAndEscalateRequest(final String disputeId, final EscalateDisputeRequest escalateDisputeRequest) {
+        validateParams("disputeId", disputeId, "escalateDisputeRequest", escalateDisputeRequest);
+    }
+
+    private void validateDisputeIdAndSubmitRequest(final String disputeId, final SubmitDisputeRequest submitDisputeRequest) {
+        validateParams("disputeId", disputeId, "submitDisputeRequest", submitDisputeRequest);
     }
 }
