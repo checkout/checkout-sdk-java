@@ -28,6 +28,10 @@ import com.checkout.issuing.controls.requests.query.CardControlsQuery;
 import com.checkout.issuing.controls.requests.update.UpdateCardControlRequest;
 import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.query.CardControlsQueryResponse;
+import com.checkout.issuing.disputes.requests.CreateDisputeRequest;
+import com.checkout.issuing.disputes.requests.EscalateDisputeRequest;
+import com.checkout.issuing.disputes.requests.SubmitDisputeRequest;
+import com.checkout.issuing.disputes.responses.DisputeResponse;
 import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
@@ -451,6 +455,96 @@ public class IssuingClientImplTest {
         }
     }
 
+    @Nested
+    @DisplayName("Disputes")
+    class Disputes {
+        @Test
+        void shouldCreateDispute() throws ExecutionException, InterruptedException {
+            final CreateDisputeRequest request = createCreateDisputeRequest();
+            final DisputeResponse response = createDisputeResponse();
+
+            when(apiClient.postAsync(
+                    "issuing/disputes",
+                    authorization,
+                    DisputeResponse.class,
+                    request,
+                    "idempotencyKey"
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<DisputeResponse> future = client.createDispute(request, "idempotencyKey");
+
+            validateDisputeResponse(response, future.get());
+        }
+
+        @Test
+        void shouldGetDispute() throws ExecutionException, InterruptedException {
+            final DisputeResponse response = createDisputeResponse();
+
+            when(apiClient.getAsync(
+                    "issuing/disputes/dispute_id",
+                    authorization,
+                    DisputeResponse.class))
+                    .thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<DisputeResponse> future = client.getDispute("dispute_id");
+
+            validateDisputeResponse(response, future.get());
+        }
+
+        @Test
+        void shouldCancelDispute() throws ExecutionException, InterruptedException {
+            final VoidResponse response = createVoidResponse();
+
+            when(apiClient.postAsync(
+                    "issuing/disputes/dispute_id/cancel",
+                    authorization,
+                    VoidResponse.class,
+                    null,
+                    "idempotencyKey"
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<VoidResponse> future = client.cancelDispute("dispute_id", "idempotencyKey");
+
+            validateVoidResponse(response, future.get());
+        }
+
+        @Test
+        void shouldEscalateDispute() throws ExecutionException, InterruptedException {
+            final EscalateDisputeRequest request = createEscalateDisputeRequest();
+            final VoidResponse response = createVoidResponse();
+
+            when(apiClient.postAsync(
+                    "issuing/disputes/dispute_id/escalate",
+                    authorization,
+                    VoidResponse.class,
+                    request,
+                    "idempotencyKey"
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<VoidResponse> future = client.escalateDispute("dispute_id", "idempotencyKey", request);
+
+            validateVoidResponse(response, future.get());
+        }
+
+        @Test
+        void shouldSubmitDispute() throws ExecutionException, InterruptedException {
+            final SubmitDisputeRequest request = createSubmitDisputeRequest();
+            final DisputeResponse response = createDisputeResponse();
+
+            when(apiClient.postAsync(
+                    "issuing/disputes/dispute_id/submit",
+                    authorization,
+                    DisputeResponse.class,
+                    request,
+                    "idempotencyKey"
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<DisputeResponse> future = client.submitDispute("dispute_id", "idempotencyKey", request);
+
+            validateDisputeResponse(response, future.get());
+        }
+    }
+
     // Synchronous methods
     @Nested
     @DisplayName("Cardholders Sync")
@@ -826,6 +920,96 @@ public class IssuingClientImplTest {
         }
     }
 
+    @Nested
+    @DisplayName("Disputes Sync")
+    class DisputesSync {
+        @Test
+        void shouldCreateDisputeSync() {
+            final CreateDisputeRequest request = createCreateDisputeRequest();
+            final DisputeResponse expectedResponse = createDisputeResponse();
+
+            when(apiClient.post(
+                    "issuing/disputes",
+                    authorization,
+                    DisputeResponse.class,
+                    request,
+                    "idempotencyKey"
+            )).thenReturn(expectedResponse);
+
+            final DisputeResponse actualResponse = client.createDisputeSync(request, "idempotencyKey");
+
+            validateDisputeResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldGetDisputeSync() {
+            final DisputeResponse expectedResponse = createDisputeResponse();
+
+            when(apiClient.get(
+                    "issuing/disputes/dispute_id",
+                    authorization,
+                    DisputeResponse.class))
+                    .thenReturn(expectedResponse);
+
+            final DisputeResponse actualResponse = client.getDisputeSync("dispute_id");
+
+            validateDisputeResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldCancelDisputeSync() {
+            final VoidResponse expectedResponse = createVoidResponse();
+
+            when(apiClient.post(
+                    "issuing/disputes/dispute_id/cancel",
+                    authorization,
+                    VoidResponse.class,
+                    null,
+                    "idempotencyKey"
+            )).thenReturn(expectedResponse);
+
+            final VoidResponse actualResponse = client.cancelDisputeSync("dispute_id", "idempotencyKey");
+
+            validateVoidResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldEscalateDisputeSync() {
+            final EscalateDisputeRequest request = createEscalateDisputeRequest();
+            final VoidResponse expectedResponse = createVoidResponse();
+
+            when(apiClient.post(
+                    "issuing/disputes/dispute_id/escalate",
+                    authorization,
+                    VoidResponse.class,
+                    request,
+                    "idempotencyKey"
+            )).thenReturn(expectedResponse);
+
+            final VoidResponse actualResponse = client.escalateDisputeSync("dispute_id", "idempotencyKey", request);
+
+            validateVoidResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldSubmitDisputeSync() {
+            final SubmitDisputeRequest request = createSubmitDisputeRequest();
+            final DisputeResponse expectedResponse = createDisputeResponse();
+
+            when(apiClient.post(
+                    "issuing/disputes/dispute_id/submit",
+                    authorization,
+                    DisputeResponse.class,
+                    request,
+                    "idempotencyKey"
+            )).thenReturn(expectedResponse);
+
+            final DisputeResponse actualResponse = client.submitDisputeSync("dispute_id", "idempotencyKey", request);
+
+            validateDisputeResponse(expectedResponse, actualResponse);
+        }
+    }
+
     // Common methods
     private CardholderRequest createCardholderRequest() {
         return mock(CardholderRequest.class);
@@ -951,6 +1135,22 @@ public class IssuingClientImplTest {
         return mock(CardAuthorizationReversalResponse.class);
     }
 
+    private CreateDisputeRequest createCreateDisputeRequest() {
+        return mock(CreateDisputeRequest.class);
+    }
+
+    private DisputeResponse createDisputeResponse() {
+        return mock(DisputeResponse.class);
+    }
+
+    private EscalateDisputeRequest createEscalateDisputeRequest() {
+        return mock(EscalateDisputeRequest.class);
+    }
+
+    private SubmitDisputeRequest createSubmitDisputeRequest() {
+        return mock(SubmitDisputeRequest.class);
+    }
+
     private void validateCardholderResponse(CardholderResponse expected, CardholderResponse actual) {
         assertNotNull(actual);
         assertEquals(expected, actual);
@@ -1032,6 +1232,11 @@ public class IssuingClientImplTest {
     }
 
     private void validateCardAuthorizationReversalResponse(CardAuthorizationReversalResponse expected, CardAuthorizationReversalResponse actual) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    private void validateDisputeResponse(DisputeResponse expected, DisputeResponse actual) {
         assertNotNull(actual);
         assertEquals(expected, actual);
     }
