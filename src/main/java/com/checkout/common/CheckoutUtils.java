@@ -16,6 +16,7 @@ public final class CheckoutUtils {
     public static final String ACCEPT_JSON = "application/json;charset=UTF-8";
     public static final String CONTROL_TYPE = "control_type";
     private static final String CKO_REQUEST_ID = "Cko-Request-Id";
+    private static final String ETAG = "Etag";
 
     private CheckoutUtils() {
     }
@@ -33,6 +34,18 @@ public final class CheckoutUtils {
             return null;
         }
         return responseHeaders.get(CKO_REQUEST_ID);
+    }
+
+    public static String getEtag(final Map<String, String> responseHeaders) {
+        if (responseHeaders == null) {
+            return null;
+        }
+        for (Map.Entry<String, String> entry : responseHeaders.entrySet()) {
+            if (entry.getKey().equalsIgnoreCase(ETAG)) {
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 
     public static void validateParams(final String p1, final Object o1) {

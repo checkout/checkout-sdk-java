@@ -1,6 +1,7 @@
 package com.checkout;
 
 import com.checkout.accounts.AccountsFileRequest;
+import com.checkout.accounts.Headers;
 import com.checkout.common.AbstractFileRequest;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.FileRequest;
@@ -20,6 +21,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -32,6 +34,7 @@ import org.apache.http.util.EntityUtils;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +44,7 @@ import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 import java.util.function.Supplier;
 
+import com.google.gson.annotations.SerializedName;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.retry.Retry;
@@ -67,6 +71,7 @@ class ApacheHttpClientTransport implements Transport {
     private final Executor executor;
     private final TransportConfiguration transportConfiguration;
     private final CheckoutConfiguration configuration;
+    private final Serializer serializer;
 
     private static final ThreadLocal<RequestMetrics> telemetryData = ThreadLocal.withInitial(RequestMetrics::new);
 
@@ -85,13 +90,14 @@ class ApacheHttpClientTransport implements Transport {
         this.executor = executor;
         this.transportConfiguration = transportConfiguration;
         this.configuration = configuration;
+        this.serializer = new GsonSerializer();
     }
 
     @Override
     public CompletableFuture<Response> invoke(final ClientOperation clientOperation,
                                               final String path,
                                               final SdkAuthorization authorization,
-                                              final String requestBody,
+                                              final Object requestBody,
                                               final String idempotencyKey,
                                               final Map<String, String> queryParams) {
         return CompletableFuture.supplyAsync(() -> {
@@ -146,7 +152,7 @@ class ApacheHttpClientTransport implements Transport {
     public Response invokeSync(final ClientOperation clientOperation,
                                final String path,
                                final SdkAuthorization authorization,
-                               final String requestBody,
+                               final Object requestBody,
                                final String idempotencyKey,
                                final Map<String, String> queryParams) {
         final HttpUriRequest request;
@@ -247,13 +253,16 @@ class ApacheHttpClientTransport implements Transport {
     }
 
     private Response performCall(final SdkAuthorization authorization,
-                                 final String requestBody,
+                                 final Object requestBody,
                                  final HttpUriRequest request,
                                  final ClientOperation clientOperation) {
         log.info("{}: {}", clientOperation, request.getURI());
         request.setHeader(USER_AGENT, PROJECT_NAME + "/" + getVersionFromManifest());
         request.setHeader(ACCEPT, getAcceptHeader(clientOperation));
         request.setHeader(AUTHORIZATION, authorization.getAuthorizationHeader());
+
+        // Check and add headers from the request object if needed
+        addHeadersFromRequestBody(requestBody, request);
 
         String currentRequestId = UUID.randomUUID().toString();
 
@@ -263,8 +272,22 @@ class ApacheHttpClientTransport implements Transport {
 
         log.info("Request: " + Arrays.toString(sanitiseHeaders(request.getAllHeaders())));
         if (requestBody != null && request instanceof HttpEntityEnclosingRequest) {
-            ((HttpEntityEnclosingRequestBase) request).setEntity(new StringEntity(requestBody, ContentType.APPLICATION_JSON));
+            HttpEntity httpEntity = null;
+            
+            if (requestBody instanceof HttpEntity) {
+                httpEntity = (HttpEntity) requestBody;
+            } else if (requestBody instanceof MultipartEntityBuilder) {
+                httpEntity = ((MultipartEntityBuilder) requestBody).build();
+            } else if (requestBody instanceof UrlEncodedFormEntity) {
+                httpEntity = (UrlEncodedFormEntity) requestBody;
+            } else {
+                String json = serializer.toJson(requestBody);
+                httpEntity = new StringEntity(json, ContentType.APPLICATION_JSON);
+            }
+            
+            ((HttpEntityEnclosingRequestBase) request).setEntity(httpEntity);
         }
+
         try (final CloseableHttpResponse response = httpClient.execute(request)) {
             long elapsed = System.currentTimeMillis() - startTime;
             log.info("Response: " + response.getStatusLine().getStatusCode() + " " + Arrays.toString(response.getAllHeaders()));
@@ -287,6 +310,23 @@ class ApacheHttpClientTransport implements Transport {
             return handleException(e, "Target server failed to respond with a valid HTTP response.");
         } catch (final Exception e) {
             return handleException(e, "Exception occurred during the execution of the client...");
+        }
+    }
+
+    private void addHeadersFromRequestBody(final Object requestBody, final HttpUriRequest request) {
+        if (requestBody instanceof Headers) {
+            Headers headers = (Headers) requestBody;
+            for (Field field : Headers.class.getDeclaredFields()) {
+                field.setAccessible(true);
+                try {
+                    Object value = field.get(headers);
+                    if (value != null && !value.toString().isEmpty()) {
+                        SerializedName serializedName = field.getAnnotation(SerializedName.class);
+                        String headerName = serializedName != null ? serializedName.value() : field.getName();
+                        request.setHeader(headerName, value.toString());
+                    }
+                } catch (IllegalAccessException ignored) {}
+            }
         }
     }
 

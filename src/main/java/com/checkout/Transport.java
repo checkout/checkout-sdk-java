@@ -7,11 +7,11 @@ import java.util.concurrent.CompletableFuture;
 
 public interface Transport {
 
-    CompletableFuture<Response> invoke(ClientOperation clientOperation, String path, SdkAuthorization authorization, String jsonRequest, String idempotencyKey, Map<String, String> queryParams);
+    CompletableFuture<Response> invoke(ClientOperation clientOperation, String path, SdkAuthorization authorization, Object requestBody, String idempotencyKey, Map<String, String> queryParams);
 
     CompletableFuture<Response> submitFile(String path, SdkAuthorization authorization, AbstractFileRequest fileRequest);
 
-    Response invokeSync(ClientOperation clientOperation, String path, SdkAuthorization authorization, String jsonRequest, String idempotencyKey, Map<String, String> queryParams);
+    Response invokeSync(ClientOperation clientOperation, String path, SdkAuthorization authorization, Object requestBody, String idempotencyKey, Map<String, String> queryParams);
 
     Response submitFileSync(String path, SdkAuthorization authorization, AbstractFileRequest fileRequest);
 

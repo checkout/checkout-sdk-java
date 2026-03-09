@@ -1,18 +1,17 @@
 package com.checkout.accounts;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
-@Builder
-public class UpdatePaymentInstrumentRequest {
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
+public class UpdatePaymentInstrumentRequest extends Headers{
 
     private String label;
 
     @SerializedName("default")
     private Boolean defaultDestination;
-
-    private Headers headers;
-
 }
