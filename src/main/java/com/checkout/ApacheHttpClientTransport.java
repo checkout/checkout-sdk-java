@@ -1,6 +1,7 @@
 package com.checkout;
 
 import com.checkout.accounts.AccountsFileRequest;
+import com.checkout.accounts.Headers;
 import com.checkout.common.AbstractFileRequest;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.FileRequest;
@@ -33,6 +34,7 @@ import org.apache.http.util.EntityUtils;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +44,7 @@ import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 import java.util.function.Supplier;
 
+import com.google.gson.annotations.SerializedName;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.retry.Retry;
@@ -52,7 +55,6 @@ import static com.checkout.common.CheckoutUtils.PROJECT_NAME;
 import static com.checkout.common.CheckoutUtils.getVersionFromManifest;
 import static org.apache.http.HttpHeaders.ACCEPT;
 import static org.apache.http.HttpHeaders.AUTHORIZATION;
-import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.apache.http.HttpHeaders.USER_AGENT;
 
 @Slf4j
@@ -277,13 +279,16 @@ class ApacheHttpClientTransport implements Transport {
     }
 
     private Response performCall(final SdkAuthorization authorization,
-                                 final Object requestBodyOrEntity,
+                                 final Object requestBody,
                                  final HttpUriRequest request,
                                  final ClientOperation clientOperation) {
         log.info("{}: {}", clientOperation, request.getURI());
         request.setHeader(USER_AGENT, PROJECT_NAME + "/" + getVersionFromManifest());
         request.setHeader(ACCEPT, getAcceptHeader(clientOperation));
         request.setHeader(AUTHORIZATION, authorization.getAuthorizationHeader());
+
+        // Check and add headers from the request object if needed
+        addHeadersFromRequestBody(requestBody, request);
 
         String currentRequestId = UUID.randomUUID().toString();
 
@@ -292,16 +297,23 @@ class ApacheHttpClientTransport implements Transport {
         long startTime = System.currentTimeMillis();
 
         log.info("Request: " + Arrays.toString(sanitiseHeaders(request.getAllHeaders())));
-        if (requestBodyOrEntity != null && request instanceof HttpEntityEnclosingRequest) {
-            if (requestBodyOrEntity instanceof UrlEncodedFormEntity) {
-                // Handle form-encoded content
-                request.setHeader(CONTENT_TYPE, ContentType.APPLICATION_FORM_URLENCODED.getMimeType());
-                ((HttpEntityEnclosingRequestBase) request).setEntity((UrlEncodedFormEntity) requestBodyOrEntity);
-            } else if (requestBodyOrEntity instanceof String) {
-                // Handle JSON content
-                ((HttpEntityEnclosingRequestBase) request).setEntity(new StringEntity((String) requestBodyOrEntity, ContentType.APPLICATION_JSON));
+        if (requestBody != null && request instanceof HttpEntityEnclosingRequest) {
+            HttpEntity httpEntity = null;
+            
+            if (requestBody instanceof HttpEntity) {
+                httpEntity = (HttpEntity) requestBody;
+            } else if (requestBody instanceof MultipartEntityBuilder) {
+                httpEntity = ((MultipartEntityBuilder) requestBody).build();
+            } else if (requestBody instanceof UrlEncodedFormEntity) {
+                httpEntity = (UrlEncodedFormEntity) requestBody;
+            } else {
+                String json = serializer.toJson(requestBody);
+                httpEntity = new StringEntity(json, ContentType.APPLICATION_JSON);
             }
+            
+            ((HttpEntityEnclosingRequestBase) request).setEntity(httpEntity);
         }
+
         try (final CloseableHttpResponse response = httpClient.execute(request)) {
             long elapsed = System.currentTimeMillis() - startTime;
             log.info("Response: " + response.getStatusLine().getStatusCode() + " " + Arrays.toString(response.getAllHeaders()));
@@ -324,6 +336,23 @@ class ApacheHttpClientTransport implements Transport {
             return handleException(e, "Target server failed to respond with a valid HTTP response.");
         } catch (final Exception e) {
             return handleException(e, "Exception occurred during the execution of the client...");
+        }
+    }
+
+    private void addHeadersFromRequestBody(final Object requestBody, final HttpUriRequest request) {
+        if (requestBody instanceof Headers) {
+            Headers headers = (Headers) requestBody;
+            for (Field field : Headers.class.getDeclaredFields()) {
+                field.setAccessible(true);
+                try {
+                    Object value = field.get(headers);
+                    if (value != null && !value.toString().isEmpty()) {
+                        SerializedName serializedName = field.getAnnotation(SerializedName.class);
+                        String headerName = serializedName != null ? serializedName.value() : field.getName();
+                        request.setHeader(headerName, value.toString());
+                    }
+                } catch (IllegalAccessException ignored) {}
+            }
         }
     }
 

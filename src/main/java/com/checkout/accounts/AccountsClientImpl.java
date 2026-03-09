@@ -14,6 +14,10 @@ import com.checkout.SdkAuthorizationType;
 import com.checkout.accounts.payout.schedule.request.UpdateScheduleRequest;
 import com.checkout.accounts.payout.schedule.response.GetScheduleResponse;
 import com.checkout.accounts.payout.schedule.response.VoidResponse;
+import com.checkout.accounts.reserverules.responses.ReserveRuleCreateResponse;
+import com.checkout.accounts.reserverules.responses.ReserveRuleRequest;
+import com.checkout.accounts.reserverules.responses.ReserveRuleResponse;
+import com.checkout.accounts.reserverules.responses.ReserveRulesResponse;
 import com.checkout.common.Currency;
 import com.checkout.common.IdResponse;
 
@@ -25,6 +29,8 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
     private static final String FILES_PATH = "files";
     private static final String PAYOUT_SCHEDULES_PATH = "payout-schedules";
     private static final String PAYMENT_INSTRUMENTS_PATH = "payment-instruments";
+    private static final String MEMBERS_PATH = "members";
+    private static final String RESERVE_RULES_PATH = "reserve-rules";
 
     private final ApiClient filesClient;
 
@@ -152,6 +158,65 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
                 request);
     }
 
+    @Override
+    public CompletableFuture<EntityMembersResponse> getEntityMembers(final String entityId) {
+        validateEntityId(entityId);
+        return apiClient.getAsync(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, MEMBERS_PATH),
+                sdkAuthorization(),
+                EntityMembersResponse.class);
+    }
+
+    @Override
+    public CompletableFuture<EntityMemberResponse> reinviteEntityMember(final String entityId, final String userId) {
+        validateEntityIdAndUserId(entityId, userId);
+        return apiClient.putAsync(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, MEMBERS_PATH, userId),
+                sdkAuthorization(),
+                EntityMemberResponse.class,
+                null);
+    }
+
+    @Override
+    public CompletableFuture<ReserveRuleCreateResponse> createReserveRule(final String entityId, final ReserveRuleRequest reserveRuleRequest) {
+        validateEntityIdAndReserveRuleRequest(entityId, reserveRuleRequest);
+        return apiClient.postAsync(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, RESERVE_RULES_PATH),
+                sdkAuthorization(),
+                ReserveRuleCreateResponse.class,
+                reserveRuleRequest,
+                null);
+    }
+
+    @Override
+    public CompletableFuture<ReserveRuleCreateResponse> updateReserveRule(final String entityId, final String reserveRuleId, 
+                                                                            final ReserveRuleRequest reserveRuleRequest) {
+        validateEntityIdReserveRuleIdAndRequest(entityId, reserveRuleId, reserveRuleRequest);
+        return apiClient.putAsync(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, RESERVE_RULES_PATH, reserveRuleId),
+                sdkAuthorization(),
+                ReserveRuleCreateResponse.class,
+                reserveRuleRequest);
+    }
+
+    @Override
+    public CompletableFuture<ReserveRuleResponse> getReserveRule(final String entityId, final String reserveRuleId) {
+        validateEntityIdAndReserveRuleId(entityId, reserveRuleId);
+        return apiClient.getAsync(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, RESERVE_RULES_PATH, reserveRuleId),
+                sdkAuthorization(),
+                ReserveRuleResponse.class);
+    }
+
+    @Override
+    public CompletableFuture<ReserveRulesResponse> getReserveRules(final String entityId) {
+        validateEntityId(entityId);
+        return apiClient.getAsync(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, RESERVE_RULES_PATH),
+                sdkAuthorization(),
+                ReserveRulesResponse.class);
+    }
+
     // Synchronous methods
     @Override
     public IdResponse submitFileSync(final AccountsFileRequest accountsFileRequest) {
@@ -270,6 +335,62 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
                 request);
     }
 
+    @Override
+    public EntityMembersResponse getEntityMembersSync(final String entityId) {
+        validateEntityId(entityId);
+        return apiClient.get(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, MEMBERS_PATH),
+                sdkAuthorization(),
+                EntityMembersResponse.class);
+    }
+
+    @Override
+    public EntityMemberResponse reinviteEntityMemberSync(final String entityId, final String userId) {
+        validateEntityIdAndUserId(entityId, userId);
+        return apiClient.put(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, MEMBERS_PATH, userId),
+                sdkAuthorization(),
+                EntityMemberResponse.class,
+                null);
+    }
+    @Override
+    public ReserveRuleCreateResponse createReserveRuleSync(final String entityId, final ReserveRuleRequest reserveRuleRequest) {
+        validateEntityIdAndReserveRuleRequest(entityId, reserveRuleRequest);
+        return apiClient.post(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, RESERVE_RULES_PATH),
+                sdkAuthorization(),
+                ReserveRuleCreateResponse.class,
+                reserveRuleRequest,
+                null);
+    }
+    @Override
+    public ReserveRuleCreateResponse updateReserveRuleSync(final String entityId, final String reserveRuleId, final ReserveRuleRequest reserveRuleRequest) {
+        validateEntityIdReserveRuleIdAndRequest(entityId, reserveRuleId, reserveRuleRequest);
+        return apiClient.put(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, RESERVE_RULES_PATH, reserveRuleId),
+                sdkAuthorization(),
+                ReserveRuleCreateResponse.class,
+                reserveRuleRequest);
+    }
+
+    @Override
+    public ReserveRuleResponse getReserveRuleSync(final String entityId, final String reserveRuleId) {
+        validateEntityIdAndReserveRuleId(entityId, reserveRuleId);
+        return apiClient.get(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, RESERVE_RULES_PATH, reserveRuleId),
+                sdkAuthorization(),
+                ReserveRuleResponse.class);
+    }
+
+    @Override
+    public ReserveRulesResponse getReserveRulesSync(final String entityId) {
+        validateEntityId(entityId);
+        return apiClient.get(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, RESERVE_RULES_PATH),
+                sdkAuthorization(),
+                ReserveRulesResponse.class);
+    }
+
     // Common methods
     private Map<Currency, UpdateScheduleRequest> buildScheduleRequestMap(final Currency currency, final UpdateScheduleRequest updateScheduleRequest) {
         final Map<Currency, UpdateScheduleRequest> request = new EnumMap<>(Currency.class);
@@ -315,6 +436,22 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
 
     private void validateEntityIdCurrencyAndRequest(final String entityId, final Currency currency, final UpdateScheduleRequest updateScheduleRequest) {
         validateParams("entityId", entityId, "currency", currency, "updateScheduleRequest", updateScheduleRequest);
+    }
+
+    private void validateEntityIdAndUserId(final String entityId, final String userId) {
+        validateParams("entityId", entityId, "userId", userId);
+    }
+
+    private void validateEntityIdAndReserveRuleId(final String entityId, final String reserveRuleId) {
+        validateParams("entityId", entityId, "reserveRuleId", reserveRuleId);
+    }
+
+    private void validateEntityIdReserveRuleIdAndRequest(final String entityId, final String reserveRuleId, final ReserveRuleRequest reserveRuleRequest) {
+        validateParams("entityId", entityId, "reserveRuleId", reserveRuleId, "reserveRuleRequest", reserveRuleRequest);
+    }
+
+    private void validateEntityIdAndReserveRuleRequest(final String entityId, final ReserveRuleRequest reserveRuleRequest) {
+        validateParams("entityId", entityId, "reserveRuleRequest", reserveRuleRequest);
     }
 
 }
