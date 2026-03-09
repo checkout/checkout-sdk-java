@@ -1,6 +1,6 @@
 package com.checkout.accounts.reserverules.responses;
 
-import com.checkout.accounts.reserverules.entities.RollingReservePolicy;
+import com.checkout.accounts.reserverules.entities.RollingReserveRule;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -19,6 +19,6 @@ public class ReserveRuleResponse extends Resource {
 
     private Instant validFrom;
 
-    private RollingReservePolicy rolling;
+    private RollingReserveRule rolling;
 
 }

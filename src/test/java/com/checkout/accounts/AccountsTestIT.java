@@ -8,7 +8,7 @@ import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
 import com.checkout.accounts.reserverules.entities.HoldingDuration;
-import com.checkout.accounts.reserverules.entities.RollingReservePolicy;
+import com.checkout.accounts.reserverules.entities.RollingReserveRule;
 import com.checkout.accounts.reserverules.responses.ReserveRuleCreateResponse;
 import com.checkout.accounts.reserverules.responses.ReserveRuleRequest;
 import com.checkout.accounts.reserverules.responses.ReserveRuleResponse;
@@ -547,7 +547,7 @@ class AccountsTestIT extends SandboxTestFixture {
         return ReserveRuleRequest.builder()
                 .type("rolling")
                 .validFrom(java.time.Instant.now().plusSeconds(3600)) // 1 hour from now
-                .rolling(RollingReservePolicy.builder()
+                .rolling(RollingReserveRule.builder()
                         .percentage(10.0)
                         .holdingDuration(HoldingDuration.builder()
                                 .weeks(2)
@@ -560,7 +560,7 @@ class AccountsTestIT extends SandboxTestFixture {
         return ReserveRuleRequest.builder()
                 .type("rolling")
                 .validFrom(java.time.Instant.now().plusSeconds(3600)) // 1 hour from now
-                .rolling(RollingReservePolicy.builder()
+                .rolling(RollingReserveRule.builder()
                         .percentage(10.0)
                         .holdingDuration(HoldingDuration.builder()
                                 .weeks(2)
