@@ -38,6 +38,9 @@ import com.checkout.issuing.disputes.requests.CreateDisputeRequest;
 import com.checkout.issuing.disputes.requests.EscalateDisputeRequest;
 import com.checkout.issuing.disputes.requests.SubmitDisputeRequest;
 import com.checkout.issuing.disputes.responses.DisputeResponse;
+import com.checkout.issuing.transactions.requests.TransactionsQuery;
+import com.checkout.issuing.transactions.responses.TransactionsSingleResponse;
+import com.checkout.issuing.transactions.responses.TransactionsListResponse;
 import com.checkout.payments.VoidResponse;
 
 import java.util.concurrent.CompletableFuture;
@@ -73,6 +76,8 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     private static final String REVERSALS_PATH = "reversals";
 
     private static final String DISPUTES_PATH = "disputes";
+
+    private static final String TRANSACTIONS_PATH = "transactions";
 
     private static final String CANCEL_PATH = "cancel";
 
@@ -407,6 +412,28 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
+    public CompletableFuture<TransactionsListResponse> getListTransactions(final TransactionsQuery queryFilter) {
+        validateTransactionsQuery(queryFilter);
+        return apiClient.queryAsync(
+                buildPath(ISSUING_PATH, TRANSACTIONS_PATH), 
+                sdkAuthorization(),
+                queryFilter,
+                TransactionsListResponse.class
+        );
+    }
+
+    @Override
+    public CompletableFuture<TransactionsSingleResponse> getSingleTransaction(final String transactionId) {
+        validateTransactionId(transactionId);
+        return apiClient.getAsync(
+                buildPath(ISSUING_PATH, TRANSACTIONS_PATH, transactionId),
+                sdkAuthorization(),
+                TransactionsSingleResponse.class
+        );
+    }
+
+
     // Synchronous methods
     @Override
     public CardholderResponse createCardholderSync(final CardholderRequest cardholderRequest) {
@@ -731,6 +758,27 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
+    public TransactionsListResponse getListTransactionsSync(final TransactionsQuery queryFilter) {
+        validateTransactionsQuery(queryFilter);
+        return apiClient.query(
+                buildPath(ISSUING_PATH, TRANSACTIONS_PATH),
+                sdkAuthorization(),
+                queryFilter,
+                TransactionsListResponse.class
+        );
+    }
+
+    @Override
+    public TransactionsSingleResponse getSingleTransactionSync(final String transactionId) {
+        validateTransactionId(transactionId);
+        return apiClient.get(
+                buildPath(ISSUING_PATH, TRANSACTIONS_PATH, transactionId),
+                sdkAuthorization(),
+                TransactionsSingleResponse.class
+        );
+    }
+
     // Common methods
     private void validateCardholderRequest(final CardholderRequest cardholderRequest) {
         validateParams("cardholderRequest", cardholderRequest);
@@ -814,5 +862,13 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     private void validateDisputeIdAndSubmitRequest(final String disputeId, final SubmitDisputeRequest submitDisputeRequest) {
         validateParams("disputeId", disputeId, "submitDisputeRequest", submitDisputeRequest);
+    }
+
+    private void validateTransactionsQuery(final TransactionsQuery query) {
+        validateParams("query", query);
+    }
+
+    private void validateTransactionId(final String transactionId) {
+        validateParams("transactionId", transactionId);
     }
 }

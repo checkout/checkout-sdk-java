@@ -36,7 +36,8 @@ public abstract class BaseIssuingTestIT extends SandboxTestFixture {
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_ISSUING_CLIENT_ID")),
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_ISSUING_CLIENT_SECRET")))
                 .scopes(OAuthScope.VAULT, OAuthScope.ISSUING_CLIENT, OAuthScope.ISSUING_CARD_MGMT,
-                        OAuthScope.ISSUING_CONTROLS_READ, OAuthScope.ISSUING_CONTROLS_WRITE)
+                        OAuthScope.ISSUING_CONTROLS_READ, OAuthScope.ISSUING_CONTROLS_WRITE,
+                        OAuthScope.ISSUING_TRANSACTIONS_READ, OAuthScope.ISSUING_TRANSACTIONS_WRITE)
                 .environment(Environment.SANDBOX)
                 .build();
     }

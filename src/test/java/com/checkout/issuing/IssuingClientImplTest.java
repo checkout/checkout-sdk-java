@@ -32,6 +32,12 @@ import com.checkout.issuing.disputes.requests.CreateDisputeRequest;
 import com.checkout.issuing.disputes.requests.EscalateDisputeRequest;
 import com.checkout.issuing.disputes.requests.SubmitDisputeRequest;
 import com.checkout.issuing.disputes.responses.DisputeResponse;
+import com.checkout.issuing.transactions.requests.TransactionsQuery;
+import com.checkout.issuing.transactions.responses.TransactionsListResponse;
+import com.checkout.issuing.transactions.responses.TransactionsSingleResponse;
+import com.checkout.issuing.transactions.requests.TransactionsQuery;
+import com.checkout.issuing.transactions.responses.TransactionsListResponse;
+import com.checkout.issuing.transactions.responses.TransactionsSingleResponse;
 import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
@@ -1010,6 +1016,81 @@ public class IssuingClientImplTest {
         }
     }
 
+    @Nested
+    @DisplayName("Transactions")
+    class Transactions {
+        @Test
+        void shouldGetListTransactions() throws ExecutionException, InterruptedException {
+            final TransactionsQuery query = createTransactionsQuery();
+            final TransactionsListResponse expectedResponse = createTransactionsListResponse();
+
+            when(apiClient.queryAsync(
+                    "issuing/transactions",
+                    authorization,
+                    query,
+                    TransactionsListResponse.class
+            )).thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+            final CompletableFuture<TransactionsListResponse> future = client.getListTransactions(query);
+            final TransactionsListResponse actualResponse = future.get();
+
+            validateTransactionsListResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldGetSingleTransaction() throws ExecutionException, InterruptedException {
+            final TransactionsSingleResponse expectedResponse = createTransactionsSingleResponse();
+
+            when(apiClient.getAsync(
+                    "issuing/transactions/transaction_id",
+                    authorization,
+                    TransactionsSingleResponse.class
+            )).thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+            final CompletableFuture<TransactionsSingleResponse> future = client.getSingleTransaction("transaction_id");
+            final TransactionsSingleResponse actualResponse = future.get();
+
+            validateTransactionsSingleResponse(expectedResponse, actualResponse);
+        }
+    }
+
+    // Synchronous methods
+    @Nested
+    @DisplayName("Transactions Sync")
+    class TransactionsSync {
+        @Test
+        void shouldGetListTransactionsSync() {
+            final TransactionsQuery query = createTransactionsQuery();
+            final TransactionsListResponse expectedResponse = createTransactionsListResponse();
+
+            when(apiClient.query(
+                    "issuing/transactions",
+                    authorization,
+                    query,
+                    TransactionsListResponse.class
+            )).thenReturn(expectedResponse);
+
+            final TransactionsListResponse actualResponse = client.getListTransactionsSync(query);
+
+            validateTransactionsListResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldGetSingleTransactionSync() {
+            final TransactionsSingleResponse expectedResponse = createTransactionsSingleResponse();
+
+            when(apiClient.get(
+                    "issuing/transactions/transaction_id",
+                    authorization,
+                    TransactionsSingleResponse.class
+            )).thenReturn(expectedResponse);
+
+            final TransactionsSingleResponse actualResponse = client.getSingleTransactionSync("transaction_id");
+
+            validateTransactionsSingleResponse(expectedResponse, actualResponse);
+        }
+    }
+
     // Common methods
     private CardholderRequest createCardholderRequest() {
         return mock(CardholderRequest.class);
@@ -1237,6 +1318,28 @@ public class IssuingClientImplTest {
     }
 
     private void validateDisputeResponse(DisputeResponse expected, DisputeResponse actual) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    private TransactionsQuery createTransactionsQuery() {
+        return mock(TransactionsQuery.class);
+    }
+
+    private TransactionsListResponse createTransactionsListResponse() {
+        return mock(TransactionsListResponse.class);
+    }
+
+    private TransactionsSingleResponse createTransactionsSingleResponse() {
+        return mock(TransactionsSingleResponse.class);
+    }
+
+    private void validateTransactionsListResponse(TransactionsListResponse expected, TransactionsListResponse actual) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    private void validateTransactionsSingleResponse(TransactionsSingleResponse expected, TransactionsSingleResponse actual) {
         assertNotNull(actual);
         assertEquals(expected, actual);
     }

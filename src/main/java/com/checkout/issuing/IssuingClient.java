@@ -34,6 +34,9 @@ import com.checkout.issuing.disputes.requests.CreateDisputeRequest;
 import com.checkout.issuing.disputes.requests.EscalateDisputeRequest;
 import com.checkout.issuing.disputes.requests.SubmitDisputeRequest;
 import com.checkout.issuing.disputes.responses.DisputeResponse;
+import com.checkout.issuing.transactions.requests.TransactionsQuery;
+import com.checkout.issuing.transactions.responses.TransactionsSingleResponse;
+import com.checkout.issuing.transactions.responses.TransactionsListResponse;
 import com.checkout.payments.VoidResponse;
 
 import java.util.concurrent.CompletableFuture;
@@ -101,6 +104,10 @@ public interface IssuingClient {
 
     CompletableFuture<DisputeResponse> submitDispute(final String disputeId, String idempotencyKey, final SubmitDisputeRequest submitDisputeRequest);
 
+    CompletableFuture<TransactionsListResponse> getListTransactions(final TransactionsQuery queryFilter);
+
+    CompletableFuture<TransactionsSingleResponse> getSingleTransaction(final String transactionId);
+
     // Synchronous methods
     CardholderResponse createCardholderSync(CardholderRequest cardholderRequest);
 
@@ -162,4 +169,8 @@ public interface IssuingClient {
     VoidResponse escalateDisputeSync(String disputeId, String idempotencyKey, EscalateDisputeRequest escalateDisputeRequest);
 
     DisputeResponse submitDisputeSync(String disputeId, String idempotencyKey, SubmitDisputeRequest submitDisputeRequest);
+
+    TransactionsListResponse getListTransactionsSync(TransactionsQuery queryFilter);
+
+    TransactionsSingleResponse getSingleTransactionSync(String transactionId);
 }
