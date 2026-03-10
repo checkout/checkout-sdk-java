@@ -18,6 +18,9 @@ import com.checkout.accounts.reserverules.responses.ReserveRuleCreateResponse;
 import com.checkout.accounts.reserverules.responses.ReserveRuleRequest;
 import com.checkout.accounts.reserverules.responses.ReserveRuleResponse;
 import com.checkout.accounts.reserverules.responses.ReserveRulesResponse;
+import com.checkout.accounts.files.request.FileUploadRequest;
+import com.checkout.accounts.files.response.FileUploadResponse;
+import com.checkout.accounts.files.response.FileDetailsResponse;
 import com.checkout.common.Currency;
 import com.checkout.common.IdResponse;
 
@@ -49,6 +52,26 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
                 sdkAuthorization(),
                 accountsFileRequest,
                 IdResponse.class);
+    }
+
+    @Override
+    public CompletableFuture<FileUploadResponse> uploadFile(final String entityId, final FileUploadRequest fileUploadRequest) {
+        validateEntityIdAndFileUploadRequest(entityId, fileUploadRequest);
+        return filesClient.postAsync(
+                buildPath(ENTITIES_PATH, entityId, FILES_PATH),
+                sdkAuthorization(),
+                FileUploadResponse.class,
+                fileUploadRequest,
+                null);
+    }
+
+    @Override
+    public CompletableFuture<FileDetailsResponse> retrieveFile(final String entityId, final String fileId) {
+        validateEntityIdAndFileId(entityId, fileId);
+        return filesClient.getAsync(
+                buildPath(ENTITIES_PATH, entityId, FILES_PATH, fileId),
+                sdkAuthorization(),
+                FileDetailsResponse.class);
     }
 
     @Override
@@ -226,6 +249,26 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
                 sdkAuthorization(),
                 accountsFileRequest,
                 IdResponse.class);
+    }
+
+    @Override
+    public FileUploadResponse uploadFileSync(final String entityId, final FileUploadRequest fileUploadRequest) {
+        validateEntityIdAndFileUploadRequest(entityId, fileUploadRequest);
+        return filesClient.post(
+                buildPath(ENTITIES_PATH, entityId, FILES_PATH),
+                sdkAuthorization(),
+                FileUploadResponse.class,
+                fileUploadRequest,
+                null);
+    }
+
+    @Override
+    public FileDetailsResponse retrieveFileSync(final String entityId, final String fileId) {
+        validateEntityIdAndFileId(entityId, fileId);
+        return filesClient.get(
+                buildPath(ENTITIES_PATH, entityId, FILES_PATH, fileId),
+                sdkAuthorization(),
+                FileDetailsResponse.class);
     }
 
     @Override
@@ -452,6 +495,14 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
 
     private void validateEntityIdAndReserveRuleRequest(final String entityId, final ReserveRuleRequest reserveRuleRequest) {
         validateParams("entityId", entityId, "reserveRuleRequest", reserveRuleRequest);
+    }
+
+    private void validateEntityIdAndFileUploadRequest(final String entityId, final FileUploadRequest fileUploadRequest) {
+        validateParams("entityId", entityId, "fileUploadRequest", fileUploadRequest);
+    }
+
+    private void validateEntityIdAndFileId(final String entityId, final String fileId) {
+        validateParams("entityId", entityId, "fileId", fileId);
     }
 
 }

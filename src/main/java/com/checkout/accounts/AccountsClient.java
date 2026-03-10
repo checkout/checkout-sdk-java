@@ -10,12 +10,19 @@ import com.checkout.accounts.reserverules.responses.ReserveRuleCreateResponse;
 import com.checkout.accounts.reserverules.responses.ReserveRuleRequest;
 import com.checkout.accounts.reserverules.responses.ReserveRuleResponse;
 import com.checkout.accounts.reserverules.responses.ReserveRulesResponse;
+import com.checkout.accounts.files.request.FileUploadRequest;
+import com.checkout.accounts.files.response.FileUploadResponse;
+import com.checkout.accounts.files.response.FileDetailsResponse;
 import com.checkout.common.Currency;
 import com.checkout.common.IdResponse;
 
 public interface AccountsClient {
 
     CompletableFuture<IdResponse> submitFile(AccountsFileRequest accountsFileRequest);
+
+    CompletableFuture<FileUploadResponse> uploadFile(String entityId, FileUploadRequest fileUploadRequest);
+
+    CompletableFuture<FileDetailsResponse> retrieveFile(String entityId, String fileId);
 
     CompletableFuture<OnboardEntityResponse> createEntity(OnboardEntityRequest entityRequest);
 
@@ -58,6 +65,10 @@ public interface AccountsClient {
 
     // Synchronous methods
     IdResponse submitFileSync(final AccountsFileRequest accountsFileRequest);
+
+    FileUploadResponse uploadFileSync(final String entityId, final FileUploadRequest fileUploadRequest);
+
+    FileDetailsResponse retrieveFileSync(final String entityId, final String fileId);
         
     OnboardEntityResponse createEntitySync(final OnboardEntityRequest entityRequest);
 
