@@ -36,6 +36,10 @@ import com.checkout.accounts.reserverules.responses.ReserveRuleCreateResponse;
 import com.checkout.accounts.reserverules.responses.ReserveRuleRequest;
 import com.checkout.accounts.reserverules.responses.ReserveRuleResponse;
 import com.checkout.accounts.reserverules.responses.ReserveRulesResponse;
+import com.checkout.accounts.files.request.FileUploadRequest;
+import com.checkout.accounts.files.response.FileUploadResponse;
+import com.checkout.accounts.files.response.FileDetailsResponse;
+import com.checkout.accounts.files.entities.FilePurpose;
 import com.checkout.common.Currency;
 import com.checkout.common.IdResponse;
 
@@ -102,7 +106,104 @@ class AccountsClientImplTest {
     }
 
     @Test
-    void shouldCreateEntity() throws ExecutionException, InterruptedException {
+    void shouldThrowException_whenEntityIdIsNullForUploadFile() {
+        try {
+            accountsClient.uploadFile(null, createFileUploadRequest());
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("entityId cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldThrowException_whenFileUploadRequestIsNull() {
+        try {
+            accountsClient.uploadFile("entity_id", null);
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("fileUploadRequest cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldThrowException_whenEntityIdIsNullForGetFileDetails() {
+        try {
+            accountsClient.retrieveFile(null, "file_id");
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("entityId cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldThrowException_whenFileIdIsNull() {
+        try {
+            accountsClient.retrieveFile("entity_id", null);
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("fileId cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldUploadFile() throws ExecutionException, InterruptedException {
+        final FileUploadRequest request = createFileUploadRequest();
+        final FileUploadResponse expectedResponse = createFileUploadResponse();
+
+        when(apiClient.postAsync(eq("entities/entity_id/files"), eq(authorization), eq(FileUploadResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<FileUploadResponse> future = accountsClient.uploadFile("entity_id", request);
+
+        validateResponse(expectedResponse, future.get());
+    }
+
+    @Test
+    void shouldGetFileDetails() throws ExecutionException, InterruptedException {
+        final FileDetailsResponse expectedResponse = createFileDetailsResponse();
+
+        when(apiClient.getAsync("entities/entity_id/files/file_id", authorization, FileDetailsResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<FileDetailsResponse> future = accountsClient.retrieveFile("entity_id", "file_id");
+
+        validateResponse(expectedResponse, future.get());
+    }
+
+    @Test
+    void shouldUploadFileSync() {
+        final FileUploadRequest request = createFileUploadRequest();
+        final FileUploadResponse expectedResponse = createFileUploadResponse();
+
+        when(apiClient.post(eq("entities/entity_id/files"), eq(authorization), eq(FileUploadResponse.class), eq(request), isNull()))
+                .thenReturn(expectedResponse);
+
+        final FileUploadResponse actualResponse = accountsClient.uploadFileSync("entity_id", request);
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldGetFileDetailsSync() {
+        final FileDetailsResponse expectedResponse = createFileDetailsResponse();
+
+        when(apiClient.get("entities/entity_id/files/file_id", authorization, FileDetailsResponse.class))
+                .thenReturn(expectedResponse);
+
+        final FileDetailsResponse actualResponse = accountsClient.retrieveFileSync("entity_id", "file_id");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test    void shouldCreateEntity() throws ExecutionException, InterruptedException {
         final OnboardEntityRequest request = createOnboardEntityRequest();
         final OnboardEntityResponse expectedResponse = createOnboardEntityResponse();
 
@@ -699,6 +800,20 @@ class AccountsClientImplTest {
 
     private AccountsFileRequest createAccountsFileRequest() {
         return AccountsFileRequest.builder().build();
+    }
+
+    private FileUploadRequest createFileUploadRequest() {
+        return FileUploadRequest.builder()
+                .purpose(FilePurpose.IDENTITY_VERIFICATION)
+                .build();
+    }
+
+    private FileUploadResponse createFileUploadResponse() {
+        return mock(FileUploadResponse.class);
+    }
+
+    private FileDetailsResponse createFileDetailsResponse() {
+        return mock(FileDetailsResponse.class);
     }
 
     private UpdateScheduleRequest createUpdateScheduleRequest() {

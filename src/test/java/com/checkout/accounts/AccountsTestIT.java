@@ -13,6 +13,10 @@ import com.checkout.accounts.reserverules.responses.ReserveRuleCreateResponse;
 import com.checkout.accounts.reserverules.responses.ReserveRuleRequest;
 import com.checkout.accounts.reserverules.responses.ReserveRuleResponse;
 import com.checkout.accounts.reserverules.responses.ReserveRulesResponse;
+import com.checkout.accounts.files.request.FileUploadRequest;
+import com.checkout.accounts.files.response.FileUploadResponse;
+import com.checkout.accounts.files.response.FileDetailsResponse;
+import com.checkout.accounts.files.entities.FilePurpose;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
@@ -73,6 +77,31 @@ class AccountsTestIT extends SandboxTestFixture {
     void shouldUploadAccountsFile() throws URISyntaxException {
         final IdResponse fileResponse = uploadFile();
         validateFileUploadResponse(fileResponse);
+    }
+
+    @Test
+    void shouldUploadFileForEntity() {
+        final String entityId = createTestEntity();
+        final FileUploadRequest fileUploadRequest = FileUploadRequest.builder()
+                .purpose(FilePurpose.IDENTITY_VERIFICATION)
+                .build();
+
+        final FileUploadResponse response = blocking(() -> checkoutApi.accountsClient().uploadFile(entityId, fileUploadRequest));
+        validateFileUploadResponseForEntity(response);
+    }
+
+    @Test
+    void shouldRetrieveFileForEntity() {
+        final String entityId = createTestEntity();
+        final FileUploadRequest fileUploadRequest = FileUploadRequest.builder()
+                .purpose(FilePurpose.IDENTITY_VERIFICATION)
+                .build();
+
+        final FileUploadResponse uploadResponse = blocking(() -> checkoutApi.accountsClient().uploadFile(entityId, fileUploadRequest));
+        validateFileUploadResponseForEntity(uploadResponse);
+
+        final FileDetailsResponse detailsResponse = blocking(() -> checkoutApi.accountsClient().retrieveFile(entityId, uploadResponse.getId()));
+        validateFileDetailsResponseForEntity(detailsResponse, uploadResponse.getId());
     }
 
     @Test
@@ -151,6 +180,31 @@ class AccountsTestIT extends SandboxTestFixture {
 
         final PaymentInstrumentDetailsResponse instrumentDetailsResponse = checkoutApi.accountsClient().retrievePaymentInstrumentDetailsSync(entityResponse.getId(), instrumentResponse.getId());
         validatePaymentInstrumentDetailsResponse(instrumentDetailsResponse);
+    }
+
+    @Test
+    void shouldUploadFileForEntitySync() {
+        final String entityId = createTestEntity();
+        final FileUploadRequest fileUploadRequest = FileUploadRequest.builder()
+                .purpose(FilePurpose.IDENTITY_VERIFICATION)
+                .build();
+
+        final FileUploadResponse response = checkoutApi.accountsClient().uploadFileSync(entityId, fileUploadRequest);
+        validateFileUploadResponseForEntity(response);
+    }
+
+    @Test
+    void shouldRetrieveFileForEntitySync() {
+        final String entityId = createTestEntity();
+        final FileUploadRequest fileUploadRequest = FileUploadRequest.builder()
+                .purpose(FilePurpose.IDENTITY_VERIFICATION)
+                .build();
+
+        final FileUploadResponse uploadResponse = checkoutApi.accountsClient().uploadFileSync(entityId, fileUploadRequest);
+        validateFileUploadResponseForEntity(uploadResponse);
+
+        final FileDetailsResponse detailsResponse = checkoutApi.accountsClient().retrieveFileSync(entityId, uploadResponse.getId());
+        validateFileDetailsResponseForEntity(detailsResponse, uploadResponse.getId());
     }
 
     @Test
@@ -426,6 +480,21 @@ class AccountsTestIT extends SandboxTestFixture {
     private void validateFileUploadResponse(final IdResponse fileResponse) {
         assertNotNull(fileResponse);
         assertNotNull(fileResponse.getId());
+    }
+
+    private void validateFileUploadResponseForEntity(final FileUploadResponse fileResponse) {
+        assertNotNull(fileResponse);
+        assertNotNull(fileResponse.getId());
+        assertNotNull(fileResponse.getMaximumSizeInBytes());
+        assertNotNull(fileResponse.getDocumentTypesForPurpose());
+        assertNotNull(fileResponse.getLinks());
+    }
+
+    private void validateFileDetailsResponseForEntity(final FileDetailsResponse fileDetailsResponse, final String expectedFileId) {
+        assertNotNull(fileDetailsResponse);
+        assertEquals(expectedFileId, fileDetailsResponse.getId());
+        assertNotNull(fileDetailsResponse.getStatus());
+        assertNotNull(fileDetailsResponse.getPurpose());
     }
 
     private void validatePaymentInstrumentDetailsResponse(final PaymentInstrumentDetailsResponse instrumentDetailsResponse) {
