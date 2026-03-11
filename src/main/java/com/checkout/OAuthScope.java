@@ -42,6 +42,7 @@ public enum OAuthScope {
     MIDDLEWARE_MERCHANTS_SECRET("middleware:merchants-secret"),
     PAYMENT_CONTEXTS("gateway:payment-contexts"),
     PAYMENT_SESSIONS("payment-sessions"),
+    PAYMENTS_SEARCH("payments:search"),
     PAYOUTS_BANK_DETAILS("payouts:bank-details"),
     REPORTS("reports"),
     REPORTS_VIEW("reports:view"),

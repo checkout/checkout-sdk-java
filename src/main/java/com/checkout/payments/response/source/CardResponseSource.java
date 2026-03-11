@@ -26,11 +26,15 @@ public final class CardResponseSource extends AbstractResponseSource implements 
 
     private Phone phone;
 
+    // This is set explicitly to String because the API mask the response with "****" and this will cause deserialization 
+    // issues if it is set to Instant
     @SerializedName("expiry_month")
-    private Integer expiryMonth;
+    private String expiryMonth;
 
+    // This is set explicitly to String because the API mask the response with "****" and this will cause deserialization 
+    // issues if it is set to Instant
     @SerializedName("expiry_year")
-    private Integer expiryYear;
+    private String expiryYear;
 
     private String name;
 

@@ -36,6 +36,12 @@ public final class GetPaymentResponse extends Resource {
 
     private String id;
 
+    @SerializedName("authentication_id")
+    private String authenticationId;
+
+    @SerializedName("processing_channel_id")
+    private String processingChannelId;
+
     @SerializedName("requested_on")
     private Instant requestedOn;
 
@@ -46,6 +52,9 @@ public final class GetPaymentResponse extends Resource {
     private Sender sender;
 
     private Long amount;
+
+    @SerializedName("amount_requested")
+    private Long amountRequested;
 
     private Currency currency;
 
