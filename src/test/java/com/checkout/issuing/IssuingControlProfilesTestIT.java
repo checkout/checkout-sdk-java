@@ -23,12 +23,14 @@ class IssuingControlProfilesTestIT extends BaseIssuingTestIT {
 
     private CardResponse card;
     private ControlProfileResponse controlProfile;
+    private ControlProfileResponse controlProfileSync;
 
     @BeforeAll
     void setUp() {
         final CardholderResponse cardholder = createCardholder();
         card = createCard(cardholder.getId(), true);
         controlProfile = createControlProfile();
+        controlProfileSync = createControlProfileSync();
     }
 
     // Control Profiles - Async Tests
@@ -94,16 +96,15 @@ class IssuingControlProfilesTestIT extends BaseIssuingTestIT {
     // Control Profiles - Sync Tests
     @Test
     void shouldCreateControlProfileSync() {
-        final ControlProfileResponse controlProfile = createControlProfileSync();
-        validateControlProfileCreation(controlProfile);
+        validateControlProfileCreation(controlProfileSync);
     }
 
     @Test
     void shouldGetControlProfileDetailsSync() {
         final ControlProfileResponse response = 
-                issuingApi.issuingClient().getControlProfileDetailsSync(controlProfile.getId());
+                issuingApi.issuingClient().getControlProfileDetailsSync(controlProfileSync.getId());
 
-        validateControlProfileResponse(response, controlProfile.getId());
+        validateControlProfileResponse(response, controlProfileSync.getId());
     }
 
     @Test
@@ -121,9 +122,9 @@ class IssuingControlProfilesTestIT extends BaseIssuingTestIT {
         final UpdateControlProfileRequest request = createUpdateControlProfileRequest();
 
         final ControlProfileResponse response = 
-                issuingApi.issuingClient().updateControlProfileSync(controlProfile.getId(), request);
+                issuingApi.issuingClient().updateControlProfileSync(controlProfileSync.getId(), request);
 
-        validateControlProfileResponse(response, controlProfile.getId());
+        validateControlProfileResponse(response, controlProfileSync.getId());
     }
 
     @Test
@@ -139,7 +140,7 @@ class IssuingControlProfilesTestIT extends BaseIssuingTestIT {
     @Test
     void shouldAddTargetToControlProfileSync() {
         final VoidResponse response = 
-                issuingApi.issuingClient().addTargetToControlProfileSync(controlProfile.getId(), card.getId());
+                issuingApi.issuingClient().addTargetToControlProfileSync(controlProfileSync.getId(), card.getId());
 
         validateVoidResponse(response);
     }
@@ -147,7 +148,7 @@ class IssuingControlProfilesTestIT extends BaseIssuingTestIT {
     @Test
     void shouldRemoveTargetFromControlProfileSync() {
         final VoidResponse response = 
-                issuingApi.issuingClient().removeTargetFromControlProfileSync(controlProfile.getId(), card.getId());
+                issuingApi.issuingClient().removeTargetFromControlProfileSync(controlProfileSync.getId(), card.getId());
 
         validateVoidResponse(response);
     }

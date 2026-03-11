@@ -19,10 +19,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class IssuingControlGroupsTestIT extends BaseIssuingTestIT {
 
     private ControlGroupResponse controlGroup;
+    private ControlGroupResponse controlGroupSync;
 
     @BeforeAll
     void setUp() {
         controlGroup = createControlGroup();
+        controlGroupSync = createControlGroupSync();
     }
 
     // Control Groups - Async Tests
@@ -62,16 +64,15 @@ class IssuingControlGroupsTestIT extends BaseIssuingTestIT {
     // Control Groups - Sync Tests
     @Test
     void shouldCreateControlGroupSync() {
-        final ControlGroupResponse controlGroup = createControlGroupSync();
-        validateControlGroupCreation(controlGroup);
+        validateControlGroupCreation(controlGroupSync);
     }
 
     @Test
     void shouldGetControlGroupDetailsSync() {
         final ControlGroupResponse response = 
-                issuingApi.issuingClient().getControlGroupDetailsSync(controlGroup.getId());
+                issuingApi.issuingClient().getControlGroupDetailsSync(controlGroupSync.getId());
 
-        validateControlGroupResponse(response, controlGroup.getId());
+        validateControlGroupResponse(response, controlGroupSync.getId());
     }
 
     @Test
