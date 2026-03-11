@@ -25,6 +25,6 @@ public class MccCardControlResponse extends CardControlResponse {
     }
 
     public MccCardControlResponse() {
-        super(ControlType.VELOCITY_LIMIT);
+        super(ControlType.MCC_LIMIT);
     }
 }

@@ -127,7 +127,7 @@ public class ApiClientImpl implements ApiClient {
         validateParams(PATH, path, AUTHORIZATION, authorization, "resultTypeMappings", resultTypeMappings);
         return executeAsyncOrSync(
                 () -> post(path, authorization, resultTypeMappings, request, idempotencyKey),
-                () -> transport.invoke(POST, path, authorization, serializer.toJson(request), idempotencyKey, null)
+                () -> transport.invoke(POST, path, authorization, request, idempotencyKey, null)
                         .thenApply(this::errorCheck)
                         .thenApply(response -> {
                             final Class<? extends HttpMetadata> responseType = resultTypeMappings.get(response.getStatusCode());
@@ -231,7 +231,7 @@ public class ApiClientImpl implements ApiClient {
     }
 
     private <T extends HttpMetadata> CompletableFuture<T> sendRequestAsync(final ClientOperation clientOperation, final String path, final SdkAuthorization authorization, final Object request, final String idempotencyKey, final Type responseType) {
-        return transport.invoke(clientOperation, path, authorization, request == null ? null : serializer.toJson(request), idempotencyKey, null)
+        return transport.invoke(clientOperation, path, authorization, request, idempotencyKey, null)
                 .thenApply(this::errorCheck)
                 .thenApply(response -> deserialize(response, responseType));
     }
@@ -343,7 +343,7 @@ public class ApiClientImpl implements ApiClient {
     @Override
     public HttpMetadata post(final String path, final SdkAuthorization authorization, final Map<Integer, Class<? extends HttpMetadata>> resultTypeMappings, final Object request, final String idempotencyKey) {
         validateParams(PATH, path, AUTHORIZATION, authorization, "resultTypeMappings", resultTypeMappings);
-        final Response response = transport.invokeSync(POST, path, authorization, serializer.toJson(request), idempotencyKey, null);
+        final Response response = transport.invokeSync(POST, path, authorization, request, idempotencyKey, null);
         final Response checkedResponse = errorCheck(response);
         final Class<? extends HttpMetadata> responseType = resultTypeMappings.get(checkedResponse.getStatusCode());
         if (responseType == null) {
@@ -393,7 +393,7 @@ public class ApiClientImpl implements ApiClient {
     }
 
     private <T extends HttpMetadata> T sendRequestSync(final ClientOperation clientOperation, final String path, final SdkAuthorization authorization, final Object request, final String idempotencyKey, final Type responseType) {
-        final Response response = transport.invokeSync(clientOperation, path, authorization, request == null ? null : serializer.toJson(request), idempotencyKey, null);
+        final Response response = transport.invokeSync(clientOperation, path, authorization, request, idempotencyKey, null);
         final Response checkedResponse = errorCheck(response);
         return deserialize(checkedResponse, responseType);
     }

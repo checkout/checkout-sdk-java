@@ -18,4 +18,7 @@ public class VelocityLimit {
 
     @SerializedName("mcc_list")
     private List<String> mccList;
+
+    @SerializedName("mid_list")
+    private List<String> midList;
 }

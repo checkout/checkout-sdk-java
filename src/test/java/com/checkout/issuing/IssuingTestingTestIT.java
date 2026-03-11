@@ -6,6 +6,7 @@ import com.checkout.issuing.cardholders.CardholderResponse;
 import com.checkout.issuing.cards.responses.CardResponse;
 import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
+import com.checkout.issuing.testing.requests.CardAuthorizationRefundsRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
 import com.checkout.issuing.testing.requests.CardSimulation;
@@ -61,7 +62,17 @@ class IssuingTestingTestIT extends BaseIssuingTestIT {
         final EmptyResponse response = blocking(() ->
                 issuingApi.issuingClient().simulateClearing(transaction.getId(), request));
 
-        validateClearingResponse(response);
+        validateResponse(response);
+    }
+
+    @Test
+    void shouldSimulateRefund() {
+        final CardAuthorizationRefundsRequest request = createRefundRequest();
+
+        final EmptyResponse response = blocking(() ->
+                issuingApi.issuingClient().simulateRefund(transaction.getId(), request));
+
+        validateResponse(response);
     }
 
     @Test
@@ -99,7 +110,18 @@ class IssuingTestingTestIT extends BaseIssuingTestIT {
         final EmptyResponse response = 
                 issuingApi.issuingClient().simulateClearingSync(newTransaction.getId(), request);
 
-        validateClearingResponse(response);
+        validateResponse(response);
+    }
+
+    @Test
+    void shouldSimulateRefundSync() {
+        final CardAuthorizationResponse newTransaction = getCardAuthorizationResponse();
+        final CardAuthorizationRefundsRequest request = createRefundRequest();
+
+        final EmptyResponse response = 
+                issuingApi.issuingClient().simulateRefundSync(newTransaction.getId(), request);
+
+        validateResponse(response);
     }
 
     @Test
@@ -148,6 +170,12 @@ class IssuingTestingTestIT extends BaseIssuingTestIT {
                 .build();
     }
 
+    private CardAuthorizationRefundsRequest createRefundRequest() {
+        return CardAuthorizationRefundsRequest.builder()
+                .amount(1)
+                .build();
+    }
+
     private CardAuthorizationReversalRequest createReversalRequest() {
         return CardAuthorizationReversalRequest.builder()
                 .amount(1)
@@ -164,7 +192,7 @@ class IssuingTestingTestIT extends BaseIssuingTestIT {
         assertEquals(TransactionStatus.AUTHORIZED, response.getStatus());
     }
 
-    private void validateClearingResponse(EmptyResponse response) {
+    private void validateResponse(EmptyResponse response) {
         assertNotNull(response);
         assertEquals(202, response.getHttpStatusCode());
     }

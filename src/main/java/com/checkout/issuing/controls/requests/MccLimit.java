@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 public class MccLimit {
 
-    private MccControlType type;
+    private String type;
 
     @SerializedName("mcc_list")
     private List<String> mccList;

@@ -5,16 +5,21 @@ import com.checkout.issuing.cards.CardStatus;
 import com.checkout.issuing.cards.requests.credentials.CardCredentialsQuery;
 import com.checkout.issuing.cards.requests.enrollment.PasswordThreeDSEnrollmentRequest;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSUpdateRequest;
+import com.checkout.issuing.cards.requests.renew.RenewCardRequest;
+import com.checkout.issuing.cards.requests.revocation.ScheduleRevocationRequest;
 import com.checkout.issuing.cards.requests.revoke.RevokeCardRequest;
 import com.checkout.issuing.cards.requests.revoke.RevokeReason;
 import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
 import com.checkout.issuing.cards.requests.suspend.SuspendReason;
+import com.checkout.issuing.cards.requests.update.UpdateCardRequest;
 import com.checkout.issuing.cards.responses.CardDetailsResponse;
 import com.checkout.issuing.cards.responses.CardResponse;
 import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
+import com.checkout.issuing.cards.responses.renew.RenewCardResponse;
+import com.checkout.issuing.cards.responses.update.UpdateCardResponse;
 import com.checkout.payments.VoidResponse;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
@@ -138,6 +143,55 @@ class IssuingCardsTestIT extends BaseIssuingTestIT {
         assertEquals(CardStatus.SUSPENDED, cardDetails.getStatus());
     }
 
+    @Test
+    void shouldUpdateCard() {
+        final UpdateCardRequest request = createUpdateCardRequest();
+
+        final UpdateCardResponse updateResponse = blocking(() ->
+                issuingApi.issuingClient().updateCard(card.getId(), request));
+
+        validateUpdateCardResponse(updateResponse);
+    }
+
+    @Test
+    void shouldRenewCard() {
+        final CardResponse cardResponse = createCard(cardholder.getId(), true);
+
+        final RenewCardRequest request = createRenewCardRequest();
+
+        final RenewCardResponse renewResponse = blocking(() ->
+                issuingApi.issuingClient().renewCard(cardResponse.getId(), request));
+
+        validateRenewCardResponse(renewResponse, cardResponse.getId());
+    }
+
+    @Test
+    void shouldScheduleCardRevocation() {
+        final CardResponse cardResponse = createCard(cardholder.getId(), true);
+
+        final ScheduleRevocationRequest request = createScheduleRevocationRequest();
+
+        final VoidResponse scheduleResponse = blocking(() ->
+                issuingApi.issuingClient().scheduleCardRevocation(cardResponse.getId(), request));
+
+        validateVoidResponse(scheduleResponse);
+    }
+
+    @Test
+    void shouldDeleteScheduledRevocation() {
+        final CardResponse cardResponse = createCard(cardholder.getId(), true);
+
+        // First schedule a revocation
+        final ScheduleRevocationRequest scheduleRequest = createScheduleRevocationRequest();
+        blocking(() -> issuingApi.issuingClient().scheduleCardRevocation(cardResponse.getId(), scheduleRequest));
+
+        // Then delete it
+        final VoidResponse deleteResponse = blocking(() ->
+                issuingApi.issuingClient().deleteScheduledRevocation(cardResponse.getId()));
+
+        validateVoidResponse(deleteResponse);
+    }
+
     // Synchronous methods
     @Test
     void shouldCreateCardSync() {
@@ -239,6 +293,55 @@ class IssuingCardsTestIT extends BaseIssuingTestIT {
         assertEquals(CardStatus.SUSPENDED, cardDetails.getStatus());
     }
 
+    @Test
+    void shouldUpdateCardSync() {
+        final UpdateCardRequest request = createUpdateCardRequest();
+
+        final UpdateCardResponse updateResponse = 
+                issuingApi.issuingClient().updateCardSync(card.getId(), request);
+
+        validateUpdateCardResponse(updateResponse);
+    }
+
+    @Test
+    void shouldRenewCardSync() {
+        final CardResponse cardResponse = createCard(cardholder.getId(), true);
+
+        final RenewCardRequest request = createRenewCardRequest();
+
+        final RenewCardResponse renewResponse = 
+                issuingApi.issuingClient().renewCardSync(cardResponse.getId(), request);
+
+        validateRenewCardResponse(renewResponse, cardResponse.getId());
+    }
+
+    @Test
+    void shouldScheduleCardRevocationSync() {
+        final CardResponse cardResponse = createCard(cardholder.getId(), true);
+
+        final ScheduleRevocationRequest request = createScheduleRevocationRequest();
+
+        final VoidResponse scheduleResponse = 
+                issuingApi.issuingClient().scheduleCardRevocationSync(cardResponse.getId(), request);
+
+        validateVoidResponse(scheduleResponse);
+    }
+
+    @Test
+    void shouldDeleteScheduledRevocationSync() {
+        final CardResponse cardResponse = createCard(cardholder.getId(), true);
+
+        // First schedule a revocation
+        final ScheduleRevocationRequest scheduleRequest = createScheduleRevocationRequest();
+        issuingApi.issuingClient().scheduleCardRevocationSync(cardResponse.getId(), scheduleRequest);
+
+        // Then delete it
+        final VoidResponse deleteResponse = 
+                issuingApi.issuingClient().deleteScheduledRevocationSync(cardResponse.getId());
+
+        validateVoidResponse(deleteResponse);
+    }
+
     // Common methods
     private PasswordThreeDSEnrollmentRequest createThreeDSEnrollmentRequest() {
         return PasswordThreeDSEnrollmentRequest.builder()
@@ -268,6 +371,27 @@ class IssuingCardsTestIT extends BaseIssuingTestIT {
     private SuspendCardRequest createSuspendCardRequest() {
         return SuspendCardRequest.builder()
                 .reason(SuspendReason.SUSPECTED_LOST)
+                .build();
+    }
+
+    private UpdateCardRequest createUpdateCardRequest() {
+        return UpdateCardRequest.builder()
+                .reference("Updated-Reference-987")
+                .expiryMonth(12)
+                .expiryYear(2025)
+                .build();
+    }
+
+    private RenewCardRequest createRenewCardRequest() {
+        return com.checkout.issuing.cards.requests.renew.VirtualCardRenewRequest.builder()
+                .displayName("John Kennedy Renewed")
+                .reference("Renewed-X-123456-N11")
+                .build();
+    }
+
+    private ScheduleRevocationRequest createScheduleRevocationRequest() {
+        return ScheduleRevocationRequest.builder()
+                .revocationDate("2025-12-31")
                 .build();
     }
 
@@ -303,5 +427,21 @@ class IssuingCardsTestIT extends BaseIssuingTestIT {
         assertNotNull(credentialsResponse);
         assertNotNull(credentialsResponse.getNumber());
         assertNotNull(credentialsResponse.getCvc2());
+    }
+
+    private void validateUpdateCardResponse(UpdateCardResponse updateResponse) {
+        assertNotNull(updateResponse);
+        assertNotNull(updateResponse.getLastModifiedDate());
+    }
+
+    private void validateRenewCardResponse(RenewCardResponse renewResponse, String parentCardId) {
+        assertNotNull(renewResponse);
+        assertNotNull(renewResponse.getId());
+        assertEquals(parentCardId, renewResponse.getParentCardId());
+    }
+
+    private void validateVoidResponse(VoidResponse voidResponse) {
+        assertNotNull(voidResponse);
+        assertEquals(HttpStatus.SC_OK, voidResponse.getHttpStatusCode());
     }
 }
