@@ -33,6 +33,7 @@ import com.checkout.common.CustomerResponse;
 import com.checkout.common.Phone;
 import com.checkout.payments.request.AuthorizationRequest;
 import com.checkout.payments.request.PaymentRequest;
+import com.checkout.payments.request.PaymentSearchRequest;
 import com.checkout.payments.request.PayoutRequest;
 import com.checkout.payments.request.source.AbstractRequestSource;
 import com.checkout.payments.request.source.PayoutRequestCurrencyAccountSource;
@@ -45,6 +46,7 @@ import com.checkout.payments.request.source.apm.RequestTamaraSource;
 import com.checkout.payments.response.AuthorizationResponse;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
+import com.checkout.payments.response.PaymentSearchResponse;
 import com.checkout.payments.response.PaymentsQueryResponse;
 import com.checkout.payments.response.PayoutResponse;
 import com.checkout.payments.sender.PaymentInstrumentSender;
@@ -496,6 +498,20 @@ class PaymentsClientImplTest {
         validateResponse(response, actualResponse);
     }
 
+    @Test
+    void shouldSearchPayments() throws ExecutionException, InterruptedException {
+        final PaymentSearchRequest request = createPaymentSearchRequest();
+        final PaymentSearchResponse response = createPaymentSearchResponse();
+
+        when(apiClient.postAsync(eq("payments/search"), any(SdkAuthorization.class), eq(PaymentSearchResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<PaymentSearchResponse> future = paymentsClient.searchPayments(request);
+        final PaymentSearchResponse actualResponse = future.get();
+
+        validateResponse(response, actualResponse);
+    }
+
     // Synchronous methods
     @Test
     void shouldRequestPaymentSync() {
@@ -870,6 +886,19 @@ class PaymentsClientImplTest {
         validateResponse(expectedResponse, actualResponse);
     }
 
+    @Test
+    void shouldSearchPaymentsSync() {
+        final PaymentSearchRequest request = createPaymentSearchRequest();
+        final PaymentSearchResponse expectedResponse = createPaymentSearchResponse();
+
+        when(apiClient.post(eq("payments/search"), any(SdkAuthorization.class), eq(PaymentSearchResponse.class), eq(request), isNull()))
+                .thenReturn(expectedResponse);
+
+        final PaymentSearchResponse actualResponse = paymentsClient.searchPaymentsSync(request);
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
     // Common methods
     private RequestIdSource createIdSource() {
         return mock(RequestIdSource.class);
@@ -1018,6 +1047,17 @@ class PaymentsClientImplTest {
     @SuppressWarnings("unchecked")
     private ItemsResponse<PaymentAction> createPaymentActionsResponse() {
         return (ItemsResponse<PaymentAction>) mock(ItemsResponse.class);
+    }
+
+    private PaymentSearchRequest createPaymentSearchRequest() {
+        return PaymentSearchRequest.builder()
+                .query("amount:100")
+                .limit(10)
+                .build();
+    }
+
+    private PaymentSearchResponse createPaymentSearchResponse() {
+        return mock(PaymentSearchResponse.class);
     }
 
     private <T> void validateResponse(T expectedResponse, T actualResponse) {
