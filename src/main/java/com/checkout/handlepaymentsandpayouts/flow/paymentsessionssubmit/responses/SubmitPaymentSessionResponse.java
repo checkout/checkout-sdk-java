@@ -1,7 +1,7 @@
 package com.checkout.handlepaymentsandpayouts.flow.paymentsessionssubmit.responses;
 
+import com.checkout.common.PaymentMethodType;
 import com.checkout.common.Resource;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessionssubmit.enums.PaymentMethodType;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
