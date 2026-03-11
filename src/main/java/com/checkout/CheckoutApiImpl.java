@@ -36,6 +36,8 @@ import com.checkout.metadata.MetadataClient;
 import com.checkout.metadata.MetadataClientImpl;
 import com.checkout.networktokens.NetworkTokensClient;
 import com.checkout.networktokens.NetworkTokensClientImpl;
+import com.checkout.paymentmethods.PaymentMethodsClient;
+import com.checkout.paymentmethods.PaymentMethodsClientImpl;
 import com.checkout.payments.PaymentsClient;
 import com.checkout.payments.PaymentsClientImpl;
 import com.checkout.payments.contexts.PaymentContextsClient;
@@ -72,6 +74,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final SessionsClient sessionsClient;
     private final ForexClient forexClient;
     private final PaymentLinksClient paymentLinksClient;
+    private final PaymentMethodsClient paymentMethodsClient;
     private final HostedPaymentsClient hostedPaymentsClient;
     private final TransfersClient transfersClient;
     private final BalancesClient balancesClient;
@@ -102,6 +105,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.sessionsClient = new SessionsClientImpl(this.apiClient, configuration);
         this.forexClient = new ForexClientImpl(this.apiClient, configuration);
         this.paymentLinksClient = new PaymentLinksClientImpl(this.apiClient, configuration);
+        this.paymentMethodsClient = new PaymentMethodsClientImpl(this.apiClient, configuration);
         this.hostedPaymentsClient = new HostedPaymentsClientImpl(this.apiClient, configuration);
         this.transfersClient = new TransfersClientImpl(getTransfersClient(configuration), configuration);
         this.balancesClient = new BalancesClientImpl(getBalancesClient(configuration), configuration);
@@ -177,6 +181,11 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     @Override
     public PaymentLinksClient paymentLinksClient() {
         return paymentLinksClient;
+    }
+
+    @Override
+    public PaymentMethodsClient paymentMethodsClient() {
+        return paymentMethodsClient;
     }
 
     @Override
