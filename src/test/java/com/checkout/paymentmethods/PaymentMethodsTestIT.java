@@ -1,6 +1,5 @@
 package com.checkout.paymentmethods;
 
-import com.checkout.CheckoutApiException;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.paymentmethods.requests.PaymentMethodsQuery;
