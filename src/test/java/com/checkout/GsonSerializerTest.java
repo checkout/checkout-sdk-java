@@ -27,7 +27,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 
 import java.time.Instant;
-import java.io.UnsupportedEncodingException;
 import java.io.IOException;
 
 import static com.checkout.TestHelper.getMock;
@@ -302,7 +301,7 @@ class GsonSerializerTest {
 
         @Test
         @DisplayName("Should create form encoded content from simple object")
-        void shouldCreateFormEncodedContentFromSimpleObject() throws UnsupportedEncodingException, IOException {
+        void shouldCreateFormEncodedContentFromSimpleObject() throws IOException {
             final SimpleTestObject testObject = new SimpleTestObject();
             testObject.clientId = "test_client_123";
             testObject.clientSecret = "secret_456";
@@ -321,7 +320,7 @@ class GsonSerializerTest {
 
         @Test
         @DisplayName("Should create form encoded content with Gson from simple object")
-        void shouldCreateFormEncodedContentWithGsonFromSimpleObject() throws UnsupportedEncodingException, IOException {
+        void shouldCreateFormEncodedContentWithGsonFromSimpleObject() throws IOException {
             final SimpleTestObject testObject = new SimpleTestObject();
             testObject.clientId = "test_client_123";
             testObject.clientSecret = "secret_456";
@@ -352,7 +351,7 @@ class GsonSerializerTest {
 
         @Test
         @DisplayName("Should skip null fields")
-        void shouldSkipNullFields() throws UnsupportedEncodingException, IOException {
+        void shouldSkipNullFields() throws IOException {
             final SimpleTestObject testObject = new SimpleTestObject();
             testObject.clientId = "test_client_123";
             testObject.clientSecret = null; // This should be skipped
@@ -371,7 +370,7 @@ class GsonSerializerTest {
 
         @Test
         @DisplayName("Should handle boolean values correctly")
-        void shouldHandleBooleanValuesCorrectly() throws UnsupportedEncodingException, IOException {
+        void shouldHandleBooleanValuesCorrectly() throws IOException {
             final BooleanTestObject testObject = new BooleanTestObject();
             testObject.isActive = true;
             testObject.isEnabled = false;
@@ -390,7 +389,7 @@ class GsonSerializerTest {
 
         @Test
         @DisplayName("Should handle various data types")
-        void shouldHandleVariousDataTypes() throws UnsupportedEncodingException, IOException {
+        void shouldHandleVariousDataTypes() throws IOException {
             final VariousTypesTestObject testObject = new VariousTypesTestObject();
             testObject.stringValue = "test string";
             testObject.intValue = 42;
@@ -411,7 +410,7 @@ class GsonSerializerTest {
 
         @Test
         @DisplayName("Should handle special characters in values")
-        void shouldHandleSpecialCharactersInValues() throws UnsupportedEncodingException, IOException {
+        void shouldHandleSpecialCharactersInValues() throws IOException {
             final SpecialCharsTestObject testObject = new SpecialCharsTestObject();
             testObject.specialValue = "test@example.com";
             testObject.spaceValue = "value with spaces";
@@ -430,7 +429,7 @@ class GsonSerializerTest {
         @Test
         @Disabled("Fails at the pipeline level, works in local, this is supported by the serializer")
         @DisplayName("Should handle empty object")
-        void shouldHandleEmptyObject() throws UnsupportedEncodingException, IOException {
+        void shouldHandleEmptyObject() throws IOException {
             final EmptyTestObject testObject = new EmptyTestObject();
 
             final UrlEncodedFormEntity entity = GsonSerializer.createFormUrlEncodedContent(testObject);
@@ -442,7 +441,7 @@ class GsonSerializerTest {
 
         @Test
         @DisplayName("Should handle object with SerializedName annotations")
-        void shouldHandleSerializedNameAnnotations() throws UnsupportedEncodingException, IOException {
+        void shouldHandleSerializedNameAnnotations() throws IOException {
             final SerializedNameTestObject testObject = new SerializedNameTestObject();
             testObject.clientId = "test_123";
             testObject.grantType = "client_credentials";
@@ -458,7 +457,7 @@ class GsonSerializerTest {
 
         @Test
         @DisplayName("Should handle inheritance")
-        void shouldHandleInheritance() throws UnsupportedEncodingException, IOException {
+        void shouldHandleInheritance() throws IOException {
             final ChildTestObject testObject = new ChildTestObject();
             testObject.childProperty = "child_value";
             testObject.parentProperty = "parent_value";
@@ -473,7 +472,7 @@ class GsonSerializerTest {
 
         @Test
         @DisplayName("Should convert field names to snake_case")
-        void shouldConvertFieldNamesToSnakeCase() throws UnsupportedEncodingException, IOException {
+        void shouldConvertFieldNamesToSnakeCase() throws IOException {
             final CamelCaseTestObject testObject = new CamelCaseTestObject();
             testObject.firstName = "John";
             testObject.lastName = "Doe";
@@ -494,7 +493,7 @@ class GsonSerializerTest {
 
         @Test
         @DisplayName("Should compare createFormUrlEncodedContent vs createFormUrlEncodedContentWithGson")
-        void shouldCompareRegularVsGsonMethods() throws UnsupportedEncodingException, IOException {
+        void shouldCompareRegularVsGsonMethods() throws IOException {
             final CamelCaseTestObject testObject = new CamelCaseTestObject();
             testObject.firstName = "John";
             testObject.isActiveUser = true;
