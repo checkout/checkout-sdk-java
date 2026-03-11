@@ -23,8 +23,6 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -59,8 +57,8 @@ class IdentityVerificationClientImplTest {
         final CreateAndOpenIdentityVerificationRequest request = createCreateAndOpenIdentityVerificationRequest();
         final IdentityVerificationResponse response = createIdentityVerificationResponse();
 
-        when(apiClient.postAsync(eq("create-and-open-idv"), eq(authorization), eq(IdentityVerificationResponse.class),
-                eq(request), isNull()))
+        when(apiClient.postAsync("create-and-open-idv", authorization, IdentityVerificationResponse.class,
+                request, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<IdentityVerificationResponse> future = client.createAndOpenIdentityVerificationAsync(request);
@@ -74,8 +72,8 @@ class IdentityVerificationClientImplTest {
         final IdentityVerificationRequest request = createIdentityVerificationRequest();
         final IdentityVerificationResponse response = createIdentityVerificationResponse();
 
-        when(apiClient.postAsync(eq("identity-verifications"), eq(authorization), eq(IdentityVerificationResponse.class),
-                eq(request), isNull()))
+        when(apiClient.postAsync("identity-verifications", authorization, IdentityVerificationResponse.class,
+                request, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<IdentityVerificationResponse> future = client.createIdentityVerificationAsync(request);
@@ -89,8 +87,8 @@ class IdentityVerificationClientImplTest {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationResponse response = createIdentityVerificationResponse();
 
-        when(apiClient.getAsync(eq("identity-verifications/" + identityVerificationId), eq(authorization), 
-                eq(IdentityVerificationResponse.class)))
+        when(apiClient.getAsync("identity-verifications/" + identityVerificationId, authorization, 
+                IdentityVerificationResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<IdentityVerificationResponse> future = client.getIdentityVerificationAsync(identityVerificationId);
@@ -104,8 +102,8 @@ class IdentityVerificationClientImplTest {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationResponse response = createIdentityVerificationResponse();
 
-        when(apiClient.postAsync(eq("identity-verifications/" + identityVerificationId + "/anonymize"), eq(authorization), 
-                eq(IdentityVerificationResponse.class), isNull(), isNull()))
+        when(apiClient.postAsync("identity-verifications/" + identityVerificationId + "/anonymize", authorization, 
+                IdentityVerificationResponse.class, null, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<IdentityVerificationResponse> future = client.anonymizeIdentityVerificationAsync(identityVerificationId);
@@ -119,8 +117,8 @@ class IdentityVerificationClientImplTest {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationAttemptsResponse response = createIdentityVerificationAttemptsResponse();
 
-        when(apiClient.getAsync(eq("identity-verifications/" + identityVerificationId + "/attempts"), eq(authorization), 
-                eq(IdentityVerificationAttemptsResponse.class)))
+        when(apiClient.getAsync("identity-verifications/" + identityVerificationId + "/attempts", authorization, 
+                IdentityVerificationAttemptsResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<IdentityVerificationAttemptsResponse> future = client.getIdentityVerificationAttemptsAsync(identityVerificationId);
@@ -135,8 +133,8 @@ class IdentityVerificationClientImplTest {
         final IdentityVerificationAttemptRequest request = createIdentityVerificationAttemptRequest();
         final IdentityVerificationAttemptResponse response = createIdentityVerificationAttemptResponse();
 
-        when(apiClient.postAsync(eq("identity-verifications/" + identityVerificationId + "/attempts"), eq(authorization), 
-                eq(IdentityVerificationAttemptResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync("identity-verifications/" + identityVerificationId + "/attempts", authorization, 
+                IdentityVerificationAttemptResponse.class, request, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<IdentityVerificationAttemptResponse> future = client.createIdentityVerificationAttemptAsync(identityVerificationId, request);
@@ -151,8 +149,8 @@ class IdentityVerificationClientImplTest {
         final String attemptId = "idva_test_987654321";
         final IdentityVerificationAttemptResponse response = createIdentityVerificationAttemptResponse();
 
-        when(apiClient.getAsync(eq("identity-verifications/" + identityVerificationId + "/attempts/" + attemptId), 
-                eq(authorization), eq(IdentityVerificationAttemptResponse.class)))
+        when(apiClient.getAsync("identity-verifications/" + identityVerificationId + "/attempts/" + attemptId, 
+                authorization, IdentityVerificationAttemptResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<IdentityVerificationAttemptResponse> future = client.getIdentityVerificationAttemptAsync(identityVerificationId, attemptId);
@@ -166,8 +164,8 @@ class IdentityVerificationClientImplTest {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationReportResponse response = createIdentityVerificationReportResponse();
 
-        when(apiClient.getAsync(eq("identity-verifications/" + identityVerificationId + "/pdf-report"), eq(authorization), 
-                eq(IdentityVerificationReportResponse.class)))
+        when(apiClient.getAsync("identity-verifications/" + identityVerificationId + "/pdf-report", authorization, 
+                IdentityVerificationReportResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<IdentityVerificationReportResponse> future = client.generateIdentityVerificationReportAsync(identityVerificationId);
@@ -183,8 +181,8 @@ class IdentityVerificationClientImplTest {
         final CreateAndOpenIdentityVerificationRequest request = createCreateAndOpenIdentityVerificationRequest();
         final IdentityVerificationResponse response = createIdentityVerificationResponse();
 
-        when(apiClient.post(eq("create-and-open-idv"), eq(authorization), eq(IdentityVerificationResponse.class),
-                eq(request), isNull()))
+        when(apiClient.post("create-and-open-idv", authorization, IdentityVerificationResponse.class,
+                request, null))
                 .thenReturn(response);
 
         final IdentityVerificationResponse result = client.createAndOpenIdentityVerification(request);
@@ -198,8 +196,8 @@ class IdentityVerificationClientImplTest {
         final IdentityVerificationRequest request = createIdentityVerificationRequest();
         final IdentityVerificationResponse response = createIdentityVerificationResponse();
 
-        when(apiClient.post(eq("identity-verifications"), eq(authorization), eq(IdentityVerificationResponse.class),
-                eq(request), isNull()))
+        when(apiClient.post("identity-verifications", authorization, IdentityVerificationResponse.class,
+                request, null))
                 .thenReturn(response);
 
         final IdentityVerificationResponse result = client.createIdentityVerification(request);
@@ -213,8 +211,8 @@ class IdentityVerificationClientImplTest {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationResponse response = createIdentityVerificationResponse();
 
-        when(apiClient.get(eq("identity-verifications/" + identityVerificationId), eq(authorization), 
-                eq(IdentityVerificationResponse.class)))
+        when(apiClient.get("identity-verifications/" + identityVerificationId, authorization, 
+                IdentityVerificationResponse.class))
                 .thenReturn(response);
 
         final IdentityVerificationResponse result = client.getIdentityVerification(identityVerificationId);
@@ -228,8 +226,8 @@ class IdentityVerificationClientImplTest {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationResponse response = createIdentityVerificationResponse();
 
-        when(apiClient.post(eq("identity-verifications/" + identityVerificationId + "/anonymize"), eq(authorization), 
-                eq(IdentityVerificationResponse.class), isNull(), isNull()))
+        when(apiClient.post("identity-verifications/" + identityVerificationId + "/anonymize", authorization, 
+                IdentityVerificationResponse.class, null, null))
                 .thenReturn(response);
 
         final IdentityVerificationResponse result = client.anonymizeIdentityVerification(identityVerificationId);
@@ -243,8 +241,8 @@ class IdentityVerificationClientImplTest {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationAttemptsResponse response = createIdentityVerificationAttemptsResponse();
 
-        when(apiClient.get(eq("identity-verifications/" + identityVerificationId + "/attempts"), eq(authorization), 
-                eq(IdentityVerificationAttemptsResponse.class)))
+        when(apiClient.get("identity-verifications/" + identityVerificationId + "/attempts", authorization, 
+                IdentityVerificationAttemptsResponse.class))
                 .thenReturn(response);
 
         final IdentityVerificationAttemptsResponse result = client.getIdentityVerificationAttempts(identityVerificationId);
@@ -259,8 +257,8 @@ class IdentityVerificationClientImplTest {
         final IdentityVerificationAttemptRequest request = createIdentityVerificationAttemptRequest();
         final IdentityVerificationAttemptResponse response = createIdentityVerificationAttemptResponse();
 
-        when(apiClient.post(eq("identity-verifications/" + identityVerificationId + "/attempts"), eq(authorization), 
-                eq(IdentityVerificationAttemptResponse.class), eq(request), isNull()))
+        when(apiClient.post("identity-verifications/" + identityVerificationId + "/attempts", authorization, 
+                IdentityVerificationAttemptResponse.class, request, null))
                 .thenReturn(response);
 
         final IdentityVerificationAttemptResponse result = client.createIdentityVerificationAttempt(identityVerificationId, request);
@@ -275,8 +273,8 @@ class IdentityVerificationClientImplTest {
         final String attemptId = "idva_test_987654321";
         final IdentityVerificationAttemptResponse response = createIdentityVerificationAttemptResponse();
 
-        when(apiClient.get(eq("identity-verifications/" + identityVerificationId + "/attempts/" + attemptId), 
-                eq(authorization), eq(IdentityVerificationAttemptResponse.class)))
+        when(apiClient.get("identity-verifications/" + identityVerificationId + "/attempts/" + attemptId, 
+                authorization, IdentityVerificationAttemptResponse.class))
                 .thenReturn(response);
 
         final IdentityVerificationAttemptResponse result = client.getIdentityVerificationAttempt(identityVerificationId, attemptId);
@@ -290,8 +288,8 @@ class IdentityVerificationClientImplTest {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationReportResponse response = createIdentityVerificationReportResponse();
 
-        when(apiClient.get(eq("identity-verifications/" + identityVerificationId + "/pdf-report"), eq(authorization), 
-                eq(IdentityVerificationReportResponse.class)))
+        when(apiClient.get("identity-verifications/" + identityVerificationId + "/pdf-report", authorization, 
+                IdentityVerificationReportResponse.class))
                 .thenReturn(response);
 
         final IdentityVerificationReportResponse result = client.generateIdentityVerificationReport(identityVerificationId);

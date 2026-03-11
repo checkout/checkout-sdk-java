@@ -121,7 +121,7 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
                 checkoutApi.identityVerificationClient().createIdentityVerificationAttemptAsync(created.getId(), attemptRequest));
 
         // Assert
-        validateCreatedIdentityVerificationAttempt(attempt, attemptRequest);
+        validateCreatedIdentityVerificationAttempt(attempt);
     }
 
     @Test
@@ -243,7 +243,7 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
         final IdentityVerificationAttemptResponse attempt = checkoutApi.identityVerificationClient().createIdentityVerificationAttempt(created.getId(), attemptRequest);
 
         // Assert
-        validateCreatedIdentityVerificationAttempt(attempt, attemptRequest);
+        validateCreatedIdentityVerificationAttempt(attempt);
     }
 
     @Test
@@ -344,8 +344,7 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
         // Add specific validation for anonymized data
     }
 
-    private void validateCreatedIdentityVerificationAttempt(final IdentityVerificationAttemptResponse attempt, 
-                                                           final IdentityVerificationAttemptRequest request) {
+    private void validateCreatedIdentityVerificationAttempt(final IdentityVerificationAttemptResponse attempt) {
         assertNotNull(attempt);
         assertNotNull(attempt.getId());
         // Add specific validation for attempt data

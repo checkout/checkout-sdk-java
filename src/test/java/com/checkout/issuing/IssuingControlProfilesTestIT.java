@@ -62,7 +62,7 @@ class IssuingControlProfilesTestIT extends BaseIssuingTestIT {
         final ControlProfileResponse response = blocking(() ->
                 issuingApi.issuingClient().updateControlProfile(controlProfile.getId(), request));
 
-        validateUpdatedControlProfileResponse(response, controlProfile.getId());
+        validateControlProfileResponse(response, controlProfile.getId());
     }
 
     @Test
@@ -123,7 +123,7 @@ class IssuingControlProfilesTestIT extends BaseIssuingTestIT {
         final ControlProfileResponse response = 
                 issuingApi.issuingClient().updateControlProfileSync(controlProfile.getId(), request);
 
-        validateUpdatedControlProfileResponse(response, controlProfile.getId());
+        validateControlProfileResponse(response, controlProfile.getId());
     }
 
     @Test
@@ -204,11 +204,6 @@ class IssuingControlProfilesTestIT extends BaseIssuingTestIT {
     private void validateControlProfilesQueryResponse(ControlProfilesQueryResponse response) {
         assertNotNull(response);
         // Note: May be empty if control profiles were removed by other tests
-    }
-
-    private void validateUpdatedControlProfileResponse(ControlProfileResponse response, String expectedId) {
-        assertNotNull(response);
-        assertEquals(expectedId, response.getId());
     }
 
     private void validateEmptyResponse(EmptyResponse response) {

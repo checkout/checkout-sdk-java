@@ -69,8 +69,8 @@ class AmlScreeningClientImplTest {
         final String amlScreeningId = "amlv_test_123456789";
         final AmlScreeningResponse response = createAmlScreeningResponse();
 
-        when(apiClient.getAsync(eq("aml-verifications/" + amlScreeningId), eq(authorization), 
-                eq(AmlScreeningResponse.class)))
+        when(apiClient.getAsync("aml-verifications/" + amlScreeningId, authorization, 
+                AmlScreeningResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<AmlScreeningResponse> future = client.getAmlScreeningAsync(amlScreeningId);
@@ -100,8 +100,8 @@ class AmlScreeningClientImplTest {
         final String amlScreeningId = "amlv_test_123456789";
         final AmlScreeningResponse response = createAmlScreeningResponse();
 
-        when(apiClient.get(eq("aml-verifications/" + amlScreeningId), eq(authorization), 
-                eq(AmlScreeningResponse.class)))
+        when(apiClient.get("aml-verifications/" + amlScreeningId, authorization, 
+                AmlScreeningResponse.class))
                 .thenReturn(response);
 
         final AmlScreeningResponse result = client.getAmlScreening(amlScreeningId);

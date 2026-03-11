@@ -21,8 +21,6 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -55,8 +53,8 @@ class FaceAuthenticationClientImplTest {
         final FaceAuthenticationRequest request = mock(FaceAuthenticationRequest.class);
         final FaceAuthenticationResponse response = mock(FaceAuthenticationResponse.class);
 
-        when(apiClient.postAsync(eq("face-authentications"), eq(authorization), eq(FaceAuthenticationResponse.class),
-                eq(request), isNull()))
+        when(apiClient.postAsync("face-authentications", authorization, FaceAuthenticationResponse.class,
+                request, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<FaceAuthenticationResponse> future = client.createFaceAuthentication(request);
@@ -70,7 +68,7 @@ class FaceAuthenticationClientImplTest {
         final String faceAuthenticationId = "fav_test_123456789";
         final FaceAuthenticationResponse response = mock(FaceAuthenticationResponse.class);
 
-        when(apiClient.getAsync(eq("face-authentications/" + faceAuthenticationId), eq(authorization), eq(FaceAuthenticationResponse.class)))
+        when(apiClient.getAsync("face-authentications/" + faceAuthenticationId, authorization, FaceAuthenticationResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<FaceAuthenticationResponse> future = client.getFaceAuthentication(faceAuthenticationId);
@@ -84,8 +82,8 @@ class FaceAuthenticationClientImplTest {
         final String faceAuthenticationId = "fav_test_123456789";
         final FaceAuthenticationResponse response = mock(FaceAuthenticationResponse.class);
 
-        when(apiClient.postAsync(eq("face-authentications/" + faceAuthenticationId + "/anonymize"), eq(authorization), 
-                eq(FaceAuthenticationResponse.class), isNull(), isNull()))
+        when(apiClient.postAsync("face-authentications/" + faceAuthenticationId + "/anonymize", authorization, 
+                FaceAuthenticationResponse.class, null, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<FaceAuthenticationResponse> future = client.anonymizeFaceAuthentication(faceAuthenticationId);
@@ -100,8 +98,8 @@ class FaceAuthenticationClientImplTest {
         final FaceAuthenticationAttemptRequest request = mock(FaceAuthenticationAttemptRequest.class);
         final FaceAuthenticationAttemptResponse response = mock(FaceAuthenticationAttemptResponse.class);
 
-        when(apiClient.postAsync(eq("face-authentications/" + faceAuthenticationId + "/attempts"), eq(authorization), 
-                eq(FaceAuthenticationAttemptResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync("face-authentications/" + faceAuthenticationId + "/attempts", authorization, 
+                FaceAuthenticationAttemptResponse.class, request, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<FaceAuthenticationAttemptResponse> future = 
@@ -116,8 +114,8 @@ class FaceAuthenticationClientImplTest {
         final String faceAuthenticationId = "fav_test_123456789";
         final FaceAuthenticationAttemptsResponse response = mock(FaceAuthenticationAttemptsResponse.class);
 
-        when(apiClient.getAsync(eq("face-authentications/" + faceAuthenticationId + "/attempts"), eq(authorization), 
-                eq(FaceAuthenticationAttemptsResponse.class)))
+        when(apiClient.getAsync("face-authentications/" + faceAuthenticationId + "/attempts", authorization, 
+                FaceAuthenticationAttemptsResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<FaceAuthenticationAttemptsResponse> future = 
@@ -133,8 +131,8 @@ class FaceAuthenticationClientImplTest {
         final String attemptId = "fatp_test_987654321";
         final FaceAuthenticationAttemptResponse response = mock(FaceAuthenticationAttemptResponse.class);
 
-        when(apiClient.getAsync(eq("face-authentications/" + faceAuthenticationId + "/attempts/" + attemptId), 
-                eq(authorization), eq(FaceAuthenticationAttemptResponse.class)))
+        when(apiClient.getAsync("face-authentications/" + faceAuthenticationId + "/attempts/" + attemptId, 
+                authorization, FaceAuthenticationAttemptResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<FaceAuthenticationAttemptResponse> future = 
@@ -151,8 +149,8 @@ class FaceAuthenticationClientImplTest {
         final FaceAuthenticationRequest request = mock(FaceAuthenticationRequest.class);
         final FaceAuthenticationResponse response = mock(FaceAuthenticationResponse.class);
 
-        when(apiClient.post(eq("face-authentications"), eq(authorization), eq(FaceAuthenticationResponse.class),
-                eq(request), isNull()))
+        when(apiClient.post("face-authentications", authorization, FaceAuthenticationResponse.class,
+                request, null))
                 .thenReturn(response);
 
         final FaceAuthenticationResponse result = client.createFaceAuthenticationSync(request);
@@ -166,7 +164,7 @@ class FaceAuthenticationClientImplTest {
         final String faceAuthenticationId = "fav_test_123456789";
         final FaceAuthenticationResponse response = mock(FaceAuthenticationResponse.class);
 
-        when(apiClient.get(eq("face-authentications/" + faceAuthenticationId), eq(authorization), eq(FaceAuthenticationResponse.class)))
+        when(apiClient.get("face-authentications/" + faceAuthenticationId, authorization, FaceAuthenticationResponse.class))
                 .thenReturn(response);
 
         final FaceAuthenticationResponse result = client.getFaceAuthenticationSync(faceAuthenticationId);
@@ -180,8 +178,8 @@ class FaceAuthenticationClientImplTest {
         final String faceAuthenticationId = "fav_test_123456789";
         final FaceAuthenticationResponse response = mock(FaceAuthenticationResponse.class);
 
-        when(apiClient.post(eq("face-authentications/" + faceAuthenticationId + "/anonymize"), eq(authorization), 
-                eq(FaceAuthenticationResponse.class), isNull(), isNull()))
+        when(apiClient.post("face-authentications/" + faceAuthenticationId + "/anonymize", authorization, 
+                FaceAuthenticationResponse.class, null, null))
                 .thenReturn(response);
 
         final FaceAuthenticationResponse result = client.anonymizeFaceAuthenticationSync(faceAuthenticationId);
@@ -196,8 +194,8 @@ class FaceAuthenticationClientImplTest {
         final FaceAuthenticationAttemptRequest request = mock(FaceAuthenticationAttemptRequest.class);
         final FaceAuthenticationAttemptResponse response = mock(FaceAuthenticationAttemptResponse.class);
 
-        when(apiClient.post(eq("face-authentications/" + faceAuthenticationId + "/attempts"), eq(authorization), 
-                eq(FaceAuthenticationAttemptResponse.class), eq(request), isNull()))
+        when(apiClient.post("face-authentications/" + faceAuthenticationId + "/attempts", authorization, 
+                FaceAuthenticationAttemptResponse.class, request, null))
                 .thenReturn(response);
 
         final FaceAuthenticationAttemptResponse result = 
@@ -212,8 +210,8 @@ class FaceAuthenticationClientImplTest {
         final String faceAuthenticationId = "fav_test_123456789";
         final FaceAuthenticationAttemptsResponse response = mock(FaceAuthenticationAttemptsResponse.class);
 
-        when(apiClient.get(eq("face-authentications/" + faceAuthenticationId + "/attempts"), eq(authorization), 
-                eq(FaceAuthenticationAttemptsResponse.class)))
+        when(apiClient.get("face-authentications/" + faceAuthenticationId + "/attempts", authorization, 
+                FaceAuthenticationAttemptsResponse.class))
                 .thenReturn(response);
 
         final FaceAuthenticationAttemptsResponse result = 
@@ -229,8 +227,8 @@ class FaceAuthenticationClientImplTest {
         final String attemptId = "fatp_test_987654321";
         final FaceAuthenticationAttemptResponse response = mock(FaceAuthenticationAttemptResponse.class);
 
-        when(apiClient.get(eq("face-authentications/" + faceAuthenticationId + "/attempts/" + attemptId), 
-                eq(authorization), eq(FaceAuthenticationAttemptResponse.class)))
+        when(apiClient.get("face-authentications/" + faceAuthenticationId + "/attempts/" + attemptId, 
+                authorization, FaceAuthenticationAttemptResponse.class))
                 .thenReturn(response);
 
         final FaceAuthenticationAttemptResponse result = 

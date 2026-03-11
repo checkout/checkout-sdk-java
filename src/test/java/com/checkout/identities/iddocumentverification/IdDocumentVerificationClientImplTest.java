@@ -22,8 +22,6 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -56,8 +54,8 @@ class IdDocumentVerificationClientImplTest {
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
         final IdDocumentVerificationResponse response = createIdDocumentVerificationResponse();
 
-        when(apiClient.postAsync(eq("id-document-verifications"), eq(authorization), eq(IdDocumentVerificationResponse.class),
-                eq(request), isNull()))
+        when(apiClient.postAsync("id-document-verifications", authorization, IdDocumentVerificationResponse.class,
+                request, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<IdDocumentVerificationResponse> future = client.createIdDocumentVerificationAsync(request);
@@ -71,8 +69,8 @@ class IdDocumentVerificationClientImplTest {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationResponse response = createIdDocumentVerificationResponse();
 
-        when(apiClient.getAsync(eq("id-document-verifications/" + idDocumentVerificationId), eq(authorization), 
-                eq(IdDocumentVerificationResponse.class)))
+        when(apiClient.getAsync("id-document-verifications/" + idDocumentVerificationId, authorization, 
+                IdDocumentVerificationResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<IdDocumentVerificationResponse> future = client.getIdDocumentVerificationAsync(idDocumentVerificationId);
@@ -86,8 +84,8 @@ class IdDocumentVerificationClientImplTest {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationResponse response = createIdDocumentVerificationResponse();
 
-        when(apiClient.postAsync(eq("id-document-verifications/" + idDocumentVerificationId + "/anonymize"), eq(authorization), 
-                eq(IdDocumentVerificationResponse.class), isNull(), isNull()))
+        when(apiClient.postAsync("id-document-verifications/" + idDocumentVerificationId + "/anonymize", authorization, 
+                IdDocumentVerificationResponse.class, null, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<IdDocumentVerificationResponse> future = client.anonymizeIdDocumentVerificationAsync(idDocumentVerificationId);
@@ -102,8 +100,8 @@ class IdDocumentVerificationClientImplTest {
         final IdDocumentVerificationAttemptRequest request = createIdDocumentVerificationAttemptRequest();
         final IdDocumentVerificationAttemptResponse response = createIdDocumentVerificationAttemptResponse();
 
-        when(apiClient.postAsync(eq("id-document-verifications/" + idDocumentVerificationId + "/attempts"), eq(authorization), 
-                eq(IdDocumentVerificationAttemptResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync("id-document-verifications/" + idDocumentVerificationId + "/attempts", authorization, 
+                IdDocumentVerificationAttemptResponse.class, request, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<IdDocumentVerificationAttemptResponse> future = client.createIdDocumentVerificationAttemptAsync(idDocumentVerificationId, request);
@@ -117,8 +115,8 @@ class IdDocumentVerificationClientImplTest {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationAttemptsResponse response = createIdDocumentVerificationAttemptsResponse();
 
-        when(apiClient.getAsync(eq("id-document-verifications/" + idDocumentVerificationId + "/attempts"), eq(authorization), 
-                eq(IdDocumentVerificationAttemptsResponse.class)))
+        when(apiClient.getAsync("id-document-verifications/" + idDocumentVerificationId + "/attempts", authorization, 
+                IdDocumentVerificationAttemptsResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<IdDocumentVerificationAttemptsResponse> future = client.getIdDocumentVerificationAttemptsAsync(idDocumentVerificationId);
@@ -133,8 +131,8 @@ class IdDocumentVerificationClientImplTest {
         final String attemptId = "datp_test_123456789";
         final IdDocumentVerificationAttemptResponse response = createIdDocumentVerificationAttemptResponse();
 
-        when(apiClient.getAsync(eq("id-document-verifications/" + idDocumentVerificationId + "/attempts/" + attemptId), eq(authorization), 
-                eq(IdDocumentVerificationAttemptResponse.class)))
+        when(apiClient.getAsync("id-document-verifications/" + idDocumentVerificationId + "/attempts/" + attemptId, authorization, 
+                IdDocumentVerificationAttemptResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<IdDocumentVerificationAttemptResponse> future = client.getIdDocumentVerificationAttemptAsync(idDocumentVerificationId, attemptId);
@@ -148,8 +146,8 @@ class IdDocumentVerificationClientImplTest {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationReportResponse response = createIdDocumentVerificationReportResponse();
 
-        when(apiClient.getAsync(eq("id-document-verifications/" + idDocumentVerificationId + "/pdf-report"), eq(authorization), 
-                eq(IdDocumentVerificationReportResponse.class)))
+        when(apiClient.getAsync("id-document-verifications/" + idDocumentVerificationId + "/pdf-report", authorization, 
+                IdDocumentVerificationReportResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<IdDocumentVerificationReportResponse> future = client.getIdDocumentVerificationReportAsync(idDocumentVerificationId);
@@ -164,8 +162,8 @@ class IdDocumentVerificationClientImplTest {
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
         final IdDocumentVerificationResponse response = createIdDocumentVerificationResponse();
 
-        when(apiClient.post(eq("id-document-verifications"), eq(authorization), eq(IdDocumentVerificationResponse.class),
-                eq(request), isNull()))
+        when(apiClient.post("id-document-verifications", authorization, IdDocumentVerificationResponse.class,
+                request, null))
                 .thenReturn(response);
 
         final IdDocumentVerificationResponse result = client.createIdDocumentVerification(request);
@@ -179,8 +177,8 @@ class IdDocumentVerificationClientImplTest {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationResponse response = createIdDocumentVerificationResponse();
 
-        when(apiClient.get(eq("id-document-verifications/" + idDocumentVerificationId), eq(authorization), 
-                eq(IdDocumentVerificationResponse.class)))
+        when(apiClient.get("id-document-verifications/" + idDocumentVerificationId, authorization, 
+                IdDocumentVerificationResponse.class))
                 .thenReturn(response);
 
         final IdDocumentVerificationResponse result = client.getIdDocumentVerification(idDocumentVerificationId);
@@ -194,8 +192,8 @@ class IdDocumentVerificationClientImplTest {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationResponse response = createIdDocumentVerificationResponse();
 
-        when(apiClient.post(eq("id-document-verifications/" + idDocumentVerificationId + "/anonymize"), eq(authorization), 
-                eq(IdDocumentVerificationResponse.class), isNull(), isNull()))
+        when(apiClient.post("id-document-verifications/" + idDocumentVerificationId + "/anonymize", authorization, 
+                IdDocumentVerificationResponse.class, null, null))
                 .thenReturn(response);
 
         final IdDocumentVerificationResponse result = client.anonymizeIdDocumentVerification(idDocumentVerificationId);
@@ -210,8 +208,8 @@ class IdDocumentVerificationClientImplTest {
         final IdDocumentVerificationAttemptRequest request = createIdDocumentVerificationAttemptRequest();
         final IdDocumentVerificationAttemptResponse response = createIdDocumentVerificationAttemptResponse();
 
-        when(apiClient.post(eq("id-document-verifications/" + idDocumentVerificationId + "/attempts"), eq(authorization), 
-                eq(IdDocumentVerificationAttemptResponse.class), eq(request), isNull()))
+        when(apiClient.post("id-document-verifications/" + idDocumentVerificationId + "/attempts", authorization, 
+                IdDocumentVerificationAttemptResponse.class, request, null))
                 .thenReturn(response);
 
         final IdDocumentVerificationAttemptResponse result = client.createIdDocumentVerificationAttempt(idDocumentVerificationId, request);
@@ -225,8 +223,8 @@ class IdDocumentVerificationClientImplTest {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationAttemptsResponse response = createIdDocumentVerificationAttemptsResponse();
 
-        when(apiClient.get(eq("id-document-verifications/" + idDocumentVerificationId + "/attempts"), eq(authorization), 
-                eq(IdDocumentVerificationAttemptsResponse.class)))
+        when(apiClient.get("id-document-verifications/" + idDocumentVerificationId + "/attempts", authorization, 
+                IdDocumentVerificationAttemptsResponse.class))
                 .thenReturn(response);
 
         final IdDocumentVerificationAttemptsResponse result = client.getIdDocumentVerificationAttempts(idDocumentVerificationId);
@@ -241,8 +239,8 @@ class IdDocumentVerificationClientImplTest {
         final String attemptId = "datp_test_123456789";
         final IdDocumentVerificationAttemptResponse response = createIdDocumentVerificationAttemptResponse();
 
-        when(apiClient.get(eq("id-document-verifications/" + idDocumentVerificationId + "/attempts/" + attemptId), eq(authorization), 
-                eq(IdDocumentVerificationAttemptResponse.class)))
+        when(apiClient.get("id-document-verifications/" + idDocumentVerificationId + "/attempts/" + attemptId, authorization, 
+                IdDocumentVerificationAttemptResponse.class))
                 .thenReturn(response);
 
         final IdDocumentVerificationAttemptResponse result = client.getIdDocumentVerificationAttempt(idDocumentVerificationId, attemptId);
@@ -256,8 +254,8 @@ class IdDocumentVerificationClientImplTest {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationReportResponse response = createIdDocumentVerificationReportResponse();
 
-        when(apiClient.get(eq("id-document-verifications/" + idDocumentVerificationId + "/pdf-report"), eq(authorization), 
-                eq(IdDocumentVerificationReportResponse.class)))
+        when(apiClient.get("id-document-verifications/" + idDocumentVerificationId + "/pdf-report", authorization, 
+                IdDocumentVerificationReportResponse.class))
                 .thenReturn(response);
 
         final IdDocumentVerificationReportResponse result = client.getIdDocumentVerificationReport(idDocumentVerificationId);

@@ -19,8 +19,6 @@ import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -53,8 +51,8 @@ class ApplicantClientImplTest {
         final ApplicantRequest request = mock(ApplicantRequest.class);
         final ApplicantResponse response = mock(ApplicantResponse.class);
 
-        when(apiClient.postAsync(eq("applicants"), eq(authorization), eq(ApplicantResponse.class),
-                eq(request), isNull()))
+        when(apiClient.postAsync("applicants", authorization, ApplicantResponse.class,
+                request, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ApplicantResponse> future = client.createApplicant(request);
@@ -68,7 +66,7 @@ class ApplicantClientImplTest {
         final String applicantId = "aplt_test_123456789";
         final ApplicantResponse response = mock(ApplicantResponse.class);
 
-        when(apiClient.getAsync(eq("applicants/" + applicantId), eq(authorization), eq(ApplicantResponse.class)))
+        when(apiClient.getAsync("applicants/" + applicantId, authorization, ApplicantResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ApplicantResponse> future = client.getApplicant(applicantId);
@@ -83,8 +81,8 @@ class ApplicantClientImplTest {
         final ApplicantUpdateRequest request = mock(ApplicantUpdateRequest.class);
         final ApplicantResponse response = mock(ApplicantResponse.class);
 
-        when(apiClient.patchAsync(eq("applicants/" + applicantId), eq(authorization), 
-                eq(ApplicantResponse.class), eq(request), isNull()))
+        when(apiClient.patchAsync("applicants/" + applicantId, authorization, 
+                ApplicantResponse.class, request, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ApplicantResponse> future = client.updateApplicant(applicantId, request);
@@ -98,8 +96,8 @@ class ApplicantClientImplTest {
         final String applicantId = "aplt_test_123456789";
         final ApplicantResponse response = mock(ApplicantResponse.class);
 
-        when(apiClient.postAsync(eq("applicants/" + applicantId + "/anonymize"), eq(authorization), 
-                eq(ApplicantResponse.class), isNull(), isNull()))
+        when(apiClient.postAsync("applicants/" + applicantId + "/anonymize", authorization, 
+                ApplicantResponse.class, null, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ApplicantResponse> future = client.anonymizeApplicant(applicantId);
@@ -114,8 +112,8 @@ class ApplicantClientImplTest {
         final ApplicantRequest request = mock(ApplicantRequest.class);
         final ApplicantResponse response = mock(ApplicantResponse.class);
 
-        when(apiClient.post(eq("applicants"), eq(authorization), eq(ApplicantResponse.class),
-                eq(request), isNull()))
+        when(apiClient.post("applicants", authorization, ApplicantResponse.class,
+                request, null))
                 .thenReturn(response);
 
         final ApplicantResponse result = client.createApplicantSync(request);
@@ -129,7 +127,7 @@ class ApplicantClientImplTest {
         final String applicantId = "aplt_test_123456789";
         final ApplicantResponse response = mock(ApplicantResponse.class);
 
-        when(apiClient.get(eq("applicants/" + applicantId), eq(authorization), eq(ApplicantResponse.class)))
+        when(apiClient.get("applicants/" + applicantId, authorization, ApplicantResponse.class))
                 .thenReturn(response);
 
         final ApplicantResponse result = client.getApplicantSync(applicantId);
@@ -144,8 +142,8 @@ class ApplicantClientImplTest {
         final ApplicantUpdateRequest request = mock(ApplicantUpdateRequest.class);
         final ApplicantResponse response = mock(ApplicantResponse.class);
 
-        when(apiClient.patch(eq("applicants/" + applicantId), eq(authorization), 
-                eq(ApplicantResponse.class), eq(request), isNull()))
+        when(apiClient.patch("applicants/" + applicantId, authorization, 
+                ApplicantResponse.class, request, null))
                 .thenReturn(response);
 
         final ApplicantResponse result = client.updateApplicantSync(applicantId, request);
@@ -159,8 +157,8 @@ class ApplicantClientImplTest {
         final String applicantId = "aplt_test_123456789";
         final ApplicantResponse response = mock(ApplicantResponse.class);
 
-        when(apiClient.post(eq("applicants/" + applicantId + "/anonymize"), eq(authorization), 
-                eq(ApplicantResponse.class), isNull(), isNull()))
+        when(apiClient.post("applicants/" + applicantId + "/anonymize", authorization, 
+                ApplicantResponse.class, null, null))
                 .thenReturn(response);
 
         final ApplicantResponse result = client.anonymizeApplicantSync(applicantId);

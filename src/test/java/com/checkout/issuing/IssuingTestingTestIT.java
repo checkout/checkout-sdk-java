@@ -62,7 +62,7 @@ class IssuingTestingTestIT extends BaseIssuingTestIT {
         final EmptyResponse response = blocking(() ->
                 issuingApi.issuingClient().simulateClearing(transaction.getId(), request));
 
-        validateClearingResponse(response);
+        validateResponse(response);
     }
 
     @Test
@@ -72,7 +72,7 @@ class IssuingTestingTestIT extends BaseIssuingTestIT {
         final EmptyResponse response = blocking(() ->
                 issuingApi.issuingClient().simulateRefund(transaction.getId(), request));
 
-        validateRefundResponse(response);
+        validateResponse(response);
     }
 
     @Test
@@ -110,7 +110,7 @@ class IssuingTestingTestIT extends BaseIssuingTestIT {
         final EmptyResponse response = 
                 issuingApi.issuingClient().simulateClearingSync(newTransaction.getId(), request);
 
-        validateClearingResponse(response);
+        validateResponse(response);
     }
 
     @Test
@@ -121,7 +121,7 @@ class IssuingTestingTestIT extends BaseIssuingTestIT {
         final EmptyResponse response = 
                 issuingApi.issuingClient().simulateRefundSync(newTransaction.getId(), request);
 
-        validateRefundResponse(response);
+        validateResponse(response);
     }
 
     @Test
@@ -192,12 +192,7 @@ class IssuingTestingTestIT extends BaseIssuingTestIT {
         assertEquals(TransactionStatus.AUTHORIZED, response.getStatus());
     }
 
-    private void validateClearingResponse(EmptyResponse response) {
-        assertNotNull(response);
-        assertEquals(202, response.getHttpStatusCode());
-    }
-
-    private void validateRefundResponse(EmptyResponse response) {
+    private void validateResponse(EmptyResponse response) {
         assertNotNull(response);
         assertEquals(202, response.getHttpStatusCode());
     }

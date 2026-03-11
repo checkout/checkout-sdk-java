@@ -483,7 +483,6 @@ public class GsonSerializer implements Serializer {
                 
             } catch (IllegalAccessException e) {
                 // Skip fields that cannot be accessed
-                continue;
             }
         }
         
@@ -521,7 +520,7 @@ public class GsonSerializer implements Serializer {
                 }
                 
             } catch (IllegalAccessException e) {
-                continue;
+                // Skip fields that cannot be accessed
             }
         }
         

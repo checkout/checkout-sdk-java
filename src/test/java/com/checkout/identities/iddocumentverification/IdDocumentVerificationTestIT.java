@@ -35,7 +35,7 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
                 checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAsync(request));
 
         // Assert
-        validateCreatedIdDocumentVerification(response, request);
+        validateCreatedIdDocumentVerification(response);
     }
 
     @Test
@@ -84,7 +84,7 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
                 checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAttemptAsync(created.getId(), attemptRequest));
 
         // Assert
-        validateCreatedIdDocumentVerificationAttempt(attempt, attemptRequest);
+        validateCreatedIdDocumentVerificationAttempt(attempt);
     }
 
     @Test
@@ -152,7 +152,7 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
         final IdDocumentVerificationResponse response = checkoutApi.idDocumentVerificationClient().createIdDocumentVerification(request);
 
         // Assert
-        validateCreatedIdDocumentVerification(response, request);
+        validateCreatedIdDocumentVerification(response);
     }
 
     @Test
@@ -195,7 +195,7 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
         final IdDocumentVerificationAttemptResponse attempt = checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAttempt(created.getId(), attemptRequest);
 
         // Assert
-        validateCreatedIdDocumentVerificationAttempt(attempt, attemptRequest);
+        validateCreatedIdDocumentVerificationAttempt(attempt);
     }
 
     @Test
@@ -262,7 +262,7 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
                 .build();
     }
 
-    private static void validateCreatedIdDocumentVerification(final IdDocumentVerificationResponse response, final IdDocumentVerificationRequest request) {
+    private static void validateCreatedIdDocumentVerification(final IdDocumentVerificationResponse response) {
         assertNotNull(response);
         assertNotNull(response.getId());
         assertTrue(response.getId().startsWith("iddv_"));
@@ -286,7 +286,7 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
         validateCommonIdDocumentVerificationFields(response);
     }
 
-    private static void validateCreatedIdDocumentVerificationAttempt(final IdDocumentVerificationAttemptResponse response, final IdDocumentVerificationAttemptRequest request) {
+    private static void validateCreatedIdDocumentVerificationAttempt(final IdDocumentVerificationAttemptResponse response) {
         assertNotNull(response);
         assertNotNull(response.getId());
         assertTrue(response.getId().startsWith("datp_"));
