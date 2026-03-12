@@ -238,7 +238,20 @@ public class ApiClientImpl implements ApiClient {
 
     private Response errorCheck(final Response response) {
         if (!CheckoutUtils.isSuccessHttpStatusCode(response.getStatusCode())) {
-            final Map<String, Object> errorDetails = serializer.fromJson(response.getBody());
+            Map<String, Object> errorDetails = null;
+            try{
+                errorDetails = serializer.fromJson(response.getBody());
+            }
+            catch (final Exception e) {
+                // Ignore deserialization errors, errorDetails will be null or the response body if
+                // existing and the exception will not be propagated as we want to throw a CheckoutApiException
+                // with the raw response details
+                if(response.getBody() != null) {
+                    errorDetails = new HashMap<>();
+                    errorDetails.put("Unknown Error", response.getBody());
+                }
+            }
+
             throw new CheckoutApiException(response.getStatusCode(), response.getHeaders(), errorDetails);
         }
         return response;

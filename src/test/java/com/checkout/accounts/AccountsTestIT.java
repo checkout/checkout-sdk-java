@@ -14,6 +14,7 @@ import com.checkout.common.IdResponse;
 import com.checkout.common.InstrumentType;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.http.entity.ContentType;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -32,6 +33,7 @@ class AccountsTestIT extends SandboxTestFixture {
         super(PlatformType.DEFAULT_OAUTH);
     }
 
+    @Disabled("Recently giving a 503 with 'no healthy upstream' description from the API, disabled")
     @Test
     void shouldCreateGetAndUpdateOnboardIndividualEntity() {
         final String randomReference = RandomStringUtils.random(15, true, true);
@@ -51,6 +53,7 @@ class AccountsTestIT extends SandboxTestFixture {
         assertEquals(onboardEntityRequest.getIndividual().getFirstName(), verifyUpdated.getIndividual().getFirstName());
     }
 
+    @Disabled("Recently giving a 503 with 'no healthy upstream' description from the API, disabled")
     @Test
     void shouldCreateGetAndUpdateOnboardCompanyEntity() {
         final String randomReference = RandomStringUtils.random(15, true, true);
@@ -69,6 +72,7 @@ class AccountsTestIT extends SandboxTestFixture {
         validateFileUploadResponse(fileResponse);
     }
 
+    @Disabled("Recently giving a 503 with 'no healthy upstream' description from the API, disabled")
     @Test
     void shouldCreateAndRetrievePaymentInstrument() throws URISyntaxException {
         final CheckoutApi checkoutApi = getAccountsCheckoutApi();
@@ -90,6 +94,7 @@ class AccountsTestIT extends SandboxTestFixture {
     }
 
     // Synchronous methods
+    @Disabled("Recently giving a 503 with 'no healthy upstream' description from the API, disabled")
     @Test
     void shouldCreateGetAndUpdateOnboardIndividualEntitySync() {
         final String randomReference = RandomStringUtils.random(15, true, true);
@@ -110,6 +115,7 @@ class AccountsTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @Disabled("Recently giving a 503 with 'no healthy upstream' description from the API, disabled")
     void shouldCreateGetAndUpdateOnboardCompanyEntitySync() {
         final String randomReference = RandomStringUtils.random(15, true, true);
         final OnboardEntityRequest onboardEntityRequest = buildCompanyEntity(randomReference);
@@ -127,6 +133,7 @@ class AccountsTestIT extends SandboxTestFixture {
         validateFileUploadResponse(fileResponse);
     }
 
+    @Disabled("Recently giving a 503 with 'no healthy upstream' description from the API, disabled")
     @Test
     void shouldCreateAndRetrievePaymentInstrumentSync() throws URISyntaxException {
         final CheckoutApi checkoutApi = getAccountsCheckoutApi();
