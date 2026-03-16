@@ -52,6 +52,8 @@ import com.checkout.risk.RiskClient;
 import com.checkout.risk.RiskClientImpl;
 import com.checkout.sessions.SessionsClient;
 import com.checkout.sessions.SessionsClientImpl;
+import com.checkout.standaloneaccountupdater.StandaloneAccountUpdaterClient;
+import com.checkout.standaloneaccountupdater.StandaloneAccountUpdaterClientImpl;
 import com.checkout.tokens.TokensClient;
 import com.checkout.tokens.TokensClientImpl;
 import com.checkout.transfers.TransfersClient;
@@ -92,6 +94,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final IdDocumentVerificationClient idDocumentVerificationClient;
     private final AmlScreeningClient amlScreeningClient;
     private final NetworkTokensClient networkTokensClient;
+    private final StandaloneAccountUpdaterClient standaloneAccountUpdaterClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         super(configuration);
@@ -126,6 +129,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.idDocumentVerificationClient = new IdDocumentVerificationClientImpl(this.apiClient, configuration);
         this.amlScreeningClient = new AmlScreeningClientImpl(this.apiClient, configuration);
         this.networkTokensClient = new NetworkTokensClientImpl(this.apiClient, configuration);
+        this.standaloneAccountUpdaterClient = new StandaloneAccountUpdaterClientImpl(this.apiClient, configuration);
     }
 
     @Override
@@ -245,7 +249,12 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
 
     @Override
     public AmlScreeningClient amlScreeningClient() { return amlScreeningClient; }
+
+    @Override
     public NetworkTokensClient networkTokensClient() { return networkTokensClient; }
+
+    @Override
+    public StandaloneAccountUpdaterClient standaloneAccountUpdaterClient() { return standaloneAccountUpdaterClient; }
 
     private ApiClient getFilesClient(final CheckoutConfiguration configuration) {
         return new ApiClientImpl(configuration, new FilesApiUriStrategy(configuration));

@@ -26,6 +26,7 @@ import com.checkout.payments.links.PaymentLinksClient;
 import com.checkout.reports.ReportsClient;
 import com.checkout.risk.RiskClient;
 import com.checkout.sessions.SessionsClient;
+import com.checkout.standaloneaccountupdater.StandaloneAccountUpdaterClient;
 import com.checkout.tokens.TokensClient;
 import com.checkout.transfers.TransfersClient;
 import com.checkout.workflows.WorkflowsClient;
@@ -89,5 +90,7 @@ public interface CheckoutApi extends CheckoutApmApi {
     AmlScreeningClient amlScreeningClient();
 
     NetworkTokensClient networkTokensClient();
+
+    StandaloneAccountUpdaterClient standaloneAccountUpdaterClient();
 
 }
