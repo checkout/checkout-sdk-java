@@ -55,6 +55,7 @@ import static com.checkout.common.CheckoutUtils.PROJECT_NAME;
 import static com.checkout.common.CheckoutUtils.getVersionFromManifest;
 import static org.apache.http.HttpHeaders.ACCEPT;
 import static org.apache.http.HttpHeaders.AUTHORIZATION;
+import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.apache.http.HttpHeaders.USER_AGENT;
 
 @Slf4j
@@ -305,6 +306,8 @@ class ApacheHttpClientTransport implements Transport {
             } else if (requestBody instanceof MultipartEntityBuilder) {
                 httpEntity = ((MultipartEntityBuilder) requestBody).build();
             } else if (requestBody instanceof UrlEncodedFormEntity) {
+                // Ensure proper Content-Type header for form-encoded content
+                request.setHeader(CONTENT_TYPE, ContentType.APPLICATION_FORM_URLENCODED.getMimeType());
                 httpEntity = (UrlEncodedFormEntity) requestBody;
             } else {
                 String json = serializer.toJson(requestBody);
