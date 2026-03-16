@@ -102,7 +102,6 @@ class ApacheHttpClientTransport implements Transport {
                                               final String idempotencyKey,
                                               final Map<String, String> queryParams) {
 
-        final Object requestBodyOrEntity = prepareRequestContent(requestObject);
         return CompletableFuture.supplyAsync(() -> {
             final HttpUriRequest request;
             switch (clientOperation) {
@@ -138,7 +137,7 @@ class ApacheHttpClientTransport implements Transport {
             if (idempotencyKey != null) {
                 request.setHeader(CKO_IDEMPOTENCY_KEY, idempotencyKey);
             }
-            return performCall(authorization, requestBodyOrEntity, request, clientOperation);
+            return performCall(authorization, requestObject, request, clientOperation);
         }, executor);
     }
 
@@ -158,7 +157,6 @@ class ApacheHttpClientTransport implements Transport {
                                final Object requestObject,
                                final String idempotencyKey,
                                final Map<String, String> queryParams) {
-        final Object requestBodyOrEntity = prepareRequestContent(requestObject);
         final HttpUriRequest request;
         switch (clientOperation) {
             case GET:
@@ -194,7 +192,7 @@ class ApacheHttpClientTransport implements Transport {
             request.setHeader(CKO_IDEMPOTENCY_KEY, idempotencyKey);
         }
         
-        final Supplier<Response> callSupplier = () -> performCall(authorization, requestBodyOrEntity, request, clientOperation);
+        final Supplier<Response> callSupplier = () -> performCall(authorization, requestObject, request, clientOperation);
         return executeWithResilience4j(callSupplier);
     }
 
@@ -236,29 +234,6 @@ class ApacheHttpClientTransport implements Transport {
         }
         
         return decoratedSupplier.get();
-    }
-
-    /**
-     * Prepares the request content based on the type of request object.
-     * If the request object is a UrlEncodedFormEntity, it returns it directly.
-     * Otherwise, it serializes the object to JSON.
-     */
-    private Object prepareRequestContent(final Object requestObject) {
-        Object request = null;
-
-        if (requestObject != null) {
-            if (requestObject instanceof UrlEncodedFormEntity) {
-                // Return the form entity directly for form-encoded requests
-                request = requestObject;
-            }
-            else
-            {
-                // Default behavior: serialize to JSON
-                request = serializer.toJson(requestObject);
-            }
-        }   
-        
-        return request;
     }
 
     private HttpEntity getMultipartFileEntity(final AbstractFileRequest abstractFileRequest) {
