@@ -1,6 +1,7 @@
 package com.checkout.payments.request;
 
 import com.checkout.common.Currency;
+import com.checkout.payments.ProcessingSettings;
 import com.checkout.payments.request.destination.PaymentRequestDestination;
 import com.checkout.payments.request.source.PayoutRequestSource;
 import com.checkout.payments.sender.PaymentSender;
@@ -33,6 +34,8 @@ public final class PayoutRequest {
 
     @SerializedName("processing_channel_id")
     private String processingChannelId;
+
+    private ProcessingSettings processing;
 
     private Map<String, Object> metadata;
 

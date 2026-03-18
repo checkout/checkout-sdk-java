@@ -113,6 +113,9 @@ public final class ProcessingSettings {
     @SerializedName("pan_preference")
     private PanProcessedType panPreference;
 
+    @SerializedName("hub_model_origination_country")
+    private CountryCode hubModelOriginationCountry;
+
     //Previous
     private DLocalProcessingSettings dlocal;
 
