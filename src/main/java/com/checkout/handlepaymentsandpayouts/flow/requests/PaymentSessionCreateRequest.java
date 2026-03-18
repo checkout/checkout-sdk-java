@@ -51,5 +51,6 @@ public class PaymentSessionCreateRequest extends PaymentSessionInfo {
     /**
      * Deprecated - The Customer's IP address. Only IPv4 and IPv6 addresses are accepted.
      */
+    @Deprecated
     private String ipAddress;
 }
