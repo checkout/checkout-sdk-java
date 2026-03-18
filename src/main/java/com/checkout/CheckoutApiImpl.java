@@ -18,6 +18,8 @@ import com.checkout.handlepaymentsandpayouts.flow.FlowClient;
 import com.checkout.handlepaymentsandpayouts.flow.FlowClientImpl;
 import com.checkout.handlepaymentsandpayouts.setups.PaymentSetupsClient;
 import com.checkout.handlepaymentsandpayouts.setups.PaymentSetupsClientImpl;
+import com.checkout.handlepaymentsandpayouts.applepay.ApplePayClient;
+import com.checkout.handlepaymentsandpayouts.applepay.ApplePayClientImpl;
 import com.checkout.identities.faceauthentications.FaceAuthenticationClient;
 import com.checkout.identities.faceauthentications.FaceAuthenticationClientImpl;
 import com.checkout.identities.applicants.ApplicantClient;
@@ -34,6 +36,10 @@ import com.checkout.issuing.IssuingClient;
 import com.checkout.issuing.IssuingClientImpl;
 import com.checkout.metadata.MetadataClient;
 import com.checkout.metadata.MetadataClientImpl;
+import com.checkout.networktokens.NetworkTokensClient;
+import com.checkout.networktokens.NetworkTokensClientImpl;
+import com.checkout.paymentmethods.PaymentMethodsClient;
+import com.checkout.paymentmethods.PaymentMethodsClientImpl;
 import com.checkout.payments.PaymentsClient;
 import com.checkout.payments.PaymentsClientImpl;
 import com.checkout.payments.contexts.PaymentContextsClient;
@@ -48,6 +54,8 @@ import com.checkout.risk.RiskClient;
 import com.checkout.risk.RiskClientImpl;
 import com.checkout.sessions.SessionsClient;
 import com.checkout.sessions.SessionsClientImpl;
+import com.checkout.standaloneaccountupdater.StandaloneAccountUpdaterClient;
+import com.checkout.standaloneaccountupdater.StandaloneAccountUpdaterClientImpl;
 import com.checkout.tokens.TokensClient;
 import com.checkout.tokens.TokensClientImpl;
 import com.checkout.transfers.TransfersClient;
@@ -70,6 +78,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final SessionsClient sessionsClient;
     private final ForexClient forexClient;
     private final PaymentLinksClient paymentLinksClient;
+    private final PaymentMethodsClient paymentMethodsClient;
     private final HostedPaymentsClient hostedPaymentsClient;
     private final TransfersClient transfersClient;
     private final BalancesClient balancesClient;
@@ -80,12 +89,15 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final PaymentContextsClient paymentContextsClient;
     private final FlowClient flowClient;
     private final PaymentSetupsClient paymentSetupsClient;
+    private final ApplePayClient applePayClient;
     private final ForwardClient forwardClient;
     private final FaceAuthenticationClient faceAuthenticationClient;
     private final ApplicantClient applicantClient;
     private final IdentityVerificationClient identityVerificationClient;
     private final IdDocumentVerificationClient idDocumentVerificationClient;
     private final AmlScreeningClient amlScreeningClient;
+    private final NetworkTokensClient networkTokensClient;
+    private final StandaloneAccountUpdaterClient standaloneAccountUpdaterClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         super(configuration);
@@ -99,6 +111,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.sessionsClient = new SessionsClientImpl(this.apiClient, configuration);
         this.forexClient = new ForexClientImpl(this.apiClient, configuration);
         this.paymentLinksClient = new PaymentLinksClientImpl(this.apiClient, configuration);
+        this.paymentMethodsClient = new PaymentMethodsClientImpl(this.apiClient, configuration);
         this.hostedPaymentsClient = new HostedPaymentsClientImpl(this.apiClient, configuration);
         this.transfersClient = new TransfersClientImpl(getTransfersClient(configuration), configuration);
         this.balancesClient = new BalancesClientImpl(getBalancesClient(configuration), configuration);
@@ -112,12 +125,15 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.paymentContextsClient = new PaymentContextsClientImpl(this.apiClient, configuration);
         this.flowClient = new FlowClientImpl(this.apiClient, configuration);
         this.paymentSetupsClient = new PaymentSetupsClientImpl(this.apiClient, configuration);
+        this.applePayClient = new ApplePayClientImpl(this.apiClient, configuration);
         this.forwardClient = new ForwardClientImpl(this.apiClient, configuration);
         this.faceAuthenticationClient = new FaceAuthenticationClientImpl(this.apiClient, configuration);
         this.applicantClient = new ApplicantClientImpl(this.apiClient, configuration);
         this.identityVerificationClient = new IdentityVerificationClientImpl(this.apiClient, configuration);
         this.idDocumentVerificationClient = new IdDocumentVerificationClientImpl(this.apiClient, configuration);
         this.amlScreeningClient = new AmlScreeningClientImpl(this.apiClient, configuration);
+        this.networkTokensClient = new NetworkTokensClientImpl(this.apiClient, configuration);
+        this.standaloneAccountUpdaterClient = new StandaloneAccountUpdaterClientImpl(this.apiClient, configuration);
     }
 
     @Override
@@ -176,6 +192,11 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     }
 
     @Override
+    public PaymentMethodsClient paymentMethodsClient() {
+        return paymentMethodsClient;
+    }
+
+    @Override
     public HostedPaymentsClient hostedPaymentsClient() {
         return hostedPaymentsClient;
     }
@@ -216,6 +237,9 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     public PaymentSetupsClient paymentSetupsClient() { return paymentSetupsClient; }
 
     @Override
+    public ApplePayClient applePayClient() { return applePayClient; }
+
+    @Override
     public ForwardClient forwardClient() { return forwardClient; }
 
     @Override
@@ -232,6 +256,12 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
 
     @Override
     public AmlScreeningClient amlScreeningClient() { return amlScreeningClient; }
+
+    @Override
+    public NetworkTokensClient networkTokensClient() { return networkTokensClient; }
+
+    @Override
+    public StandaloneAccountUpdaterClient standaloneAccountUpdaterClient() { return standaloneAccountUpdaterClient; }
 
     private ApiClient getFilesClient(final CheckoutConfiguration configuration) {
         return new ApiClientImpl(configuration, new FilesApiUriStrategy(configuration));

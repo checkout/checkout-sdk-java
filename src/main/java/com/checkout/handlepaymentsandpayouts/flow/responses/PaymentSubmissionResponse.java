@@ -1,7 +1,7 @@
 package com.checkout.handlepaymentsandpayouts.flow.responses;
 
 import com.checkout.common.Resource;
-import com.checkout.handlepaymentsandpayouts.flow.entities.PaymentMethod;
+import com.checkout.common.PaymentMethodType;
 import com.checkout.handlepaymentsandpayouts.flow.entities.PaymentSessionStatus;
 
 import lombok.Data;
@@ -28,5 +28,5 @@ public abstract class PaymentSubmissionResponse extends Resource {
     /**
      * The payment method name.
      */
-    private PaymentMethod type;
+    private PaymentMethodType type;
 }

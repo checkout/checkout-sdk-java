@@ -32,6 +32,14 @@ import com.checkout.SdkCredentials;
 import com.checkout.accounts.payout.schedule.request.UpdateScheduleRequest;
 import com.checkout.accounts.payout.schedule.response.GetScheduleResponse;
 import com.checkout.accounts.payout.schedule.response.VoidResponse;
+import com.checkout.accounts.reserverules.responses.ReserveRuleCreateResponse;
+import com.checkout.accounts.reserverules.responses.ReserveRuleRequest;
+import com.checkout.accounts.reserverules.responses.ReserveRuleResponse;
+import com.checkout.accounts.reserverules.responses.ReserveRulesResponse;
+import com.checkout.accounts.files.request.FileUploadRequest;
+import com.checkout.accounts.files.response.FileUploadResponse;
+import com.checkout.accounts.files.response.FileDetailsResponse;
+import com.checkout.accounts.files.entities.FilePurpose;
 import com.checkout.common.Currency;
 import com.checkout.common.IdResponse;
 
@@ -98,7 +106,104 @@ class AccountsClientImplTest {
     }
 
     @Test
-    void shouldCreateEntity() throws ExecutionException, InterruptedException {
+    void shouldThrowException_whenEntityIdIsNullForUploadFile() {
+        try {
+            accountsClient.uploadFile(null, createFileUploadRequest());
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("entityId cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldThrowException_whenFileUploadRequestIsNull() {
+        try {
+            accountsClient.uploadFile("entity_id", null);
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("fileUploadRequest cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldThrowException_whenEntityIdIsNullForGetFileDetails() {
+        try {
+            accountsClient.retrieveFile(null, "file_id");
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("entityId cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldThrowException_whenFileIdIsNull() {
+        try {
+            accountsClient.retrieveFile("entity_id", null);
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("fileId cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldUploadFile() throws ExecutionException, InterruptedException {
+        final FileUploadRequest request = createFileUploadRequest();
+        final FileUploadResponse expectedResponse = createFileUploadResponse();
+
+        when(apiClient.postAsync(eq("entities/entity_id/files"), eq(authorization), eq(FileUploadResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<FileUploadResponse> future = accountsClient.uploadFile("entity_id", request);
+
+        validateResponse(expectedResponse, future.get());
+    }
+
+    @Test
+    void shouldGetFileDetails() throws ExecutionException, InterruptedException {
+        final FileDetailsResponse expectedResponse = createFileDetailsResponse();
+
+        when(apiClient.getAsync("entities/entity_id/files/file_id", authorization, FileDetailsResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<FileDetailsResponse> future = accountsClient.retrieveFile("entity_id", "file_id");
+
+        validateResponse(expectedResponse, future.get());
+    }
+
+    @Test
+    void shouldUploadFileSync() {
+        final FileUploadRequest request = createFileUploadRequest();
+        final FileUploadResponse expectedResponse = createFileUploadResponse();
+
+        when(apiClient.post(eq("entities/entity_id/files"), eq(authorization), eq(FileUploadResponse.class), eq(request), isNull()))
+                .thenReturn(expectedResponse);
+
+        final FileUploadResponse actualResponse = accountsClient.uploadFileSync("entity_id", request);
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldGetFileDetailsSync() {
+        final FileDetailsResponse expectedResponse = createFileDetailsResponse();
+
+        when(apiClient.get("entities/entity_id/files/file_id", authorization, FileDetailsResponse.class))
+                .thenReturn(expectedResponse);
+
+        final FileDetailsResponse actualResponse = accountsClient.retrieveFileSync("entity_id", "file_id");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test    void shouldCreateEntity() throws ExecutionException, InterruptedException {
         final OnboardEntityRequest request = createOnboardEntityRequest();
         final OnboardEntityResponse expectedResponse = createOnboardEntityResponse();
 
@@ -438,6 +543,239 @@ class AccountsClientImplTest {
         verifyNoInteractions(apiClient);
     }
 
+    @Test
+    void shouldGetEntityMembers() throws ExecutionException, InterruptedException {
+        final EntityMembersResponse expectedResponse = createEntityMembersResponse();
+
+        when(apiClient.getAsync("accounts/entities/entity_id/members", authorization, EntityMembersResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<EntityMembersResponse> future = accountsClient.getEntityMembers("entity_id");
+
+        validateResponse(expectedResponse, future.get());
+    }
+
+    @Test
+    void shouldReinviteEntityMember() throws ExecutionException, InterruptedException {
+        final EntityMemberResponse expectedResponse = createEntityMemberResponse();
+
+        when(apiClient.putAsync(eq("accounts/entities/entity_id/members/user_id"), eq(authorization), eq(EntityMemberResponse.class), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<EntityMemberResponse> future = accountsClient.reinviteEntityMember("entity_id", "user_id");
+
+        validateResponse(expectedResponse, future.get());
+    }
+
+    @Test
+    void shouldCreateReserveRule() throws ExecutionException, InterruptedException {
+        final ReserveRuleRequest request = createReserveRuleRequest();
+        final ReserveRuleCreateResponse expectedResponse = createReserveRuleCreateResponse();
+
+        when(apiClient.postAsync(eq("accounts/entities/entity_id/reserve-rules"), eq(authorization), eq(ReserveRuleCreateResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<ReserveRuleCreateResponse> future = accountsClient.createReserveRule("entity_id", request);
+
+        validateResponse(expectedResponse, future.get());
+    }
+
+    @Test
+    void shouldUpdateReserveRule() throws ExecutionException, InterruptedException {
+        final ReserveRuleRequest request = createReserveRuleRequest();
+        final ReserveRuleCreateResponse expectedResponse = createReserveRuleCreateResponse();
+
+        when(apiClient.putAsync(eq("accounts/entities/entity_id/reserve-rules/rule_id"), eq(authorization), eq(ReserveRuleCreateResponse.class), eq(request)))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<ReserveRuleCreateResponse> future = accountsClient.updateReserveRule("entity_id", "rule_id", request);
+
+        validateResponse(expectedResponse, future.get());
+    }
+
+    @Test
+    void shouldGetReserveRule() throws ExecutionException, InterruptedException {
+        final ReserveRuleResponse expectedResponse = createReserveRuleResponse();
+
+        when(apiClient.getAsync("accounts/entities/entity_id/reserve-rules/rule_id", authorization, ReserveRuleResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<ReserveRuleResponse> future = accountsClient.getReserveRule("entity_id", "rule_id");
+
+        validateResponse(expectedResponse, future.get());
+    }
+
+    @Test
+    void shouldGetReserveRules() throws ExecutionException, InterruptedException {
+        final ReserveRulesResponse expectedResponse = createReserveRulesResponse();
+
+        when(apiClient.getAsync("accounts/entities/entity_id/reserve-rules", authorization, ReserveRulesResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<ReserveRulesResponse> future = accountsClient.getReserveRules("entity_id");
+
+        validateResponse(expectedResponse, future.get());
+    }
+
+    // Synchronous methods
+    @Test
+    void shouldGetEntityMembersSync() {
+        final EntityMembersResponse expectedResponse = createEntityMembersResponse();
+
+        when(apiClient.get("accounts/entities/entity_id/members", authorization, EntityMembersResponse.class))
+                .thenReturn(expectedResponse);
+
+        final EntityMembersResponse actualResponse = accountsClient.getEntityMembersSync("entity_id");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldReinviteEntityMemberSync() {
+        final EntityMemberResponse expectedResponse = createEntityMemberResponse();
+
+        when(apiClient.put(eq("accounts/entities/entity_id/members/user_id"), eq(authorization), eq(EntityMemberResponse.class), isNull()))
+                .thenReturn(expectedResponse);
+
+        final EntityMemberResponse actualResponse = accountsClient.reinviteEntityMemberSync("entity_id", "user_id");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldCreateReserveRuleSync() {
+        final ReserveRuleRequest request = createReserveRuleRequest();
+        final ReserveRuleCreateResponse expectedResponse = createReserveRuleCreateResponse();
+
+        when(apiClient.post(eq("accounts/entities/entity_id/reserve-rules"), eq(authorization), eq(ReserveRuleCreateResponse.class), eq(request), isNull()))
+                .thenReturn(expectedResponse);
+
+        final ReserveRuleCreateResponse actualResponse = accountsClient.createReserveRuleSync("entity_id", request);
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldUpdateReserveRuleSync() {
+        final ReserveRuleRequest request = createReserveRuleRequest();
+        final ReserveRuleCreateResponse expectedResponse = createReserveRuleCreateResponse();
+
+        when(apiClient.put(eq("accounts/entities/entity_id/reserve-rules/rule_id"), eq(authorization), eq(ReserveRuleCreateResponse.class), eq(request)))
+                .thenReturn(expectedResponse);
+
+        final ReserveRuleCreateResponse actualResponse = accountsClient.updateReserveRuleSync("entity_id", "rule_id", request);
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+    
+    @Test
+    void shouldGetReserveRuleSync() {
+        final ReserveRuleResponse expectedResponse = createReserveRuleResponse();
+
+        when(apiClient.get("accounts/entities/entity_id/reserve-rules/rule_id", authorization, ReserveRuleResponse.class))
+                .thenReturn(expectedResponse);
+
+        final ReserveRuleResponse actualResponse = accountsClient.getReserveRuleSync("entity_id", "rule_id");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldGetReserveRulesSync() {
+        final ReserveRulesResponse expectedResponse = createReserveRulesResponse();
+
+        when(apiClient.get("accounts/entities/entity_id/reserve-rules", authorization, ReserveRulesResponse.class))
+                .thenReturn(expectedResponse);
+
+        final ReserveRulesResponse actualResponse = accountsClient.getReserveRulesSync("entity_id");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldThrowException_whenEntityIdIsNullGetEntityMembers() {
+        try {
+            accountsClient.getEntityMembers(null);
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("entityId cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldThrowException_whenEntityIdIsNullReinviteEntityMember() {
+        try {
+            accountsClient.reinviteEntityMember(null, "user_id");
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("entityId cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldThrowException_whenUserIdIsNullReinviteEntityMember() {
+        try {
+            accountsClient.reinviteEntityMember("entity_id", null);
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("userId cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldThrowException_whenEntityIdIsNullGetReserveRule() {
+        try {
+            accountsClient.getReserveRule(null, "rule_id");
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("entityId cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldThrowException_whenReserveRuleIdIsNullGetReserveRule() {
+        try {
+            accountsClient.getReserveRule("entity_id", null);
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("reserveRuleId cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldThrowException_whenEntityIdIsNullCreateReserveRule() {
+        try {
+            accountsClient.createReserveRule(null, createReserveRuleRequest());
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("entityId cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldThrowException_whenReserveRuleRequestIsNullCreateReserveRule() {
+        try {
+            accountsClient.createReserveRule("entity_id", null);
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("reserveRuleRequest cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
     // Common methods
     private OnboardEntityRequest createOnboardEntityRequest() {
         return OnboardEntityRequest.builder().build();
@@ -462,6 +800,20 @@ class AccountsClientImplTest {
 
     private AccountsFileRequest createAccountsFileRequest() {
         return AccountsFileRequest.builder().build();
+    }
+
+    private FileUploadRequest createFileUploadRequest() {
+        return FileUploadRequest.builder()
+                .purpose(FilePurpose.IDENTITY_VERIFICATION)
+                .build();
+    }
+
+    private FileUploadResponse createFileUploadResponse() {
+        return mock(FileUploadResponse.class);
+    }
+
+    private FileDetailsResponse createFileDetailsResponse() {
+        return mock(FileDetailsResponse.class);
     }
 
     private UpdateScheduleRequest createUpdateScheduleRequest() {
@@ -502,6 +854,32 @@ class AccountsClientImplTest {
 
     private PaymentInstrumentQueryResponse createPaymentInstrumentQueryResponse() {
         return mock(PaymentInstrumentQueryResponse.class);
+    }
+
+    // Entity Members mock objects
+    private EntityMembersResponse createEntityMembersResponse() {
+        return mock(EntityMembersResponse.class);
+    }
+
+    private EntityMemberResponse createEntityMemberResponse() {
+        return mock(EntityMemberResponse.class);
+    }
+
+    // Reserve Rules mock objects
+    private ReserveRuleRequest createReserveRuleRequest() {
+        return mock(ReserveRuleRequest.class);
+    }
+
+    private ReserveRuleResponse createReserveRuleResponse() {
+        return mock(ReserveRuleResponse.class);
+    }
+
+    private ReserveRulesResponse createReserveRulesResponse() {
+        return mock(ReserveRulesResponse.class);
+    }
+
+    private ReserveRuleCreateResponse createReserveRuleCreateResponse() {
+        return mock(ReserveRuleCreateResponse.class);
     }
 
     private <T> void validateResponse(T expectedResponse, T actualResponse) {

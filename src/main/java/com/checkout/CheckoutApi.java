@@ -9,6 +9,7 @@ import com.checkout.forex.ForexClient;
 import com.checkout.forward.ForwardClient;
 import com.checkout.handlepaymentsandpayouts.flow.FlowClient;
 import com.checkout.handlepaymentsandpayouts.setups.PaymentSetupsClient;
+import com.checkout.handlepaymentsandpayouts.applepay.ApplePayClient;
 import com.checkout.identities.faceauthentications.FaceAuthenticationClient;
 import com.checkout.identities.applicants.ApplicantClient;
 import com.checkout.identities.identityverification.IdentityVerificationClient;
@@ -17,6 +18,8 @@ import com.checkout.identities.amlscreening.AmlScreeningClient;
 import com.checkout.instruments.InstrumentsClient;
 import com.checkout.issuing.IssuingClient;
 import com.checkout.metadata.MetadataClient;
+import com.checkout.networktokens.NetworkTokensClient;
+import com.checkout.paymentmethods.PaymentMethodsClient;
 import com.checkout.payments.PaymentsClient;
 import com.checkout.payments.contexts.PaymentContextsClient;
 import com.checkout.payments.hosted.HostedPaymentsClient;
@@ -24,6 +27,7 @@ import com.checkout.payments.links.PaymentLinksClient;
 import com.checkout.reports.ReportsClient;
 import com.checkout.risk.RiskClient;
 import com.checkout.sessions.SessionsClient;
+import com.checkout.standaloneaccountupdater.StandaloneAccountUpdaterClient;
 import com.checkout.tokens.TokensClient;
 import com.checkout.transfers.TransfersClient;
 import com.checkout.workflows.WorkflowsClient;
@@ -52,6 +56,8 @@ public interface CheckoutApi extends CheckoutApmApi {
 
     PaymentLinksClient paymentLinksClient();
 
+    PaymentMethodsClient paymentMethodsClient();
+
     HostedPaymentsClient hostedPaymentsClient();
 
     BalancesClient balancesClient();
@@ -72,6 +78,8 @@ public interface CheckoutApi extends CheckoutApmApi {
 
     PaymentSetupsClient paymentSetupsClient();
 
+    ApplePayClient applePayClient();
+
     ForwardClient forwardClient();
 
     FaceAuthenticationClient faceAuthenticationClient();
@@ -83,5 +91,9 @@ public interface CheckoutApi extends CheckoutApmApi {
     IdDocumentVerificationClient idDocumentVerificationClient();
 
     AmlScreeningClient amlScreeningClient();
+
+    NetworkTokensClient networkTokensClient();
+
+    StandaloneAccountUpdaterClient standaloneAccountUpdaterClient();
 
 }

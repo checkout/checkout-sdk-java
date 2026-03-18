@@ -7,6 +7,16 @@ import com.checkout.OAuthScope;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
+import com.checkout.accounts.reserverules.entities.HoldingDuration;
+import com.checkout.accounts.reserverules.entities.RollingReserveRule;
+import com.checkout.accounts.reserverules.responses.ReserveRuleCreateResponse;
+import com.checkout.accounts.reserverules.responses.ReserveRuleRequest;
+import com.checkout.accounts.reserverules.responses.ReserveRuleResponse;
+import com.checkout.accounts.reserverules.responses.ReserveRulesResponse;
+import com.checkout.accounts.files.request.FileUploadRequest;
+import com.checkout.accounts.files.response.FileUploadResponse;
+import com.checkout.accounts.files.response.FileDetailsResponse;
+import com.checkout.accounts.files.entities.FilePurpose;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
@@ -73,6 +83,31 @@ class AccountsTestIT extends SandboxTestFixture {
     }
 
     @Disabled("Recently giving a 503 with 'no healthy upstream' description from the API, disabled")
+    @Test
+    void shouldUploadFileForEntity() {
+        final String entityId = createTestEntity();
+        final FileUploadRequest fileUploadRequest = FileUploadRequest.builder()
+                .purpose(FilePurpose.IDENTITY_VERIFICATION)
+                .build();
+
+        final FileUploadResponse response = blocking(() -> checkoutApi.accountsClient().uploadFile(entityId, fileUploadRequest));
+        validateFileUploadResponseForEntity(response);
+    }
+
+    @Test
+    void shouldRetrieveFileForEntity() {
+        final String entityId = createTestEntity();
+        final FileUploadRequest fileUploadRequest = FileUploadRequest.builder()
+                .purpose(FilePurpose.IDENTITY_VERIFICATION)
+                .build();
+
+        final FileUploadResponse uploadResponse = blocking(() -> checkoutApi.accountsClient().uploadFile(entityId, fileUploadRequest));
+        validateFileUploadResponseForEntity(uploadResponse);
+
+        final FileDetailsResponse detailsResponse = blocking(() -> checkoutApi.accountsClient().retrieveFile(entityId, uploadResponse.getId()));
+        validateFileDetailsResponseForEntity(detailsResponse, uploadResponse.getId());
+    }
+
     @Test
     void shouldCreateAndRetrievePaymentInstrument() throws URISyntaxException {
         final CheckoutApi checkoutApi = getAccountsCheckoutApi();
@@ -154,7 +189,204 @@ class AccountsTestIT extends SandboxTestFixture {
         validatePaymentInstrumentDetailsResponse(instrumentDetailsResponse);
     }
 
+    @Test
+    void shouldUploadFileForEntitySync() {
+        final String entityId = createTestEntity();
+        final FileUploadRequest fileUploadRequest = FileUploadRequest.builder()
+                .purpose(FilePurpose.IDENTITY_VERIFICATION)
+                .build();
+
+        final FileUploadResponse response = checkoutApi.accountsClient().uploadFileSync(entityId, fileUploadRequest);
+        validateFileUploadResponseForEntity(response);
+    }
+
+    @Test
+    void shouldRetrieveFileForEntitySync() {
+        final String entityId = createTestEntity();
+        final FileUploadRequest fileUploadRequest = FileUploadRequest.builder()
+                .purpose(FilePurpose.IDENTITY_VERIFICATION)
+                .build();
+
+        final FileUploadResponse uploadResponse = checkoutApi.accountsClient().uploadFileSync(entityId, fileUploadRequest);
+        validateFileUploadResponseForEntity(uploadResponse);
+
+        final FileDetailsResponse detailsResponse = checkoutApi.accountsClient().retrieveFileSync(entityId, uploadResponse.getId());
+        validateFileDetailsResponseForEntity(detailsResponse, uploadResponse.getId());
+    }
+
+    @Test
+    void shouldGetEntityMembers() {
+        final String entityId = createTestEntity();
+
+        final EntityMembersResponse response = blocking(() -> checkoutApi.accountsClient().getEntityMembers(entityId));
+        validateEntityMembersResponse(response);
+    }
+
+    @Test
+    void shouldReinviteEntityMember() {
+        final String entityId = createTestEntity();
+        
+        // Get entity members first to find a valid user ID
+        final EntityMembersResponse membersResponse = blocking(() -> checkoutApi.accountsClient().getEntityMembers(entityId));
+        validateEntityMembersResponse(membersResponse);
+        
+        // Skip test if no members found
+        if (membersResponse.getData() == null || membersResponse.getData().isEmpty()) {
+            System.out.println("Skipping reinvite test - no entity members found");
+            return;
+        }
+        
+        final String userId = membersResponse.getData().get(0).getUserId();
+        assertNotNull(userId, "First entity member should have a user ID");
+
+        final EntityMemberResponse response = blocking(() -> checkoutApi.accountsClient().reinviteEntityMember(entityId, userId));
+        validateEntityMemberResponse(response);
+    }
+
+    @Test
+    void shouldCreateGetAndUpdateReserveRule() {
+        final String entityId = createTestEntity();
+        final ReserveRuleRequest createRequest = buildReserveRuleRequest();
+
+        final ReserveRuleCreateResponse createResponse = blocking(() -> checkoutApi.accountsClient().createReserveRule(entityId, createRequest));
+        validateReserveRuleCreateResponse(createResponse);
+
+        final ReserveRuleResponse getResponse = blocking(() -> checkoutApi.accountsClient().getReserveRule(entityId, createResponse.getId()));
+        validateReserveRuleResponse(getResponse);
+
+        // Get Etag from the creation response headers
+        String etag = null;            
+        if (createResponse != null)
+        {
+            etag = createResponse.getEtag();
+        }
+
+        // Update (with the If-Match header when using the etag)
+        final ReserveRuleRequest updateRequest = buildReserveRuleRequestWithEtag(etag); // Set the Etag for concurrency control
+        final ReserveRuleCreateResponse updateResponse = blocking(() -> checkoutApi.accountsClient().updateReserveRule(entityId, createResponse.getId(), updateRequest));
+        validateReserveRuleCreateResponse(updateResponse);
+    }
+
+    @Test
+    void shouldGetReserveRules() {
+        final String entityId = createTestEntity();
+
+        final ReserveRulesResponse response = blocking(() -> checkoutApi.accountsClient().getReserveRules(entityId));
+        validateReserveRulesResponse(response);
+    }
+
+    // Synchronous methods
+    @Test
+    void shouldGetEntityMembersSync() {
+        final String entityId = createTestEntity();
+
+        final EntityMembersResponse response = checkoutApi.accountsClient().getEntityMembersSync(entityId);
+        validateEntityMembersResponse(response);
+    }
+
+    @Test
+    void shouldReinviteEntityMemberSync() {
+        final String entityId = createTestEntity();
+        
+        // Get entity members first to find a valid user ID
+        final EntityMembersResponse membersResponse = checkoutApi.accountsClient().getEntityMembersSync(entityId);
+        validateEntityMembersResponse(membersResponse);
+        
+        // Skip test if no members found
+        if (membersResponse.getData() == null || membersResponse.getData().isEmpty()) {
+            System.out.println("Skipping reinvite sync test - no entity members found");
+            return;
+        }
+        
+        final String userId = membersResponse.getData().get(0).getUserId();
+        assertNotNull(userId, "First entity member should have a user ID");
+
+        final EntityMemberResponse response = checkoutApi.accountsClient().reinviteEntityMemberSync(entityId, userId);
+        validateEntityMemberResponse(response);
+    }
+
+    @Test
+    void shouldCreateGetAndUpdateReserveRuleSync() {
+        final String entityId = createTestEntity();
+        final ReserveRuleRequest createRequest = buildReserveRuleRequest();
+
+        final ReserveRuleCreateResponse createResponse = checkoutApi.accountsClient().createReserveRuleSync(entityId, createRequest);
+        validateReserveRuleCreateResponse(createResponse);
+
+        final ReserveRuleResponse getResponse = checkoutApi.accountsClient().getReserveRuleSync(entityId, createResponse.getId());
+        validateReserveRuleResponse(getResponse);
+
+        // Get Etag from the creation response headers
+        String etag = null;            
+        if (createResponse != null)
+        {
+            etag = createResponse.getEtag();
+        }
+
+        // Update (with the If-Match header when using the etag)
+        final ReserveRuleRequest updateRequest = buildReserveRuleRequestWithEtag(etag); // Set the Etag for concurrency control
+        final ReserveRuleCreateResponse updateResponse = checkoutApi.accountsClient().updateReserveRuleSync(entityId, createResponse.getId(), updateRequest);
+        validateReserveRuleCreateResponse(updateResponse);
+    }
+
+    @Test
+    void shouldGetReserveRulesSync() {
+        final String entityId = createTestEntity();
+
+        final ReserveRulesResponse response = checkoutApi.accountsClient().getReserveRulesSync(entityId);
+        validateReserveRulesResponse(response);
+    }
+
     // Common methods
+    private String createTestEntity() {
+        final String randomReference = RandomStringUtils.random(15, true, true);
+        final OnboardEntityRequest entityRequest = OnboardEntityRequest.builder()
+                .reference(randomReference)
+                .contactDetails(ContactDetails.builder()
+                        .phone(buildAccountPhone())
+                        .emailAddresses(EntityEmailAddresses.builder()
+                                .primary(generateRandomEmail())
+                                .build())
+                        .build())
+                .profile(buildProfile())
+                .company(Company.builder()
+                        .businessRegistrationNumber("01234567")
+                        .legalName("Reserve Rules Test Inc.")
+                        .tradingName("Reserve Rules Test")
+                        .principalAddress(TestHelper.createAddress())
+                        .registeredAddress(TestHelper.createAddress())
+                        .representatives(Collections.singletonList(Representative.builder()
+                                .firstName("John")
+                                .lastName("Doe")
+                                .address(TestHelper.createAddress())
+                                .identification(Identification.builder()
+                                        .nationalIdNumber("AB123456C")
+                                        .build())
+                                .phone(buildAccountPhone())
+                                .dateOfBirth(DateOfBirth.builder()
+                                        .day(5)
+                                        .month(6)
+                                        .year(1995)
+                                        .build())
+                                .placeOfBirth(PlaceOfBirth.builder()
+                                        .country(CountryCode.GB)
+                                        .build())
+                                .roles(Collections.singletonList(EntityRoles.UBO))
+                                .build()))
+                        .financialDetails(EntityFinancialDetails.builder()
+                                .annualProcessingVolume(120000L)
+                                .averageTransactionValue(10000L)
+                                .highestTransactionValue(2500L)
+                                .build())
+                        .build())
+                .build();
+
+        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(entityRequest));
+        assertNotNull(entityResponse);
+        assertNotNull(entityResponse.getId());
+        return entityResponse.getId();
+    }
+
     private IdResponse uploadFileSync() throws URISyntaxException {
         final URL resource = getClass().getClassLoader().getResource("checkout.jpeg");
         final File file = new File(resource.toURI());
@@ -257,6 +489,21 @@ class AccountsTestIT extends SandboxTestFixture {
         assertNotNull(fileResponse.getId());
     }
 
+    private void validateFileUploadResponseForEntity(final FileUploadResponse fileResponse) {
+        assertNotNull(fileResponse);
+        assertNotNull(fileResponse.getId());
+        assertNotNull(fileResponse.getMaximumSizeInBytes());
+        assertNotNull(fileResponse.getDocumentTypesForPurpose());
+        assertNotNull(fileResponse.getLinks());
+    }
+
+    private void validateFileDetailsResponseForEntity(final FileDetailsResponse fileDetailsResponse, final String expectedFileId) {
+        assertNotNull(fileDetailsResponse);
+        assertEquals(expectedFileId, fileDetailsResponse.getId());
+        assertNotNull(fileDetailsResponse.getStatus());
+        assertNotNull(fileDetailsResponse.getPurpose());
+    }
+
     private void validatePaymentInstrumentDetailsResponse(final PaymentInstrumentDetailsResponse instrumentDetailsResponse) {
         assertNotNull(instrumentDetailsResponse);
         assertNotNull(instrumentDetailsResponse.getId());
@@ -352,6 +599,62 @@ class AccountsTestIT extends SandboxTestFixture {
                 .scopes(OAuthScope.ACCOUNTS)
                 .environment(Environment.SANDBOX)
                 .build();
+    }
+
+    private static void validateEntityMembersResponse(final EntityMembersResponse response) {
+        assertNotNull(response);
+        assertNotNull(response.getData());
+    }
+
+    private static void validateEntityMemberResponse(final EntityMemberResponse response) {
+        assertNotNull(response);
+        assertNotNull(response.getUserId());
+    }
+
+    // Reserve Rules builders and validators
+    private static ReserveRuleRequest buildReserveRuleRequest() {
+        return ReserveRuleRequest.builder()
+                .type("rolling")
+                .validFrom(java.time.Instant.now().plusSeconds(3600)) // 1 hour from now
+                .rolling(RollingReserveRule.builder()
+                        .percentage(10.0)
+                        .holdingDuration(HoldingDuration.builder()
+                                .weeks(2)
+                                .build())
+                        .build())
+                .build();
+    }
+
+    private static ReserveRuleRequest buildReserveRuleRequestWithEtag(String etag) {
+        return ReserveRuleRequest.builder()
+                .type("rolling")
+                .validFrom(java.time.Instant.now().plusSeconds(3600)) // 1 hour from now
+                .rolling(RollingReserveRule.builder()
+                        .percentage(10.0)
+                        .holdingDuration(HoldingDuration.builder()
+                                .weeks(2)
+                                .build())
+                        .build())
+                .ifMatch(etag)
+                .build();
+    }
+
+    private static void validateReserveRuleCreateResponse(final ReserveRuleCreateResponse response) {
+        assertNotNull(response);
+        assertNotNull(response.getId());
+    }
+
+    private static void validateReserveRuleResponse(final ReserveRuleResponse response) {
+        assertNotNull(response);
+        assertNotNull(response.getId());
+        assertNotNull(response.getType());
+        assertNotNull(response.getValidFrom());
+        assertNotNull(response.getRolling());
+    }
+
+    private static void validateReserveRulesResponse(final ReserveRulesResponse response) {
+        assertNotNull(response);
+        assertNotNull(response.getData());
     }
 
 }

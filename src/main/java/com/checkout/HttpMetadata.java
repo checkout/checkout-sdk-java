@@ -18,4 +18,8 @@ public class HttpMetadata {
         return CheckoutUtils.getRequestId(responseHeaders);
     }
 
+    public String getEtag() {
+        return CheckoutUtils.getEtag(responseHeaders);
+    }
+
 }

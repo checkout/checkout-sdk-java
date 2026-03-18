@@ -506,8 +506,8 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
         final CardResponseSource responseCardSource = (CardResponseSource) paymentResponse.getSource();
         assertNotNull(responseCardSource);
         assertEquals(PaymentSourceType.CARD, responseCardSource.getType());
-        assertEquals(CardSourceHelper.Visa.EXPIRY_MONTH, (int) responseCardSource.getExpiryMonth());
-        assertEquals(CardSourceHelper.Visa.EXPIRY_YEAR, (int) responseCardSource.getExpiryYear());
+        assertEquals(String.valueOf(CardSourceHelper.Visa.EXPIRY_MONTH), responseCardSource.getExpiryMonth());
+        assertEquals(String.valueOf(CardSourceHelper.Visa.EXPIRY_YEAR), responseCardSource.getExpiryYear());
         assertEquals("Visa", responseCardSource.getScheme());
     }
 

@@ -7,10 +7,12 @@ import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unre
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.RequestAPaymentOrPayoutResponse;
 import com.checkout.payments.request.AuthorizationRequest;
 import com.checkout.payments.request.PaymentRequest;
+import com.checkout.payments.request.PaymentSearchRequest;
 import com.checkout.payments.request.PayoutRequest;
 import com.checkout.payments.response.AuthorizationResponse;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
+import com.checkout.payments.response.PaymentSearchResponse;
 import com.checkout.payments.response.PaymentsQueryResponse;
 import com.checkout.payments.response.PayoutResponse;
 
@@ -70,6 +72,8 @@ public interface PaymentsClient {
 
     CompletableFuture<VoidResponse> voidPayment(String paymentId, VoidRequest voidRequest, String idempotencyKey);
 
+    CompletableFuture<PaymentSearchResponse> searchPayments(PaymentSearchRequest paymentSearchRequest);
+
     // Synchronous methods
     PaymentResponse requestPaymentSync(PaymentRequest paymentRequest);
 
@@ -124,5 +128,7 @@ public interface PaymentsClient {
     VoidResponse voidPaymentSync(String paymentId, VoidRequest voidRequest);
 
     VoidResponse voidPaymentSync(String paymentId, VoidRequest voidRequest, String idempotencyKey);
+
+    PaymentSearchResponse searchPaymentsSync(PaymentSearchRequest paymentSearchRequest);
 
 }

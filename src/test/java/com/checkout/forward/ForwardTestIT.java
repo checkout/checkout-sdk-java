@@ -1,17 +1,22 @@
 package com.checkout.forward;
 
+import com.checkout.EmptyResponse;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
+import com.checkout.forward.requests.CreateSecretRequest;
 import com.checkout.forward.requests.DestinationRequest;
 import com.checkout.forward.requests.ForwardRequest;
 import com.checkout.forward.requests.Headers;
 import com.checkout.forward.requests.MethodType;
 import com.checkout.forward.requests.NetworkToken;
+import com.checkout.forward.requests.UpdateSecretRequest;
 import com.checkout.forward.requests.signatures.DlocalParameters;
 import com.checkout.forward.requests.signatures.DlocalSignature;
 import com.checkout.forward.requests.sources.IdSource;
 import com.checkout.forward.responses.ForwardAnApiResponse;
 import com.checkout.forward.responses.GetForwardResponse;
+import com.checkout.forward.responses.SecretResponse;
+import com.checkout.forward.responses.SecretsListResponse;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +25,7 @@ import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ForwardTestIT extends SandboxTestFixture {
 
@@ -53,6 +59,47 @@ public class ForwardTestIT extends SandboxTestFixture {
 
     }
 
+    @Disabled("This test requires a valid id or Token source")
+    @Test
+    void shouldCreateSecret() {
+        final CreateSecretRequest request = createSecretRequest();
+
+        final SecretResponse response = blocking(() -> checkoutApi.forwardClient().createSecret(request));
+
+        validateSecretResponse(response);
+    }
+
+    @Disabled("This test requires a valid id or Token source")
+    @Test
+    void shouldListSecrets() {
+        final SecretsListResponse response = blocking(() -> checkoutApi.forwardClient().listSecrets());
+
+        validateSecretsListResponse(response);
+    }
+
+    @Disabled("This test requires a valid id or Token source")
+    @Test
+    void shouldUpdateSecret() {
+        final CreateSecretRequest createRequest = createSecretRequest();
+        final SecretResponse createResponse = blocking(() -> checkoutApi.forwardClient().createSecret(createRequest));
+        
+        final UpdateSecretRequest updateRequest = createUpdateSecretRequest();
+        final SecretResponse response = blocking(() -> checkoutApi.forwardClient().updateSecret(createResponse.getName(), updateRequest));
+
+        validateSecretResponse(response);
+    }
+
+    @Disabled("This test requires a valid id or Token source")
+    @Test
+    void shouldDeleteSecret() {
+        final CreateSecretRequest createRequest = createSecretRequest();
+        final SecretResponse createResponse = blocking(() -> checkoutApi.forwardClient().createSecret(createRequest));
+        
+        final EmptyResponse response = blocking(() -> checkoutApi.forwardClient().deleteSecret(createResponse.getName()));
+
+        validateEmptyResponse(response);
+    }
+
     // Sync methods
     @Disabled("This test requires a valid id or Token source")
     @Test
@@ -77,6 +124,47 @@ public class ForwardTestIT extends SandboxTestFixture {
 
         validateGetForwardResponse(response);
 
+    }
+
+    @Disabled("This test requires a valid id or Token source")
+    @Test
+    void shouldCreateSecretSync() {
+        final CreateSecretRequest request = createSecretRequest();
+
+        final SecretResponse response = checkoutApi.forwardClient().createSecretSync(request);
+
+        validateSecretResponse(response);
+    }
+
+    @Disabled("This test requires a valid id or Token source")
+    @Test
+    void shouldListSecretsSync() {
+        final SecretsListResponse response = checkoutApi.forwardClient().listSecretsSync();
+
+        validateSecretsListResponse(response);
+    }
+
+    @Disabled("This test requires a valid id or Token source")
+    @Test
+    void shouldUpdateSecretSync() {
+        final CreateSecretRequest createRequest = createSecretRequest();
+        final SecretResponse createResponse = checkoutApi.forwardClient().createSecretSync(createRequest);
+        
+        final UpdateSecretRequest updateRequest = createUpdateSecretRequest();
+        final SecretResponse response = checkoutApi.forwardClient().updateSecretSync(createResponse.getName(), updateRequest);
+
+        validateSecretResponse(response);
+    }
+
+    @Disabled("This test requires a valid id or Token source")
+    @Test
+    void shouldDeleteSecretSync() {
+        final CreateSecretRequest createRequest = createSecretRequest();
+        final SecretResponse createResponse = checkoutApi.forwardClient().createSecretSync(createRequest);
+        
+        final EmptyResponse response = checkoutApi.forwardClient().deleteSecretSync(createResponse.getName());
+
+        validateEmptyResponse(response);
     }
 
     // Common methods
@@ -110,7 +198,7 @@ public class ForwardTestIT extends SandboxTestFixture {
                 .method(MethodType.POST)
                 .url("https://example.com/payments")
                 .headers(headers)
-                .body("{\"amount\": 1000, \"currency\": \"USD\", \"reference\": \"some_reference\", \"source\": {\"type\": \"card\", \\\"number\\\": \\\"{{card_number}}\\\", \\\"expiry_month\\\": \\\"{{card_expiry_month}}\\\", \\\"expiry_year\\\": \\\"{{card_expiry_year_yyyy}}\\\", \\\"name\\\": \\\"Ali Farid\\\"}, \\\"payment_type\\\": \\\"Regular\\\", \\\"authorization_type\\\": \\\"Final\\\", \\\"capture\\\": true, \\\"processing_channel_id\\\": \\\"pc_xxxxxxxxxxx\\\", \\\"risk\\\": {\\\"enabled\\\": false}, \\\"merchant_initiated\\\": true}")
+                .body("{\"amount\": 1000, \"currency\": \"USD\", \"reference\": \"some_reference\", \"source\": {\"type\": \"card\", \"number\": \"{{card_number}}\", \"expiry_month\": \"{{card_expiry_month}}\", \"expiry_year\": \"{{card_expiry_year_yyyy}}\", \"name\": \"Ali Farid\"}, \"payment_type\": \"Regular\", \"authorization_type\": \"Final\", \"capture\": true, \"processing_channel_id\": \"pc_xxxxxxxxxxx\", \"risk\": {\"enabled\": false}, \"merchant_initiated\": true}")
                 .signature(dlocalSignature)
                 .build();
 
@@ -120,6 +208,21 @@ public class ForwardTestIT extends SandboxTestFixture {
                 .processingChannelId(requireNonNull(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID")))
                 .networkToken(networkToken)
                 .destinationRequest(destinationRequest)
+                .build();
+    }
+
+    private CreateSecretRequest createSecretRequest() {
+        return CreateSecretRequest.builder()
+                .name("test_secret_" + System.currentTimeMillis())
+                .value("test_secret_value")
+                .entityId("ent_test_123")
+                .build();
+    }
+
+    private UpdateSecretRequest createUpdateSecretRequest() {
+        return UpdateSecretRequest.builder()
+                .value("updated_secret_value")
+                .entityId("ent_test_456")
                 .build();
     }
 
@@ -137,5 +240,23 @@ public class ForwardTestIT extends SandboxTestFixture {
         assertNotNull(response.getCreatedOn());
         assertNotNull(response.getReference());
         assertNotNull(response.getDestinationResponse());
+    }
+
+    private void validateSecretResponse(final SecretResponse response) {
+        assertNotNull(response);
+        assertNotNull(response.getName());
+        assertNotNull(response.getCreatedAt());
+        assertNotNull(response.getUpdatedAt());
+        assertNotNull(response.getVersion());
+        assertTrue(response.getVersion() >= 1);
+    }
+
+    private void validateSecretsListResponse(final SecretsListResponse response) {
+        assertNotNull(response);
+        assertNotNull(response.getData());
+    }
+
+    private void validateEmptyResponse(final EmptyResponse response) {
+        assertNotNull(response);
     }
 }

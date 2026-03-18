@@ -20,10 +20,12 @@ import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.req
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.RequestAPaymentOrPayoutResponseCreated;
 import com.checkout.payments.request.AuthorizationRequest;
 import com.checkout.payments.request.PaymentRequest;
+import com.checkout.payments.request.PaymentSearchRequest;
 import com.checkout.payments.request.PayoutRequest;
 import com.checkout.payments.response.AuthorizationResponse;
 import com.checkout.payments.response.GetPaymentResponse;
 import com.checkout.payments.response.PaymentResponse;
+import com.checkout.payments.response.PaymentSearchResponse;
 import com.checkout.payments.response.PaymentsQueryResponse;
 import com.checkout.payments.response.PayoutResponse;
 import com.google.gson.reflect.TypeToken;
@@ -31,6 +33,7 @@ import com.google.gson.reflect.TypeToken;
 public final class PaymentsClientImpl extends AbstractClient implements PaymentsClient {
 
     private static final String PAYMENTS_PATH = "payments";
+    private static final String SEARCH_PATH = "search";
     private static final String ACTIONS_PATH = "actions";
     private static final String CAPTURES_PATH = "captures";
     private static final String AUTHORIZATIONS_PATH = "authorizations";
@@ -226,6 +229,12 @@ public final class PaymentsClientImpl extends AbstractClient implements Payments
         return apiClient.postAsync(buildPath(PAYMENTS_PATH, paymentId, VOIDS_PATH), sdkAuthorization(), VoidResponse.class, voidRequest, idempotencyKey);
     }
 
+    @Override
+    public CompletableFuture<PaymentSearchResponse> searchPayments(final PaymentSearchRequest paymentSearchRequest) {
+        validatePaymentSearchRequest(paymentSearchRequest);
+        return apiClient.postAsync(buildPath(PAYMENTS_PATH, SEARCH_PATH), sdkAuthorization(), PaymentSearchResponse.class, paymentSearchRequest, null);
+    }
+
     // Synchronous methods
     @Override
     public PaymentResponse requestPaymentSync(final PaymentRequest paymentRequest) {
@@ -400,6 +409,12 @@ public final class PaymentsClientImpl extends AbstractClient implements Payments
         return apiClient.post(buildPath(PAYMENTS_PATH, paymentId, VOIDS_PATH), sdkAuthorization(), VoidResponse.class, voidRequest, idempotencyKey);
     }
 
+    @Override
+    public PaymentSearchResponse searchPaymentsSync(final PaymentSearchRequest paymentSearchRequest) {
+        validatePaymentSearchRequest(paymentSearchRequest);
+        return apiClient.post(buildPath(PAYMENTS_PATH, SEARCH_PATH), sdkAuthorization(), PaymentSearchResponse.class, paymentSearchRequest, null);
+    }
+
     // Common methods
     protected void validatePaymentRequest(final PaymentRequest paymentRequest) {
         validateParams("paymentRequest", paymentRequest);
@@ -475,6 +490,10 @@ public final class PaymentsClientImpl extends AbstractClient implements Payments
 
     protected void validatePaymentIdVoidRequestAndIdempotencyKey(final String paymentId, final VoidRequest voidRequest, final String idempotencyKey) {
         validateParams("paymentId", paymentId, "voidRequest", voidRequest, "idempotencyKey", idempotencyKey);
+    }
+
+    protected void validatePaymentSearchRequest(final PaymentSearchRequest paymentSearchRequest) {
+        validateParams("paymentSearchRequest", paymentSearchRequest);
     }
 
 }

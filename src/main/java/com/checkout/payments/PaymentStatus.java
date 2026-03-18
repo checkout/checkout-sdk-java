@@ -32,6 +32,8 @@ public enum PaymentStatus {
     PARTIALLY_REFUNDED,
     @SerializedName("Refunded")
     REFUNDED,
+    @SerializedName("Authentication Requested")
+    AUTHENTICATION_REQUESTED,
 
 }
 

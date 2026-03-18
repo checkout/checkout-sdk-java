@@ -42,6 +42,7 @@ public enum OAuthScope {
     MIDDLEWARE_MERCHANTS_SECRET("middleware:merchants-secret"),
     PAYMENT_CONTEXTS("gateway:payment-contexts"),
     PAYMENT_SESSIONS("payment-sessions"),
+    PAYMENTS_SEARCH("payments:search"),
     PAYOUTS_BANK_DETAILS("payouts:bank-details"),
     REPORTS("reports"),
     REPORTS_VIEW("reports:view"),
@@ -55,7 +56,9 @@ public enum OAuthScope {
     VAULT_CARD_METADATA("vault:card-metadata"),
     VAULT_INSTRUMENTS("vault:instruments"),
     VAULT_TOKENIZATION("vault:tokenization"),
-    FORWARD("forward");
+    VAULT_NETWORK_TOKENS("vault:network-tokens"),
+    FORWARD("forward"),
+    FORWARD_SECRETS("forward:secrets");
 
     private final String scope;
 

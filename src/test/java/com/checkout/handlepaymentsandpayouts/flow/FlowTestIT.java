@@ -6,8 +6,8 @@ import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.Phone;
+import com.checkout.common.PaymentMethodType;
 import com.checkout.handlepaymentsandpayouts.flow.entities.CardConfiguration;
-import com.checkout.handlepaymentsandpayouts.flow.entities.PaymentMethod;
 import com.checkout.handlepaymentsandpayouts.flow.entities.PaymentMethodConfiguration;
 import com.checkout.handlepaymentsandpayouts.flow.requests.PaymentSessionCreateRequest;
 import com.checkout.handlepaymentsandpayouts.flow.requests.PaymentSessionSubmitRequest;
@@ -167,7 +167,7 @@ class FlowTestIT extends SandboxTestFixture {
                 .threeDS(createThreeDSRequest())
                 .capture(true)
                 .locale(LocaleType.EN_GB)
-                .enabledPaymentMethods(Collections.singletonList(PaymentMethod.CARD))
+                .enabledPaymentMethods(Collections.singletonList(PaymentMethodType.CARD))
                 .paymentMethodConfiguration(createPaymentMethodConfiguration())
                 .build();
     }
@@ -295,8 +295,8 @@ class FlowTestIT extends SandboxTestFixture {
         request.setRisk(createRiskRequest());
 
         // Properties specific to PaymentSessionCreateRequest
-        request.setEnabledPaymentMethods(Collections.singletonList(PaymentMethod.CARD));
-        request.setDisabledPaymentMethods(Collections.singletonList(PaymentMethod.EPS));
+        request.setEnabledPaymentMethods(Collections.singletonList(PaymentMethodType.CARD));
+        request.setDisabledPaymentMethods(Collections.singletonList(PaymentMethodType.EPS));
         request.setPaymentMethodConfiguration(createPaymentMethodConfiguration());
         request.setIpAddress("127.0.0.1");
 

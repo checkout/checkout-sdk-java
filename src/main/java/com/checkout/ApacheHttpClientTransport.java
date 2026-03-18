@@ -1,6 +1,7 @@
 package com.checkout;
 
 import com.checkout.accounts.AccountsFileRequest;
+import com.checkout.accounts.Headers;
 import com.checkout.common.AbstractFileRequest;
 import com.checkout.common.CheckoutUtils;
 import com.checkout.common.FileRequest;
@@ -33,6 +34,7 @@ import org.apache.http.util.EntityUtils;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +44,7 @@ import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 import java.util.function.Supplier;
 
+import com.google.gson.annotations.SerializedName;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.retry.Retry;
@@ -99,7 +102,6 @@ class ApacheHttpClientTransport implements Transport {
                                               final String idempotencyKey,
                                               final Map<String, String> queryParams) {
 
-        final Object requestBodyOrEntity = prepareRequestContent(requestObject);
         return CompletableFuture.supplyAsync(() -> {
             final HttpUriRequest request;
             switch (clientOperation) {
@@ -135,7 +137,7 @@ class ApacheHttpClientTransport implements Transport {
             if (idempotencyKey != null) {
                 request.setHeader(CKO_IDEMPOTENCY_KEY, idempotencyKey);
             }
-            return performCall(authorization, requestBodyOrEntity, request, clientOperation);
+            return performCall(authorization, requestObject, request, clientOperation);
         }, executor);
     }
 
@@ -155,7 +157,6 @@ class ApacheHttpClientTransport implements Transport {
                                final Object requestObject,
                                final String idempotencyKey,
                                final Map<String, String> queryParams) {
-        final Object requestBodyOrEntity = prepareRequestContent(requestObject);
         final HttpUriRequest request;
         switch (clientOperation) {
             case GET:
@@ -191,7 +192,7 @@ class ApacheHttpClientTransport implements Transport {
             request.setHeader(CKO_IDEMPOTENCY_KEY, idempotencyKey);
         }
         
-        final Supplier<Response> callSupplier = () -> performCall(authorization, requestBodyOrEntity, request, clientOperation);
+        final Supplier<Response> callSupplier = () -> performCall(authorization, requestObject, request, clientOperation);
         return executeWithResilience4j(callSupplier);
     }
 
@@ -235,29 +236,6 @@ class ApacheHttpClientTransport implements Transport {
         return decoratedSupplier.get();
     }
 
-    /**
-     * Prepares the request content based on the type of request object.
-     * If the request object is a UrlEncodedFormEntity, it returns it directly.
-     * Otherwise, it serializes the object to JSON.
-     */
-    private Object prepareRequestContent(final Object requestObject) {
-        Object request = null;
-
-        if (requestObject != null) {
-            if (requestObject instanceof UrlEncodedFormEntity) {
-                // Return the form entity directly for form-encoded requests
-                request = requestObject;
-            }
-            else
-            {
-                // Default behavior: serialize to JSON
-                request = serializer.toJson(requestObject);
-            }
-        }   
-        
-        return request;
-    }
-
     private HttpEntity getMultipartFileEntity(final AbstractFileRequest abstractFileRequest) {
         final MultipartEntityBuilder builder = MultipartEntityBuilder.create().setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
         if (abstractFileRequest instanceof FileRequest) {
@@ -277,13 +255,16 @@ class ApacheHttpClientTransport implements Transport {
     }
 
     private Response performCall(final SdkAuthorization authorization,
-                                 final Object requestBodyOrEntity,
+                                 final Object requestBody,
                                  final HttpUriRequest request,
                                  final ClientOperation clientOperation) {
         log.info("{}: {}", clientOperation, request.getURI());
         request.setHeader(USER_AGENT, PROJECT_NAME + "/" + getVersionFromManifest());
         request.setHeader(ACCEPT, getAcceptHeader(clientOperation));
         request.setHeader(AUTHORIZATION, authorization.getAuthorizationHeader());
+
+        // Check and add headers from the request object if needed
+        addHeadersFromRequestBody(requestBody, request);
 
         String currentRequestId = UUID.randomUUID().toString();
 
@@ -292,16 +273,25 @@ class ApacheHttpClientTransport implements Transport {
         long startTime = System.currentTimeMillis();
 
         log.info("Request: " + Arrays.toString(sanitiseHeaders(request.getAllHeaders())));
-        if (requestBodyOrEntity != null && request instanceof HttpEntityEnclosingRequest) {
-            if (requestBodyOrEntity instanceof UrlEncodedFormEntity) {
-                // Handle form-encoded content
+        if (requestBody != null && request instanceof HttpEntityEnclosingRequest) {
+            HttpEntity httpEntity = null;
+            
+            if (requestBody instanceof HttpEntity) {
+                httpEntity = (HttpEntity) requestBody;
+            } else if (requestBody instanceof MultipartEntityBuilder) {
+                httpEntity = ((MultipartEntityBuilder) requestBody).build();
+            } else if (requestBody instanceof UrlEncodedFormEntity) {
+                // Ensure proper Content-Type header for form-encoded content
                 request.setHeader(CONTENT_TYPE, ContentType.APPLICATION_FORM_URLENCODED.getMimeType());
-                ((HttpEntityEnclosingRequestBase) request).setEntity((UrlEncodedFormEntity) requestBodyOrEntity);
-            } else if (requestBodyOrEntity instanceof String) {
-                // Handle JSON content
-                ((HttpEntityEnclosingRequestBase) request).setEntity(new StringEntity((String) requestBodyOrEntity, ContentType.APPLICATION_JSON));
+                httpEntity = (UrlEncodedFormEntity) requestBody;
+            } else {
+                String json = serializer.toJson(requestBody);
+                httpEntity = new StringEntity(json, ContentType.APPLICATION_JSON);
             }
+            
+            ((HttpEntityEnclosingRequestBase) request).setEntity(httpEntity);
         }
+
         try (final CloseableHttpResponse response = httpClient.execute(request)) {
             long elapsed = System.currentTimeMillis() - startTime;
             log.info("Response: " + response.getStatusLine().getStatusCode() + " " + Arrays.toString(response.getAllHeaders()));
@@ -324,6 +314,23 @@ class ApacheHttpClientTransport implements Transport {
             return handleException(e, "Target server failed to respond with a valid HTTP response.");
         } catch (final Exception e) {
             return handleException(e, "Exception occurred during the execution of the client...");
+        }
+    }
+
+    private void addHeadersFromRequestBody(final Object requestBody, final HttpUriRequest request) {
+        if (requestBody instanceof Headers) {
+            Headers headers = (Headers) requestBody;
+            for (Field field : Headers.class.getDeclaredFields()) {
+                field.setAccessible(true);
+                try {
+                    Object value = field.get(headers);
+                    if (value != null && !value.toString().isEmpty()) {
+                        SerializedName serializedName = field.getAnnotation(SerializedName.class);
+                        String headerName = serializedName != null ? serializedName.value() : field.getName();
+                        request.setHeader(headerName, value.toString());
+                    }
+                } catch (IllegalAccessException ignored) {}
+            }
         }
     }
 
