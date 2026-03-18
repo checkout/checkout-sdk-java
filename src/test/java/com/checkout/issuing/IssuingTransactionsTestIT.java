@@ -46,7 +46,7 @@ class IssuingTransactionsTestIT extends BaseIssuingTestIT {
             final TransactionsSingleResponse response = blocking(() -> 
                 issuingApi.issuingClient().getSingleTransaction(transactionId));
 
-            validateTransactionsSingleResponse(response, transactionId);
+            validateTransactionsSingleResponse(response);
         }
     }
 
@@ -71,7 +71,7 @@ class IssuingTransactionsTestIT extends BaseIssuingTestIT {
 
             final TransactionsSingleResponse response = issuingApi.issuingClient().getSingleTransactionSync(transactionId);
 
-            validateTransactionsSingleResponse(response, transactionId);
+            validateTransactionsSingleResponse(response);
         }
     }
 
@@ -91,7 +91,7 @@ class IssuingTransactionsTestIT extends BaseIssuingTestIT {
         assertNotNull(response.getData());
     }
 
-    private void validateTransactionsSingleResponse(TransactionsSingleResponse response, String expectedTransactionId) {
+    private void validateTransactionsSingleResponse(TransactionsSingleResponse response) {
         assertNotNull(response);
         assertNotNull(response.getId());
         assertNotNull(response.getTransactionType());
