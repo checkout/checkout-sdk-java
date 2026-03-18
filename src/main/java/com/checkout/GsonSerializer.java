@@ -23,6 +23,8 @@ import com.checkout.payments.ProductType;
 import com.checkout.payments.previous.PaymentAction;
 import com.checkout.payments.sender.Sender;
 import com.checkout.payments.sender.SenderType;
+import com.checkout.handlepaymentsandpayouts.flow.entities.PaymentSessionStatus;
+import com.checkout.handlepaymentsandpayouts.flow.responses.PaymentSubmissionResponse;
 import com.checkout.webhooks.previous.WebhookResponse;
 import com.checkout.workflows.actions.WorkflowActionType;
 import com.checkout.workflows.conditions.WorkflowConditionType;
@@ -207,6 +209,11 @@ public class GsonSerializer implements Serializer {
                     .registerSubtype(com.checkout.issuing.controls.requests.controlgroup.VelocityControlGroupControl.class, identifier(ControlType.VELOCITY_LIMIT))
                     .registerSubtype(com.checkout.issuing.controls.requests.controlgroup.MccControlGroupControl.class, identifier(ControlType.MCC_LIMIT))
                     .registerSubtype(com.checkout.issuing.controls.requests.controlgroup.MidControlGroupControl.class, identifier(ControlType.MID_LIMIT)))
+            // Flow - PaymentSubmissionResponse
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.handlepaymentsandpayouts.flow.responses.PaymentSubmissionResponse.class, CheckoutUtils.STATUS)
+                    .registerSubtype(com.checkout.handlepaymentsandpayouts.flow.responses.ApprovedPaymentSubmissionResponse.class, identifier(PaymentSessionStatus.APPROVED))
+                    .registerSubtype(com.checkout.handlepaymentsandpayouts.flow.responses.DeclinedPaymentSubmissionResponse.class, identifier(PaymentSessionStatus.DECLINED))
+                    .registerSubtype(com.checkout.handlepaymentsandpayouts.flow.responses.ActionRequiredPaymentSubmissionResponse.class, identifier(PaymentSessionStatus.ACTION_REQUIRED)))
             // Adapters when API returns an array
             .registerTypeAdapter(EVENT_TYPES_TYPE, eventTypesResponseDeserializer())
             .registerTypeAdapter(WORKFLOWS_EVENT_TYPES_TYPE, workflowEventTypesResponseDeserializer())

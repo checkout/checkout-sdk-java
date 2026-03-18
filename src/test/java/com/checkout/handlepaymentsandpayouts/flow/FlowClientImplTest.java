@@ -5,22 +5,11 @@ import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
-import com.checkout.common.CountryCode;
-import com.checkout.common.Currency;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.IdentificationType;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.LocaleType;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.enums.PaymentType;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Address;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Billing;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Identification;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.PaymentSessionRequest;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.Phone;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.requests.sender.IndividualSender;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessions.responses.PaymentSessionResponse;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessionscomplete.requests.PaymentSessionWithPaymentRequest;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessionscomplete.responses.PaymentSessionWithPaymentResponse;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessionssubmit.requests.SubmitPaymentSessionRequest;
-import com.checkout.handlepaymentsandpayouts.flow.paymentsessionssubmit.responses.SubmitPaymentSessionResponse;
+import com.checkout.handlepaymentsandpayouts.flow.requests.PaymentSessionCreateRequest;
+import com.checkout.handlepaymentsandpayouts.flow.requests.PaymentSessionSubmitRequest;
+import com.checkout.handlepaymentsandpayouts.flow.requests.PaymentSessionCompleteRequest;
+import com.checkout.handlepaymentsandpayouts.flow.responses.PaymentSessionResponse;
+import com.checkout.handlepaymentsandpayouts.flow.responses.PaymentSubmissionResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,193 +45,120 @@ class FlowClientImplTest {
 
     @BeforeEach
     void setUp() {
-        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
-        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+        setUpAuthorizationMocks();
         client = new FlowClientImpl(apiClient, configuration);
     }
 
     @Test
-    void shouldRequestPaymentSessions() throws ExecutionException, InterruptedException {
-        final PaymentSessionRequest request = createPaymentSessionRequest();
-        final PaymentSessionResponse response = createPaymentSessionResponse();
+    void shouldRequestPaymentSession() throws ExecutionException, InterruptedException {
+        final PaymentSessionCreateRequest request = createMockPaymentSessionCreateRequest();
+        final PaymentSessionResponse expectedResponse = mock(PaymentSessionResponse.class);
 
-        when(apiClient.postAsync(eq("payment-sessions"), eq(authorization), eq(PaymentSessionResponse.class), eq(request), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(response));
-        
+        when(apiClient.postAsync(eq("payment-sessions"), eq(authorization), eq(PaymentSessionResponse.class),
+                eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
         final CompletableFuture<PaymentSessionResponse> future = client.requestPaymentSession(request);
+        final PaymentSessionResponse actualResponse = future.get();
 
-        validatePaymentSessionResponse(future.get(), response);
+        validateResponse(expectedResponse, actualResponse);
     }
 
     @Test
-    void shouldRequestPaymentSessionsWithFullIndividualSender() throws ExecutionException, InterruptedException {
-        final PaymentSessionRequest request = PaymentSessionRequest.builder()
-                .amount(1000L) // 10.00 in minor currency units
-                .currency(Currency.USD)
-                .billing(createStandardBilling())
-                .successUrl("https://example.com/success")
-                .failureUrl("https://example.com/failure")
-                .paymentType(PaymentType.REGULAR)
-                .reference("ORDER-12345")
-                .description("Test payment for order")
-                .sender(createIndividualSender())
-                .capture(true)
-                .locale(LocaleType.EN_GB)
-                .build();
+    void shouldSubmitPaymentSession() throws ExecutionException, InterruptedException {
+        final String sessionId = "ps_test_123456789";
+        final PaymentSessionSubmitRequest request = createMockPaymentSessionSubmitRequest();
+        final PaymentSubmissionResponse expectedResponse = mock(PaymentSubmissionResponse.class);
 
-        final PaymentSessionResponse response = mock(PaymentSessionResponse.class);
+        when(apiClient.postAsync(eq("payment-sessions/" + sessionId + "/submit"), eq(authorization), eq(PaymentSubmissionResponse.class),
+                eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
-        when(apiClient.postAsync(eq("payment-sessions"), eq(authorization), eq(PaymentSessionResponse.class), eq(request), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(response));
+        final CompletableFuture<PaymentSubmissionResponse> future = client.submitPaymentSession(sessionId, request);
+        final PaymentSubmissionResponse actualResponse = future.get();
 
-        final CompletableFuture<PaymentSessionResponse> future = client.requestPaymentSession(request);
-
-        validatePaymentSessionResponse(future.get(), response);
-    }
-
-    @Test
-    void shouldSubmitPaymentSessions() throws ExecutionException, InterruptedException {
-        final String paymentId = "pay_mbabizu24mvu3mela5njyhpit4";
-        final SubmitPaymentSessionRequest request = createSubmitPaymentSessionRequest();
-        final SubmitPaymentSessionResponse response = createSubmitPaymentSessionResponse();
-
-        when(apiClient.postAsync(eq("payment-sessions/" + paymentId + "/submit"), eq(authorization), eq(SubmitPaymentSessionResponse.class), eq(request), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(response));
-
-        final CompletableFuture<SubmitPaymentSessionResponse> future = client.submitPaymentSessions(paymentId, request);
-
-        validateSubmitPaymentSessionResponse(future.get(), response);
+        validateResponse(expectedResponse, actualResponse);
     }
 
     @Test
     void shouldRequestPaymentSessionWithPayment() throws ExecutionException, InterruptedException {
-        final PaymentSessionWithPaymentRequest request = createPaymentSessionWithPaymentRequest();
-        final PaymentSessionWithPaymentResponse response = createPaymentSessionWithPaymentResponse();
+        final PaymentSessionCompleteRequest request = createMockPaymentSessionCompleteRequest();
+        final PaymentSubmissionResponse expectedResponse = mock(PaymentSubmissionResponse.class);
 
-        when(apiClient.postAsync(eq("payment-sessions/complete"), eq(authorization), eq(PaymentSessionWithPaymentResponse.class), eq(request), isNull()))
-                .thenReturn(CompletableFuture.completedFuture(response));
+        when(apiClient.postAsync(eq("payment-sessions/complete"), eq(authorization), eq(PaymentSubmissionResponse.class),
+                eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
-        final CompletableFuture<PaymentSessionWithPaymentResponse> future = client.requestPaymentSessionWithPayment(request);
+        final CompletableFuture<PaymentSubmissionResponse> future = client.requestPaymentSessionWithPayment(request);
+        final PaymentSubmissionResponse actualResponse = future.get();
 
-        validatePaymentSessionWithPaymentResponse(future.get(), response);
+        validateResponse(expectedResponse, actualResponse);
     }
 
     // Synchronous methods
     @Test
-    void shouldRequestPaymentSessionsSync() throws ExecutionException, InterruptedException {
-
-        final PaymentSessionRequest request = createPaymentSessionRequest();
-        final PaymentSessionResponse response = createPaymentSessionResponse();
+    void shouldRequestPaymentSessionSync() {
+        final PaymentSessionCreateRequest request = createMockPaymentSessionCreateRequest();
+        final PaymentSessionResponse expectedResponse = mock(PaymentSessionResponse.class);
 
         when(apiClient.post(eq("payment-sessions"), eq(authorization), eq(PaymentSessionResponse.class),
                 eq(request), isNull()))
-                .thenReturn(response);
+                .thenReturn(expectedResponse);
 
-        PaymentSessionResponse result = client.requestPaymentSessionSync(request);
+        final PaymentSessionResponse actualResponse = client.requestPaymentSessionSync(request);
 
-        validatePaymentSessionResponse(result, response);
-
+        validateResponse(expectedResponse, actualResponse);
     }
 
     @Test
-    void shouldSubmitPaymentSessionsSync() throws ExecutionException, InterruptedException {
-        final String paymentId = "pay_mbabizu24mvu3mela5njyhpit4";
-        final SubmitPaymentSessionRequest request = createSubmitPaymentSessionRequest();
-        final SubmitPaymentSessionResponse response = createSubmitPaymentSessionResponse();
+    void shouldSubmitPaymentSessionSync() {
+        final String sessionId = "ps_test_123456789";
+        final PaymentSessionSubmitRequest request = createMockPaymentSessionSubmitRequest();
+        final PaymentSubmissionResponse expectedResponse = mock(PaymentSubmissionResponse.class);
 
-        when(apiClient.post(eq("payment-sessions/" + paymentId + "/submit"), eq(authorization), eq(SubmitPaymentSessionResponse.class),
+        when(apiClient.post(eq("payment-sessions/" + sessionId + "/submit"), eq(authorization), eq(PaymentSubmissionResponse.class),
                 eq(request), isNull()))
-                .thenReturn(response);
+                .thenReturn(expectedResponse);
 
-        final SubmitPaymentSessionResponse result = client.submitPaymentSessionsSync(paymentId, request);
+        final PaymentSubmissionResponse actualResponse = client.submitPaymentSessionSync(sessionId, request);
 
-        validateSubmitPaymentSessionResponse(result, response);
+        validateResponse(expectedResponse, actualResponse);
     }
 
     @Test
-    void shouldRequestPaymentSessionWithPaymentSync() throws ExecutionException, InterruptedException {
-        final PaymentSessionWithPaymentRequest request = createPaymentSessionWithPaymentRequest();
-        final PaymentSessionWithPaymentResponse response = createPaymentSessionWithPaymentResponse();
+    void shouldRequestPaymentSessionWithPaymentSync() {
+        final PaymentSessionCompleteRequest request = createMockPaymentSessionCompleteRequest();
+        final PaymentSubmissionResponse expectedResponse = mock(PaymentSubmissionResponse.class);
 
-        when(apiClient.post(eq("payment-sessions/complete"), eq(authorization), eq(PaymentSessionWithPaymentResponse.class),
+        when(apiClient.post(eq("payment-sessions/complete"), eq(authorization), eq(PaymentSubmissionResponse.class),
                 eq(request), isNull()))
-                .thenReturn(response);
+                .thenReturn(expectedResponse);
 
-        final PaymentSessionWithPaymentResponse result = client.requestPaymentSessionWithPaymentSync(request);
+        final PaymentSubmissionResponse actualResponse = client.requestPaymentSessionWithPaymentSync(request);
 
-        validatePaymentSessionWithPaymentResponse(result, response);
+        validateResponse(expectedResponse, actualResponse);
     }
 
     // Common methods
-    private IndividualSender createIndividualSender() {
-        return IndividualSender.builder()
-                .firstName("John")
-                .lastName("Doe")
-                .address(Address.builder()
-                        .addressLine1("123 Test Street")
-                        .city("London")
-                        .state("London")
-                        .zip("SW1A 1AA")
-                        .country(CountryCode.GB)
-                        .build())
-                .identification(Identification.builder()
-                        .type(IdentificationType.DRIVING_LICENCE)
-                        .number("DL123456789")
-                        .issuingCountry("GB")
-                        .build())
-                .reference("SENDER-REF-123")
-                .build();
+    private void setUpAuthorizationMocks() {
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
     }
 
-    private Billing createStandardBilling() {
-        return Billing.builder()
-                .address(Address.builder()
-                        .addressLine1("123 High St.")
-                        .addressLine2("Flat 456")
-                        .city("London")
-                        .state("London")
-                        .zip("SW1A 1AA")
-                        .country(CountryCode.GB)
-                        .build())
-                .phone(Phone.builder()
-                        .countryCode("+1")
-                        .number("415 555 2671")
-                        .build())
-                .build();
+    private PaymentSessionCreateRequest createMockPaymentSessionCreateRequest() {
+        return mock(PaymentSessionCreateRequest.class);
     }
 
-    private PaymentSessionRequest createPaymentSessionRequest() {
-        return mock(PaymentSessionRequest.class);
+    private PaymentSessionSubmitRequest createMockPaymentSessionSubmitRequest() {
+        return mock(PaymentSessionSubmitRequest.class);
     }
 
-    private PaymentSessionResponse createPaymentSessionResponse() {
-        return mock(PaymentSessionResponse.class);
-    }
-    private SubmitPaymentSessionRequest createSubmitPaymentSessionRequest() {
-        return mock(SubmitPaymentSessionRequest.class);
-    }
-    private SubmitPaymentSessionResponse createSubmitPaymentSessionResponse() {
-        return mock(SubmitPaymentSessionResponse.class);
-    }
-    private PaymentSessionWithPaymentRequest createPaymentSessionWithPaymentRequest() {
-        return mock(PaymentSessionWithPaymentRequest.class);
-    }
-    private PaymentSessionWithPaymentResponse createPaymentSessionWithPaymentResponse() {
-        return mock(PaymentSessionWithPaymentResponse.class);
+    private PaymentSessionCompleteRequest createMockPaymentSessionCompleteRequest() {
+        return mock(PaymentSessionCompleteRequest.class);
     }
 
-    private void validatePaymentSessionResponse(PaymentSessionResponse actual, PaymentSessionResponse expected) {
-        assertNotNull(actual);
-        assertEquals(expected, actual);
-    }
-
-    private void validateSubmitPaymentSessionResponse(SubmitPaymentSessionResponse actual, SubmitPaymentSessionResponse expected) {
-        assertNotNull(actual);
-        assertEquals(expected, actual);
-    }
-
-    private void validatePaymentSessionWithPaymentResponse(PaymentSessionWithPaymentResponse actual, PaymentSessionWithPaymentResponse expected) {
-        assertNotNull(actual);
-        assertEquals(expected, actual);
+    private <T> void validateResponse(T expectedResponse, T actualResponse) {
+        assertEquals(expectedResponse, actualResponse);
+        assertNotNull(actualResponse);
     }
 }
