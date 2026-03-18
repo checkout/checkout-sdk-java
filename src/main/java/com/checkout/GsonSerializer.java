@@ -24,7 +24,6 @@ import com.checkout.payments.previous.PaymentAction;
 import com.checkout.payments.sender.Sender;
 import com.checkout.payments.sender.SenderType;
 import com.checkout.handlepaymentsandpayouts.flow.entities.PaymentSessionStatus;
-import com.checkout.handlepaymentsandpayouts.flow.responses.PaymentSubmissionResponse;
 import com.checkout.webhooks.previous.WebhookResponse;
 import com.checkout.workflows.actions.WorkflowActionType;
 import com.checkout.workflows.conditions.WorkflowConditionType;

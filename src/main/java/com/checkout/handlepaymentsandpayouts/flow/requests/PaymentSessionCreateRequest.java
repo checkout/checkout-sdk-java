@@ -1,7 +1,7 @@
 package com.checkout.handlepaymentsandpayouts.flow.requests;
 
+import com.checkout.common.PaymentMethodType;
 import com.checkout.handlepaymentsandpayouts.flow.entities.CustomerRetry;
-import com.checkout.handlepaymentsandpayouts.flow.entities.PaymentMethod;
 import com.checkout.handlepaymentsandpayouts.flow.entities.PaymentMethodConfiguration;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
@@ -31,12 +31,12 @@ public class PaymentSessionCreateRequest extends PaymentSessionInfo {
     /**
      * Specifies which payment method options to present to the customer.
      */
-    private List<PaymentMethod> enabledPaymentMethods;
+    private List<PaymentMethodType> enabledPaymentMethods;
 
     /**
      * Specifies which payment method options to not present to the customer.
      */
-    private List<PaymentMethod> disabledPaymentMethods;
+    private List<PaymentMethodType> disabledPaymentMethods;
 
     /**
      * Configurations for payment method-specific settings.
