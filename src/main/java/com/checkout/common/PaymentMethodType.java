@@ -28,6 +28,8 @@ public enum PaymentMethodType {
     BANCONTACT,
     @SerializedName("benefit")
     BENEFIT,
+    @SerializedName("bizum")
+    BIZUM,
     @SerializedName("boost")
     BOOST,
     @SerializedName("bpi")
@@ -70,24 +72,34 @@ public enum PaymentMethodType {
     MASTERCARD,
     @SerializedName("mbway")
     MBWAY,
+    @SerializedName("mobilepay")
+    MOBILEPAY,
     @SerializedName("multibanco")
     MULTIBANCO,
     @SerializedName("nyce")
     NYCE,
+    @SerializedName("octopus")
+    OCTOPUS,
     @SerializedName("omannet")
     OMANNET,
     @SerializedName("p24")
     P24,
+    @SerializedName("paynow")
+    PAYNOW,
     @SerializedName("paypal")
     PAYPAL,
     @SerializedName("paypay")
     PAYPAY,
+    @SerializedName("plaid")
+    PLAID,
     @SerializedName("pulse")
     PULSE,
     @SerializedName("qpay")
     QPAY,
     @SerializedName("rabbit_line_pay")
     RABBIT_LINE_PAY,
+    @SerializedName("remember_me")
+    REMEMBER_ME,
     @SerializedName("sepa")
     SEPA,
     @SerializedName("sequra")
@@ -100,6 +112,8 @@ public enum PaymentMethodType {
     STAR,
     @SerializedName("stcpay")
     STCPAY,
+    @SerializedName("stored_card")
+    STORED_CARD,
     @SerializedName("swish")
     SWISH,
     @SerializedName("tabby")
@@ -110,8 +124,12 @@ public enum PaymentMethodType {
     TNG,
     @SerializedName("truemoney")
     TRUEMONEY,
+    @SerializedName("twint")
+    TWINT,
     @SerializedName("upi")
     UPI,
+    @SerializedName("vipps")
+    VIPPS,
     @SerializedName("visa")
     VISA,
     @SerializedName("wechatpay")

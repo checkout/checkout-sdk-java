@@ -21,6 +21,7 @@ import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
 import com.checkout.issuing.cards.requests.update.UpdateCardRequest;
 import com.checkout.issuing.cards.responses.CardDetailsResponse;
 import com.checkout.issuing.cards.responses.CardResponse;
+import com.checkout.issuing.cards.responses.GetDigitalCardResponse;
 import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
@@ -42,6 +43,7 @@ import com.checkout.issuing.controls.responses.controlgroup.ControlGroupsQueryRe
 import com.checkout.issuing.controls.responses.controlprofile.ControlProfileResponse;
 import com.checkout.issuing.controls.responses.controlprofile.ControlProfilesQueryResponse;
 import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
+import com.checkout.issuing.testing.requests.SimulateOobAuthenticationRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRefundsRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
@@ -167,6 +169,22 @@ public interface IssuingClient {
 
     CompletableFuture<TransactionsSingleResponse> getSingleTransaction(final String transactionId);
 
+    /**
+     * Get digital card details.
+     *
+     * @param digitalCardId the unique identifier of the digital card
+     * @return a {@link CompletableFuture} of {@link GetDigitalCardResponse}
+     */
+    CompletableFuture<GetDigitalCardResponse> getDigitalCard(String digitalCardId);
+
+    /**
+     * Simulate an out-of-band (OOB) authentication request.
+     *
+     * @param request the OOB authentication simulation request
+     * @return a {@link CompletableFuture} of {@link EmptyResponse}
+     */
+    CompletableFuture<EmptyResponse> simulateOobAuthentication(SimulateOobAuthenticationRequest request);
+
     // Synchronous methods
     CardholderAccessTokenResponse requestCardholderAccessTokenSync(CardholderAccessTokenRequest cardholderAccessTokenRequest);
 
@@ -272,4 +290,20 @@ public interface IssuingClient {
     TransactionsListResponse getListTransactionsSync(TransactionsQuery queryFilter);
 
     TransactionsSingleResponse getSingleTransactionSync(String transactionId);
+
+    /**
+     * Get digital card details (synchronous version).
+     *
+     * @param digitalCardId the unique identifier of the digital card
+     * @return {@link GetDigitalCardResponse}
+     */
+    GetDigitalCardResponse getDigitalCardSync(String digitalCardId);
+
+    /**
+     * Simulate an out-of-band (OOB) authentication request (synchronous version).
+     *
+     * @param request the OOB authentication simulation request
+     * @return {@link EmptyResponse}
+     */
+    EmptyResponse simulateOobAuthenticationSync(SimulateOobAuthenticationRequest request);
 }

@@ -46,7 +46,9 @@ import com.checkout.issuing.controls.responses.controlgroup.ControlGroupResponse
 import com.checkout.issuing.controls.responses.controlgroup.ControlGroupsQueryResponse;
 import com.checkout.issuing.controls.responses.controlprofile.ControlProfileResponse;
 import com.checkout.issuing.controls.responses.controlprofile.ControlProfilesQueryResponse;
+import com.checkout.issuing.cards.responses.GetDigitalCardResponse;
 import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
+import com.checkout.issuing.testing.requests.SimulateOobAuthenticationRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRefundsRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
@@ -1330,5 +1332,29 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     private void validateTransactionId(final String transactionId) {
         validateParams("transactionId", transactionId);
+    }
+
+    @Override
+    public CompletableFuture<GetDigitalCardResponse> getDigitalCard(final String digitalCardId) {
+        validateParams("digitalCardId", digitalCardId);
+        return apiClient.getAsync(buildPath(ISSUING_PATH, "digital-cards", digitalCardId), sdkAuthorization(), GetDigitalCardResponse.class);
+    }
+
+    @Override
+    public GetDigitalCardResponse getDigitalCardSync(final String digitalCardId) {
+        validateParams("digitalCardId", digitalCardId);
+        return apiClient.get(buildPath(ISSUING_PATH, "digital-cards", digitalCardId), sdkAuthorization(), GetDigitalCardResponse.class);
+    }
+
+    @Override
+    public CompletableFuture<EmptyResponse> simulateOobAuthentication(final SimulateOobAuthenticationRequest request) {
+        validateParams("request", request);
+        return apiClient.postAsync(buildPath(ISSUING_PATH, SIMULATE_PATH, "oob", "authentication"), sdkAuthorization(), EmptyResponse.class, request, null);
+    }
+
+    @Override
+    public EmptyResponse simulateOobAuthenticationSync(final SimulateOobAuthenticationRequest request) {
+        validateParams("request", request);
+        return apiClient.post(buildPath(ISSUING_PATH, SIMULATE_PATH, "oob", "authentication"), sdkAuthorization(), EmptyResponse.class, request, null);
     }
 }

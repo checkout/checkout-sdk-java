@@ -31,6 +31,8 @@ import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.CustomerResponse;
 import com.checkout.common.Phone;
+import com.checkout.payments.CancellationAcceptedResponse;
+import com.checkout.payments.CancellationRequest;
 import com.checkout.payments.request.AuthorizationRequest;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.PaymentSearchRequest;
@@ -455,6 +457,48 @@ class PaymentsClientImplTest {
     }
 
     @Test
+    void shouldCancelPayment() throws ExecutionException, InterruptedException {
+        final CancellationAcceptedResponse response = new CancellationAcceptedResponse();
+        when(apiClient.postAsync(eq("payments/pay_123/cancellations"), any(SdkAuthorization.class),
+                eq(CancellationAcceptedResponse.class), isNull(), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        validateResponse(response, paymentsClient.cancelPayment("pay_123").get());
+    }
+
+    @Test
+    void shouldCancelPayment_idempotencyKey() throws ExecutionException, InterruptedException {
+        final CancellationAcceptedResponse response = new CancellationAcceptedResponse();
+        when(apiClient.postAsync(eq("payments/pay_123/cancellations"), any(SdkAuthorization.class),
+                eq(CancellationAcceptedResponse.class), isNull(), eq("idem_key")))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        validateResponse(response, paymentsClient.cancelPayment("pay_123", "idem_key").get());
+    }
+
+    @Test
+    void shouldCancelPayment_request() throws ExecutionException, InterruptedException {
+        final CancellationRequest request = createCancellationRequest();
+        final CancellationAcceptedResponse response = new CancellationAcceptedResponse();
+        when(apiClient.postAsync(eq("payments/pay_123/cancellations"), any(SdkAuthorization.class),
+                eq(CancellationAcceptedResponse.class), eq(request), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        validateResponse(response, paymentsClient.cancelPayment("pay_123", request).get());
+    }
+
+    @Test
+    void shouldCancelPayment_request_idempotencyKey() throws ExecutionException, InterruptedException {
+        final CancellationRequest request = createCancellationRequest();
+        final CancellationAcceptedResponse response = new CancellationAcceptedResponse();
+        when(apiClient.postAsync(eq("payments/pay_123/cancellations"), any(SdkAuthorization.class),
+                eq(CancellationAcceptedResponse.class), eq(request), eq("idem_key")))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        validateResponse(response, paymentsClient.cancelPayment("pay_123", request, "idem_key").get());
+    }
+
+    @Test
     void shouldRequestProviderTokenSourcePayment() throws ExecutionException, InterruptedException {
         final PaymentInstrumentSender sender = createPaymentSender();
         final PaymentResponse response = createPaymentResponse();
@@ -846,6 +890,48 @@ class PaymentsClientImplTest {
     }
 
     @Test
+    void shouldCancelPaymentSync() {
+        final CancellationAcceptedResponse response = new CancellationAcceptedResponse();
+        when(apiClient.post(eq("payments/pay_123/cancellations"), any(SdkAuthorization.class),
+                eq(CancellationAcceptedResponse.class), isNull(), isNull()))
+                .thenReturn(response);
+
+        validateResponse(response, paymentsClient.cancelPaymentSync("pay_123"));
+    }
+
+    @Test
+    void shouldCancelPaymentSync_idempotencyKey() {
+        final CancellationAcceptedResponse response = new CancellationAcceptedResponse();
+        when(apiClient.post(eq("payments/pay_123/cancellations"), any(SdkAuthorization.class),
+                eq(CancellationAcceptedResponse.class), isNull(), eq("idem_key")))
+                .thenReturn(response);
+
+        validateResponse(response, paymentsClient.cancelPaymentSync("pay_123", "idem_key"));
+    }
+
+    @Test
+    void shouldCancelPaymentSync_request() {
+        final CancellationRequest request = createCancellationRequest();
+        final CancellationAcceptedResponse response = new CancellationAcceptedResponse();
+        when(apiClient.post(eq("payments/pay_123/cancellations"), any(SdkAuthorization.class),
+                eq(CancellationAcceptedResponse.class), eq(request), isNull()))
+                .thenReturn(response);
+
+        validateResponse(response, paymentsClient.cancelPaymentSync("pay_123", request));
+    }
+
+    @Test
+    void shouldCancelPaymentSync_request_idempotencyKey() {
+        final CancellationRequest request = createCancellationRequest();
+        final CancellationAcceptedResponse response = new CancellationAcceptedResponse();
+        when(apiClient.post(eq("payments/pay_123/cancellations"), any(SdkAuthorization.class),
+                eq(CancellationAcceptedResponse.class), eq(request), eq("idem_key")))
+                .thenReturn(response);
+
+        validateResponse(response, paymentsClient.cancelPaymentSync("pay_123", request, "idem_key"));
+    }
+
+    @Test
     void shouldRequestProviderTokenSourcePaymentSync() {
         final PaymentInstrumentSender sender = createPaymentSender();
         final PaymentResponse expectedResponse = createPaymentResponse();
@@ -1058,6 +1144,12 @@ class PaymentsClientImplTest {
 
     private PaymentSearchResponse createPaymentSearchResponse() {
         return mock(PaymentSearchResponse.class);
+    }
+
+    private CancellationRequest createCancellationRequest() {
+        return CancellationRequest.builder()
+                .reference("ref_1")
+                .build();
     }
 
     private <T> void validateResponse(T expectedResponse, T actualResponse) {

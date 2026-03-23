@@ -9,7 +9,9 @@ import com.checkout.forex.ForexClient;
 import com.checkout.forward.ForwardClient;
 import com.checkout.handlepaymentsandpayouts.flow.FlowClient;
 import com.checkout.handlepaymentsandpayouts.setups.PaymentSetupsClient;
+import com.checkout.compliance.ComplianceClient;
 import com.checkout.handlepaymentsandpayouts.applepay.ApplePayClient;
+import com.checkout.handlepaymentsandpayouts.googlepay.GooglePayClient;
 import com.checkout.identities.faceauthentications.FaceAuthenticationClient;
 import com.checkout.identities.applicants.ApplicantClient;
 import com.checkout.identities.identityverification.IdentityVerificationClient;
@@ -79,6 +81,10 @@ public interface CheckoutApi extends CheckoutApmApi {
     PaymentSetupsClient paymentSetupsClient();
 
     ApplePayClient applePayClient();
+
+    GooglePayClient googlePayClient();
+
+    ComplianceClient complianceClient();
 
     ForwardClient forwardClient();
 

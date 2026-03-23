@@ -5,6 +5,7 @@ bin/
 lombok.config
 .DS_Store
 .vscode/
-.cursor/rules/endpoint-review.mdc
+.cursor
 .github/SKILL.md
 swagger-spec.json
+swagger.*

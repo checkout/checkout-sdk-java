@@ -68,6 +68,8 @@ public enum PaymentSourceType {
     KNET,
     @SerializedName("mbway")
     MBWAY,
+    @SerializedName("mobilepay")
+    MOBILEPAY,
     @SerializedName("multibanco")
     MULTIBANCO,
     @SerializedName("network_token")
@@ -104,6 +106,8 @@ public enum PaymentSourceType {
     SOFORT,
     @SerializedName("stcpay")
     STCPAY,
+    @SerializedName("swish")
+    SWISH,
     @SerializedName("tabby")
     TABBY,
     @SerializedName("tamara")
@@ -116,6 +120,10 @@ public enum PaymentSourceType {
     TRUEMONEY,
     @SerializedName("trustly")
     TRUSTLY,
+    @SerializedName("twint")
+    TWINT,
+    @SerializedName("vipps")
+    VIPPS,
     @SerializedName("wechatpay")
     WECHATPAY,
     @SerializedName("paynow")

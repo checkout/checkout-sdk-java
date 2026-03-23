@@ -74,6 +74,42 @@ public interface PaymentsClient {
 
     CompletableFuture<PaymentSearchResponse> searchPayments(PaymentSearchRequest paymentSearchRequest);
 
+    /**
+     * Cancels an upcoming scheduled payment retry.
+     *
+     * @param paymentId the payment identifier
+     * @return a {@link CompletableFuture} of {@link CancellationAcceptedResponse}
+     */
+    CompletableFuture<CancellationAcceptedResponse> cancelPayment(String paymentId);
+
+    /**
+     * Cancels an upcoming scheduled payment retry.
+     *
+     * @param paymentId           the payment identifier
+     * @param idempotencyKey      the idempotency key
+     * @return a {@link CompletableFuture} of {@link CancellationAcceptedResponse}
+     */
+    CompletableFuture<CancellationAcceptedResponse> cancelPayment(String paymentId, String idempotencyKey);
+
+    /**
+     * Cancels an upcoming scheduled payment retry.
+     *
+     * @param paymentId           the payment identifier
+     * @param cancellationRequest the cancellation request body
+     * @return a {@link CompletableFuture} of {@link CancellationAcceptedResponse}
+     */
+    CompletableFuture<CancellationAcceptedResponse> cancelPayment(String paymentId, CancellationRequest cancellationRequest);
+
+    /**
+     * Cancels an upcoming scheduled payment retry.
+     *
+     * @param paymentId           the payment identifier
+     * @param cancellationRequest the cancellation request body
+     * @param idempotencyKey      the idempotency key
+     * @return a {@link CompletableFuture} of {@link CancellationAcceptedResponse}
+     */
+    CompletableFuture<CancellationAcceptedResponse> cancelPayment(String paymentId, CancellationRequest cancellationRequest, String idempotencyKey);
+
     // Synchronous methods
     PaymentResponse requestPaymentSync(PaymentRequest paymentRequest);
 
@@ -130,5 +166,41 @@ public interface PaymentsClient {
     VoidResponse voidPaymentSync(String paymentId, VoidRequest voidRequest, String idempotencyKey);
 
     PaymentSearchResponse searchPaymentsSync(PaymentSearchRequest paymentSearchRequest);
+
+    /**
+     * Cancels an upcoming scheduled payment retry (synchronous version).
+     *
+     * @param paymentId the payment identifier
+     * @return {@link CancellationAcceptedResponse}
+     */
+    CancellationAcceptedResponse cancelPaymentSync(String paymentId);
+
+    /**
+     * Cancels an upcoming scheduled payment retry (synchronous version).
+     *
+     * @param paymentId      the payment identifier
+     * @param idempotencyKey the idempotency key
+     * @return {@link CancellationAcceptedResponse}
+     */
+    CancellationAcceptedResponse cancelPaymentSync(String paymentId, String idempotencyKey);
+
+    /**
+     * Cancels an upcoming scheduled payment retry (synchronous version).
+     *
+     * @param paymentId           the payment identifier
+     * @param cancellationRequest the cancellation request body
+     * @return {@link CancellationAcceptedResponse}
+     */
+    CancellationAcceptedResponse cancelPaymentSync(String paymentId, CancellationRequest cancellationRequest);
+
+    /**
+     * Cancels an upcoming scheduled payment retry (synchronous version).
+     *
+     * @param paymentId           the payment identifier
+     * @param cancellationRequest the cancellation request body
+     * @param idempotencyKey      the idempotency key
+     * @return {@link CancellationAcceptedResponse}
+     */
+    CancellationAcceptedResponse cancelPaymentSync(String paymentId, CancellationRequest cancellationRequest, String idempotencyKey);
 
 }
