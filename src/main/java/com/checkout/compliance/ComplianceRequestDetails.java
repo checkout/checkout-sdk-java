@@ -8,7 +8,7 @@ import lombok.Data;
  * Represents a compliance request with all its details.
  */
 @Data
-public class ComplianceRequestDetails {
+public final class ComplianceRequestDetails {
 
     @SerializedName("payment_id")
     private String paymentId;

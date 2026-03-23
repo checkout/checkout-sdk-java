@@ -8,7 +8,7 @@ import java.util.List;
  * Groups the requested fields by party (sender/recipient).
  */
 @Data
-public class RequestedFields {
+public final class RequestedFields {
 
     private List<RequestedField> sender;
 

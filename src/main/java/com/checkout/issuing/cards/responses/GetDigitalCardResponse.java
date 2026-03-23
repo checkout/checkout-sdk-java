@@ -14,7 +14,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class GetDigitalCardResponse extends Resource {
+public final class GetDigitalCardResponse extends Resource {
 
     private String id;
 

@@ -30,7 +30,7 @@ import com.checkout.payments.response.PaymentsQueryResponse;
 import com.checkout.payments.response.PayoutResponse;
 import com.google.gson.reflect.TypeToken;
 
-public final class PaymentsClientImpl extends AbstractClient implements PaymentsClient {
+public class PaymentsClientImpl extends AbstractClient implements PaymentsClient {
 
     private static final String PAYMENTS_PATH = "payments";
     private static final String SEARCH_PATH = "search";

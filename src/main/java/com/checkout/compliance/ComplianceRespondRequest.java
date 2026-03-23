@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ComplianceRespondRequest {
+public final class ComplianceRespondRequest {
 
     /**
      * The fields being responded to, grouped by sender and recipient.

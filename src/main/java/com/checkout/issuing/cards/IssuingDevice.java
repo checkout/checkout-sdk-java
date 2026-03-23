@@ -1,9 +1,15 @@
 package com.checkout.issuing.cards;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class IssuingDevice {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public final class IssuingDevice {
 
     private String id;
 

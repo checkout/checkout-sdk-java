@@ -61,8 +61,8 @@ public class ComplianceTestIT extends SandboxTestFixture {
 
     private ComplianceRespondRequest createRespondRequest() {
         return ComplianceRespondRequest.builder()
-                .respondedFields(ComplianceRequestRespondedFields.builder()
-                        .fields(Collections.singletonList(
+                .fields(ComplianceRequestRespondedFields.builder()
+                        .sender(Collections.singletonList(
                                 ComplianceRequestRespondedField.builder()
                                         .name("invoice")
                                         .value("base64_encoded_document")
@@ -75,6 +75,6 @@ public class ComplianceTestIT extends SandboxTestFixture {
         assertNotNull(response);
         assertNotNull(response.getPaymentId());
         assertNotNull(response.getStatus());
-        assertNotNull(response.getRequestedFields());
+        assertNotNull(response.getFields());
     }
 }

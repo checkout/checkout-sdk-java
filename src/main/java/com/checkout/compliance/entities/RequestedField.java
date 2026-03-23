@@ -6,7 +6,7 @@ import lombok.Data;
  * Describes a single requested field within a compliance request.
  */
 @Data
-public class RequestedField {
+public final class RequestedField {
 
     private String name;
 
