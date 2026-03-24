@@ -43,6 +43,7 @@ import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -67,6 +68,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Getter
+@Slf4j
 public class GsonSerializer implements Serializer {
 
     private static final List<DateTimeFormatter> DEFAULT_FORMATTERS = Arrays.asList(
@@ -438,7 +440,7 @@ public class GsonSerializer implements Serializer {
                             }
                         }
                     } catch (IllegalAccessException e) {
-                        System.err.println("Error setting field: " + entry.getKey() + ", " + e.getMessage());
+                        log.warn("Error setting field: {}", entry.getKey(), e);
                     }
                 });
 

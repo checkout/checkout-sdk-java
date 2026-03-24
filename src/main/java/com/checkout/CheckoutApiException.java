@@ -7,7 +7,7 @@ import lombok.ToString;
 import java.util.Map;
 
 @Getter
-@ToString
+@ToString(exclude = "responseHeaders")
 public final class CheckoutApiException extends CheckoutException {
 
     private final Integer httpStatusCode;
