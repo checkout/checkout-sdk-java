@@ -30,7 +30,7 @@ import com.checkout.payments.response.PaymentsQueryResponse;
 import com.checkout.payments.response.PayoutResponse;
 import com.google.gson.reflect.TypeToken;
 
-public final class PaymentsClientImpl extends AbstractClient implements PaymentsClient {
+public class PaymentsClientImpl extends AbstractClient implements PaymentsClient {
 
     private static final String PAYMENTS_PATH = "payments";
     private static final String SEARCH_PATH = "search";
@@ -40,6 +40,7 @@ public final class PaymentsClientImpl extends AbstractClient implements Payments
     private static final String REFUNDS_PATH = "refunds";
     private static final String REVERSALS_PATH = "reversals";
     private static final String VOIDS_PATH = "voids";
+    private static final String CANCELLATIONS_PATH = "cancellations";
 
     private static final Map<Integer, Class<? extends HttpMetadata>> RESPONSE_MAPPINGS = new HashMap<>();
     private static final Type PAYMENT_ACTIONS_TYPE = new TypeToken<ItemsResponse<PaymentAction>>() {
@@ -494,6 +495,54 @@ public final class PaymentsClientImpl extends AbstractClient implements Payments
 
     protected void validatePaymentSearchRequest(final PaymentSearchRequest paymentSearchRequest) {
         validateParams("paymentSearchRequest", paymentSearchRequest);
+    }
+
+    @Override
+    public CompletableFuture<CancellationAcceptedResponse> cancelPayment(final String paymentId) {
+        validateParams("paymentId", paymentId);
+        return apiClient.postAsync(buildPath(PAYMENTS_PATH, paymentId, CANCELLATIONS_PATH), sdkAuthorization(), CancellationAcceptedResponse.class, null, null);
+    }
+
+    @Override
+    public CompletableFuture<CancellationAcceptedResponse> cancelPayment(final String paymentId, final String idempotencyKey) {
+        validateParams("paymentId", paymentId, "idempotencyKey", idempotencyKey);
+        return apiClient.postAsync(buildPath(PAYMENTS_PATH, paymentId, CANCELLATIONS_PATH), sdkAuthorization(), CancellationAcceptedResponse.class, null, idempotencyKey);
+    }
+
+    @Override
+    public CompletableFuture<CancellationAcceptedResponse> cancelPayment(final String paymentId, final CancellationRequest cancellationRequest) {
+        validateParams("paymentId", paymentId, "cancellationRequest", cancellationRequest);
+        return apiClient.postAsync(buildPath(PAYMENTS_PATH, paymentId, CANCELLATIONS_PATH), sdkAuthorization(), CancellationAcceptedResponse.class, cancellationRequest, null);
+    }
+
+    @Override
+    public CompletableFuture<CancellationAcceptedResponse> cancelPayment(final String paymentId, final CancellationRequest cancellationRequest, final String idempotencyKey) {
+        validateParams("paymentId", paymentId, "cancellationRequest", cancellationRequest, "idempotencyKey", idempotencyKey);
+        return apiClient.postAsync(buildPath(PAYMENTS_PATH, paymentId, CANCELLATIONS_PATH), sdkAuthorization(), CancellationAcceptedResponse.class, cancellationRequest, idempotencyKey);
+    }
+
+    @Override
+    public CancellationAcceptedResponse cancelPaymentSync(final String paymentId) {
+        validateParams("paymentId", paymentId);
+        return apiClient.post(buildPath(PAYMENTS_PATH, paymentId, CANCELLATIONS_PATH), sdkAuthorization(), CancellationAcceptedResponse.class, null, null);
+    }
+
+    @Override
+    public CancellationAcceptedResponse cancelPaymentSync(final String paymentId, final String idempotencyKey) {
+        validateParams("paymentId", paymentId, "idempotencyKey", idempotencyKey);
+        return apiClient.post(buildPath(PAYMENTS_PATH, paymentId, CANCELLATIONS_PATH), sdkAuthorization(), CancellationAcceptedResponse.class, null, idempotencyKey);
+    }
+
+    @Override
+    public CancellationAcceptedResponse cancelPaymentSync(final String paymentId, final CancellationRequest cancellationRequest) {
+        validateParams("paymentId", paymentId, "cancellationRequest", cancellationRequest);
+        return apiClient.post(buildPath(PAYMENTS_PATH, paymentId, CANCELLATIONS_PATH), sdkAuthorization(), CancellationAcceptedResponse.class, cancellationRequest, null);
+    }
+
+    @Override
+    public CancellationAcceptedResponse cancelPaymentSync(final String paymentId, final CancellationRequest cancellationRequest, final String idempotencyKey) {
+        validateParams("paymentId", paymentId, "cancellationRequest", cancellationRequest, "idempotencyKey", idempotencyKey);
+        return apiClient.post(buildPath(PAYMENTS_PATH, paymentId, CANCELLATIONS_PATH), sdkAuthorization(), CancellationAcceptedResponse.class, cancellationRequest, idempotencyKey);
     }
 
 }

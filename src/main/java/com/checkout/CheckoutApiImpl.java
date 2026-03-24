@@ -18,8 +18,12 @@ import com.checkout.handlepaymentsandpayouts.flow.FlowClient;
 import com.checkout.handlepaymentsandpayouts.flow.FlowClientImpl;
 import com.checkout.handlepaymentsandpayouts.setups.PaymentSetupsClient;
 import com.checkout.handlepaymentsandpayouts.setups.PaymentSetupsClientImpl;
+import com.checkout.compliance.ComplianceClient;
+import com.checkout.compliance.ComplianceClientImpl;
 import com.checkout.handlepaymentsandpayouts.applepay.ApplePayClient;
 import com.checkout.handlepaymentsandpayouts.applepay.ApplePayClientImpl;
+import com.checkout.handlepaymentsandpayouts.googlepay.GooglePayClient;
+import com.checkout.handlepaymentsandpayouts.googlepay.GooglePayClientImpl;
 import com.checkout.identities.faceauthentications.FaceAuthenticationClient;
 import com.checkout.identities.faceauthentications.FaceAuthenticationClientImpl;
 import com.checkout.identities.applicants.ApplicantClient;
@@ -90,6 +94,8 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final FlowClient flowClient;
     private final PaymentSetupsClient paymentSetupsClient;
     private final ApplePayClient applePayClient;
+    private final GooglePayClient googlePayClient;
+    private final ComplianceClient complianceClient;
     private final ForwardClient forwardClient;
     private final FaceAuthenticationClient faceAuthenticationClient;
     private final ApplicantClient applicantClient;
@@ -126,6 +132,8 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.flowClient = new FlowClientImpl(this.apiClient, configuration);
         this.paymentSetupsClient = new PaymentSetupsClientImpl(this.apiClient, configuration);
         this.applePayClient = new ApplePayClientImpl(this.apiClient, configuration);
+        this.googlePayClient = new GooglePayClientImpl(this.apiClient, configuration);
+        this.complianceClient = new ComplianceClientImpl(this.apiClient, configuration);
         this.forwardClient = new ForwardClientImpl(this.apiClient, configuration);
         this.faceAuthenticationClient = new FaceAuthenticationClientImpl(this.apiClient, configuration);
         this.applicantClient = new ApplicantClientImpl(this.apiClient, configuration);
@@ -238,6 +246,12 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
 
     @Override
     public ApplePayClient applePayClient() { return applePayClient; }
+
+    @Override
+    public GooglePayClient googlePayClient() { return googlePayClient; }
+
+    @Override
+    public ComplianceClient complianceClient() { return complianceClient; }
 
     @Override
     public ForwardClient forwardClient() { return forwardClient; }

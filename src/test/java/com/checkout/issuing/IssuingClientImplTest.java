@@ -56,11 +56,13 @@ import com.checkout.issuing.transactions.responses.TransactionsSingleResponse;
 import com.checkout.issuing.transactions.requests.TransactionsQuery;
 import com.checkout.issuing.transactions.responses.TransactionsListResponse;
 import com.checkout.issuing.transactions.responses.TransactionsSingleResponse;
+import com.checkout.issuing.cards.responses.GetDigitalCardResponse;
 import com.checkout.issuing.testing.requests.CardAuthorizationClearingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationIncrementingRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRefundsRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationRequest;
 import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
+import com.checkout.issuing.testing.requests.SimulateOobAuthenticationRequest;
 import com.checkout.issuing.testing.responses.CardAuthorizationIncrementingResponse;
 import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
 import com.checkout.issuing.testing.responses.CardAuthorizationReversalResponse;
@@ -794,6 +796,35 @@ public class IssuingClientImplTest {
             final CompletableFuture<VoidResponse> future = client.removeTargetFromControlProfile("profile_id", "target_id");
 
             validateVoidResponse(response, future.get());
+        }
+
+        @Test
+        void shouldGetDigitalCard() throws ExecutionException, InterruptedException {
+            final GetDigitalCardResponse response = mock(GetDigitalCardResponse.class);
+
+            when(apiClient.getAsync(
+                    "issuing/digital-cards/dc_123",
+                    authorization,
+                    GetDigitalCardResponse.class
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            validateGetDigitalCardResponse(response, client.getDigitalCard("dc_123").get());
+        }
+
+        @Test
+        void shouldSimulateOobAuthentication() throws ExecutionException, InterruptedException {
+            final SimulateOobAuthenticationRequest request = createOobAuthenticationRequest();
+            final EmptyResponse response = mock(EmptyResponse.class);
+
+            when(apiClient.postAsync(
+                    "issuing/simulate/oob/authentication",
+                    authorization,
+                    EmptyResponse.class,
+                    request,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            validateEmptyResponse(response, client.simulateOobAuthentication(request).get());
         }
     }
 
@@ -1570,6 +1601,35 @@ public class IssuingClientImplTest {
 
             validateVoidResponse(expectedResponse, actualResponse);
         }
+
+        @Test
+        void shouldGetDigitalCardSync() {
+            final GetDigitalCardResponse response = mock(GetDigitalCardResponse.class);
+
+            when(apiClient.get(
+                    "issuing/digital-cards/dc_123",
+                    authorization,
+                    GetDigitalCardResponse.class
+            )).thenReturn(response);
+
+            validateGetDigitalCardResponse(response, client.getDigitalCardSync("dc_123"));
+        }
+
+        @Test
+        void shouldSimulateOobAuthenticationSync() {
+            final SimulateOobAuthenticationRequest request = createOobAuthenticationRequest();
+            final EmptyResponse response = mock(EmptyResponse.class);
+
+            when(apiClient.post(
+                    "issuing/simulate/oob/authentication",
+                    authorization,
+                    EmptyResponse.class,
+                    request,
+                    null
+            )).thenReturn(response);
+
+            validateEmptyResponse(response, client.simulateOobAuthenticationSync(request));
+        }
     }
 
     @DisplayName("Disputes Sync")
@@ -2102,6 +2162,17 @@ public class IssuingClientImplTest {
     }
 
     private void validateTransactionsSingleResponse(TransactionsSingleResponse expected, TransactionsSingleResponse actual) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    private SimulateOobAuthenticationRequest createOobAuthenticationRequest() {
+        return SimulateOobAuthenticationRequest.builder()
+                .cardId("card_123")
+                .build();
+    }
+
+    private void validateGetDigitalCardResponse(GetDigitalCardResponse expected, GetDigitalCardResponse actual) {
         assertNotNull(actual);
         assertEquals(expected, actual);
     }
