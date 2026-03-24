@@ -1,14 +1,19 @@
 package com.checkout.compliance;
 
+import com.checkout.HttpMetadata;
 import com.checkout.compliance.entities.RequestedFields;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Represents a compliance request with all its details.
  */
 @Data
-public final class ComplianceRequestDetails {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public final class ComplianceRequestDetails extends HttpMetadata {
 
     @SerializedName("payment_id")
     private String paymentId;

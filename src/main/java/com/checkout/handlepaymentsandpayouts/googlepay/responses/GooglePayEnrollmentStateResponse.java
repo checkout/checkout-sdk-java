@@ -1,12 +1,17 @@
 package com.checkout.handlepaymentsandpayouts.googlepay.responses;
 
+import com.checkout.HttpMetadata;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Response containing the enrollment state of a Google Pay entity.
  */
 @Data
-public final class GooglePayEnrollmentStateResponse {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public final class GooglePayEnrollmentStateResponse extends HttpMetadata {
 
     /**
      * The current enrollment state of the entity.
