@@ -1,0 +1,11 @@
+name: "CodeQL config"
+
+# Suppress false positives caused by Lombok-generated code.
+# Lombok generates canEqual(Object) in every @EqualsAndHashCode class that
+# extends another @Data/@EqualsAndHashCode class, but does not emit @Override
+# on the generated method. CodeQL reports this as "Missing Override annotation"
+# even though the override is intentional and correct at the bytecode level.
+# See: https://github.com/projectlombok/lombok/issues/2357
+query-filters:
+  - exclude:
+      id: java/missing-override
