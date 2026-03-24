@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UpdateCardControlRequest {
+public final class UpdateCardControlRequest {
 
     private String description;
 

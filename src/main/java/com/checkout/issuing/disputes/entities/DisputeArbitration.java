@@ -14,7 +14,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DisputeArbitration {
+public final class DisputeArbitration {
 
     /**
      * The date and time when the arbitration was successfully escalated to the card scheme, in UTC

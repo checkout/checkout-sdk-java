@@ -8,7 +8,7 @@ import java.time.Instant;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SecretResponse extends Resource {
+public final class SecretResponse extends Resource {
 
     private String name;
     

@@ -11,7 +11,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class VirtualCardRenewRequest extends RenewCardRequest {
+public final class VirtualCardRenewRequest extends RenewCardRequest {
 
     @Builder
     private VirtualCardRenewRequest(final String displayName,

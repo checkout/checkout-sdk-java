@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerDevice {
+public final class CustomerDevice {
 
     /**
      * The locale setting of the customer's device (e.g., "en-US")

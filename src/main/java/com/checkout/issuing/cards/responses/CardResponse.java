@@ -13,7 +13,7 @@ import java.time.Instant;
 @Data
 @Builder
 @EqualsAndHashCode(callSuper = true)
-public class CardResponse extends Resource {
+public final class CardResponse extends Resource {
 
     protected String id;
 

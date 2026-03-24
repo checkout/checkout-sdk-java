@@ -18,7 +18,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class IdentityVerificationAttemptsResponse extends Resource {
+public final class IdentityVerificationAttemptsResponse extends Resource {
 
     /**
      * The total number of attempts.

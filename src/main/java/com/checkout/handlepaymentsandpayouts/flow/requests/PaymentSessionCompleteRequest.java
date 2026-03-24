@@ -17,7 +17,7 @@ import lombok.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class PaymentSessionCompleteRequest extends PaymentSessionInfo {
+public final class PaymentSessionCompleteRequest extends PaymentSessionInfo {
 
     /**
      * A unique token representing the additional customer data captured by Flow, 

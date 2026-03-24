@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ControlProfileQuery {
+public final class ControlProfileQuery {
 
     @SerializedName("target_id")
     private String targetId;

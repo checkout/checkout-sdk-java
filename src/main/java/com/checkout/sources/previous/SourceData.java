@@ -7,5 +7,5 @@ import java.util.HashMap;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class SourceData extends HashMap<String, Object> {
+public final class SourceData extends HashMap<String, Object> {
 }

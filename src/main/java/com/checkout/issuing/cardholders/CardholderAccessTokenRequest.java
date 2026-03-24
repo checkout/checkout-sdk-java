@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CardholderAccessTokenRequest {
+public final class CardholderAccessTokenRequest {
 
     @SerializedName("grant_type")
     private String grantType;

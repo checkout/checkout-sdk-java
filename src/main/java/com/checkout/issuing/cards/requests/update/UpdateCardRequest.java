@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateCardRequest {
+public final class UpdateCardRequest {
 
     private String reference;
 

@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StoredCardConfiguration {
+public final class StoredCardConfiguration {
 
     /**
      * The unique identifier for an existing customer.

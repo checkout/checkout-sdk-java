@@ -2,7 +2,7 @@ package com.checkout;
 
 import static java.lang.String.format;
 
-public class CheckoutAuthorizationException extends CheckoutException {
+public final class CheckoutAuthorizationException extends CheckoutException {
 
     public CheckoutAuthorizationException(final String message) {
         super(message);

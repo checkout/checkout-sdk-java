@@ -13,7 +13,7 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ActionBreakdown {
+public final class ActionBreakdown {
 
     @SerializedName("breakdown_type")
     private String breakdownType;

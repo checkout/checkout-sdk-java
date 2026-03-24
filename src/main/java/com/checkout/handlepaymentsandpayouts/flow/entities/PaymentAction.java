@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentAction {
+public final class PaymentAction {
 
     /**
      * The type of action required

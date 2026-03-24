@@ -5,7 +5,7 @@ import java.util.Currency;
 import lombok.Data;
 
 @Data
-public class TransactionAmount {
+public final class TransactionAmount {
     private Long amount;
     private Currency currency;
 }

@@ -2,7 +2,7 @@ package com.checkout;
 
 import org.apache.http.HttpStatus;
 
-public class DefaultTransportConfiguration implements TransportConfiguration {
+public final class DefaultTransportConfiguration implements TransportConfiguration {
 
     private final int defaultHttpStatusCode;
 

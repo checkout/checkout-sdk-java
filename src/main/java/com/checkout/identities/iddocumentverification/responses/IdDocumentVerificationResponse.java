@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class IdDocumentVerificationResponse extends BaseIdentityResponseStatus<IdDocumentVerificationStatus> {
+public final class IdDocumentVerificationResponse extends BaseIdentityResponseStatus<IdDocumentVerificationStatus> {
 
     private String userJourneyId;
 

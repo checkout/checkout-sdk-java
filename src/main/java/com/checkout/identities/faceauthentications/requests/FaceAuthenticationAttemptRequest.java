@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FaceAuthenticationAttemptRequest {
+public final class FaceAuthenticationAttemptRequest {
 
     /**
      * The URL to redirect the applicant to after the attempt.

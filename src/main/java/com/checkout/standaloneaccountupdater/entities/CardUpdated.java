@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CardUpdated extends CardBase {
+public final class CardUpdated extends CardBase {
 
     /**
      * The encrypted full Primary Account Number (PAN). Returned only for PCI SAQ D merchants.

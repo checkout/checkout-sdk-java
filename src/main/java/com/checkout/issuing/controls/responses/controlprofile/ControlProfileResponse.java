@@ -11,7 +11,7 @@ import java.time.Instant;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ControlProfileResponse extends Resource {
+public final class ControlProfileResponse extends Resource {
 
     private String id;
 

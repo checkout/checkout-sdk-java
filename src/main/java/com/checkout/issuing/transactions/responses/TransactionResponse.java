@@ -10,7 +10,7 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class TransactionResponse extends Resource {
+public final class TransactionResponse extends Resource {
 
     private String id;
 

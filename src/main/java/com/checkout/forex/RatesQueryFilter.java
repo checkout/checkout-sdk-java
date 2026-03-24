@@ -9,7 +9,7 @@ import lombok.NonNull;
 @Data
 @Builder
 @AllArgsConstructor
-public class RatesQueryFilter {
+public final class RatesQueryFilter {
 
     @NonNull
     private String product;

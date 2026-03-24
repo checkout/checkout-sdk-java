@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ItemsResponse<T> extends HttpMetadata {
+public final class ItemsResponse<T> extends HttpMetadata {
 
     private List<T> items = new ArrayList<>();
 

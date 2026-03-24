@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class CardNetworkTokenSource extends AbstractNetworkTokenSource {
+public final class CardNetworkTokenSource extends AbstractNetworkTokenSource {
 
     private String number;
     

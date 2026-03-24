@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class EntityFinancialDocuments {
+public final class EntityFinancialDocuments {
 
     @SerializedName("bank_statement")
     private EntityDocument bankStatement;

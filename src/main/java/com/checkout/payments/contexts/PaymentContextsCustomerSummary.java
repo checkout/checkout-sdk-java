@@ -12,7 +12,7 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentContextsCustomerSummary {
+public final class PaymentContextsCustomerSummary {
 
     @SerializedName("registration_date")
     private Instant registrationDate;

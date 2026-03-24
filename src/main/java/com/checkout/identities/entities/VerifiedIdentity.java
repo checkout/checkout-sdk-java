@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VerifiedIdentity {
+public final class VerifiedIdentity {
     private String fullName;
 
     private String birthDate;

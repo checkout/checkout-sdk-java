@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlaceOfBirth {
+public final class PlaceOfBirth {
 
     private CountryCode country;
 }

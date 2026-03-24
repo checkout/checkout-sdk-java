@@ -19,7 +19,7 @@ import com.checkout.identities.entities.BaseIdentityResponseStatus;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FaceAuthenticationResponse extends BaseIdentityResponseStatus<FaceAuthenticationStatus> {
+public final class FaceAuthenticationResponse extends BaseIdentityResponseStatus<FaceAuthenticationStatus> {
 
     /**
      * The applicant's unique identifier.

@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FileUploadRequest {
+public final class FileUploadRequest {
 
     private FilePurpose purpose;
 }

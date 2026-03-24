@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentSetupsRequest {
+public final class PaymentSetupsRequest {
 
     /**
      * The processing channel to be used for the payment setup

@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class FileUploadResponse extends Resource {
+public final class FileUploadResponse extends Resource {
 
     private String id;
 

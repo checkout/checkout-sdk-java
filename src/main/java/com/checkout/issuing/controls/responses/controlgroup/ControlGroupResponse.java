@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ControlGroupResponse extends Resource {
+public final class ControlGroupResponse extends Resource {
 
     private String id;
 

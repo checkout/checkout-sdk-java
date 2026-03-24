@@ -8,7 +8,7 @@ import java.time.Instant;
 
 @Data
 @Builder
-public class TransactionsQuery {
+public final class TransactionsQuery {
 
     private Integer limit;
 

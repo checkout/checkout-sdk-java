@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Industry {
+public final class Industry {
 
     /**
      * Airline industry-specific data for flight bookings and related payments

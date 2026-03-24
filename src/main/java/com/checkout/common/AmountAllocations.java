@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AmountAllocations {
+public final class AmountAllocations {
 
     private String id;
 

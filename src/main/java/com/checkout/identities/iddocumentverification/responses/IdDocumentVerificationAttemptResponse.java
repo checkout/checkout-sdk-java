@@ -10,6 +10,6 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class IdDocumentVerificationAttemptResponse extends BaseIdentityResponseStatus<IdDocumentVerificationAttemptStatus> {
+public final class IdDocumentVerificationAttemptResponse extends BaseIdentityResponseStatus<IdDocumentVerificationAttemptStatus> {
     // All fields are inherited from BaseAttemptResponse and BaseIdentityResponse
 }

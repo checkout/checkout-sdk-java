@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CurrentPeriodBreakdown {
+public final class CurrentPeriodBreakdown {
 
     @SerializedName("processed_amount")
     private Long processedAmount;

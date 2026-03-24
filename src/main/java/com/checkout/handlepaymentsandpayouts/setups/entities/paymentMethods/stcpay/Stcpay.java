@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Stcpay extends PaymentMethodBase {
+public final class Stcpay extends PaymentMethodBase {
 
     /**
      * The one-time password (OTP) for STC Pay authentication

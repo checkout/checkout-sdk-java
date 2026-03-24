@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class SuspendCardRequest {
+public final class SuspendCardRequest {
 
     private SuspendReason reason;
 }

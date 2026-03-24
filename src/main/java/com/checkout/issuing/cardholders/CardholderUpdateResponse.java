@@ -11,7 +11,7 @@ import java.time.Instant;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class CardholderUpdateResponse extends Resource {
+public final class CardholderUpdateResponse extends Resource {
 
     @SerializedName("last_modified_date")
     private Instant lastModifiedDate;

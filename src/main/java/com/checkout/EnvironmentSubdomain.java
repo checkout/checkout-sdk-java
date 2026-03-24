@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-public class EnvironmentSubdomain {
+public final class EnvironmentSubdomain {
 
     private URI checkoutApi;
     private URI oAuthAuthorizationApi;

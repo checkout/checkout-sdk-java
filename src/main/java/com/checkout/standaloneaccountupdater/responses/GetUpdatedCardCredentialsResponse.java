@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class GetUpdatedCardCredentialsResponse extends Resource {
+public final class GetUpdatedCardCredentialsResponse extends Resource {
 
     /**
      * Result of the update operation.

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Face {
+public final class Face {
     /**
      * The URL to the face image.
      */

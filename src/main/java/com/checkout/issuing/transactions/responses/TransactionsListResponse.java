@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class TransactionsListResponse extends Resource {
+public final class TransactionsListResponse extends Resource {
 
     private Integer limit;
 

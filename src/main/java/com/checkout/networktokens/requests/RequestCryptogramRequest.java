@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class RequestCryptogramRequest {
+public final class RequestCryptogramRequest {
 
     private TransactionType transactionType;
 

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DisputeAmount {
+public final class DisputeAmount {
 
     /**
      * The amount is provided in the minor currency unit

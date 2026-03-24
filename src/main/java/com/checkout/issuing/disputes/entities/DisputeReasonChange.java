@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DisputeReasonChange {
+public final class DisputeReasonChange {
 
     /**
      * The updated four-digit scheme-specific reason code for the chargeback

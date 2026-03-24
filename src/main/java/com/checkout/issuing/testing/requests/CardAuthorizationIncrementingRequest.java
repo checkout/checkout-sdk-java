@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CardAuthorizationIncrementingRequest {
+public final class CardAuthorizationIncrementingRequest {
 
     private int amount;
 }

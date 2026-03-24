@@ -12,7 +12,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class VirtualCardRequest extends CardRequest {
+public final class VirtualCardRequest extends CardRequest {
 
     @SerializedName("is_single_use")
     private Boolean isSingleUse;

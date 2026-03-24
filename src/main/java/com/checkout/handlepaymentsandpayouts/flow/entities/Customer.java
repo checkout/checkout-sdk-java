@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customer {
+public final class Customer {
 
     /**
      * The customer's email address. Required if source.type is tamara.

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CardLifetime {
+public final class CardLifetime {
 
     private LifetimeUnit unit;
 

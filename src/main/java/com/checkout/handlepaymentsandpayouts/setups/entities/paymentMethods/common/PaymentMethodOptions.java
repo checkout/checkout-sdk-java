@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentMethodOptions {
+public final class PaymentMethodOptions {
 
     /**
      * Klarna SDK configuration options

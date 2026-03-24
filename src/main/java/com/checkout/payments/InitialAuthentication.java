@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InitialAuthentication {
+public final class InitialAuthentication {
 
     @SerializedName("acs_transaction_id")
     private String acsTransactionId;

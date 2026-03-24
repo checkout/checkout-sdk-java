@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateControlProfileRequest {
+public final class CreateControlProfileRequest {
 
     private String name;
 }

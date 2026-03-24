@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class SchemeFileResponse extends Resource {
+public final class SchemeFileResponse extends Resource {
 
     private String id;
 

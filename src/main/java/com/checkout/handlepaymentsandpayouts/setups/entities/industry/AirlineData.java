@@ -18,7 +18,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AirlineData {
+public final class AirlineData {
 
     /**
      * The airline ticket information

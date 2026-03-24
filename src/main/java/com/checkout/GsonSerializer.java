@@ -69,7 +69,7 @@ import java.util.stream.IntStream;
 
 @Getter
 @Slf4j
-public class GsonSerializer implements Serializer {
+public final class GsonSerializer implements Serializer {
 
     private static final List<DateTimeFormatter> DEFAULT_FORMATTERS = Arrays.asList(
             DateTimeFormatter.ISO_INSTANT,

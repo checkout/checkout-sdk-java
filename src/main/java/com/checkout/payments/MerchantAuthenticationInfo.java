@@ -12,7 +12,7 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MerchantAuthenticationInfo {
+public final class MerchantAuthenticationInfo {
 
     @SerializedName("three_ds_req_auth_method")
     private String threeDsReqAuthMethod;

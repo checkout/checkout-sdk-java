@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApplicantSessionInformation {
+public final class ApplicantSessionInformation {
     /**
      * The applicant's IP address during the attempt.
      */

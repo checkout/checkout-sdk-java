@@ -4,7 +4,7 @@ import com.checkout.common.CountryCode;
 import lombok.Data;
 
 @Data
-public class Merchant {
+public final class Merchant {
 
     private String id;
 

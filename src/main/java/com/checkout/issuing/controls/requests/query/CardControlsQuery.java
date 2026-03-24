@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CardControlsQuery {
+public final class CardControlsQuery {
 
     @SerializedName("target_id")
     private String targetId;

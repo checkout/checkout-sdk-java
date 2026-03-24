@@ -13,7 +13,7 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReportsQuery {
+public final class ReportsQuery {
 
     @SerializedName("created_after")
     private Instant createdAfter;

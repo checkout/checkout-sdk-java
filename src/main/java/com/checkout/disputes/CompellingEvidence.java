@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.time.Instant;
 import java.util.List;
 
-public class CompellingEvidence {
+public final class CompellingEvidence {
 
     @SerializedName("merchandise_or_service")
     private String merchandiseOrService;

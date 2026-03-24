@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FaceAuthenticationAttemptsResponse extends Resource {
+public final class FaceAuthenticationAttemptsResponse extends Resource {
 
     /**
      * The total number of attempts.

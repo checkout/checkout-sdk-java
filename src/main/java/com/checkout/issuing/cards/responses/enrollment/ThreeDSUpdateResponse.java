@@ -11,7 +11,7 @@ import java.time.Instant;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ThreeDSUpdateResponse extends Resource {
+public final class ThreeDSUpdateResponse extends Resource {
 
     @SerializedName("last_modified_date")
     private Instant lastModifiedDate;

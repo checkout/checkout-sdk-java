@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CreateDisputeRequest extends Resource {
+public final class CreateDisputeRequest extends Resource {
 
     /**
      * The transaction's unique identifier

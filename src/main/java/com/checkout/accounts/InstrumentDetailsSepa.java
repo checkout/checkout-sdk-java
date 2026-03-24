@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class InstrumentDetailsSepa implements InstrumentDetails{
+public final class InstrumentDetailsSepa implements InstrumentDetails{
 
     private String iban;
 

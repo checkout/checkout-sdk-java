@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class FileDetailsResponse extends Resource {
+public final class FileDetailsResponse extends Resource {
 
     private String id;
 

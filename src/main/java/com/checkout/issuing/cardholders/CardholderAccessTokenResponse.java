@@ -9,7 +9,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class CardholderAccessTokenResponse extends Resource {
+public final class CardholderAccessTokenResponse extends Resource {
 
     @SerializedName("access_token")
     private String accessToken;

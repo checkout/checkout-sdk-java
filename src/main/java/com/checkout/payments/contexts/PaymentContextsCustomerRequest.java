@@ -13,7 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class PaymentContextsCustomerRequest extends CustomerRequest {
+public final class PaymentContextsCustomerRequest extends CustomerRequest {
 
     @SerializedName("email_verified")
     private Boolean emailVerified;

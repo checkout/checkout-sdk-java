@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class EntityFinancialDetails {
+public final class EntityFinancialDetails {
 
     @SerializedName("annual_processing_volume")
     private Long annualProcessingVolume;

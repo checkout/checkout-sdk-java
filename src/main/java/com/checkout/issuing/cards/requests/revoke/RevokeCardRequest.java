@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class RevokeCardRequest {
+public final class RevokeCardRequest {
 
     private RevokeReason reason;
 }

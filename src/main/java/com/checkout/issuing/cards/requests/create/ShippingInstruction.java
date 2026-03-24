@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ShippingInstruction {
+public final class ShippingInstruction {
 
     @SerializedName("shipping_recipient")
     private String shippingRecipient;

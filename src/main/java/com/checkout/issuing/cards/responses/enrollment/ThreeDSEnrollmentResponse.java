@@ -11,7 +11,7 @@ import java.time.Instant;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ThreeDSEnrollmentResponse extends Resource {
+public final class ThreeDSEnrollmentResponse extends Resource {
 
     @SerializedName("created_date")
     private Instant createdDate;

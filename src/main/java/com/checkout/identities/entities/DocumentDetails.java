@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DocumentDetails {
+public final class DocumentDetails {
 
     private DocumentType documentType;
 

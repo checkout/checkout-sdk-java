@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class MccLimit {
+public final class MccLimit {
 
     private String type;
 

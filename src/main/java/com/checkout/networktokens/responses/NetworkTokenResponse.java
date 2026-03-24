@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class NetworkTokenResponse extends Resource {
+public final class NetworkTokenResponse extends Resource {
 
     private CardDetails card;
     

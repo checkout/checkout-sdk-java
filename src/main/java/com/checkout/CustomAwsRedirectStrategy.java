@@ -18,7 +18,7 @@ import static org.apache.http.HttpHeaders.ACCEPT;
  * or other critical headers during a redirect.
  * The purpose of this implementation is to exclude the original CKO Headers from the request that is sent.
  */
-public class CustomAwsRedirectStrategy extends DefaultRedirectStrategy {
+public final class CustomAwsRedirectStrategy extends DefaultRedirectStrategy {
 
     public CustomAwsRedirectStrategy() {
         super(new String[]{

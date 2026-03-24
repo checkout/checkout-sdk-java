@@ -8,7 +8,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class CardAuthorizationResponse extends HttpMetadata {
+public final class CardAuthorizationResponse extends HttpMetadata {
 
     private String id;
 

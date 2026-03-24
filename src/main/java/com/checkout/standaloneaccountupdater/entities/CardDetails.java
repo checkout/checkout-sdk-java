@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CardDetails extends CardBase {
+public final class CardDetails extends CardBase {
 
     /**
      * The card number

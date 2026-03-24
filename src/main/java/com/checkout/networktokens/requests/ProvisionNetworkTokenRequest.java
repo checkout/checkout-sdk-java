@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ProvisionNetworkTokenRequest {
+public final class ProvisionNetworkTokenRequest {
 
     private AbstractNetworkTokenSource source;
 

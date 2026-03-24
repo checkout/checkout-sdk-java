@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class CardControlsQueryResponse extends HttpMetadata {
+public final class CardControlsQueryResponse extends HttpMetadata {
 
     private List<CardControlResponse> controls;
 }

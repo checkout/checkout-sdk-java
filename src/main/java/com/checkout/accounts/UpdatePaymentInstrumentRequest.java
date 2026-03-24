@@ -8,7 +8,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class UpdatePaymentInstrumentRequest extends Headers{
+public final class UpdatePaymentInstrumentRequest extends Headers{
 
     private String label;
 

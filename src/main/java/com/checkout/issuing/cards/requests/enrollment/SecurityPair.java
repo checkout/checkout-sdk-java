@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class SecurityPair {
+public final class SecurityPair {
 
     private String question;
 

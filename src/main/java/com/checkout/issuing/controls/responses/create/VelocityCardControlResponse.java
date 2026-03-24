@@ -14,7 +14,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class VelocityCardControlResponse extends CardControlResponse {
+public final class VelocityCardControlResponse extends CardControlResponse {
 
     @SerializedName("velocity_limit")
     private VelocityLimit velocityLimit;

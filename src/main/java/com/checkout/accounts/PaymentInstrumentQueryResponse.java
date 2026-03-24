@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class PaymentInstrumentQueryResponse extends Resource {
+public final class PaymentInstrumentQueryResponse extends Resource {
 
     private List<PaymentInstrumentDetailsResponse> data;
 }

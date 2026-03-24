@@ -9,7 +9,7 @@ import com.checkout.common.Resource;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class EntityMemberResponse extends Resource {
+public final class EntityMemberResponse extends Resource {
 
     private String userId;
 

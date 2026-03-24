@@ -13,7 +13,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class MidCardControlRequest extends CardControlRequest {
+public final class MidCardControlRequest extends CardControlRequest {
 
     @SerializedName("mid_limit")
     private MidLimit midLimit;

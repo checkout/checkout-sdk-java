@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Setter;
 
 @Builder
-public class CustomTransportConfiguration implements TransportConfiguration {
+public final class CustomTransportConfiguration implements TransportConfiguration {
 
     @Setter
     private int defaultHttpStatusCode;

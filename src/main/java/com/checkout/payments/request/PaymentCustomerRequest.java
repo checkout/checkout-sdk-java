@@ -13,7 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class PaymentCustomerRequest extends CustomerRequest {
+public final class PaymentCustomerRequest extends CustomerRequest {
 
     private String id;
 

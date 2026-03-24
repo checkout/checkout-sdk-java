@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class PaymentSessionCreateRequest extends PaymentSessionInfo {
+public final class PaymentSessionCreateRequest extends PaymentSessionInfo {
 
     /**
      * A timestamp specifying when the PaymentSession should expire, as an ISO 8601 code.

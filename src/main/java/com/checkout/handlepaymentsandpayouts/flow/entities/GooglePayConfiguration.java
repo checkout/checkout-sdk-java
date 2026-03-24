@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class GooglePayConfiguration extends PaymentMethodConfigurationBase {
+public final class GooglePayConfiguration extends PaymentMethodConfigurationBase {
 
     /**
      * The status of the Google Pay payment total price. Default: "final"

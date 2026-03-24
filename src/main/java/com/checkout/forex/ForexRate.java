@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 @Data
-public class ForexRate {
+public final class ForexRate {
 
     @SerializedName("exchange_rate")
     private Double exchangeRate;

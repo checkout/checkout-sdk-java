@@ -11,7 +11,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class PasswordThreeDSEnrollmentRequest extends ThreeDSEnrollmentRequest {
+public final class PasswordThreeDSEnrollmentRequest extends ThreeDSEnrollmentRequest {
 
     private String password;
 

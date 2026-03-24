@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CardAuthorizationRequest {
+public final class CardAuthorizationRequest {
 
     private CardSimulation card;
 

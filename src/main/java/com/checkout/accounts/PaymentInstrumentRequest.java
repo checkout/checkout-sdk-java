@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class PaymentInstrumentRequest {
+public final class PaymentInstrumentRequest {
 
     private String label;
 

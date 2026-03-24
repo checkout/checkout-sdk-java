@@ -26,7 +26,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentSetupsConfirmResponse extends Resource {
+public final class PaymentSetupsConfirmResponse extends Resource {
 
     /**
      * The payment's unique identifier

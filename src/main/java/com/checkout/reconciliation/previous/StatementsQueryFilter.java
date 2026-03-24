@@ -9,7 +9,7 @@ import java.time.Instant;
 
 @Data
 @Builder
-public class StatementsQueryFilter {
+public final class StatementsQueryFilter {
 
     @SerializedName("payout_id")
     private String payoutId;

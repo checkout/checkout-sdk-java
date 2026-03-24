@@ -15,7 +15,7 @@ import java.time.Instant;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class RenewCardResponse extends Resource {
+public final class RenewCardResponse extends Resource {
 
     @SerializedName("parent_card_id")
     private String parentCardId;

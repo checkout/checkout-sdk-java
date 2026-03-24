@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApplicantUpdateRequest {
+public final class ApplicantUpdateRequest {
 
     /**
      * The applicant's email address.

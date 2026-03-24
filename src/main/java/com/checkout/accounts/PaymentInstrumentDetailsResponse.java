@@ -12,7 +12,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class PaymentInstrumentDetailsResponse extends Resource {
+public final class PaymentInstrumentDetailsResponse extends Resource {
 
     private String id;
 

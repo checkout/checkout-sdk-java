@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetUpdatedCardCredentialsRequest {
+public final class GetUpdatedCardCredentialsRequest {
 
     /**
      * The source to update. You must provide either card or instrument object, but not both.

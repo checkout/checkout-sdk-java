@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class InstrumentDetailsFasterPayments implements InstrumentDetails{
+public final class InstrumentDetailsFasterPayments implements InstrumentDetails{
 
     @SerializedName("account_number")
     private String accountNumber;

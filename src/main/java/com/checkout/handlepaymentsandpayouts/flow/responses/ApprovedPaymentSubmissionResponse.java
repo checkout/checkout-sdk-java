@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ApprovedPaymentSubmissionResponse extends PaymentSubmissionResponse {
+public final class ApprovedPaymentSubmissionResponse extends PaymentSubmissionResponse {
 
     /**
      * The Payment Sessions unique identifier (only present in CreateAndSubmitPaymentSession response)

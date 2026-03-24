@@ -15,7 +15,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MerchantAccount {
+public final class MerchantAccount {
 
     /**
      * The unique identifier of the merchant account

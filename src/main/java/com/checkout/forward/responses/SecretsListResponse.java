@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SecretsListResponse extends Resource {
+public final class SecretsListResponse extends Resource {
 
     private List<SecretResponse> data;
 

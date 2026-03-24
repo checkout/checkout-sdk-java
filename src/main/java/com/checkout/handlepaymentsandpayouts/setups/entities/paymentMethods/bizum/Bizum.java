@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Bizum extends PaymentMethodBase {
+public final class Bizum extends PaymentMethodBase {
 
     /**
      * Payment method options specific to Bizum

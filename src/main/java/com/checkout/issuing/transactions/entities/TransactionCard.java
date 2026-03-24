@@ -3,7 +3,7 @@ package com.checkout.issuing.transactions.entities;
 import lombok.Data;
 
 @Data
-public class TransactionCard {
+public final class TransactionCard {
 
     private String id;
 

@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class ReserveRulesResponse extends Resource {
+public final class ReserveRulesResponse extends Resource {
 
     private List<ReserveRuleResponse> data;
 

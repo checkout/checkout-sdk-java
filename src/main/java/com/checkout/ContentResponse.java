@@ -7,7 +7,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ContentResponse extends HttpMetadata {
+public final class ContentResponse extends HttpMetadata {
 
     public ContentResponse(final String content) {
         this.content = content;

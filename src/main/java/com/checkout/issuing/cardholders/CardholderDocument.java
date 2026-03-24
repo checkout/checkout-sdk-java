@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CardholderDocument {
+public final class CardholderDocument {
 
     private DocumentType type;
 

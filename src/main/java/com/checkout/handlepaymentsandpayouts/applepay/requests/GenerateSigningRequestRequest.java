@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GenerateSigningRequestRequest {
+public final class GenerateSigningRequestRequest {
 
     /**
      * The protocol version of the encryption type used.
