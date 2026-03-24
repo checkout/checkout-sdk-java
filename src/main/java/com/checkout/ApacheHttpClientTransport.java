@@ -363,6 +363,10 @@ class ApacheHttpClientTransport implements Transport {
     }
 
     private Header[] sanitiseHeaders(final Header[] headers) {
+        // TODO: discuss whether Cko-Idempotency-Key should also be filtered — it is a per-request
+        //  unique identifier (not a credential), but filtering it reduces exposure in INFO logs.
+        //  Uncomment the line below once agreed.
+        // .filter(it -> !it.getName().equalsIgnoreCase(CKO_IDEMPOTENCY_KEY))
         return Arrays.stream(headers)
                 .filter(it -> !it.getName().equals(AUTHORIZATION))
                 .toArray(Header[]::new);
