@@ -2176,9 +2176,4 @@ public class IssuingClientImplTest {
         assertNotNull(actual);
         assertEquals(expected, actual);
     }
-
-    private void validateEmptyResponse(EmptyResponse expected, EmptyResponse actual) {
-        assertNotNull(actual);
-        assertEquals(expected, actual);
-    }
 }

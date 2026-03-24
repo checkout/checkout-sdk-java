@@ -103,7 +103,7 @@ public class GooglePayTestIT extends SandboxTestFixture {
 
     private GooglePayRegisterDomainRequest createRegisterDomainRequest() {
         return GooglePayRegisterDomainRequest.builder()
-                .domain("example.com")
+                .webDomain("example.com")
                 .build();
     }
 
