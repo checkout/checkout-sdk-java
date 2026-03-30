@@ -175,6 +175,16 @@ class FlowTestIT extends SandboxTestFixture {
     private PaymentSessionSubmitRequest createPaymentSessionSubmitRequest() {
         return PaymentSessionSubmitRequest.builder()
                 .sessionData("encrypted_session_data")
+                .amount(1000L)
+                .reference("ORD-123A")
+                .items(Collections.singletonList(createProductRequest()))
+                .threeDS(createThreeDSRequest())
+                .paymentType(PaymentType.REGULAR)
+                .successUrl("https://example.com/payments/success")
+                .failureUrl("https://example.com/payments/failure")
+                .billingDescriptor(createBillingDescriptor())
+                .paymentMethodConfiguration(createPaymentMethodConfiguration())
+                .capture(true)
                 .ipAddress("192.168.1.1")
                 .build();
     }
@@ -313,12 +323,15 @@ class FlowTestIT extends SandboxTestFixture {
 
     @Test
     void paymentSessionSubmitRequest_shouldHaveAllRequiredPropertiesForJsonCompatibility() {
-        // This test validates that PaymentSessionSubmitRequest has the necessary properties
-        // to be compatible with the submit JSON structure from the API documentation
         final PaymentSessionSubmitRequest request = new PaymentSessionSubmitRequest();
 
         // PaymentSessionSubmitRequest specific properties
         request.setSessionData("string");
+        request.setSuccessUrl("https://example.com/payments/success");
+        request.setFailureUrl("https://example.com/payments/failure");
+        request.setBillingDescriptor(createBillingDescriptor());
+        request.setPaymentMethodConfiguration(createPaymentMethodConfiguration());
+        request.setCapture(true);
         request.setIpAddress("90.197.169.245");
 
         // Basic properties from PaymentSessionBase (inherited)
@@ -328,9 +341,14 @@ class FlowTestIT extends SandboxTestFixture {
         request.setThreeDS(createThreeDSRequest());
         request.setPaymentType(PaymentType.REGULAR);
 
-        // Assertions to verify all properties from the JSON can be assigned
+        // Assertions
         assertNotNull(request);
         assertEquals("string", request.getSessionData());
+        assertEquals("https://example.com/payments/success", request.getSuccessUrl());
+        assertEquals("https://example.com/payments/failure", request.getFailureUrl());
+        assertNotNull(request.getBillingDescriptor());
+        assertNotNull(request.getPaymentMethodConfiguration());
+        assertEquals(true, request.getCapture());
         assertEquals("90.197.169.245", request.getIpAddress());
         assertEquals(1000L, request.getAmount());
         assertEquals("ORD-123A", request.getReference());
