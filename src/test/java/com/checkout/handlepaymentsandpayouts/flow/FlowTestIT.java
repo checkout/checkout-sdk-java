@@ -8,6 +8,7 @@ import com.checkout.common.Currency;
 import com.checkout.common.Phone;
 import com.checkout.common.PaymentMethodType;
 import com.checkout.handlepaymentsandpayouts.flow.entities.CardConfiguration;
+import com.checkout.handlepaymentsandpayouts.flow.entities.Customer;
 import com.checkout.handlepaymentsandpayouts.flow.entities.PaymentMethodConfiguration;
 import com.checkout.handlepaymentsandpayouts.flow.requests.PaymentSessionCreateRequest;
 import com.checkout.handlepaymentsandpayouts.flow.requests.PaymentSessionSubmitRequest;
@@ -25,6 +26,7 @@ import com.checkout.payments.ThreeDSRequest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -410,5 +412,65 @@ class FlowTestIT extends SandboxTestFixture {
         assertEquals(LocaleType.AR, request.getLocale());
         assertNotNull(request.getThreeDS());
         assertEquals(true, request.getCapture());
+    }
+
+    @Test
+    @Disabled("This test requires merchant configuration that supports customer.summary fields")
+    void shouldCreatePaymentSessionWithCustomerSummary() {
+        // Arrange
+        final Customer.CustomerSummary summary = Customer.CustomerSummary.builder()
+                .registrationDate(LocalDate.of(2023, 1, 15))
+                .firstTransactionDate(LocalDate.of(2023, 2, 20))
+                .lastPaymentDate(LocalDate.of(2024, 3, 10))
+                .totalOrderCount(5)
+                .lastPaymentAmount(100.50)
+                .isPremiumCustomer(true)
+                .isReturningCustomer(true)
+                .lifetimeValue(500.75)
+                .build();
+
+        final Customer customer = Customer.builder()
+                .email("customer@example.com")
+                .name("Test Customer")
+                .id("cust_" + randomString(10))
+                .phone(Phone.builder()
+                        .countryCode("+1")
+                        .number("415 555 2671")
+                        .build())
+                .taxNumber("VAT123456")
+                .summary(summary)
+                .build();
+
+        final PaymentSessionCreateRequest request = PaymentSessionCreateRequest.builder()
+                .amount(1000L)
+                .currency(Currency.USD)
+                .paymentType(PaymentType.REGULAR)
+                .reference("ORD-" + randomString(6))
+                .description("Payment with customer summary")
+                .displayName("Company Test")
+                .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
+                .successUrl("https://example.com/payments/success")
+                .failureUrl("https://example.com/payments/failure")
+                .billing(createBillingInformation())
+                .billingDescriptor(createBillingDescriptor())
+                .risk(createRiskRequest())
+                .threeDS(createThreeDSRequest())
+                .capture(true)
+                .locale(LocaleType.EN_GB)
+                .customer(customer)
+                .enabledPaymentMethods(Collections.singletonList(PaymentMethodType.CARD))
+                .paymentMethodConfiguration(createPaymentMethodConfiguration())
+                .build();
+
+        // Act
+        final CompletableFuture<PaymentSessionResponse> future =
+                checkoutApi.flowClient().requestPaymentSession(request);
+        final PaymentSessionResponse response = future.join();
+
+        // Assert
+        assertNotNull(response);
+        assertNotNull(response.getId());
+        assertNotNull(response.getPaymentSessionToken());
+        assertNotNull(response.getPaymentSessionSecret());
     }
 }
