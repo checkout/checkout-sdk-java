@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class IdentityVerificationReportResponse extends Resource {
+public final class IdentityVerificationReportResponse extends Resource {
 
     /**
      * The pre-signed URL to the captured image of the document.

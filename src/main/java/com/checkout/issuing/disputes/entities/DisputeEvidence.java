@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DisputeEvidence {
+public final class DisputeEvidence {
 
     /**
      * The complete file name, including the extension

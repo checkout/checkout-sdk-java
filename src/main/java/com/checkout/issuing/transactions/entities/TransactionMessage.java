@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.Currency;
 
 @Data
-public class TransactionMessage {
+public final class TransactionMessage {
 
     private String id;
 

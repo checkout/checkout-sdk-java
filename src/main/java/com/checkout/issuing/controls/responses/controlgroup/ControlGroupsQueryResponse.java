@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ControlGroupsQueryResponse extends HttpMetadata {
+public final class ControlGroupsQueryResponse extends HttpMetadata {
 
     @SerializedName("control_groups")
     private List<ControlGroupResponse> controlGroups;

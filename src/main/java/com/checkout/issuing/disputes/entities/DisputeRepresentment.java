@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DisputeRepresentment {
+public final class DisputeRepresentment {
 
     /**
      * The date and time when you received the representment, in UTC

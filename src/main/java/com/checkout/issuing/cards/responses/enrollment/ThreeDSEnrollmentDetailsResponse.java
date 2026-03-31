@@ -10,7 +10,7 @@ import java.time.Instant;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ThreeDSEnrollmentDetailsResponse extends Resource {
+public final class ThreeDSEnrollmentDetailsResponse extends Resource {
 
     private String locale;
 

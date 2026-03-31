@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerRetry {
+public final class CustomerRetry {
 
     /**
      * The maximum number of authorization retry attempts, excluding the initial authorization. Default: 5

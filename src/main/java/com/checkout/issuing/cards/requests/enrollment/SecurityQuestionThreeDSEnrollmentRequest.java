@@ -12,7 +12,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class SecurityQuestionThreeDSEnrollmentRequest extends ThreeDSEnrollmentRequest {
+public final class SecurityQuestionThreeDSEnrollmentRequest extends ThreeDSEnrollmentRequest {
 
     @SerializedName("security_pair")
     private SecurityPair securityPair;

@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class CardCredentialsResponse extends HttpMetadata {
+public final class CardCredentialsResponse extends HttpMetadata {
 
     private String number;
 

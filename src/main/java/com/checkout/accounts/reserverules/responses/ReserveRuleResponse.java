@@ -11,7 +11,7 @@ import java.time.Instant;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class ReserveRuleResponse extends Resource {
+public final class ReserveRuleResponse extends Resource {
 
     private String id;
 

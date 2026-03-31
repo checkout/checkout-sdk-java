@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EnrollDomainRequest {
+public final class EnrollDomainRequest {
 
     /**
      * The domain to enroll

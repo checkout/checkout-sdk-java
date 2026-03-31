@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ProcessingFeesBreakdown {
+public final class ProcessingFeesBreakdown {
 
     @SerializedName("interchange_fees")
     private Integer interchangeFees;

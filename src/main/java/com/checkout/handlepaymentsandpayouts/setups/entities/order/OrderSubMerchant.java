@@ -15,7 +15,7 @@ import java.time.Instant;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderSubMerchant {
+public final class OrderSubMerchant {
 
     /**
      * The unique identifier of the sub-merchant

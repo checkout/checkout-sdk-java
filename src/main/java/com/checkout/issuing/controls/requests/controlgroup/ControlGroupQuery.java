@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ControlGroupQuery {
+public final class ControlGroupQuery {
 
     @SerializedName("target_id")
     private String targetId;

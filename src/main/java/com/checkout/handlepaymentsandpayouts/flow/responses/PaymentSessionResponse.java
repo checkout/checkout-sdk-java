@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class PaymentSessionResponse extends Resource {
+public final class PaymentSessionResponse extends Resource {
 
     /**
      * The Payment Sessions unique identifier

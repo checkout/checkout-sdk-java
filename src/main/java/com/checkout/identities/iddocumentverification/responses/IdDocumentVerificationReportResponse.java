@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class IdDocumentVerificationReportResponse extends Resource {
+public final class IdDocumentVerificationReportResponse extends Resource {
 
     private String signedUrl;
 }

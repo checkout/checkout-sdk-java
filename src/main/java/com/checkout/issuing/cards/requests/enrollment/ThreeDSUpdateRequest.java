@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ThreeDSUpdateRequest {
+public final class ThreeDSUpdateRequest {
 
     @SerializedName("security_pair")
     private SecurityPair securityPair;

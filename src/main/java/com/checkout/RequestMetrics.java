@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class RequestMetrics {
+public final class RequestMetrics {
 
     @SerializedName("prev_request_id")
     private String prevRequestId;

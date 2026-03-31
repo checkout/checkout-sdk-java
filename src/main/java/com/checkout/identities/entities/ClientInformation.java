@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClientInformation {
+public final class ClientInformation {
     /**
      * The applicant's residence country.
      */

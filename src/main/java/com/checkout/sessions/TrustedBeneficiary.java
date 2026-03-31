@@ -3,7 +3,7 @@ package com.checkout.sessions;
 import lombok.Data;
 
 @Data
-public class TrustedBeneficiary {
+public final class TrustedBeneficiary {
 
     private TrustedBeneficiaryStatusType status;
 

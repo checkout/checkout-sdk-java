@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class VelocityLimit {
+public final class VelocityLimit {
 
     @SerializedName("amount_limit")
     private Integer amountLimit;

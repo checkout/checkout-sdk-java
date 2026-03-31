@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DisputeFileEvidence {
+public final class DisputeFileEvidence {
 
     /**
      * The unique identifier for an uploaded file

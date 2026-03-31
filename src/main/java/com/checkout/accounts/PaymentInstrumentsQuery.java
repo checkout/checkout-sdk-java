@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentInstrumentsQuery {
+public final class PaymentInstrumentsQuery {
 
     private InstrumentStatus status;
 }

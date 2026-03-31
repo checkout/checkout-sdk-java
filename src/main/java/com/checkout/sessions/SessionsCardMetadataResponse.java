@@ -5,7 +5,7 @@ import com.checkout.common.CardType;
 import com.checkout.common.CountryCode;
 import com.google.gson.annotations.SerializedName;
 
-public class SessionsCardMetadataResponse {
+public final class SessionsCardMetadataResponse {
 
     @SerializedName("card_type")
     private CardType cardType;

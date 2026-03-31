@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Builder
 @AllArgsConstructor
-public class FaceAuthenticationAttemptResponse extends BaseAttemptResponse<FaceAuthenticationAttemptStatus> {
+public final class FaceAuthenticationAttemptResponse extends BaseAttemptResponse<FaceAuthenticationAttemptStatus> {
 
     // This class inherits all necessary fields from BaseAttemptResponse
     // No additional fields are currently needed for face authentication attempts

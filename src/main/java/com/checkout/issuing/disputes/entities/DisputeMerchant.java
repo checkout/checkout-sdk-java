@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DisputeMerchant {
+public final class DisputeMerchant {
 
     /**
      * The merchant's identifier. This can vary from one acquirer to another.

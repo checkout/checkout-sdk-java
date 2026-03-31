@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CardSimulation {
+public final class CardSimulation {
 
     private String id;
 

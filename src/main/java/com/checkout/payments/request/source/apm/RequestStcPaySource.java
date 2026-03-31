@@ -7,7 +7,7 @@ import lombok.ToString;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class RequestStcPaySource extends AbstractRequestSource {
+public final class RequestStcPaySource extends AbstractRequestSource {
 
     public RequestStcPaySource() {
         super(PaymentSourceType.STCPAY);

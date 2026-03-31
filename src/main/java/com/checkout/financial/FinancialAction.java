@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FinancialAction {
+public final class FinancialAction {
 
     @SerializedName("payment_id")
     private String paymentId;

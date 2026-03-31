@@ -18,7 +18,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class PaymentSessionSubmitRequest extends PaymentSessionInfo {
+public final class PaymentSessionSubmitRequest extends PaymentSessionInfo {
 
     /**
      * A unique token representing the additional customer data captured by Flow, 

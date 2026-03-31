@@ -13,7 +13,7 @@ import java.time.Instant;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AccountInfo {
+public final class AccountInfo {
 
     @SerializedName("purchase_count")
     private Long purchaseCount;

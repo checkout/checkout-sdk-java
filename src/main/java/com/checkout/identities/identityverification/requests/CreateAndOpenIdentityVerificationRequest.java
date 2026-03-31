@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateAndOpenIdentityVerificationRequest {
+public final class CreateAndOpenIdentityVerificationRequest {
 
     /**
      * The personal details provided by the applicant.

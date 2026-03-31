@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ScheduleRevocationRequest {
+public final class ScheduleRevocationRequest {
 
     @SerializedName("revocation_date")
     private String revocationDate;

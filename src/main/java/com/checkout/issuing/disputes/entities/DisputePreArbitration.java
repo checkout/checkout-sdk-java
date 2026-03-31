@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DisputePreArbitration {
+public final class DisputePreArbitration {
 
     /**
      * The date and time when the pre-arbitration was successfully escalated to the card scheme, in UTC

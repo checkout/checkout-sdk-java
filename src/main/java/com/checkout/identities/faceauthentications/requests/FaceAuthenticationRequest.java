@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FaceAuthenticationRequest {
+public final class FaceAuthenticationRequest {
 
     /**
      * The applicant's unique identifier.

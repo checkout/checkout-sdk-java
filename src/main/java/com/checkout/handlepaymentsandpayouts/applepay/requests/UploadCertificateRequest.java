@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UploadCertificateRequest {
+public final class UploadCertificateRequest {
 
     /**
      * The certificate content

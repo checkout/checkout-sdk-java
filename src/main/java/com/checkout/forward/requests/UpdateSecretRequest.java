@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UpdateSecretRequest {
+public final class UpdateSecretRequest {
 
     private String value;
     

@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class AmlScreeningRequest extends Resource {
+public final class AmlScreeningRequest extends Resource {
 
     private String applicantId;
 

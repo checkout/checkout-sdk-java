@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApplicantRequest {
+public final class ApplicantRequest {
 
     /**
      * Your reference for the applicant.

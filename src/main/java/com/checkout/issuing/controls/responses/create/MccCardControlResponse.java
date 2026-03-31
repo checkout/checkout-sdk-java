@@ -13,7 +13,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class MccCardControlResponse extends CardControlResponse {
+public final class MccCardControlResponse extends CardControlResponse {
 
     @SerializedName("mcc_limit")
     private MccLimit mccLimit;

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InstrumentReference {
+public final class InstrumentReference {
 
     /**
      * Unique instrument identifier

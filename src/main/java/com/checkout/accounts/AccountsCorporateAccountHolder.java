@@ -15,7 +15,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class AccountsCorporateAccountHolder extends AccountsAccountHolder {
+public final class AccountsCorporateAccountHolder extends AccountsAccountHolder {
 
     @SerializedName("company_name")
     private String companyName;

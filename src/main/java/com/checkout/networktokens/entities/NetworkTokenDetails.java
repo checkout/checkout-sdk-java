@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.Instant;
 
 @Data
-public class NetworkTokenDetails {
+public final class NetworkTokenDetails {
 
     private String id;
     

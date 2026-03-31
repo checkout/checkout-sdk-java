@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class EntityMembersResponse extends Resource {
+public final class EntityMembersResponse extends Resource {
 
     private List<EntityMemberResponse> data;
 

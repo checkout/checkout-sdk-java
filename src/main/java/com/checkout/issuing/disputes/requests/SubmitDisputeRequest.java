@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class SubmitDisputeRequest extends Resource {
+public final class SubmitDisputeRequest extends Resource {
 
     /**
      * The updated four-digit scheme-specific reason code.

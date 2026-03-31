@@ -16,7 +16,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class MidControlGroupControl extends ControlGroupControl {
+public final class MidControlGroupControl extends ControlGroupControl {
 
     /**
      * The MID limit configuration that defines which merchant identifiers to block or allow.

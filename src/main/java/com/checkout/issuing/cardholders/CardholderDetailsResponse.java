@@ -13,7 +13,7 @@ import java.time.Instant;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class CardholderDetailsResponse extends Resource {
+public final class CardholderDetailsResponse extends Resource {
     
     private String id;
 

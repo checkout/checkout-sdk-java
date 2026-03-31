@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentMethodConfiguration {
+public final class PaymentMethodConfiguration {
 
     /**
      * Configuration options specific to Apple Pay payments.

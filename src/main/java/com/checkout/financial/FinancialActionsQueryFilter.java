@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FinancialActionsQueryFilter {
+public final class FinancialActionsQueryFilter {
 
     @SerializedName("payment_id")
     private String paymentId;

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SourceOptions {
+public final class SourceOptions {
 
     /**
      * The card details

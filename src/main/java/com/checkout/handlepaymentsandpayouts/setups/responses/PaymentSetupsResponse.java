@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentSetupsResponse extends Resource {
+public final class PaymentSetupsResponse extends Resource {
 
     /**
      * The unique identifier of the payment setup.

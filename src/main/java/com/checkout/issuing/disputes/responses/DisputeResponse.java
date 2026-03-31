@@ -20,7 +20,7 @@ import java.time.Instant;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class DisputeResponse extends Resource {
+public final class DisputeResponse extends Resource {
 
     /**
      * The unique identifier for the Issuing dispute

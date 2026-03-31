@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class HoldingDuration {
+public final class HoldingDuration {
 
     private Integer weeks;
 

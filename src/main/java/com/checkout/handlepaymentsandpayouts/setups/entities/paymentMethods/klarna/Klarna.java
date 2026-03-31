@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Klarna extends PaymentMethodBase {
+public final class Klarna extends PaymentMethodBase {
 
     /**
      * The account holder information for Klarna payments

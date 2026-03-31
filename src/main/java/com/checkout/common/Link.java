@@ -3,7 +3,7 @@ package com.checkout.common;
 import lombok.Data;
 
 @Data
-public class Link {
+public final class Link {
 
     private final String href;
 

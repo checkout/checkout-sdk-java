@@ -9,7 +9,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ReverseResponse extends Resource {
+public final class ReverseResponse extends Resource {
 
     @SerializedName("action_id")
     private String actionId;

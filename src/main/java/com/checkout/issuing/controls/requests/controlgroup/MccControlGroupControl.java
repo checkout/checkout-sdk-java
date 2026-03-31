@@ -16,7 +16,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class MccControlGroupControl extends ControlGroupControl {
+public final class MccControlGroupControl extends ControlGroupControl {
 
     /**
      * The MCC limit configuration that defines which merchant category codes to block or allow.

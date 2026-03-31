@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class KlarnaAccountHolder {
+public final class KlarnaAccountHolder {
 
     /**
      * The billing address of the Klarna account holder

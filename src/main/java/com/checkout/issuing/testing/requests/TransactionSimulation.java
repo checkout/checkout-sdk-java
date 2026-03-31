@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class TransactionSimulation {
+public final class TransactionSimulation {
 
     private TransactionType type;
 

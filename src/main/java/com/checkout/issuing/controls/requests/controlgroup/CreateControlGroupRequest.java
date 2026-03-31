@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateControlGroupRequest {
+public final class CreateControlGroupRequest {
 
     @SerializedName("target_id")
     private String targetId;

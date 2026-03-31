@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentSetupSource {
+public final class PaymentSetupSource {
 
     /**
      * The payment source type. sepabank_accountalipay_cnachcardcard

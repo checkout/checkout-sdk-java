@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdatedCardDetails {
+public final class UpdatedCardDetails {
 
     private Integer expiryMonth;
     private Integer expiryYear;

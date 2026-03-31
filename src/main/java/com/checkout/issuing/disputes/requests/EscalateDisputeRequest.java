@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class EscalateDisputeRequest extends Resource {
+public final class EscalateDisputeRequest extends Resource {
 
     /**
      * Justification for escalating the dispute

@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentMethodOption {
+public final class PaymentMethodOption {
 
     /**
      * The unique identifier for the payment method option

@@ -3,7 +3,7 @@ package com.checkout.networktokens.entities;
 import lombok.Data;
 
 @Data
-public class CardDetails {
+public final class CardDetails {
 
     private String last4;
     

@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class GenerateSigningRequestResponse extends Resource {
+public final class GenerateSigningRequestResponse extends Resource {
 
     /**
      * The signing request content

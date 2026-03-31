@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class IdentityVerificationRequest {
+public final class IdentityVerificationRequest {
 
     /**
      * The applicant's unique identifier.

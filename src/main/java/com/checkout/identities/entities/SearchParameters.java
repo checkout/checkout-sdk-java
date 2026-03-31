@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchParameters {
+public final class SearchParameters {
     private String configurationIdentifier;
 }

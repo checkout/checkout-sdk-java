@@ -17,7 +17,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class VelocityControlGroupControl extends ControlGroupControl {
+public final class VelocityControlGroupControl extends ControlGroupControl {
 
     /**
      * The velocity limit configuration that defines transaction frequency and amount restrictions over time periods.

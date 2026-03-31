@@ -21,7 +21,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class IdentityVerificationResponse extends BaseIdentityResponseStatus<IdentityVerificationStatus> {
+public final class IdentityVerificationResponse extends BaseIdentityResponseStatus<IdentityVerificationStatus> {
 
     /**
      * The applicant's unique identifier.

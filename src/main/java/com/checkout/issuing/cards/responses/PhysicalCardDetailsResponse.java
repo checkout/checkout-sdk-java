@@ -6,7 +6,7 @@ import lombok.ToString;
 
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class PhysicalCardDetailsResponse extends CardDetailsResponse {
+public final class PhysicalCardDetailsResponse extends CardDetailsResponse {
 
     public PhysicalCardDetailsResponse() {
         super(CardType.PHYSICAL);

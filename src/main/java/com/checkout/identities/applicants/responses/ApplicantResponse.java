@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApplicantResponse extends BaseIdentityResponse{
+public final class ApplicantResponse extends BaseIdentityResponse{
 
     /**
      * Your reference for the applicant.

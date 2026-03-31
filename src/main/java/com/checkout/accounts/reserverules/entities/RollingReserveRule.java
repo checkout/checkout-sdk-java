@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RollingReserveRule {
+public final class RollingReserveRule {
     private double percentage;
 
     @SerializedName("holding_duration")

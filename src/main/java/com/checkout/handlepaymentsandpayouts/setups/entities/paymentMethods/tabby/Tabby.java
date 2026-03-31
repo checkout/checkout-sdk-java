@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Tabby extends PaymentMethodBase {
+public final class Tabby extends PaymentMethodBase {
 
     /**
      * Payment method options specific to Tabby

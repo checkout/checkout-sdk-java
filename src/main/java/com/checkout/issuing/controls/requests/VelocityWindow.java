@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class VelocityWindow {
+public final class VelocityWindow {
 
     private VelocityWindowType type;
 }

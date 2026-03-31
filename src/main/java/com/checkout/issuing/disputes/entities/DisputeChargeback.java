@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DisputeChargeback {
+public final class DisputeChargeback {
 
     /**
      * The date and time when the chargeback was successfully submitted to the card scheme, in UTC

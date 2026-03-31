@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class IdDocumentVerificationAttemptRequest {
+public final class IdDocumentVerificationAttemptRequest {
 
     /**
      * The image of the front of the document to upload.

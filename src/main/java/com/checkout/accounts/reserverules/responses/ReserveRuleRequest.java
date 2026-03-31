@@ -17,7 +17,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class ReserveRuleRequest extends Headers {
+public final class ReserveRuleRequest extends Headers {
 
     private String type;
 

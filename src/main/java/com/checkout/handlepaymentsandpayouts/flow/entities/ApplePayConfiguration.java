@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ApplePayConfiguration extends PaymentMethodConfigurationBase {
+public final class ApplePayConfiguration extends PaymentMethodConfigurationBase {
 
     /**
      * The type of the Apple Pay payment total line item. Default: "final"

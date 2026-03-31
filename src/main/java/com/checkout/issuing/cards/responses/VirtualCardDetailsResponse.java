@@ -11,7 +11,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class VirtualCardDetailsResponse extends CardDetailsResponse {
+public final class VirtualCardDetailsResponse extends CardDetailsResponse {
 
     @SerializedName("is_single_use")
     private Boolean isSingleUse;

@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class AmlScreeningResponse extends BaseIdentityResponseStatus<AmlScreeningStatus> {
+public final class AmlScreeningResponse extends BaseIdentityResponseStatus<AmlScreeningStatus> {
     private String applicantId;
 
     private SearchParameters searchParameters;

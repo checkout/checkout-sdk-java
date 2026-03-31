@@ -8,7 +8,7 @@ import java.time.Instant;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UploadCertificateResponse extends Resource {
+public final class UploadCertificateResponse extends Resource {
 
     /**
      * The identifier of the account domain

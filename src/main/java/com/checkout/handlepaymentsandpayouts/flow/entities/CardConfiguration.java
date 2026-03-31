@@ -8,6 +8,6 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class CardConfiguration extends PaymentMethodConfigurationBase {
+public final class CardConfiguration extends PaymentMethodConfigurationBase {
     // Empty class - inherits all properties from base
 }

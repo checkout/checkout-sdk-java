@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class DeclinedPaymentSubmissionResponse extends PaymentSubmissionResponse {
+public final class DeclinedPaymentSubmissionResponse extends PaymentSubmissionResponse {
 
     /**
      * The reason for the payment decline.

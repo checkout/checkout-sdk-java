@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Settings {
+public final class Settings {
 
     /**
      *  &lt;= 255 characters

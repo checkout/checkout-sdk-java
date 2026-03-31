@@ -14,7 +14,7 @@ import java.time.Duration;
  * to be used with synchronous methods.
  * All components are optional. If not configured, they won't be applied.
  */
-public class Resilience4jConfiguration {
+public final class Resilience4jConfiguration {
 
     private CircuitBreaker circuitBreaker;
     private Retry retry;

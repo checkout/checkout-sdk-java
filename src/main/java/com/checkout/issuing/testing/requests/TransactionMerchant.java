@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class TransactionMerchant {
+public final class TransactionMerchant {
 
     private String categoryCode;
 }

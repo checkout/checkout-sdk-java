@@ -11,7 +11,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReverseRequest {
+public final class ReverseRequest {
 
     private String reference;
 

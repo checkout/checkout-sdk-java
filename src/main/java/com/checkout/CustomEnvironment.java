@@ -7,7 +7,7 @@ import java.net.URI;
 
 @Data
 @Builder
-public class CustomEnvironment implements IEnvironment {
+public final class CustomEnvironment implements IEnvironment {
 
     private URI checkoutApi;
 

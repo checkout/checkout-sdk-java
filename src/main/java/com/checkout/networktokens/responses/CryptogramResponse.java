@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class CryptogramResponse extends Resource {
+public final class CryptogramResponse extends Resource {
 
     private String cryptogram;
     

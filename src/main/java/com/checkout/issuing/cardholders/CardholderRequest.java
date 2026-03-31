@@ -8,7 +8,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public class CardholderRequest extends CardholderUpdateRequest {
+public final class CardholderRequest extends CardholderUpdateRequest {
 
     private CardholderType type;
 

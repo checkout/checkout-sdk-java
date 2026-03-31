@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class ActionRequiredPaymentSubmissionResponse extends PaymentSubmissionResponse {
+public final class ActionRequiredPaymentSubmissionResponse extends PaymentSubmissionResponse {
 
     /**
      * Instruction for further payment action.

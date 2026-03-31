@@ -12,7 +12,7 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class PhysicalCardRequest extends CardRequest {
+public final class PhysicalCardRequest extends CardRequest {
 
     @SerializedName("shipping_instructions")
     private ShippingInstruction shippingInstructions;

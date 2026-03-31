@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerEmail {
+public final class CustomerEmail {
 
     /**
      * The customer's email address
