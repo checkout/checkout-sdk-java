@@ -100,6 +100,10 @@ public final class GsonSerializer implements Serializer {
             .registerTypeAdapter(Instant.class, (JsonSerializer<Instant>) (Instant date, Type typeOfSrc, JsonSerializationContext context) ->
                     new JsonPrimitive(date.truncatedTo(ChronoUnit.SECONDS).toString()))
             .registerTypeAdapter(Instant.class, getInstantJsonDeserializer())
+            // LocalDate type adapters
+            .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (LocalDate date, Type typeOfSrc, JsonSerializationContext context) ->
+                    new JsonPrimitive(date.format(DateTimeFormatter.ISO_LOCAL_DATE)))
+            .registerTypeAdapter(LocalDate.class, getLocalDateJsonDeserializer())
             // Payments - AbstractSource (polymorphic deserialization)
             .registerTypeAdapterFactory(
                 RuntimeTypeAdapterFactory.of(
@@ -380,6 +384,26 @@ public final class GsonSerializer implements Serializer {
                     }
                 }
                 throw ex;
+            }
+        };
+    }
+
+    private static JsonDeserializer<LocalDate> getLocalDateJsonDeserializer() {
+        return (json, typeOfT, context) -> {
+            String dateString = json.getAsString();
+            
+            try {
+                return LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE);
+            } catch (final DateTimeParseException ex) {
+                if (dateString.matches("\\d{8}")) {
+                    try {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+                        return LocalDate.parse(dateString, formatter);
+                    } catch (final DateTimeParseException e) {
+                        throw new JsonParseException("Failed to parse numeric date in format yyyyMMdd: " + dateString, e);
+                    }
+                }
+                throw new JsonParseException("Failed to parse LocalDate: " + dateString, ex);
             }
         };
     }
