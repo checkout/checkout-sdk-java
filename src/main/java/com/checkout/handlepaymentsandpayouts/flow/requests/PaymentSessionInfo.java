@@ -11,8 +11,6 @@ import com.checkout.payments.PaymentInstruction;
 import com.checkout.common.AmountAllocations;
 import com.checkout.payments.RiskRequest;
 import com.checkout.payments.sender.PaymentSender;
-import com.checkout.payments.LocaleType;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -115,12 +113,6 @@ public abstract class PaymentSessionInfo extends PaymentSessionBase {
      * Allows you to store additional information about a transaction with custom fields.
      */
     private Map<String, Object> metadata;
-
-    /**
-     * Creates a translated version of the page in the specified language. Default: "en-GB"
-     */
-    @Builder.Default
-    private LocaleType locale = LocaleType.EN_GB;
 
     /**
      * The sender of the payment.

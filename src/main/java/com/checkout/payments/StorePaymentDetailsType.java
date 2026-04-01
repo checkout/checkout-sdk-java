@@ -10,4 +10,7 @@ public enum StorePaymentDetailsType {
     @SerializedName("enabled")
     ENABLED,
 
+    @SerializedName("collect_consent")
+    COLLECT_CONSENT
+
 }

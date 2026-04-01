@@ -30,6 +30,8 @@ public enum LocaleType {
     IT_IT,
     @SerializedName("ja-JP")
     JA_JP,
+    @SerializedName("ko-KR")
+    KO_KR,
     @SerializedName("ms-MY")
     MS_MY,
     @SerializedName("nb-NO")

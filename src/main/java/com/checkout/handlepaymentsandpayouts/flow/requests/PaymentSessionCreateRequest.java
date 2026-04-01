@@ -3,8 +3,9 @@ package com.checkout.handlepaymentsandpayouts.flow.requests;
 import com.checkout.common.PaymentMethodType;
 import com.checkout.handlepaymentsandpayouts.flow.entities.CustomerRetry;
 import com.checkout.handlepaymentsandpayouts.flow.entities.PaymentMethodConfiguration;
-import com.google.gson.annotations.SerializedName;
+import com.checkout.payments.LocaleType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,12 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public final class PaymentSessionCreateRequest extends PaymentSessionInfo {
+
+    /**
+     * Creates a translated version of the page in the specified language. Default: "en-GB"
+     */
+    @Builder.Default
+    private LocaleType locale = LocaleType.EN_GB;
 
     /**
      * A timestamp specifying when the PaymentSession should expire, as an ISO 8601 code.

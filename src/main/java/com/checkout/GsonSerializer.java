@@ -214,11 +214,11 @@ public final class GsonSerializer implements Serializer {
                     .registerSubtype(com.checkout.issuing.controls.requests.controlgroup.VelocityControlGroupControl.class, identifier(ControlType.VELOCITY_LIMIT))
                     .registerSubtype(com.checkout.issuing.controls.requests.controlgroup.MccControlGroupControl.class, identifier(ControlType.MCC_LIMIT))
                     .registerSubtype(com.checkout.issuing.controls.requests.controlgroup.MidControlGroupControl.class, identifier(ControlType.MID_LIMIT)))
-            // Flow - PaymentSubmissionResponse
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.handlepaymentsandpayouts.flow.responses.PaymentSubmissionResponse.class, CheckoutUtils.STATUS)
-                    .registerSubtype(com.checkout.handlepaymentsandpayouts.flow.responses.ApprovedPaymentSubmissionResponse.class, identifier(PaymentSessionStatus.APPROVED))
-                    .registerSubtype(com.checkout.handlepaymentsandpayouts.flow.responses.DeclinedPaymentSubmissionResponse.class, identifier(PaymentSessionStatus.DECLINED))
-                    .registerSubtype(com.checkout.handlepaymentsandpayouts.flow.responses.ActionRequiredPaymentSubmissionResponse.class, identifier(PaymentSessionStatus.ACTION_REQUIRED)))
+            // Flow - PaymentSubmissionResponse (status values are title-case from the API, e.g. "Action Required")
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.handlepaymentsandpayouts.flow.responses.PaymentSubmissionResponse.class, CheckoutUtils.STATUS, true)
+                    .registerSubtype(com.checkout.handlepaymentsandpayouts.flow.responses.ApprovedPaymentSubmissionResponse.class, serializedName(PaymentSessionStatus.APPROVED))
+                    .registerSubtype(com.checkout.handlepaymentsandpayouts.flow.responses.DeclinedPaymentSubmissionResponse.class, serializedName(PaymentSessionStatus.DECLINED))
+                    .registerSubtype(com.checkout.handlepaymentsandpayouts.flow.responses.ActionRequiredPaymentSubmissionResponse.class, serializedName(PaymentSessionStatus.ACTION_REQUIRED)))
             // Adapters when API returns an array
             .registerTypeAdapter(EVENT_TYPES_TYPE, eventTypesResponseDeserializer())
             .registerTypeAdapter(WORKFLOWS_EVENT_TYPES_TYPE, workflowEventTypesResponseDeserializer())
@@ -261,6 +261,27 @@ public final class GsonSerializer implements Serializer {
     private static <E extends Enum<E>> String identifier(final E enumEntry) {
         if (enumEntry == null) {
             throw new IllegalStateException("invalid enum entry");
+        }
+        return enumEntry.name().toLowerCase();
+    }
+
+    /**
+     * Extracts the @SerializedName value from an enum constant, falling back to identifier() if absent.
+     * Use this when the API discriminator values don't match the lowercase enum name convention
+     * (e.g. "Action Required" vs "action_required").
+     */
+    private static <E extends Enum<E>> String serializedName(final E enumEntry) {
+        if (enumEntry == null) {
+            throw new IllegalStateException("invalid enum entry");
+        }
+        try {
+            Field field = enumEntry.getClass().getField(enumEntry.name());
+            SerializedName annotation = field.getAnnotation(SerializedName.class);
+            if (annotation != null) {
+                return annotation.value();
+            }
+        } catch (NoSuchFieldException e) {
+            // fall through to default
         }
         return enumEntry.name().toLowerCase();
     }
