@@ -5,7 +5,7 @@
 
 ![build-status](https://github.com/checkout/checkout-sdk-java/workflows/build-release/badge.svg)
 [![GitHub release](https://img.shields.io/github/release/checkout/checkout-sdk-java.svg)](https://GitHub.com/checkout/checkout-sdk-java/releases/)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.checkout/checkout-sdk-java/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.checkout/checkout-sdk-java/)
+[![Maven Central](https://img.shields.io/maven-central/v/com.checkout/checkout-sdk-java)](https://central.sonatype.com/artifact/com.checkout/checkout-sdk-java)
 
 [![GitHub license](https://img.shields.io/github/license/checkout/checkout-sdk-java.svg)](https://github.com/checkout/checkout-sdk-java/blob/master/LICENSE.md)
 
