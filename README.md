@@ -11,12 +11,14 @@
 
 ## Getting started
 
-> **Version 6.0.0 is here!**
+> **Version 7.x is here!**
 >  <br/><br/>
 > We improved the initialization of SDK making it easier to understand the available options. <br/>
 > Now `NAS` accounts are the default instance for the SDK and `ABC` structure was moved to a `previous` prefixes. <br/>
 > If you have been using this SDK before, you may find the following important changes:
 > * Marketplace module was moved to Accounts module, same for classes and references.
+> * Synchronous variants added for all client methods (e.g. `requestPaymentSync`).
+> * Flow client for Payment Sessions (create, submit, complete).
 > * In most cases, IDE can help you determine from where to import, but if you’re still having issues don't hesitate to open a [ticket](https://github.com/checkout/checkout-sdk-java/issues/new/choose).
 
 #### Gradle
@@ -213,7 +215,7 @@ The SDK provides flexibility in how you handle API operations by supporting both
 
 The default operation mode of the SDK is async, so you can use async and sync functions freely, or combine them.
 
-### Aync/Sync Operation Mode
+### Async/Sync Operation Mode
 
 The SDK can be configured to operate in two different modes:
 
@@ -227,7 +229,7 @@ The SDK can be configured to operate in two different modes:
 
 #### Synchronous Mode
 - **Configuration**: `synchronous(true)`
-- **Behavior**: HTTP requests are executed synchronously, even async ops will be executed synchronous is this mode is activated!!!
+- **Behavior**: HTTP requests are executed synchronously. When this mode is activated, even async operations will be executed synchronously.
 - **Transport**: Uses `Transport.invokeSync()` and `Transport.submitFileSync()` methods  
 - **Resilience**: Full Resilience4j support (retry, rate limiter, circuit breaker)
 - **Performance**: Blocking execution with enhanced reliability patterns
@@ -348,7 +350,7 @@ CompletableFuture<PaymentResponse> asyncResult = asyncApi.paymentsClient().reque
 PaymentResponse syncResult = syncApi.paymentsClient().requestPaymentSync(request);
         // Resilience4j automatically handles retries for transient errors
 
-// Both return CompletableFuture - same API!
+// Both modes share the same request objects and API interface
 ```
 
 ### Thread Pool Considerations
