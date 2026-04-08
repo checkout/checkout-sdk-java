@@ -9,6 +9,7 @@ import com.checkout.agenticcommerce.request.DelegatePaymentAllowance;
 import com.checkout.agenticcommerce.request.DelegatePaymentBillingAddress;
 import com.checkout.agenticcommerce.request.DelegatePaymentMethod;
 import com.checkout.agenticcommerce.request.DelegatePaymentRequest;
+import com.checkout.agenticcommerce.request.DelegatePaymentHeaders;
 import com.checkout.agenticcommerce.request.RiskSignal;
 import com.checkout.agenticcommerce.response.DelegatePaymentResponse;
 import org.junit.jupiter.api.Disabled;
@@ -40,7 +41,7 @@ public class AgenticCommerceTestIT extends SandboxTestFixture {
         final DelegatePaymentRequest request = buildFullRequest();
 
         final DelegatePaymentResponse response =
-                blocking(() -> checkoutApi.agenticCommerceClient().delegatePayment(request));
+                blocking(() -> checkoutApi.agenticCommerceClient().delegatePayment(request, buildHeaders()));
 
         validateResponse(response);
     }
@@ -67,7 +68,7 @@ public class AgenticCommerceTestIT extends SandboxTestFixture {
                 .build();
 
         final DelegatePaymentResponse response =
-                blocking(() -> checkoutApi.agenticCommerceClient().delegatePayment(request));
+                blocking(() -> checkoutApi.agenticCommerceClient().delegatePayment(request, buildHeaders()));
 
         validateResponse(response);
     }
@@ -78,12 +79,19 @@ public class AgenticCommerceTestIT extends SandboxTestFixture {
         final DelegatePaymentRequest request = buildFullRequest();
 
         final DelegatePaymentResponse response =
-                checkoutApi.agenticCommerceClient().delegatePaymentSync(request);
+                checkoutApi.agenticCommerceClient().delegatePaymentSync(request, buildHeaders());
 
         validateResponse(response);
     }
 
     // --- helpers ---
+
+    private static DelegatePaymentHeaders buildHeaders() {
+        return DelegatePaymentHeaders.builder()
+                .signature("sha256=test_signature")
+                .timestamp(Instant.now().toString())
+                .build();
+    }
 
     private static DelegatePaymentRequest buildFullRequest() {
         final DelegatePaymentMethod paymentMethod = DelegatePaymentMethod.builder()

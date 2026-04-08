@@ -4,6 +4,7 @@ import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorizationType;
+import com.checkout.agenticcommerce.request.DelegatePaymentHeaders;
 import com.checkout.agenticcommerce.request.DelegatePaymentRequest;
 import com.checkout.agenticcommerce.response.DelegatePaymentResponse;
 import com.checkout.common.CheckoutUtils;
@@ -20,24 +21,26 @@ public class AgenticCommerceClientImpl extends AbstractClient implements Agentic
     }
 
     @Override
-    public CompletableFuture<DelegatePaymentResponse> delegatePayment(final DelegatePaymentRequest request) {
-        CheckoutUtils.validateParams("request", request);
+    public CompletableFuture<DelegatePaymentResponse> delegatePayment(final DelegatePaymentRequest request, final DelegatePaymentHeaders headers) {
+        CheckoutUtils.validateParams("request", request, "headers", headers);
         return apiClient.postAsync(
                 buildPath(AGENTIC_COMMERCE_PATH, DELEGATE_PAYMENT_PATH),
                 sdkAuthorization(),
                 DelegatePaymentResponse.class,
                 request,
-                null);
+                null,
+                headers);
     }
 
     @Override
-    public DelegatePaymentResponse delegatePaymentSync(final DelegatePaymentRequest request) {
-        CheckoutUtils.validateParams("request", request);
+    public DelegatePaymentResponse delegatePaymentSync(final DelegatePaymentRequest request, final DelegatePaymentHeaders headers) {
+        CheckoutUtils.validateParams("request", request, "headers", headers);
         return apiClient.post(
                 buildPath(AGENTIC_COMMERCE_PATH, DELEGATE_PAYMENT_PATH),
                 sdkAuthorization(),
                 DelegatePaymentResponse.class,
                 request,
-                null);
+                null,
+                headers);
     }
 }
