@@ -2,8 +2,6 @@ package com.checkout.handlepaymentsandpayouts.setups;
 
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
-import com.checkout.common.Address;
-import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.Phone;
 import com.checkout.handlepaymentsandpayouts.setups.entities.customer.Customer;
@@ -12,7 +10,6 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.customer.CustomerEm
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodInitialization;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.klarna.Klarna;
-import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.klarna.KlarnaAccountHolder;
 import com.checkout.handlepaymentsandpayouts.setups.entities.settings.Settings;
 import com.checkout.payments.PaymentType;
 import com.checkout.handlepaymentsandpayouts.setups.requests.PaymentSetupsRequest;
@@ -129,17 +126,6 @@ class PaymentSetupsTestIT extends SandboxTestFixture {
     private PaymentSetupsRequest createValidPaymentSetupsRequest() {
         final Klarna klarna = new Klarna();
         klarna.setInitialization(PaymentMethodInitialization.DISABLED);
-        
-        final KlarnaAccountHolder accountHolder = KlarnaAccountHolder.builder()
-                .billingAddress(Address.builder()
-                        .addressLine1("123 High Street")
-                        .city("London")
-                        .zip("SW1A 1AA")
-                        .country(CountryCode.GB)
-                        .build())
-                .build();
-        
-        klarna.setAccountHolder(accountHolder);
 
         return PaymentSetupsRequest.builder()
                 .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
