@@ -2,6 +2,8 @@ package com.checkout;
 
 import com.checkout.accounts.AccountsClient;
 import com.checkout.accounts.AccountsClientImpl;
+import com.checkout.agenticcommerce.AgenticCommerceClient;
+import com.checkout.agenticcommerce.AgenticCommerceClientImpl;
 import com.checkout.balances.BalancesClient;
 import com.checkout.balances.BalancesClientImpl;
 import com.checkout.customers.CustomersClient;
@@ -104,6 +106,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final AmlScreeningClient amlScreeningClient;
     private final NetworkTokensClient networkTokensClient;
     private final StandaloneAccountUpdaterClient standaloneAccountUpdaterClient;
+    private final AgenticCommerceClient agenticCommerceClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         super(configuration);
@@ -142,6 +145,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.amlScreeningClient = new AmlScreeningClientImpl(this.apiClient, configuration);
         this.networkTokensClient = new NetworkTokensClientImpl(this.apiClient, configuration);
         this.standaloneAccountUpdaterClient = new StandaloneAccountUpdaterClientImpl(this.apiClient, configuration);
+        this.agenticCommerceClient = new AgenticCommerceClientImpl(this.apiClient, configuration);
     }
 
     @Override
@@ -276,6 +280,9 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
 
     @Override
     public StandaloneAccountUpdaterClient standaloneAccountUpdaterClient() { return standaloneAccountUpdaterClient; }
+
+    @Override
+    public AgenticCommerceClient agenticCommerceClient() { return agenticCommerceClient; }
 
     private ApiClient getFilesClient(final CheckoutConfiguration configuration) {
         return new ApiClientImpl(configuration, new FilesApiUriStrategy(configuration));

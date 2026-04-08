@@ -62,8 +62,22 @@ jacocoTestReport {
     dependsOn test
     reports {
         xml.required = true
+        html.required = true
+        csv.required = false
     }
 }
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.70
+            }
+        }
+    }
+}
+
+check.dependsOn jacocoTestCoverageVerification
 
 tasks.register('sourcesJar', Jar) {
     from sourceSets.main.allJava
