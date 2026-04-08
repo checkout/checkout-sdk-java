@@ -1,7 +1,10 @@
 package com.checkout.issuing.cards.requests.create;
 
 import com.checkout.issuing.cards.CardType;
+import com.checkout.issuing.cards.requests.update.IssuingCardMetadata;
 import com.google.gson.annotations.SerializedName;
+
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,8 +27,12 @@ public final class VirtualCardRequest extends CardRequest {
                                final String cardProductId,
                                final String displayName,
                                final Boolean activateCard,
-                               final Boolean isSingleUse) {
+                               final Boolean isSingleUse,
+                               final IssuingCardMetadata metadata,
+                               final LocalDate revocationDate) {
         super(CardType.VIRTUAL, cardholderId, lifetime, reference, cardProductId, displayName, activateCard);
         this.isSingleUse = isSingleUse;
+        setMetadata(metadata);
+        setRevocationDate(revocationDate);
     }
 }

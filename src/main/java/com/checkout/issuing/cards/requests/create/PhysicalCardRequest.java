@@ -1,7 +1,10 @@
 package com.checkout.issuing.cards.requests.create;
 
 import com.checkout.issuing.cards.CardType;
+import com.checkout.issuing.cards.requests.update.IssuingCardMetadata;
 import com.google.gson.annotations.SerializedName;
+
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,9 +27,13 @@ public final class PhysicalCardRequest extends CardRequest {
                                 final String cardProductId,
                                 final String displayName,
                                 final Boolean activateCard,
-                                final ShippingInstruction shippingInstructions) {
+                                final ShippingInstruction shippingInstructions,
+                                final IssuingCardMetadata metadata,
+                                final LocalDate revocationDate) {
         super(CardType.PHYSICAL, cardholderId, lifetime, reference, cardProductId, displayName, activateCard);
         this.shippingInstructions = shippingInstructions;
+        setMetadata(metadata);
+        setRevocationDate(revocationDate);
     }
 
 }
