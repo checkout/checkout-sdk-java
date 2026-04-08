@@ -6,6 +6,7 @@ import com.checkout.SandboxTestFixture;
 import com.checkout.handlepaymentsandpayouts.googlepay.requests.GooglePayEnrollmentRequest;
 import com.checkout.handlepaymentsandpayouts.googlepay.requests.GooglePayRegisterDomainRequest;
 import com.checkout.handlepaymentsandpayouts.googlepay.responses.GooglePayDomainListResponse;
+import com.checkout.handlepaymentsandpayouts.googlepay.responses.GooglePayEnrollmentResponse;
 import com.checkout.handlepaymentsandpayouts.googlepay.responses.GooglePayEnrollmentStateResponse;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ public class GooglePayTestIT extends SandboxTestFixture {
 
     @Test
     void shouldEnrollEntity() {
-        final EmptyResponse response = blocking(() ->
+        final GooglePayEnrollmentResponse response = blocking(() ->
                 checkoutApi.googlePayClient().enrollEntity(createEnrollmentRequest()));
 
         assertNotNull(response);
@@ -69,7 +70,7 @@ public class GooglePayTestIT extends SandboxTestFixture {
 
     @Test
     void shouldEnrollEntitySync() {
-        final EmptyResponse response = checkoutApi.googlePayClient().enrollEntitySync(createEnrollmentRequest());
+        final GooglePayEnrollmentResponse response = checkoutApi.googlePayClient().enrollEntitySync(createEnrollmentRequest());
 
         assertNotNull(response);
     }

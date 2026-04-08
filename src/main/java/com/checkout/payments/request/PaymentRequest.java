@@ -15,6 +15,8 @@ import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
 import com.checkout.payments.request.source.AbstractRequestSource;
 import com.checkout.payments.PaymentPlan;
+import com.checkout.payments.PaymentRouting;
+import com.checkout.payments.PaymentSubscription;
 import com.checkout.payments.sender.PaymentSender;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
@@ -65,6 +67,16 @@ public final class PaymentRequest {
     @SerializedName("capture_on")
     private Instant captureOn;
 
+    /**
+     * The date and time when the Multibanco payment expires in UTC.
+     * <p>
+     * [Optional]
+     * </p>
+     * Format: date-time (ISO 8601)
+     */
+    @SerializedName("expire_on")
+    private Instant expireOn;
+
     private CustomerRequest customer;
 
     @SerializedName("billing_descriptor")
@@ -112,11 +124,27 @@ public final class PaymentRequest {
 
     private PaymentRetryRequest retry;
 
+    /**
+     * The details of the subscription.
+     * <p>
+     * [Optional]
+     * </p>
+     */
+    private PaymentSubscription subscription;
+
     @Builder.Default
     private Map<String, Object> metadata = new HashMap<>();
 
     private PaymentSegment segment;
 
-    private PaymentInstruction instruction ;
+    private PaymentInstruction instruction;
+
+    /**
+     * Controls processor attempts at the payment level.
+     * <p>
+     * [Optional]
+     * </p>
+     */
+    private PaymentRouting routing;
 
 }

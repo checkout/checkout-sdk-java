@@ -7,9 +7,6 @@ import lombok.ToString;
 
 import java.util.List;
 
-/**
- * Response containing the list of registered domains for a Google Pay enrolled entity.
- */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -17,6 +14,10 @@ public final class GooglePayDomainListResponse extends HttpMetadata {
 
     /**
      * The list of domains registered for the entity.
+     * <p>
+     * [Required]
+     * </p>
+     * Items format: hostname
      */
     private List<String> domains;
 

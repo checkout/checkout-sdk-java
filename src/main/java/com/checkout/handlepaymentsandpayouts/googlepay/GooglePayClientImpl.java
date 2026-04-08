@@ -9,13 +9,11 @@ import com.checkout.common.CheckoutUtils;
 import com.checkout.handlepaymentsandpayouts.googlepay.requests.GooglePayEnrollmentRequest;
 import com.checkout.handlepaymentsandpayouts.googlepay.requests.GooglePayRegisterDomainRequest;
 import com.checkout.handlepaymentsandpayouts.googlepay.responses.GooglePayDomainListResponse;
+import com.checkout.handlepaymentsandpayouts.googlepay.responses.GooglePayEnrollmentResponse;
 import com.checkout.handlepaymentsandpayouts.googlepay.responses.GooglePayEnrollmentStateResponse;
 
 import java.util.concurrent.CompletableFuture;
 
-/**
- * Implementation of the Google Pay client.
- */
 public class GooglePayClientImpl extends AbstractClient implements GooglePayClient {
 
     private static final String GOOGLEPAY_PATH = "googlepay";
@@ -29,9 +27,9 @@ public class GooglePayClientImpl extends AbstractClient implements GooglePayClie
     }
 
     @Override
-    public CompletableFuture<EmptyResponse> enrollEntity(final GooglePayEnrollmentRequest request) {
+    public CompletableFuture<GooglePayEnrollmentResponse> enrollEntity(final GooglePayEnrollmentRequest request) {
         CheckoutUtils.validateParams("request", request);
-        return apiClient.postAsync(buildPath(GOOGLEPAY_PATH, ENROLLMENTS_PATH), sdkAuthorization(), EmptyResponse.class, request, null);
+        return apiClient.postAsync(buildPath(GOOGLEPAY_PATH, ENROLLMENTS_PATH), sdkAuthorization(), GooglePayEnrollmentResponse.class, request, null);
     }
 
     @Override
@@ -53,9 +51,9 @@ public class GooglePayClientImpl extends AbstractClient implements GooglePayClie
     }
 
     @Override
-    public EmptyResponse enrollEntitySync(final GooglePayEnrollmentRequest request) {
+    public GooglePayEnrollmentResponse enrollEntitySync(final GooglePayEnrollmentRequest request) {
         CheckoutUtils.validateParams("request", request);
-        return apiClient.post(buildPath(GOOGLEPAY_PATH, ENROLLMENTS_PATH), sdkAuthorization(), EmptyResponse.class, request, null);
+        return apiClient.post(buildPath(GOOGLEPAY_PATH, ENROLLMENTS_PATH), sdkAuthorization(), GooglePayEnrollmentResponse.class, request, null);
     }
 
     @Override

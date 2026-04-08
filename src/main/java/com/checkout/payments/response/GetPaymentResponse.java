@@ -80,6 +80,14 @@ public final class GetPaymentResponse extends Resource {
     @SerializedName("3ds")
     private ThreeDSData threeDSData;
 
+    /**
+     * Provides information relating to the authentication of the payment.
+     * <p>
+     * [Optional]
+     * </p>
+     */
+    private PaymentResponseAuthentication authentication;
+
     private RiskAssessment risk;
 
     private CustomerResponse customer;

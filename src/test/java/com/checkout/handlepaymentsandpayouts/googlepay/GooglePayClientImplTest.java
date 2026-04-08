@@ -9,6 +9,7 @@ import com.checkout.SdkCredentials;
 import com.checkout.handlepaymentsandpayouts.googlepay.requests.GooglePayEnrollmentRequest;
 import com.checkout.handlepaymentsandpayouts.googlepay.requests.GooglePayRegisterDomainRequest;
 import com.checkout.handlepaymentsandpayouts.googlepay.responses.GooglePayDomainListResponse;
+import com.checkout.handlepaymentsandpayouts.googlepay.responses.GooglePayEnrollmentResponse;
 import com.checkout.handlepaymentsandpayouts.googlepay.responses.GooglePayEnrollmentStateResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,13 +56,13 @@ public class GooglePayClientImplTest {
     @Test
     void shouldEnrollEntity() throws ExecutionException, InterruptedException {
         final GooglePayEnrollmentRequest request = createEnrollmentRequest();
-        final EmptyResponse response = mock(EmptyResponse.class);
+        final GooglePayEnrollmentResponse response = mock(GooglePayEnrollmentResponse.class);
 
         when(apiClient.postAsync(eq("googlepay/enrollments"), eq(oAuthAuthorization),
-                eq(EmptyResponse.class), eq(request), isNull()))
+                eq(GooglePayEnrollmentResponse.class), eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        validateEmptyResponse(response, client.enrollEntity(request).get());
+        validateEnrollmentResponse(response, client.enrollEntity(request).get());
     }
 
     @Test
@@ -103,13 +104,13 @@ public class GooglePayClientImplTest {
     @Test
     void shouldEnrollEntitySync() {
         final GooglePayEnrollmentRequest request = createEnrollmentRequest();
-        final EmptyResponse response = mock(EmptyResponse.class);
+        final GooglePayEnrollmentResponse response = mock(GooglePayEnrollmentResponse.class);
 
         when(apiClient.post(eq("googlepay/enrollments"), eq(oAuthAuthorization),
-                eq(EmptyResponse.class), eq(request), isNull()))
+                eq(GooglePayEnrollmentResponse.class), eq(request), isNull()))
                 .thenReturn(response);
 
-        validateEmptyResponse(response, client.enrollEntitySync(request));
+        validateEnrollmentResponse(response, client.enrollEntitySync(request));
     }
 
     @Test
@@ -154,6 +155,11 @@ public class GooglePayClientImplTest {
                 .emailAddress("merchant@example.com")
                 .acceptTermsOfService(true)
                 .build();
+    }
+
+    private void validateEnrollmentResponse(final GooglePayEnrollmentResponse expected, final GooglePayEnrollmentResponse actual) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
     }
 
     private void validateEmptyResponse(final EmptyResponse expected, final EmptyResponse actual) {

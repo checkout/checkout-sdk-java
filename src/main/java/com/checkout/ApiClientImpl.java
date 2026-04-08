@@ -96,6 +96,15 @@ public class ApiClientImpl implements ApiClient {
     }
 
     @Override
+    public <T extends HttpMetadata> CompletableFuture<T> postAsync(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request, final String idempotencyKey, final IHeaders headers) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return executeAsyncOrSync(
+                () -> post(path, authorization, responseType, request, idempotencyKey, headers),
+                () -> sendRequestAsync(POST, path, authorization, request, idempotencyKey, responseType, headers)
+        );
+    }
+
+    @Override
     public <T extends HttpMetadata> CompletableFuture<T> postAsync(final String path, final SdkAuthorization authorization, final Type responseType, final Object request, final String idempotencyKey) {
         validateParams(PATH, path, AUTHORIZATION, authorization);
         return executeAsyncOrSync(
@@ -236,6 +245,12 @@ public class ApiClientImpl implements ApiClient {
                 .thenApply(response -> deserialize(response, responseType));
     }
 
+    private <T extends HttpMetadata> CompletableFuture<T> sendRequestAsync(final ClientOperation clientOperation, final String path, final SdkAuthorization authorization, final Object request, final String idempotencyKey, final Type responseType, final IHeaders headers) {
+        return transport.invoke(clientOperation, path, authorization, request, idempotencyKey, null, headers)
+                .thenApply(this::errorCheck)
+                .thenApply(response -> deserialize(response, responseType));
+    }
+
     private Response errorCheck(final Response response) {
         if (!CheckoutUtils.isSuccessHttpStatusCode(response.getStatusCode())) {
             Map<String, Object> errorDetails = null;
@@ -336,6 +351,12 @@ public class ApiClientImpl implements ApiClient {
     }
 
     @Override
+    public <T extends HttpMetadata> T post(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request, final String idempotencyKey, final IHeaders headers) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(POST, path, authorization, request, idempotencyKey, responseType, headers);
+    }
+
+    @Override
     public <T extends HttpMetadata> T post(final String path, final SdkAuthorization authorization, final Type responseType, final Object request, final String idempotencyKey) {
         validateParams(PATH, path, AUTHORIZATION, authorization);
         return sendRequestSync(POST, path, authorization, request, idempotencyKey, responseType);
@@ -407,6 +428,12 @@ public class ApiClientImpl implements ApiClient {
 
     private <T extends HttpMetadata> T sendRequestSync(final ClientOperation clientOperation, final String path, final SdkAuthorization authorization, final Object request, final String idempotencyKey, final Type responseType) {
         final Response response = transport.invokeSync(clientOperation, path, authorization, request, idempotencyKey, null);
+        final Response checkedResponse = errorCheck(response);
+        return deserialize(checkedResponse, responseType);
+    }
+
+    private <T extends HttpMetadata> T sendRequestSync(final ClientOperation clientOperation, final String path, final SdkAuthorization authorization, final Object request, final String idempotencyKey, final Type responseType, final IHeaders headers) {
+        final Response response = transport.invokeSync(clientOperation, path, authorization, request, idempotencyKey, null, headers);
         final Response checkedResponse = errorCheck(response);
         return deserialize(checkedResponse, responseType);
     }

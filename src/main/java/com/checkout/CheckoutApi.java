@@ -1,6 +1,7 @@
 package com.checkout;
 
 import com.checkout.accounts.AccountsClient;
+import com.checkout.agenticcommerce.AgenticCommerceClient;
 import com.checkout.balances.BalancesClient;
 import com.checkout.customers.CustomersClient;
 import com.checkout.disputes.DisputesClient;
@@ -101,5 +102,11 @@ public interface CheckoutApi extends CheckoutApmApi {
     NetworkTokensClient networkTokensClient();
 
     StandaloneAccountUpdaterClient standaloneAccountUpdaterClient();
+
+    /**
+     * Returns the client for the Agentic Commerce Protocol (Beta).
+     * Use to create delegated payment tokens for AI-agent-initiated payments.
+     */
+    AgenticCommerceClient agenticCommerceClient();
 
 }

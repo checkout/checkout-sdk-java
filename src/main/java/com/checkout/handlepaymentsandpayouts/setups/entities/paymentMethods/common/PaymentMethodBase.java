@@ -1,31 +1,24 @@
 package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common;
 
-import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodInitialization;
 import lombok.Data;
 
 import java.util.List;
 
 /**
- * Base class for all payment methods with common properties
+ * Base class for all payment methods with common properties (status and flags).
  */
 @Data
 public abstract class PaymentMethodBase {
 
     /**
-     * The status of the payment method
+     * The payment method status.
+     * <p>[Read-only]</p>
      */
-    private String status;
+    private PaymentMethodStatus status;
 
     /**
-     * Configuration flags for the payment method
+     * An array of error codes or indicators that highlight missing or invalid information.
+     * <p>[Read-only]</p>
      */
     private List<String> flags;
-
-    /**
-     * Default: "disabled"
-     * The initialization state of the payment method.
-     * When you create a Payment Setup, this defaults to disabled.
-     * Enum: "disabled" "enabled"
-     */
-    private PaymentMethodInitialization initialization = PaymentMethodInitialization.DISABLED;
 }
