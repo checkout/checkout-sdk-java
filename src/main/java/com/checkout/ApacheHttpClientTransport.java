@@ -110,10 +110,7 @@ class ApacheHttpClientTransport implements Transport {
                                               final IHeaders headers) {
 
         return CompletableFuture.supplyAsync(() -> {
-            final HttpUriRequest request = buildRequest(clientOperation, path, queryParams);
-            if (idempotencyKey != null) {
-                request.setHeader(CKO_IDEMPOTENCY_KEY, idempotencyKey);
-            }
+            final HttpUriRequest request = buildRequest(clientOperation, path, queryParams, idempotencyKey);
             return performCall(authorization, requestObject, request, clientOperation, headers);
         }, executor);
     }
@@ -145,10 +142,7 @@ class ApacheHttpClientTransport implements Transport {
                                final String idempotencyKey,
                                final Map<String, String> queryParams,
                                final IHeaders headers) {
-        final HttpUriRequest request = buildRequest(clientOperation, path, queryParams);
-        if (idempotencyKey != null) {
-            request.setHeader(CKO_IDEMPOTENCY_KEY, idempotencyKey);
-        }
+        final HttpUriRequest request = buildRequest(clientOperation, path, queryParams, idempotencyKey);
 
         final Supplier<Response> callSupplier = () -> performCall(authorization, requestObject, request, clientOperation, headers);
         return executeWithResilience4j(callSupplier);
@@ -349,31 +343,42 @@ class ApacheHttpClientTransport implements Transport {
         }
     }
 
-    private HttpUriRequest buildRequest(final ClientOperation clientOperation, final String path, final Map<String, String> queryParams) {
+    private HttpUriRequest buildRequest(final ClientOperation clientOperation, final String path, final Map<String, String> queryParams, final String idempotencyKey) {
+        final HttpUriRequest request;
         switch (clientOperation) {
             case GET:
             case GET_CSV_CONTENT:
-                return new HttpGet(getRequestUrl(path));
+                request = new HttpGet(getRequestUrl(path));
+                break;
             case PUT:
-                return new HttpPut(getRequestUrl(path));
+                request = new HttpPut(getRequestUrl(path));
+                break;
             case POST:
-                return new HttpPost(getRequestUrl(path));
+                request = new HttpPost(getRequestUrl(path));
+                break;
             case DELETE:
-                return new HttpDelete(getRequestUrl(path));
+                request = new HttpDelete(getRequestUrl(path));
+                break;
             case PATCH:
-                return new HttpPatch(getRequestUrl(path));
+                request = new HttpPatch(getRequestUrl(path));
+                break;
             case QUERY:
                 final List<NameValuePair> params = queryParams.entrySet().stream()
                         .map(entry -> new BasicNameValuePair(entry.getKey(), entry.getValue()))
                         .collect(Collectors.toList());
                 try {
-                    return new HttpGet(new URIBuilder(getRequestUrl(path)).addParameters(params).build());
+                    request = new HttpGet(new URIBuilder(getRequestUrl(path)).addParameters(params).build());
                 } catch (final URISyntaxException e) {
                     throw new CheckoutException(e);
                 }
+                break;
             default:
                 throw new UnsupportedOperationException("Unsupported HTTP Method: " + clientOperation);
         }
+        if (idempotencyKey != null) {
+            request.setHeader(CKO_IDEMPOTENCY_KEY, idempotencyKey);
+        }
+        return request;
     }
 
     private String getRequestUrl(final String path) {
