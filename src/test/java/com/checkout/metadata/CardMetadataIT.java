@@ -22,116 +22,144 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CardMetadataIT extends SandboxTestFixture {
+
     CardMetadataIT() {
         super(PlatformType.DEFAULT_OAUTH);
     }
 
+    // ─── BIN source ─────────────────────────────────────────────────────────
+
     @Test
     void shouldRequestMetadataCardForBinNumber() {
-
-        final CardMetadataRequest metadataCardRequest = CardMetadataRequest.builder()
+        final CardMetadataRequest request = CardMetadataRequest.builder()
                 .source(CardMetadataBinSource.builder()
                         .bin(CardSourceHelper.Visa.NUMBER.substring(0, 6))
                         .build())
                 .format(CardMetadataFormatType.BASIC)
                 .build();
 
-        final CardMetadataResponse cardMetadataResponse = blocking(
-                () -> checkoutApi.metadataClient().requestCardMetadata(metadataCardRequest));
-        
-        validateResponse(cardMetadataResponse);
+        final CardMetadataResponse response = blocking(
+                () -> checkoutApi.metadataClient().requestCardMetadata(request));
 
+        validateBasicResponse(response);
     }
 
     @Test
-    void shouldRequestCardMetadataForCardNumber() {
+    void shouldRequestMetadataCardForBinNumberWithCardPayoutsFormat() {
+        final CardMetadataRequest request = CardMetadataRequest.builder()
+                .source(CardMetadataBinSource.builder()
+                        .bin(CardSourceHelper.Visa.NUMBER.substring(0, 6))
+                        .build())
+                .format(CardMetadataFormatType.CARD_PAYOUTS)
+                .build();
 
-        final CardMetadataRequest metadataCardRequest = CardMetadataRequest.builder()
+        final CardMetadataResponse response = blocking(
+                () -> checkoutApi.metadataClient().requestCardMetadata(request));
+
+        validateBasicResponse(response);
+    }
+
+    @Test
+    void shouldRequestMetadataCardForBinNumberWithReference() {
+        final CardMetadataRequest request = CardMetadataRequest.builder()
+                .source(CardMetadataBinSource.builder()
+                        .bin(CardSourceHelper.Visa.NUMBER.substring(0, 6))
+                        .build())
+                .format(CardMetadataFormatType.BASIC)
+                .reference("ORD-5023-4E89")
+                .build();
+
+        final CardMetadataResponse response = blocking(
+                () -> checkoutApi.metadataClient().requestCardMetadata(request));
+
+        validateBasicResponse(response);
+    }
+
+    // ─── Card (PAN) source ───────────────────────────────────────────────────
+
+    @Test
+    void shouldRequestCardMetadataForCardNumber() {
+        final CardMetadataRequest request = CardMetadataRequest.builder()
                 .source(CardMetadataCardSource.builder()
                         .number(CardSourceHelper.Visa.NUMBER)
                         .build())
                 .format(CardMetadataFormatType.BASIC)
                 .build();
 
-        final CardMetadataResponse cardMetadataResponse = blocking(
-                () -> checkoutApi.metadataClient().requestCardMetadata(metadataCardRequest));
-        
-        validateResponse(cardMetadataResponse);
+        final CardMetadataResponse response = blocking(
+                () -> checkoutApi.metadataClient().requestCardMetadata(request));
+
+        validateBasicResponse(response);
     }
+
+    // ─── Token source ────────────────────────────────────────────────────────
 
     @Test
     void shouldRequestCardMetadataForToken() {
-        final CheckoutApi checkoutApi = createCheckoutApi();
-        final CardTokenRequest cardTokenRequest = createCardTokenRequest();
+        final CheckoutApi staticKeyApi = createStaticKeyApi();
+        final String token = blocking(
+                () -> staticKeyApi.tokensClient().requestCardToken(createCardTokenRequest())).getToken();
 
-        final String token = blocking(() -> checkoutApi.tokensClient().requestCardToken(cardTokenRequest)).getToken();
-
-        final CardMetadataRequest metadataCardRequest = CardMetadataRequest.builder()
-                .source(CardMetadataTokenSource.builder()
-                        .token(token)
-                        .build())
+        final CardMetadataRequest request = CardMetadataRequest.builder()
+                .source(CardMetadataTokenSource.builder().token(token).build())
                 .format(CardMetadataFormatType.BASIC)
                 .build();
 
-        final CardMetadataResponse cardMetadataResponse = blocking(
-                () -> checkoutApi.metadataClient().requestCardMetadata(metadataCardRequest));
-        
-        validateResponse(cardMetadataResponse);
+        final CardMetadataResponse response = blocking(
+                () -> checkoutApi.metadataClient().requestCardMetadata(request));
+
+        validateBasicResponse(response);
     }
 
-    // Sync methods
+    // ─── Sync variants ──────────────────────────────────────────────────────
+
     @Test
     void shouldRequestMetadataCardForBinNumberSync() {
-
-        final CardMetadataRequest metadataCardRequest = CardMetadataRequest.builder()
+        final CardMetadataRequest request = CardMetadataRequest.builder()
                 .source(CardMetadataBinSource.builder()
                         .bin(CardSourceHelper.Visa.NUMBER.substring(0, 6))
                         .build())
                 .format(CardMetadataFormatType.BASIC)
                 .build();
 
-        final CardMetadataResponse cardMetadataResponse = checkoutApi.metadataClient().requestCardMetadataSync(metadataCardRequest);
-        
-        validateResponse(cardMetadataResponse);
+        final CardMetadataResponse response = checkoutApi.metadataClient().requestCardMetadataSync(request);
 
+        validateBasicResponse(response);
     }
 
     @Test
     void shouldRequestCardMetadataForCardNumberSync() {
-
-        final CardMetadataRequest metadataCardRequest = CardMetadataRequest.builder()
+        final CardMetadataRequest request = CardMetadataRequest.builder()
                 .source(CardMetadataCardSource.builder()
                         .number(CardSourceHelper.Visa.NUMBER)
                         .build())
                 .format(CardMetadataFormatType.BASIC)
                 .build();
 
-        final CardMetadataResponse cardMetadataResponse = checkoutApi.metadataClient().requestCardMetadataSync(metadataCardRequest);
-        
-        validateResponse(cardMetadataResponse);
+        final CardMetadataResponse response = checkoutApi.metadataClient().requestCardMetadataSync(request);
+
+        validateBasicResponse(response);
     }
 
     @Test
     void shouldRequestCardMetadataForTokenSync() {
-        final CheckoutApi checkoutApi = createCheckoutApi();
-        final CardTokenRequest cardTokenRequest = createCardTokenRequest();
+        final CheckoutApi staticKeyApi = createStaticKeyApi();
+        final String token = staticKeyApi.tokensClient()
+                .requestCardTokenSync(createCardTokenRequest()).getToken();
 
-        final String token = checkoutApi.tokensClient().requestCardTokenSync(cardTokenRequest).getToken();
-
-        final CardMetadataRequest metadataCardRequest = CardMetadataRequest.builder()
-                .source(CardMetadataTokenSource.builder()
-                        .token(token)
-                        .build())
+        final CardMetadataRequest request = CardMetadataRequest.builder()
+                .source(CardMetadataTokenSource.builder().token(token).build())
                 .format(CardMetadataFormatType.BASIC)
                 .build();
 
-        final CardMetadataResponse cardMetadataResponse = checkoutApi.metadataClient().requestCardMetadataSync(metadataCardRequest);
-        
-        validateResponse(cardMetadataResponse);
+        final CardMetadataResponse response = checkoutApi.metadataClient().requestCardMetadataSync(request);
+
+        validateBasicResponse(response);
     }
 
-    // Common methods
-    private CheckoutApiImpl createCheckoutApi() {
+    // ─── Helpers ────────────────────────────────────────────────────────────
+
+    private CheckoutApiImpl createStaticKeyApi() {
         return CheckoutSdk.builder().staticKeys()
                 .publicKey(System.getenv("CHECKOUT_DEFAULT_PUBLIC_KEY"))
                 .secretKey(System.getenv("CHECKOUT_DEFAULT_SECRET_KEY"))
@@ -150,17 +178,16 @@ class CardMetadataIT extends SandboxTestFixture {
                 .build();
     }
 
-    private void validateResponse(final CardMetadataResponse cardMetadataResponse)
-    {
-        assertNotNull(cardMetadataResponse);
-        assertNotNull(cardMetadataResponse.getBin());
-        assertNotNull(cardMetadataResponse.getScheme());
-        assertNotNull(cardMetadataResponse.getCardType());
-        assertNotNull(cardMetadataResponse.getCardCategory());
-        assertNotNull(cardMetadataResponse.getIssuerCountry());
-        assertNotNull(cardMetadataResponse.getIssuerCountryName());
-        assertNotNull(cardMetadataResponse.getProductId());
-        assertNotNull(cardMetadataResponse.getProductType());
-        assertEquals(200, cardMetadataResponse.getHttpStatusCode());
+    private void validateBasicResponse(final CardMetadataResponse response) {
+        assertNotNull(response);
+        assertNotNull(response.getBin());
+        assertNotNull(response.getScheme());
+        assertNotNull(response.getCardType());
+        assertNotNull(response.getCardCategory());
+        assertNotNull(response.getIssuerCountry());
+        assertNotNull(response.getIssuerCountryName());
+        assertNotNull(response.getProductId());
+        assertNotNull(response.getProductType());
+        assertEquals(200, response.getHttpStatusCode());
     }
 }

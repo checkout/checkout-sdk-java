@@ -7,12 +7,22 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Card metadata source identified by a Bank Identification Number (BIN).
+ */
 @Getter
 @Setter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public final class CardMetadataBinSource extends CardMetadataRequestSource {
 
+    /**
+     * The issuer's Bank Identification Number (BIN).
+     * [Required]
+     * >= 6 characters
+     * <= 8 characters
+     * Pattern: ^[0-9]+$
+     */
     private String bin;
 
     @Builder
