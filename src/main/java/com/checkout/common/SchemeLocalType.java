@@ -16,8 +16,14 @@ public enum SchemeLocalType {
     OMANNET,
     @SerializedName("pulse")
     PULSE,
+    @SerializedName("shazam")
+    SHAZAM,
     @SerializedName("star")
     STAR,
     @SerializedName("upi")
     UPI,
+    @SerializedName("paypak")
+    PAYPAK,
+    @SerializedName("maestro")
+    MAESTRO,
 }

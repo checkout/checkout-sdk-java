@@ -7,12 +7,20 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Card metadata source identified by a Checkout.com card token.
+ */
 @Getter
 @Setter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public final class CardMetadataTokenSource extends CardMetadataRequestSource {
 
+    /**
+     * The Checkout.com unique token generated when the card's details were tokenized.
+     * [Required]
+     * Pattern: ^(tok)_(\w{26})$
+     */
     private String token;
 
     @Builder

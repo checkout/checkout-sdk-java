@@ -219,6 +219,11 @@ public final class GsonSerializer implements Serializer {
                     .registerSubtype(com.checkout.handlepaymentsandpayouts.flow.responses.ApprovedPaymentSubmissionResponse.class, serializedName(PaymentSessionStatus.APPROVED))
                     .registerSubtype(com.checkout.handlepaymentsandpayouts.flow.responses.DeclinedPaymentSubmissionResponse.class, serializedName(PaymentSessionStatus.DECLINED))
                     .registerSubtype(com.checkout.handlepaymentsandpayouts.flow.responses.ActionRequiredPaymentSubmissionResponse.class, serializedName(PaymentSessionStatus.ACTION_REQUIRED)))
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.metadata.card.source.CardMetadataRequestSource.class, CheckoutUtils.TYPE, true)
+                    .registerSubtype(com.checkout.metadata.card.source.CardMetadataBinSource.class, identifier(com.checkout.metadata.card.CardMetadataSourceType.BIN))
+                    .registerSubtype(com.checkout.metadata.card.source.CardMetadataCardSource.class, identifier(com.checkout.metadata.card.CardMetadataSourceType.CARD))
+                    .registerSubtype(com.checkout.metadata.card.source.CardMetadataTokenSource.class, identifier(com.checkout.metadata.card.CardMetadataSourceType.TOKEN))
+                    .registerSubtype(com.checkout.metadata.card.source.CardMetadataIdSource.class, identifier(com.checkout.metadata.card.CardMetadataSourceType.ID)))
             // Adapters when API returns an array
             .registerTypeAdapter(EVENT_TYPES_TYPE, eventTypesResponseDeserializer())
             .registerTypeAdapter(WORKFLOWS_EVENT_TYPES_TYPE, workflowEventTypesResponseDeserializer())
