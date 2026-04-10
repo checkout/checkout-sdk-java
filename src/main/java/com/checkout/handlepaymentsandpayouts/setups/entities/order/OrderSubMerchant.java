@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 /**
  * Sub-merchant information for order
@@ -35,8 +35,10 @@ public final class OrderSubMerchant {
     private Integer numberOfTrades;
 
     /**
-     * The date when the sub-merchant was registered in YYYY-MM-DD format
+     * The date the sub-merchant was registered.
+     * [Optional]
+     * Format: yyyy-MM-dd
      */
     @SerializedName("registration_date")
-    private Instant registrationDate;
+    private LocalDate registrationDate;
 }

@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -54,8 +54,13 @@ public final class ProductResponse {
 
     private String sku;
 
+    /**
+     * Maximum date for the service to be rendered or ended.
+     * [Optional]
+     * Format: yyyy-MM-dd
+     */
     @SerializedName("service_ends_on")
-    private Instant serviceEndsOn;
+    private LocalDate serviceEndsOn;
 
     public ProductType getTypeAsEnum() {
         return type instanceof ProductType ? (ProductType) type : null;
