@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -15,14 +15,31 @@ import java.time.Instant;
 @AllArgsConstructor
 public final class PaymentContextsPassenger {
 
+    /**
+     * The passenger's first name.
+     * [Optional]
+     */
     @SerializedName("first_name")
     private String firstName;
 
+    /**
+     * The passenger's last name.
+     * [Optional]
+     */
     @SerializedName("last_name")
     private String lastName;
 
+    /**
+     * The passenger's date of birth.
+     * [Optional]
+     * Format: yyyy-MM-dd
+     */
     @SerializedName("date_of_birth")
-    private Instant dateOfBirth;
+    private LocalDate dateOfBirth;
 
+    /**
+     * The passenger's address.
+     * [Optional]
+     */
     private Address address;
 }
