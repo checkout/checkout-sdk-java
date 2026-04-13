@@ -121,7 +121,7 @@ class PayoutsTestIT extends SandboxTestFixture {
                 .address(createBillingAddress())
                 .reference("1234567ABCDEFG")
                 .referenceType("other")
-                .dateOfBirth("1939-05-05")
+                .dateOfBirth(java.time.LocalDate.of(1939, 5, 5))
                 .sourceOfFunds(SourceOfFunds.CREDIT)
                 .build();
     }
