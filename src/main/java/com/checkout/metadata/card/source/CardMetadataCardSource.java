@@ -19,8 +19,8 @@ public final class CardMetadataCardSource extends CardMetadataRequestSource {
     /**
      * The Primary Account Number (PAN).
      * [Required]
-     * >= 12 characters
-     * <= 19 characters
+     * &gt;= 12 characters
+     * &lt;= 19 characters
      * Pattern: ^[0-9]+$
      */
     private String number;

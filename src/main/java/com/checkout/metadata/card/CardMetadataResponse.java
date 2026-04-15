@@ -26,8 +26,8 @@ public final class CardMetadataResponse extends HttpMetadata {
     /**
      * The issuer's Bank Identification Number (BIN). Supports 6, 8, or 11 digit BINs.
      * [Required]
-     * >= 6 characters
-     * <= 11 characters
+     * &gt;= 6 characters
+     * &lt;= 11 characters
      * Pattern: ^[0-9]{6}$|^[0-9]{8}$|^[0-9]{11}$
      */
     private String bin;
