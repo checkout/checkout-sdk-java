@@ -426,7 +426,6 @@ public final class TestHelper {
     public static PaymentRecipient createRecipient() {
         return PaymentRecipient.builder()
                 .accountNumber("1234567")
-                .country(CountryCode.ES)
                 .dateOfBirth("1985-05-15")
                 .firstName("IT")
                 .lastName("TESTING")
