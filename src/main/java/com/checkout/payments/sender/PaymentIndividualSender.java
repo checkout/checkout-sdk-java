@@ -77,7 +77,7 @@ public final class PaymentIndividualSender extends PaymentSender {
      * The sender's date of birth (yyyy-MM-dd).
      * [Optional]
      * Format: yyyy-MM-dd
-     * <= 10 characters
+     * &lt;= 10 characters
      */
     @SerializedName("date_of_birth")
     private LocalDate dateOfBirth;
