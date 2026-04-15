@@ -368,7 +368,6 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
     private PaymentRecipient createPaymentRecipient() {
         return PaymentRecipient.builder()
                 .accountNumber("1234567")
-                .country(CountryCode.ES)
                 .dateOfBirth("1985-05-15")
                 .firstName("IT")
                 .lastName("TESTING")
