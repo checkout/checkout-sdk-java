@@ -1,7 +1,6 @@
 package com.checkout.instruments.create;
 
 import com.checkout.common.AccountHolder;
-import com.checkout.common.AccountType;
 import com.checkout.common.InstrumentType;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
@@ -16,18 +15,34 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class CreateInstrumentSepaRequest extends CreateInstrumentRequest {
 
+    /**
+     * The details of the SEPA mandate, including IBAN, country, currency, payment type, and mandate ID.
+     * [Required]
+     */
     @SerializedName("instrument_data")
     private InstrumentData instrumentData;
 
+    /**
+     * The account holder details. Must include first_name, last_name, and billing_address.
+     * [Required]
+     */
     @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
+    /**
+     * The customer details. Associates the instrument with an existing or new customer.
+     * [Optional]
+     */
+    private CreateCustomerInstrumentRequest customer;
+
     @Builder
     private CreateInstrumentSepaRequest(final InstrumentData instrumentData,
-                                        final AccountHolder accountHolder) {
+                                        final AccountHolder accountHolder,
+                                        final CreateCustomerInstrumentRequest customer) {
         super(InstrumentType.SEPA);
         this.instrumentData = instrumentData;
         this.accountHolder = accountHolder;
+        this.customer = customer;
     }
 
     public CreateInstrumentSepaRequest() {

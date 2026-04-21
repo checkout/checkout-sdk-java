@@ -187,7 +187,9 @@ public final class GsonSerializer implements Serializer {
                     .registerSubtype(com.checkout.instruments.get.GetSepaInstrumentResponse.class, identifier(InstrumentType.SEPA)))
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.instruments.update.UpdateInstrumentResponse.class, CheckoutUtils.TYPE)
                     .registerSubtype(com.checkout.instruments.update.UpdateInstrumentBankAccountResponse.class, identifier(InstrumentType.BANK_ACCOUNT))
-                    .registerSubtype(com.checkout.instruments.update.UpdateInstrumentCardResponse.class, identifier(InstrumentType.CARD)))
+                    .registerSubtype(com.checkout.instruments.update.UpdateInstrumentCardResponse.class, identifier(InstrumentType.CARD))
+                    .registerSubtype(com.checkout.instruments.update.UpdateInstrumentSepaResponse.class, identifier(InstrumentType.SEPA))
+                    .registerSubtype(com.checkout.instruments.update.UpdateInstrumentAchResponse.class, identifier(InstrumentType.ACH)))
             // Workflows CS2
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.workflows.actions.response.WorkflowActionResponse.class, CheckoutUtils.TYPE)
                     .registerSubtype(com.checkout.workflows.actions.response.WebhookWorkflowActionResponse.class, identifier(WorkflowActionType.WEBHOOK)))
