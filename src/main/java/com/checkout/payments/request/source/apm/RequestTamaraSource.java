@@ -19,6 +19,10 @@ public final class RequestTamaraSource extends AbstractRequestSource {
         super(PaymentSourceType.TAMARA);
     }
 
+    /**
+     * The customer's billing address.
+     * [Optional]
+     */
     @SerializedName("billing_address")
     private Address billingAddress;
 

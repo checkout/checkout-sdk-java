@@ -16,6 +16,10 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestAlmaSource extends AbstractRequestSource {
 
+    /**
+     * The customer's billing address.
+     * [Optional]
+     */
     @SerializedName("billing_address")
     private Address billingAddress;
 

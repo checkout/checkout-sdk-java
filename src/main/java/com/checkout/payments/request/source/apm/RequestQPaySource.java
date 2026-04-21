@@ -15,12 +15,29 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestQPaySource extends AbstractRequestSource {
 
+    /**
+     * The number of items in the order.
+     * [Optional]
+     */
     private Integer quantity;
 
+    /**
+     * A description of the payment.
+     * [Optional]
+     * max 255
+     */
     private String description;
 
+    /**
+     * The language to display the payment page in.
+     * [Optional]
+     */
     private String language;
 
+    /**
+     * The customer's national ID.
+     * [Optional]
+     */
     @SerializedName("national_id")
     private String nationalId;
 

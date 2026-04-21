@@ -17,20 +17,44 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestBankAccountSource extends AbstractRequestSource {
 
+    /**
+     * The payment method to use. For example, "ach".
+     * [Optional]
+     */
     @SerializedName("payment_method")
     private String paymentMethod;
 
+    /**
+     * The type of account.
+     * [Optional]
+     */
     @SerializedName("account_type")
     private AccountType accountType;
 
+    /**
+     * The two-letter ISO country code of the bank account.
+     * [Optional]
+     */
     private CountryCode country;
 
+    /**
+     * The account number.
+     * [Optional]
+     */
     @SerializedName("account_number")
     private String accountNumber;
 
+    /**
+     * The bank routing code.
+     * [Optional]
+     */
     @SerializedName("bank_code")
     private String bankCode;
 
+    /**
+     * The account holder's details.
+     * [Optional]
+     */
     @SerializedName("account_holder")
     private AccountHolder accountHolder;
 

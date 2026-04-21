@@ -16,15 +16,32 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestP24Source extends AbstractRequestSource {
 
+    /**
+     * The two-letter ISO country code of the payment.
+     * [Optional]
+     */
     @SerializedName("payment_country")
     private CountryCode paymentCountry;
 
+    /**
+     * The account holder's name.
+     * [Optional]
+     * min 3 max 100
+     */
     @SerializedName("account_holder_name")
     private String accountHolderName;
 
+    /**
+     * The account holder's email address.
+     * [Optional]
+     */
     @SerializedName("account_holder_email")
     private String accountHolderEmail;
 
+    /**
+     * A description of the purchase shown on the customer's statement.
+     * [Optional]
+     */
     @SerializedName("billing_descriptor")
     private String billingDescriptor;
 

@@ -10,15 +10,27 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * @deprecated Sofort was deprecated as a payment source type on 2024/12/03.
+ */
+@Deprecated
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class RequestSofortSource extends AbstractRequestSource {
 
+    /**
+     * The ISO 3166-1 alpha-2 country code for the Sofort payment.
+     * [Optional]
+     */
     @SerializedName("countryCode")
     private CountryCode countryCode;
 
+    /**
+     * The language code for the Sofort payment.
+     * [Optional]
+     */
     @SerializedName("languageCode")
     private String languageCode;
 
@@ -29,6 +41,7 @@ public final class RequestSofortSource extends AbstractRequestSource {
         this.languageCode = languageCode;
     }
 
+    @Deprecated
     public RequestSofortSource() {
         super(PaymentSourceType.SOFORT);
     }

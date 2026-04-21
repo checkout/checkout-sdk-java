@@ -22,18 +22,26 @@ import java.util.List;
 public final class RequestGiropaySource extends AbstractRequestSource {
 
     /**
+     * The purpose of the payment.
+     * [Optional]
      * @deprecated GiroPay doesn't support this field anymore, will be removed in the future
      */
     @Deprecated
     private String purpose;
 
     /**
+     * Additional information fields for the payment.
+     * [Optional]
      * @deprecated GiroPay doesn't support this field anymore, will be removed in the future
      */
     @Deprecated
     @SerializedName("info_fields")
     private List<InfoFields> infoFields;
 
+    /**
+     * The account holder's details.
+     * [Optional]
+     */
     @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
@@ -56,7 +64,17 @@ public final class RequestGiropaySource extends AbstractRequestSource {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class InfoFields {
+
+        /**
+         * The label for the information field.
+         * [Optional]
+         */
         private String label;
+
+        /**
+         * The text content of the information field.
+         * [Optional]
+         */
         private String text;
     }
 

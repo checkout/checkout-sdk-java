@@ -16,9 +16,17 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestPlaidSource extends AbstractRequestSource {
 
+    /**
+     * The Plaid processor token.
+     * [Optional]
+     */
     @SerializedName("token")
     private String token;
 
+    /**
+     * The account holder's details.
+     * [Optional]
+     */
     @SerializedName("account_holder")
     private AccountHolder accountHolder;
 

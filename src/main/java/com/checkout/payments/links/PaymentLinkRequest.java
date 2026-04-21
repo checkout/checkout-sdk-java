@@ -30,77 +30,203 @@ import java.util.Map;
 @Builder
 public final class PaymentLinkRequest {
 
+    /**
+     * The payment amount in minor currency units. The exact format depends on the currency.
+     * [Required]
+     * min 0
+     */
     private Long amount;
 
+    /**
+     * The three-letter ISO currency code of the payment.
+     * [Required]
+     * min 3 characters, max 3 characters
+     */
     private Currency currency;
 
+    /**
+     * The billing information for the payment, including address and phone.
+     * [Required]
+     */
     private BillingInformation billing;
 
+    /**
+     * The type of payment. Must be specified for card payments where the cardholder is not present.
+     * [Optional]
+     * Enum: "Regular" "Recurring" "MOTO" "Installment" "Unscheduled"
+     */
     @SerializedName("payment_type")
     private PaymentType paymentType;
 
+    /**
+     * @deprecated Deprecated in the API on 2025-03-11. Use {@code risk.device.network.ipv4} or {@code risk.device.network.ipv6} instead.
+     */
+    @Deprecated
     @SerializedName("payment_ip")
     private String paymentIp;
 
+    /**
+     * An optional description displayed on the customer's statement identifying a purchase.
+     * [Optional]
+     */
     @SerializedName("billing_descriptor")
     private BillingDescriptor billingDescriptor;
 
+    /**
+     * A reference you can use to identify the payment, such as an order number.
+     * [Optional]
+     */
     private String reference;
 
+    /**
+     * A description of the payment.
+     * [Optional]
+     * max 100 characters
+     */
     private String description;
 
+    /**
+     * The merchant name to display to customers on the checkout page.
+     * [Optional]
+     */
     @SerializedName("display_name")
     private String displayName;
 
+    /**
+     * The processing channel to be used for the payment.
+     * [Optional]
+     * Pattern: ^(pc)_(\w{26})$
+     */
     @SerializedName("processing_channel_id")
     private String processingChannelId;
 
+    /**
+     * The amount allocations for marketplace or split payments.
+     * [Optional]
+     */
     @SerializedName("amount_allocations")
     private List<AmountAllocations> amountAllocations;
 
+    /**
+     * The time for which the Payment Link remains valid, in seconds.
+     * [Optional]
+     */
     @SerializedName("expires_in")
     private Integer expiresIn;
 
+    /**
+     * The customer details.
+     * [Optional]
+     */
     private CustomerRequest customer;
 
+    /**
+     * The shipping details.
+     * [Optional]
+     */
     private ShippingDetails shipping;
 
+    /**
+     * The recipient of the payment. Used for financial regulations compliance.
+     * [Optional]
+     */
     private PaymentRecipient recipient;
 
+    /**
+     * Use the processing object to influence or override data during payment processing.
+     * [Optional]
+     */
     private ProcessingSettings processing;
 
+    /**
+     * Specifies which payment method options to present to the customer.
+     * [Optional]
+     */
     @SerializedName("allow_payment_methods")
     private List<PaymentSourceType> allowPaymentMethods;
 
+    /**
+     * Specifies which payment method options to hide from the customer.
+     * [Optional]
+     */
     @SerializedName("disabled_payment_methods")
     private List<PaymentSourceType> disabledPaymentMethods;
 
+    /**
+     * The line items or products included in the purchase.
+     * [Optional]
+     */
     private List<Product> products;
 
+    /**
+     * Key-value pairs to store additional information about the transaction.
+     * [Optional]
+     */
     private Map<String, Object> metadata;
 
+    /**
+     * The 3D Secure (3DS) authentication configuration for the payment.
+     * [Optional]
+     */
     @SerializedName("3ds")
     private ThreeDSRequest threeDS;
 
+    /**
+     * The risk assessment configuration for the payment.
+     * [Optional]
+     */
     private RiskRequest risk;
 
+    /**
+     * The customer retry configuration for failed payments.
+     * [Optional]
+     */
     @SerializedName("customer_retry")
     private PaymentRetryRequest customerRetry;
 
+    /**
+     * The sender of the payment. Required for financial regulations in some jurisdictions.
+     * [Optional]
+     */
     private PaymentSender sender;
 
+    /**
+     * If provided, the success page will include a button that redirects the customer to this URL.
+     * [Optional]
+     */
     @SerializedName("return_url")
     private String returnUrl;
 
+    /**
+     * Creates a translated version of the hosted page in the specified language.
+     * [Optional]
+     */
     private LocaleType locale;
 
+    /**
+     * Whether to capture the payment immediately (if applicable).
+     * [Optional]
+     */
     private boolean capture;
 
+    /**
+     * The date and time at which the payment should be captured (ISO 8601).
+     * [Optional]
+     * Format: date-time (RFC 3339)
+     */
     @SerializedName("capture_on")
     private Instant captureOn;
 
+    /**
+     * The payment instruction details, such as purpose of payment.
+     * [Optional]
+     */
     private PaymentInstruction instruction;
 
+    /**
+     * The payment method configuration for stored card and wallet methods.
+     * [Optional]
+     */
     @SerializedName("payment_method_configuration")
     private PaymentMethodConfiguration paymentMethodConfiguration;
 }

@@ -40,10 +40,9 @@ public final class PaymentIndividualSender extends PaymentSender {
     private String lastName;
 
     /**
-     * The sender's date of birth.
-     * [Optional]
-     * Format: yyyy-MM-dd
+     * @deprecated Renamed to {@link #dateOfBirth} (date_of_birth) per API changelog 2025/02/21.
      */
+    @Deprecated
     @SerializedName("dob")
     private String dob;
 
@@ -74,10 +73,10 @@ public final class PaymentIndividualSender extends PaymentSender {
     private SourceOfFunds sourceOfFunds;
 
     /**
-     * The sender's date of birth (yyyy-MM-dd).
+     * The sender's date of birth.
      * [Optional]
      * Format: yyyy-MM-dd
-     * &lt;= 10 characters
+     * max 10 characters
      */
     @SerializedName("date_of_birth")
     private LocalDate dateOfBirth;

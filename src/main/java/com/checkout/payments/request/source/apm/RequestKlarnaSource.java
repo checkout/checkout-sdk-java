@@ -16,15 +16,17 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestKlarnaSource extends AbstractRequestSource {
 
+    /**
+     * The account holder's details.
+     * [Optional]
+     */
     @SerializedName("account_holder")
     private AccountHolder accountHolder;
-
 
     @Builder
     private RequestKlarnaSource(final AccountHolder accountHolder) {
         super(PaymentSourceType.KLARNA);
         this.accountHolder = accountHolder;
-
     }
 
     public RequestKlarnaSource() {

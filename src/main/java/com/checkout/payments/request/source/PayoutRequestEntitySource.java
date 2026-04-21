@@ -12,6 +12,10 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class PayoutRequestEntitySource extends PayoutRequestSource {
 
+    /**
+     * The entity identifier.
+     * [Required]
+     */
     private String id;
 
     @Builder

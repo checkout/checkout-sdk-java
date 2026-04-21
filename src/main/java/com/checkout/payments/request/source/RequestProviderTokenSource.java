@@ -15,11 +15,23 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestProviderTokenSource extends AbstractRequestSource {
 
+    /**
+     * The payment method to use.
+     * [Optional]
+     */
     @SerializedName("payment_method")
     private String paymentMethod;
 
+    /**
+     * The provider token value.
+     * [Optional]
+     */
     private String token;
 
+    /**
+     * The account holder's details.
+     * [Optional]
+     */
     @SerializedName("account_holder")
     private AccountHolder accountHolder;
 

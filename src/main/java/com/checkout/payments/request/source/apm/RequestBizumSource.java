@@ -15,6 +15,12 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestBizumSource extends AbstractRequestSource {
 
+    /**
+     * The customer's mobile number.
+     * [Optional]
+     * @deprecated Removed from the API on 2025/02/10. Use the customer object instead.
+     */
+    @Deprecated
     @SerializedName("mobile_number")
     private String mobileNumber;
 

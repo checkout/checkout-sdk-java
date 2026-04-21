@@ -16,6 +16,10 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public final class RequestWeChatPaySource extends AbstractRequestSource {
 
+    /**
+     * The customer's billing address.
+     * [Optional]
+     */
     @SerializedName("billing_address")
     private Address billingAddress;
 

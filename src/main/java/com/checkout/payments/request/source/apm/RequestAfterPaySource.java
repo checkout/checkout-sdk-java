@@ -16,6 +16,10 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestAfterPaySource extends AbstractRequestSource {
 
+    /**
+     * The account holder's details.
+     * [Optional]
+     */
     @SerializedName("account_holder")
     private AccountHolder accountHolder;
 

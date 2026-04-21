@@ -21,20 +21,45 @@ import java.util.List;
 @ToString(callSuper = true)
 public final class RequestFawrySource extends AbstractRequestSource {
 
+    /**
+     * The description of the payment.
+     * [Optional]
+     */
     private String description;
 
+    /**
+     * The customer's profile ID.
+     * [Optional]
+     */
     @SerializedName("customer_profile_id")
     private String customerProfileId;
 
+    /**
+     * The customer's email address.
+     * [Optional]
+     */
     @SerializedName("customer_email")
     private String customerEmail;
 
+    /**
+     * The customer's mobile number.
+     * [Optional]
+     */
     @SerializedName("customer_mobile")
     private String customerMobile;
 
+    /**
+     * The timestamp after which the payment expires.
+     * [Optional]
+     * Format: date-time (ISO 8601)
+     */
     @SerializedName("expires_on")
     private Instant expiresOn;
 
+    /**
+     * The products included in the order.
+     * [Optional]
+     */
     private List<Product> products;
 
     @Builder
@@ -63,13 +88,29 @@ public final class RequestFawrySource extends AbstractRequestSource {
     @AllArgsConstructor
     public static class Product {
 
+        /**
+         * The product identifier.
+         * [Optional]
+         */
         @SerializedName("product_id")
         private String id;
 
+        /**
+         * The quantity of the product.
+         * [Optional]
+         */
         private Long quantity;
 
+        /**
+         * The price of the product in minor currency units.
+         * [Optional]
+         */
         private Long price;
 
+        /**
+         * The description of the product.
+         * [Optional]
+         */
         private String description;
 
     }

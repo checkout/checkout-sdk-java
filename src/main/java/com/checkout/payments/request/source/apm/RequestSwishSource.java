@@ -17,12 +17,24 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestSwishSource extends AbstractRequestSource {
 
+    /**
+     * The two-letter ISO country code of the payment.
+     * [Optional]
+     */
     @SerializedName("payment_country")
     private String paymentCountry;
 
+    /**
+     * The account holder's details.
+     * [Optional]
+     */
     @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
+    /**
+     * A description of the purchase shown on the customer's statement.
+     * [Optional]
+     */
     @SerializedName("billing_descriptor")
     private BillingDescriptor billingDescriptor;
 

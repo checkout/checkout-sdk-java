@@ -16,8 +16,16 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestEpsSource extends AbstractRequestSource {
 
+    /**
+     * The purpose of the payment.
+     * [Optional]
+     */
     private String purpose;
 
+    /**
+     * The account holder's details.
+     * [Optional]
+     */
     @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
