@@ -12,13 +12,13 @@ public abstract class PaymentMethodBase {
 
     /**
      * The payment method status.
-     * <p>[Read-only]</p>
+     * [Optional]
      */
     private PaymentMethodStatus status;
 
     /**
      * An array of error codes or indicators that highlight missing or invalid information.
-     * <p>[Read-only]</p>
+     * [Optional]
      */
     private List<String> flags;
 }

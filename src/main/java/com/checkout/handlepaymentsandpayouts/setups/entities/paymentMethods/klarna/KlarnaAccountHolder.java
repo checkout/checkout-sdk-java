@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Klarna account holder information
+ * Klarna account holder information.
  */
 @Data
 @Builder
@@ -17,7 +17,8 @@ import lombok.NoArgsConstructor;
 public final class KlarnaAccountHolder {
 
     /**
-     * The billing address of the Klarna account holder
+     * The billing address of the Klarna account holder.
+     * [Optional]
      */
     @SerializedName("billing_address")
     private Address billingAddress;

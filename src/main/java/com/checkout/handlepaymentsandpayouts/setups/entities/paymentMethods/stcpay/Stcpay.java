@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * STC Pay payment method configuration
+ * STC Pay payment method configuration.
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -15,19 +15,19 @@ public final class Stcpay extends PaymentMethodBase {
 
     /**
      * The initialization state of the payment method. Defaults to disabled.
-     * <p>[Optional]</p>
+     * [Optional]
      */
     private PaymentMethodInitialization initialization = PaymentMethodInitialization.DISABLED;
 
     /**
-     * The one-time password (OTP) for stc pay.
-     * <p>[Write-only]</p>
+     * The one-time password (OTP) for STC Pay. Write-only.
+     * [Optional]
      */
     private String otp;
 
     /**
-     * The next available action. Contains type {@code otp} when an OTP is required.
-     * <p>[Read-only]</p>
+     * The next available action. Contains type otp when an OTP is required.
+     * [Optional]
      */
     private PaymentMethodAction action;
 }

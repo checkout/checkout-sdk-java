@@ -17,13 +17,13 @@ public final class Tabby extends PaymentMethodBase {
 
     /**
      * The initialization state of the payment method. Defaults to disabled.
-     * <p>[Optional]</p>
+     * [Optional]
      */
     private PaymentMethodInitialization initialization = PaymentMethodInitialization.DISABLED;
 
     /**
-     * The available payment types for Tabby (for example, {@code installments}).
-     * <p>[Read-only]</p>
+     * The available payment types for Tabby (for example, installments).
+     * [Optional]
      */
     @SerializedName("payment_types")
     private List<String> paymentTypes;

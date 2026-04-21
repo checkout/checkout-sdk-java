@@ -15,13 +15,13 @@ public final class Klarna extends PaymentMethodBase {
 
     /**
      * The initialization state of the payment method. Defaults to disabled.
-     * <p>[Optional]</p>
+     * [Optional]
      */
     private PaymentMethodInitialization initialization = PaymentMethodInitialization.DISABLED;
 
     /**
-     * The next available action. Contains type {@code sdk}, {@code client_token}, {@code session_id}.
-     * <p>[Read-only]</p>
+     * The next available action. Contains type, client_token, and session_id.
+     * [Optional]
      */
     private PaymentMethodAction action;
 }
