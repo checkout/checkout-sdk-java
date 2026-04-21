@@ -2,6 +2,7 @@ package com.checkout.payments.contexts;
 
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
+import com.checkout.common.Phone;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -90,4 +91,18 @@ public final class PaymentContextsAccommodationData {
      */
     @SerializedName("room")
     private List<PaymentContextsAccommodationRoom> room;
+
+    /**
+     * The property's phone information.
+     * [Optional]
+     */
+    @SerializedName("property_phone")
+    private List<Phone> propertyPhone;
+
+    /**
+     * The customer service phone information.
+     * [Optional]
+     */
+    @SerializedName("customer_service_phone")
+    private List<Phone> customerServicePhone;
 }
