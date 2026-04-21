@@ -16,6 +16,7 @@ public final class CustomerRetry {
 
     /**
      * The maximum number of authorization retry attempts, excluding the initial authorization. Default: 5
+     * [Optional]
      */
     @Builder.Default
     private Integer maxAttempts = 5;

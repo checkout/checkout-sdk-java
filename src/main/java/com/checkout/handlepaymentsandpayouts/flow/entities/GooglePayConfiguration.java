@@ -18,6 +18,7 @@ public final class GooglePayConfiguration extends PaymentMethodConfigurationBase
 
     /**
      * The status of the Google Pay payment total price. Default: "final"
+     * [Optional]
      */
     @Builder.Default
     private TotalPriceStatus totalPriceStatus = TotalPriceStatus.FINAL;

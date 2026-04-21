@@ -18,6 +18,7 @@ public final class ApplePayConfiguration extends PaymentMethodConfigurationBase 
 
     /**
      * The type of the Apple Pay payment total line item. Default: "final"
+     * [Optional]
      */
     @Builder.Default
     private TotalType totalType = TotalType.FINAL;

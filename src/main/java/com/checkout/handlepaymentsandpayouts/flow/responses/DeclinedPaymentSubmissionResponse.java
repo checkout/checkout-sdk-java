@@ -18,6 +18,7 @@ public final class DeclinedPaymentSubmissionResponse extends PaymentSubmissionRe
 
     /**
      * The reason for the payment decline.
+     * [Optional]
      */
     private String declineReason;
 }

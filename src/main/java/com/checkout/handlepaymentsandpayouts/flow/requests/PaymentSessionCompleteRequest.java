@@ -20,14 +20,16 @@ public final class PaymentSessionCompleteRequest extends PaymentSessionInfo {
 
     /**
      * Creates a translated version of the page in the specified language. Default: "en-GB"
+     * [Optional]
      */
     @Builder.Default
     private LocaleType locale = LocaleType.EN_GB;
 
     /**
-     * A unique token representing the additional customer data captured by Flow, 
+     * A unique token representing the additional customer data captured by Flow,
      * as received from the handleSubmit callback.
      * Do not log or store this value.
+     * [Optional]
      */
     private String sessionData;
 }
