@@ -25,6 +25,12 @@ public enum DisputeRelevantEvidence {
     @SerializedName("additional_evidence")
     ADDITIONAL_EVIDENCE,
 
+    @SerializedName("proof_of_delivery_or_service_date")
+    PROOF_OF_DELIVERY_OR_SERVICE_DATE,
+
+    @SerializedName("compelling_evidence")
+    COMPELLING_EVIDENCE,
+
     @SerializedName("arbitration_no_review")
     ARBITRATION_NO_REVIEW,
 
