@@ -2,7 +2,6 @@ package com.checkout.payments.request.source;
 
 import com.checkout.common.AccountHolder;
 import com.checkout.common.PaymentSourceType;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -19,7 +18,6 @@ public final class RequestProviderTokenSource extends AbstractRequestSource {
      * The payment method to use.
      * [Optional]
      */
-    @SerializedName("payment_method")
     private String paymentMethod;
 
     /**
@@ -32,7 +30,6 @@ public final class RequestProviderTokenSource extends AbstractRequestSource {
      * The account holder's details.
      * [Optional]
      */
-    @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
     @Builder

@@ -4,7 +4,6 @@ import com.checkout.common.AccountHolder;
 import com.checkout.common.Address;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -35,7 +34,6 @@ public final class RequestIdSource extends AbstractRequestSource {
      * The payment method to be used.
      * [Optional]
      */
-    @SerializedName("payment_method")
     private String paymentMethod;
 
     /**
@@ -48,14 +46,12 @@ public final class RequestIdSource extends AbstractRequestSource {
      * Whether to store the payment instrument for future use.
      * [Optional]
      */
-    @SerializedName("store_for_future_use")
     private Boolean storeForFutureUse;
 
     /**
      * The billing address associated with the payment instrument.
      * [Optional]
      */
-    @SerializedName("billing_address")
     private Address billingAddress;
 
     /**
@@ -68,14 +64,12 @@ public final class RequestIdSource extends AbstractRequestSource {
      * The account holder information for the payment instrument.
      * [Optional]
      */
-    @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
     /**
      * Whether to update the stored instrument information with the data provided.
      * [Optional]
      */
-    @SerializedName("allow_update")
     private Boolean allowUpdate;
 
     @Builder

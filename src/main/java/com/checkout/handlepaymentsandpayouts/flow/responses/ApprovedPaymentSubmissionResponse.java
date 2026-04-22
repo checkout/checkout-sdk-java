@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.flow.responses;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

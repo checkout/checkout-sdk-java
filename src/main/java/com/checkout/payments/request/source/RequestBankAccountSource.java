@@ -4,7 +4,6 @@ import com.checkout.common.AccountHolder;
 import com.checkout.common.AccountType;
 import com.checkout.common.CountryCode;
 import com.checkout.common.PaymentSourceType;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,14 +20,12 @@ public final class RequestBankAccountSource extends AbstractRequestSource {
      * The payment method to use. For example, "ach".
      * [Optional]
      */
-    @SerializedName("payment_method")
     private String paymentMethod;
 
     /**
      * The type of account.
      * [Optional]
      */
-    @SerializedName("account_type")
     private AccountType accountType;
 
     /**
@@ -41,21 +38,18 @@ public final class RequestBankAccountSource extends AbstractRequestSource {
      * The account number.
      * [Optional]
      */
-    @SerializedName("account_number")
     private String accountNumber;
 
     /**
      * The bank routing code.
      * [Optional]
      */
-    @SerializedName("bank_code")
     private String bankCode;
 
     /**
      * The account holder's details.
      * [Optional]
      */
-    @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
     public RequestBankAccountSource() {

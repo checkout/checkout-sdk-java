@@ -1,7 +1,6 @@
 package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.ach;
 
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodBase;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,14 +15,12 @@ public final class Ach extends PaymentMethodBase {
      * The type of Direct Debit account.
      * [Optional]
      */
-    @SerializedName("account_type")
     private AchAccountType accountType;
 
     /**
      * The account holder details.
      * [Optional]
      */
-    @SerializedName("account_holder")
     private AchAccountHolder accountHolder;
 
     /**
@@ -31,7 +28,6 @@ public final class Ach extends PaymentMethodBase {
      * [Optional]
      * min 4 characters, max 17 characters
      */
-    @SerializedName("account_number")
     private String accountNumber;
 
     /**
@@ -39,7 +35,6 @@ public final class Ach extends PaymentMethodBase {
      * [Optional]
      * min 8 characters, max 9 characters
      */
-    @SerializedName("bank_code")
     private String bankCode;
 
     /**

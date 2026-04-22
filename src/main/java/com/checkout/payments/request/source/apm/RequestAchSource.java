@@ -5,7 +5,6 @@ import com.checkout.common.AccountType;
 import com.checkout.common.CountryCode;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -23,7 +22,6 @@ public final class RequestAchSource extends AbstractRequestSource {
      * [Required]
      * Enum: "savings" "checking" "cash"
      */
-    @SerializedName("account_type")
     private AccountType accountType;
 
     /**
@@ -31,7 +29,6 @@ public final class RequestAchSource extends AbstractRequestSource {
      * [Required]
      * min 2 characters, max 2 characters
      */
-    @SerializedName("country")
     private CountryCode country;
 
     /**
@@ -39,7 +36,6 @@ public final class RequestAchSource extends AbstractRequestSource {
      * [Required]
      * min 4 characters, max 17 characters
      */
-    @SerializedName("account_number")
     private String accountNumber;
 
     /**
@@ -47,7 +43,6 @@ public final class RequestAchSource extends AbstractRequestSource {
      * [Required]
      * min 8 characters, max 9 characters
      */
-    @SerializedName("bank_code")
     private String bankCode;
 
     /**
@@ -55,7 +50,6 @@ public final class RequestAchSource extends AbstractRequestSource {
      * Supports date_of_birth and identification (SSN) fields.
      * [Required]
      */
-    @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
     @Builder

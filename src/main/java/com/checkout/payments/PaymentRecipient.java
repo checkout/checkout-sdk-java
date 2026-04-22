@@ -22,7 +22,6 @@ public final class PaymentRecipient {
      * an IBAN, an internal account number, or a phone number.
      * [Optional]
      */
-    @SerializedName("account_number")
     private String accountNumber;
 
     /**
@@ -43,13 +42,11 @@ public final class PaymentRecipient {
      * The recipient's first name.
      * [Optional]
      */
-    @SerializedName("first_name")
     private String firstName;
 
     /**
      * The recipient's last name.
      * [Optional]
      */
-    @SerializedName("last_name")
     private String lastName;
 }

@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.sepa;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +33,5 @@ public final class SepaMandate {
      * [Optional]
      * Format: yyyy-MM-dd
      */
-    @SerializedName("date_of_signature")
     private LocalDate dateOfSignature;
 }

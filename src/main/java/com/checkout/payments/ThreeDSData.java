@@ -2,7 +2,6 @@ package com.checkout.payments;
 
 import com.checkout.common.Exemption;
 import com.checkout.common.ThreeDSEnrollmentStatus;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 @Data
@@ -24,21 +23,18 @@ public final class ThreeDSData {
      * The reason for the 3DS upgrade.
      * [Optional]
      */
-    @SerializedName("upgrade_reason")
     private String upgradeReason;
 
     /**
      * Whether the 3DS signature is valid.
      * [Optional]
      */
-    @SerializedName("signature_valid")
     private String signatureValid;
 
     /**
      * The 3DS authentication response code.
      * [Optional]
      */
-    @SerializedName("authentication_response")
     private String authenticationResponse;
 
     /**
@@ -69,7 +65,6 @@ public final class ThreeDSData {
      * The 3DS exemption type that was applied by the issuer.
      * [Optional]
      */
-    @SerializedName("exemption_applied")
     private String exemptionApplied;
 
     /**
@@ -88,14 +83,12 @@ public final class ThreeDSData {
      * The reason for the authentication status result.
      * [Optional]
      */
-    @SerializedName("authentication_status_reason")
     private String authenticationStatusReason;
 
     /**
      * The trusted listing status for the cardholder.
      * [Optional]
      */
-    @SerializedName("trusted_listing")
     private TrustedListing trustedListing;
 
 }

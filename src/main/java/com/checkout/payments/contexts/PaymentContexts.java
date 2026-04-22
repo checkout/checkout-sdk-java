@@ -3,7 +3,6 @@ package com.checkout.payments.contexts;
 import com.checkout.common.Currency;
 import com.checkout.payments.PaymentType;
 import com.checkout.payments.ShippingDetails;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,14 +34,12 @@ public class PaymentContexts {
      * [Optional]
      * Enum: "Regular" "Recurring"
      */
-    @SerializedName("payment_type")
     private PaymentType paymentType;
 
     /**
      * The authorization type for the payment.
      * [Optional]
      */
-    @SerializedName("authorization_type")
     private String authorizationType;
 
     /**
@@ -74,7 +71,6 @@ public class PaymentContexts {
      * [Optional]
      * Pattern: ^(pc)_(\w{26})$
      */
-    @SerializedName("processing_channel_id")
     private String processingChannelId;
 
     /**
@@ -97,7 +93,6 @@ public class PaymentContexts {
      * Format: uri
      * max 1024 characters
      */
-    @SerializedName("success_url")
     private String successUrl;
 
     /**
@@ -106,7 +101,6 @@ public class PaymentContexts {
      * Format: uri
      * max 1024 characters
      */
-    @SerializedName("failure_url")
     private String failureUrl;
 
     /**

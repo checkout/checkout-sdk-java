@@ -5,7 +5,6 @@ import com.checkout.payments.ProcessingSettings;
 import com.checkout.payments.request.destination.PaymentRequestDestination;
 import com.checkout.payments.request.source.PayoutRequestSource;
 import com.checkout.payments.sender.PaymentSender;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
@@ -51,7 +50,6 @@ public final class PayoutRequest {
      * An optional description displayed on the recipient's statement identifying the payout.
      * [Optional]
      */
-    @SerializedName("billing_descriptor")
     private PayoutBillingDescriptor billingDescriptor;
 
     /**
@@ -72,7 +70,6 @@ public final class PayoutRequest {
      * Pattern: ^(pc)_(\w{26})$
      * max 29 characters
      */
-    @SerializedName("processing_channel_id")
     private String processingChannelId;
 
     /**

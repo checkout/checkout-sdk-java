@@ -5,7 +5,6 @@ import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -28,14 +27,12 @@ public final class RequestSepaSource extends AbstractRequestSource {
      * The account holder's IBAN.
      * [Required]
      */
-    @SerializedName("account_number")
     private String accountNumber;
 
     /**
      * The BIC/SWIFT code of the bank.
      * [Optional]
      */
-    @SerializedName("bank_code")
     private String bankCode;
 
     /**
@@ -48,7 +45,6 @@ public final class RequestSepaSource extends AbstractRequestSource {
      * The ID of the mandate.
      * [Optional]
      */
-    @SerializedName("mandate_id")
     private String mandateId;
 
     /**
@@ -56,21 +52,18 @@ public final class RequestSepaSource extends AbstractRequestSource {
      * [Optional]
      * Enum: "Core" "B2B"
      */
-    @SerializedName("mandate_type")
     private MandateType mandateType;
 
     /**
      * The date the mandate was signed, in the format yyyy-MM-dd.
      * [Optional]
      */
-    @SerializedName("date_of_signature")
     private String dateOfSignature;
 
     /**
      * The account holder's personal information.
      * [Required]
      */
-    @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
     @Builder

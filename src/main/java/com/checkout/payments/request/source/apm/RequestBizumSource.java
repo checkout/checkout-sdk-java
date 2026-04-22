@@ -2,7 +2,6 @@ package com.checkout.payments.request.source.apm;
 
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,7 +20,6 @@ public final class RequestBizumSource extends AbstractRequestSource {
      * @deprecated Removed from the API on 2025/02/10. Use the customer object instead.
      */
     @Deprecated
-    @SerializedName("mobile_number")
     private String mobileNumber;
 
     @Builder

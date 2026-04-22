@@ -3,7 +3,6 @@ package com.checkout.payments;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Phone;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,7 +27,6 @@ public final class AccommodationData {
      * The booking reference for this accommodation.
      * [Optional]
      */
-    @SerializedName("booking_reference")
     private String bookingReference;
 
     /**
@@ -36,7 +34,6 @@ public final class AccommodationData {
      * [Optional]
      * Format: date (yyyy-MM-dd)
      */
-    @SerializedName("check_in_date")
     private LocalDate checkInDate;
 
     /**
@@ -44,7 +41,6 @@ public final class AccommodationData {
      * [Optional]
      * Format: date (yyyy-MM-dd)
      */
-    @SerializedName("check_out_date")
     private LocalDate checkOutDate;
 
     /**
@@ -54,10 +50,10 @@ public final class AccommodationData {
     private Address address;
 
     /**
-     * The state or region code where the property is located, as an ISO 3166-1 alpha-2 code.
+     * The state or region code where the property is located, as an ISO 3166-2 subdivision code.
      * [Optional]
      */
-    private CountryCode state;
+    private String state;
 
     /**
      * The country where the property is located, as an ISO 3166-1 alpha-2 code.
@@ -75,7 +71,6 @@ public final class AccommodationData {
      * The number of rooms booked.
      * [Optional]
      */
-    @SerializedName("number_of_rooms")
     private Integer numberOfRooms;
 
     /**
@@ -94,14 +89,12 @@ public final class AccommodationData {
      * The property's phone numbers.
      * [Optional]
      */
-    @SerializedName("property_phone")
     private List<Phone> propertyPhone;
 
     /**
      * The customer service phone numbers for the property.
      * [Optional]
      */
-    @SerializedName("customer_service_phone")
     private List<Phone> customerServicePhone;
 
 }

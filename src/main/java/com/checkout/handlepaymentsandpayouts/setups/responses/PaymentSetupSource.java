@@ -11,7 +11,6 @@ import com.checkout.handlepaymentsandpayouts.payments.common.source.cardsource.C
 import com.checkout.handlepaymentsandpayouts.payments.common.source.cardsource.AccountUpdateStatusType;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.cardsource.accountholder.AbstractAccountHolder;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,14 +35,12 @@ public final class PaymentSetupSource {
      * The expiry month.
      * [Optional]
      */
-    @SerializedName("expiry_month")
     private Integer expiryMonth;
 
     /**
      * The expiry year.
      * [Optional]
      */
-    @SerializedName("expiry_year")
     private Integer expiryYear;
 
     /**
@@ -75,7 +72,6 @@ public final class PaymentSetupSource {
      * The payment source owner's billing address.
      * [Optional]
      */
-    @SerializedName("billing_address")
     private Address billingAddress;
 
     /**
@@ -100,35 +96,30 @@ public final class PaymentSetupSource {
      * Deprecated. Replaced by local_schemes. The local co-branded card scheme.
      * [Optional]
      */
-    @SerializedName("scheme_local")
     private String schemeLocal;
 
     /**
      * The local co-branded card schemes.
      * [Optional]
      */
-    @SerializedName("local_schemes")
     private List<String> localSchemes;
 
     /**
      * The card type.
      * [Optional]
      */
-    @SerializedName("card_type")
     private CardType cardType;
 
     /**
      * The card category.
      * [Optional]
      */
-    @SerializedName("card_category")
     private CardCategoryType cardCategory;
 
     /**
      * The card wallet type.
      * [Optional]
      */
-    @SerializedName("card_wallet_type")
     private CardWalletType cardWalletType;
 
     /**
@@ -141,69 +132,59 @@ public final class PaymentSetupSource {
      * The card issuer's country (two-letter ISO code).
      * [Optional]
      */
-    @SerializedName("issuer_country")
     private String issuerCountry;
 
     /**
      * The issuer/card scheme product identifier.
      * [Optional]
      */
-    @SerializedName("product_id")
     private String productId;
 
     /**
      * The issuer/card scheme product type.
      * [Optional]
      */
-    @SerializedName("product_type")
     private String productType;
 
     /**
      * The Address Verification System check result.
      * [Optional]
      */
-    @SerializedName("avs_check")
     private String avsCheck;
 
     /**
      * The card verification value (CVV) check result.
      * [Optional]
      */
-    @SerializedName("cvv_check")
     private String cvvCheck;
 
     /**
      * A unique reference to the underlying card for network tokens (e.g., Apple Pay, Google Pay).
      * [Optional]
      */
-    @SerializedName("payment_account_reference")
     private String paymentAccountReference;
 
     /**
      * The JWE encrypted full card number that has been updated by real-time account updater.
      * [Optional]
      */
-    @SerializedName("encrypted_card_number")
     private String encryptedCardNumber;
 
     /**
      * Specifies what card information was updated by the Real-Time Account Updater.
      * [Optional]
      */
-    @SerializedName("account_update_status")
     private AccountUpdateStatusType accountUpdateStatus;
 
     /**
      * Provides the failure code if the Real-Time Account Updater fails to update the card information.
      * [Optional]
      */
-    @SerializedName("account_update_failure_code")
     private String accountUpdateFailureCode;
 
     /**
      * Information about the account holder of the card.
      * [Optional]
      */
-    @SerializedName("account_holder")
     private AbstractAccountHolder accountHolder;
 }

@@ -31,21 +31,18 @@ public final class RequestFawrySource extends AbstractRequestSource {
      * The customer's profile ID.
      * [Optional]
      */
-    @SerializedName("customer_profile_id")
     private String customerProfileId;
 
     /**
      * The customer's email address.
      * [Optional]
      */
-    @SerializedName("customer_email")
     private String customerEmail;
 
     /**
      * The customer's mobile number.
      * [Optional]
      */
-    @SerializedName("customer_mobile")
     private String customerMobile;
 
     /**
@@ -53,7 +50,6 @@ public final class RequestFawrySource extends AbstractRequestSource {
      * [Optional]
      * Format: date-time (ISO 8601)
      */
-    @SerializedName("expires_on")
     private Instant expiresOn;
 
     /**

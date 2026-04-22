@@ -35,7 +35,6 @@ public final class PaymentRequest {
      * The unique identifier of a Payment Context. Used to initiate a payment from a context.
      * [Optional]
      */
-    @SerializedName("payment_context_id")
     private String paymentContextId;
 
     /**
@@ -66,14 +65,12 @@ public final class PaymentRequest {
      * Enum: "Regular" "Recurring" "MOTO" "Installment" "PayLater" "Unscheduled"
      */
     @Builder.Default
-    @SerializedName("payment_type")
     private PaymentType paymentType = PaymentType.REGULAR;
 
     /**
      * The details of a recurring subscription or installment.
      * [Optional]
      */
-    @SerializedName("payment_plan")
     private PaymentPlan paymentPlan;
 
     /**
@@ -81,7 +78,6 @@ public final class PaymentRequest {
      * Must be set to true for all MITs. If true, payment_type must not be Regular.
      * [Optional]
      */
-    @SerializedName("merchant_initiated")
     private Boolean merchantInitiated;
 
     /**
@@ -109,14 +105,12 @@ public final class PaymentRequest {
      * [Optional]
      * Enum: "Final" "Estimated"
      */
-    @SerializedName("authorization_type")
     private AuthorizationType authorizationType;
 
     /**
      * The partial authorization configuration for the payment.
      * [Optional]
      */
-    @SerializedName("partial_authorization")
     private PartialAuthorization partialAuthorization;
 
     /**
@@ -131,7 +125,6 @@ public final class PaymentRequest {
      * [Optional]
      * Format: date-time (RFC 3339)
      */
-    @SerializedName("capture_on")
     private Instant captureOn;
 
     /**
@@ -139,7 +132,6 @@ public final class PaymentRequest {
      * [Optional]
      * Format: date-time (ISO 8601)
      */
-    @SerializedName("expire_on")
     private Instant expireOn;
 
     /**
@@ -152,7 +144,6 @@ public final class PaymentRequest {
      * An optional description displayed on the customer's statement identifying a purchase.
      * [Optional]
      */
-    @SerializedName("billing_descriptor")
     private BillingDescriptor billingDescriptor;
 
     /**
@@ -173,7 +164,6 @@ public final class PaymentRequest {
      * [Optional]
      * Pattern: ^(pc)_(\w{26})$
      */
-    @SerializedName("processing_channel_id")
     private String processingChannelId;
 
     /**
@@ -182,7 +172,6 @@ public final class PaymentRequest {
      * [Optional]
      * max 100 characters
      */
-    @SerializedName("previous_payment_id")
     private String previousPaymentId;
 
     /**
@@ -197,7 +186,6 @@ public final class PaymentRequest {
      * Format: uri
      * max 1024 characters
      */
-    @SerializedName("success_url")
     private String successUrl;
 
     /**
@@ -206,14 +194,12 @@ public final class PaymentRequest {
      * Format: uri
      * max 1024 characters
      */
-    @SerializedName("failure_url")
     private String failureUrl;
 
     /**
      * @deprecated Deprecated in the API on 2025-03-11. Use {@code risk.device.network.ipv4} or {@code risk.device.network.ipv6} instead.
      */
     @Deprecated
-    @SerializedName("payment_ip")
     private String paymentIp;
 
     /**
@@ -238,7 +224,6 @@ public final class PaymentRequest {
      * The amount allocations for marketplace or split payments.
      * [Optional]
      */
-    @SerializedName("amount_allocations")
     private List<AmountAllocations> amountAllocations;
 
     /**

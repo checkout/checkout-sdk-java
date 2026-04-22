@@ -1,6 +1,5 @@
 package com.checkout.payments.request;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,14 +21,12 @@ public final class DunningRetryRequest {
      * The maximum number of retry attempts.
      * [Optional]
      */
-    @SerializedName("max_attempts")
     private Integer maxAttempts;
 
     /**
      * The number of days after which retries stop.
      * [Optional]
      */
-    @SerializedName("end_after_days")
     private Integer endAfterDays;
 
 }

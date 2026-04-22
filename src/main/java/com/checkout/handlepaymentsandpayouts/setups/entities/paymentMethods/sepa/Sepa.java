@@ -2,7 +2,6 @@ package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.sep
 
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodBase;
 import com.checkout.common.Currency;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,14 +16,12 @@ public final class Sepa extends PaymentMethodBase {
      * The account holder details.
      * [Optional]
      */
-    @SerializedName("account_holder")
     private SepaAccountHolder accountHolder;
 
     /**
      * The account holder's IBAN.
      * [Optional]
      */
-    @SerializedName("account_number")
     private String accountNumber;
 
     /**

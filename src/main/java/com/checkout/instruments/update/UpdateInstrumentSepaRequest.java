@@ -4,8 +4,7 @@ import com.checkout.common.AccountHolder;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.InstrumentType;
-import com.checkout.payments.PaymentType;
-import com.google.gson.annotations.SerializedName;
+import com.checkout.payments.request.source.apm.MandateType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,14 +26,12 @@ public final class UpdateInstrumentSepaRequest extends UpdateInstrumentRequest {
      * SEPA-specific instrument data to update.
      * [Optional]
      */
-    @SerializedName("instrument_data")
     private SepaInstrumentData instrumentData;
 
     /**
      * The account holder details.
      * [Optional]
      */
-    @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
     @Builder
@@ -56,16 +53,15 @@ public final class UpdateInstrumentSepaRequest extends UpdateInstrumentRequest {
     public static final class SepaInstrumentData {
 
         /**
-         * The SEPA instrument type.
+         * The SEPA mandate type.
          * [Optional]
          */
-        private String type;
+        private MandateType type;
 
         /**
          * The IBAN account number.
          * [Optional]
          */
-        @SerializedName("account_number")
         private String accountNumber;
 
         /**
@@ -84,14 +80,12 @@ public final class UpdateInstrumentSepaRequest extends UpdateInstrumentRequest {
          * The SEPA payment type.
          * [Optional]
          */
-        @SerializedName("payment_type")
-        private PaymentType paymentType;
+        private SepaPaymentType paymentType;
 
         /**
          * The SEPA mandate identifier.
          * [Optional]
          */
-        @SerializedName("mandate_id")
         private String mandateId;
 
         /**
@@ -99,7 +93,6 @@ public final class UpdateInstrumentSepaRequest extends UpdateInstrumentRequest {
          * [Optional]
          * Format: yyyy-MM-dd
          */
-        @SerializedName("date_of_signature")
         private LocalDate dateOfSignature;
 
     }

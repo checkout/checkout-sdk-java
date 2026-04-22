@@ -1,6 +1,5 @@
 package com.checkout.payments.request;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,14 +37,12 @@ public final class PaymentRetryRequest {
      * @deprecated Use {@link DunningRetryRequest#maxAttempts} via {@link #dunning} instead.
      */
     @Deprecated
-    @SerializedName("max_attempts")
     private Integer maxAttempts;
 
     /**
      * @deprecated Use {@link DunningRetryRequest#endAfterDays} via {@link #dunning} instead.
      */
     @Deprecated
-    @SerializedName("end_after_days")
     private Integer endAfterDays;
 
 }

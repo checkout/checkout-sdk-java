@@ -1,6 +1,5 @@
 package com.checkout.payments.response.source;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -16,7 +15,6 @@ public final class PayPalResponseSource extends AbstractResponseSource implement
      * The PayPal account holder details.
      * [Optional]
      */
-    @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
     public PayPalResponseSource() {
@@ -36,7 +34,6 @@ public final class PayPalResponseSource extends AbstractResponseSource implement
          * The PayPal account holder's full name.
          * [Optional]
          */
-        @SerializedName("full_name")
         private String fullName;
 
     }

@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.ach;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +24,6 @@ public final class AchIdentification {
      * The country where the document was issued.
      * [Optional]
      */
-    @SerializedName("issuing_country")
     private String issuingCountry;
 
     /**

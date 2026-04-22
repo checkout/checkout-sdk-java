@@ -3,7 +3,6 @@ package com.checkout.payments.request.source.apm;
 import com.checkout.common.CountryCode;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,14 +23,12 @@ public final class RequestSofortSource extends AbstractRequestSource {
      * The ISO 3166-1 alpha-2 country code for the Sofort payment.
      * [Optional]
      */
-    @SerializedName("countryCode")
     private CountryCode countryCode;
 
     /**
      * The language code for the Sofort payment.
      * [Optional]
      */
-    @SerializedName("languageCode")
     private String languageCode;
 
     @Builder

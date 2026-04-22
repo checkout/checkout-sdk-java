@@ -22,21 +22,18 @@ public final class PaymentIndividualSender extends PaymentSender {
      * The sender's first name.
      * [Required]
      */
-    @SerializedName("first_name")
     private String firstName;
 
     /**
      * The sender's middle name.
      * [Optional]
      */
-    @SerializedName("middle_name")
     private String middleName;
 
     /**
      * The sender's last name.
      * [Required]
      */
-    @SerializedName("last_name")
     private String lastName;
 
     /**
@@ -62,14 +59,12 @@ public final class PaymentIndividualSender extends PaymentSender {
      * The reference type for the sender.
      * [Optional]
      */
-    @SerializedName("reference_type")
     private String referenceType;
 
     /**
      * The source of funds for the sender.
      * [Optional]
      */
-    @SerializedName("source_of_funds")
     private SourceOfFunds sourceOfFunds;
 
     /**
@@ -78,14 +73,12 @@ public final class PaymentIndividualSender extends PaymentSender {
      * Format: yyyy-MM-dd
      * max 10 characters
      */
-    @SerializedName("date_of_birth")
     private LocalDate dateOfBirth;
 
     /**
      * The sender's country of birth.
      * [Optional]
      */
-    @SerializedName("country_of_birth")
     private CountryCode countryOfBirth;
 
     /**

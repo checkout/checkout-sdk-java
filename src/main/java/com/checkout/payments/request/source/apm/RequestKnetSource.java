@@ -4,7 +4,6 @@ import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.PaymentMethodDetails;
 import com.checkout.payments.request.source.AbstractRequestSource;
 import com.checkout.tokens.ApplePayTokenData;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -27,42 +26,36 @@ public final class RequestKnetSource extends AbstractRequestSource {
      * User-defined field 1.
      * [Optional]
      */
-    @SerializedName("user_defined_field1")
     private String userDefinedField1;
 
     /**
      * User-defined field 2.
      * [Optional]
      */
-    @SerializedName("user_defined_field2")
     private String userDefinedField2;
 
     /**
      * User-defined field 3.
      * [Optional]
      */
-    @SerializedName("user_defined_field3")
     private String userDefinedField3;
 
     /**
      * User-defined field 4.
      * [Optional]
      */
-    @SerializedName("user_defined_field4")
     private String userDefinedField4;
 
     /**
      * User-defined field 5.
      * [Optional]
      */
-    @SerializedName("user_defined_field5")
     private String userDefinedField5;
 
     /**
      * The card token for the payment.
      * [Optional]
      */
-    @SerializedName("card_token")
     private String cardToken;
 
     /**
@@ -75,21 +68,18 @@ public final class RequestKnetSource extends AbstractRequestSource {
      * The type of token.
      * [Optional]
      */
-    @SerializedName("token_type")
     private String tokenType;
 
     /**
      * The token data for Apple Pay payments.
      * [Optional]
      */
-    @SerializedName("token_data")
     private ApplePayTokenData tokenData;
 
     /**
      * Additional payment method details.
      * [Optional]
      */
-    @SerializedName("payment_method_details")
     private PaymentMethodDetails paymentMethodDetails;
 
     @Builder

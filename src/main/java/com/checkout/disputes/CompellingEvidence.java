@@ -1,7 +1,5 @@
 package com.checkout.disputes;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.time.Instant;
 import java.util.List;
 
@@ -12,7 +10,6 @@ public final class CompellingEvidence {
      * [Required]
      * Enum: "Merchandise" "Services"
      */
-    @SerializedName("merchandise_or_service")
     private String merchandiseOrService;
 
     /**
@@ -20,7 +17,6 @@ public final class CompellingEvidence {
      * [Required]
      * min 1 character, max 5000 characters
      */
-    @SerializedName("merchandise_or_service_desc")
     private String merchandiseOrServiceDesc;
 
     /**
@@ -28,14 +24,12 @@ public final class CompellingEvidence {
      * [Required]
      * Format: date-time (RFC 3339)
      */
-    @SerializedName("merchandise_or_service_provided_date")
     private Instant merchandiseOrServiceProvidedDate;
 
     /**
      * The shipping or delivery status of the merchandise.
      * [Optional]
      */
-    @SerializedName("shipping_delivery_status")
     private ShippingDeliveryStatusType shippingDeliveryStatus;
 
     /**
@@ -43,7 +37,6 @@ public final class CompellingEvidence {
      * [Optional]
      * max 50 characters
      */
-    @SerializedName("tracking_information")
     private TrackingInformationType trackingInformation;
 
     /**
@@ -51,14 +44,12 @@ public final class CompellingEvidence {
      * [Optional]
      * max 50 characters
      */
-    @SerializedName("user_id")
     private String userId;
 
     /**
      * The IP address used for the transaction (IPv4 or IPv6).
      * [Optional]
      */
-    @SerializedName("ip_address")
     private String ipAddress;
 
     /**
@@ -66,14 +57,12 @@ public final class CompellingEvidence {
      * [Optional]
      * min 15 characters, max 64 characters
      */
-    @SerializedName("device_id")
     private String deviceId;
 
     /**
      * The shipping address used for the transaction.
      * [Optional]
      */
-    @SerializedName("shipping_address")
     private ShippingAddress shippingAddress;
 
     /**
@@ -81,7 +70,6 @@ public final class CompellingEvidence {
      * At least 2 items required.
      * [Required]
      */
-    @SerializedName("historical_transactions")
     private List<HistoricalTransactions> historicalTransactions;
 
 }

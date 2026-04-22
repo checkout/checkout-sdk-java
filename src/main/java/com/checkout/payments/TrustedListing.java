@@ -9,7 +9,7 @@ public final class TrustedListing {
      * The trusted listing status for the cardholder.
      * [Optional]
      */
-    private String status;
+    private TrustedListingStatus status;
 
     /**
      * The source of the trusted listing entry.

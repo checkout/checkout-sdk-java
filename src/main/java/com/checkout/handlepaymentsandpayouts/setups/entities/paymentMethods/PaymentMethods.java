@@ -37,7 +37,6 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.true
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.twint.Twint;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.vipps.Vipps;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.wechatpay.WeChatPay;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -146,14 +145,12 @@ public final class PaymentMethods {
      * Alipay CN payment method configuration.
      * [Optional]
      */
-    @SerializedName("alipay_cn")
     private AlipayCn alipayCn;
 
     /**
      * Alipay HK payment method configuration.
      * [Optional]
      */
-    @SerializedName("alipay_hk")
     private AlipayHk alipayHk;
 
     /**

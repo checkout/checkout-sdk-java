@@ -3,7 +3,6 @@ package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.app
 import com.checkout.common.Phone;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.CardAccountHolder;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodBase;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,7 +19,6 @@ public final class ApplePay extends PaymentMethodBase {
      * The Apple Pay encrypted payment token data.
      * [Optional]
      */
-    @SerializedName("token_data")
     private ApplePayTokenData tokenData;
 
     /**
@@ -34,14 +32,12 @@ public final class ApplePay extends PaymentMethodBase {
      * [Optional]
      * Format: date-time (ISO 8601)
      */
-    @SerializedName("expires_on")
     private Instant expiresOn;
 
     /**
      * Set to true if you intend to reuse the payment credentials in subsequent payments.
      * [Optional]
      */
-    @SerializedName("store_for_future_use")
     private Boolean storeForFutureUse;
 
     /**
@@ -54,6 +50,5 @@ public final class ApplePay extends PaymentMethodBase {
      * The card account holder details.
      * [Optional]
      */
-    @SerializedName("account_holder")
     private CardAccountHolder accountHolder;
 }

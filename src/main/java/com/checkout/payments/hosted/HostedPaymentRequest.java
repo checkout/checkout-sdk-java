@@ -49,7 +49,6 @@ public final class HostedPaymentRequest {
      * Format: uri
      * max 255 characters
      */
-    @SerializedName("success_url")
     private String successUrl;
 
     /**
@@ -58,7 +57,6 @@ public final class HostedPaymentRequest {
      * Format: uri
      * max 255 characters
      */
-    @SerializedName("cancel_url")
     private String cancelUrl;
 
     /**
@@ -67,7 +65,6 @@ public final class HostedPaymentRequest {
      * Format: uri
      * max 255 characters
      */
-    @SerializedName("failure_url")
     private String failureUrl;
 
     /**
@@ -83,21 +80,18 @@ public final class HostedPaymentRequest {
      * Enum: "Regular" "Recurring"
      */
     @Builder.Default
-    @SerializedName("payment_type")
     private PaymentType paymentType = PaymentType.REGULAR;
 
     /**
      * @deprecated Deprecated in the API on 2025-03-11. Use {@code risk.device.network.ipv4} or {@code risk.device.network.ipv6} instead.
      */
     @Deprecated
-    @SerializedName("payment_ip")
     private String paymentIp;
 
     /**
      * An optional description displayed on the customer's statement identifying a purchase.
      * [Optional]
      */
-    @SerializedName("billing_descriptor")
     private BillingDescriptor billingDescriptor;
 
     /**
@@ -117,7 +111,6 @@ public final class HostedPaymentRequest {
      * The merchant name to display to customers on the checkout page.
      * [Optional]
      */
-    @SerializedName("display_name")
     private String displayName;
 
     /**
@@ -125,14 +118,12 @@ public final class HostedPaymentRequest {
      * [Optional]
      * Pattern: ^(pc)_(\w{26})$
      */
-    @SerializedName("processing_channel_id")
     private String processingChannelId;
 
     /**
      * The amount allocations for marketplace or split payments.
      * [Optional]
      */
-    @SerializedName("amount_allocations")
     private List<AmountAllocations> amountAllocations;
 
     /**
@@ -163,14 +154,12 @@ public final class HostedPaymentRequest {
      * Specifies which payment method options to present to the customer.
      * [Optional]
      */
-    @SerializedName("allow_payment_methods")
     private List<PaymentSourceType> allowPaymentMethods;
 
     /**
      * Specifies which payment method options to hide from the customer.
      * [Optional]
      */
-    @SerializedName("disabled_payment_methods")
     private List<PaymentSourceType> disabledPaymentMethods;
 
     /**
@@ -189,7 +178,6 @@ public final class HostedPaymentRequest {
      * The customer retry configuration for failed payments.
      * [Optional]
      */
-    @SerializedName("customer_retry")
     private PaymentRetryRequest customerRetry;
 
     /**
@@ -228,7 +216,6 @@ public final class HostedPaymentRequest {
      * [Optional]
      * Format: date-time (RFC 3339)
      */
-    @SerializedName("capture_on")
     private Instant captureOn;
 
     /**
@@ -241,6 +228,5 @@ public final class HostedPaymentRequest {
      * The payment method configuration for stored card and wallet methods.
      * [Optional]
      */
-    @SerializedName("payment_method_configuration")
     private PaymentMethodConfiguration paymentMethodConfiguration;
 }

@@ -2,7 +2,6 @@ package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.tab
 
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodBase;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodInitialization;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -25,6 +24,5 @@ public final class Tabby extends PaymentMethodBase {
      * The available payment types for Tabby (for example, installments).
      * [Optional]
      */
-    @SerializedName("payment_types")
     private List<String> paymentTypes;
 }

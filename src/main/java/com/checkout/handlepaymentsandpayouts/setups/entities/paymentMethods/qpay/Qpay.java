@@ -1,7 +1,6 @@
 package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.qpay;
 
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodBase;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,7 +15,6 @@ public final class Qpay extends PaymentMethodBase {
      * The Qatari national ID. Must start with 2 or 3, followed by 10 digits.
      * [Optional]
      */
-    @SerializedName("national_id")
     private String nationalId;
 
     /**

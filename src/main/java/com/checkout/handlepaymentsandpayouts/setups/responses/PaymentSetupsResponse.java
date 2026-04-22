@@ -9,7 +9,6 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.order.Order;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
 import com.checkout.handlepaymentsandpayouts.setups.entities.settings.Settings;
 import com.checkout.payments.PaymentType;
-import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -113,6 +112,5 @@ public final class PaymentSetupsResponse extends Resource {
      * presentation priority, with the first item being the highest priority.
      * [Optional]
      */
-    @SerializedName("available_payment_methods")
     private List<String> availablePaymentMethods;
 }

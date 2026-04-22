@@ -3,7 +3,6 @@ package com.checkout.payments.request.source.apm;
 import com.checkout.common.Address;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,7 +19,6 @@ public final class RequestCvConnectSource extends AbstractRequestSource {
      * The customer's billing address.
      * [Optional]
      */
-    @SerializedName("billing_address")
     private Address billingAddress;
 
     @Builder

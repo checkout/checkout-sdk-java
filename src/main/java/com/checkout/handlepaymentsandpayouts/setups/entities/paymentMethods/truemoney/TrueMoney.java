@@ -3,7 +3,6 @@ package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.tru
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.OsType;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodBase;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.TerminalType;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,7 +18,6 @@ public final class TrueMoney extends PaymentMethodBase {
      * [Optional]
      * Enum: "APP" "WAP" "WEB"
      */
-    @SerializedName("terminal_type")
     private TerminalType terminalType;
 
     /**
@@ -27,6 +25,5 @@ public final class TrueMoney extends PaymentMethodBase {
      * [Optional]
      * Enum: "ANDROID" "IOS"
      */
-    @SerializedName("os_type")
     private OsType osType;
 }

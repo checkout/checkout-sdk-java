@@ -1,7 +1,6 @@
 package com.checkout.issuing.cards.requests.create;
 
 import com.checkout.common.Address;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,14 +14,12 @@ public final class ShippingInstruction {
      * @deprecated No longer supported.
      */
     @Deprecated
-    @SerializedName("shipping_recipient")
     private String shippingRecipient;
 
     /**
      * The address to ship the physical card to.
      * [Optional]
      */
-    @SerializedName("shipping_address")
     private Address shippingAddress;
 
     /**
@@ -31,6 +28,5 @@ public final class ShippingInstruction {
      * @deprecated No longer supported.
      */
     @Deprecated
-    @SerializedName("additional_comment")
     private String additionalComment;
 }

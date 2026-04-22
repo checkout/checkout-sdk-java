@@ -55,21 +55,18 @@ public final class PaymentLinkRequest {
      * [Optional]
      * Enum: "Regular" "Recurring" "MOTO" "Installment" "Unscheduled"
      */
-    @SerializedName("payment_type")
     private PaymentType paymentType;
 
     /**
      * @deprecated Deprecated in the API on 2025-03-11. Use {@code risk.device.network.ipv4} or {@code risk.device.network.ipv6} instead.
      */
     @Deprecated
-    @SerializedName("payment_ip")
     private String paymentIp;
 
     /**
      * An optional description displayed on the customer's statement identifying a purchase.
      * [Optional]
      */
-    @SerializedName("billing_descriptor")
     private BillingDescriptor billingDescriptor;
 
     /**
@@ -89,7 +86,6 @@ public final class PaymentLinkRequest {
      * The merchant name to display to customers on the checkout page.
      * [Optional]
      */
-    @SerializedName("display_name")
     private String displayName;
 
     /**
@@ -97,21 +93,18 @@ public final class PaymentLinkRequest {
      * [Optional]
      * Pattern: ^(pc)_(\w{26})$
      */
-    @SerializedName("processing_channel_id")
     private String processingChannelId;
 
     /**
      * The amount allocations for marketplace or split payments.
      * [Optional]
      */
-    @SerializedName("amount_allocations")
     private List<AmountAllocations> amountAllocations;
 
     /**
      * The time for which the Payment Link remains valid, in seconds.
      * [Optional]
      */
-    @SerializedName("expires_in")
     private Integer expiresIn;
 
     /**
@@ -142,14 +135,12 @@ public final class PaymentLinkRequest {
      * Specifies which payment method options to present to the customer.
      * [Optional]
      */
-    @SerializedName("allow_payment_methods")
     private List<PaymentSourceType> allowPaymentMethods;
 
     /**
      * Specifies which payment method options to hide from the customer.
      * [Optional]
      */
-    @SerializedName("disabled_payment_methods")
     private List<PaymentSourceType> disabledPaymentMethods;
 
     /**
@@ -181,7 +172,6 @@ public final class PaymentLinkRequest {
      * The customer retry configuration for failed payments.
      * [Optional]
      */
-    @SerializedName("customer_retry")
     private PaymentRetryRequest customerRetry;
 
     /**
@@ -194,7 +184,6 @@ public final class PaymentLinkRequest {
      * If provided, the success page will include a button that redirects the customer to this URL.
      * [Optional]
      */
-    @SerializedName("return_url")
     private String returnUrl;
 
     /**
@@ -214,7 +203,6 @@ public final class PaymentLinkRequest {
      * [Optional]
      * Format: date-time (RFC 3339)
      */
-    @SerializedName("capture_on")
     private Instant captureOn;
 
     /**
@@ -227,6 +215,5 @@ public final class PaymentLinkRequest {
      * The payment method configuration for stored card and wallet methods.
      * [Optional]
      */
-    @SerializedName("payment_method_configuration")
     private PaymentMethodConfiguration paymentMethodConfiguration;
 }

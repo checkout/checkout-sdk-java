@@ -1,6 +1,5 @@
 package com.checkout.common;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 @Data
@@ -34,7 +33,6 @@ public final class Link {
      * QR code data for redirect payments.
      * [Optional]
      */
-    @SerializedName("qr_code")
     private QrCode qrCode;
 
 }

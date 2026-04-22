@@ -8,7 +8,6 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.industry.Industry;
 import com.checkout.handlepaymentsandpayouts.setups.entities.order.Order;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
 import com.checkout.handlepaymentsandpayouts.setups.entities.settings.Settings;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,7 +27,6 @@ public final class PaymentSetupsRequest {
      * [Required]
      * Pattern: ^(pc)_(\w{26})$
      */
-    @SerializedName("processing_channel_id")
     private String processingChannelId;
 
     /**
@@ -68,7 +66,6 @@ public final class PaymentSetupsRequest {
      * The payment methods that are enabled on your account and available for use
      * [Optional]
      */
-    @SerializedName("payment_methods")
     private PaymentMethods paymentMethods;
 
     /**

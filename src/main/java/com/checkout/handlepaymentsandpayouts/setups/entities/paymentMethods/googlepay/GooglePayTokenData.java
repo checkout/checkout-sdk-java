@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.googlepay;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +18,6 @@ public final class GooglePayTokenData {
      * The encryption and signing scheme used to create this message. Defaults to ECv0.
      * [Optional]
      */
-    @SerializedName("protocol_version")
     private String protocolVersion;
 
     /**
@@ -32,13 +30,11 @@ public final class GooglePayTokenData {
      * A serialized JSON string containing the encryptedMessage, ephemeralPublicKey, and tag.
      * [Optional]
      */
-    @SerializedName("signed_message")
     private String signedMessage;
 
     /**
      * The public key provided to the Google API in the tokenizationSpecification.parameters field.
      * [Optional]
      */
-    @SerializedName("tokenization_key")
     private String tokenizationKey;
 }

@@ -4,7 +4,6 @@ import com.checkout.common.AccountHolder;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.InstrumentType;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,10 +19,8 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class UpdateInstrumentAchRequest extends UpdateInstrumentRequest {
 
-    @SerializedName("instrument_data")
     private AchInstrumentData instrumentData;
 
-    @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
     @Builder
@@ -44,13 +41,10 @@ public final class UpdateInstrumentAchRequest extends UpdateInstrumentRequest {
     @AllArgsConstructor
     public static final class AchInstrumentData {
 
-        @SerializedName("account_type")
-        private String accountType;
+        private AchInstrumentAccountType accountType;
 
-        @SerializedName("account_number")
         private String accountNumber;
 
-        @SerializedName("bank_code")
         private String bankCode;
 
         private Currency currency;

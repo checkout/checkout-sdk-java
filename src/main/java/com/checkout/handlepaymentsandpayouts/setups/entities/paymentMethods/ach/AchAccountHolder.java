@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.ach;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,21 +24,18 @@ public final class AchAccountHolder {
      * The first name of the account holder.
      * [Optional]
      */
-    @SerializedName("first_name")
     private String firstName;
 
     /**
      * The last name of the account holder.
      * [Optional]
      */
-    @SerializedName("last_name")
     private String lastName;
 
     /**
      * The legal name of a registered company that holds the account.
      * [Optional]
      */
-    @SerializedName("company_name")
     private String companyName;
 
     /**
@@ -47,7 +43,6 @@ public final class AchAccountHolder {
      * [Optional]
      * Format: yyyy-MM-dd
      */
-    @SerializedName("date_of_birth")
     private String dateOfBirth;
 
     /**

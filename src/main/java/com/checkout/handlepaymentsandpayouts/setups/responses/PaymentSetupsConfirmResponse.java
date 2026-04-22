@@ -38,7 +38,6 @@ public final class PaymentSetupsConfirmResponse extends Resource {
      * The unique identifier for the action performed against this payment.
      * [Optional]
      */
-    @SerializedName("action_id")
     private String actionId;
 
     /**
@@ -69,7 +68,6 @@ public final class PaymentSetupsConfirmResponse extends Resource {
      * The Gateway response code.
      * [Optional]
      */
-    @SerializedName("response_code")
     private String responseCode;
 
     /**
@@ -77,28 +75,24 @@ public final class PaymentSetupsConfirmResponse extends Resource {
      * [Optional]
      * Format: date-time (ISO 8601)
      */
-    @SerializedName("processed_on")
     private Instant processedOn;
 
     /**
      * The full amount from the original authorization, if a partial authorization was requested and approved.
      * [Optional]
      */
-    @SerializedName("amount_requested")
     private Long amountRequested;
 
     /**
      * The acquirer authorization code if the payment was authorized.
      * [Optional]
      */
-    @SerializedName("auth_code")
     private String authCode;
 
     /**
      * The Gateway response summary.
      * [Optional]
      */
-    @SerializedName("response_summary")
     private String responseSummary;
 
     /**
@@ -106,7 +100,6 @@ public final class PaymentSetupsConfirmResponse extends Resource {
      * [Optional]
      * Format: date-time (ISO 8601)
      */
-    @SerializedName("expires_on")
     private String expiresOn;
 
     /**
@@ -169,7 +162,6 @@ public final class PaymentSetupsConfirmResponse extends Resource {
      * The scheme transaction identifier.
      * [Optional]
      */
-    @SerializedName("scheme_id")
     private String schemeId;
 
     /**

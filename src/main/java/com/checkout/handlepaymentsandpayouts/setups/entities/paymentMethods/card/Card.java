@@ -3,7 +3,6 @@ package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.car
 import com.checkout.common.Phone;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.CardAccountHolder;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodBase;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -44,14 +43,12 @@ public final class Card extends PaymentMethodBase {
      * The expiry month of the card.
      * [Optional]
      */
-    @SerializedName("expiry_month")
     private Integer expiryMonth;
 
     /**
      * The expiry year of the card.
      * [Optional]
      */
-    @SerializedName("expiry_year")
     private Integer expiryYear;
 
     /**
@@ -77,14 +74,12 @@ public final class Card extends PaymentMethodBase {
      * [Optional]
      * Format: date-time (ISO 8601)
      */
-    @SerializedName("expires_on")
     private Instant expiresOn;
 
     /**
      * Set to true if you intend to reuse the payment credentials in subsequent payments. Write-only.
      * [Optional]
      */
-    @SerializedName("store_for_future_use")
     private Boolean storeForFutureUse;
 
     /**
@@ -97,13 +92,11 @@ public final class Card extends PaymentMethodBase {
      * The card account holder details.
      * [Optional]
      */
-    @SerializedName("account_holder")
     private CardAccountHolder accountHolder;
 
     /**
      * Indicates whether to use the Real-Time Account Updater to update the card information.
      * [Optional]
      */
-    @SerializedName("allow_update")
     private Boolean allowUpdate;
 }

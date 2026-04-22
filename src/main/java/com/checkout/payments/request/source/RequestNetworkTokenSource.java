@@ -4,7 +4,6 @@ import com.checkout.common.AccountHolder;
 import com.checkout.common.Address;
 import com.checkout.common.Phone;
 import com.checkout.payments.NetworkTokenType;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -29,21 +28,18 @@ public final class RequestNetworkTokenSource extends AbstractRequestSource {
      * The expiry month of the token.
      * [Optional]
      */
-    @SerializedName("expiry_month")
     private Integer expiryMonth;
 
     /**
      * The expiry year of the token.
      * [Optional]
      */
-    @SerializedName("expiry_year")
     private Integer expiryYear;
 
     /**
      * The network token type.
      * [Optional]
      */
-    @SerializedName("token_type")
     private NetworkTokenType tokenType;
 
     /**
@@ -68,7 +64,6 @@ public final class RequestNetworkTokenSource extends AbstractRequestSource {
      * Set to true if you intend to reuse the payment credentials in subsequent payments. Write-only.
      * [Optional]
      */
-    @SerializedName("store_for_future_use")
     private Boolean storeForFutureUse;
 
     /**
@@ -87,7 +82,6 @@ public final class RequestNetworkTokenSource extends AbstractRequestSource {
      * The payment source owner's billing address.
      * [Optional]
      */
-    @SerializedName("billing_address")
     private Address billingAddress;
 
     /**
@@ -100,7 +94,6 @@ public final class RequestNetworkTokenSource extends AbstractRequestSource {
      * The card account holder's details.
      * [Optional]
      */
-    @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
     @Builder
