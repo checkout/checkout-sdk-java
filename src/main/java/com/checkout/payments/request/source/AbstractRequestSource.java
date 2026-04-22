@@ -6,6 +6,10 @@ import lombok.Data;
 @Data
 public abstract class AbstractRequestSource {
 
+    /**
+     * The payment source type.
+     * [Required]
+     */
     protected final PaymentSourceType type;
 
     protected AbstractRequestSource(final PaymentSourceType type) {

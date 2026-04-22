@@ -1,8 +1,9 @@
 package com.checkout.payments.request.source;
 
 import com.checkout.common.AccountHolder;
+import com.checkout.common.Address;
 import com.checkout.common.PaymentSourceType;
-import com.google.gson.annotations.SerializedName;
+import com.checkout.common.Phone;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,20 +16,61 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestIdSource extends AbstractRequestSource {
 
+    /**
+     * The payment instrument identifier.
+     * [Required]
+     * Pattern: ^(src)_(\w{26})$
+     */
     private String id;
 
+    /**
+     * The card verification value (CVV) of the card.
+     * [Optional]
+     * min 3 characters, max 4 characters
+     */
     private String cvv;
 
-    @SerializedName("payment_method")
+    /**
+     * The payment method to be used.
+     * [Optional]
+     */
     private String paymentMethod;
 
+    /**
+     * Whether this payment instrument was previously stored for future use.
+     * [Optional]
+     */
     private Boolean stored;
 
-    @SerializedName("store_for_future_use")
+    /**
+     * Whether to store the payment instrument for future use.
+     * [Optional]
+     */
     private Boolean storeForFutureUse;
 
-    @SerializedName("account_holder")
+    /**
+     * The billing address associated with the payment instrument.
+     * [Optional]
+     */
+    private Address billingAddress;
+
+    /**
+     * The phone number associated with the payment instrument.
+     * [Optional]
+     */
+    private Phone phone;
+
+    /**
+     * The account holder information for the payment instrument.
+     * [Optional]
+     */
     private AccountHolder accountHolder;
+
+    /**
+     * Whether to update the stored instrument information with the data provided.
+     * [Optional]
+     */
+    private Boolean allowUpdate;
 
     @Builder
     private RequestIdSource(final String id,
@@ -36,14 +78,20 @@ public final class RequestIdSource extends AbstractRequestSource {
                             final String paymentMethod,
                             final Boolean stored,
                             final Boolean storeForFutureUse,
-                            final AccountHolder accountHolder) {
+                            final Address billingAddress,
+                            final Phone phone,
+                            final AccountHolder accountHolder,
+                            final Boolean allowUpdate) {
         super(PaymentSourceType.ID);
         this.id = id;
         this.cvv = cvv;
         this.paymentMethod = paymentMethod;
         this.stored = stored;
         this.storeForFutureUse = storeForFutureUse;
+        this.billingAddress = billingAddress;
+        this.phone = phone;
         this.accountHolder = accountHolder;
+        this.allowUpdate = allowUpdate;
     }
 
     public RequestIdSource() {

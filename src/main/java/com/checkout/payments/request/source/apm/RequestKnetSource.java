@@ -4,7 +4,6 @@ import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.PaymentMethodDetails;
 import com.checkout.payments.request.source.AbstractRequestSource;
 import com.checkout.tokens.ApplePayTokenData;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,35 +16,70 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestKnetSource extends AbstractRequestSource {
 
+    /**
+     * The language to display the payment page in.
+     * [Optional]
+     */
     private String language;
 
-    @SerializedName("user_defined_field1")
+    /**
+     * User-defined field 1.
+     * [Optional]
+     */
     private String userDefinedField1;
 
-    @SerializedName("user_defined_field2")
+    /**
+     * User-defined field 2.
+     * [Optional]
+     */
     private String userDefinedField2;
 
-    @SerializedName("user_defined_field3")
+    /**
+     * User-defined field 3.
+     * [Optional]
+     */
     private String userDefinedField3;
 
-    @SerializedName("user_defined_field4")
+    /**
+     * User-defined field 4.
+     * [Optional]
+     */
     private String userDefinedField4;
 
-    @SerializedName("user_defined_field5")
+    /**
+     * User-defined field 5.
+     * [Optional]
+     */
     private String userDefinedField5;
 
-    @SerializedName("card_token")
+    /**
+     * The card token for the payment.
+     * [Optional]
+     */
     private String cardToken;
 
+    /**
+     * The PTLF value.
+     * [Optional]
+     */
     private String ptlf;
 
-    @SerializedName("token_type")
+    /**
+     * The type of token.
+     * [Optional]
+     */
     private String tokenType;
 
-    @SerializedName("token_data")
+    /**
+     * The token data for Apple Pay payments.
+     * [Optional]
+     */
     private ApplePayTokenData tokenData;
 
-    @SerializedName("payment_method_details")
+    /**
+     * Additional payment method details.
+     * [Optional]
+     */
     private PaymentMethodDetails paymentMethodDetails;
 
     @Builder

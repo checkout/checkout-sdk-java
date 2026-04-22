@@ -18,16 +18,19 @@ public final class StoredCardConfiguration {
 
     /**
      * The unique identifier for an existing customer.
+     * [Optional]
      */
     private String customerId;
 
     /**
      * The unique identifiers for card Instruments.
+     * [Optional]
      */
     private List<String> instrumentIds;
 
     /**
      * The unique identifier for the payment instrument to present to the customer as the default option.
+     * [Optional]
      */
     private String defaultInstrumentId;
 }

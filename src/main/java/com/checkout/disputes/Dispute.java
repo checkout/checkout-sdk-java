@@ -2,7 +2,6 @@ package com.checkout.disputes;
 
 import com.checkout.common.Currency;
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,54 +15,137 @@ import java.time.Instant;
 @EqualsAndHashCode(callSuper = false)
 public final class Dispute extends Resource {
 
+    /**
+     * The dispute identifier.
+     * [Optional]
+     * ^(dsp)_(\w{22,26})$
+     */
     private String id;
 
+    /**
+     * The reason for the dispute.
+     * [Optional]
+     */
     private DisputeCategory category;
 
+    /**
+     * The current status of the dispute.
+     * [Optional]
+     */
     private DisputeStatus status;
 
+    /**
+     * The disputed amount in the processing currency.
+     * [Optional]
+     */
     private Long amount;
 
+    /**
+     * The processing currency.
+     * [Optional]
+     */
     private Currency currency;
 
-    @SerializedName("reason_code")
+    /**
+     * The card scheme reason code for the dispute.
+     * [Optional]
+     */
     private String reasonCode;
 
-    @SerializedName("payment_id")
+    /**
+     * The payment identifier.
+     * [Optional]
+     */
     private String paymentId;
 
-    @SerializedName("payment_action_id")
+    /**
+     * The payment action identifier.
+     * [Optional]
+     */
     private String paymentActionId;
 
-    @SerializedName("payment_reference")
+    /**
+     * The payment reference or order ID.
+     * [Optional]
+     */
     private String paymentReference;
 
-    @SerializedName("payment_arn")
+    /**
+     * The acquirer reference number for the payment.
+     * [Optional]
+     */
     private String paymentArn;
 
-    @SerializedName("payment_method")
+    /**
+     * The payment method or card scheme.
+     * [Optional]
+     */
     private String paymentMethod;
 
-    @SerializedName("evidence_required_by")
+    /**
+     * The deadline by which evidence must be submitted.
+     * [Optional]
+     * Format: date-time (RFC 3339)
+     */
     private Instant evidenceRequiredBy;
 
-    @SerializedName("received_on")
+    /**
+     * The date and time the dispute was issued.
+     * [Optional]
+     * Format: date-time (RFC 3339)
+     */
     private Instant receivedOn;
 
-    @SerializedName("last_update")
+    /**
+     * The date and time of the last update to the dispute.
+     * [Optional]
+     * Format: date-time (RFC 3339)
+     */
     private Instant lastUpdate;
 
     /**
-     * Not available on Previous
+     * The reason the dispute was automatically resolved.
+     * [Optional]
+     * Enum: "rapid_dispute_resolution" "negative_amount" "already_refunded"
      */
+    private DisputeResolvedReason resolvedReason;
 
-    @SerializedName("entity_id")
+    /**
+     * Whether the dispute is eligible for Visa Compelling Evidence 3.0.
+     * [Optional]
+     */
+    private Boolean isCeCandidate;
+
+    // Not available on Previous API
+
+    /**
+     * The client entity linked to this dispute.
+     * [Optional]
+     */
     private String entityId;
 
-    @SerializedName("sub_entity_id")
+    /**
+     * The sub-entity linked to this dispute.
+     * [Optional]
+     */
     private String subEntityId;
 
-    @SerializedName("payment_mcc")
+    /**
+     * The processing channel linked to this dispute.
+     * [Optional]
+     */
+    private String processingChannel;
+
+    /**
+     * The business segment identifier.
+     * [Optional]
+     */
+    private String segmentId;
+
+    /**
+     * The merchant category code for the payment.
+     * [Optional]
+     */
     private String paymentMcc;
 
 }

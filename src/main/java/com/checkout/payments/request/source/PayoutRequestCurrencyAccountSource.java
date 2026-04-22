@@ -12,6 +12,10 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class PayoutRequestCurrencyAccountSource extends PayoutRequestSource {
 
+    /**
+     * The currency account identifier.
+     * [Required]
+     */
     private String id;
 
     @Builder

@@ -161,7 +161,8 @@ public final class GsonSerializer implements Serializer {
             // Payments - source
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.payments.response.source.ResponseSource.class, CheckoutUtils.TYPE, true, com.checkout.payments.response.source.AlternativePaymentSourceResponse.class)
                     .registerSubtype(com.checkout.payments.response.source.CardResponseSource.class, identifier(PaymentSourceType.CARD))
-                    .registerSubtype(com.checkout.payments.response.source.CurrencyAccountResponseSource.class, identifier(PaymentSourceType.CURRENCY_ACCOUNT)))
+                    .registerSubtype(com.checkout.payments.response.source.CurrencyAccountResponseSource.class, identifier(PaymentSourceType.CURRENCY_ACCOUNT))
+                    .registerSubtype(com.checkout.payments.response.source.PayPalResponseSource.class, identifier(PaymentSourceType.PAYPAL)))
             // Payment Contexts
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.payments.response.source.contexts.ResponseSource.class, CheckoutUtils.TYPE, true, com.checkout.payments.response.source.contexts.AlternativePaymentSourceResponse.class)
                     .registerSubtype(com.checkout.payments.response.source.contexts.PaymentContextsPayPalResponseSource.class, identifier(PaymentSourceType.PAYPAL))
@@ -187,7 +188,9 @@ public final class GsonSerializer implements Serializer {
                     .registerSubtype(com.checkout.instruments.get.GetSepaInstrumentResponse.class, identifier(InstrumentType.SEPA)))
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.instruments.update.UpdateInstrumentResponse.class, CheckoutUtils.TYPE)
                     .registerSubtype(com.checkout.instruments.update.UpdateInstrumentBankAccountResponse.class, identifier(InstrumentType.BANK_ACCOUNT))
-                    .registerSubtype(com.checkout.instruments.update.UpdateInstrumentCardResponse.class, identifier(InstrumentType.CARD)))
+                    .registerSubtype(com.checkout.instruments.update.UpdateInstrumentCardResponse.class, identifier(InstrumentType.CARD))
+                    .registerSubtype(com.checkout.instruments.update.UpdateInstrumentSepaResponse.class, identifier(InstrumentType.SEPA))
+                    .registerSubtype(com.checkout.instruments.update.UpdateInstrumentAchResponse.class, identifier(InstrumentType.ACH)))
             // Workflows CS2
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.workflows.actions.response.WorkflowActionResponse.class, CheckoutUtils.TYPE)
                     .registerSubtype(com.checkout.workflows.actions.response.WebhookWorkflowActionResponse.class, identifier(WorkflowActionType.WEBHOOK)))

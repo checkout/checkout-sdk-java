@@ -11,6 +11,10 @@ import lombok.*;
 @ToString(callSuper = true)
 public final class RequestIllicadoSource extends AbstractRequestSource {
 
+    /**
+     * The customer's billing address.
+     * [Optional]
+     */
     private Address billingAddress;
 
     @Builder

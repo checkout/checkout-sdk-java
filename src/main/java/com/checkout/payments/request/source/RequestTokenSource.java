@@ -4,7 +4,6 @@ import com.checkout.common.AccountHolder;
 import com.checkout.common.Address;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,19 +16,40 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestTokenSource extends AbstractRequestSource {
 
+    /**
+     * The Checkout.com token value.
+     * [Optional]
+     */
     private String token;
 
-    @SerializedName("billing_address")
+    /**
+     * The payment source owner's billing address.
+     * [Optional]
+     */
     private Address billingAddress;
 
+    /**
+     * The payment source owner's phone number.
+     * [Optional]
+     */
     private Phone phone;
 
+    /**
+     * Set to true for payments that use stored card details. Write-only.
+     * [Optional]
+     */
     private Boolean stored;
 
-    @SerializedName("store_for_future_use")
+    /**
+     * Set to true if you intend to reuse the payment credentials in subsequent payments. Write-only.
+     * [Optional]
+     */
     private Boolean storeForFutureUse;
 
-    @SerializedName("account_holder")
+    /**
+     * The card account holder's details.
+     * [Optional]
+     */
     private AccountHolder accountHolder;
 
     @Builder

@@ -4,7 +4,6 @@ import com.checkout.common.AccountHolder;
 import com.checkout.common.Address;
 import com.checkout.common.Phone;
 import com.checkout.payments.NetworkTokenType;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -19,36 +18,82 @@ import static com.checkout.common.PaymentSourceType.NETWORK_TOKEN;
 @ToString(callSuper = true)
 public final class RequestNetworkTokenSource extends AbstractRequestSource {
 
+    /**
+     * The network token value.
+     * [Optional]
+     */
     private String token;
 
-    @SerializedName("expiry_month")
+    /**
+     * The expiry month of the token.
+     * [Optional]
+     */
     private Integer expiryMonth;
 
-    @SerializedName("expiry_year")
+    /**
+     * The expiry year of the token.
+     * [Optional]
+     */
     private Integer expiryYear;
 
-    @SerializedName("token_type")
+    /**
+     * The network token type.
+     * [Optional]
+     */
     private NetworkTokenType tokenType;
 
+    /**
+     * The cryptogram for the network token (device pan). Required for Visa and Mastercard DPAN payments.
+     * [Optional]
+     */
     private String cryptogram;
 
+    /**
+     * The Electronic Commerce Indicator (ECI) security level.
+     * [Optional]
+     */
     private String eci;
 
+    /**
+     * Set to true for payments that use stored card details. Write-only.
+     * [Optional]
+     */
     private Boolean stored;
 
-    @SerializedName("store_for_future_use")
+    /**
+     * Set to true if you intend to reuse the payment credentials in subsequent payments. Write-only.
+     * [Optional]
+     */
     private Boolean storeForFutureUse;
 
+    /**
+     * The cardholder's name. Write-only.
+     * [Optional]
+     */
     private String name;
 
+    /**
+     * The card verification value/code. 3 digits, except for American Express (4 digits). Write-only.
+     * [Optional]
+     */
     private String cvv;
 
-    @SerializedName("billing_address")
+    /**
+     * The payment source owner's billing address.
+     * [Optional]
+     */
     private Address billingAddress;
 
+    /**
+     * The payment source owner's phone number.
+     * [Optional]
+     */
     private Phone phone;
 
-    @SerializedName("account_holder")
+    /**
+     * The card account holder's details.
+     * [Optional]
+     */
     private AccountHolder accountHolder;
 
     @Builder

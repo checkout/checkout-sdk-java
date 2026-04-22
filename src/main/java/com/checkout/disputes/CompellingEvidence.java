@@ -1,37 +1,75 @@
 package com.checkout.disputes;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.time.Instant;
 import java.util.List;
 
 public final class CompellingEvidence {
 
-    @SerializedName("merchandise_or_service")
+    /**
+     * Whether the evidence concerns merchandise or services.
+     * [Required]
+     * Enum: "Merchandise" "Services"
+     */
     private String merchandiseOrService;
 
-    @SerializedName("merchandise_or_service_desc")
+    /**
+     * A description of the merchandise or service provided.
+     * [Required]
+     * min 1 character, max 5000 characters
+     */
     private String merchandiseOrServiceDesc;
 
-    @SerializedName("merchandise_or_service_provided_date")
+    /**
+     * The date the merchandise or service was provided to the customer.
+     * [Required]
+     * Format: date-time (RFC 3339)
+     */
     private Instant merchandiseOrServiceProvidedDate;
 
-    @SerializedName("shipping_delivery_status")
+    /**
+     * The shipping or delivery status of the merchandise.
+     * [Optional]
+     */
     private ShippingDeliveryStatusType shippingDeliveryStatus;
 
-    @SerializedName("tracking_information")
+    /**
+     * The tracking number for the shipment.
+     * [Optional]
+     * max 50 characters
+     */
     private TrackingInformationType trackingInformation;
 
-    @SerializedName("user_id")
+    /**
+     * The customer's account or login identifier.
+     * [Optional]
+     * max 50 characters
+     */
     private String userId;
 
-    @SerializedName("ip_address")
+    /**
+     * The IP address used for the transaction (IPv4 or IPv6).
+     * [Optional]
+     */
     private String ipAddress;
 
-    @SerializedName("shipping_address")
+    /**
+     * The device identifier used for the transaction.
+     * [Optional]
+     * min 15 characters, max 64 characters
+     */
+    private String deviceId;
+
+    /**
+     * The shipping address used for the transaction.
+     * [Optional]
+     */
     private ShippingAddress shippingAddress;
 
-    @SerializedName("historical_transactions")
+    /**
+     * Prior undisputed transactions between the merchant and the same customer.
+     * At least 2 items required.
+     * [Required]
+     */
     private List<HistoricalTransactions> historicalTransactions;
 
 }

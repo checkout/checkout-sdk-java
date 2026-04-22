@@ -15,6 +15,10 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestPayPalSource extends AbstractRequestSource {
 
+    /**
+     * The billing plan details for recurring PayPal payments.
+     * [Optional]
+     */
     private BillingPlan plan;
 
     @Builder

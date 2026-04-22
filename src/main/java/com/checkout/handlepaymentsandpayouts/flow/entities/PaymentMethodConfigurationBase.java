@@ -16,11 +16,13 @@ public abstract class PaymentMethodConfigurationBase {
 
     /**
      * Specifies whether you intend to store the cardholder's payment details. Default: "disabled"
+     * [Optional]
      */
     private StorePaymentDetailsType storePaymentDetails = StorePaymentDetailsType.DISABLED;
 
     /**
      * The account holder's details.
+     * [Optional]
      */
     private AccountHolder accountHolder;
 }

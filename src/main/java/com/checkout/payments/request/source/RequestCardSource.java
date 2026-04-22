@@ -4,7 +4,6 @@ import com.checkout.common.AccountHolder;
 import com.checkout.common.Address;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,29 +16,64 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestCardSource extends AbstractRequestSource {
 
+    /**
+     * The card number (without separators). Write-only.
+     * [Optional]
+     */
     private String number;
 
-    @SerializedName("expiry_month")
+    /**
+     * The expiry month of the card.
+     * [Optional]
+     */
     private Integer expiryMonth;
 
-    @SerializedName("expiry_year")
+    /**
+     * The expiry year of the card.
+     * [Optional]
+     */
     private Integer expiryYear;
 
+    /**
+     * The cardholder's name. Write-only.
+     * [Optional]
+     */
     private String name;
 
+    /**
+     * The card verification value/code. 3 digits, except for American Express (4 digits). Write-only.
+     * [Optional]
+     */
     private String cvv;
 
+    /**
+     * Set to true for payments that use stored card details. Write-only.
+     * [Optional]
+     */
     private Boolean stored;
 
-    @SerializedName("store_for_future_use")
+    /**
+     * Set to true if you intend to reuse the payment credentials in subsequent payments. Write-only.
+     * [Optional]
+     */
     private Boolean storeForFutureUse;
 
-    @SerializedName("billing_address")
+    /**
+     * The payment source owner's billing address.
+     * [Optional]
+     */
     private Address billingAddress;
 
+    /**
+     * The payment source owner's phone number.
+     * [Optional]
+     */
     private Phone phone;
 
-    @SerializedName("account_holder")
+    /**
+     * The card account holder's details.
+     * [Optional]
+     */
     private AccountHolder accountHolder;
 
     @Builder

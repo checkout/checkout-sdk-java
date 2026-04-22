@@ -2,7 +2,6 @@ package com.checkout.payments.request.source.apm;
 
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,13 +14,29 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestQPaySource extends AbstractRequestSource {
 
+    /**
+     * The number of items in the order.
+     * [Optional]
+     */
     private Integer quantity;
 
+    /**
+     * A description of the payment.
+     * [Optional]
+     * max 255
+     */
     private String description;
 
+    /**
+     * The language to display the payment page in.
+     * [Optional]
+     */
     private String language;
 
-    @SerializedName("national_id")
+    /**
+     * The customer's national ID.
+     * [Optional]
+     */
     private String nationalId;
 
     @Builder

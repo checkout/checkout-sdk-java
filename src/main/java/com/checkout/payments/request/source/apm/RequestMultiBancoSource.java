@@ -3,7 +3,6 @@ package com.checkout.payments.request.source.apm;
 import com.checkout.common.CountryCode;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,13 +15,23 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestMultiBancoSource extends AbstractRequestSource {
 
-    @SerializedName("payment_country")
+    /**
+     * The two-letter ISO country code of the payment.
+     * [Optional]
+     */
     private CountryCode paymentCountry;
 
-    @SerializedName("account_holder_name")
+    /**
+     * The account holder's name.
+     * [Optional]
+     * min 3 max 100
+     */
     private String accountHolderName;
 
-    @SerializedName("billing_descriptor")
+    /**
+     * A description of the purchase shown on the customer's statement.
+     * [Optional]
+     */
     private String billingDescriptor;
 
     @Builder

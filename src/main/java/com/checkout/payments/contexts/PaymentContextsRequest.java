@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @ToString(callSuper = true)
@@ -18,6 +19,10 @@ import java.util.List;
 @NoArgsConstructor
 public final class PaymentContextsRequest extends PaymentContexts {
 
+    /**
+     * The source of the payment. Discriminated by type: klarna, paypal, stcpay, tabby.
+     * [Required]
+     */
     private AbstractRequestSource source;
 
     @Builder
@@ -36,10 +41,11 @@ public final class PaymentContextsRequest extends PaymentContexts {
             final String failureUrl,
             final List<PaymentContextsItems> items,
             final String authorizationType,
-            final PaymentContextsCustomerRequest customer
+            final PaymentContextsCustomerRequest customer,
+            final Map<String, Object> metadata
     ) {
         super(amount, currency, paymentType, authorizationType, capture, customer, shipping, processing,
-                processingChannelId, reference, description, successUrl, failureUrl, items);
+                processingChannelId, reference, description, successUrl, failureUrl, items, metadata);
         this.source = source;
     }
 }

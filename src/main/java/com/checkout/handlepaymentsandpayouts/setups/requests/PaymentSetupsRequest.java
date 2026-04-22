@@ -2,12 +2,12 @@ package com.checkout.handlepaymentsandpayouts.setups.requests;
 
 import com.checkout.common.Currency;
 import com.checkout.payments.PaymentType;
+import com.checkout.handlepaymentsandpayouts.setups.entities.billing.PaymentSetupBilling;
 import com.checkout.handlepaymentsandpayouts.setups.entities.customer.Customer;
 import com.checkout.handlepaymentsandpayouts.setups.entities.industry.Industry;
 import com.checkout.handlepaymentsandpayouts.setups.entities.order.Order;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
 import com.checkout.handlepaymentsandpayouts.setups.entities.settings.Settings;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,10 +23,10 @@ import lombok.NoArgsConstructor;
 public final class PaymentSetupsRequest {
 
     /**
-     * The processing channel to be used for the payment setup
+     * The processing channel to be used for the payment setup.
      * [Required]
+     * Pattern: ^(pc)_(\w{26})$
      */
-    @SerializedName("processing_channel_id")
     private String processingChannelId;
 
     /**
@@ -42,10 +42,10 @@ public final class PaymentSetupsRequest {
     private Currency currency;
 
     /**
-     * The type of payment.
-     //// You must provide this field for card payments in which the cardholder is not present. For example, if the transaction is a recurring payment, or a mail order/telephone order (MOTO) payment.
-     * Enum: "Regular" "Recurring" "MOTO" "Installment" "Unscheduled"
+     * The type of payment. Required for card payments where the cardholder is not present,
+     * such as recurring or MOTO payments.
      * [Optional]
+     * Enum: "Regular" "Recurring" "MOTO" "Installment" "PayLater" "Unscheduled"
      */
     @Builder.Default
     private PaymentType paymentType = PaymentType.REGULAR;
@@ -66,7 +66,6 @@ public final class PaymentSetupsRequest {
      * The payment methods that are enabled on your account and available for use
      * [Optional]
      */
-    @SerializedName("payment_methods")
     private PaymentMethods paymentMethods;
 
     /**
@@ -92,4 +91,10 @@ public final class PaymentSetupsRequest {
      * [Optional]
      */
     private Industry industry;
+
+    /**
+     * The billing details for the payment.
+     * [Optional]
+     */
+    private PaymentSetupBilling billing;
 }

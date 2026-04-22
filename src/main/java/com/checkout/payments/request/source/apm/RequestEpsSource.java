@@ -3,7 +3,6 @@ package com.checkout.payments.request.source.apm;
 import com.checkout.common.AccountHolder;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,9 +15,16 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestEpsSource extends AbstractRequestSource {
 
+    /**
+     * The purpose of the payment.
+     * [Optional]
+     */
     private String purpose;
 
-    @SerializedName("account_holder")
+    /**
+     * The account holder's details.
+     * [Optional]
+     */
     private AccountHolder accountHolder;
 
     @Builder

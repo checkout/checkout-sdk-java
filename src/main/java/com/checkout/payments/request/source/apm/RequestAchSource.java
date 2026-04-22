@@ -5,7 +5,6 @@ import com.checkout.common.AccountType;
 import com.checkout.common.CountryCode;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,19 +17,39 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestAchSource extends AbstractRequestSource {
 
-    @SerializedName("account_type")
+    /**
+     * The type of Direct Debit account.
+     * [Required]
+     * Enum: "savings" "checking" "cash"
+     */
     private AccountType accountType;
 
-    @SerializedName("country")
+    /**
+     * The source country as an ISO 3166-1 alpha-2 code.
+     * [Required]
+     * min 2 characters, max 2 characters
+     */
     private CountryCode country;
 
-    @SerializedName("account_number")
+    /**
+     * The account number of the Direct Debit account.
+     * [Required]
+     * min 4 characters, max 17 characters
+     */
     private String accountNumber;
 
-    @SerializedName("bank_code")
+    /**
+     * The bank code (ABA routing number) of the Direct Debit account.
+     * [Required]
+     * min 8 characters, max 9 characters
+     */
     private String bankCode;
 
-    @SerializedName("account_holder")
+    /**
+     * The account holder's personal information.
+     * Supports date_of_birth and identification (SSN) fields.
+     * [Required]
+     */
     private AccountHolder accountHolder;
 
     @Builder

@@ -4,7 +4,6 @@ import com.checkout.common.AccountHolder;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,13 +16,22 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestSwishSource extends AbstractRequestSource {
 
-    @SerializedName("payment_country")
+    /**
+     * The two-letter ISO country code of the payment.
+     * [Optional]
+     */
     private String paymentCountry;
 
-    @SerializedName("account_holder")
+    /**
+     * The account holder's details.
+     * [Optional]
+     */
     private AccountHolder accountHolder;
 
-    @SerializedName("billing_descriptor")
+    /**
+     * A description of the purchase shown on the customer's statement.
+     * [Optional]
+     */
     private BillingDescriptor billingDescriptor;
 
     @Builder

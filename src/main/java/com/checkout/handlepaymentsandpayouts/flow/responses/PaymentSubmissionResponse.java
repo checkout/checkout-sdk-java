@@ -17,16 +17,19 @@ public abstract class PaymentSubmissionResponse extends Resource {
 
     /**
      * The payment identifier.
+     * [Optional]
      */
     private String id;
 
     /**
      * The payment's status - used for polymorphic deserialization.
+     * [Optional]
      */
     private PaymentSessionStatus status;
 
     /**
      * The payment method name.
+     * [Optional]
      */
     private PaymentMethodType type;
 }

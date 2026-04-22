@@ -29,127 +29,144 @@ import java.time.Instant;
 public final class PaymentSetupsConfirmResponse extends Resource {
 
     /**
-     * The payment's unique identifier
+     * The payment's unique identifier.
+     * [Optional]
      */
     private String id;
 
     /**
-     * The unique identifier for the action performed against this payment
+     * The unique identifier for the action performed against this payment.
+     * [Optional]
      */
-    @SerializedName("action_id")
     private String actionId;
 
     /**
-     * The payment amount
+     * The payment amount.
+     * [Optional]
      */
     private Long amount;
 
     /**
-     * The three-letter ISO currency code of the payment
+     * The three-letter ISO currency code of the payment.
+     * [Optional]
      */
     private Currency currency;
 
     /**
-     * Whether or not the authorization or capture was successful
+     * Whether or not the authorization or capture was successful.
+     * [Optional]
      */
     private Boolean approved;
 
     /**
-     * The status of the payment
+     * The status of the payment.
+     * [Optional]
      */
     private PaymentStatus status;
 
     /**
-     * The Gateway response code
+     * The Gateway response code.
+     * [Optional]
      */
-    @SerializedName("response_code")
     private String responseCode;
 
     /**
-     * The date and time at which the payment was processed
+     * The date and time at which the payment was processed.
+     * [Optional]
+     * Format: date-time (ISO 8601)
      */
-    @SerializedName("processed_on")
     private Instant processedOn;
 
     /**
-     * The full amount from the original authorization, if a partial authorization was requested and approved
+     * The full amount from the original authorization, if a partial authorization was requested and approved.
+     * [Optional]
      */
-    @SerializedName("amount_requested")
     private Long amountRequested;
 
     /**
-     * The acquirer authorization code if the payment was authorized
+     * The acquirer authorization code if the payment was authorized.
+     * [Optional]
      */
-    @SerializedName("auth_code")
     private String authCode;
 
     /**
-     * The Gateway response summary
+     * The Gateway response summary.
+     * [Optional]
      */
-    @SerializedName("response_summary")
     private String responseSummary;
 
     /**
-     * The timestamp (ISO 8601 code) for when the authorization's validity period expires
+     * The timestamp for when the authorization's validity period expires.
+     * [Optional]
+     * Format: date-time (ISO 8601)
      */
-    @SerializedName("expires_on")
     private String expiresOn;
 
     /**
-     * Provides 3D Secure enrollment status if the payment was downgraded to non-3D Secure
+     * Provides 3D Secure enrollment status if the payment was downgraded to non-3D Secure.
+     * [Optional]
      */
     @SerializedName("3ds")
     private Threeds threeDSecure;
 
     /**
-     * Returns the payment's risk assessment results
+     * Returns the payment's risk assessment results.
+     * [Optional]
      */
     private Risk risk;
 
     /**
-     * The source of the payment
+     * The source of the payment.
+     * [Optional]
      */
     private PaymentSetupSource source;
 
     /**
-     * The customer associated with the payment, if provided in the request
+     * The customer associated with the payment, if provided in the request.
+     * [Optional]
      */
     private Customer customer;
 
     /**
-     * The payment balances
+     * The payment balances.
+     * [Optional]
      */
     private Balances balances;
 
     /**
-     * Your reference for the payment
+     * Your reference for the payment.
+     * [Optional]
      */
     private String reference;
 
     /**
-     * The The details of the subscription
+     * The details of the subscription.
+     * [Optional]
      */
     private Subscription subscription;
 
     /**
-     * Returns information related to the processing of the payment
+     * Returns information related to the processing of the payment.
+     * [Optional]
      */
     private Processing processing;
 
     /**
-     *  The final Electronic Commerce Indicator (ECI) security level used to authorize the payment. 
-     *  Applicable for 3D Secure and network token payments
+     * The final Electronic Commerce Indicator (ECI) security level used to authorize the payment.
+     * Applicable for 3D Secure and network token payments.
+     * [Optional]
      */
     private String eci;
 
     /**
-     * The scheme transaction identifier
+     * The scheme transaction identifier.
+     * [Optional]
      */
-    @SerializedName("scheme_id")
     private String schemeId;
 
     /**
-     * The retry information
+     * The retry information.
+     * [Optional]
      */
     private Retry retry;
 }

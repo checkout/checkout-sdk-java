@@ -2,7 +2,7 @@ package com.checkout.payments.contexts;
 
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
-import com.google.gson.annotations.SerializedName;
+import com.checkout.common.Phone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +27,6 @@ public final class PaymentContextsAccommodationData {
      * The booking reference.
      * [Optional]
      */
-    @SerializedName("booking_reference")
     private String bookingReference;
 
     /**
@@ -35,7 +34,6 @@ public final class PaymentContextsAccommodationData {
      * [Optional]
      * Format: yyyy-MM-dd
      */
-    @SerializedName("check_in_date")
     private LocalDate checkInDate;
 
     /**
@@ -43,7 +41,6 @@ public final class PaymentContextsAccommodationData {
      * [Optional]
      * Format: yyyy-MM-dd
      */
-    @SerializedName("check_out_date")
     private LocalDate checkOutDate;
 
     /**
@@ -74,20 +71,29 @@ public final class PaymentContextsAccommodationData {
      * The number of rooms booked.
      * [Optional]
      */
-    @SerializedName("number_of_rooms")
     private Integer numberOfRooms;
 
     /**
      * Information about the guests staying at the accommodation.
      * [Optional]
      */
-    @SerializedName("guests")
     private List<PaymentContextsGuests> guests;
 
     /**
      * Information about the rooms booked by the customer.
      * [Optional]
      */
-    @SerializedName("room")
     private List<PaymentContextsAccommodationRoom> room;
+
+    /**
+     * The property's phone information.
+     * [Optional]
+     */
+    private List<Phone> propertyPhone;
+
+    /**
+     * The customer service phone information.
+     * [Optional]
+     */
+    private List<Phone> customerServicePhone;
 }

@@ -9,19 +9,44 @@ import lombok.Data;
 @Builder
 public final class PaymentRecipient {
 
+    /**
+     * The recipient's date of birth.
+     * [Optional]
+     * Format: yyyy-MM-dd
+     */
     @SerializedName("dob")
     private String dateOfBirth;
 
-    @SerializedName("account_number")
+    /**
+     * Any identifier related to the primary recipient's account, such as part of the PAN,
+     * an IBAN, an internal account number, or a phone number.
+     * [Optional]
+     */
     private String accountNumber;
 
+    /**
+     * The recipient's address.
+     * [Optional]
+     */
     private Address address;
 
+    /**
+     * The first part of the UK postcode (e.g., SW1A 1AA would be SW1A). Replaced by address.zip.
+     * [Optional]
+     * @deprecated Use {@code address.zip} instead.
+     */
+    @Deprecated
     private String zip;
 
-    @SerializedName("first_name")
+    /**
+     * The recipient's first name.
+     * [Optional]
+     */
     private String firstName;
 
-    @SerializedName("last_name")
+    /**
+     * The recipient's last name.
+     * [Optional]
+     */
     private String lastName;
 }

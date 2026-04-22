@@ -15,17 +15,20 @@ import lombok.NoArgsConstructor;
 public final class PaymentAction {
 
     /**
-     * The type of action required
+     * The type of action required.
+     * [Optional]
      */
     private String type;
 
     /**
-     * A URL the customer should be redirected to for further action (if type requires redirect)
+     * A URL the customer should be redirected to for further action (if type requires redirect).
+     * [Optional]
      */
     private String url;
 
     /**
-     * Additional data needed for the action
+     * Additional data needed for the action.
+     * [Optional]
      */
     private Object data;
 }

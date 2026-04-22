@@ -1,9 +1,15 @@
 package com.checkout.payments.request.source.apm;
 
-import com.checkout.common.*;
+import com.checkout.common.AccountHolder;
+import com.checkout.common.CountryCode;
+import com.checkout.common.Currency;
+import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
@@ -11,23 +17,53 @@ import lombok.*;
 @ToString(callSuper = true)
 public final class RequestSepaSource extends AbstractRequestSource {
 
+    /**
+     * The account's country, as an ISO 3166-1 alpha-2 code.
+     * [Required]
+     */
     private CountryCode country;
 
-    @SerializedName("account_number")
+    /**
+     * The account holder's IBAN.
+     * [Required]
+     */
     private String accountNumber;
 
-    @SerializedName("bank_code")
+    /**
+     * The BIC/SWIFT code of the bank.
+     * [Optional]
+     */
     private String bankCode;
 
+    /**
+     * The account holder's account currency.
+     * [Required]
+     */
     private Currency currency;
 
-    @SerializedName("mandate_id")
+    /**
+     * The ID of the mandate.
+     * [Optional]
+     */
     private String mandateId;
 
-    @SerializedName("date_of_signature")
+    /**
+     * The type of mandate.
+     * [Optional]
+     * Enum: "Core" "B2B"
+     */
+    private MandateType mandateType;
+
+    /**
+     * The date the mandate was signed, in the format yyyy-MM-dd.
+     * [Optional]
+     */
     private String dateOfSignature;
 
-    @SerializedName("account_holder")
+    /**
+     * The account holder's personal information.
+     * [Required]
+     */
     private AccountHolder accountHolder;
 
     @Builder
@@ -37,6 +73,7 @@ public final class RequestSepaSource extends AbstractRequestSource {
             final String bankCode,
             final Currency currency,
             final String mandateId,
+            final MandateType mandateType,
             final String dateOfSignature,
             final AccountHolder accountHolder
     ) {
@@ -46,6 +83,7 @@ public final class RequestSepaSource extends AbstractRequestSource {
         this.bankCode = bankCode;
         this.currency = currency;
         this.mandateId = mandateId;
+        this.mandateType = mandateType;
         this.dateOfSignature = dateOfSignature;
         this.accountHolder = accountHolder;
     }

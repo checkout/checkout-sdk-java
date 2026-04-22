@@ -3,20 +3,26 @@ package com.checkout.payments.request.source.apm;
 import com.checkout.common.Address;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * @deprecated Trustly was removed as a payment method on 2024/09/17.
+ */
+@Deprecated
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class RequestTrustlySource extends AbstractRequestSource {
 
-    @SerializedName("billing_address")
+    /**
+     * The billing address for the Trustly payment.
+     * [Optional]
+     */
     private Address billingAddress;
 
     @Builder
@@ -25,6 +31,7 @@ public final class RequestTrustlySource extends AbstractRequestSource {
         this.billingAddress = billingAddress;
     }
 
+    @Deprecated
     public RequestTrustlySource() {
         super(PaymentSourceType.TRUSTLY);
     }

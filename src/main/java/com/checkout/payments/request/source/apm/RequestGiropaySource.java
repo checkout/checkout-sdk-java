@@ -3,7 +3,6 @@ package com.checkout.payments.request.source.apm;
 import com.checkout.common.AccountHolder;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,19 +21,25 @@ import java.util.List;
 public final class RequestGiropaySource extends AbstractRequestSource {
 
     /**
+     * The purpose of the payment.
+     * [Optional]
      * @deprecated GiroPay doesn't support this field anymore, will be removed in the future
      */
     @Deprecated
     private String purpose;
 
     /**
+     * Additional information fields for the payment.
+     * [Optional]
      * @deprecated GiroPay doesn't support this field anymore, will be removed in the future
      */
     @Deprecated
-    @SerializedName("info_fields")
     private List<InfoFields> infoFields;
 
-    @SerializedName("account_holder")
+    /**
+     * The account holder's details.
+     * [Optional]
+     */
     private AccountHolder accountHolder;
 
     @Builder
@@ -56,7 +61,17 @@ public final class RequestGiropaySource extends AbstractRequestSource {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class InfoFields {
+
+        /**
+         * The label for the information field.
+         * [Optional]
+         */
         private String label;
+
+        /**
+         * The text content of the information field.
+         * [Optional]
+         */
         private String text;
     }
 

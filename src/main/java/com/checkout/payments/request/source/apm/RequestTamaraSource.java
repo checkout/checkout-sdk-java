@@ -3,7 +3,6 @@ package com.checkout.payments.request.source.apm;
 import com.checkout.common.Address;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +18,10 @@ public final class RequestTamaraSource extends AbstractRequestSource {
         super(PaymentSourceType.TAMARA);
     }
 
-    @SerializedName("billing_address")
+    /**
+     * The customer's billing address.
+     * [Optional]
+     */
     private Address billingAddress;
 
 }

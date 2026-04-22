@@ -1,6 +1,5 @@
 package com.checkout.payments.request;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,12 +11,38 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class PaymentRetryRequest {
 
+    /**
+     * Configuration of asynchronous Dunning retries.
+     * [Optional]
+     */
+    private DunningRetryRequest dunning;
+
+    /**
+     * Configuration of asynchronous Downtime retries.
+     * [Optional]
+     */
+    private DowntimeRetryRequest downtime;
+
+    // ========================================
+    // Deprecated — use dunning.enabled instead
+    // ========================================
+
+    /**
+     * @deprecated Use {@link DunningRetryRequest#enabled} via {@link #dunning} instead.
+     */
+    @Deprecated
     private Boolean enabled;
 
-    @SerializedName("max_attempts")
+    /**
+     * @deprecated Use {@link DunningRetryRequest#maxAttempts} via {@link #dunning} instead.
+     */
+    @Deprecated
     private Integer maxAttempts;
 
-    @SerializedName("end_after_days")
+    /**
+     * @deprecated Use {@link DunningRetryRequest#endAfterDays} via {@link #dunning} instead.
+     */
+    @Deprecated
     private Integer endAfterDays;
 
 }
