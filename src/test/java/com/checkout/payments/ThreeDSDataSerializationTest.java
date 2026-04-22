@@ -3,6 +3,7 @@ package com.checkout.payments;
 import com.checkout.GsonSerializer;
 import com.checkout.common.ThreeDSEnrollmentStatus;
 import org.junit.jupiter.api.Test;
+import static com.checkout.payments.TrustedListingStatus.ALLOWLISTED;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -67,7 +68,7 @@ class ThreeDSDataSerializationTest {
 
         assertNotNull(data);
         assertNotNull(data.getTrustedListing());
-        assertEquals("Y", data.getTrustedListing().getStatus());
+        assertEquals(ALLOWLISTED, data.getTrustedListing().getStatus());
         assertEquals("01", data.getTrustedListing().getSource());
     }
 
@@ -108,7 +109,7 @@ class ThreeDSDataSerializationTest {
         assertEquals("05", data.getEci());
         assertEquals("01", data.getAuthenticationStatusReason());
         assertNotNull(data.getTrustedListing());
-        assertEquals("Y", data.getTrustedListing().getStatus());
+        assertEquals(ALLOWLISTED, data.getTrustedListing().getStatus());
     }
 
     @Test
