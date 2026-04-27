@@ -30,6 +30,8 @@ public enum PaymentMethodType {
     BENEFIT,
     @SerializedName("bizum")
     BIZUM,
+    @SerializedName("blik")
+    BLIK,
     @SerializedName("boost")
     BOOST,
     @SerializedName("bpi")
@@ -134,8 +136,6 @@ public enum PaymentMethodType {
     VISA,
     @SerializedName("wechatpay")
     WECHATPAY,
-    @SerializedName("blik")
-    BLIK,
 
     // Payment method categories
     @SerializedName("card_scheme")
