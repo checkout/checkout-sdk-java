@@ -110,6 +110,64 @@ class PaymentSessionSerializationTest {
     }
 
     @Test
+    void shouldSerializePaymentSessionCreateRequestWithBlikPaymentMethod() {
+        Customer customer = Customer.builder()
+                .email("blik@example.com")
+                .name("BLIK Customer")
+                .id("cust_blik_123")
+                .build();
+
+        PaymentSessionCreateRequest request = PaymentSessionCreateRequest.builder()
+                .amount(2000L)
+                .currency(Currency.EUR)
+                .reference("blik-ref-456")
+                .paymentType(PaymentType.REGULAR)
+                .description("Test BLIK payment")
+                .customer(customer)
+                .locale(LocaleType.EN_GB)
+                .enabledPaymentMethods(Collections.singletonList(PaymentMethodType.BLIK))
+                .capture(true)
+                .build();
+
+        assertDoesNotThrow(() -> {
+            String json = serializer.toJson(request);
+            assertNotNull(json);
+            assertTrue(json.contains("\"blik\""), "Should contain serialized BLIK payment method");
+            assertTrue(json.contains("blik@example.com"), "Should contain customer email");
+            assertTrue(json.contains("BLIK Customer"), "Should contain customer name");
+        }, "Should serialize PaymentSessionCreateRequest with BLIK payment method without errors");
+    }
+
+    @Test
+    void shouldDeserializePaymentSessionCreateRequestWithBlikPaymentMethod() {
+        String json = "{"
+                + "\"amount\":2000,"
+                + "\"currency\":\"EUR\","
+                + "\"reference\":\"blik-ref-456\","
+                + "\"payment_type\":\"Regular\","
+                + "\"description\":\"Test BLIK payment\","
+                + "\"customer\":{"
+                + "  \"email\":\"blik@example.com\","
+                + "  \"name\":\"BLIK Customer\","
+                + "  \"id\":\"cust_blik_123\""
+                + "},"
+                + "\"locale\":\"en-GB\","
+                + "\"enabled_payment_methods\":[\"blik\"],"
+                + "\"capture\":true"
+                + "}";
+
+        assertDoesNotThrow(() -> {
+            PaymentSessionCreateRequest request = serializer.fromJson(json, PaymentSessionCreateRequest.class);
+            assertNotNull(request);
+            assertNotNull(request.getEnabledPaymentMethods());
+            assertEquals(1, request.getEnabledPaymentMethods().size());
+            assertEquals(PaymentMethodType.BLIK, request.getEnabledPaymentMethods().get(0));
+            assertEquals("blik@example.com", request.getCustomer().getEmail());
+            assertEquals("BLIK Customer", request.getCustomer().getName());
+        }, "Should deserialize PaymentSessionCreateRequest with BLIK payment method without errors");
+    }
+
+    @Test
     void shouldRoundTripSerializePaymentSessionCreateRequestWithCustomer() {
         Customer.CustomerSummary summary = Customer.CustomerSummary.builder()
                 .registrationDate(LocalDate.of(2022, 6, 1))
