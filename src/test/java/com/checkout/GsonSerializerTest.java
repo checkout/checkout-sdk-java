@@ -1,5 +1,6 @@
 package com.checkout;
 
+import com.checkout.common.PaymentMethodType;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.financial.FinancialActionsQueryResponse;
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
@@ -200,6 +201,21 @@ class GsonSerializerTest {
         assertNotNull(productResponse);
         assertEquals("UNKNOWN_VALUE", productResponse.getTypeAsString());
         assertNull(productResponse.getTypeAsEnum());
+    }
+
+    @Test
+    void shouldSerializePaymentMethodTypeBlikCorrectly() {
+        // Test that BLIK payment method type serializes to "blik"
+        String json = serializer.toJson(PaymentMethodType.BLIK);
+        assertEquals("\"blik\"", json);
+    }
+
+    @Test
+    void shouldDeserializePaymentMethodTypeBlikCorrectly() {
+        // Test that "blik" string deserializes to PaymentMethodType.BLIK
+        String json = "\"blik\"";
+        PaymentMethodType paymentMethodType = serializer.fromJson(json, PaymentMethodType.class);
+        assertEquals(PaymentMethodType.BLIK, paymentMethodType);
     }
 
     @Test

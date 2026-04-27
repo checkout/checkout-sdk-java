@@ -174,6 +174,40 @@ class FlowTestIT extends SandboxTestFixture {
                 .build();
     }
 
+    @Test
+    void shouldCreatePaymentSessionWithBlikInDisabledMethods() {
+        // Test BLIK in disabled payment methods list
+        final PaymentSessionCreateRequest request = PaymentSessionCreateRequest.builder()
+                .amount(1000L)
+                .currency(Currency.EUR)
+                .paymentType(PaymentType.REGULAR)
+                .reference("ORD-NO-BLIK-456")
+                .description("Payment without BLIK")
+                .displayName("No BLIK Test")
+                .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
+                .successUrl("https://example.com/payments/success")
+                .failureUrl("https://example.com/payments/failure")
+                .billing(createBillingInformation())
+                .billingDescriptor(createBillingDescriptor())
+                .risk(createRiskRequest())
+                .threeDS(createThreeDSRequest())
+                .capture(true)
+                .locale(LocaleType.EN_GB)
+                .enabledPaymentMethods(Collections.singletonList(PaymentMethodType.CARD))
+                .disabledPaymentMethods(Collections.singletonList(PaymentMethodType.BLIK))
+                .paymentMethodConfiguration(createPaymentMethodConfiguration())
+                .build();
+
+        final CompletableFuture<PaymentSessionResponse> future =
+                checkoutApi.flowClient().requestPaymentSession(request);
+        final PaymentSessionResponse response = future.join();
+
+        assertNotNull(response);
+        assertNotNull(response.getId());
+        assertNotNull(response.getPaymentSessionToken());
+        assertNotNull(response.getPaymentSessionSecret());
+    }
+
     private PaymentSessionSubmitRequest createPaymentSessionSubmitRequest() {
         return PaymentSessionSubmitRequest.builder()
                 .sessionData("encrypted_session_data")
