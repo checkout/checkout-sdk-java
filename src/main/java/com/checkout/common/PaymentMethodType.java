@@ -134,7 +134,9 @@ public enum PaymentMethodType {
     VISA,
     @SerializedName("wechatpay")
     WECHATPAY,
-    
+    @SerializedName("blik")
+    BLIK,
+
     // Payment method categories
     @SerializedName("card_scheme")
     CARD_SCHEME,
