@@ -174,27 +174,6 @@ class FlowTestIT extends SandboxTestFixture {
                 .build();
     }
 
-    private PaymentSessionCreateRequest createPaymentSessionCreateRequestWithBlik() {
-        return PaymentSessionCreateRequest.builder()
-                .amount(2000L)
-                .currency(Currency.PLN)
-                .reference("ORD-BLIK-789")
-                .description("BLIK payment for mobile transaction")
-                .displayName("Company BLIK Test")
-                .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
-                .successUrl("https://example.com/payments/success")
-                .failureUrl("https://example.com/payments/failure")
-                .billing(createBillingInformation())
-                .billingDescriptor(createBillingDescriptor())
-                .risk(createRiskRequest())
-                .threeDS(createThreeDSRequest())
-                .capture(true)
-                .locale(LocaleType.EN_GB)
-                .enabledPaymentMethods(Collections.singletonList(PaymentMethodType.BLIK))
-                .paymentMethodConfiguration(createPaymentMethodConfiguration())
-                .build();
-    }
-
     @Test
     void shouldCreatePaymentSessionWithBlikInDisabledMethods() {
         // Test BLIK in disabled payment methods list
