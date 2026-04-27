@@ -139,6 +139,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("APM is currently unavailable, temporary skipping the qpay failing test")
     void shouldMakeQPayPayment() throws ExecutionException, InterruptedException {
         final PaymentRequest paymentRequest = createQPayPaymentRequest();
         checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
@@ -351,6 +352,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    @Disabled("APM is currently unavailable, temporary skipping the qpay failing test")
     void shouldMakeQPayPaymentSync() {
         final PaymentRequest paymentRequest = createQPayPaymentRequest();
         checkErrorItemSync(() -> paymentsClient.requestPaymentSync(paymentRequest), PAYEE_NOT_ONBOARDED);
