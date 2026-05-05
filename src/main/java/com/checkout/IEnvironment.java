@@ -12,6 +12,10 @@ public interface IEnvironment {
 
     URI getBalancesApi();
 
+    URI getForwardApi();
+
+    URI getIdentityApi();
+
     URI getOAuthAuthorizationApi();
 
     boolean isSandbox();

@@ -137,12 +137,12 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.applePayClient = new ApplePayClientImpl(this.apiClient, configuration);
         this.googlePayClient = new GooglePayClientImpl(this.apiClient, configuration);
         this.complianceClient = new ComplianceClientImpl(this.apiClient, configuration);
-        this.forwardClient = new ForwardClientImpl(this.apiClient, configuration);
-        this.faceAuthenticationClient = new FaceAuthenticationClientImpl(this.apiClient, configuration);
-        this.applicantClient = new ApplicantClientImpl(this.apiClient, configuration);
-        this.identityVerificationClient = new IdentityVerificationClientImpl(this.apiClient, configuration);
-        this.idDocumentVerificationClient = new IdDocumentVerificationClientImpl(this.apiClient, configuration);
-        this.amlScreeningClient = new AmlScreeningClientImpl(this.apiClient, configuration);
+        this.forwardClient = new ForwardClientImpl(getForwardClient(configuration), configuration);
+        this.faceAuthenticationClient = new FaceAuthenticationClientImpl(getIdentityClient(configuration), configuration);
+        this.applicantClient = new ApplicantClientImpl(getIdentityClient(configuration), configuration);
+        this.identityVerificationClient = new IdentityVerificationClientImpl(getIdentityClient(configuration), configuration);
+        this.idDocumentVerificationClient = new IdDocumentVerificationClientImpl(getIdentityClient(configuration), configuration);
+        this.amlScreeningClient = new AmlScreeningClientImpl(getIdentityClient(configuration), configuration);
         this.networkTokensClient = new NetworkTokensClientImpl(this.apiClient, configuration);
         this.standaloneAccountUpdaterClient = new StandaloneAccountUpdaterClientImpl(this.apiClient, configuration);
         this.agenticCommerceClient = new AgenticCommerceClientImpl(this.apiClient, configuration);
@@ -296,6 +296,14 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         return new ApiClientImpl(configuration, new BalancesApiUriStrategy(configuration));
     }
 
+    private ApiClient getForwardClient(final CheckoutConfiguration configuration) {
+        return new ApiClientImpl(configuration, new ForwardApiUriStrategy(configuration));
+    }
+
+    private ApiClient getIdentityClient(final CheckoutConfiguration configuration) {
+        return new ApiClientImpl(configuration, new IdentityApiUriStrategy(configuration));
+    }
+
     private static class FilesApiUriStrategy implements UriStrategy {
 
         private final CheckoutConfiguration configuration;
@@ -337,6 +345,36 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         @Override
         public URI getUri() {
             return configuration.getEnvironment().getBalancesApi();
+        }
+
+    }
+
+    private static class ForwardApiUriStrategy implements UriStrategy {
+
+        private final CheckoutConfiguration configuration;
+
+        private ForwardApiUriStrategy(final CheckoutConfiguration configuration) {
+            this.configuration = configuration;
+        }
+
+        @Override
+        public URI getUri() {
+            return configuration.getEnvironment().getForwardApi();
+        }
+
+    }
+
+    private static class IdentityApiUriStrategy implements UriStrategy {
+
+        private final CheckoutConfiguration configuration;
+
+        private IdentityApiUriStrategy(final CheckoutConfiguration configuration) {
+            this.configuration = configuration;
+        }
+
+        @Override
+        public URI getUri() {
+            return configuration.getEnvironment().getIdentityApi();
         }
 
     }
