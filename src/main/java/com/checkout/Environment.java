@@ -13,12 +13,16 @@ public enum Environment implements IEnvironment {
             create("https://files.sandbox.checkout.com/"),
             create("https://transfers.sandbox.checkout.com/"),
             create("https://balances.sandbox.checkout.com/"),
+            create("https://forward.sandbox.checkout.com/"),
+            create("https://identity-verification.sandbox.checkout.com/"),
             create("https://access.sandbox.checkout.com/connect/token"),
             true),
     PRODUCTION(create("https://api.checkout.com/"),
             create("https://files.checkout.com/"),
             create("https://transfers.checkout.com/"),
             create("https://balances.checkout.com/"),
+            create("https://forward.checkout.com/"),
+            create("https://identity-verification.checkout.com/"),
             create("https://access.checkout.com/connect/token"),
             false);
 
@@ -26,6 +30,8 @@ public enum Environment implements IEnvironment {
     private final URI filesApi;
     private final URI transfersApi;
     private final URI balancesApi;
+    private final URI forwardApi;
+    private final URI identityApi;
     private final URI oAuthAuthorizationApi;
     private final boolean sandbox;
 
@@ -33,12 +39,16 @@ public enum Environment implements IEnvironment {
                 final URI filesApi,
                 final URI transfersApi,
                 final URI balancesApi,
+                final URI forwardApi,
+                final URI identityApi,
                 final URI oAuthAuthorizationApi,
                 final boolean sandbox) {
         this.checkoutApi = checkoutApi;
         this.filesApi = filesApi;
         this.transfersApi = transfersApi;
         this.balancesApi = balancesApi;
+        this.forwardApi = forwardApi;
+        this.identityApi = identityApi;
         this.oAuthAuthorizationApi = oAuthAuthorizationApi;
         this.sandbox = sandbox;
     }
