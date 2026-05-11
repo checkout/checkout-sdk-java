@@ -40,7 +40,7 @@ public final class EnvironmentSubdomain {
             throw new CheckoutException(e);
         }
         
-        Pattern pattern = Pattern.compile("^[a-z0-9]+(-[a-z0-9]+)*$");
+        Pattern pattern = Pattern.compile("^(?:pl-)?[a-z0-9]+$");
         Matcher matcher = pattern.matcher(subdomain);
         if (matcher.matches()) {
             String host = originalUrl.getHost();
