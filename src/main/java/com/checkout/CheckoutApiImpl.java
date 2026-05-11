@@ -138,11 +138,12 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.googlePayClient = new GooglePayClientImpl(this.apiClient, configuration);
         this.complianceClient = new ComplianceClientImpl(this.apiClient, configuration);
         this.forwardClient = new ForwardClientImpl(getForwardClient(configuration), configuration);
-        this.faceAuthenticationClient = new FaceAuthenticationClientImpl(getIdentityClient(configuration), configuration);
-        this.applicantClient = new ApplicantClientImpl(getIdentityClient(configuration), configuration);
-        this.identityVerificationClient = new IdentityVerificationClientImpl(getIdentityClient(configuration), configuration);
-        this.idDocumentVerificationClient = new IdDocumentVerificationClientImpl(getIdentityClient(configuration), configuration);
-        this.amlScreeningClient = new AmlScreeningClientImpl(getIdentityClient(configuration), configuration);
+        final ApiClient identityApiClient = getIdentityClient(configuration);
+        this.faceAuthenticationClient = new FaceAuthenticationClientImpl(identityApiClient, configuration);
+        this.applicantClient = new ApplicantClientImpl(identityApiClient, configuration);
+        this.identityVerificationClient = new IdentityVerificationClientImpl(identityApiClient, configuration);
+        this.idDocumentVerificationClient = new IdDocumentVerificationClientImpl(identityApiClient, configuration);
+        this.amlScreeningClient = new AmlScreeningClientImpl(identityApiClient, configuration);
         this.networkTokensClient = new NetworkTokensClientImpl(this.apiClient, configuration);
         this.standaloneAccountUpdaterClient = new StandaloneAccountUpdaterClientImpl(this.apiClient, configuration);
         this.agenticCommerceClient = new AgenticCommerceClientImpl(this.apiClient, configuration);
