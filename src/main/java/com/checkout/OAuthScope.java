@@ -58,7 +58,8 @@ public enum OAuthScope {
     VAULT_TOKENIZATION("vault:tokenization"),
     VAULT_NETWORK_TOKENS("vault:network-tokens"),
     FORWARD("forward"),
-    FORWARD_SECRETS("forward:secrets");
+    FORWARD_SECRETS("forward:secrets"),
+    IDENTITY_VERIFICATION("identity-verification");
 
     private final String scope;
 
