@@ -17,6 +17,10 @@ public final class CustomEnvironment implements IEnvironment {
 
     private URI balancesApi;
 
+    private URI forwardApi;
+
+    private URI identityApi;
+
     private URI oAuthAuthorizationApi;
 
     private boolean sandbox;
