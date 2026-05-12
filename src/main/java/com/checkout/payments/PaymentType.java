@@ -7,7 +7,7 @@ public enum PaymentType {
     @SerializedName("Installment")
     INSTALLMENT,
 
-    @SerializedName(value = "Moto", alternate = "MOTO")
+    @SerializedName(value = "MOTO", alternate = "Moto")
     MOTO,
 
     @SerializedName("PayLater")

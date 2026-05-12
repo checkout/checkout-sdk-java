@@ -26,7 +26,7 @@ public enum Exemption {
     DATA_SHARE,
     @SerializedName("other")
     OTHER,
-    @SerializedName(value = "None", alternate = {"NONE", "none"})
+    @SerializedName(value = "none", alternate = {"None", "NONE"})
     NONE,
     @SerializedName("secure_corporate_payment")
     SECURE_CORPORATE_PAYMENT,
