@@ -34,6 +34,8 @@ public enum PaymentStatus {
     REFUNDED,
     @SerializedName("Authentication Requested")
     AUTHENTICATION_REQUESTED,
+    @SerializedName("Retry Scheduled")
+    RETRY_SCHEDULED,
 
 }
 
