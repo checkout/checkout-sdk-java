@@ -11,7 +11,7 @@ public final class FileDetailsResponse extends Resource {
 
     private String id;
     private String filename;
-    private String purpose;
+    private FilePurpose purpose;
     private Integer size;
     private String uploadedOn;
 
