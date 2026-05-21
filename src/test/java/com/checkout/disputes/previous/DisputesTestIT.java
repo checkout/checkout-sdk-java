@@ -184,7 +184,7 @@ class DisputesTestIT extends SandboxTestFixture {
         final FileDetailsResponse fileDetailsResponse = blocking(() -> previousApi.disputesClient().getFileDetails(fileResponse.getId()));
         assertNotNull(fileDetailsResponse);
         assertEquals(fileRequest.getFile().getName(), fileDetailsResponse.getFilename());
-        assertEquals(fileRequest.getPurpose().getPurpose(), fileDetailsResponse.getPurpose());
+        assertEquals(fileRequest.getPurpose(), fileDetailsResponse.getPurpose());
         //Provide dispute evidence
         final DisputeEvidenceRequest evidenceRequest = DisputeEvidenceRequest.builder()
                 .proofOfDeliveryOrServiceFile(fileDetailsResponse.getId())
