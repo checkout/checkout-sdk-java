@@ -332,7 +332,7 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
     private void validateFileDetailsResponse(FileRequest fileRequest, FileDetailsResponse fileDetailsResponse) {
         assertNotNull(fileDetailsResponse);
         assertEquals(fileRequest.getFile().getName(), fileDetailsResponse.getFilename());
-        assertEquals(fileRequest.getPurpose().getPurpose(), fileDetailsResponse.getPurpose());
+        assertEquals(fileRequest.getPurpose(), fileDetailsResponse.getPurpose());
     }
 
     private void validateEvidenceResponse(DisputeEvidenceRequest evidenceRequest, DisputeEvidenceResponse evidenceResponse) {
