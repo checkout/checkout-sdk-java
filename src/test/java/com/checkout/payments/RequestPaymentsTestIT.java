@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.time.Instant;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -271,7 +270,7 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .daysBetweenPayments(1)
                 .totalNumberOfPayments(1)
                 .currentPaymentNumber(1)
-                .expiry(Instant.parse("2025-12-31T00:00:00Z"))
+                .expiry("2025-12-31T00:00:00Z")
                 .build();
     }
 
