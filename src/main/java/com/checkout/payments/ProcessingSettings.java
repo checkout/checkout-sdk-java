@@ -300,4 +300,14 @@ public final class ProcessingSettings {
      */
     private String affiliateUrl;
 
+    /**
+     * The customer's 6-digit Blik code. Required when {@code source.type} is {@code blik} and
+     * {@code merchant_initiated} is {@code false} (for example, for {@code Regular} payments and
+     * the initial payment of a {@code Recurring} agreement).
+     * [Optional]
+     * Pattern: ^\d{6}$
+     * 6 characters
+     */
+    private String partnerCode;
+
 }

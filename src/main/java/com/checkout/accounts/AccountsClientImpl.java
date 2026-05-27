@@ -34,6 +34,7 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
     private static final String PAYMENT_INSTRUMENTS_PATH = "payment-instruments";
     private static final String MEMBERS_PATH = "members";
     private static final String RESERVE_RULES_PATH = "reserve-rules";
+    private static final String REQUIREMENTS_PATH = "requirements";
 
     private final ApiClient filesClient;
 
@@ -240,6 +241,34 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
                 ReserveRulesResponse.class);
     }
 
+    @Override
+    public CompletableFuture<EntityRequirementListResponse> getEntityRequirements(final String entityId) {
+        validateEntityId(entityId);
+        return apiClient.getAsync(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, REQUIREMENTS_PATH),
+                sdkAuthorization(),
+                EntityRequirementListResponse.class);
+    }
+
+    @Override
+    public CompletableFuture<EntityRequirementDetailsResponse> getEntityRequirementDetails(final String entityId, final String requirementId) {
+        validateParams("entityId", entityId, "requirementId", requirementId);
+        return apiClient.getAsync(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, REQUIREMENTS_PATH, requirementId),
+                sdkAuthorization(),
+                EntityRequirementDetailsResponse.class);
+    }
+
+    @Override
+    public CompletableFuture<EntityRequirementUpdateResponse> resolveEntityRequirement(final String entityId, final String requirementId, final EntityRequirementUpdateRequest updateRequest) {
+        validateParams("entityId", entityId, "requirementId", requirementId, "updateRequest", updateRequest);
+        return apiClient.putAsync(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, REQUIREMENTS_PATH, requirementId),
+                sdkAuthorization(),
+                EntityRequirementUpdateResponse.class,
+                updateRequest);
+    }
+
     // Synchronous methods
     @Override
     public IdResponse submitFileSync(final AccountsFileRequest accountsFileRequest) {
@@ -432,6 +461,34 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
                 buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, RESERVE_RULES_PATH),
                 sdkAuthorization(),
                 ReserveRulesResponse.class);
+    }
+
+    @Override
+    public EntityRequirementListResponse getEntityRequirementsSync(final String entityId) {
+        validateEntityId(entityId);
+        return apiClient.get(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, REQUIREMENTS_PATH),
+                sdkAuthorization(),
+                EntityRequirementListResponse.class);
+    }
+
+    @Override
+    public EntityRequirementDetailsResponse getEntityRequirementDetailsSync(final String entityId, final String requirementId) {
+        validateParams("entityId", entityId, "requirementId", requirementId);
+        return apiClient.get(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, REQUIREMENTS_PATH, requirementId),
+                sdkAuthorization(),
+                EntityRequirementDetailsResponse.class);
+    }
+
+    @Override
+    public EntityRequirementUpdateResponse resolveEntityRequirementSync(final String entityId, final String requirementId, final EntityRequirementUpdateRequest updateRequest) {
+        validateParams("entityId", entityId, "requirementId", requirementId, "updateRequest", updateRequest);
+        return apiClient.put(
+                buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, REQUIREMENTS_PATH, requirementId),
+                sdkAuthorization(),
+                EntityRequirementUpdateResponse.class,
+                updateRequest);
     }
 
     // Common methods

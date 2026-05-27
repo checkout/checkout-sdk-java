@@ -123,6 +123,19 @@ class InstrumentsClientImplTest {
     }
 
     @Test
+    void shouldRevokeInstrument() throws ExecutionException, InterruptedException {
+        final EmptyResponse expectedResponse = Mockito.mock(EmptyResponse.class);
+
+        when(apiClient.patchAsync(eq(INSTRUMENTS + "/" + "123" + "/revoke"), any(SdkAuthorization.class), eq(EmptyResponse.class), isNull(), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<EmptyResponse> future = instrumentsClient.revoke("123");
+        final EmptyResponse actualResponse = future.get();
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
     void shouldGetBankAccountFieldFormatting() throws ExecutionException, InterruptedException {
         when(sdkCredentials.getAuthorization(SdkAuthorizationType.OAUTH)).thenReturn(authorization);
         final BankAccountFieldResponse expectedResponse = new BankAccountFieldResponse();
@@ -184,6 +197,18 @@ class InstrumentsClientImplTest {
                 .thenReturn(expectedResponse);
 
         final EmptyResponse actualResponse = instrumentsClient.deleteSync("123");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldRevokeInstrumentSync() {
+        final EmptyResponse expectedResponse = Mockito.mock(EmptyResponse.class);
+
+        when(apiClient.patch(eq(INSTRUMENTS + "/" + "123" + "/revoke"), any(SdkAuthorization.class), eq(EmptyResponse.class), isNull(), isNull()))
+                .thenReturn(expectedResponse);
+
+        final EmptyResponse actualResponse = instrumentsClient.revokeSync("123");
 
         validateResponse(expectedResponse, actualResponse);
     }

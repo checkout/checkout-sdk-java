@@ -12,6 +12,12 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class PaymentContextDetailsResponse extends HttpMetadata {
 
+    /**
+     * The unique identifier of the payment context.
+     * [Optional]
+     */
+    private String id;
+
     private PaymentContextDetailsStatusType status;
 
     @SerializedName("payment_request")

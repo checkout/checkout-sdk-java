@@ -28,6 +28,9 @@ public enum SourceType {
     @SerializedName("benefit")
     BENEFIT,
 
+    @SerializedName("blik")
+    BLIK,
+
     @SerializedName("cvconnect")
     CVCONNECT,
 

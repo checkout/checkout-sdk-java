@@ -2,6 +2,7 @@ package com.checkout.handlepaymentsandpayouts.setups.requests;
 
 import com.checkout.common.Currency;
 import com.checkout.payments.PaymentType;
+import com.checkout.handlepaymentsandpayouts.setups.entities.accountFundingTransaction.PaymentSetupAccountFundingTransaction;
 import com.checkout.handlepaymentsandpayouts.setups.entities.billing.PaymentSetupBilling;
 import com.checkout.handlepaymentsandpayouts.setups.entities.customer.Customer;
 import com.checkout.handlepaymentsandpayouts.setups.entities.industry.Industry;
@@ -97,4 +98,10 @@ public final class PaymentSetupsRequest {
      * [Optional]
      */
     private PaymentSetupBilling billing;
+
+    /**
+     * Account funding transaction details for the payment.
+     * [Optional]
+     */
+    private PaymentSetupAccountFundingTransaction accountFundingTransaction;
 }

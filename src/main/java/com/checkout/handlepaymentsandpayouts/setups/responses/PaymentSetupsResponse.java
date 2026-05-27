@@ -2,6 +2,7 @@ package com.checkout.handlepaymentsandpayouts.setups.responses;
 
 import com.checkout.common.Resource;
 import com.checkout.common.Currency;
+import com.checkout.handlepaymentsandpayouts.setups.entities.accountFundingTransaction.PaymentSetupAccountFundingTransaction;
 import com.checkout.handlepaymentsandpayouts.setups.entities.billing.PaymentSetupBilling;
 import com.checkout.handlepaymentsandpayouts.setups.entities.customer.Customer;
 import com.checkout.handlepaymentsandpayouts.setups.entities.industry.Industry;
@@ -113,4 +114,10 @@ public final class PaymentSetupsResponse extends Resource {
      * [Optional]
      */
     private List<String> availablePaymentMethods;
+
+    /**
+     * Account funding transaction details for the payment.
+     * [Optional]
+     */
+    private PaymentSetupAccountFundingTransaction accountFundingTransaction;
 }

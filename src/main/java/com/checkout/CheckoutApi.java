@@ -22,6 +22,7 @@ import com.checkout.instruments.InstrumentsClient;
 import com.checkout.issuing.IssuingClient;
 import com.checkout.metadata.MetadataClient;
 import com.checkout.networktokens.NetworkTokensClient;
+import com.checkout.onboardingsimulator.OnboardingSimulatorClient;
 import com.checkout.paymentmethods.PaymentMethodsClient;
 import com.checkout.payments.PaymentsClient;
 import com.checkout.payments.contexts.PaymentContextsClient;
@@ -108,5 +109,10 @@ public interface CheckoutApi extends CheckoutApmApi {
      * Use to create delegated payment tokens for AI-agent-initiated payments.
      */
     AgenticCommerceClient agenticCommerceClient();
+
+    /**
+     * Returns the client for the Onboarding Simulator (Sandbox only).
+     */
+    OnboardingSimulatorClient onboardingSimulatorClient();
 
 }

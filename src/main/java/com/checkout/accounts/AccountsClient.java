@@ -63,6 +63,33 @@ public interface AccountsClient {
 
     CompletableFuture<ReserveRulesResponse> getReserveRules(String entityId);
 
+    /**
+     * Retrieves the list of pending requirements that the sub-entity must resolve.
+     *
+     * @param entityId The sub-entity ID.
+     * @return a {@link CompletableFuture} resolving to the requirements list.
+     */
+    CompletableFuture<EntityRequirementListResponse> getEntityRequirements(String entityId);
+
+    /**
+     * Retrieves detailed information for a single requirement.
+     *
+     * @param entityId      The sub-entity ID.
+     * @param requirementId The requirement ID.
+     * @return a {@link CompletableFuture} resolving to the requirement details.
+     */
+    CompletableFuture<EntityRequirementDetailsResponse> getEntityRequirementDetails(String entityId, String requirementId);
+
+    /**
+     * Submits a response to resolve a requirement.
+     *
+     * @param entityId      The sub-entity ID.
+     * @param requirementId The requirement ID.
+     * @param updateRequest The response payload.
+     * @return a {@link CompletableFuture} resolving to the resolve response.
+     */
+    CompletableFuture<EntityRequirementUpdateResponse> resolveEntityRequirement(String entityId, String requirementId, EntityRequirementUpdateRequest updateRequest);
+
     // Synchronous methods
     IdResponse submitFileSync(final AccountsFileRequest accountsFileRequest);
 
@@ -102,5 +129,20 @@ public interface AccountsClient {
     ReserveRuleResponse getReserveRuleSync(final String entityId, final String reserveRuleId);
 
     ReserveRulesResponse getReserveRulesSync(final String entityId);
+
+    /**
+     * Synchronous variant of {@link #getEntityRequirements(String)}.
+     */
+    EntityRequirementListResponse getEntityRequirementsSync(final String entityId);
+
+    /**
+     * Synchronous variant of {@link #getEntityRequirementDetails(String, String)}.
+     */
+    EntityRequirementDetailsResponse getEntityRequirementDetailsSync(final String entityId, final String requirementId);
+
+    /**
+     * Synchronous variant of {@link #resolveEntityRequirement(String, String, EntityRequirementUpdateRequest)}.
+     */
+    EntityRequirementUpdateResponse resolveEntityRequirementSync(final String entityId, final String requirementId, final EntityRequirementUpdateRequest updateRequest);
 
 }

@@ -58,6 +58,12 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
     }
 
     @Override
+    public CompletableFuture<EmptyResponse> revoke(final String instrumentId) {
+        validateInstrumentId(instrumentId);
+        return apiClient.patchAsync(buildPath(INSTRUMENTS_PATH, instrumentId, "revoke"), sdkAuthorization(), EmptyResponse.class, null, null);
+    }
+
+    @Override
     public CompletableFuture<BankAccountFieldResponse> getBankAccountFieldFormatting(final CountryCode country, final Currency currency, final BankAccountFieldQuery query) {
         validateBankAccountFieldParams(country, currency, query);
         return apiClient.queryAsync(buildPath(VALIDATION_PATH, country.name(), currency.name()), sdkAuthorization(SdkAuthorizationType.OAUTH), query, BankAccountFieldResponse.class);
@@ -86,6 +92,12 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
     public EmptyResponse deleteSync(final String instrumentId) {
         validateInstrumentId(instrumentId);
         return apiClient.delete(buildPath(INSTRUMENTS_PATH, instrumentId), sdkAuthorization());
+    }
+
+    @Override
+    public EmptyResponse revokeSync(final String instrumentId) {
+        validateInstrumentId(instrumentId);
+        return apiClient.patch(buildPath(INSTRUMENTS_PATH, instrumentId, "revoke"), sdkAuthorization(), EmptyResponse.class, null, null);
     }
 
     @Override

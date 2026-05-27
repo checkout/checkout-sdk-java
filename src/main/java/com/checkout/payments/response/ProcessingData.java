@@ -78,4 +78,36 @@ public final class ProcessingData {
     @SerializedName("cko_network_token_available")
     private Boolean ckoNetworkTokenAvailable;
 
+    /**
+     * Indicates whether the {@code fallback_source} field was used for the payment.
+     * [Optional]
+     */
+    @SerializedName("fallback_source_used")
+    private Boolean fallbackSourceUsed;
+
+    /**
+     * A high-level failure category returned by the payment provider when a payment is declined or fails.
+     * Not all payment methods return this field.
+     * [Optional]
+     */
+    @SerializedName("failure_code")
+    private String failureCode;
+
+    /**
+     * The 6-digit partner code returned by the payment provider. Returned when {@code source.type} is {@code blik}.
+     * [Optional]
+     * Pattern: ^\d{6}$
+     * 6 characters
+     */
+    @SerializedName("partner_code")
+    private String partnerCode;
+
+    /**
+     * The raw response code returned by the payment provider when a payment is declined or fails.
+     * Not all payment methods return this field.
+     * [Optional]
+     */
+    @SerializedName("partner_response_code")
+    private String partnerResponseCode;
+
 }

@@ -29,6 +29,13 @@ public class TokensClientImpl extends AbstractClient implements TokensClient {
         return apiClient.postAsync(TOKENS_PATH, sdkAuthorization(), TokenResponse.class, walletTokenRequest, null);
     }
 
+    @Override
+    public CompletableFuture<TokenMetadataResponse> getTokenMetadata(final String tokenId) {
+        validateParams("tokenId", tokenId);
+        return apiClient.getAsync(buildPath(TOKENS_PATH, tokenId, "metadata"),
+                sdkAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH), TokenMetadataResponse.class);
+    }
+
     // Synchronous methods
     @Override
     public CardTokenResponse requestCardTokenSync(final CardTokenRequest cardTokenRequest) {
@@ -40,6 +47,13 @@ public class TokensClientImpl extends AbstractClient implements TokensClient {
     public TokenResponse requestWalletTokenSync(final WalletTokenRequest walletTokenRequest) {
         validateWalletTokenRequest(walletTokenRequest);
         return apiClient.post(TOKENS_PATH, sdkAuthorization(), TokenResponse.class, walletTokenRequest, null);
+    }
+
+    @Override
+    public TokenMetadataResponse getTokenMetadataSync(final String tokenId) {
+        validateParams("tokenId", tokenId);
+        return apiClient.get(buildPath(TOKENS_PATH, tokenId, "metadata"),
+                sdkAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH), TokenMetadataResponse.class);
     }
 
     // Common methods

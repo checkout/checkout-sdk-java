@@ -62,6 +62,19 @@ class InstrumentsTestIT extends CardTokenInstrumentsTestIT {
         assertNotFound(checkoutApi.instrumentsClient().get(createResponse.getId()));
     }
 
+    @Disabled("Sandbox instrument revoke currently returns 503 from VaultExternalApi in this environment")
+    @Test
+    void shouldRevokeInstrument() {
+        final String customerId = createCustomer();
+
+        final CreateInstrumentTokenRequest request = createTokenInstrumentRequest(customerId);
+        final CreateInstrumentTokenResponse createResponse = blocking(() -> checkoutApi.instrumentsClient().create(request));
+        validateInstrumentCreation(createResponse);
+
+        final EmptyResponse revokeResponse = blocking(() -> checkoutApi.instrumentsClient().revoke(createResponse.getId()));
+        assertNotNull(revokeResponse);
+    }
+
     @Test
     @Disabled("Requires OAuth configuration")
     void shouldGetBankAccountFieldFormatting() {
@@ -109,6 +122,19 @@ class InstrumentsTestIT extends CardTokenInstrumentsTestIT {
         assertNotNull(deleteResponse);
         
         assertNotFound(checkoutApi.instrumentsClient().get(createResponse.getId()));
+    }
+
+    @Disabled("Sandbox instrument revoke currently returns 503 from VaultExternalApi in this environment")
+    @Test
+    void shouldRevokeInstrumentSync() {
+        final String customerId = createCustomer();
+
+        final CreateInstrumentTokenRequest request = createTokenInstrumentRequest(customerId);
+        final CreateInstrumentTokenResponse createResponse = checkoutApi.instrumentsClient().createSync(request);
+        validateInstrumentCreation(createResponse);
+
+        final EmptyResponse revokeResponse = checkoutApi.instrumentsClient().revokeSync(createResponse.getId());
+        assertNotNull(revokeResponse);
     }
 
     @Test

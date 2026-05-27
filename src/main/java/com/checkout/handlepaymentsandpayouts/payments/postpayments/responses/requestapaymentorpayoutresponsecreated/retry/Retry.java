@@ -20,6 +20,12 @@ import java.time.Instant;
 public final class Retry {
 
     /**
+     * Indicates whether asynchronous retries are enabled for the payment.
+     * [Optional]
+     */
+    private Boolean enabled;
+
+    /**
      * Default: 6 The maximum number of authorization retry attempts, excluding the initial authorization.
      * [Optional]
      * [ 1 .. 15 ]

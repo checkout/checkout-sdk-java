@@ -8,6 +8,7 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.appl
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.bancontact.Bancontact;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.benefit.Benefit;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.bizum.Bizum;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.blik.Blik;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.card.Card;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.dana.Dana;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.eps.Eps;
@@ -86,6 +87,12 @@ public final class PaymentMethods {
      * [Optional]
      */
     private Bizum bizum;
+
+    /**
+     * Blik payment method configuration.
+     * [Optional]
+     */
+    private Blik blik;
 
     /**
      * PayNow payment method configuration.

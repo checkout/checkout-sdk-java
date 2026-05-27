@@ -1,4 +1,4 @@
-package com.checkout.networkTokens;
+package com.checkout.networktokens;
 
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
@@ -6,8 +6,6 @@ import com.checkout.EmptyResponse;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
-import com.checkout.networktokens.NetworkTokensClient;
-import com.checkout.networktokens.NetworkTokensClientImpl;
 import com.checkout.networktokens.entities.DeletionReason;
 import com.checkout.networktokens.entities.IdNetworkTokenSource;
 import com.checkout.networktokens.entities.InitiatedBy;

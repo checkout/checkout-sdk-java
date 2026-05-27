@@ -127,6 +127,22 @@ class TokensClientImplTest {
         validateResponse(expectedResponse, actualResponse);
     }
 
+    @Test
+    void shouldGetTokenMetadata() throws ExecutionException, InterruptedException {
+        final String tokenId = "tok_4gzeau5o2uqubbk6fudbloo47a";
+        final TokenMetadataResponse expectedResponse = mock(TokenMetadataResponse.class);
+
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+        when(apiClient.getAsync(eq("tokens/" + tokenId + "/metadata"), eq(authorization), eq(TokenMetadataResponse.class)))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<TokenMetadataResponse> future = client.getTokenMetadata(tokenId);
+        final TokenMetadataResponse actualResponse = future.get();
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
     // Synchronous methods
     @Test
     void shouldRequestCardTokenSync() {
@@ -167,6 +183,21 @@ class TokensClientImplTest {
 
         final TokenResponse actualResponse = client.requestWalletTokenSync(request);
         
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldGetTokenMetadataSync() {
+        final String tokenId = "tok_4gzeau5o2uqubbk6fudbloo47a";
+        final TokenMetadataResponse expectedResponse = mock(TokenMetadataResponse.class);
+
+        when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
+        when(configuration.getSdkCredentials()).thenReturn(sdkCredentials);
+        when(apiClient.get(eq("tokens/" + tokenId + "/metadata"), eq(authorization), eq(TokenMetadataResponse.class)))
+                .thenReturn(expectedResponse);
+
+        final TokenMetadataResponse actualResponse = client.getTokenMetadataSync(tokenId);
+
         validateResponse(expectedResponse, actualResponse);
     }
 

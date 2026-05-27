@@ -23,6 +23,15 @@ public interface InstrumentsClient {
 
     CompletableFuture<EmptyResponse> delete(String instrumentId);
 
+    /**
+     * Revokes a payment instrument. The instrument status is set to {@code INVALID} with the reason
+     * {@code revoked_by_merchant}. The instrument record is retained for audit purposes.
+     *
+     * @param instrumentId The payment instrument ID. Pattern: ^(src_)[a-z0-9]{26}$.
+     * @return a {@link CompletableFuture} that resolves to an empty response on success.
+     */
+    CompletableFuture<EmptyResponse> revoke(String instrumentId);
+
     CompletableFuture<BankAccountFieldResponse> getBankAccountFieldFormatting(CountryCode country, Currency currency, BankAccountFieldQuery query);
 
     // Synchronous methods
@@ -33,6 +42,14 @@ public interface InstrumentsClient {
     <T extends UpdateInstrumentResponse> T updateSync(String instrumentId, UpdateInstrumentRequest updateInstrumentRequest);
 
     EmptyResponse deleteSync(String instrumentId);
+
+    /**
+     * Synchronous variant of {@link #revoke(String)}.
+     *
+     * @param instrumentId The payment instrument ID. Pattern: ^(src_)[a-z0-9]{26}$.
+     * @return an empty response on success.
+     */
+    EmptyResponse revokeSync(String instrumentId);
 
     BankAccountFieldResponse getBankAccountFieldFormattingSync(CountryCode country, Currency currency, BankAccountFieldQuery query);
 }
