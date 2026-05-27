@@ -4,8 +4,6 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.Instant;
-
 @Data
 @Builder
 public final class PaymentPlan {
@@ -38,7 +36,7 @@ public final class PaymentPlan {
     private Integer currentPaymentNumber;
 
     @SerializedName("expiry")
-    private Instant expiry;
+    private String expiry;
 
     /**
      * The name of the payment plan. Required when {@code source.type} is {@code blik}.

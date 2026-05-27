@@ -24,6 +24,7 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
 
     private static final String INSTRUMENTS_PATH = "instruments";
     private static final String VALIDATION_PATH = "validation/bank-accounts";
+    private static final String REVOKE_PATH = "revoke";
 
     private static final Type CREATE_TYPE = TypeToken.get(CreateInstrumentResponse.class).getType();
     private static final Type UPDATE_TYPE = TypeToken.get(UpdateInstrumentResponse.class).getType();
@@ -60,7 +61,7 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
     @Override
     public CompletableFuture<EmptyResponse> revoke(final String instrumentId) {
         validateInstrumentId(instrumentId);
-        return apiClient.patchAsync(buildPath(INSTRUMENTS_PATH, instrumentId, "revoke"), sdkAuthorization(), EmptyResponse.class, null, null);
+        return apiClient.patchAsync(buildPath(INSTRUMENTS_PATH, instrumentId, REVOKE_PATH), sdkAuthorization(), EmptyResponse.class, null, null);
     }
 
     @Override
@@ -97,7 +98,7 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
     @Override
     public EmptyResponse revokeSync(final String instrumentId) {
         validateInstrumentId(instrumentId);
-        return apiClient.patch(buildPath(INSTRUMENTS_PATH, instrumentId, "revoke"), sdkAuthorization(), EmptyResponse.class, null, null);
+        return apiClient.patch(buildPath(INSTRUMENTS_PATH, instrumentId, REVOKE_PATH), sdkAuthorization(), EmptyResponse.class, null, null);
     }
 
     @Override
