@@ -8,8 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.NoHttpResponseException;
@@ -85,15 +83,6 @@ class ApacheHttpClientTransport implements Transport {
         this.baseUri = baseUri;
         this.httpClient = httpClientBuilder
                 .setRedirectStrategy(new CustomAwsRedirectStrategy())
-                .addInterceptorLast((HttpRequestInterceptor) (request, context) -> {
-                    if (request instanceof HttpEntityEnclosingRequest) {
-                        final HttpEntity entity = ((HttpEntityEnclosingRequest) request).getEntity();
-                        if (entity != null && entity.getContentType() != null) {
-                            request.removeHeaders(HttpHeaders.CONTENT_TYPE);
-                            request.setHeader(entity.getContentType());
-                        }
-                    }
-                })
                 .build();
         this.executor = executor;
         this.transportConfiguration = transportConfiguration;
