@@ -16,4 +16,14 @@ public final class ReverseResponse extends Resource {
 
     private String reference;
 
+    /**
+     * The payment action performed during the reversal.
+     * Determined by the payment's state at the time of processing:
+     * "Refund" if the payment has been fully or partially captured;
+     * "Void" if the payment is in an Authorized state.
+     * [Optional]
+     */
+    @SerializedName("action_type")
+    private String actionType;
+
 }

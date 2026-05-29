@@ -152,7 +152,7 @@ class ApacheHttpClientTransport implements Transport {
     public Response submitFileSync(final String path, final SdkAuthorization authorization, final AbstractFileRequest fileRequest) {
         final HttpPost request = new HttpPost(getRequestUrl(path));
         request.setEntity(getMultipartFileEntity(fileRequest));
-        
+
         final Supplier<Response> callSupplier = () -> performCall(authorization, null, request, POST);
         return executeWithResilience4j(callSupplier);
     }

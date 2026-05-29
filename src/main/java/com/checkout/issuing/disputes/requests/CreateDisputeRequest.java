@@ -58,7 +58,10 @@ public final class CreateDisputeRequest extends Resource {
      * • Immediately – Set to true.
      * • Later – Set to false.
      * Default: false
+     *
+     * @deprecated Removed from the API on 2026-04-15. Use the Submit an Issuing Dispute endpoint instead.
      */
+    @Deprecated
     @Builder.Default
     private Boolean isReadyForSubmission = false;
 

@@ -12,6 +12,7 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 public class TokensClientImpl extends AbstractClient implements TokensClient {
 
     private static final String TOKENS_PATH = "tokens";
+    private static final String METADATA_PATH = "metadata";
 
     public TokensClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.PUBLIC_KEY);
@@ -29,6 +30,13 @@ public class TokensClientImpl extends AbstractClient implements TokensClient {
         return apiClient.postAsync(TOKENS_PATH, sdkAuthorization(), TokenResponse.class, walletTokenRequest, null);
     }
 
+    @Override
+    public CompletableFuture<TokenMetadataResponse> getTokenMetadata(final String tokenId) {
+        validateParams("tokenId", tokenId);
+        return apiClient.getAsync(buildPath(TOKENS_PATH, tokenId, METADATA_PATH),
+                sdkAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH), TokenMetadataResponse.class);
+    }
+
     // Synchronous methods
     @Override
     public CardTokenResponse requestCardTokenSync(final CardTokenRequest cardTokenRequest) {
@@ -40,6 +48,13 @@ public class TokensClientImpl extends AbstractClient implements TokensClient {
     public TokenResponse requestWalletTokenSync(final WalletTokenRequest walletTokenRequest) {
         validateWalletTokenRequest(walletTokenRequest);
         return apiClient.post(TOKENS_PATH, sdkAuthorization(), TokenResponse.class, walletTokenRequest, null);
+    }
+
+    @Override
+    public TokenMetadataResponse getTokenMetadataSync(final String tokenId) {
+        validateParams("tokenId", tokenId);
+        return apiClient.get(buildPath(TOKENS_PATH, tokenId, METADATA_PATH),
+                sdkAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH), TokenMetadataResponse.class);
     }
 
     // Common methods

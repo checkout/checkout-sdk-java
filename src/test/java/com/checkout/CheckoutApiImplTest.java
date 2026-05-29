@@ -37,6 +37,7 @@ class CheckoutApiImplTest {
         assertNotNull(checkoutApi.forexClient());
         assertNotNull(checkoutApi.metadataClient());
         assertNotNull(checkoutApi.agenticCommerceClient());
+        assertNotNull(checkoutApi.onboardingSimulatorClient());
         // APMs
         assertNotNull(checkoutApi.idealClient());
     }

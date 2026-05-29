@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import lombok.val;
 import org.apache.http.Header;
 import org.apache.http.ProtocolVersion;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
@@ -57,6 +58,7 @@ class CheckoutSdkTelemetryIntegrationTest {
     private CheckoutApi buildCheckoutApi(CloseableHttpClient httpClientMock, boolean telemetryEnabled) {
         HttpClientBuilder httpClientBuilderMock = mock(HttpClientBuilder.class);
         when(httpClientBuilderMock.setRedirectStrategy(any())).thenReturn(httpClientBuilderMock);
+        when(httpClientBuilderMock.addInterceptorLast(any(HttpRequestInterceptor.class))).thenReturn(httpClientBuilderMock);
         when(httpClientBuilderMock.build()).thenReturn(httpClientMock);
 
         return CheckoutSdk.builder()

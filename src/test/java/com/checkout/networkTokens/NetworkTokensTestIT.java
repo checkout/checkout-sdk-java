@@ -1,4 +1,4 @@
-package com.checkout.networkTokens;
+package com.checkout.networktokens;
 
 import com.checkout.EmptyResponse;
 import com.checkout.PlatformType;

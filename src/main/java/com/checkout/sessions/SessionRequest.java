@@ -82,4 +82,11 @@ public final class SessionRequest {
     @SerializedName("initial_transaction")
     private InitialTransaction initialTransaction;
 
+    /**
+     * Details of the device from which the authentication originated.
+     * [Optional]
+     */
+    @SerializedName("device_information")
+    private DeviceInformation deviceInformation;
+
 }

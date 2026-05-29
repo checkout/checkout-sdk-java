@@ -93,6 +93,10 @@ public final class GsonSerializer implements Serializer {
     }.getType();
     private static final Type PAYMENT_ACTIONS_TYPE = new TypeToken<ItemsResponse<com.checkout.payments.PaymentAction>>() {
     }.getType();
+    private static final Type SIMULATOR_AVAILABLE_REQUIREMENTS_TYPE = new TypeToken<ItemsResponse<com.checkout.onboardingsimulator.entities.SimulatorAvailableRequirement>>() {
+    }.getType();
+    private static final Type SIMULATOR_SCENARIOS_TYPE = new TypeToken<ItemsResponse<com.checkout.onboardingsimulator.entities.SimulatorScenario>>() {
+    }.getType();
 
     private static final Gson DEFAULT_GSON = new GsonBuilder()
             .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
@@ -118,6 +122,7 @@ public final class GsonSerializer implements Serializer {
                     .registerSubtype(com.checkout.handlepaymentsandpayouts.payments.common.source.almasource.AlmaSource.class, identifier(com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType.ALMA))
                     .registerSubtype(com.checkout.handlepaymentsandpayouts.payments.common.source.bancontactsource.BancontactSource.class, identifier(com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType.BANCONTACT))
                     .registerSubtype(com.checkout.handlepaymentsandpayouts.payments.common.source.benefitsource.BenefitSource.class, identifier(com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType.BENEFIT))
+                    .registerSubtype(com.checkout.handlepaymentsandpayouts.payments.common.source.bliksource.BlikSource.class, identifier(com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType.BLIK))
                     .registerSubtype(com.checkout.handlepaymentsandpayouts.payments.common.source.currencyaccountsource.CurrencyAccountSource.class, identifier(com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType.CURRENCY_ACCOUNT))
                     .registerSubtype(com.checkout.handlepaymentsandpayouts.payments.common.source.cvconnectsource.CvconnectSource.class, identifier(com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType.CVCONNECT))
                     .registerSubtype(com.checkout.handlepaymentsandpayouts.payments.common.source.danasource.DanaSource.class, identifier(com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType.DANA))
@@ -233,6 +238,8 @@ public final class GsonSerializer implements Serializer {
             .registerTypeAdapter(WEBHOOKS_TYPE, webhooksResponseDeserializer())
             .registerTypeAdapter(PREVIOUS_PAYMENT_ACTIONS_TYPE, paymentActionsResponsePreviousDeserializer())
             .registerTypeAdapter(PAYMENT_ACTIONS_TYPE, paymentActionsResponseDeserializer())
+            .registerTypeAdapter(SIMULATOR_AVAILABLE_REQUIREMENTS_TYPE, simulatorAvailableRequirementsResponseDeserializer())
+            .registerTypeAdapter(SIMULATOR_SCENARIOS_TYPE, simulatorScenariosResponseDeserializer())
             .registerTypeAdapter(ProductResponse.class, getProductDeserializer())
             .create();
 
@@ -341,6 +348,26 @@ public final class GsonSerializer implements Serializer {
                 paymentActionsResponse.setItems(deserializeJsonArray(json, com.checkout.payments.PaymentAction.class));
             }
             return paymentActionsResponse;
+        };
+    }
+
+    private static JsonDeserializer<ItemsResponse<com.checkout.onboardingsimulator.entities.SimulatorAvailableRequirement>> simulatorAvailableRequirementsResponseDeserializer() {
+        return (json, typeOfT, context) -> {
+            final ItemsResponse<com.checkout.onboardingsimulator.entities.SimulatorAvailableRequirement> response = new ItemsResponse<>();
+            if (json.isJsonArray()) {
+                response.setItems(deserializeJsonArray(json, com.checkout.onboardingsimulator.entities.SimulatorAvailableRequirement.class));
+            }
+            return response;
+        };
+    }
+
+    private static JsonDeserializer<ItemsResponse<com.checkout.onboardingsimulator.entities.SimulatorScenario>> simulatorScenariosResponseDeserializer() {
+        return (json, typeOfT, context) -> {
+            final ItemsResponse<com.checkout.onboardingsimulator.entities.SimulatorScenario> response = new ItemsResponse<>();
+            if (json.isJsonArray()) {
+                response.setItems(deserializeJsonArray(json, com.checkout.onboardingsimulator.entities.SimulatorScenario.class));
+            }
+            return response;
         };
     }
 

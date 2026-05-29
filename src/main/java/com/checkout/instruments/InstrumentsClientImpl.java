@@ -24,6 +24,7 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
 
     private static final String INSTRUMENTS_PATH = "instruments";
     private static final String VALIDATION_PATH = "validation/bank-accounts";
+    private static final String REVOKE_PATH = "revoke";
 
     private static final Type CREATE_TYPE = TypeToken.get(CreateInstrumentResponse.class).getType();
     private static final Type UPDATE_TYPE = TypeToken.get(UpdateInstrumentResponse.class).getType();
@@ -58,6 +59,12 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
     }
 
     @Override
+    public CompletableFuture<EmptyResponse> revoke(final String instrumentId) {
+        validateInstrumentId(instrumentId);
+        return apiClient.patchAsync(buildPath(INSTRUMENTS_PATH, instrumentId, REVOKE_PATH), sdkAuthorization(), EmptyResponse.class, null, null);
+    }
+
+    @Override
     public CompletableFuture<BankAccountFieldResponse> getBankAccountFieldFormatting(final CountryCode country, final Currency currency, final BankAccountFieldQuery query) {
         validateBankAccountFieldParams(country, currency, query);
         return apiClient.queryAsync(buildPath(VALIDATION_PATH, country.name(), currency.name()), sdkAuthorization(SdkAuthorizationType.OAUTH), query, BankAccountFieldResponse.class);
@@ -86,6 +93,12 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
     public EmptyResponse deleteSync(final String instrumentId) {
         validateInstrumentId(instrumentId);
         return apiClient.delete(buildPath(INSTRUMENTS_PATH, instrumentId), sdkAuthorization());
+    }
+
+    @Override
+    public EmptyResponse revokeSync(final String instrumentId) {
+        validateInstrumentId(instrumentId);
+        return apiClient.patch(buildPath(INSTRUMENTS_PATH, instrumentId, REVOKE_PATH), sdkAuthorization(), EmptyResponse.class, null, null);
     }
 
     @Override

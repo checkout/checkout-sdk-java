@@ -10,6 +10,12 @@ import java.time.Instant;
 @Builder
 public final class PaymentRetryResponse {
 
+    /**
+     * Indicates whether asynchronous retries are enabled for the payment.
+     * [Optional]
+     */
+    private Boolean enabled;
+
     @SerializedName("max_attempts")
     private Integer maxAttempts;
 

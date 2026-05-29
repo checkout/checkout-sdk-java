@@ -617,6 +617,43 @@ class AccountsClientImplTest {
         validateResponse(expectedResponse, future.get());
     }
 
+    @Test
+    void shouldGetEntityRequirements() throws ExecutionException, InterruptedException {
+        final EntityRequirementListResponse expectedResponse = createEntityRequirementListResponse();
+
+        when(apiClient.getAsync("accounts/entities/entity_id/requirements", authorization, EntityRequirementListResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<EntityRequirementListResponse> future = accountsClient.getEntityRequirements("entity_id");
+
+        validateResponse(expectedResponse, future.get());
+    }
+
+    @Test
+    void shouldGetEntityRequirementDetails() throws ExecutionException, InterruptedException {
+        final EntityRequirementDetailsResponse expectedResponse = createEntityRequirementDetailsResponse();
+
+        when(apiClient.getAsync("accounts/entities/entity_id/requirements/requirement_id", authorization, EntityRequirementDetailsResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<EntityRequirementDetailsResponse> future = accountsClient.getEntityRequirementDetails("entity_id", "requirement_id");
+
+        validateResponse(expectedResponse, future.get());
+    }
+
+    @Test
+    void shouldResolveEntityRequirement() throws ExecutionException, InterruptedException {
+        final EntityRequirementUpdateRequest request = EntityRequirementUpdateRequest.builder().value("Acme Holdings Limited").build();
+        final EntityRequirementUpdateResponse expectedResponse = createEntityRequirementUpdateResponse();
+
+        when(apiClient.putAsync(eq("accounts/entities/entity_id/requirements/requirement_id"), eq(authorization), eq(EntityRequirementUpdateResponse.class), eq(request)))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<EntityRequirementUpdateResponse> future = accountsClient.resolveEntityRequirement("entity_id", "requirement_id", request);
+
+        validateResponse(expectedResponse, future.get());
+    }
+
     // Synchronous methods
     @Test
     void shouldGetEntityMembersSync() {
@@ -688,6 +725,43 @@ class AccountsClientImplTest {
                 .thenReturn(expectedResponse);
 
         final ReserveRulesResponse actualResponse = accountsClient.getReserveRulesSync("entity_id");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldGetEntityRequirementsSync() {
+        final EntityRequirementListResponse expectedResponse = createEntityRequirementListResponse();
+
+        when(apiClient.get("accounts/entities/entity_id/requirements", authorization, EntityRequirementListResponse.class))
+                .thenReturn(expectedResponse);
+
+        final EntityRequirementListResponse actualResponse = accountsClient.getEntityRequirementsSync("entity_id");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldGetEntityRequirementDetailsSync() {
+        final EntityRequirementDetailsResponse expectedResponse = createEntityRequirementDetailsResponse();
+
+        when(apiClient.get("accounts/entities/entity_id/requirements/requirement_id", authorization, EntityRequirementDetailsResponse.class))
+                .thenReturn(expectedResponse);
+
+        final EntityRequirementDetailsResponse actualResponse = accountsClient.getEntityRequirementDetailsSync("entity_id", "requirement_id");
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldResolveEntityRequirementSync() {
+        final EntityRequirementUpdateRequest request = EntityRequirementUpdateRequest.builder().value("Acme Holdings Limited").build();
+        final EntityRequirementUpdateResponse expectedResponse = createEntityRequirementUpdateResponse();
+
+        when(apiClient.put(eq("accounts/entities/entity_id/requirements/requirement_id"), eq(authorization), eq(EntityRequirementUpdateResponse.class), eq(request)))
+                .thenReturn(expectedResponse);
+
+        final EntityRequirementUpdateResponse actualResponse = accountsClient.resolveEntityRequirementSync("entity_id", "requirement_id", request);
 
         validateResponse(expectedResponse, actualResponse);
     }
@@ -771,6 +845,42 @@ class AccountsClientImplTest {
             fail();
         } catch (final CheckoutArgumentException checkoutArgumentException) {
             assertEquals("reserveRuleRequest cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldThrowException_whenEntityIdIsNullGetEntityRequirements() {
+        try {
+            accountsClient.getEntityRequirements(null);
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("entityId cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldThrowException_whenRequirementIdIsNullGetEntityRequirementDetails() {
+        try {
+            accountsClient.getEntityRequirementDetails("entity_id", null);
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("requirementId cannot be null", checkoutArgumentException.getMessage());
+        }
+
+        verifyNoInteractions(apiClient);
+    }
+
+    @Test
+    void shouldThrowException_whenUpdateRequestIsNullResolveEntityRequirement() {
+        try {
+            accountsClient.resolveEntityRequirement("entity_id", "requirement_id", null);
+            fail();
+        } catch (final CheckoutArgumentException checkoutArgumentException) {
+            assertEquals("updateRequest cannot be null", checkoutArgumentException.getMessage());
         }
 
         verifyNoInteractions(apiClient);
@@ -880,6 +990,43 @@ class AccountsClientImplTest {
 
     private ReserveRuleCreateResponse createReserveRuleCreateResponse() {
         return mock(ReserveRuleCreateResponse.class);
+    }
+
+    private EntityRequirementListResponse createEntityRequirementListResponse() {
+        return new EntityRequirementListResponse(java.util.Collections.singletonList(
+                new EntityRequirementListItem(
+                        "requirement_id",
+                        "entity_id",
+                        "company",
+                        EntityRequirementReason.PERIODIC_REVIEW,
+                        EntityRequirementPriority.CRITICAL,
+                        java.time.Instant.now().plusSeconds(3600),
+                        "urn:object:company#entity_id#field:company.legal_name",
+                        "company.legal_name",
+                        "urn:field:company.legal_name",
+                        java.util.Collections.emptyMap())));
+    }
+
+    private EntityRequirementDetailsResponse createEntityRequirementDetailsResponse() {
+        final EntityRequirementDetailsResponse response = new EntityRequirementDetailsResponse();
+        response.setId("requirement_id");
+        response.setResource("entity_id");
+        response.setResourceType("company");
+        response.setReason(EntityRequirementReason.PERIODIC_REVIEW);
+        response.setPriority(EntityRequirementPriority.CRITICAL);
+        response.setDeadline(java.time.Instant.now().plusSeconds(3600));
+        response.setFieldPath("company.legal_name");
+        response.setMessage("Provide the legal name for periodic review.");
+        response.setSchema(java.util.Collections.singletonMap("type", "string"));
+        return response;
+    }
+
+    private EntityRequirementUpdateResponse createEntityRequirementUpdateResponse() {
+        final EntityRequirementUpdateResponse response = new EntityRequirementUpdateResponse();
+        response.setId("requirement_id");
+        response.setStatus(EntityRequirementUpdateStatus.PROCESSING);
+        response.setSubmittedAt(java.time.Instant.now());
+        return response;
     }
 
     private <T> void validateResponse(T expectedResponse, T actualResponse) {

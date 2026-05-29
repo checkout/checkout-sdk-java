@@ -16,6 +16,7 @@ import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
 import org.apache.http.entity.ContentType;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.checkout.CheckoutApiException;
@@ -130,6 +131,18 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
         assertNotNull(compiledSubmittedEvidenceResponse.getFileId());
     }
 
+    @Test
+    @Disabled("This test is disabled to avoid uploading files constantly, reactivate if needed for digging purposes")
+    void shouldUploadAndGetFileDetails() throws Exception {
+        final FileRequest fileRequest = createFileRequest();
+        final IdResponse fileResponse = blocking(() -> checkoutApi.disputesClient().uploadFile(fileRequest));
+        assertNotNull(fileResponse);
+        assertNotNull(fileResponse.getId());
+
+        final FileDetailsResponse fileDetailsResponse = blocking(() -> checkoutApi.disputesClient().getFileDetails(fileResponse.getId()));
+        validateFileDetailsResponse(fileRequest, fileDetailsResponse);
+    }
+
     // Synchronous methods
     @Test
     void shouldQueryDisputesSync() {
@@ -224,6 +237,18 @@ class DisputesTestIT extends AbstractPaymentsTestIT {
         final DisputeCompiledSubmittedEvidenceResponse compiledSubmittedEvidenceResponse = checkoutApi.disputesClient().getCompiledSubmittedEvidenceSync(disputeDetails.getId());
         assertNotNull(compiledSubmittedEvidenceResponse);
         assertNotNull(compiledSubmittedEvidenceResponse.getFileId());
+    }
+
+    @Test
+    @Disabled("This test is disabled to avoid uploading files constantly, reactivate if needed for digging purposes")
+    void shouldUploadAndGetFileDetailsSync() throws Exception {
+        final FileRequest fileRequest = createFileRequest();
+        final IdResponse fileResponse = checkoutApi.disputesClient().uploadFileSync(fileRequest);
+        assertNotNull(fileResponse);
+        assertNotNull(fileResponse.getId());
+
+        final FileDetailsResponse fileDetailsResponse = checkoutApi.disputesClient().getFileDetailsSync(fileResponse.getId());
+        validateFileDetailsResponse(fileRequest, fileDetailsResponse);
     }
 
     // Common methods

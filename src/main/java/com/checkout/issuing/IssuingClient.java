@@ -163,6 +163,10 @@ public interface IssuingClient {
 
     CompletableFuture<VoidResponse> escalateDispute(final String disputeId, String idempotencyKey, final EscalateDisputeRequest escalateDisputeRequest);
 
+    /**
+     * @deprecated POST /issuing/disputes/{disputeId}/submit was removed from the API on 2026-04-15.
+     */
+    @Deprecated
     CompletableFuture<DisputeResponse> submitDispute(final String disputeId, String idempotencyKey, final SubmitDisputeRequest submitDisputeRequest);
 
     CompletableFuture<TransactionsListResponse> getListTransactions(final TransactionsQuery queryFilter);
@@ -285,6 +289,10 @@ public interface IssuingClient {
 
     VoidResponse escalateDisputeSync(String disputeId, String idempotencyKey, EscalateDisputeRequest escalateDisputeRequest);
 
+    /**
+     * @deprecated POST /issuing/disputes/{disputeId}/submit was removed from the API on 2026-04-15.
+     */
+    @Deprecated
     DisputeResponse submitDisputeSync(String disputeId, String idempotencyKey, SubmitDisputeRequest submitDisputeRequest);
 
     TransactionsListResponse getListTransactionsSync(TransactionsQuery queryFilter);

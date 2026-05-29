@@ -44,6 +44,8 @@ import com.checkout.metadata.MetadataClient;
 import com.checkout.metadata.MetadataClientImpl;
 import com.checkout.networktokens.NetworkTokensClient;
 import com.checkout.networktokens.NetworkTokensClientImpl;
+import com.checkout.onboardingsimulator.OnboardingSimulatorClient;
+import com.checkout.onboardingsimulator.OnboardingSimulatorClientImpl;
 import com.checkout.paymentmethods.PaymentMethodsClient;
 import com.checkout.paymentmethods.PaymentMethodsClientImpl;
 import com.checkout.payments.PaymentsClient;
@@ -107,6 +109,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final NetworkTokensClient networkTokensClient;
     private final StandaloneAccountUpdaterClient standaloneAccountUpdaterClient;
     private final AgenticCommerceClient agenticCommerceClient;
+    private final OnboardingSimulatorClient onboardingSimulatorClient;
 
     public CheckoutApiImpl(final CheckoutConfiguration configuration) {
         super(configuration);
@@ -146,6 +149,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.networkTokensClient = new NetworkTokensClientImpl(this.apiClient, configuration);
         this.standaloneAccountUpdaterClient = new StandaloneAccountUpdaterClientImpl(this.apiClient, configuration);
         this.agenticCommerceClient = new AgenticCommerceClientImpl(this.apiClient, configuration);
+        this.onboardingSimulatorClient = new OnboardingSimulatorClientImpl(this.apiClient, configuration);
     }
 
     @Override
@@ -283,6 +287,9 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
 
     @Override
     public AgenticCommerceClient agenticCommerceClient() { return agenticCommerceClient; }
+
+    @Override
+    public OnboardingSimulatorClient onboardingSimulatorClient() { return onboardingSimulatorClient; }
 
     private ApiClient getFilesClient(final CheckoutConfiguration configuration) {
         return new ApiClientImpl(configuration, new FilesApiUriStrategy(configuration));

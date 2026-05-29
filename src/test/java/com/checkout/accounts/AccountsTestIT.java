@@ -31,6 +31,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.Objects;
 
 import static com.checkout.TestHelper.generateRandomEmail;
 import static java.util.Objects.requireNonNull;
@@ -273,6 +274,44 @@ class AccountsTestIT extends SandboxTestFixture {
 
         final ReserveRulesResponse response = blocking(() -> checkoutApi.accountsClient().getReserveRules(entityId));
         validateReserveRulesResponse(response);
+    }
+
+    @Disabled("Requires a sub-entity with pending requirements")
+    @Test
+    void shouldGetEntityRequirements() {
+        final String entityId = Objects.requireNonNull(System.getenv("CHECKOUT_DEFAULT_ENTITY_ID"));
+
+        final EntityRequirementListResponse response = blocking(() -> checkoutApi.accountsClient().getEntityRequirements(entityId));
+        validateEntityRequirementListResponse(response);
+    }
+
+    @Disabled("Requires a sub-entity with a known requirement id")
+    @Test
+    void shouldGetEntityRequirementDetails() {
+        final String entityId = Objects.requireNonNull(System.getenv("CHECKOUT_DEFAULT_ENTITY_ID"));
+        final EntityRequirementListResponse listResponse = blocking(() -> checkoutApi.accountsClient().getEntityRequirements(entityId));
+        assertNotNull(listResponse.getData());
+        assertNotNull(listResponse.getData().get(0));
+
+        final String requirementId = listResponse.getData().get(0).getId();
+        final EntityRequirementDetailsResponse detailsResponse = blocking(() -> checkoutApi.accountsClient().getEntityRequirementDetails(entityId, requirementId));
+        validateEntityRequirementDetailsResponse(detailsResponse, requirementId);
+    }
+
+    @Disabled("Requires a sub-entity with a resolvable requirement")
+    @Test
+    void shouldResolveEntityRequirement() {
+        final String entityId = Objects.requireNonNull(System.getenv("CHECKOUT_DEFAULT_ENTITY_ID"));
+        final EntityRequirementListResponse listResponse = blocking(() -> checkoutApi.accountsClient().getEntityRequirements(entityId));
+        assertNotNull(listResponse.getData());
+        assertNotNull(listResponse.getData().get(0));
+
+        final String requirementId = listResponse.getData().get(0).getId();
+        final EntityRequirementUpdateRequest updateRequest = EntityRequirementUpdateRequest.builder()
+                .value("Acme Holdings Limited")
+                .build();
+        final EntityRequirementUpdateResponse response = blocking(() -> checkoutApi.accountsClient().resolveEntityRequirement(entityId, requirementId, updateRequest));
+        validateEntityRequirementUpdateResponse(response, requirementId);
     }
 
     // Synchronous methods
@@ -655,6 +694,24 @@ class AccountsTestIT extends SandboxTestFixture {
     private static void validateReserveRulesResponse(final ReserveRulesResponse response) {
         assertNotNull(response);
         assertNotNull(response.getData());
+    }
+
+    private static void validateEntityRequirementListResponse(final EntityRequirementListResponse response) {
+        assertNotNull(response);
+        assertNotNull(response.getData());
+    }
+
+    private static void validateEntityRequirementDetailsResponse(final EntityRequirementDetailsResponse response, final String requirementId) {
+        assertNotNull(response);
+        assertEquals(requirementId, response.getId());
+        assertNotNull(response.getResource());
+    }
+
+    private static void validateEntityRequirementUpdateResponse(final EntityRequirementUpdateResponse response, final String requirementId) {
+        assertNotNull(response);
+        assertEquals(requirementId, response.getId());
+        assertEquals(EntityRequirementUpdateStatus.PROCESSING, response.getStatus());
+        assertNotNull(response.getSubmittedAt());
     }
 
 }
