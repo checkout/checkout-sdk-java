@@ -92,7 +92,7 @@ public abstract class BaseIssuingTestIT extends SandboxTestFixture {
         final CardResponse cardResponse = blocking(() ->
                 getIssuingCheckoutApi()
                         .issuingClient()
-                        .createCard(request));
+                        .createCard(request, null));
 
         assertNotNull(cardResponse);
 

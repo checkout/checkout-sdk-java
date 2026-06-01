@@ -186,14 +186,14 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
-    public CompletableFuture<CardResponse> createCard(final CardRequest cardRequest) {
+    public CompletableFuture<CardResponse> createCard(final CardRequest cardRequest, final String idempotencyKey) {
         validateParams("cardRequest", cardRequest);
         return apiClient.postAsync(
                 buildPath(ISSUING_PATH, CARDS_PATH),
                 sdkAuthorization(),
                 CardResponse.class,
                 cardRequest,
-                null
+                idempotencyKey
         );
     }
 
@@ -301,7 +301,8 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     @Override
     public CompletableFuture<CardControlResponse> createControl(
-            final CardControlRequest cardControlRequest
+            final CardControlRequest cardControlRequest,
+            final String idempotencyKey
     ) {
         validateParams("cardControlRequest", cardControlRequest);
         return apiClient.postAsync(
@@ -309,7 +310,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 sdkAuthorization(),
                 CardControlResponse.class,
                 cardControlRequest,
-                null
+                idempotencyKey
         );
     }
 
@@ -739,14 +740,14 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
-    public CardResponse createCardSync(final CardRequest cardRequest) {
+    public CardResponse createCardSync(final CardRequest cardRequest, final String idempotencyKey) {
         validateCardRequest(cardRequest);
         return apiClient.post(
                 buildPath(ISSUING_PATH, CARDS_PATH),
                 sdkAuthorization(),
                 CardResponse.class,
                 cardRequest,
-                null
+                idempotencyKey
         );
     }
 
@@ -854,7 +855,8 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     @Override
     public CardControlResponse createControlSync(
-            final CardControlRequest cardControlRequest
+            final CardControlRequest cardControlRequest,
+            final String idempotencyKey
     ) {
         validateCardControlRequest(cardControlRequest);
         return apiClient.post(
@@ -862,7 +864,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 sdkAuthorization(),
                 CardControlResponse.class,
                 cardControlRequest,
-                null
+                idempotencyKey
         );
     }
 
