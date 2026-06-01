@@ -601,6 +601,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
     public CompletableFuture<DisputeResponse> createDispute(final CreateDisputeRequest createDisputeRequest, String idempotencyKey) {
         validateCreateDisputeRequest(createDisputeRequest);
         return apiClient.postAsync(
@@ -612,6 +613,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
     public CompletableFuture<DisputeResponse> getDispute(final String disputeId) {
         validateDisputeId(disputeId);
         return apiClient.getAsync(
@@ -621,6 +623,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
     public CompletableFuture<VoidResponse> cancelDispute(final String disputeId, String idempotencyKey) {
         validateDisputeId(disputeId);
         return apiClient.postAsync(
@@ -632,6 +635,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
     public CompletableFuture<VoidResponse> escalateDispute(final String disputeId, String idempotencyKey, 
                                                                 final EscalateDisputeRequest escalateDisputeRequest) {
         validateDisputeIdAndEscalateRequest(disputeId, escalateDisputeRequest);
@@ -1154,6 +1158,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
     public DisputeResponse createDisputeSync(final CreateDisputeRequest createDisputeRequest, String idempotencyKey) {
         validateCreateDisputeRequest(createDisputeRequest);
         return apiClient.post(
@@ -1165,6 +1170,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
     public DisputeResponse getDisputeSync(final String disputeId) {
         validateDisputeId(disputeId);
         return apiClient.get(
@@ -1174,6 +1180,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
     public VoidResponse cancelDisputeSync(final String disputeId, String idempotencyKey) {
         validateDisputeId(disputeId);
         return apiClient.post(
@@ -1185,6 +1192,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
     public VoidResponse escalateDisputeSync(final String disputeId, String idempotencyKey,
                                                 final EscalateDisputeRequest escalateDisputeRequest) {
         validateDisputeIdAndEscalateRequest(disputeId, escalateDisputeRequest);

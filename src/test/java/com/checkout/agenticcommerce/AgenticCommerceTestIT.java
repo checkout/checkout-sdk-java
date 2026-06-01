@@ -41,7 +41,7 @@ public class AgenticCommerceTestIT extends SandboxTestFixture {
         final DelegatePaymentRequest request = buildFullRequest();
 
         final DelegatePaymentResponse response =
-                blocking(() -> checkoutApi.agenticCommerceClient().delegatePayment(request, buildHeaders()));
+                blocking(() -> checkoutApi.agenticCommerceClient().delegatePayment(request, null, buildHeaders()));
 
         validateResponse(response);
     }
@@ -68,7 +68,7 @@ public class AgenticCommerceTestIT extends SandboxTestFixture {
                 .build();
 
         final DelegatePaymentResponse response =
-                blocking(() -> checkoutApi.agenticCommerceClient().delegatePayment(request, buildHeaders()));
+                blocking(() -> checkoutApi.agenticCommerceClient().delegatePayment(request, null, buildHeaders()));
 
         validateResponse(response);
     }
@@ -79,7 +79,7 @@ public class AgenticCommerceTestIT extends SandboxTestFixture {
         final DelegatePaymentRequest request = buildFullRequest();
 
         final DelegatePaymentResponse response =
-                checkoutApi.agenticCommerceClient().delegatePaymentSync(request, buildHeaders());
+                checkoutApi.agenticCommerceClient().delegatePaymentSync(request, null, buildHeaders());
 
         validateResponse(response);
     }

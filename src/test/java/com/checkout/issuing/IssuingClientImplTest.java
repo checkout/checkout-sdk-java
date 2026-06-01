@@ -864,6 +864,7 @@ public class IssuingClientImplTest {
         }
     }
 
+    @Nested
     @DisplayName("Disputes")
     class Disputes {
         @Test
@@ -916,6 +917,7 @@ public class IssuingClientImplTest {
             validateVoidResponse(response, future.get());
         }
 
+        @Test
         void shouldEscalateDispute() throws ExecutionException, InterruptedException {
             final EscalateDisputeRequest request = createEscalateDisputeRequest();
             final VoidResponse response = createVoidResponse();
@@ -1704,6 +1706,7 @@ public class IssuingClientImplTest {
         }
     }
 
+    @Nested
     @DisplayName("Disputes Sync")
     class DisputesSync {
         @Test
@@ -1756,6 +1759,7 @@ public class IssuingClientImplTest {
             validateVoidResponse(expectedResponse, actualResponse);
         }
 
+        @Test
         void shouldEscalateDisputeSync() {
             final EscalateDisputeRequest request = createEscalateDisputeRequest();
             final VoidResponse expectedResponse = createVoidResponse();
