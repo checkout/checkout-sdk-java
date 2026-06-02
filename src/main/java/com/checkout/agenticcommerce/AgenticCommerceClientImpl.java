@@ -21,6 +21,11 @@ public class AgenticCommerceClientImpl extends AbstractClient implements Agentic
     }
 
     @Override
+    public CompletableFuture<DelegatePaymentResponse> delegatePayment(final DelegatePaymentRequest request, final DelegatePaymentHeaders headers) {
+        return delegatePayment(request, null, headers);
+    }
+
+    @Override
     public CompletableFuture<DelegatePaymentResponse> delegatePayment(final DelegatePaymentRequest request, final String idempotencyKey, final DelegatePaymentHeaders headers) {
         CheckoutUtils.validateParams("request", request, "headers", headers);
         return apiClient.postAsync(
@@ -30,6 +35,11 @@ public class AgenticCommerceClientImpl extends AbstractClient implements Agentic
                 request,
                 idempotencyKey,
                 headers);
+    }
+
+    @Override
+    public DelegatePaymentResponse delegatePaymentSync(final DelegatePaymentRequest request, final DelegatePaymentHeaders headers) {
+        return delegatePaymentSync(request, null, headers);
     }
 
     @Override

@@ -18,6 +18,11 @@ public class PaymentContextsClientImpl extends AbstractClient implements Payment
     }
 
     @Override
+    public CompletableFuture<PaymentContextsRequestResponse> requestPaymentContexts(final PaymentContextsRequest paymentContextsRequest) {
+        return requestPaymentContexts(paymentContextsRequest, null);
+    }
+
+    @Override
     public CompletableFuture<PaymentContextsRequestResponse> requestPaymentContexts(final PaymentContextsRequest paymentContextsRequest, final String idempotencyKey) {
         validatePaymentContextsRequest(paymentContextsRequest);
         return apiClient.postAsync(PAYMENT_CONTEXTS_PATH, sdkAuthorization(), PaymentContextsRequestResponse.class, paymentContextsRequest, idempotencyKey);
@@ -31,6 +36,11 @@ public class PaymentContextsClientImpl extends AbstractClient implements Payment
     }
 
     // Synchronous methods
+    @Override
+    public PaymentContextsRequestResponse requestPaymentContextsSync(final PaymentContextsRequest paymentContextsRequest) {
+        return requestPaymentContextsSync(paymentContextsRequest, null);
+    }
+
     @Override
     public PaymentContextsRequestResponse requestPaymentContextsSync(final PaymentContextsRequest paymentContextsRequest, final String idempotencyKey) {
         validatePaymentContextsRequest(paymentContextsRequest);

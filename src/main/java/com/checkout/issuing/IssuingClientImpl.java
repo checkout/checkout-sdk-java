@@ -186,6 +186,11 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
+    public CompletableFuture<CardResponse> createCard(final CardRequest cardRequest) {
+        return createCard(cardRequest, null);
+    }
+
+    @Override
     public CompletableFuture<CardResponse> createCard(final CardRequest cardRequest, final String idempotencyKey) {
         validateParams("cardRequest", cardRequest);
         return apiClient.postAsync(
@@ -297,6 +302,11 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 suspendCardRequest,
                 null
         );
+    }
+
+    @Override
+    public CompletableFuture<CardControlResponse> createControl(final CardControlRequest cardControlRequest) {
+        return createControl(cardControlRequest, null);
     }
 
     @Override
@@ -744,6 +754,11 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
+    public CardResponse createCardSync(final CardRequest cardRequest) {
+        return createCardSync(cardRequest, null);
+    }
+
+    @Override
     public CardResponse createCardSync(final CardRequest cardRequest, final String idempotencyKey) {
         validateCardRequest(cardRequest);
         return apiClient.post(
@@ -855,6 +870,11 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 suspendCardRequest,
                 null
         );
+    }
+
+    @Override
+    public CardControlResponse createControlSync(final CardControlRequest cardControlRequest) {
+        return createControlSync(cardControlRequest, null);
     }
 
     @Override
