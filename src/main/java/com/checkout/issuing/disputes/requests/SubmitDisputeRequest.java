@@ -13,7 +13,9 @@ import java.util.List;
 
 /**
  * Request to submit an Issuing dispute to the card scheme for processing
+ * @deprecated POST /issuing/disputes/{disputeId}/submit was removed from the API on 2026-04-15.
  */
+@Deprecated
 @Data
 @Builder
 @NoArgsConstructor

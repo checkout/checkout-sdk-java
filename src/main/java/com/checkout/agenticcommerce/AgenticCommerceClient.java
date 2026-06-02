@@ -10,5 +10,9 @@ public interface AgenticCommerceClient {
 
     CompletableFuture<DelegatePaymentResponse> delegatePayment(DelegatePaymentRequest request, DelegatePaymentHeaders headers);
 
+    CompletableFuture<DelegatePaymentResponse> delegatePayment(DelegatePaymentRequest request, String idempotencyKey, DelegatePaymentHeaders headers);
+
     DelegatePaymentResponse delegatePaymentSync(DelegatePaymentRequest request, DelegatePaymentHeaders headers);
+
+    DelegatePaymentResponse delegatePaymentSync(DelegatePaymentRequest request, String idempotencyKey, DelegatePaymentHeaders headers);
 }

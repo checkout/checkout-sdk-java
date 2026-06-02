@@ -54,7 +54,7 @@ class PaymentContextsClientImplTest {
                 eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
-        final CompletableFuture<PaymentContextsRequestResponse> future = client.requestPaymentContexts(request);
+        final CompletableFuture<PaymentContextsRequestResponse> future = client.requestPaymentContexts(request, null);
         final PaymentContextsRequestResponse actualResponse = future.get();
         
         validateResponse(expectedResponse, actualResponse);
@@ -86,8 +86,37 @@ class PaymentContextsClientImplTest {
                 eq(request), isNull()))
                 .thenReturn(expectedResponse);
 
-        final PaymentContextsRequestResponse actualResponse = client.requestPaymentContextsSync(request);
+        final PaymentContextsRequestResponse actualResponse = client.requestPaymentContextsSync(request, null);
         
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldRequestPaymentContextsWithIdempotencyKey() throws ExecutionException, InterruptedException {
+        final PaymentContextsRequest request = createMockPaymentContextsRequest();
+        final PaymentContextsRequestResponse expectedResponse = mock(PaymentContextsRequestResponse.class);
+
+        when(apiClient.postAsync(eq("payment-contexts"), eq(authorization), eq(PaymentContextsRequestResponse.class),
+                eq(request), eq("idempotencyKey")))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<PaymentContextsRequestResponse> future = client.requestPaymentContexts(request, "idempotencyKey");
+        final PaymentContextsRequestResponse actualResponse = future.get();
+
+        validateResponse(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void shouldRequestPaymentContextsWithIdempotencyKeySync() {
+        final PaymentContextsRequest request = createMockPaymentContextsRequest();
+        final PaymentContextsRequestResponse expectedResponse = mock(PaymentContextsRequestResponse.class);
+
+        when(apiClient.post(eq("payment-contexts"), eq(authorization), eq(PaymentContextsRequestResponse.class),
+                eq(request), eq("idempotencyKey")))
+                .thenReturn(expectedResponse);
+
+        final PaymentContextsRequestResponse actualResponse = client.requestPaymentContextsSync(request, "idempotencyKey");
+
         validateResponse(expectedResponse, actualResponse);
     }
 

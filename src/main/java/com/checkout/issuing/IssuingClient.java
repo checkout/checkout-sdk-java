@@ -76,6 +76,8 @@ public interface IssuingClient {
 
     CompletableFuture<CardResponse> createCard(CardRequest cardRequest);
 
+    CompletableFuture<CardResponse> createCard(CardRequest cardRequest, String idempotencyKey);
+
     CompletableFuture<CardDetailsResponse> getCardDetails(String cardId);
 
     CompletableFuture<ThreeDSEnrollmentResponse> enrollThreeDS(String cardId, ThreeDSEnrollmentRequest enrollmentRequest);
@@ -93,6 +95,8 @@ public interface IssuingClient {
     CompletableFuture<VoidResponse> suspendCard(final String cardId, final SuspendCardRequest suspendCardRequest);
 
     CompletableFuture<CardControlResponse> createControl(final CardControlRequest cardControlRequest);
+
+    CompletableFuture<CardControlResponse> createControl(final CardControlRequest cardControlRequest, final String idempotencyKey);
 
     CompletableFuture<CardControlsQueryResponse> getCardControls(final CardControlsQuery queryFilter);
 
@@ -202,6 +206,8 @@ public interface IssuingClient {
 
     CardResponse createCardSync(CardRequest cardRequest);
 
+    CardResponse createCardSync(CardRequest cardRequest, String idempotencyKey);
+
     CardDetailsResponse getCardDetailsSync(String cardId);
 
     ThreeDSEnrollmentResponse enrollThreeDSSync(String cardId, ThreeDSEnrollmentRequest enrollmentRequest);
@@ -219,6 +225,8 @@ public interface IssuingClient {
     VoidResponse suspendCardSync(String cardId, SuspendCardRequest suspendCardRequest);
 
     CardControlResponse createControlSync(CardControlRequest cardControlRequest);
+
+    CardControlResponse createControlSync(CardControlRequest cardControlRequest, String idempotencyKey);
 
     CardControlsQueryResponse getCardControlsSync(CardControlsQuery queryFilter);
 

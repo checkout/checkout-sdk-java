@@ -6,10 +6,14 @@ public interface PaymentContextsClient {
 
     CompletableFuture<PaymentContextsRequestResponse> requestPaymentContexts(PaymentContextsRequest paymentContextsRequest);
 
+    CompletableFuture<PaymentContextsRequestResponse> requestPaymentContexts(PaymentContextsRequest paymentContextsRequest, String idempotencyKey);
+
     CompletableFuture<PaymentContextDetailsResponse> getPaymentContextDetails(String paymentContextId);
 
     // Synchronous methods
     PaymentContextsRequestResponse requestPaymentContextsSync(PaymentContextsRequest paymentContextsRequest);
+
+    PaymentContextsRequestResponse requestPaymentContextsSync(PaymentContextsRequest paymentContextsRequest, String idempotencyKey);
 
     PaymentContextDetailsResponse getPaymentContextDetailsSync(String paymentContextId);
 

@@ -49,7 +49,7 @@ class IssuingCardNewFieldsIT extends BaseIssuingTestIT {
                 .build();
 
         final CardResponse response = blocking(() ->
-                issuingApi.issuingClient().createCard(request));
+                issuingApi.issuingClient().createCard(request, null));
 
         assertNotNull(response);
         assertNotNull(response.getId());
@@ -65,7 +65,7 @@ class IssuingCardNewFieldsIT extends BaseIssuingTestIT {
                 .build();
 
         final CardResponse response = blocking(() ->
-                issuingApi.issuingClient().createCard(request));
+                issuingApi.issuingClient().createCard(request, null));
 
         assertNotNull(response);
         assertNotNull(response.getId());
@@ -86,7 +86,7 @@ class IssuingCardNewFieldsIT extends BaseIssuingTestIT {
                 .build();
 
         final CardResponse response = blocking(() ->
-                issuingApi.issuingClient().createCard(request));
+                issuingApi.issuingClient().createCard(request, null));
 
         assertNotNull(response);
         assertNotNull(response.getId());
@@ -104,7 +104,7 @@ class IssuingCardNewFieldsIT extends BaseIssuingTestIT {
                 .build();
 
         final CardResponse response = blocking(() ->
-                issuingApi.issuingClient().createCard(request));
+                issuingApi.issuingClient().createCard(request, null));
 
         assertNotNull(response);
         assertNotNull(response.getId());
@@ -120,7 +120,7 @@ class IssuingCardNewFieldsIT extends BaseIssuingTestIT {
                 .build();
 
         final CardResponse response = blocking(() ->
-                issuingApi.issuingClient().createCard(request));
+                issuingApi.issuingClient().createCard(request, null));
 
         assertNotNull(response);
         assertNotNull(response.getId());

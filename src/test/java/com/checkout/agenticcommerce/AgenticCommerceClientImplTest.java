@@ -74,7 +74,7 @@ public class AgenticCommerceClientImplTest {
                 eq(headers)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<DelegatePaymentResponse> future = client.delegatePayment(request, headers);
+        final CompletableFuture<DelegatePaymentResponse> future = client.delegatePayment(request, null, headers);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -95,7 +95,49 @@ public class AgenticCommerceClientImplTest {
                 eq(headers)))
                 .thenReturn(response);
 
-        final DelegatePaymentResponse result = client.delegatePaymentSync(request, headers);
+        final DelegatePaymentResponse result = client.delegatePaymentSync(request, null, headers);
+
+        assertNotNull(result);
+        assertEquals(response, result);
+    }
+
+    @Test
+    void shouldDelegatePaymentWithIdempotencyKey() throws ExecutionException, InterruptedException {
+        final DelegatePaymentRequest request = buildDelegatePaymentRequest();
+        final DelegatePaymentHeaders headers = buildHeaders();
+        final DelegatePaymentResponse response = mock(DelegatePaymentResponse.class);
+
+        when(apiClient.postAsync(
+                eq("agentic_commerce/delegate_payment"),
+                eq(authorization),
+                eq(DelegatePaymentResponse.class),
+                eq(request),
+                eq("idempotencyKey"),
+                eq(headers)))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<DelegatePaymentResponse> future = client.delegatePayment(request, "idempotencyKey", headers);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+    }
+
+    @Test
+    void shouldDelegatePaymentSyncWithIdempotencyKey() {
+        final DelegatePaymentRequest request = buildDelegatePaymentRequest();
+        final DelegatePaymentHeaders headers = buildHeaders();
+        final DelegatePaymentResponse response = mock(DelegatePaymentResponse.class);
+
+        when(apiClient.post(
+                eq("agentic_commerce/delegate_payment"),
+                eq(authorization),
+                eq(DelegatePaymentResponse.class),
+                eq(request),
+                eq("idempotencyKey"),
+                eq(headers)))
+                .thenReturn(response);
+
+        final DelegatePaymentResponse result = client.delegatePaymentSync(request, "idempotencyKey", headers);
 
         assertNotNull(result);
         assertEquals(response, result);
@@ -116,7 +158,7 @@ public class AgenticCommerceClientImplTest {
                 any(DelegatePaymentHeaders.class)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final DelegatePaymentResponse result = client.delegatePayment(request, headers).get();
+        final DelegatePaymentResponse result = client.delegatePayment(request, null, headers).get();
 
         assertNotNull(result);
         assertEquals(response, result);

@@ -187,13 +187,18 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     @Override
     public CompletableFuture<CardResponse> createCard(final CardRequest cardRequest) {
+        return createCard(cardRequest, null);
+    }
+
+    @Override
+    public CompletableFuture<CardResponse> createCard(final CardRequest cardRequest, final String idempotencyKey) {
         validateParams("cardRequest", cardRequest);
         return apiClient.postAsync(
                 buildPath(ISSUING_PATH, CARDS_PATH),
                 sdkAuthorization(),
                 CardResponse.class,
                 cardRequest,
-                null
+                idempotencyKey
         );
     }
 
@@ -300,8 +305,14 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
+    public CompletableFuture<CardControlResponse> createControl(final CardControlRequest cardControlRequest) {
+        return createControl(cardControlRequest, null);
+    }
+
+    @Override
     public CompletableFuture<CardControlResponse> createControl(
-            final CardControlRequest cardControlRequest
+            final CardControlRequest cardControlRequest,
+            final String idempotencyKey
     ) {
         validateParams("cardControlRequest", cardControlRequest);
         return apiClient.postAsync(
@@ -309,7 +320,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 sdkAuthorization(),
                 CardControlResponse.class,
                 cardControlRequest,
-                null
+                idempotencyKey
         );
     }
 
@@ -600,6 +611,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
     public CompletableFuture<DisputeResponse> createDispute(final CreateDisputeRequest createDisputeRequest, String idempotencyKey) {
         validateCreateDisputeRequest(createDisputeRequest);
         return apiClient.postAsync(
@@ -611,6 +623,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
     public CompletableFuture<DisputeResponse> getDispute(final String disputeId) {
         validateDisputeId(disputeId);
         return apiClient.getAsync(
@@ -620,6 +633,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
     public CompletableFuture<VoidResponse> cancelDispute(final String disputeId, String idempotencyKey) {
         validateDisputeId(disputeId);
         return apiClient.postAsync(
@@ -631,6 +645,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
     public CompletableFuture<VoidResponse> escalateDispute(final String disputeId, String idempotencyKey, 
                                                                 final EscalateDisputeRequest escalateDisputeRequest) {
         validateDisputeIdAndEscalateRequest(disputeId, escalateDisputeRequest);
@@ -740,13 +755,18 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     @Override
     public CardResponse createCardSync(final CardRequest cardRequest) {
+        return createCardSync(cardRequest, null);
+    }
+
+    @Override
+    public CardResponse createCardSync(final CardRequest cardRequest, final String idempotencyKey) {
         validateCardRequest(cardRequest);
         return apiClient.post(
                 buildPath(ISSUING_PATH, CARDS_PATH),
                 sdkAuthorization(),
                 CardResponse.class,
                 cardRequest,
-                null
+                idempotencyKey
         );
     }
 
@@ -853,8 +873,14 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
+    public CardControlResponse createControlSync(final CardControlRequest cardControlRequest) {
+        return createControlSync(cardControlRequest, null);
+    }
+
+    @Override
     public CardControlResponse createControlSync(
-            final CardControlRequest cardControlRequest
+            final CardControlRequest cardControlRequest,
+            final String idempotencyKey
     ) {
         validateCardControlRequest(cardControlRequest);
         return apiClient.post(
@@ -862,7 +888,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 sdkAuthorization(),
                 CardControlResponse.class,
                 cardControlRequest,
-                null
+                idempotencyKey
         );
     }
 
@@ -1152,6 +1178,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
     public DisputeResponse createDisputeSync(final CreateDisputeRequest createDisputeRequest, String idempotencyKey) {
         validateCreateDisputeRequest(createDisputeRequest);
         return apiClient.post(
@@ -1163,6 +1190,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
     public DisputeResponse getDisputeSync(final String disputeId) {
         validateDisputeId(disputeId);
         return apiClient.get(
@@ -1172,6 +1200,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
     public VoidResponse cancelDisputeSync(final String disputeId, String idempotencyKey) {
         validateDisputeId(disputeId);
         return apiClient.post(
@@ -1183,6 +1212,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    @Override
     public VoidResponse escalateDisputeSync(final String disputeId, String idempotencyKey,
                                                 final EscalateDisputeRequest escalateDisputeRequest) {
         validateDisputeIdAndEscalateRequest(disputeId, escalateDisputeRequest);

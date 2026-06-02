@@ -172,7 +172,7 @@ class IssuingControlsTestIT extends BaseIssuingTestIT {
                 .build();
 
         final CardControlResponse cardControlResponse = blocking(() ->
-                issuingApi.issuingClient().createControl(request));
+                issuingApi.issuingClient().createControl(request, null));
 
         assertNotNull(cardControlResponse);
         return cardControlResponse;

@@ -215,7 +215,25 @@ public class IssuingClientImplTest {
                     null
             )).thenReturn(CompletableFuture.completedFuture(response));
 
-            final CompletableFuture<CardResponse> future = client.createCard(request);
+            final CompletableFuture<CardResponse> future = client.createCard(request, null);
+
+            validateCardResponse(response, future.get());
+        }
+
+        @Test
+        void shouldCreateCardWithIdempotencyKey() throws ExecutionException, InterruptedException {
+            final VirtualCardRequest request = createVirtualCardRequest();
+            final CardResponse response = createCardResponse();
+
+            when(apiClient.postAsync(
+                    "issuing/cards",
+                    authorization,
+                    CardResponse.class,
+                    request,
+                    "idempotencyKey"
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<CardResponse> future = client.createCard(request, "idempotencyKey");
 
             validateCardResponse(response, future.get());
         }
@@ -442,7 +460,25 @@ public class IssuingClientImplTest {
                     null
             )).thenReturn(CompletableFuture.completedFuture(response));
 
-            final CompletableFuture<CardControlResponse> future = client.createControl(request);
+            final CompletableFuture<CardControlResponse> future = client.createControl(request, null);
+
+            validateCardControlResponse(response, future.get());
+        }
+
+        @Test
+        void shouldCreateControlWithIdempotencyKey() throws ExecutionException, InterruptedException {
+            final CardControlRequest request = createCardControlRequest();
+            final CardControlResponse response = createCardControlResponse();
+
+            when(apiClient.postAsync(
+                    "issuing/controls",
+                    authorization,
+                    CardControlResponse.class,
+                    request,
+                    "idempotencyKey"
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<CardControlResponse> future = client.createControl(request, "idempotencyKey");
 
             validateCardControlResponse(response, future.get());
         }
@@ -828,6 +864,7 @@ public class IssuingClientImplTest {
         }
     }
 
+    @Nested
     @DisplayName("Disputes")
     class Disputes {
         @Test
@@ -880,6 +917,7 @@ public class IssuingClientImplTest {
             validateVoidResponse(response, future.get());
         }
 
+        @Test
         void shouldEscalateDispute() throws ExecutionException, InterruptedException {
             final EscalateDisputeRequest request = createEscalateDisputeRequest();
             final VoidResponse response = createVoidResponse();
@@ -1021,7 +1059,25 @@ public class IssuingClientImplTest {
                     null
             )).thenReturn(expectedResponse);
 
-            final CardResponse actualResponse = client.createCardSync(request);
+            final CardResponse actualResponse = client.createCardSync(request, null);
+
+            validateCardResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldCreateCardSyncWithIdempotencyKey() {
+            final VirtualCardRequest request = createVirtualCardRequest();
+            final CardResponse expectedResponse = createCardResponse();
+
+            when(apiClient.post(
+                    "issuing/cards",
+                    authorization,
+                    CardResponse.class,
+                    request,
+                    "idempotencyKey"
+            )).thenReturn(expectedResponse);
+
+            final CardResponse actualResponse = client.createCardSync(request, "idempotencyKey");
 
             validateCardResponse(expectedResponse, actualResponse);
         }
@@ -1248,7 +1304,25 @@ public class IssuingClientImplTest {
                     null
             )).thenReturn(expectedResponse);
 
-            final CardControlResponse actualResponse = client.createControlSync(request);
+            final CardControlResponse actualResponse = client.createControlSync(request, null);
+
+            validateCardControlResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldCreateControlSyncWithIdempotencyKey() {
+            final CardControlRequest request = createCardControlRequest();
+            final CardControlResponse expectedResponse = createCardControlResponse();
+
+            when(apiClient.post(
+                    "issuing/controls",
+                    authorization,
+                    CardControlResponse.class,
+                    request,
+                    "idempotencyKey"
+            )).thenReturn(expectedResponse);
+
+            final CardControlResponse actualResponse = client.createControlSync(request, "idempotencyKey");
 
             validateCardControlResponse(expectedResponse, actualResponse);
         }
@@ -1632,6 +1706,7 @@ public class IssuingClientImplTest {
         }
     }
 
+    @Nested
     @DisplayName("Disputes Sync")
     class DisputesSync {
         @Test
@@ -1684,6 +1759,7 @@ public class IssuingClientImplTest {
             validateVoidResponse(expectedResponse, actualResponse);
         }
 
+        @Test
         void shouldEscalateDisputeSync() {
             final EscalateDisputeRequest request = createEscalateDisputeRequest();
             final VoidResponse expectedResponse = createVoidResponse();

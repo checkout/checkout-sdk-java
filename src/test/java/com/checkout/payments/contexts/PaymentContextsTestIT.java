@@ -21,7 +21,7 @@ class PaymentContextsTestIT extends SandboxTestFixture {
     @Test
     void shouldMakeAPaymentContextPayPalRequest() {
         final PaymentContextsRequest request = TestHelper.createPaymentContextsPayPalRequest();
-        final PaymentContextsRequestResponse response = blocking(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request));
+        final PaymentContextsRequestResponse response = blocking(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request, null));
         
         validatePayPalResponse(response);
     }
@@ -29,7 +29,7 @@ class PaymentContextsTestIT extends SandboxTestFixture {
     @Test
     void shouldMakeAPaymentContextKlarnaRequest() {
         final PaymentContextsRequest request = TestHelper.createPaymentContextsKlarnaRequest();
-        final PaymentContextsRequestResponse response = blocking(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request));
+        final PaymentContextsRequestResponse response = blocking(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request, null));
         
         validateKlarnaResponse(response);
     }
@@ -38,7 +38,7 @@ class PaymentContextsTestIT extends SandboxTestFixture {
     @Test
     void shouldMakeAPaymentContextStcpayRequest() {
         final PaymentContextsRequest request = TestHelper.createPaymentContextsStcpayRequest();
-        final PaymentContextsRequestResponse response = blocking(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request));
+        final PaymentContextsRequestResponse response = blocking(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request, null));
         
         validateStcpayResponse(response);
     }
@@ -46,13 +46,13 @@ class PaymentContextsTestIT extends SandboxTestFixture {
     @Test
     void shouldMakeAPaymentContextTabbyRequest() {
         final PaymentContextsRequest request = TestHelper.createPaymentContextsTabbyRequest();
-        checkErrorItem(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request), APM_SERVICE_UNAVAILABLE);
+        checkErrorItem(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request, null), APM_SERVICE_UNAVAILABLE);
     }
 
     @Test
     void shouldGetAPaymentContext() {
         final PaymentContextsRequest request = TestHelper.createPaymentContextsPayPalRequest();
-        final PaymentContextsRequestResponse paymentContextsResponse = blocking(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request));
+        final PaymentContextsRequestResponse paymentContextsResponse = blocking(() -> checkoutApi.paymentContextsClient().requestPaymentContexts(request, null));
         final PaymentContextDetailsResponse response = blocking(() -> checkoutApi.paymentContextsClient().getPaymentContextDetails(paymentContextsResponse.getId()));
         
         validatePaymentContextDetails(response);
@@ -62,7 +62,7 @@ class PaymentContextsTestIT extends SandboxTestFixture {
     @Test
     void shouldMakeAPaymentContextPayPalRequestSync() {
         final PaymentContextsRequest request = TestHelper.createPaymentContextsPayPalRequest();
-        final PaymentContextsRequestResponse response = checkoutApi.paymentContextsClient().requestPaymentContextsSync(request);
+        final PaymentContextsRequestResponse response = checkoutApi.paymentContextsClient().requestPaymentContextsSync(request, null);
         
         validatePayPalResponse(response);
     }
@@ -70,7 +70,7 @@ class PaymentContextsTestIT extends SandboxTestFixture {
     @Test
     void shouldMakeAPaymentContextKlarnaRequestSync() {
         final PaymentContextsRequest request = TestHelper.createPaymentContextsKlarnaRequest();
-        final PaymentContextsRequestResponse response = checkoutApi.paymentContextsClient().requestPaymentContextsSync(request);
+        final PaymentContextsRequestResponse response = checkoutApi.paymentContextsClient().requestPaymentContextsSync(request, null);
         
         validateKlarnaResponse(response);
     }
@@ -79,7 +79,7 @@ class PaymentContextsTestIT extends SandboxTestFixture {
     @Test
     void shouldMakeAPaymentContextStcpayRequestSync() {
         final PaymentContextsRequest request = TestHelper.createPaymentContextsStcpayRequest();
-        final PaymentContextsRequestResponse response = checkoutApi.paymentContextsClient().requestPaymentContextsSync(request);
+        final PaymentContextsRequestResponse response = checkoutApi.paymentContextsClient().requestPaymentContextsSync(request, null);
         
         validateStcpayResponse(response);
     }
@@ -87,13 +87,13 @@ class PaymentContextsTestIT extends SandboxTestFixture {
     @Test
     void shouldMakeAPaymentContextTabbyRequestSync() {
         final PaymentContextsRequest request = TestHelper.createPaymentContextsTabbyRequest();
-        checkErrorItemSync(() -> checkoutApi.paymentContextsClient().requestPaymentContextsSync(request), APM_SERVICE_UNAVAILABLE);
+        checkErrorItemSync(() -> checkoutApi.paymentContextsClient().requestPaymentContextsSync(request, null), APM_SERVICE_UNAVAILABLE);
     }
 
     @Test
     void shouldGetAPaymentContextSync() {
         final PaymentContextsRequest request = TestHelper.createPaymentContextsPayPalRequest();
-        final PaymentContextsRequestResponse paymentContextsResponse = checkoutApi.paymentContextsClient().requestPaymentContextsSync(request);
+        final PaymentContextsRequestResponse paymentContextsResponse = checkoutApi.paymentContextsClient().requestPaymentContextsSync(request, null);
         final PaymentContextDetailsResponse response = checkoutApi.paymentContextsClient().getPaymentContextDetailsSync(paymentContextsResponse.getId());
         
         validatePaymentContextDetails(response);
