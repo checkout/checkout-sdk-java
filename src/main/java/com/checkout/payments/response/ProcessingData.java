@@ -1,6 +1,8 @@
 package com.checkout.payments.response;
 
 import com.checkout.common.CountryCode;
+import com.checkout.payments.AccommodationData;
+import com.checkout.payments.AirlineData;
 import com.checkout.payments.PanProcessedType;
 import com.checkout.payments.PreferredSchema;
 import com.google.gson.annotations.SerializedName;
@@ -109,5 +111,44 @@ public final class ProcessingData {
      */
     @SerializedName("partner_response_code")
     private String partnerResponseCode;
+
+    /**
+     * The scheme on which the payment was authorized. This may differ from the card's scheme used
+     * for the payment if the card is co-badged and the payment was authorized on a different network.
+     * [Optional] readOnly
+     */
+    private String scheme;
+
+    /**
+     * Partner fraud status. If the status is {@code Pending}, and the merchant captures before it
+     * changes to {@code Accepted}, the risk of the transaction is solely on the merchant.
+     * [Optional]
+     */
+    @SerializedName("partner_fraud_status")
+    private String partnerFraudStatus;
+
+    /**
+     * The Mastercard Merchant Advice Code (MAC), which contains additional information about the
+     * transaction. For example, the MAC can inform you if the transaction was performed using a
+     * consumer non-reloadable prepaid card or a consumer single-use virtual card. For declined
+     * transactions, the MAC also indicates whether the payment can be retried and how long to wait.
+     * [Optional]
+     */
+    @SerializedName("partner_merchant_advice_code")
+    private String partnerMerchantAdviceCode;
+
+    /**
+     * Contains information about the accommodation booked by the customer.
+     * [Optional]
+     */
+    @SerializedName("accommodation_data")
+    private List<AccommodationData> accommodationData;
+
+    /**
+     * Contains information about the airline ticket and flights booked by the customer.
+     * [Optional]
+     */
+    @SerializedName("airline_data")
+    private List<AirlineData> airlineData;
 
 }
