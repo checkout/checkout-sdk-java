@@ -416,6 +416,12 @@ class GetPaymentsTestIT extends AbstractPaymentsTestIT {
     private void validateBasicGetPaymentResponse(GetPaymentResponse paymentReturned, PaymentStatus expectedStatus) {
         assertNotNull(paymentReturned);
         assertEquals(expectedStatus, paymentReturned.getStatus());
+        // Mastercard Transaction Link Identifier — optional, only populated for Mastercard
+        // transactions. Exercising the getter confirms the field is exposed by the SDK
+        // and deserializes without error even when absent from the response payload.
+        if (paymentReturned.getProcessing() != null) {
+            paymentReturned.getProcessing().getSchemeTransactionLinkId();
+        }
     }
 
     private void validatePaymentWithDigitalItem(GetPaymentResponse paymentReturned) {
