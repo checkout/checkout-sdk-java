@@ -148,4 +148,13 @@ public final class Processing {
     @SerializedName("cko_network_token_available")
     private Boolean ckoNetworkTokenAvailable;
 
+    /**
+     * The scheme transaction link identifier. Returned for Mastercard transactions when the scheme
+     * provides a link identifier that ties together related transactions on the network
+     * (see Mastercard Transaction Link Identifier documentation).
+     * [Optional]
+     */
+    @SerializedName("scheme_transaction_link_id")
+    private String schemeTransactionLinkId;
+
 }

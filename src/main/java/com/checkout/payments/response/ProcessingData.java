@@ -151,4 +151,13 @@ public final class ProcessingData {
     @SerializedName("airline_data")
     private List<AirlineData> airlineData;
 
+    /**
+     * The scheme transaction link identifier. Returned for Mastercard transactions when the scheme
+     * provides a link identifier that ties together related transactions on the network
+     * (see Mastercard Transaction Link Identifier documentation).
+     * [Optional]
+     */
+    @SerializedName("scheme_transaction_link_id")
+    private String schemeTransactionLinkId;
+
 }

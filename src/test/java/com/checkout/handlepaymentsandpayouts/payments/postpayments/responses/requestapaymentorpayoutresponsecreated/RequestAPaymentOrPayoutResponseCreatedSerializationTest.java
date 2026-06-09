@@ -12,6 +12,7 @@ import com.checkout.handlepaymentsandpayouts.payments.common.source.currencyacco
 import com.checkout.handlepaymentsandpayouts.payments.common.source.klarnasource.KlarnaSource;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.paypalsource.PaypalSource;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.sepasource.SepaSource;
+import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.processing.Processing;
 
 public final  class RequestAPaymentOrPayoutResponseCreatedSerializationTest {
 
@@ -147,6 +148,34 @@ public final  class RequestAPaymentOrPayoutResponseCreatedSerializationTest {
         assertInstanceOf(SepaSource.class, response.getSource());
         SepaSource sepaSource = (SepaSource) response.getSource();
         assertEquals("src_sepa_123", sepaSource.getId());
+    }
+
+    @Test
+    void shouldDeserializeProcessingSchemeTransactionLinkId() {
+        String json = "{\n" +
+                "  \"id\": \"pay_123\",\n" +
+                "  \"amount\": 1000,\n" +
+                "  \"currency\": \"USD\",\n" +
+                "  \"approved\": true,\n" +
+                "  \"status\": \"Authorized\",\n" +
+                "  \"processed_on\": \"2021-06-08T12:25:01Z\",\n" +
+                "  \"processing\": {\n" +
+                "    \"retrieval_reference_number\": \"RRN001\",\n" +
+                "    \"acquirer_transaction_id\": \"ACQ001\",\n" +
+                "    \"scheme\": \"Mastercard\",\n" +
+                "    \"scheme_transaction_link_id\": \"MTL-XYZ-789\"\n" +
+                "  }\n" +
+                "}";
+
+        RequestAPaymentOrPayoutResponseCreated response = serializer.fromJson(json, RequestAPaymentOrPayoutResponseCreated.class);
+
+        assertNotNull(response);
+        Processing processing = response.getProcessing();
+        assertNotNull(processing);
+        assertEquals("RRN001", processing.getRetrievalReferenceNumber());
+        assertEquals("ACQ001", processing.getAcquirerTransactionId());
+        assertEquals("Mastercard", processing.getScheme());
+        assertEquals("MTL-XYZ-789", processing.getSchemeTransactionLinkId());
     }
 
 }

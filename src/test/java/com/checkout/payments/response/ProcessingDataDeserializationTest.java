@@ -113,6 +113,16 @@ class ProcessingDataDeserializationTest {
     }
 
     @Test
+    void shouldDeserializeSchemeTransactionLinkId() {
+        final String json = "{\"scheme_transaction_link_id\":\"MTL-001\"}";
+
+        final ProcessingData data = serializer.fromJson(json, ProcessingData.class);
+
+        assertNotNull(data);
+        assertEquals("MTL-001", data.getSchemeTransactionLinkId());
+    }
+
+    @Test
     void shouldDeserializeAllNewFieldsTogether() {
         final String json = "{"
                 + "\"scheme\":\"VISA\","
@@ -121,7 +131,8 @@ class ProcessingDataDeserializationTest {
                 + "\"fallback_source_used\":false,"
                 + "\"failure_code\":\"partner_error\","
                 + "\"partner_code\":\"902111\","
-                + "\"partner_response_code\":\"DECLINED\""
+                + "\"partner_response_code\":\"DECLINED\","
+                + "\"scheme_transaction_link_id\":\"MTL-XYZ-789\""
                 + "}";
 
         final ProcessingData data = serializer.fromJson(json, ProcessingData.class);
@@ -134,6 +145,7 @@ class ProcessingDataDeserializationTest {
         assertEquals("partner_error", data.getFailureCode());
         assertEquals("902111", data.getPartnerCode());
         assertEquals("DECLINED", data.getPartnerResponseCode());
+        assertEquals("MTL-XYZ-789", data.getSchemeTransactionLinkId());
     }
 
     @Test
@@ -153,5 +165,6 @@ class ProcessingDataDeserializationTest {
         assertNull(data.getFailureCode());
         assertNull(data.getPartnerCode());
         assertNull(data.getPartnerResponseCode());
+        assertNull(data.getSchemeTransactionLinkId());
     }
 }

@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PaymentProcessingSerializationTest {
 
@@ -90,6 +91,26 @@ class PaymentProcessingSerializationTest {
 
         assertNotNull(processing);
         assertEquals("recon_001", processing.getReconciliationId());
+    }
+
+    @Test
+    void shouldDeserializeSchemeTransactionLinkId() {
+        final String json = "{\"scheme_transaction_link_id\":\"MTL-001\"}";
+
+        final PaymentProcessing processing = serializer.fromJson(json, PaymentProcessing.class);
+
+        assertNotNull(processing);
+        assertEquals("MTL-001", processing.getSchemeTransactionLinkId());
+    }
+
+    @Test
+    void shouldSerializeSchemeTransactionLinkIdToSnakeCase() {
+        final PaymentProcessing processing = new PaymentProcessing();
+        processing.setSchemeTransactionLinkId("MTL-001");
+
+        final String json = serializer.toJson(processing);
+
+        assertTrue(json.contains("\"scheme_transaction_link_id\":\"MTL-001\""));
     }
 
     @Test
@@ -182,7 +203,8 @@ class PaymentProcessingSerializationTest {
                 + "\"merchant_category_code\":\"5812\","
                 + "\"aft\":false,"
                 + "\"bizum_payment_id\":\"biz_001\","
-                + "\"reconciliation_id\":\"rec_001\""
+                + "\"reconciliation_id\":\"rec_001\","
+                + "\"scheme_transaction_link_id\":\"MTL-XYZ-789\""
                 + "}";
 
         final PaymentProcessing processing = serializer.fromJson(json, PaymentProcessing.class);
@@ -199,6 +221,7 @@ class PaymentProcessingSerializationTest {
         assertEquals(100L, processing.getForeignRetailerAmount());
         assertEquals("biz_001", processing.getBizumPaymentId());
         assertEquals("rec_001", processing.getReconciliationId());
+        assertEquals("MTL-XYZ-789", processing.getSchemeTransactionLinkId());
     }
 
     @Test
