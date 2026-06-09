@@ -53,7 +53,7 @@ class DefaultCheckoutConfigurationTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"a", "ab", "abc", "abc1", "12345domain", "a1b2c3d4", "12345678", "abcdefgh", "1234doma"})
+    @ValueSource(strings = {"a", "ab", "abc", "abc1", "12345domain", "a1b2c3d4", "12345678", "abcdefgh", "1234doma", "pl-abc123", "pl-loquesea", "vkuhvk4v", "pl-vkuhvk4v"})
     void shouldCreateConfigurationWithSubdomain(String subdomain) {
 
         final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
@@ -65,7 +65,7 @@ class DefaultCheckoutConfigurationTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", " ", "  ", " - ", "a b", "ab c1"})
+    @ValueSource(strings = {"", " ", "  ", " - ", "a b", "ab c1", "foo-", "-foo", "ABC123", "FOO", "test-123", "foo-bar", "pl-"})
     void shouldCreateConfigurationWithBadSubdomain(String subdomain) {
 
         final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
@@ -86,6 +86,28 @@ class DefaultCheckoutConfigurationTest {
         final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.PRODUCTION, environmentSubdomain, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, DEFAULT_TRANSPORT_CONFIGURATION, false);
         assertEquals("https://" + subdomain + ".api.checkout.com/", configuration.getEnvironmentSubdomain().getCheckoutApi().toString());
         assertEquals("https://" + subdomain + ".access.checkout.com/connect/token", configuration.getEnvironmentSubdomain().getOAuthAuthorizationApi().toString());
+    }
+
+    @Test
+    void shouldHaveCorrectSandboxUrls() {
+
+        assertEquals(create("https://api.sandbox.checkout.com/"), Environment.SANDBOX.getCheckoutApi());
+        assertEquals(create("https://files.sandbox.checkout.com/"), Environment.SANDBOX.getFilesApi());
+        assertEquals(create("https://transfers.sandbox.checkout.com/"), Environment.SANDBOX.getTransfersApi());
+        assertEquals(create("https://balances.sandbox.checkout.com/"), Environment.SANDBOX.getBalancesApi());
+        assertEquals(create("https://forward.sandbox.checkout.com/"), Environment.SANDBOX.getForwardApi());
+        assertEquals(create("https://identity-verification.sandbox.checkout.com/"), Environment.SANDBOX.getIdentityApi());
+    }
+
+    @Test
+    void shouldHaveCorrectProductionUrls() {
+
+        assertEquals(create("https://api.checkout.com/"), Environment.PRODUCTION.getCheckoutApi());
+        assertEquals(create("https://files.checkout.com/"), Environment.PRODUCTION.getFilesApi());
+        assertEquals(create("https://transfers.checkout.com/"), Environment.PRODUCTION.getTransfersApi());
+        assertEquals(create("https://balances.checkout.com/"), Environment.PRODUCTION.getBalancesApi());
+        assertEquals(create("https://forward.checkout.com/"), Environment.PRODUCTION.getForwardApi());
+        assertEquals(create("https://identity-verification.checkout.com/"), Environment.PRODUCTION.getIdentityApi());
     }
 
     @Test
@@ -136,6 +158,8 @@ class DefaultCheckoutConfigurationTest {
                 .filesApi(create("https://the.files.uri/"))
                 .transfersApi(create("https://the.transfers.uri/"))
                 .balancesApi(create("https://the.balances.uri/"))
+                .forwardApi(create("https://the.forward.uri/"))
+                .identityApi(create("https://the.identity.uri/"))
                 .build();
 
         final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
@@ -147,6 +171,8 @@ class DefaultCheckoutConfigurationTest {
         assertEquals(environment.getFilesApi(), configuration.getEnvironment().getFilesApi());
         assertEquals(environment.getTransfersApi(), configuration.getEnvironment().getTransfersApi());
         assertEquals(environment.getBalancesApi(), configuration.getEnvironment().getBalancesApi());
+        assertEquals(environment.getForwardApi(), configuration.getEnvironment().getForwardApi());
+        assertEquals(environment.getIdentityApi(), configuration.getEnvironment().getIdentityApi());
     }
 
     /**
