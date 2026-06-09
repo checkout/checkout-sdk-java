@@ -84,6 +84,7 @@ public final class UnreferencedRefundRequest {
      * non-primitive data types such as objects or arrays.
      * [Optional]
      */
+    @Builder.Default
     private Map<String, Object> metadata = new HashMap<>();
 
     /**
