@@ -22,6 +22,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public abstract class BaseIssuingTestIT extends SandboxTestFixture {
 
+    // currently not used: Sandbox card product account range is full error (card_product_account_range_full)
+    protected String oldProductId = "pro_3fn6pv2ikshurn36dbd3iysyha";
+
+    // new product with available account range created for testing purposes
+    protected String newProductId = "pro_gfp2kpog3ztutpgtpu4jj36n7i";
+    
     protected CheckoutApi issuingApi;
 
     public BaseIssuingTestIT() {
@@ -78,7 +84,7 @@ public abstract class BaseIssuingTestIT extends SandboxTestFixture {
     protected CardResponse createCard(final String cardholderId, final Boolean active) {
         final VirtualCardRequest request = VirtualCardRequest.builder()
                 .cardholderId(cardholderId)
-                .cardProductId("pro_3fn6pv2ikshurn36dbd3iysyha")
+                .cardProductId(newProductId)
                 .lifetime(CardLifetime.builder()
                         .unit(LifetimeUnit.MONTHS)
                         .value(6)
