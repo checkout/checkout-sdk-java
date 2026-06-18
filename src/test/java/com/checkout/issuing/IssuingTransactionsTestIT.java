@@ -6,15 +6,14 @@ import com.checkout.issuing.transactions.requests.TransactionsQuery;
 import com.checkout.issuing.transactions.responses.TransactionsListResponse;
 import com.checkout.issuing.transactions.responses.TransactionsSingleResponse;
 import org.junit.jupiter.api.BeforeAll;
-//import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
-//@Disabled("Sandbox card product account range is full (card_product_account_range_full); " +
-//            "requires a card product with available account range")
+@Disabled("Sandbox card product account range is full (422 invalid_request: card_product_account_range_full) - card creation prerequisite cannot be satisfied")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class IssuingTransactionsTestIT extends BaseIssuingTestIT {
 
