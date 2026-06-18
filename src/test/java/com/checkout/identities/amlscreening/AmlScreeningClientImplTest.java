@@ -58,7 +58,7 @@ class AmlScreeningClientImplTest {
                 eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<AmlScreeningResponse> future = client.createAmlScreeningAsync(request);
+        final CompletableFuture<AmlScreeningResponse> future = client.createAmlScreening(request);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -73,7 +73,7 @@ class AmlScreeningClientImplTest {
                 AmlScreeningResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<AmlScreeningResponse> future = client.getAmlScreeningAsync(amlScreeningId);
+        final CompletableFuture<AmlScreeningResponse> future = client.getAmlScreening(amlScreeningId);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -89,7 +89,7 @@ class AmlScreeningClientImplTest {
                 eq(request), isNull()))
                 .thenReturn(response);
 
-        final AmlScreeningResponse result = client.createAmlScreening(request);
+        final AmlScreeningResponse result = client.createAmlScreeningSync(request);
 
         assertNotNull(result);
         assertEquals(response, result);
@@ -104,7 +104,7 @@ class AmlScreeningClientImplTest {
                 AmlScreeningResponse.class))
                 .thenReturn(response);
 
-        final AmlScreeningResponse result = client.getAmlScreening(amlScreeningId);
+        final AmlScreeningResponse result = client.getAmlScreeningSync(amlScreeningId);
 
         assertNotNull(result);
         assertEquals(response, result);

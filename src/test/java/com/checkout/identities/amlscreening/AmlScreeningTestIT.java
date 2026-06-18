@@ -31,7 +31,7 @@ class AmlScreeningTestIT extends SandboxTestFixture {
 
         // Act
         final AmlScreeningResponse response = blocking(() -> 
-                checkoutApi.amlScreeningClient().createAmlScreeningAsync(request));
+                checkoutApi.amlScreeningClient().createAmlScreening(request));
 
         // Assert
         validateCreatedAmlScreening(response, request);
@@ -43,11 +43,11 @@ class AmlScreeningTestIT extends SandboxTestFixture {
         // Arrange
         final AmlScreeningRequest request = createAmlScreeningRequest();
         final AmlScreeningResponse created = blocking(() ->
-                checkoutApi.amlScreeningClient().createAmlScreeningAsync(request));
+                checkoutApi.amlScreeningClient().createAmlScreening(request));
 
         // Act
         final AmlScreeningResponse retrieved = blocking(() ->
-                checkoutApi.amlScreeningClient().getAmlScreeningAsync(created.getId()));
+                checkoutApi.amlScreeningClient().getAmlScreening(created.getId()));
 
         // Assert
         validateRetrievedAmlScreening(retrieved, created);
@@ -61,7 +61,7 @@ class AmlScreeningTestIT extends SandboxTestFixture {
         final AmlScreeningRequest request = createAmlScreeningRequest();
 
         // Act
-        final AmlScreeningResponse response = checkoutApi.amlScreeningClient().createAmlScreening(request);
+        final AmlScreeningResponse response = checkoutApi.amlScreeningClient().createAmlScreeningSync(request);
 
         // Assert
         validateCreatedAmlScreening(response, request);
@@ -72,10 +72,10 @@ class AmlScreeningTestIT extends SandboxTestFixture {
     void shouldGetAmlScreeningSync() {
         // Arrange
         final AmlScreeningRequest request = createAmlScreeningRequest();
-        final AmlScreeningResponse created = checkoutApi.amlScreeningClient().createAmlScreening(request);
+        final AmlScreeningResponse created = checkoutApi.amlScreeningClient().createAmlScreeningSync(request);
 
         // Act
-        final AmlScreeningResponse retrieved = checkoutApi.amlScreeningClient().getAmlScreening(created.getId());
+        final AmlScreeningResponse retrieved = checkoutApi.amlScreeningClient().getAmlScreeningSync(created.getId());
 
         // Assert
         validateRetrievedAmlScreening(retrieved, created);

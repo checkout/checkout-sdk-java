@@ -25,7 +25,7 @@ public interface IdentityVerificationClient {
      * @param identityVerificationRequest the identity verification request
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationResponse}
      */
-    CompletableFuture<IdentityVerificationResponse> createAndOpenIdentityVerificationAsync(CreateAndOpenIdentityVerificationRequest identityVerificationRequest);
+    CompletableFuture<IdentityVerificationResponse> createAndOpenIdentityVerification(CreateAndOpenIdentityVerificationRequest identityVerificationRequest);
 
     /**
      * Create an identity verification session
@@ -33,7 +33,7 @@ public interface IdentityVerificationClient {
      * @param identityVerificationRequest the identity verification request
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationResponse}
      */
-    CompletableFuture<IdentityVerificationResponse> createIdentityVerificationAsync(IdentityVerificationRequest identityVerificationRequest);
+    CompletableFuture<IdentityVerificationResponse> createIdentityVerification(IdentityVerificationRequest identityVerificationRequest);
 
     /**
      * Retrieve an identity verification session
@@ -41,7 +41,7 @@ public interface IdentityVerificationClient {
      * @param identityVerificationId the identity verification ID
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationResponse}
      */
-    CompletableFuture<IdentityVerificationResponse> getIdentityVerificationAsync(String identityVerificationId);
+    CompletableFuture<IdentityVerificationResponse> getIdentityVerification(String identityVerificationId);
 
     /**
      * Anonymize an identity verification
@@ -49,7 +49,7 @@ public interface IdentityVerificationClient {
      * @param identityVerificationId the identity verification ID
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationResponse}
      */
-    CompletableFuture<IdentityVerificationResponse> anonymizeIdentityVerificationAsync(String identityVerificationId);
+    CompletableFuture<IdentityVerificationResponse> anonymizeIdentityVerification(String identityVerificationId);
 
     /**
      * Retrieve all identity verification attempts
@@ -57,7 +57,7 @@ public interface IdentityVerificationClient {
      * @param identityVerificationId the identity verification ID
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationAttemptsResponse}
      */
-    CompletableFuture<IdentityVerificationAttemptsResponse> getIdentityVerificationAttemptsAsync(String identityVerificationId);
+    CompletableFuture<IdentityVerificationAttemptsResponse> getIdentityVerificationAttempts(String identityVerificationId);
 
     /**
      * Create an identity verification attempt
@@ -66,7 +66,7 @@ public interface IdentityVerificationClient {
      * @param identityVerificationAttemptRequest the attempt request
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationAttemptResponse}
      */
-    CompletableFuture<IdentityVerificationAttemptResponse> createIdentityVerificationAttemptAsync(String identityVerificationId, IdentityVerificationAttemptRequest identityVerificationAttemptRequest);
+    CompletableFuture<IdentityVerificationAttemptResponse> createIdentityVerificationAttempt(String identityVerificationId, IdentityVerificationAttemptRequest identityVerificationAttemptRequest);
 
     /**
      * Retrieve a specific identity verification attempt
@@ -75,7 +75,7 @@ public interface IdentityVerificationClient {
      * @param attemptId the attempt ID
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationAttemptResponse}
      */
-    CompletableFuture<IdentityVerificationAttemptResponse> getIdentityVerificationAttemptAsync(String identityVerificationId, String attemptId);
+    CompletableFuture<IdentityVerificationAttemptResponse> getIdentityVerificationAttempt(String identityVerificationId, String attemptId);
 
     /**
      * Retrieves the assets (face images, videos, and document images) captured during an identity verification attempt.
@@ -85,7 +85,7 @@ public interface IdentityVerificationClient {
      * @param queryFilter the pagination query parameters (skip and limit)
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationAttemptAssetsResponse}
      */
-    CompletableFuture<IdentityVerificationAttemptAssetsResponse> getIdentityVerificationAttemptAssetsAsync(String identityVerificationId, String attemptId, AttemptAssetsQueryFilter queryFilter);
+    CompletableFuture<IdentityVerificationAttemptAssetsResponse> getIdentityVerificationAttemptAssets(String identityVerificationId, String attemptId, AttemptAssetsQueryFilter queryFilter);
 
     /**
      * Generate and download a PDF report
@@ -93,7 +93,7 @@ public interface IdentityVerificationClient {
      * @param identityVerificationId the identity verification ID
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationReportResponse}
      */
-    CompletableFuture<IdentityVerificationReportResponse> generateIdentityVerificationReportAsync(String identityVerificationId);
+    CompletableFuture<IdentityVerificationReportResponse> generateIdentityVerificationReport(String identityVerificationId);
 
     // Sync methods
 
@@ -103,7 +103,7 @@ public interface IdentityVerificationClient {
      * @param identityVerificationRequest the identity verification request
      * @return the {@link IdentityVerificationResponse}
      */
-    IdentityVerificationResponse createAndOpenIdentityVerification(CreateAndOpenIdentityVerificationRequest identityVerificationRequest);
+    IdentityVerificationResponse createAndOpenIdentityVerificationSync(CreateAndOpenIdentityVerificationRequest identityVerificationRequest);
 
     /**
      * Create an identity verification session
@@ -111,7 +111,7 @@ public interface IdentityVerificationClient {
      * @param identityVerificationRequest the identity verification request
      * @return the {@link IdentityVerificationResponse}
      */
-    IdentityVerificationResponse createIdentityVerification(IdentityVerificationRequest identityVerificationRequest);
+    IdentityVerificationResponse createIdentityVerificationSync(IdentityVerificationRequest identityVerificationRequest);
 
     /**
      * Retrieve an identity verification session
@@ -119,7 +119,7 @@ public interface IdentityVerificationClient {
      * @param identityVerificationId the identity verification ID
      * @return the {@link IdentityVerificationResponse}
      */
-    IdentityVerificationResponse getIdentityVerification(String identityVerificationId);
+    IdentityVerificationResponse getIdentityVerificationSync(String identityVerificationId);
 
     /**
      * Anonymize an identity verification
@@ -127,7 +127,7 @@ public interface IdentityVerificationClient {
      * @param identityVerificationId the identity verification ID
      * @return the {@link IdentityVerificationResponse}
      */
-    IdentityVerificationResponse anonymizeIdentityVerification(String identityVerificationId);
+    IdentityVerificationResponse anonymizeIdentityVerificationSync(String identityVerificationId);
 
     /**
      * Retrieve all identity verification attempts
@@ -135,7 +135,7 @@ public interface IdentityVerificationClient {
      * @param identityVerificationId the identity verification ID
      * @return the {@link IdentityVerificationAttemptsResponse}
      */
-    IdentityVerificationAttemptsResponse getIdentityVerificationAttempts(String identityVerificationId);
+    IdentityVerificationAttemptsResponse getIdentityVerificationAttemptsSync(String identityVerificationId);
 
     /**
      * Create an identity verification attempt
@@ -144,7 +144,7 @@ public interface IdentityVerificationClient {
      * @param identityVerificationAttemptRequest the attempt request
      * @return the {@link IdentityVerificationAttemptResponse}
      */
-    IdentityVerificationAttemptResponse createIdentityVerificationAttempt(String identityVerificationId, IdentityVerificationAttemptRequest identityVerificationAttemptRequest);
+    IdentityVerificationAttemptResponse createIdentityVerificationAttemptSync(String identityVerificationId, IdentityVerificationAttemptRequest identityVerificationAttemptRequest);
 
     /**
      * Retrieve a specific identity verification attempt
@@ -153,7 +153,7 @@ public interface IdentityVerificationClient {
      * @param attemptId the attempt ID
      * @return the {@link IdentityVerificationAttemptResponse}
      */
-    IdentityVerificationAttemptResponse getIdentityVerificationAttempt(String identityVerificationId, String attemptId);
+    IdentityVerificationAttemptResponse getIdentityVerificationAttemptSync(String identityVerificationId, String attemptId);
 
     /**
      * Retrieves the assets (face images, videos, and document images) captured during an identity verification attempt.
@@ -163,7 +163,7 @@ public interface IdentityVerificationClient {
      * @param queryFilter the pagination query parameters (skip and limit)
      * @return the {@link IdentityVerificationAttemptAssetsResponse}
      */
-    IdentityVerificationAttemptAssetsResponse getIdentityVerificationAttemptAssets(String identityVerificationId, String attemptId, AttemptAssetsQueryFilter queryFilter);
+    IdentityVerificationAttemptAssetsResponse getIdentityVerificationAttemptAssetsSync(String identityVerificationId, String attemptId, AttemptAssetsQueryFilter queryFilter);
 
     /**
      * Generate and download a PDF report
@@ -171,5 +171,5 @@ public interface IdentityVerificationClient {
      * @param identityVerificationId the identity verification ID
      * @return the {@link IdentityVerificationReportResponse}
      */
-    IdentityVerificationReportResponse generateIdentityVerificationReport(String identityVerificationId);
+    IdentityVerificationReportResponse generateIdentityVerificationReportSync(String identityVerificationId);
 }

@@ -32,145 +32,13 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
 
     @Test
     @Disabled("Integration test - requires valid applicant and user journey")
-    void shouldCreateAndOpenIdentityVerificationAsync() {
-        // Arrange
-        final CreateAndOpenIdentityVerificationRequest request = createCreateAndOpenIdentityVerificationRequest();
-
-        // Act
-        final IdentityVerificationResponse response = blocking(() -> 
-                checkoutApi.identityVerificationClient().createAndOpenIdentityVerificationAsync(request));
-
-        // Assert
-        validateCreatedAndOpenedIdentityVerification(response, request);
-    }
-
-    @Test
-    @Disabled("Integration test - requires valid applicant and user journey")
-    void shouldCreateIdentityVerificationAsync() {
-        // Arrange
-        final IdentityVerificationRequest request = createIdentityVerificationRequest();
-
-        // Act
-        final IdentityVerificationResponse response = blocking(() -> 
-                checkoutApi.identityVerificationClient().createIdentityVerificationAsync(request));
-
-        // Assert
-        validateCreatedIdentityVerification(response, request);
-    }
-
-    @Test
-    @Disabled("Integration test - requires valid identity verification ID")
-    void shouldGetIdentityVerificationAsync() {
-        // Arrange
-        final IdentityVerificationRequest request = createIdentityVerificationRequest();
-        final IdentityVerificationResponse created = blocking(() ->
-                checkoutApi.identityVerificationClient().createIdentityVerificationAsync(request));
-
-        // Act
-        final IdentityVerificationResponse retrieved = blocking(() ->
-                checkoutApi.identityVerificationClient().getIdentityVerificationAsync(created.getId()));
-
-        // Assert
-        validateRetrievedIdentityVerification(retrieved, created);
-    }
-
-    @Test
-    @Disabled("Integration test - requires valid identity verification ID")
-    void shouldAnonymizeIdentityVerificationAsync() {
-        // Arrange
-        final IdentityVerificationRequest request = createIdentityVerificationRequest();
-        final IdentityVerificationResponse created = blocking(() ->
-                checkoutApi.identityVerificationClient().createIdentityVerificationAsync(request));
-
-        // Act
-        final IdentityVerificationResponse anonymized = blocking(() ->
-                checkoutApi.identityVerificationClient().anonymizeIdentityVerificationAsync(created.getId()));
-
-        // Assert
-        validateAnonymizedIdentityVerification(anonymized);
-    }
-
-    @Test
-    @Disabled("Integration test - requires valid identity verification ID")
-    void shouldGetIdentityVerificationAttemptsAsync() {
-        // Arrange
-        final IdentityVerificationRequest request = createIdentityVerificationRequest();
-        final IdentityVerificationResponse created = blocking(() ->
-                checkoutApi.identityVerificationClient().createIdentityVerificationAsync(request));
-        final IdentityVerificationAttemptRequest attemptRequest = createIdentityVerificationAttemptRequest();
-        final IdentityVerificationAttemptResponse createdAttempt = blocking(() ->
-                checkoutApi.identityVerificationClient().createIdentityVerificationAttemptAsync(created.getId(), attemptRequest));
-
-        // Act
-        final IdentityVerificationAttemptsResponse attempts = blocking(() ->
-                checkoutApi.identityVerificationClient().getIdentityVerificationAttemptsAsync(created.getId()));
-
-        // Assert
-        validateRetrievedIdentityVerificationAttempts(attempts, createdAttempt);
-    }
-
-    @Test
-    @Disabled("Integration test - requires valid identity verification ID")
-    void shouldCreateIdentityVerificationAttemptAsync() {
-        // Arrange
-        final IdentityVerificationRequest request = createIdentityVerificationRequest();
-        final IdentityVerificationResponse created = blocking(() ->
-                checkoutApi.identityVerificationClient().createIdentityVerificationAsync(request));
-        final IdentityVerificationAttemptRequest attemptRequest = createIdentityVerificationAttemptRequest();
-
-        // Act
-        final IdentityVerificationAttemptResponse attempt = blocking(() ->
-                checkoutApi.identityVerificationClient().createIdentityVerificationAttemptAsync(created.getId(), attemptRequest));
-
-        // Assert
-        validateCreatedIdentityVerificationAttempt(attempt);
-    }
-
-    @Test
-    @Disabled("Integration test - requires valid identity verification and attempt IDs")
-    void shouldGetIdentityVerificationAttemptAsync() {
-        // Arrange
-        final IdentityVerificationRequest request = createIdentityVerificationRequest();
-        final IdentityVerificationResponse created = blocking(() ->
-                checkoutApi.identityVerificationClient().createIdentityVerificationAsync(request));
-        final IdentityVerificationAttemptRequest attemptRequest = createIdentityVerificationAttemptRequest();
-        final IdentityVerificationAttemptResponse createdAttempt = blocking(() ->
-                checkoutApi.identityVerificationClient().createIdentityVerificationAttemptAsync(created.getId(), attemptRequest));
-
-        // Act
-        final IdentityVerificationAttemptResponse retrievedAttempt = blocking(() ->
-                checkoutApi.identityVerificationClient().getIdentityVerificationAttemptAsync(created.getId(), createdAttempt.getId()));
-
-        // Assert
-        validateRetrievedIdentityVerificationAttempt(retrievedAttempt, createdAttempt);
-    }
-
-    @Test
-    @Disabled("Integration test - requires valid identity verification ID")
-    void shouldGenerateIdentityVerificationReportAsync() {
-        // Arrange
-        final IdentityVerificationRequest request = createIdentityVerificationRequest();
-        final IdentityVerificationResponse created = blocking(() ->
-                checkoutApi.identityVerificationClient().createIdentityVerificationAsync(request));
-
-        // Act
-        final IdentityVerificationReportResponse report = blocking(() ->
-                checkoutApi.identityVerificationClient().generateIdentityVerificationReportAsync(created.getId()));
-
-        // Assert
-        validateGeneratedIdentityVerificationReport(report);
-    }
-
-    // Synchronous methods
-
-    @Test
-    @Disabled("Integration test - requires valid applicant and user journey")
     void shouldCreateAndOpenIdentityVerification() {
         // Arrange
         final CreateAndOpenIdentityVerificationRequest request = createCreateAndOpenIdentityVerificationRequest();
 
         // Act
-        final IdentityVerificationResponse response = checkoutApi.identityVerificationClient().createAndOpenIdentityVerification(request);
+        final IdentityVerificationResponse response = blocking(() -> 
+                checkoutApi.identityVerificationClient().createAndOpenIdentityVerification(request));
 
         // Assert
         validateCreatedAndOpenedIdentityVerification(response, request);
@@ -183,7 +51,8 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
         final IdentityVerificationRequest request = createIdentityVerificationRequest();
 
         // Act
-        final IdentityVerificationResponse response = checkoutApi.identityVerificationClient().createIdentityVerification(request);
+        final IdentityVerificationResponse response = blocking(() -> 
+                checkoutApi.identityVerificationClient().createIdentityVerification(request));
 
         // Assert
         validateCreatedIdentityVerification(response, request);
@@ -194,10 +63,12 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
     void shouldGetIdentityVerification() {
         // Arrange
         final IdentityVerificationRequest request = createIdentityVerificationRequest();
-        final IdentityVerificationResponse created = checkoutApi.identityVerificationClient().createIdentityVerification(request);
+        final IdentityVerificationResponse created = blocking(() ->
+                checkoutApi.identityVerificationClient().createIdentityVerification(request));
 
         // Act
-        final IdentityVerificationResponse retrieved = checkoutApi.identityVerificationClient().getIdentityVerification(created.getId());
+        final IdentityVerificationResponse retrieved = blocking(() ->
+                checkoutApi.identityVerificationClient().getIdentityVerification(created.getId()));
 
         // Assert
         validateRetrievedIdentityVerification(retrieved, created);
@@ -208,10 +79,12 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
     void shouldAnonymizeIdentityVerification() {
         // Arrange
         final IdentityVerificationRequest request = createIdentityVerificationRequest();
-        final IdentityVerificationResponse created = checkoutApi.identityVerificationClient().createIdentityVerification(request);
+        final IdentityVerificationResponse created = blocking(() ->
+                checkoutApi.identityVerificationClient().createIdentityVerification(request));
 
         // Act
-        final IdentityVerificationResponse anonymized = checkoutApi.identityVerificationClient().anonymizeIdentityVerification(created.getId());
+        final IdentityVerificationResponse anonymized = blocking(() ->
+                checkoutApi.identityVerificationClient().anonymizeIdentityVerification(created.getId()));
 
         // Assert
         validateAnonymizedIdentityVerification(anonymized);
@@ -222,12 +95,15 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
     void shouldGetIdentityVerificationAttempts() {
         // Arrange
         final IdentityVerificationRequest request = createIdentityVerificationRequest();
-        final IdentityVerificationResponse created = checkoutApi.identityVerificationClient().createIdentityVerification(request);
+        final IdentityVerificationResponse created = blocking(() ->
+                checkoutApi.identityVerificationClient().createIdentityVerification(request));
         final IdentityVerificationAttemptRequest attemptRequest = createIdentityVerificationAttemptRequest();
-        final IdentityVerificationAttemptResponse createdAttempt = checkoutApi.identityVerificationClient().createIdentityVerificationAttempt(created.getId(), attemptRequest);
+        final IdentityVerificationAttemptResponse createdAttempt = blocking(() ->
+                checkoutApi.identityVerificationClient().createIdentityVerificationAttempt(created.getId(), attemptRequest));
 
         // Act
-        final IdentityVerificationAttemptsResponse attempts = checkoutApi.identityVerificationClient().getIdentityVerificationAttempts(created.getId());
+        final IdentityVerificationAttemptsResponse attempts = blocking(() ->
+                checkoutApi.identityVerificationClient().getIdentityVerificationAttempts(created.getId()));
 
         // Assert
         validateRetrievedIdentityVerificationAttempts(attempts, createdAttempt);
@@ -238,11 +114,13 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
     void shouldCreateIdentityVerificationAttempt() {
         // Arrange
         final IdentityVerificationRequest request = createIdentityVerificationRequest();
-        final IdentityVerificationResponse created = checkoutApi.identityVerificationClient().createIdentityVerification(request);
+        final IdentityVerificationResponse created = blocking(() ->
+                checkoutApi.identityVerificationClient().createIdentityVerification(request));
         final IdentityVerificationAttemptRequest attemptRequest = createIdentityVerificationAttemptRequest();
 
         // Act
-        final IdentityVerificationAttemptResponse attempt = checkoutApi.identityVerificationClient().createIdentityVerificationAttempt(created.getId(), attemptRequest);
+        final IdentityVerificationAttemptResponse attempt = blocking(() ->
+                checkoutApi.identityVerificationClient().createIdentityVerificationAttempt(created.getId(), attemptRequest));
 
         // Assert
         validateCreatedIdentityVerificationAttempt(attempt);
@@ -253,12 +131,134 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
     void shouldGetIdentityVerificationAttempt() {
         // Arrange
         final IdentityVerificationRequest request = createIdentityVerificationRequest();
-        final IdentityVerificationResponse created = checkoutApi.identityVerificationClient().createIdentityVerification(request);
+        final IdentityVerificationResponse created = blocking(() ->
+                checkoutApi.identityVerificationClient().createIdentityVerification(request));
         final IdentityVerificationAttemptRequest attemptRequest = createIdentityVerificationAttemptRequest();
-        final IdentityVerificationAttemptResponse createdAttempt = checkoutApi.identityVerificationClient().createIdentityVerificationAttempt(created.getId(), attemptRequest);
+        final IdentityVerificationAttemptResponse createdAttempt = blocking(() ->
+                checkoutApi.identityVerificationClient().createIdentityVerificationAttempt(created.getId(), attemptRequest));
 
         // Act
-        final IdentityVerificationAttemptResponse retrievedAttempt = checkoutApi.identityVerificationClient().getIdentityVerificationAttempt(created.getId(), createdAttempt.getId());
+        final IdentityVerificationAttemptResponse retrievedAttempt = blocking(() ->
+                checkoutApi.identityVerificationClient().getIdentityVerificationAttempt(created.getId(), createdAttempt.getId()));
+
+        // Assert
+        validateRetrievedIdentityVerificationAttempt(retrievedAttempt, createdAttempt);
+    }
+
+    @Test
+    @Disabled("Integration test - requires valid identity verification ID")
+    void shouldGenerateIdentityVerificationReport() {
+        // Arrange
+        final IdentityVerificationRequest request = createIdentityVerificationRequest();
+        final IdentityVerificationResponse created = blocking(() ->
+                checkoutApi.identityVerificationClient().createIdentityVerification(request));
+
+        // Act
+        final IdentityVerificationReportResponse report = blocking(() ->
+                checkoutApi.identityVerificationClient().generateIdentityVerificationReport(created.getId()));
+
+        // Assert
+        validateGeneratedIdentityVerificationReport(report);
+    }
+
+    // Synchronous methods
+
+    @Test
+    @Disabled("Integration test - requires valid applicant and user journey")
+    void shouldCreateAndOpenIdentityVerificationSync() {
+        // Arrange
+        final CreateAndOpenIdentityVerificationRequest request = createCreateAndOpenIdentityVerificationRequest();
+
+        // Act
+        final IdentityVerificationResponse response = checkoutApi.identityVerificationClient().createAndOpenIdentityVerificationSync(request);
+
+        // Assert
+        validateCreatedAndOpenedIdentityVerification(response, request);
+    }
+
+    @Test
+    @Disabled("Integration test - requires valid applicant and user journey")
+    void shouldCreateIdentityVerificationSync() {
+        // Arrange
+        final IdentityVerificationRequest request = createIdentityVerificationRequest();
+
+        // Act
+        final IdentityVerificationResponse response = checkoutApi.identityVerificationClient().createIdentityVerificationSync(request);
+
+        // Assert
+        validateCreatedIdentityVerification(response, request);
+    }
+
+    @Test
+    @Disabled("Integration test - requires valid identity verification ID")
+    void shouldGetIdentityVerificationSync() {
+        // Arrange
+        final IdentityVerificationRequest request = createIdentityVerificationRequest();
+        final IdentityVerificationResponse created = checkoutApi.identityVerificationClient().createIdentityVerificationSync(request);
+
+        // Act
+        final IdentityVerificationResponse retrieved = checkoutApi.identityVerificationClient().getIdentityVerificationSync(created.getId());
+
+        // Assert
+        validateRetrievedIdentityVerification(retrieved, created);
+    }
+
+    @Test
+    @Disabled("Integration test - requires valid identity verification ID")
+    void shouldAnonymizeIdentityVerificationSync() {
+        // Arrange
+        final IdentityVerificationRequest request = createIdentityVerificationRequest();
+        final IdentityVerificationResponse created = checkoutApi.identityVerificationClient().createIdentityVerificationSync(request);
+
+        // Act
+        final IdentityVerificationResponse anonymized = checkoutApi.identityVerificationClient().anonymizeIdentityVerificationSync(created.getId());
+
+        // Assert
+        validateAnonymizedIdentityVerification(anonymized);
+    }
+
+    @Test
+    @Disabled("Integration test - requires valid identity verification ID")
+    void shouldGetIdentityVerificationAttemptsSync() {
+        // Arrange
+        final IdentityVerificationRequest request = createIdentityVerificationRequest();
+        final IdentityVerificationResponse created = checkoutApi.identityVerificationClient().createIdentityVerificationSync(request);
+        final IdentityVerificationAttemptRequest attemptRequest = createIdentityVerificationAttemptRequest();
+        final IdentityVerificationAttemptResponse createdAttempt = checkoutApi.identityVerificationClient().createIdentityVerificationAttemptSync(created.getId(), attemptRequest);
+
+        // Act
+        final IdentityVerificationAttemptsResponse attempts = checkoutApi.identityVerificationClient().getIdentityVerificationAttemptsSync(created.getId());
+
+        // Assert
+        validateRetrievedIdentityVerificationAttempts(attempts, createdAttempt);
+    }
+
+    @Test
+    @Disabled("Integration test - requires valid identity verification ID")
+    void shouldCreateIdentityVerificationAttemptSync() {
+        // Arrange
+        final IdentityVerificationRequest request = createIdentityVerificationRequest();
+        final IdentityVerificationResponse created = checkoutApi.identityVerificationClient().createIdentityVerificationSync(request);
+        final IdentityVerificationAttemptRequest attemptRequest = createIdentityVerificationAttemptRequest();
+
+        // Act
+        final IdentityVerificationAttemptResponse attempt = checkoutApi.identityVerificationClient().createIdentityVerificationAttemptSync(created.getId(), attemptRequest);
+
+        // Assert
+        validateCreatedIdentityVerificationAttempt(attempt);
+    }
+
+    @Test
+    @Disabled("Integration test - requires valid identity verification and attempt IDs")
+    void shouldGetIdentityVerificationAttemptSync() {
+        // Arrange
+        final IdentityVerificationRequest request = createIdentityVerificationRequest();
+        final IdentityVerificationResponse created = checkoutApi.identityVerificationClient().createIdentityVerificationSync(request);
+        final IdentityVerificationAttemptRequest attemptRequest = createIdentityVerificationAttemptRequest();
+        final IdentityVerificationAttemptResponse createdAttempt = checkoutApi.identityVerificationClient().createIdentityVerificationAttemptSync(created.getId(), attemptRequest);
+
+        // Act
+        final IdentityVerificationAttemptResponse retrievedAttempt = checkoutApi.identityVerificationClient().getIdentityVerificationAttemptSync(created.getId(), createdAttempt.getId());
 
         // Assert
         validateRetrievedIdentityVerificationAttempt(retrievedAttempt, createdAttempt);
@@ -266,16 +266,16 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
 
     @Test
     @Disabled("Integration test - requires valid identity verification and attempt IDs")
-    void shouldGetIdentityVerificationAttemptAssets() {
+    void shouldGetIdentityVerificationAttemptAssetsSync() {
         // Arrange
         final IdentityVerificationRequest request = createIdentityVerificationRequest();
-        final IdentityVerificationResponse created = checkoutApi.identityVerificationClient().createIdentityVerification(request);
+        final IdentityVerificationResponse created = checkoutApi.identityVerificationClient().createIdentityVerificationSync(request);
         final IdentityVerificationAttemptRequest attemptRequest = createIdentityVerificationAttemptRequest();
-        final IdentityVerificationAttemptResponse createdAttempt = checkoutApi.identityVerificationClient().createIdentityVerificationAttempt(created.getId(), attemptRequest);
+        final IdentityVerificationAttemptResponse createdAttempt = checkoutApi.identityVerificationClient().createIdentityVerificationAttemptSync(created.getId(), attemptRequest);
         final AttemptAssetsQueryFilter queryFilter = AttemptAssetsQueryFilter.builder().skip(0).limit(10).build();
 
         // Act
-        final IdentityVerificationAttemptAssetsResponse assets = checkoutApi.identityVerificationClient().getIdentityVerificationAttemptAssets(created.getId(), createdAttempt.getId(), queryFilter);
+        final IdentityVerificationAttemptAssetsResponse assets = checkoutApi.identityVerificationClient().getIdentityVerificationAttemptAssetsSync(created.getId(), createdAttempt.getId(), queryFilter);
 
         // Assert
         assertNotNull(assets);
@@ -284,13 +284,13 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
 
     @Test
     @Disabled("Integration test - requires valid identity verification ID")
-    void shouldGenerateIdentityVerificationReport() {
+    void shouldGenerateIdentityVerificationReportSync() {
         // Arrange
         final IdentityVerificationRequest request = createIdentityVerificationRequest();
-        final IdentityVerificationResponse created = checkoutApi.identityVerificationClient().createIdentityVerification(request);
+        final IdentityVerificationResponse created = checkoutApi.identityVerificationClient().createIdentityVerificationSync(request);
 
         // Act
-        final IdentityVerificationReportResponse report = checkoutApi.identityVerificationClient().generateIdentityVerificationReport(created.getId());
+        final IdentityVerificationReportResponse report = checkoutApi.identityVerificationClient().generateIdentityVerificationReportSync(created.getId());
 
         // Assert
         validateGeneratedIdentityVerificationReport(report);

@@ -34,7 +34,7 @@ public class ReconciliationClientImpl extends AbstractClient implements Reconcil
     }
 
     @Override
-    public CompletableFuture<ReconciliationPaymentReportResponse> singlePaymentReportAsync(final String paymentId) {
+    public CompletableFuture<ReconciliationPaymentReportResponse> singlePaymentReport(final String paymentId) {
         validateParams("paymentId", paymentId);
         return apiClient.getAsync(
                 buildPath(REPORTING_PATH, PAYMENTS_PATH, paymentId),

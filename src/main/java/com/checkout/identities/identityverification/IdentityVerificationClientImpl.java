@@ -43,7 +43,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationResponse}
      */
     @Override
-    public CompletableFuture<IdentityVerificationResponse> createAndOpenIdentityVerificationAsync(
+    public CompletableFuture<IdentityVerificationResponse> createAndOpenIdentityVerification(
             final CreateAndOpenIdentityVerificationRequest identityVerificationRequest) {
         validateParams("identityVerificationRequest", identityVerificationRequest);
         return apiClient.postAsync(CREATE_AND_OPEN_PATH, sdkAuthorization(), IdentityVerificationResponse.class,
@@ -57,7 +57,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationResponse}
      */
     @Override
-    public CompletableFuture<IdentityVerificationResponse> createIdentityVerificationAsync(
+    public CompletableFuture<IdentityVerificationResponse> createIdentityVerification(
             final IdentityVerificationRequest identityVerificationRequest) {
         validateParams("identityVerificationRequest", identityVerificationRequest);
         return apiClient.postAsync(IDENTITY_VERIFICATIONS_PATH, sdkAuthorization(), IdentityVerificationResponse.class,
@@ -71,7 +71,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationResponse}
      */
     @Override
-    public CompletableFuture<IdentityVerificationResponse> getIdentityVerificationAsync(
+    public CompletableFuture<IdentityVerificationResponse> getIdentityVerification(
             final String identityVerificationId) {
         validateParams("identityVerificationId", identityVerificationId);
         return apiClient.getAsync(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId), sdkAuthorization(),
@@ -85,7 +85,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationResponse}
      */
     @Override
-    public CompletableFuture<IdentityVerificationResponse> anonymizeIdentityVerificationAsync(
+    public CompletableFuture<IdentityVerificationResponse> anonymizeIdentityVerification(
             final String identityVerificationId) {
         validateParams("identityVerificationId", identityVerificationId);
         return apiClient.postAsync(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, ANONYMIZE_PATH), 
@@ -100,7 +100,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationAttemptResponse}
      */
     @Override
-    public CompletableFuture<IdentityVerificationAttemptResponse> createIdentityVerificationAttemptAsync(
+    public CompletableFuture<IdentityVerificationAttemptResponse> createIdentityVerificationAttempt(
             final String identityVerificationId,
             final IdentityVerificationAttemptRequest identityVerificationAttemptRequest) {
         validateParams("identityVerificationId", identityVerificationId, "identityVerificationAttemptRequest",
@@ -117,7 +117,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationAttemptsResponse}
      */
     @Override
-    public CompletableFuture<IdentityVerificationAttemptsResponse> getIdentityVerificationAttemptsAsync(
+    public CompletableFuture<IdentityVerificationAttemptsResponse> getIdentityVerificationAttempts(
             final String identityVerificationId) {
         validateParams("identityVerificationId", identityVerificationId);
         return apiClient.getAsync(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, ATTEMPTS_PATH),
@@ -132,7 +132,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationAttemptResponse}
      */
     @Override
-    public CompletableFuture<IdentityVerificationAttemptResponse> getIdentityVerificationAttemptAsync(
+    public CompletableFuture<IdentityVerificationAttemptResponse> getIdentityVerificationAttempt(
             final String identityVerificationId, final String attemptId) {
         validateParams("identityVerificationId", identityVerificationId, "attemptId", attemptId);
         return apiClient.getAsync(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, ATTEMPTS_PATH, attemptId),
@@ -148,7 +148,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationAttemptAssetsResponse}
      */
     @Override
-    public CompletableFuture<IdentityVerificationAttemptAssetsResponse> getIdentityVerificationAttemptAssetsAsync(
+    public CompletableFuture<IdentityVerificationAttemptAssetsResponse> getIdentityVerificationAttemptAssets(
             final String identityVerificationId, final String attemptId, final AttemptAssetsQueryFilter queryFilter) {
         validateParams("identityVerificationId", identityVerificationId, "attemptId", attemptId);
         return apiClient.queryAsync(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, ATTEMPTS_PATH, attemptId, ASSETS_PATH),
@@ -162,7 +162,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationReportResponse}
      */
     @Override
-    public CompletableFuture<IdentityVerificationReportResponse> generateIdentityVerificationReportAsync(
+    public CompletableFuture<IdentityVerificationReportResponse> generateIdentityVerificationReport(
             final String identityVerificationId) {
         validateParams("identityVerificationId", identityVerificationId);
         return apiClient.getAsync(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, PDF_REPORT_PATH),
@@ -178,7 +178,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return the {@link IdentityVerificationResponse}
      */
     @Override
-    public IdentityVerificationResponse createAndOpenIdentityVerification(
+    public IdentityVerificationResponse createAndOpenIdentityVerificationSync(
             final CreateAndOpenIdentityVerificationRequest identityVerificationRequest) {
         validateParams("identityVerificationRequest", identityVerificationRequest);
         return apiClient.post(CREATE_AND_OPEN_PATH, sdkAuthorization(), IdentityVerificationResponse.class,
@@ -192,7 +192,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return the {@link IdentityVerificationResponse}
      */
     @Override
-    public IdentityVerificationResponse createIdentityVerification(
+    public IdentityVerificationResponse createIdentityVerificationSync(
             final IdentityVerificationRequest identityVerificationRequest) {
         validateParams("identityVerificationRequest", identityVerificationRequest);
         return apiClient.post(IDENTITY_VERIFICATIONS_PATH, sdkAuthorization(), IdentityVerificationResponse.class,
@@ -206,7 +206,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return the {@link IdentityVerificationResponse}
      */
     @Override
-    public IdentityVerificationResponse getIdentityVerification(final String identityVerificationId) {
+    public IdentityVerificationResponse getIdentityVerificationSync(final String identityVerificationId) {
         validateParams("identityVerificationId", identityVerificationId);
         return apiClient.get(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId), sdkAuthorization(),
                 IdentityVerificationResponse.class);
@@ -219,7 +219,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return the {@link IdentityVerificationResponse}
      */
     @Override
-    public IdentityVerificationResponse anonymizeIdentityVerification(final String identityVerificationId) {
+    public IdentityVerificationResponse anonymizeIdentityVerificationSync(final String identityVerificationId) {
         validateParams("identityVerificationId", identityVerificationId);
         return apiClient.post(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, ANONYMIZE_PATH), 
                 sdkAuthorization(), IdentityVerificationResponse.class, null, null);
@@ -232,7 +232,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return the {@link IdentityVerificationAttemptsResponse}
      */
     @Override
-    public IdentityVerificationAttemptsResponse getIdentityVerificationAttempts(final String identityVerificationId) {
+    public IdentityVerificationAttemptsResponse getIdentityVerificationAttemptsSync(final String identityVerificationId) {
         validateParams("identityVerificationId", identityVerificationId);
         return apiClient.get(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, ATTEMPTS_PATH),
                 sdkAuthorization(), IdentityVerificationAttemptsResponse.class);
@@ -246,7 +246,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return the {@link IdentityVerificationAttemptResponse}
      */
     @Override
-    public IdentityVerificationAttemptResponse createIdentityVerificationAttempt(
+    public IdentityVerificationAttemptResponse createIdentityVerificationAttemptSync(
             final String identityVerificationId,
             final IdentityVerificationAttemptRequest identityVerificationAttemptRequest) {
         validateParams("identityVerificationId", identityVerificationId, "identityVerificationAttemptRequest",
@@ -264,7 +264,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return the {@link IdentityVerificationAttemptResponse}
      */
     @Override
-    public IdentityVerificationAttemptResponse getIdentityVerificationAttempt(
+    public IdentityVerificationAttemptResponse getIdentityVerificationAttemptSync(
             final String identityVerificationId, final String attemptId) {
         validateParams("identityVerificationId", identityVerificationId, "attemptId", attemptId);
         return apiClient.get(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, ATTEMPTS_PATH, attemptId),
@@ -280,7 +280,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return the {@link IdentityVerificationAttemptAssetsResponse}
      */
     @Override
-    public IdentityVerificationAttemptAssetsResponse getIdentityVerificationAttemptAssets(
+    public IdentityVerificationAttemptAssetsResponse getIdentityVerificationAttemptAssetsSync(
             final String identityVerificationId, final String attemptId, final AttemptAssetsQueryFilter queryFilter) {
         validateParams("identityVerificationId", identityVerificationId, "attemptId", attemptId);
         return apiClient.query(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, ATTEMPTS_PATH, attemptId, ASSETS_PATH),
@@ -294,7 +294,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
      * @return the {@link IdentityVerificationReportResponse}
      */
     @Override
-    public IdentityVerificationReportResponse generateIdentityVerificationReport(final String identityVerificationId) {
+    public IdentityVerificationReportResponse generateIdentityVerificationReportSync(final String identityVerificationId) {
         validateParams("identityVerificationId", identityVerificationId);
         return apiClient.get(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, PDF_REPORT_PATH),
                 sdkAuthorization(), IdentityVerificationReportResponse.class);

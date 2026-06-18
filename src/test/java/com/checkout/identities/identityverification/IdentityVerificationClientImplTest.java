@@ -55,7 +55,7 @@ class IdentityVerificationClientImplTest {
     // Async methods
 
     @Test
-    void shouldCreateAndOpenIdentityVerificationAsync() throws ExecutionException, InterruptedException {
+    void shouldCreateAndOpenIdentityVerification() throws ExecutionException, InterruptedException {
         final CreateAndOpenIdentityVerificationRequest request = createCreateAndOpenIdentityVerificationRequest();
         final IdentityVerificationResponse response = createIdentityVerificationResponse();
 
@@ -63,14 +63,14 @@ class IdentityVerificationClientImplTest {
                 request, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<IdentityVerificationResponse> future = client.createAndOpenIdentityVerificationAsync(request);
+        final CompletableFuture<IdentityVerificationResponse> future = client.createAndOpenIdentityVerification(request);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
     }
 
     @Test
-    void shouldCreateIdentityVerificationAsync() throws ExecutionException, InterruptedException {
+    void shouldCreateIdentityVerification() throws ExecutionException, InterruptedException {
         final IdentityVerificationRequest request = createIdentityVerificationRequest();
         final IdentityVerificationResponse response = createIdentityVerificationResponse();
 
@@ -78,14 +78,14 @@ class IdentityVerificationClientImplTest {
                 request, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<IdentityVerificationResponse> future = client.createIdentityVerificationAsync(request);
+        final CompletableFuture<IdentityVerificationResponse> future = client.createIdentityVerification(request);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
     }
 
     @Test
-    void shouldGetIdentityVerificationAsync() throws ExecutionException, InterruptedException {
+    void shouldGetIdentityVerification() throws ExecutionException, InterruptedException {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationResponse response = createIdentityVerificationResponse();
 
@@ -93,14 +93,14 @@ class IdentityVerificationClientImplTest {
                 IdentityVerificationResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<IdentityVerificationResponse> future = client.getIdentityVerificationAsync(identityVerificationId);
+        final CompletableFuture<IdentityVerificationResponse> future = client.getIdentityVerification(identityVerificationId);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
     }
 
     @Test
-    void shouldAnonymizeIdentityVerificationAsync() throws ExecutionException, InterruptedException {
+    void shouldAnonymizeIdentityVerification() throws ExecutionException, InterruptedException {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationResponse response = createIdentityVerificationResponse();
 
@@ -108,14 +108,14 @@ class IdentityVerificationClientImplTest {
                 IdentityVerificationResponse.class, null, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<IdentityVerificationResponse> future = client.anonymizeIdentityVerificationAsync(identityVerificationId);
+        final CompletableFuture<IdentityVerificationResponse> future = client.anonymizeIdentityVerification(identityVerificationId);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
     }
 
     @Test
-    void shouldGetIdentityVerificationAttemptsAsync() throws ExecutionException, InterruptedException {
+    void shouldGetIdentityVerificationAttempts() throws ExecutionException, InterruptedException {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationAttemptsResponse response = createIdentityVerificationAttemptsResponse();
 
@@ -123,14 +123,14 @@ class IdentityVerificationClientImplTest {
                 IdentityVerificationAttemptsResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<IdentityVerificationAttemptsResponse> future = client.getIdentityVerificationAttemptsAsync(identityVerificationId);
+        final CompletableFuture<IdentityVerificationAttemptsResponse> future = client.getIdentityVerificationAttempts(identityVerificationId);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
     }
 
     @Test
-    void shouldCreateIdentityVerificationAttemptAsync() throws ExecutionException, InterruptedException {
+    void shouldCreateIdentityVerificationAttempt() throws ExecutionException, InterruptedException {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationAttemptRequest request = createIdentityVerificationAttemptRequest();
         final IdentityVerificationAttemptResponse response = createIdentityVerificationAttemptResponse();
@@ -139,14 +139,14 @@ class IdentityVerificationClientImplTest {
                 IdentityVerificationAttemptResponse.class, request, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<IdentityVerificationAttemptResponse> future = client.createIdentityVerificationAttemptAsync(identityVerificationId, request);
+        final CompletableFuture<IdentityVerificationAttemptResponse> future = client.createIdentityVerificationAttempt(identityVerificationId, request);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
     }
 
     @Test
-    void shouldGetIdentityVerificationAttemptAsync() throws ExecutionException, InterruptedException {
+    void shouldGetIdentityVerificationAttempt() throws ExecutionException, InterruptedException {
         final String identityVerificationId = "idv_test_123456789";
         final String attemptId = "idva_test_987654321";
         final IdentityVerificationAttemptResponse response = createIdentityVerificationAttemptResponse();
@@ -155,14 +155,14 @@ class IdentityVerificationClientImplTest {
                 authorization, IdentityVerificationAttemptResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<IdentityVerificationAttemptResponse> future = client.getIdentityVerificationAttemptAsync(identityVerificationId, attemptId);
+        final CompletableFuture<IdentityVerificationAttemptResponse> future = client.getIdentityVerificationAttempt(identityVerificationId, attemptId);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
     }
 
     @Test
-    void shouldGetIdentityVerificationAttemptAssetsAsync() throws ExecutionException, InterruptedException {
+    void shouldGetIdentityVerificationAttemptAssets() throws ExecutionException, InterruptedException {
         final String identityVerificationId = "idv_test_123456789";
         final String attemptId = "idva_test_987654321";
         final AttemptAssetsQueryFilter queryFilter = AttemptAssetsQueryFilter.builder().skip(0).limit(10).build();
@@ -173,14 +173,14 @@ class IdentityVerificationClientImplTest {
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<IdentityVerificationAttemptAssetsResponse> future =
-                client.getIdentityVerificationAttemptAssetsAsync(identityVerificationId, attemptId, queryFilter);
+                client.getIdentityVerificationAttemptAssets(identityVerificationId, attemptId, queryFilter);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
     }
 
     @Test
-    void shouldGenerateIdentityVerificationReportAsync() throws ExecutionException, InterruptedException {
+    void shouldGenerateIdentityVerificationReport() throws ExecutionException, InterruptedException {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationReportResponse response = createIdentityVerificationReportResponse();
 
@@ -188,7 +188,7 @@ class IdentityVerificationClientImplTest {
                 IdentityVerificationReportResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<IdentityVerificationReportResponse> future = client.generateIdentityVerificationReportAsync(identityVerificationId);
+        final CompletableFuture<IdentityVerificationReportResponse> future = client.generateIdentityVerificationReport(identityVerificationId);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -197,7 +197,7 @@ class IdentityVerificationClientImplTest {
     // Synchronous methods tests
 
     @Test
-    void shouldCreateAndOpenIdentityVerification() {
+    void shouldCreateAndOpenIdentityVerificationSync() {
         final CreateAndOpenIdentityVerificationRequest request = createCreateAndOpenIdentityVerificationRequest();
         final IdentityVerificationResponse response = createIdentityVerificationResponse();
 
@@ -205,14 +205,14 @@ class IdentityVerificationClientImplTest {
                 request, null))
                 .thenReturn(response);
 
-        final IdentityVerificationResponse result = client.createAndOpenIdentityVerification(request);
+        final IdentityVerificationResponse result = client.createAndOpenIdentityVerificationSync(request);
 
         assertNotNull(result);
         assertEquals(response, result);
     }
 
     @Test
-    void shouldCreateIdentityVerification() {
+    void shouldCreateIdentityVerificationSync() {
         final IdentityVerificationRequest request = createIdentityVerificationRequest();
         final IdentityVerificationResponse response = createIdentityVerificationResponse();
 
@@ -220,14 +220,14 @@ class IdentityVerificationClientImplTest {
                 request, null))
                 .thenReturn(response);
 
-        final IdentityVerificationResponse result = client.createIdentityVerification(request);
+        final IdentityVerificationResponse result = client.createIdentityVerificationSync(request);
 
         assertNotNull(result);
         assertEquals(response, result);
     }
 
     @Test
-    void shouldGetIdentityVerification() {
+    void shouldGetIdentityVerificationSync() {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationResponse response = createIdentityVerificationResponse();
 
@@ -235,14 +235,14 @@ class IdentityVerificationClientImplTest {
                 IdentityVerificationResponse.class))
                 .thenReturn(response);
 
-        final IdentityVerificationResponse result = client.getIdentityVerification(identityVerificationId);
+        final IdentityVerificationResponse result = client.getIdentityVerificationSync(identityVerificationId);
 
         assertNotNull(result);
         assertEquals(response, result);
     }
 
     @Test
-    void shouldAnonymizeIdentityVerification() {
+    void shouldAnonymizeIdentityVerificationSync() {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationResponse response = createIdentityVerificationResponse();
 
@@ -250,14 +250,14 @@ class IdentityVerificationClientImplTest {
                 IdentityVerificationResponse.class, null, null))
                 .thenReturn(response);
 
-        final IdentityVerificationResponse result = client.anonymizeIdentityVerification(identityVerificationId);
+        final IdentityVerificationResponse result = client.anonymizeIdentityVerificationSync(identityVerificationId);
 
         assertNotNull(result);
         assertEquals(response, result);
     }
 
     @Test
-    void shouldGetIdentityVerificationAttempts() {
+    void shouldGetIdentityVerificationAttemptsSync() {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationAttemptsResponse response = createIdentityVerificationAttemptsResponse();
 
@@ -265,14 +265,14 @@ class IdentityVerificationClientImplTest {
                 IdentityVerificationAttemptsResponse.class))
                 .thenReturn(response);
 
-        final IdentityVerificationAttemptsResponse result = client.getIdentityVerificationAttempts(identityVerificationId);
+        final IdentityVerificationAttemptsResponse result = client.getIdentityVerificationAttemptsSync(identityVerificationId);
 
         assertNotNull(result);
         assertEquals(response, result);
     }
 
     @Test
-    void shouldCreateIdentityVerificationAttempt() {
+    void shouldCreateIdentityVerificationAttemptSync() {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationAttemptRequest request = createIdentityVerificationAttemptRequest();
         final IdentityVerificationAttemptResponse response = createIdentityVerificationAttemptResponse();
@@ -281,14 +281,14 @@ class IdentityVerificationClientImplTest {
                 IdentityVerificationAttemptResponse.class, request, null))
                 .thenReturn(response);
 
-        final IdentityVerificationAttemptResponse result = client.createIdentityVerificationAttempt(identityVerificationId, request);
+        final IdentityVerificationAttemptResponse result = client.createIdentityVerificationAttemptSync(identityVerificationId, request);
 
         assertNotNull(result);
         assertEquals(response, result);
     }
 
     @Test
-    void shouldGetIdentityVerificationAttempt() {
+    void shouldGetIdentityVerificationAttemptSync() {
         final String identityVerificationId = "idv_test_123456789";
         final String attemptId = "idva_test_987654321";
         final IdentityVerificationAttemptResponse response = createIdentityVerificationAttemptResponse();
@@ -297,14 +297,14 @@ class IdentityVerificationClientImplTest {
                 authorization, IdentityVerificationAttemptResponse.class))
                 .thenReturn(response);
 
-        final IdentityVerificationAttemptResponse result = client.getIdentityVerificationAttempt(identityVerificationId, attemptId);
+        final IdentityVerificationAttemptResponse result = client.getIdentityVerificationAttemptSync(identityVerificationId, attemptId);
 
         assertNotNull(result);
         assertEquals(response, result);
     }
 
     @Test
-    void shouldGetIdentityVerificationAttemptAssets() {
+    void shouldGetIdentityVerificationAttemptAssetsSync() {
         final String identityVerificationId = "idv_test_123456789";
         final String attemptId = "idva_test_987654321";
         final AttemptAssetsQueryFilter queryFilter = AttemptAssetsQueryFilter.builder().skip(0).limit(10).build();
@@ -315,14 +315,14 @@ class IdentityVerificationClientImplTest {
                 .thenReturn(response);
 
         final IdentityVerificationAttemptAssetsResponse result =
-                client.getIdentityVerificationAttemptAssets(identityVerificationId, attemptId, queryFilter);
+                client.getIdentityVerificationAttemptAssetsSync(identityVerificationId, attemptId, queryFilter);
 
         assertNotNull(result);
         assertEquals(response, result);
     }
 
     @Test
-    void shouldGenerateIdentityVerificationReport() {
+    void shouldGenerateIdentityVerificationReportSync() {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationReportResponse response = createIdentityVerificationReportResponse();
 
@@ -330,7 +330,7 @@ class IdentityVerificationClientImplTest {
                 IdentityVerificationReportResponse.class))
                 .thenReturn(response);
 
-        final IdentityVerificationReportResponse result = client.generateIdentityVerificationReport(identityVerificationId);
+        final IdentityVerificationReportResponse result = client.generateIdentityVerificationReportSync(identityVerificationId);
 
         assertNotNull(result);
         assertEquals(response, result);

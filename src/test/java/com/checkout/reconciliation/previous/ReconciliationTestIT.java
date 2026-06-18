@@ -73,7 +73,7 @@ class ReconciliationTestIT {
     @Disabled("Only works in production")
     void shouldGetSinglePaymentReport() throws ExecutionException, InterruptedException {
 
-        final ReconciliationPaymentReportResponse response = getProductionCheckoutApi().reconciliationClient().singlePaymentReportAsync("id").get();
+        final ReconciliationPaymentReportResponse response = getProductionCheckoutApi().reconciliationClient().singlePaymentReport("id").get();
 
         assertNotNull(response);
         assertNotNull(response.getLinks());

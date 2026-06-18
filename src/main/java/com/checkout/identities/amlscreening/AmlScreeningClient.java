@@ -18,7 +18,7 @@ public interface AmlScreeningClient {
      * @param amlScreeningRequest the {@link AmlScreeningRequest}
      * @return a {@link CompletableFuture} of {@link AmlScreeningResponse}
      */
-    CompletableFuture<AmlScreeningResponse> createAmlScreeningAsync(AmlScreeningRequest amlScreeningRequest);
+    CompletableFuture<AmlScreeningResponse> createAmlScreening(AmlScreeningRequest amlScreeningRequest);
 
     /**
      * Get an AML screening
@@ -26,7 +26,7 @@ public interface AmlScreeningClient {
      * @param amlScreeningId the AML screening's unique identifier
      * @return a {@link CompletableFuture} of {@link AmlScreeningResponse}
      */
-    CompletableFuture<AmlScreeningResponse> getAmlScreeningAsync(String amlScreeningId);
+    CompletableFuture<AmlScreeningResponse> getAmlScreening(String amlScreeningId);
 
     // Sync methods
 
@@ -36,7 +36,7 @@ public interface AmlScreeningClient {
      * @param amlScreeningRequest the {@link AmlScreeningRequest}
      * @return a {@link AmlScreeningResponse}
      */
-    AmlScreeningResponse createAmlScreening(AmlScreeningRequest amlScreeningRequest);
+    AmlScreeningResponse createAmlScreeningSync(AmlScreeningRequest amlScreeningRequest);
 
     /**
      * Get an AML screening
@@ -44,6 +44,6 @@ public interface AmlScreeningClient {
      * @param amlScreeningId the AML screening's unique identifier
      * @return a {@link AmlScreeningResponse}
      */
-    AmlScreeningResponse getAmlScreening(String amlScreeningId);
+    AmlScreeningResponse getAmlScreeningSync(String amlScreeningId);
 
 }
