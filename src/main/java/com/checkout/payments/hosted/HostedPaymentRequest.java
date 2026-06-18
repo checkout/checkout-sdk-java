@@ -5,10 +5,12 @@ import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Product;
+import com.checkout.payments.AuthorizationType;
 import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.BillingInformation;
 import com.checkout.payments.PaymentInstruction;
 import com.checkout.payments.LocaleType;
+import com.checkout.payments.PaymentPlan;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.PaymentType;
 import com.checkout.payments.ProcessingSettings;
@@ -229,4 +231,18 @@ public final class HostedPaymentRequest {
      * [Optional]
      */
     private PaymentMethodConfiguration paymentMethodConfiguration;
+
+    /**
+     * The information to process a recurring payment request. To be used when the payment_type is Recurring.
+     * [Optional]
+     */
+    private PaymentPlan paymentPlan;
+
+    /**
+     * The authorization type.
+     * [Optional]
+     * Enum: "Final" "Estimated"
+     * Default: "Final"
+     */
+    private AuthorizationType authorizationType;
 }

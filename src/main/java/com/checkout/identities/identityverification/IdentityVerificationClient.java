@@ -1,8 +1,10 @@
 package com.checkout.identities.identityverification;
 
+import com.checkout.identities.entities.AttemptAssetsQueryFilter;
 import com.checkout.identities.identityverification.requests.CreateAndOpenIdentityVerificationRequest;
 import com.checkout.identities.identityverification.requests.IdentityVerificationRequest;
 import com.checkout.identities.identityverification.requests.IdentityVerificationAttemptRequest;
+import com.checkout.identities.identityverification.responses.IdentityVerificationAttemptAssetsResponse;
 import com.checkout.identities.identityverification.responses.IdentityVerificationAttemptResponse;
 import com.checkout.identities.identityverification.responses.IdentityVerificationAttemptsResponse;
 import com.checkout.identities.identityverification.responses.IdentityVerificationReportResponse;
@@ -76,6 +78,16 @@ public interface IdentityVerificationClient {
     CompletableFuture<IdentityVerificationAttemptResponse> getIdentityVerificationAttemptAsync(String identityVerificationId, String attemptId);
 
     /**
+     * Retrieves the assets (face images, videos, and document images) captured during an identity verification attempt.
+     *
+     * @param identityVerificationId the identity verification ID
+     * @param attemptId the attempt ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return a {@link CompletableFuture} containing the {@link IdentityVerificationAttemptAssetsResponse}
+     */
+    CompletableFuture<IdentityVerificationAttemptAssetsResponse> getIdentityVerificationAttemptAssetsAsync(String identityVerificationId, String attemptId, AttemptAssetsQueryFilter queryFilter);
+
+    /**
      * Generate and download a PDF report
      *
      * @param identityVerificationId the identity verification ID
@@ -142,6 +154,16 @@ public interface IdentityVerificationClient {
      * @return the {@link IdentityVerificationAttemptResponse}
      */
     IdentityVerificationAttemptResponse getIdentityVerificationAttempt(String identityVerificationId, String attemptId);
+
+    /**
+     * Retrieves the assets (face images, videos, and document images) captured during an identity verification attempt.
+     *
+     * @param identityVerificationId the identity verification ID
+     * @param attemptId the attempt ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return the {@link IdentityVerificationAttemptAssetsResponse}
+     */
+    IdentityVerificationAttemptAssetsResponse getIdentityVerificationAttemptAssets(String identityVerificationId, String attemptId, AttemptAssetsQueryFilter queryFilter);
 
     /**
      * Generate and download a PDF report

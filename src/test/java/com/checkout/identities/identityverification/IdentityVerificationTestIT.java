@@ -2,11 +2,13 @@ package com.checkout.identities.identityverification;
 
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
+import com.checkout.identities.entities.AttemptAssetsQueryFilter;
 import com.checkout.identities.entities.ClientInformation;
 import com.checkout.identities.entities.DeclaredData;
 import com.checkout.identities.identityverification.requests.CreateAndOpenIdentityVerificationRequest;
 import com.checkout.identities.identityverification.requests.IdentityVerificationRequest;
 import com.checkout.identities.identityverification.requests.IdentityVerificationAttemptRequest;
+import com.checkout.identities.identityverification.responses.IdentityVerificationAttemptAssetsResponse;
 import com.checkout.identities.identityverification.responses.IdentityVerificationAttemptResponse;
 import com.checkout.identities.identityverification.responses.IdentityVerificationAttemptsResponse;
 import com.checkout.identities.identityverification.responses.IdentityVerificationReportResponse;
@@ -260,6 +262,24 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
 
         // Assert
         validateRetrievedIdentityVerificationAttempt(retrievedAttempt, createdAttempt);
+    }
+
+    @Test
+    @Disabled("Integration test - requires valid identity verification and attempt IDs")
+    void shouldGetIdentityVerificationAttemptAssets() {
+        // Arrange
+        final IdentityVerificationRequest request = createIdentityVerificationRequest();
+        final IdentityVerificationResponse created = checkoutApi.identityVerificationClient().createIdentityVerification(request);
+        final IdentityVerificationAttemptRequest attemptRequest = createIdentityVerificationAttemptRequest();
+        final IdentityVerificationAttemptResponse createdAttempt = checkoutApi.identityVerificationClient().createIdentityVerificationAttempt(created.getId(), attemptRequest);
+        final AttemptAssetsQueryFilter queryFilter = AttemptAssetsQueryFilter.builder().skip(0).limit(10).build();
+
+        // Act
+        final IdentityVerificationAttemptAssetsResponse assets = checkoutApi.identityVerificationClient().getIdentityVerificationAttemptAssets(created.getId(), createdAttempt.getId(), queryFilter);
+
+        // Assert
+        assertNotNull(assets);
+        assertNotNull(assets.getData());
     }
 
     @Test

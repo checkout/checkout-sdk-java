@@ -5,8 +5,10 @@ import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
+import com.checkout.identities.entities.AttemptAssetsQueryFilter;
 import com.checkout.identities.faceauthentications.requests.FaceAuthenticationAttemptRequest;
 import com.checkout.identities.faceauthentications.requests.FaceAuthenticationRequest;
+import com.checkout.identities.faceauthentications.responses.FaceAuthenticationAttemptAssetsResponse;
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationAttemptResponse;
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationAttemptsResponse;
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationResponse;
@@ -135,8 +137,26 @@ class FaceAuthenticationClientImplTest {
                 authorization, FaceAuthenticationAttemptResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<FaceAuthenticationAttemptResponse> future = 
+        final CompletableFuture<FaceAuthenticationAttemptResponse> future =
                 client.getFaceAuthenticationAttempt(faceAuthenticationId, attemptId);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+    }
+
+    @Test
+    void shouldGetFaceAuthenticationAttemptAssets() throws ExecutionException, InterruptedException {
+        final String faceAuthenticationId = "fav_test_123456789";
+        final String attemptId = "fatp_test_987654321";
+        final AttemptAssetsQueryFilter queryFilter = AttemptAssetsQueryFilter.builder().skip(0).limit(10).build();
+        final FaceAuthenticationAttemptAssetsResponse response = mock(FaceAuthenticationAttemptAssetsResponse.class);
+
+        when(apiClient.queryAsync("face-authentications/" + faceAuthenticationId + "/attempts/" + attemptId + "/assets",
+                authorization, queryFilter, FaceAuthenticationAttemptAssetsResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<FaceAuthenticationAttemptAssetsResponse> future =
+                client.getFaceAuthenticationAttemptAssets(faceAuthenticationId, attemptId, queryFilter);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -231,8 +251,26 @@ class FaceAuthenticationClientImplTest {
                 authorization, FaceAuthenticationAttemptResponse.class))
                 .thenReturn(response);
 
-        final FaceAuthenticationAttemptResponse result = 
+        final FaceAuthenticationAttemptResponse result =
                 client.getFaceAuthenticationAttemptSync(faceAuthenticationId, attemptId);
+
+        assertNotNull(result);
+        assertEquals(response, result);
+    }
+
+    @Test
+    void shouldGetFaceAuthenticationAttemptAssetsSync() {
+        final String faceAuthenticationId = "fav_test_123456789";
+        final String attemptId = "fatp_test_987654321";
+        final AttemptAssetsQueryFilter queryFilter = AttemptAssetsQueryFilter.builder().skip(0).limit(10).build();
+        final FaceAuthenticationAttemptAssetsResponse response = mock(FaceAuthenticationAttemptAssetsResponse.class);
+
+        when(apiClient.query("face-authentications/" + faceAuthenticationId + "/attempts/" + attemptId + "/assets",
+                authorization, queryFilter, FaceAuthenticationAttemptAssetsResponse.class))
+                .thenReturn(response);
+
+        final FaceAuthenticationAttemptAssetsResponse result =
+                client.getFaceAuthenticationAttemptAssetsSync(faceAuthenticationId, attemptId, queryFilter);
 
         assertNotNull(result);
         assertEquals(response, result);

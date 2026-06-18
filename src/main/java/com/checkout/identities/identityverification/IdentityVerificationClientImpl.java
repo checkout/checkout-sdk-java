@@ -4,9 +4,11 @@ import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorizationType;
+import com.checkout.identities.entities.AttemptAssetsQueryFilter;
 import com.checkout.identities.identityverification.requests.CreateAndOpenIdentityVerificationRequest;
 import com.checkout.identities.identityverification.requests.IdentityVerificationRequest;
 import com.checkout.identities.identityverification.requests.IdentityVerificationAttemptRequest;
+import com.checkout.identities.identityverification.responses.IdentityVerificationAttemptAssetsResponse;
 import com.checkout.identities.identityverification.responses.IdentityVerificationAttemptResponse;
 import com.checkout.identities.identityverification.responses.IdentityVerificationAttemptsResponse;
 import com.checkout.identities.identityverification.responses.IdentityVerificationReportResponse;
@@ -26,6 +28,7 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
     private static final String ANONYMIZE_PATH = "anonymize";
     private static final String ATTEMPTS_PATH = "attempts";
     private static final String PDF_REPORT_PATH = "pdf-report";
+    private static final String ASSETS_PATH = "assets";
 
     public IdentityVerificationClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
@@ -134,6 +137,22 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
         validateParams("identityVerificationId", identityVerificationId, "attemptId", attemptId);
         return apiClient.getAsync(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, ATTEMPTS_PATH, attemptId),
                 sdkAuthorization(), IdentityVerificationAttemptResponse.class);
+    }
+
+    /**
+     * Retrieve the assets captured during an identity verification attempt
+     *
+     * @param identityVerificationId the identity verification ID
+     * @param attemptId the attempt ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return a {@link CompletableFuture} containing the {@link IdentityVerificationAttemptAssetsResponse}
+     */
+    @Override
+    public CompletableFuture<IdentityVerificationAttemptAssetsResponse> getIdentityVerificationAttemptAssetsAsync(
+            final String identityVerificationId, final String attemptId, final AttemptAssetsQueryFilter queryFilter) {
+        validateParams("identityVerificationId", identityVerificationId, "attemptId", attemptId);
+        return apiClient.queryAsync(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, ATTEMPTS_PATH, attemptId, ASSETS_PATH),
+                sdkAuthorization(), queryFilter, IdentityVerificationAttemptAssetsResponse.class);
     }
 
     /**
@@ -250,6 +269,22 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
         validateParams("identityVerificationId", identityVerificationId, "attemptId", attemptId);
         return apiClient.get(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, ATTEMPTS_PATH, attemptId),
                 sdkAuthorization(), IdentityVerificationAttemptResponse.class);
+    }
+
+    /**
+     * Retrieve the assets captured during an identity verification attempt
+     *
+     * @param identityVerificationId the identity verification ID
+     * @param attemptId the attempt ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return the {@link IdentityVerificationAttemptAssetsResponse}
+     */
+    @Override
+    public IdentityVerificationAttemptAssetsResponse getIdentityVerificationAttemptAssets(
+            final String identityVerificationId, final String attemptId, final AttemptAssetsQueryFilter queryFilter) {
+        validateParams("identityVerificationId", identityVerificationId, "attemptId", attemptId);
+        return apiClient.query(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, ATTEMPTS_PATH, attemptId, ASSETS_PATH),
+                sdkAuthorization(), queryFilter, IdentityVerificationAttemptAssetsResponse.class);
     }
 
     /**

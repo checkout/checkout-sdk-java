@@ -5,9 +5,11 @@ import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
+import com.checkout.identities.entities.AttemptAssetsQueryFilter;
 import com.checkout.identities.identityverification.requests.CreateAndOpenIdentityVerificationRequest;
 import com.checkout.identities.identityverification.requests.IdentityVerificationRequest;
 import com.checkout.identities.identityverification.requests.IdentityVerificationAttemptRequest;
+import com.checkout.identities.identityverification.responses.IdentityVerificationAttemptAssetsResponse;
 import com.checkout.identities.identityverification.responses.IdentityVerificationAttemptResponse;
 import com.checkout.identities.identityverification.responses.IdentityVerificationAttemptsResponse;
 import com.checkout.identities.identityverification.responses.IdentityVerificationReportResponse;
@@ -160,6 +162,24 @@ class IdentityVerificationClientImplTest {
     }
 
     @Test
+    void shouldGetIdentityVerificationAttemptAssetsAsync() throws ExecutionException, InterruptedException {
+        final String identityVerificationId = "idv_test_123456789";
+        final String attemptId = "idva_test_987654321";
+        final AttemptAssetsQueryFilter queryFilter = AttemptAssetsQueryFilter.builder().skip(0).limit(10).build();
+        final IdentityVerificationAttemptAssetsResponse response = mock(IdentityVerificationAttemptAssetsResponse.class);
+
+        when(apiClient.queryAsync("identity-verifications/" + identityVerificationId + "/attempts/" + attemptId + "/assets",
+                authorization, queryFilter, IdentityVerificationAttemptAssetsResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<IdentityVerificationAttemptAssetsResponse> future =
+                client.getIdentityVerificationAttemptAssetsAsync(identityVerificationId, attemptId, queryFilter);
+
+        assertNotNull(future.get());
+        assertEquals(response, future.get());
+    }
+
+    @Test
     void shouldGenerateIdentityVerificationReportAsync() throws ExecutionException, InterruptedException {
         final String identityVerificationId = "idv_test_123456789";
         final IdentityVerificationReportResponse response = createIdentityVerificationReportResponse();
@@ -278,6 +298,24 @@ class IdentityVerificationClientImplTest {
                 .thenReturn(response);
 
         final IdentityVerificationAttemptResponse result = client.getIdentityVerificationAttempt(identityVerificationId, attemptId);
+
+        assertNotNull(result);
+        assertEquals(response, result);
+    }
+
+    @Test
+    void shouldGetIdentityVerificationAttemptAssets() {
+        final String identityVerificationId = "idv_test_123456789";
+        final String attemptId = "idva_test_987654321";
+        final AttemptAssetsQueryFilter queryFilter = AttemptAssetsQueryFilter.builder().skip(0).limit(10).build();
+        final IdentityVerificationAttemptAssetsResponse response = mock(IdentityVerificationAttemptAssetsResponse.class);
+
+        when(apiClient.query("identity-verifications/" + identityVerificationId + "/attempts/" + attemptId + "/assets",
+                authorization, queryFilter, IdentityVerificationAttemptAssetsResponse.class))
+                .thenReturn(response);
+
+        final IdentityVerificationAttemptAssetsResponse result =
+                client.getIdentityVerificationAttemptAssets(identityVerificationId, attemptId, queryFilter);
 
         assertNotNull(result);
         assertEquals(response, result);

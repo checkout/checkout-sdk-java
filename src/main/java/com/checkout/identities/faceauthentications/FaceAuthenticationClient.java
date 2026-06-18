@@ -1,7 +1,9 @@
 package com.checkout.identities.faceauthentications;
 
+import com.checkout.identities.entities.AttemptAssetsQueryFilter;
 import com.checkout.identities.faceauthentications.requests.FaceAuthenticationAttemptRequest;
 import com.checkout.identities.faceauthentications.requests.FaceAuthenticationRequest;
+import com.checkout.identities.faceauthentications.responses.FaceAuthenticationAttemptAssetsResponse;
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationAttemptResponse;
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationAttemptsResponse;
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationResponse;
@@ -63,6 +65,16 @@ public interface FaceAuthenticationClient {
      */
     CompletableFuture<FaceAuthenticationAttemptResponse> getFaceAuthenticationAttempt(String faceAuthenticationId, String attemptId);
 
+    /**
+     * Retrieves the assets (face images and videos) captured during a face authentication attempt.
+     *
+     * @param faceAuthenticationId The face authentication ID
+     * @param attemptId The attempt ID
+     * @param queryFilter The pagination query parameters (skip and limit)
+     * @return CompletableFuture containing the face authentication attempt assets response
+     */
+    CompletableFuture<FaceAuthenticationAttemptAssetsResponse> getFaceAuthenticationAttemptAssets(String faceAuthenticationId, String attemptId, AttemptAssetsQueryFilter queryFilter);
+
     // Synchronous methods
 
     /**
@@ -114,4 +126,14 @@ public interface FaceAuthenticationClient {
      * @return The face authentication attempt response
      */
     FaceAuthenticationAttemptResponse getFaceAuthenticationAttemptSync(String faceAuthenticationId, String attemptId);
+
+    /**
+     * Retrieves the assets (face images and videos) captured during a face authentication attempt.
+     *
+     * @param faceAuthenticationId The face authentication ID
+     * @param attemptId The attempt ID
+     * @param queryFilter The pagination query parameters (skip and limit)
+     * @return The face authentication attempt assets response
+     */
+    FaceAuthenticationAttemptAssetsResponse getFaceAuthenticationAttemptAssetsSync(String faceAuthenticationId, String attemptId, AttemptAssetsQueryFilter queryFilter);
 }
