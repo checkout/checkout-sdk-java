@@ -5,7 +5,10 @@ import com.checkout.common.Currency;
 import com.checkout.common.PaymentMethodType;
 import com.checkout.handlepaymentsandpayouts.flow.entities.Customer;
 import com.checkout.handlepaymentsandpayouts.flow.requests.PaymentSessionCreateRequest;
+import com.checkout.payments.AmountVariabilityType;
+import com.checkout.payments.AuthorizationType;
 import com.checkout.payments.LocaleType;
+import com.checkout.payments.PaymentPlan;
 import com.checkout.payments.PaymentType;
 import org.junit.jupiter.api.Test;
 
@@ -296,5 +299,50 @@ class PaymentSessionSerializationTest {
             assertNotNull(request.getCustomer().getSummary());
             assertEquals(LocalDate.of(2023, 1, 15), request.getCustomer().getSummary().getRegistrationDate());
         }, "Should deserialize compact date format (yyyyMMdd)");
+    }
+
+    @Test
+    void shouldSerializePaymentSessionWithAuthorizationTypeAndPaymentPlan() {
+        PaymentSessionCreateRequest request = PaymentSessionCreateRequest.builder()
+                .amount(1234L)
+                .currency(Currency.USD)
+                .reference("plan-ref")
+                .authorizationType(AuthorizationType.ESTIMATED)
+                .paymentPlan(PaymentPlan.builder()
+                        .amountVariabilityType(AmountVariabilityType.VARIABLE)
+                        .amount(1234L)
+                        .totalNumberOfPayments(5)
+                        .name("Subscription 1234")
+                        .build())
+                .build();
+
+        final String json = serializer.toJson(request);
+
+        assertTrue(json.contains("\"authorization_type\":\"Estimated\""));
+        assertTrue(json.contains("\"payment_plan\""));
+        assertTrue(json.contains("\"amount_variability\":\"Variable\""));
+    }
+
+    @Test
+    void shouldDeserializePaymentSessionWithAuthorizationTypeAndPaymentPlan() {
+        String json = "{"
+                + "\"amount\":500,"
+                + "\"currency\":\"USD\","
+                + "\"authorization_type\":\"Final\","
+                + "\"payment_plan\":{"
+                + "  \"amount_variability\":\"Fixed\","
+                + "  \"amount\":500,"
+                + "  \"total_number_of_payments\":6"
+                + "}"
+                + "}";
+
+        PaymentSessionCreateRequest request = serializer.fromJson(json, PaymentSessionCreateRequest.class);
+
+        assertNotNull(request);
+        assertEquals(AuthorizationType.FINAL, request.getAuthorizationType());
+        assertNotNull(request.getPaymentPlan());
+        assertEquals(AmountVariabilityType.FIXED, request.getPaymentPlan().getAmountVariabilityType());
+        assertEquals(500L, request.getPaymentPlan().getAmount());
+        assertEquals(6, request.getPaymentPlan().getTotalNumberOfPayments());
     }
 }

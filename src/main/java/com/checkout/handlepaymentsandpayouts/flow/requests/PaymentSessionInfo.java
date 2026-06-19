@@ -2,9 +2,11 @@ package com.checkout.handlepaymentsandpayouts.flow.requests;
 
 import com.checkout.common.Currency;
 import com.checkout.handlepaymentsandpayouts.flow.entities.Customer;
+import com.checkout.payments.AuthorizationType;
 import com.checkout.payments.BillingInformation;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.BillingDescriptor;
+import com.checkout.payments.PaymentPlan;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.ProcessingSettings;
 import com.checkout.payments.PaymentInstruction;
@@ -154,4 +156,18 @@ public abstract class PaymentSessionInfo extends PaymentSessionBase {
      * Format: date-time (ISO 8601)
      */
     private Instant captureOn;
+
+    /**
+     * The authorization type.
+     * [Optional]
+     * Enum: "Final" "Estimated"
+     * Default: "Final"
+     */
+    private AuthorizationType authorizationType;
+
+    /**
+     * The information to process a recurring payment request. To be used when the payment_type is Recurring.
+     * [Optional]
+     */
+    private PaymentPlan paymentPlan;
 }

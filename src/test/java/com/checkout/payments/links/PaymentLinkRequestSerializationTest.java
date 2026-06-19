@@ -4,7 +4,10 @@ import com.checkout.GsonSerializer;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
+import com.checkout.payments.AmountVariabilityType;
+import com.checkout.payments.AuthorizationType;
 import com.checkout.payments.BillingInformation;
+import com.checkout.payments.PaymentPlan;
 import com.checkout.payments.PaymentType;
 import org.junit.jupiter.api.Test;
 
@@ -212,5 +215,67 @@ class PaymentLinkRequestSerializationTest {
         assertNull(request.getExpiresIn());
         assertNull(request.getReturnUrl());
         assertNull(request.getDescription());
+    }
+
+    @Test
+    void shouldSerializeAuthorizationType() {
+        final PaymentLinkRequest request = PaymentLinkRequest.builder()
+                .amount(1000L)
+                .currency(Currency.USD)
+                .authorizationType(AuthorizationType.ESTIMATED)
+                .build();
+
+        final String json = serializer.toJson(request);
+
+        assertTrue(json.contains("\"authorization_type\":\"Estimated\""));
+    }
+
+    @Test
+    void shouldSerializePaymentPlan() {
+        final PaymentLinkRequest request = PaymentLinkRequest.builder()
+                .amount(1000L)
+                .currency(Currency.USD)
+                .paymentPlan(PaymentPlan.builder()
+                        .amountVariabilityType(AmountVariabilityType.VARIABLE)
+                        .amount(1234L)
+                        .daysBetweenPayments(28)
+                        .totalNumberOfPayments(5)
+                        .currentPaymentNumber(3)
+                        .expiry("20251031")
+                        .name("Subscription 1234")
+                        .startDate("20260507")
+                        .build())
+                .build();
+
+        final String json = serializer.toJson(request);
+
+        assertTrue(json.contains("\"payment_plan\""));
+        assertTrue(json.contains("\"amount_variability\":\"Variable\""));
+    }
+
+    @Test
+    void shouldDeserializePaymentPlanAndAuthorizationType() {
+        final String json = "{"
+                + "\"amount\":500,"
+                + "\"currency\":\"USD\","
+                + "\"authorization_type\":\"Estimated\","
+                + "\"payment_plan\":{"
+                + "\"amount_variability\":\"Fixed\","
+                + "\"amount\":999,"
+                + "\"days_between_payments\":30,"
+                + "\"total_number_of_payments\":12,"
+                + "\"name\":\"Plan A\""
+                + "}}";
+
+        final PaymentLinkRequest request = serializer.fromJson(json, PaymentLinkRequest.class);
+
+        assertNotNull(request);
+        assertEquals(AuthorizationType.ESTIMATED, request.getAuthorizationType());
+        assertNotNull(request.getPaymentPlan());
+        assertEquals(AmountVariabilityType.FIXED, request.getPaymentPlan().getAmountVariabilityType());
+        assertEquals(999L, request.getPaymentPlan().getAmount());
+        assertEquals(30, request.getPaymentPlan().getDaysBetweenPayments());
+        assertEquals(12, request.getPaymentPlan().getTotalNumberOfPayments());
+        assertEquals("Plan A", request.getPaymentPlan().getName());
     }
 }

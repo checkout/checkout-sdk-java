@@ -64,13 +64,13 @@ class ReconciliationClientImplTest {
     }
 
     @Test
-    void shouldSinglePaymentReportAsync() throws ExecutionException, InterruptedException {
+    void shouldSinglePaymentReport() throws ExecutionException, InterruptedException {
         final ReconciliationPaymentReportResponse response = mock(ReconciliationPaymentReportResponse.class);
 
         when(apiClient.getAsync(eq("reporting/payments/payment_id"), any(SdkAuthorization.class), eq(ReconciliationPaymentReportResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<ReconciliationPaymentReportResponse> future = client.singlePaymentReportAsync("payment_id");
+        final CompletableFuture<ReconciliationPaymentReportResponse> future = client.singlePaymentReport("payment_id");
 
         assertNotNull(future.get());
         assertEquals(response, future.get());

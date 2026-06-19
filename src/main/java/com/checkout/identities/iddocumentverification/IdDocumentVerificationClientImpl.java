@@ -36,7 +36,7 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
      * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationResponse}
      */
     @Override
-    public CompletableFuture<IdDocumentVerificationResponse> createIdDocumentVerificationAsync(
+    public CompletableFuture<IdDocumentVerificationResponse> createIdDocumentVerification(
             final IdDocumentVerificationRequest idDocumentVerificationRequest) {
         validateParams("idDocumentVerificationRequest", idDocumentVerificationRequest);
         return apiClient.postAsync(ID_DOCUMENT_VERIFICATIONS_PATH, sdkAuthorization(), IdDocumentVerificationResponse.class,
@@ -50,7 +50,7 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
      * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationResponse}
      */
     @Override
-    public CompletableFuture<IdDocumentVerificationResponse> getIdDocumentVerificationAsync(
+    public CompletableFuture<IdDocumentVerificationResponse> getIdDocumentVerification(
             final String idDocumentVerificationId) {
         validateParams("idDocumentVerificationId", idDocumentVerificationId);
         return apiClient.getAsync(buildPath(ID_DOCUMENT_VERIFICATIONS_PATH, idDocumentVerificationId), sdkAuthorization(),
@@ -64,7 +64,7 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
      * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationResponse}
      */
     @Override
-    public CompletableFuture<IdDocumentVerificationResponse> anonymizeIdDocumentVerificationAsync(
+    public CompletableFuture<IdDocumentVerificationResponse> anonymizeIdDocumentVerification(
             final String idDocumentVerificationId) {
         validateParams("idDocumentVerificationId", idDocumentVerificationId);
         return apiClient.postAsync(buildPath(ID_DOCUMENT_VERIFICATIONS_PATH, idDocumentVerificationId, ANONYMIZE_PATH),
@@ -79,7 +79,7 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
      * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationAttemptResponse}
      */
     @Override
-    public CompletableFuture<IdDocumentVerificationAttemptResponse> createIdDocumentVerificationAttemptAsync(
+    public CompletableFuture<IdDocumentVerificationAttemptResponse> createIdDocumentVerificationAttempt(
             final String idDocumentVerificationId,
             final IdDocumentVerificationAttemptRequest idDocumentVerificationAttemptRequest) {
         validateParams("idDocumentVerificationId", idDocumentVerificationId, 
@@ -96,7 +96,7 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
      * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationAttemptsResponse}
      */
     @Override
-    public CompletableFuture<IdDocumentVerificationAttemptsResponse> getIdDocumentVerificationAttemptsAsync(
+    public CompletableFuture<IdDocumentVerificationAttemptsResponse> getIdDocumentVerificationAttempts(
             final String idDocumentVerificationId) {
         validateParams("idDocumentVerificationId", idDocumentVerificationId);
         return apiClient.getAsync(buildPath(ID_DOCUMENT_VERIFICATIONS_PATH, idDocumentVerificationId, ATTEMPTS_PATH),
@@ -111,7 +111,7 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
      * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationAttemptResponse}
      */
     @Override
-    public CompletableFuture<IdDocumentVerificationAttemptResponse> getIdDocumentVerificationAttemptAsync(
+    public CompletableFuture<IdDocumentVerificationAttemptResponse> getIdDocumentVerificationAttempt(
             final String idDocumentVerificationId, final String attemptId) {
         validateParams("idDocumentVerificationId", idDocumentVerificationId, "attemptId", attemptId);
         return apiClient.getAsync(buildPath(ID_DOCUMENT_VERIFICATIONS_PATH, idDocumentVerificationId, ATTEMPTS_PATH, attemptId),
@@ -125,7 +125,7 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
      * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationReportResponse}
      */
     @Override
-    public CompletableFuture<IdDocumentVerificationReportResponse> getIdDocumentVerificationReportAsync(
+    public CompletableFuture<IdDocumentVerificationReportResponse> getIdDocumentVerificationReport(
             final String idDocumentVerificationId) {
         validateParams("idDocumentVerificationId", idDocumentVerificationId);
         return apiClient.getAsync(buildPath(ID_DOCUMENT_VERIFICATIONS_PATH, idDocumentVerificationId, PDF_REPORT_PATH),
@@ -141,7 +141,7 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
      * @return the {@link IdDocumentVerificationResponse}
      */
     @Override
-    public IdDocumentVerificationResponse createIdDocumentVerification(
+    public IdDocumentVerificationResponse createIdDocumentVerificationSync(
             final IdDocumentVerificationRequest idDocumentVerificationRequest) {
         validateParams("idDocumentVerificationRequest", idDocumentVerificationRequest);
         return apiClient.post(ID_DOCUMENT_VERIFICATIONS_PATH, sdkAuthorization(), IdDocumentVerificationResponse.class,
@@ -155,7 +155,7 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
      * @return the {@link IdDocumentVerificationResponse}
      */
     @Override
-    public IdDocumentVerificationResponse getIdDocumentVerification(final String idDocumentVerificationId) {
+    public IdDocumentVerificationResponse getIdDocumentVerificationSync(final String idDocumentVerificationId) {
         validateParams("idDocumentVerificationId", idDocumentVerificationId);
         return apiClient.get(buildPath(ID_DOCUMENT_VERIFICATIONS_PATH, idDocumentVerificationId), sdkAuthorization(),
                 IdDocumentVerificationResponse.class);
@@ -168,7 +168,7 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
      * @return the {@link IdDocumentVerificationResponse}
      */
     @Override
-    public IdDocumentVerificationResponse anonymizeIdDocumentVerification(final String idDocumentVerificationId) {
+    public IdDocumentVerificationResponse anonymizeIdDocumentVerificationSync(final String idDocumentVerificationId) {
         validateParams("idDocumentVerificationId", idDocumentVerificationId);
         return apiClient.post(buildPath(ID_DOCUMENT_VERIFICATIONS_PATH, idDocumentVerificationId, ANONYMIZE_PATH),
                 sdkAuthorization(), IdDocumentVerificationResponse.class, null, null);
@@ -182,7 +182,7 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
      * @return the {@link IdDocumentVerificationAttemptResponse}
      */
     @Override
-    public IdDocumentVerificationAttemptResponse createIdDocumentVerificationAttempt(
+    public IdDocumentVerificationAttemptResponse createIdDocumentVerificationAttemptSync(
             final String idDocumentVerificationId,
             final IdDocumentVerificationAttemptRequest idDocumentVerificationAttemptRequest) {
         validateParams("idDocumentVerificationId", idDocumentVerificationId, 
@@ -199,7 +199,7 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
      * @return the {@link IdDocumentVerificationAttemptsResponse}
      */
     @Override
-    public IdDocumentVerificationAttemptsResponse getIdDocumentVerificationAttempts(final String idDocumentVerificationId) {
+    public IdDocumentVerificationAttemptsResponse getIdDocumentVerificationAttemptsSync(final String idDocumentVerificationId) {
         validateParams("idDocumentVerificationId", idDocumentVerificationId);
         return apiClient.get(buildPath(ID_DOCUMENT_VERIFICATIONS_PATH, idDocumentVerificationId, ATTEMPTS_PATH),
                 sdkAuthorization(), IdDocumentVerificationAttemptsResponse.class);
@@ -213,7 +213,7 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
      * @return the {@link IdDocumentVerificationAttemptResponse}
      */
     @Override
-    public IdDocumentVerificationAttemptResponse getIdDocumentVerificationAttempt(
+    public IdDocumentVerificationAttemptResponse getIdDocumentVerificationAttemptSync(
             final String idDocumentVerificationId, final String attemptId) {
         validateParams("idDocumentVerificationId", idDocumentVerificationId, "attemptId", attemptId);
         return apiClient.get(buildPath(ID_DOCUMENT_VERIFICATIONS_PATH, idDocumentVerificationId, ATTEMPTS_PATH, attemptId),
@@ -227,7 +227,7 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
      * @return the {@link IdDocumentVerificationReportResponse}
      */
     @Override
-    public IdDocumentVerificationReportResponse getIdDocumentVerificationReport(final String idDocumentVerificationId) {
+    public IdDocumentVerificationReportResponse getIdDocumentVerificationReportSync(final String idDocumentVerificationId) {
         validateParams("idDocumentVerificationId", idDocumentVerificationId);
         return apiClient.get(buildPath(ID_DOCUMENT_VERIFICATIONS_PATH, idDocumentVerificationId, PDF_REPORT_PATH),
                 sdkAuthorization(), IdDocumentVerificationReportResponse.class);

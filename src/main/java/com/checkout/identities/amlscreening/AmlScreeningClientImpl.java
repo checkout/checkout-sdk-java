@@ -31,7 +31,7 @@ public class AmlScreeningClientImpl extends AbstractClient implements AmlScreeni
      * @return a {@link CompletableFuture} containing the {@link AmlScreeningResponse}
      */
     @Override
-    public CompletableFuture<AmlScreeningResponse> createAmlScreeningAsync(
+    public CompletableFuture<AmlScreeningResponse> createAmlScreening(
             final AmlScreeningRequest amlScreeningRequest) {
         validateParams("amlScreeningRequest", amlScreeningRequest);
         return apiClient.postAsync(AML_VERIFICATIONS_PATH, sdkAuthorization(), AmlScreeningResponse.class,
@@ -45,7 +45,7 @@ public class AmlScreeningClientImpl extends AbstractClient implements AmlScreeni
      * @return a {@link CompletableFuture} containing the {@link AmlScreeningResponse}
      */
     @Override
-    public CompletableFuture<AmlScreeningResponse> getAmlScreeningAsync(
+    public CompletableFuture<AmlScreeningResponse> getAmlScreening(
             final String amlVerificationId) {
         validateParams("amlVerificationId", amlVerificationId);
         return apiClient.getAsync(buildPath(AML_VERIFICATIONS_PATH, amlVerificationId), sdkAuthorization(),
@@ -61,7 +61,7 @@ public class AmlScreeningClientImpl extends AbstractClient implements AmlScreeni
      * @return a {@link AmlScreeningResponse}
      */
     @Override
-    public AmlScreeningResponse createAmlScreening(final AmlScreeningRequest amlScreeningRequest) {
+    public AmlScreeningResponse createAmlScreeningSync(final AmlScreeningRequest amlScreeningRequest) {
         validateParams("amlScreeningRequest", amlScreeningRequest);
         return apiClient.post(AML_VERIFICATIONS_PATH, sdkAuthorization(), AmlScreeningResponse.class,
                 amlScreeningRequest, null);
@@ -74,7 +74,7 @@ public class AmlScreeningClientImpl extends AbstractClient implements AmlScreeni
      * @return a {@link AmlScreeningResponse}
      */
     @Override
-    public AmlScreeningResponse getAmlScreening(final String amlVerificationId) {
+    public AmlScreeningResponse getAmlScreeningSync(final String amlVerificationId) {
         validateParams("amlVerificationId", amlVerificationId);
         return apiClient.get(buildPath(AML_VERIFICATIONS_PATH, amlVerificationId), sdkAuthorization(),
                 AmlScreeningResponse.class);

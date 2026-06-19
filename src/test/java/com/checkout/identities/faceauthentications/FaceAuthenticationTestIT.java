@@ -2,9 +2,11 @@ package com.checkout.identities.faceauthentications;
 
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
+import com.checkout.identities.entities.AttemptAssetsQueryFilter;
 import com.checkout.identities.entities.ClientInformation;
 import com.checkout.identities.faceauthentications.requests.FaceAuthenticationAttemptRequest;
 import com.checkout.identities.faceauthentications.requests.FaceAuthenticationRequest;
+import com.checkout.identities.faceauthentications.responses.FaceAuthenticationAttemptAssetsResponse;
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationAttemptResponse;
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationAttemptsResponse;
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationResponse;
@@ -123,6 +125,27 @@ class FaceAuthenticationTestIT extends SandboxTestFixture {
 
         // Assert
         validateRetrievedFaceAuthenticationAttempt(retrievedAttempt, createdAttempt);
+    }
+
+    @Test
+    @Disabled("Integration test - requires valid face authentication and attempt IDs")
+    void shouldGetFaceAuthenticationAttemptAssets() {
+        // Arrange
+        final FaceAuthenticationRequest request = createFaceAuthenticationRequest();
+        final FaceAuthenticationResponse created = blocking(() ->
+                checkoutApi.faceAuthenticationClient().createFaceAuthentication(request));
+        final FaceAuthenticationAttemptRequest attemptRequest = createFaceAuthenticationAttemptRequest();
+        final FaceAuthenticationAttemptResponse createdAttempt = blocking(() ->
+                checkoutApi.faceAuthenticationClient().createFaceAuthenticationAttempt(created.getId(), attemptRequest));
+        final AttemptAssetsQueryFilter queryFilter = AttemptAssetsQueryFilter.builder().skip(0).limit(10).build();
+
+        // Act
+        final FaceAuthenticationAttemptAssetsResponse assets = blocking(() ->
+                checkoutApi.faceAuthenticationClient().getFaceAuthenticationAttemptAssets(created.getId(), createdAttempt.getId(), queryFilter));
+
+        // Assert
+        assertNotNull(assets);
+        assertNotNull(assets.getData());
     }
 
     @Test

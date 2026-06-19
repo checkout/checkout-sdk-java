@@ -310,4 +310,10 @@ public final class ProcessingSettings {
      */
     private String partnerCode;
 
+    /**
+     * The scheme transaction link identifier.
+     * [Optional]
+     */
+    private String schemeTransactionLinkId;
+
 }

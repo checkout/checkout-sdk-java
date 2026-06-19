@@ -9,7 +9,7 @@ public interface ReconciliationClient {
 
     CompletableFuture<ReconciliationPaymentReportResponse> queryPaymentsReport(ReconciliationQueryPaymentsFilter filter);
 
-    CompletableFuture<ReconciliationPaymentReportResponse> singlePaymentReportAsync(String paymentId);
+    CompletableFuture<ReconciliationPaymentReportResponse> singlePaymentReport(String paymentId);
 
     CompletableFuture<StatementReportResponse> queryStatementsReport(StatementsQueryFilter filter);
 

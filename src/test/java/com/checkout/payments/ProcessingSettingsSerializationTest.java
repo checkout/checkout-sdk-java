@@ -202,4 +202,25 @@ class ProcessingSettingsSerializationTest {
         assertNull(settings.getAffiliateId());
         assertNull(settings.getCardType());
     }
+
+    @Test
+    void shouldSerializeSchemeTransactionLinkId() {
+        final ProcessingSettings settings = ProcessingSettings.builder()
+                .schemeTransactionLinkId("MTL-001")
+                .build();
+
+        final String json = serializer.toJson(settings);
+
+        assertTrue(json.contains("\"scheme_transaction_link_id\":\"MTL-001\""));
+    }
+
+    @Test
+    void shouldDeserializeSchemeTransactionLinkId() {
+        final String json = "{\"scheme_transaction_link_id\":\"MTL-001\"}";
+
+        final ProcessingSettings settings = serializer.fromJson(json, ProcessingSettings.class);
+
+        assertNotNull(settings);
+        assertEquals("MTL-001", settings.getSchemeTransactionLinkId());
+    }
 }

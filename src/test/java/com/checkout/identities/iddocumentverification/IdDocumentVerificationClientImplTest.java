@@ -50,7 +50,7 @@ class IdDocumentVerificationClientImplTest {
     }
 
     @Test
-    void shouldCreateIdDocumentVerificationAsync() throws ExecutionException, InterruptedException {
+    void shouldCreateIdDocumentVerification() throws ExecutionException, InterruptedException {
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
         final IdDocumentVerificationResponse response = createIdDocumentVerificationResponse();
 
@@ -58,14 +58,14 @@ class IdDocumentVerificationClientImplTest {
                 request, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<IdDocumentVerificationResponse> future = client.createIdDocumentVerificationAsync(request);
+        final CompletableFuture<IdDocumentVerificationResponse> future = client.createIdDocumentVerification(request);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
     }
 
     @Test
-    void shouldGetIdDocumentVerificationAsync() throws ExecutionException, InterruptedException {
+    void shouldGetIdDocumentVerification() throws ExecutionException, InterruptedException {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationResponse response = createIdDocumentVerificationResponse();
 
@@ -73,14 +73,14 @@ class IdDocumentVerificationClientImplTest {
                 IdDocumentVerificationResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<IdDocumentVerificationResponse> future = client.getIdDocumentVerificationAsync(idDocumentVerificationId);
+        final CompletableFuture<IdDocumentVerificationResponse> future = client.getIdDocumentVerification(idDocumentVerificationId);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
     }
 
     @Test
-    void shouldAnonymizeIdDocumentVerificationAsync() throws ExecutionException, InterruptedException {
+    void shouldAnonymizeIdDocumentVerification() throws ExecutionException, InterruptedException {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationResponse response = createIdDocumentVerificationResponse();
 
@@ -88,14 +88,14 @@ class IdDocumentVerificationClientImplTest {
                 IdDocumentVerificationResponse.class, null, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<IdDocumentVerificationResponse> future = client.anonymizeIdDocumentVerificationAsync(idDocumentVerificationId);
+        final CompletableFuture<IdDocumentVerificationResponse> future = client.anonymizeIdDocumentVerification(idDocumentVerificationId);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
     }
 
     @Test
-    void shouldCreateIdDocumentVerificationAttemptAsync() throws ExecutionException, InterruptedException {
+    void shouldCreateIdDocumentVerificationAttempt() throws ExecutionException, InterruptedException {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationAttemptRequest request = createIdDocumentVerificationAttemptRequest();
         final IdDocumentVerificationAttemptResponse response = createIdDocumentVerificationAttemptResponse();
@@ -104,14 +104,14 @@ class IdDocumentVerificationClientImplTest {
                 IdDocumentVerificationAttemptResponse.class, request, null))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<IdDocumentVerificationAttemptResponse> future = client.createIdDocumentVerificationAttemptAsync(idDocumentVerificationId, request);
+        final CompletableFuture<IdDocumentVerificationAttemptResponse> future = client.createIdDocumentVerificationAttempt(idDocumentVerificationId, request);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
     }
 
     @Test
-    void shouldGetIdDocumentVerificationAttemptsAsync() throws ExecutionException, InterruptedException {
+    void shouldGetIdDocumentVerificationAttempts() throws ExecutionException, InterruptedException {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationAttemptsResponse response = createIdDocumentVerificationAttemptsResponse();
 
@@ -119,14 +119,14 @@ class IdDocumentVerificationClientImplTest {
                 IdDocumentVerificationAttemptsResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<IdDocumentVerificationAttemptsResponse> future = client.getIdDocumentVerificationAttemptsAsync(idDocumentVerificationId);
+        final CompletableFuture<IdDocumentVerificationAttemptsResponse> future = client.getIdDocumentVerificationAttempts(idDocumentVerificationId);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
     }
 
     @Test
-    void shouldGetIdDocumentVerificationAttemptAsync() throws ExecutionException, InterruptedException {
+    void shouldGetIdDocumentVerificationAttempt() throws ExecutionException, InterruptedException {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final String attemptId = "datp_test_123456789";
         final IdDocumentVerificationAttemptResponse response = createIdDocumentVerificationAttemptResponse();
@@ -135,14 +135,14 @@ class IdDocumentVerificationClientImplTest {
                 IdDocumentVerificationAttemptResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<IdDocumentVerificationAttemptResponse> future = client.getIdDocumentVerificationAttemptAsync(idDocumentVerificationId, attemptId);
+        final CompletableFuture<IdDocumentVerificationAttemptResponse> future = client.getIdDocumentVerificationAttempt(idDocumentVerificationId, attemptId);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
     }
 
     @Test
-    void shouldGetIdDocumentVerificationReportAsync() throws ExecutionException, InterruptedException {
+    void shouldGetIdDocumentVerificationReport() throws ExecutionException, InterruptedException {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationReportResponse response = createIdDocumentVerificationReportResponse();
 
@@ -150,7 +150,7 @@ class IdDocumentVerificationClientImplTest {
                 IdDocumentVerificationReportResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<IdDocumentVerificationReportResponse> future = client.getIdDocumentVerificationReportAsync(idDocumentVerificationId);
+        final CompletableFuture<IdDocumentVerificationReportResponse> future = client.getIdDocumentVerificationReport(idDocumentVerificationId);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
@@ -158,7 +158,7 @@ class IdDocumentVerificationClientImplTest {
 
     // Synchronous methods tests
     @Test
-    void shouldCreateIdDocumentVerification() {
+    void shouldCreateIdDocumentVerificationSync() {
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
         final IdDocumentVerificationResponse response = createIdDocumentVerificationResponse();
 
@@ -166,14 +166,14 @@ class IdDocumentVerificationClientImplTest {
                 request, null))
                 .thenReturn(response);
 
-        final IdDocumentVerificationResponse result = client.createIdDocumentVerification(request);
+        final IdDocumentVerificationResponse result = client.createIdDocumentVerificationSync(request);
 
         assertNotNull(result);
         assertEquals(response, result);
     }
 
     @Test
-    void shouldGetIdDocumentVerification() {
+    void shouldGetIdDocumentVerificationSync() {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationResponse response = createIdDocumentVerificationResponse();
 
@@ -181,14 +181,14 @@ class IdDocumentVerificationClientImplTest {
                 IdDocumentVerificationResponse.class))
                 .thenReturn(response);
 
-        final IdDocumentVerificationResponse result = client.getIdDocumentVerification(idDocumentVerificationId);
+        final IdDocumentVerificationResponse result = client.getIdDocumentVerificationSync(idDocumentVerificationId);
 
         assertNotNull(result);
         assertEquals(response, result);
     }
 
     @Test
-    void shouldAnonymizeIdDocumentVerification() {
+    void shouldAnonymizeIdDocumentVerificationSync() {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationResponse response = createIdDocumentVerificationResponse();
 
@@ -196,14 +196,14 @@ class IdDocumentVerificationClientImplTest {
                 IdDocumentVerificationResponse.class, null, null))
                 .thenReturn(response);
 
-        final IdDocumentVerificationResponse result = client.anonymizeIdDocumentVerification(idDocumentVerificationId);
+        final IdDocumentVerificationResponse result = client.anonymizeIdDocumentVerificationSync(idDocumentVerificationId);
 
         assertNotNull(result);
         assertEquals(response, result);
     }
 
     @Test
-    void shouldCreateIdDocumentVerificationAttempt() {
+    void shouldCreateIdDocumentVerificationAttemptSync() {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationAttemptRequest request = createIdDocumentVerificationAttemptRequest();
         final IdDocumentVerificationAttemptResponse response = createIdDocumentVerificationAttemptResponse();
@@ -212,14 +212,14 @@ class IdDocumentVerificationClientImplTest {
                 IdDocumentVerificationAttemptResponse.class, request, null))
                 .thenReturn(response);
 
-        final IdDocumentVerificationAttemptResponse result = client.createIdDocumentVerificationAttempt(idDocumentVerificationId, request);
+        final IdDocumentVerificationAttemptResponse result = client.createIdDocumentVerificationAttemptSync(idDocumentVerificationId, request);
 
         assertNotNull(result);
         assertEquals(response, result);
     }
 
     @Test
-    void shouldGetIdDocumentVerificationAttempts() {
+    void shouldGetIdDocumentVerificationAttemptsSync() {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationAttemptsResponse response = createIdDocumentVerificationAttemptsResponse();
 
@@ -227,14 +227,14 @@ class IdDocumentVerificationClientImplTest {
                 IdDocumentVerificationAttemptsResponse.class))
                 .thenReturn(response);
 
-        final IdDocumentVerificationAttemptsResponse result = client.getIdDocumentVerificationAttempts(idDocumentVerificationId);
+        final IdDocumentVerificationAttemptsResponse result = client.getIdDocumentVerificationAttemptsSync(idDocumentVerificationId);
 
         assertNotNull(result);
         assertEquals(response, result);
     }
 
     @Test
-    void shouldGetIdDocumentVerificationAttempt() {
+    void shouldGetIdDocumentVerificationAttemptSync() {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final String attemptId = "datp_test_123456789";
         final IdDocumentVerificationAttemptResponse response = createIdDocumentVerificationAttemptResponse();
@@ -243,14 +243,14 @@ class IdDocumentVerificationClientImplTest {
                 IdDocumentVerificationAttemptResponse.class))
                 .thenReturn(response);
 
-        final IdDocumentVerificationAttemptResponse result = client.getIdDocumentVerificationAttempt(idDocumentVerificationId, attemptId);
+        final IdDocumentVerificationAttemptResponse result = client.getIdDocumentVerificationAttemptSync(idDocumentVerificationId, attemptId);
 
         assertNotNull(result);
         assertEquals(response, result);
     }
 
     @Test
-    void shouldGetIdDocumentVerificationReport() {
+    void shouldGetIdDocumentVerificationReportSync() {
         final String idDocumentVerificationId = "iddv_test_123456789";
         final IdDocumentVerificationReportResponse response = createIdDocumentVerificationReportResponse();
 
@@ -258,7 +258,7 @@ class IdDocumentVerificationClientImplTest {
                 IdDocumentVerificationReportResponse.class))
                 .thenReturn(response);
 
-        final IdDocumentVerificationReportResponse result = client.getIdDocumentVerificationReport(idDocumentVerificationId);
+        final IdDocumentVerificationReportResponse result = client.getIdDocumentVerificationReportSync(idDocumentVerificationId);
 
         assertNotNull(result);
         assertEquals(response, result);

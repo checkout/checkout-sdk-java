@@ -4,8 +4,10 @@ import com.checkout.AbstractClient;
 import com.checkout.ApiClient;
 import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorizationType;
+import com.checkout.identities.entities.AttemptAssetsQueryFilter;
 import com.checkout.identities.faceauthentications.requests.FaceAuthenticationAttemptRequest;
 import com.checkout.identities.faceauthentications.requests.FaceAuthenticationRequest;
+import com.checkout.identities.faceauthentications.responses.FaceAuthenticationAttemptAssetsResponse;
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationAttemptResponse;
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationAttemptsResponse;
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationResponse;
@@ -22,6 +24,7 @@ public class FaceAuthenticationClientImpl extends AbstractClient implements Face
     private static final String FACE_AUTHENTICATIONS_PATH = "face-authentications";
     private static final String ANONYMIZE_PATH = "anonymize";
     private static final String ATTEMPTS_PATH = "attempts";
+    private static final String ASSETS_PATH = "assets";
 
     public FaceAuthenticationClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
@@ -107,8 +110,24 @@ public class FaceAuthenticationClientImpl extends AbstractClient implements Face
     public CompletableFuture<FaceAuthenticationAttemptResponse> getFaceAuthenticationAttempt(
             final String faceAuthenticationId, final String attemptId) {
         validateParams("faceAuthenticationId", faceAuthenticationId, "attemptId", attemptId);
-        return apiClient.getAsync(buildPath(FACE_AUTHENTICATIONS_PATH, faceAuthenticationId, ATTEMPTS_PATH, attemptId), 
+        return apiClient.getAsync(buildPath(FACE_AUTHENTICATIONS_PATH, faceAuthenticationId, ATTEMPTS_PATH, attemptId),
                 sdkAuthorization(), FaceAuthenticationAttemptResponse.class);
+    }
+
+    /**
+     * Retrieves the assets (face images and videos) captured during a face authentication attempt.
+     *
+     * @param faceAuthenticationId The face authentication ID
+     * @param attemptId The attempt ID
+     * @param queryFilter The pagination query parameters (skip and limit)
+     * @return CompletableFuture containing the face authentication attempt assets response
+     */
+    @Override
+    public CompletableFuture<FaceAuthenticationAttemptAssetsResponse> getFaceAuthenticationAttemptAssets(
+            final String faceAuthenticationId, final String attemptId, final AttemptAssetsQueryFilter queryFilter) {
+        validateParams("faceAuthenticationId", faceAuthenticationId, "attemptId", attemptId);
+        return apiClient.queryAsync(buildPath(FACE_AUTHENTICATIONS_PATH, faceAuthenticationId, ATTEMPTS_PATH, attemptId, ASSETS_PATH),
+                sdkAuthorization(), queryFilter, FaceAuthenticationAttemptAssetsResponse.class);
     }
 
     // Synchronous methods
@@ -192,7 +211,23 @@ public class FaceAuthenticationClientImpl extends AbstractClient implements Face
     public FaceAuthenticationAttemptResponse getFaceAuthenticationAttemptSync(
             final String faceAuthenticationId, final String attemptId) {
         validateParams("faceAuthenticationId", faceAuthenticationId, "attemptId", attemptId);
-        return apiClient.get(buildPath(FACE_AUTHENTICATIONS_PATH, faceAuthenticationId, ATTEMPTS_PATH, attemptId), 
+        return apiClient.get(buildPath(FACE_AUTHENTICATIONS_PATH, faceAuthenticationId, ATTEMPTS_PATH, attemptId),
                 sdkAuthorization(), FaceAuthenticationAttemptResponse.class);
+    }
+
+    /**
+     * Retrieves the assets (face images and videos) captured during a face authentication attempt.
+     *
+     * @param faceAuthenticationId The face authentication ID
+     * @param attemptId The attempt ID
+     * @param queryFilter The pagination query parameters (skip and limit)
+     * @return The face authentication attempt assets response
+     */
+    @Override
+    public FaceAuthenticationAttemptAssetsResponse getFaceAuthenticationAttemptAssetsSync(
+            final String faceAuthenticationId, final String attemptId, final AttemptAssetsQueryFilter queryFilter) {
+        validateParams("faceAuthenticationId", faceAuthenticationId, "attemptId", attemptId);
+        return apiClient.query(buildPath(FACE_AUTHENTICATIONS_PATH, faceAuthenticationId, ATTEMPTS_PATH, attemptId, ASSETS_PATH),
+                sdkAuthorization(), queryFilter, FaceAuthenticationAttemptAssetsResponse.class);
     }
 }

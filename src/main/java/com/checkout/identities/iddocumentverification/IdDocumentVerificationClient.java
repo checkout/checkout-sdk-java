@@ -20,7 +20,7 @@ public interface IdDocumentVerificationClient {
      * @param idDocumentVerificationRequest the ID document verification request
      * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationResponse}
      */
-    CompletableFuture<IdDocumentVerificationResponse> createIdDocumentVerificationAsync(IdDocumentVerificationRequest idDocumentVerificationRequest);
+    CompletableFuture<IdDocumentVerificationResponse> createIdDocumentVerification(IdDocumentVerificationRequest idDocumentVerificationRequest);
 
     /**
      * Retrieve an ID document verification
@@ -28,7 +28,7 @@ public interface IdDocumentVerificationClient {
      * @param idDocumentVerificationId the ID document verification ID
      * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationResponse}
      */
-    CompletableFuture<IdDocumentVerificationResponse> getIdDocumentVerificationAsync(String idDocumentVerificationId);
+    CompletableFuture<IdDocumentVerificationResponse> getIdDocumentVerification(String idDocumentVerificationId);
 
     /**
      * Anonymize an ID document verification
@@ -36,7 +36,7 @@ public interface IdDocumentVerificationClient {
      * @param idDocumentVerificationId the ID document verification ID
      * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationResponse}
      */
-    CompletableFuture<IdDocumentVerificationResponse> anonymizeIdDocumentVerificationAsync(String idDocumentVerificationId);
+    CompletableFuture<IdDocumentVerificationResponse> anonymizeIdDocumentVerification(String idDocumentVerificationId);
 
     /**
      * Create an ID document verification attempt
@@ -45,7 +45,7 @@ public interface IdDocumentVerificationClient {
      * @param idDocumentVerificationAttemptRequest the attempt request
      * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationAttemptResponse}
      */
-    CompletableFuture<IdDocumentVerificationAttemptResponse> createIdDocumentVerificationAttemptAsync(String idDocumentVerificationId, IdDocumentVerificationAttemptRequest idDocumentVerificationAttemptRequest);
+    CompletableFuture<IdDocumentVerificationAttemptResponse> createIdDocumentVerificationAttempt(String idDocumentVerificationId, IdDocumentVerificationAttemptRequest idDocumentVerificationAttemptRequest);
 
     /**
      * Retrieve all ID document verification attempts
@@ -53,7 +53,7 @@ public interface IdDocumentVerificationClient {
      * @param idDocumentVerificationId the ID document verification ID
      * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationAttemptsResponse}
      */
-    CompletableFuture<IdDocumentVerificationAttemptsResponse> getIdDocumentVerificationAttemptsAsync(String idDocumentVerificationId);
+    CompletableFuture<IdDocumentVerificationAttemptsResponse> getIdDocumentVerificationAttempts(String idDocumentVerificationId);
 
     /**
      * Retrieve a specific ID document verification attempt
@@ -62,7 +62,7 @@ public interface IdDocumentVerificationClient {
      * @param attemptId the attempt ID
      * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationAttemptResponse}
      */
-    CompletableFuture<IdDocumentVerificationAttemptResponse> getIdDocumentVerificationAttemptAsync(String idDocumentVerificationId, String attemptId);
+    CompletableFuture<IdDocumentVerificationAttemptResponse> getIdDocumentVerificationAttempt(String idDocumentVerificationId, String attemptId);
 
     /**
      * Generate and download a PDF report
@@ -70,7 +70,7 @@ public interface IdDocumentVerificationClient {
      * @param idDocumentVerificationId the ID document verification ID
      * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationReportResponse}
      */
-    CompletableFuture<IdDocumentVerificationReportResponse> getIdDocumentVerificationReportAsync(String idDocumentVerificationId);
+    CompletableFuture<IdDocumentVerificationReportResponse> getIdDocumentVerificationReport(String idDocumentVerificationId);
 
     // Synchronous methods
 
@@ -80,7 +80,7 @@ public interface IdDocumentVerificationClient {
      * @param idDocumentVerificationRequest the ID document verification request
      * @return the {@link IdDocumentVerificationResponse}
      */
-    IdDocumentVerificationResponse createIdDocumentVerification(IdDocumentVerificationRequest idDocumentVerificationRequest);
+    IdDocumentVerificationResponse createIdDocumentVerificationSync(IdDocumentVerificationRequest idDocumentVerificationRequest);
 
     /**
      * Retrieve an ID document verification
@@ -88,7 +88,7 @@ public interface IdDocumentVerificationClient {
      * @param idDocumentVerificationId the ID document verification ID
      * @return the {@link IdDocumentVerificationResponse}
      */
-    IdDocumentVerificationResponse getIdDocumentVerification(String idDocumentVerificationId);
+    IdDocumentVerificationResponse getIdDocumentVerificationSync(String idDocumentVerificationId);
 
     /**
      * Anonymize an ID document verification
@@ -96,7 +96,7 @@ public interface IdDocumentVerificationClient {
      * @param idDocumentVerificationId the ID document verification ID
      * @return the {@link IdDocumentVerificationResponse}
      */
-    IdDocumentVerificationResponse anonymizeIdDocumentVerification(String idDocumentVerificationId);
+    IdDocumentVerificationResponse anonymizeIdDocumentVerificationSync(String idDocumentVerificationId);
 
     /**
      * Create an ID document verification attempt
@@ -105,7 +105,7 @@ public interface IdDocumentVerificationClient {
      * @param idDocumentVerificationAttemptRequest the attempt request
      * @return the {@link IdDocumentVerificationAttemptResponse}
      */
-    IdDocumentVerificationAttemptResponse createIdDocumentVerificationAttempt(String idDocumentVerificationId, IdDocumentVerificationAttemptRequest idDocumentVerificationAttemptRequest);
+    IdDocumentVerificationAttemptResponse createIdDocumentVerificationAttemptSync(String idDocumentVerificationId, IdDocumentVerificationAttemptRequest idDocumentVerificationAttemptRequest);
 
     /**
      * Retrieve all ID document verification attempts
@@ -113,7 +113,7 @@ public interface IdDocumentVerificationClient {
      * @param idDocumentVerificationId the ID document verification ID
      * @return the {@link IdDocumentVerificationAttemptsResponse}
      */
-    IdDocumentVerificationAttemptsResponse getIdDocumentVerificationAttempts(String idDocumentVerificationId);
+    IdDocumentVerificationAttemptsResponse getIdDocumentVerificationAttemptsSync(String idDocumentVerificationId);
 
     /**
      * Retrieve a specific ID document verification attempt
@@ -122,7 +122,7 @@ public interface IdDocumentVerificationClient {
      * @param attemptId the attempt ID
      * @return the {@link IdDocumentVerificationAttemptResponse}
      */
-    IdDocumentVerificationAttemptResponse getIdDocumentVerificationAttempt(String idDocumentVerificationId, String attemptId);
+    IdDocumentVerificationAttemptResponse getIdDocumentVerificationAttemptSync(String idDocumentVerificationId, String attemptId);
 
     /**
      * Generate and download a PDF report
@@ -130,5 +130,5 @@ public interface IdDocumentVerificationClient {
      * @param idDocumentVerificationId the ID document verification ID
      * @return the {@link IdDocumentVerificationReportResponse}
      */
-    IdDocumentVerificationReportResponse getIdDocumentVerificationReport(String idDocumentVerificationId);
+    IdDocumentVerificationReportResponse getIdDocumentVerificationReportSync(String idDocumentVerificationId);
 }

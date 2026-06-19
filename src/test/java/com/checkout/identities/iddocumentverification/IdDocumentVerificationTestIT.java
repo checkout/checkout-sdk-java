@@ -32,7 +32,7 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
 
         // Act
         final IdDocumentVerificationResponse response = blocking(() -> 
-                checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAsync(request));
+                checkoutApi.idDocumentVerificationClient().createIdDocumentVerification(request));
 
         // Assert
         validateCreatedIdDocumentVerification(response);
@@ -44,11 +44,11 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
         // Arrange
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
         final IdDocumentVerificationResponse created = blocking(() ->
-                checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAsync(request));
+                checkoutApi.idDocumentVerificationClient().createIdDocumentVerification(request));
 
         // Act
         final IdDocumentVerificationResponse retrieved = blocking(() ->
-                checkoutApi.idDocumentVerificationClient().getIdDocumentVerificationAsync(created.getId()));
+                checkoutApi.idDocumentVerificationClient().getIdDocumentVerification(created.getId()));
 
         // Assert
         validateRetrievedIdDocumentVerification(retrieved, created);
@@ -60,11 +60,11 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
         // Arrange
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
         final IdDocumentVerificationResponse created = blocking(() ->
-                checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAsync(request));
+                checkoutApi.idDocumentVerificationClient().createIdDocumentVerification(request));
 
         // Act
         final IdDocumentVerificationResponse anonymized = blocking(() ->
-                checkoutApi.idDocumentVerificationClient().anonymizeIdDocumentVerificationAsync(created.getId()));
+                checkoutApi.idDocumentVerificationClient().anonymizeIdDocumentVerification(created.getId()));
 
         // Assert
         validateAnonymizedIdDocumentVerification(anonymized);
@@ -76,12 +76,12 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
         // Arrange
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
         final IdDocumentVerificationResponse created = blocking(() ->
-                checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAsync(request));
+                checkoutApi.idDocumentVerificationClient().createIdDocumentVerification(request));
         final IdDocumentVerificationAttemptRequest attemptRequest = createIdDocumentVerificationAttemptRequest();
 
         // Act
         final IdDocumentVerificationAttemptResponse attempt = blocking(() ->
-                checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAttemptAsync(created.getId(), attemptRequest));
+                checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAttempt(created.getId(), attemptRequest));
 
         // Assert
         validateCreatedIdDocumentVerificationAttempt(attempt);
@@ -93,14 +93,14 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
         // Arrange
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
         final IdDocumentVerificationResponse created = blocking(() ->
-                checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAsync(request));
+                checkoutApi.idDocumentVerificationClient().createIdDocumentVerification(request));
         final IdDocumentVerificationAttemptRequest attemptRequest = createIdDocumentVerificationAttemptRequest();
         final IdDocumentVerificationAttemptResponse createdAttempt = blocking(() ->
-                checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAttemptAsync(created.getId(), attemptRequest));
+                checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAttempt(created.getId(), attemptRequest));
 
         // Act
         final IdDocumentVerificationAttemptsResponse attempts = blocking(() ->
-                checkoutApi.idDocumentVerificationClient().getIdDocumentVerificationAttemptsAsync(created.getId()));
+                checkoutApi.idDocumentVerificationClient().getIdDocumentVerificationAttempts(created.getId()));
 
         // Assert
         validateRetrievedIdDocumentVerificationAttempts(attempts, createdAttempt);
@@ -112,14 +112,14 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
         // Arrange
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
         final IdDocumentVerificationResponse created = blocking(() ->
-                checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAsync(request));
+                checkoutApi.idDocumentVerificationClient().createIdDocumentVerification(request));
         final IdDocumentVerificationAttemptRequest attemptRequest = createIdDocumentVerificationAttemptRequest();
         final IdDocumentVerificationAttemptResponse createdAttempt = blocking(() ->
-                checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAttemptAsync(created.getId(), attemptRequest));
+                checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAttempt(created.getId(), attemptRequest));
 
         // Act
         final IdDocumentVerificationAttemptResponse retrievedAttempt = blocking(() ->
-                checkoutApi.idDocumentVerificationClient().getIdDocumentVerificationAttemptAsync(created.getId(), createdAttempt.getId()));
+                checkoutApi.idDocumentVerificationClient().getIdDocumentVerificationAttempt(created.getId(), createdAttempt.getId()));
 
         // Assert
         validateRetrievedIdDocumentVerificationAttempt(retrievedAttempt, createdAttempt);
@@ -131,11 +131,11 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
         // Arrange
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
         final IdDocumentVerificationResponse created = blocking(() ->
-                checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAsync(request));
+                checkoutApi.idDocumentVerificationClient().createIdDocumentVerification(request));
 
         // Act
         final IdDocumentVerificationReportResponse report = blocking(() ->
-                checkoutApi.idDocumentVerificationClient().getIdDocumentVerificationReportAsync(created.getId()));
+                checkoutApi.idDocumentVerificationClient().getIdDocumentVerificationReport(created.getId()));
 
         // Assert
         validateGeneratedIdDocumentVerificationReport(report);
@@ -149,7 +149,7 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
 
         // Act
-        final IdDocumentVerificationResponse response = checkoutApi.idDocumentVerificationClient().createIdDocumentVerification(request);
+        final IdDocumentVerificationResponse response = checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationSync(request);
 
         // Assert
         validateCreatedIdDocumentVerification(response);
@@ -160,10 +160,10 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
     void shouldGetIdDocumentVerificationSync() {
         // Arrange
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
-        final IdDocumentVerificationResponse created = checkoutApi.idDocumentVerificationClient().createIdDocumentVerification(request);
+        final IdDocumentVerificationResponse created = checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationSync(request);
 
         // Act
-        final IdDocumentVerificationResponse retrieved = checkoutApi.idDocumentVerificationClient().getIdDocumentVerification(created.getId());
+        final IdDocumentVerificationResponse retrieved = checkoutApi.idDocumentVerificationClient().getIdDocumentVerificationSync(created.getId());
 
         // Assert
         validateRetrievedIdDocumentVerification(retrieved, created);
@@ -174,10 +174,10 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
     void shouldAnonymizeIdDocumentVerificationSync() {
         // Arrange
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
-        final IdDocumentVerificationResponse created = checkoutApi.idDocumentVerificationClient().createIdDocumentVerification(request);
+        final IdDocumentVerificationResponse created = checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationSync(request);
 
         // Act
-        final IdDocumentVerificationResponse anonymized = checkoutApi.idDocumentVerificationClient().anonymizeIdDocumentVerification(created.getId());
+        final IdDocumentVerificationResponse anonymized = checkoutApi.idDocumentVerificationClient().anonymizeIdDocumentVerificationSync(created.getId());
 
         // Assert
         validateAnonymizedIdDocumentVerification(anonymized);
@@ -188,11 +188,11 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
     void shouldCreateIdDocumentVerificationAttemptSync() {
         // Arrange
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
-        final IdDocumentVerificationResponse created = checkoutApi.idDocumentVerificationClient().createIdDocumentVerification(request);
+        final IdDocumentVerificationResponse created = checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationSync(request);
         final IdDocumentVerificationAttemptRequest attemptRequest = createIdDocumentVerificationAttemptRequest();
 
         // Act
-        final IdDocumentVerificationAttemptResponse attempt = checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAttempt(created.getId(), attemptRequest);
+        final IdDocumentVerificationAttemptResponse attempt = checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAttemptSync(created.getId(), attemptRequest);
 
         // Assert
         validateCreatedIdDocumentVerificationAttempt(attempt);
@@ -203,12 +203,12 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
     void shouldGetIdDocumentVerificationAttemptsSync() {
         // Arrange
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
-        final IdDocumentVerificationResponse created = checkoutApi.idDocumentVerificationClient().createIdDocumentVerification(request);
+        final IdDocumentVerificationResponse created = checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationSync(request);
         final IdDocumentVerificationAttemptRequest attemptRequest = createIdDocumentVerificationAttemptRequest();
-        final IdDocumentVerificationAttemptResponse createdAttempt = checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAttempt(created.getId(), attemptRequest);
+        final IdDocumentVerificationAttemptResponse createdAttempt = checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAttemptSync(created.getId(), attemptRequest);
 
         // Act
-        final IdDocumentVerificationAttemptsResponse attempts = checkoutApi.idDocumentVerificationClient().getIdDocumentVerificationAttempts(created.getId());
+        final IdDocumentVerificationAttemptsResponse attempts = checkoutApi.idDocumentVerificationClient().getIdDocumentVerificationAttemptsSync(created.getId());
 
         // Assert
         validateRetrievedIdDocumentVerificationAttempts(attempts, createdAttempt);
@@ -219,12 +219,12 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
     void shouldGetIdDocumentVerificationAttemptSync() {
         // Arrange
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
-        final IdDocumentVerificationResponse created = checkoutApi.idDocumentVerificationClient().createIdDocumentVerification(request);
+        final IdDocumentVerificationResponse created = checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationSync(request);
         final IdDocumentVerificationAttemptRequest attemptRequest = createIdDocumentVerificationAttemptRequest();
-        final IdDocumentVerificationAttemptResponse createdAttempt = checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAttempt(created.getId(), attemptRequest);
+        final IdDocumentVerificationAttemptResponse createdAttempt = checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationAttemptSync(created.getId(), attemptRequest);
 
         // Act
-        final IdDocumentVerificationAttemptResponse retrievedAttempt = checkoutApi.idDocumentVerificationClient().getIdDocumentVerificationAttempt(created.getId(), createdAttempt.getId());
+        final IdDocumentVerificationAttemptResponse retrievedAttempt = checkoutApi.idDocumentVerificationClient().getIdDocumentVerificationAttemptSync(created.getId(), createdAttempt.getId());
 
         // Assert
         validateRetrievedIdDocumentVerificationAttempt(retrievedAttempt, createdAttempt);
@@ -235,10 +235,10 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
     void shouldGetIdDocumentVerificationReportSync() {
         // Arrange
         final IdDocumentVerificationRequest request = createIdDocumentVerificationRequest();
-        final IdDocumentVerificationResponse created = checkoutApi.idDocumentVerificationClient().createIdDocumentVerification(request);
+        final IdDocumentVerificationResponse created = checkoutApi.idDocumentVerificationClient().createIdDocumentVerificationSync(request);
 
         // Act
-        final IdDocumentVerificationReportResponse report = checkoutApi.idDocumentVerificationClient().getIdDocumentVerificationReport(created.getId());
+        final IdDocumentVerificationReportResponse report = checkoutApi.idDocumentVerificationClient().getIdDocumentVerificationReportSync(created.getId());
 
         // Assert
         validateGeneratedIdDocumentVerificationReport(report);
