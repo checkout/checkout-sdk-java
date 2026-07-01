@@ -18,7 +18,6 @@ public final class RatesQueryFilter {
     private ForexSource source;
 
     @NonNull
-    @SerializedName("currency_pairs")
     private String currencyPairs;
 
     @NonNull

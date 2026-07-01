@@ -1,6 +1,5 @@
 package com.checkout.issuing.cards.requests.update;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,10 +17,8 @@ public final class UpdateCardRequest {
 
     private IssuingCardMetadata metadata;
 
-    @SerializedName("expiry_month")
     private Integer expiryMonth;
 
-    @SerializedName("expiry_year")
     private Integer expiryYear;
 
     /**
@@ -34,7 +31,6 @@ public final class UpdateCardRequest {
      * [Optional]
      * </p>
      */
-    @SerializedName("activation_date")
     private String activationDate;
 
     /**
@@ -44,6 +40,5 @@ public final class UpdateCardRequest {
      * </p>
      * Format: yyyy-MM-dd
      */
-    @SerializedName("revocation_date")
     private LocalDate revocationDate;
 }

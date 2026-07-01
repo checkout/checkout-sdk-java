@@ -1,7 +1,6 @@
 package com.checkout.handlepaymentsandpayouts.googlepay.responses;
 
 import com.checkout.HttpMetadata;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -23,7 +22,6 @@ public final class GooglePayEnrollmentResponse extends HttpMetadata {
      * </p>
      * Format: date-time (RFC 3339)
      */
-    @SerializedName("tos_accepted_time")
     private Instant tosAcceptedTime;
 
     /**

@@ -1,6 +1,5 @@
 package com.checkout.accounts;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,9 +7,7 @@ import lombok.Data;
 @Builder
 public final class EntityFinancialDocuments {
 
-    @SerializedName("bank_statement")
     private EntityDocument bankStatement;
 
-    @SerializedName("financial_statement")
     private EntityDocument financialStatement;
 }

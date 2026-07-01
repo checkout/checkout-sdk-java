@@ -40,14 +40,12 @@ public final class InstrumentData {
      * The payment type for this instrument.
      * [Optional]
      */
-    @SerializedName("payment_type")
     private PaymentType paymentType;
 
     /**
      * The unique identifier of the SEPA mandate.
      * [Optional]
      */
-    @SerializedName("mandate_id")
     private String mandateId;
 
     /**
@@ -55,7 +53,6 @@ public final class InstrumentData {
      * [Optional]
      * Format: yyyy-MM-dd
      */
-    @SerializedName("date_of_signature")
     private LocalDate dateOfSignature;
 
 }

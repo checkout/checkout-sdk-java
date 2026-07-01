@@ -1,6 +1,5 @@
 package com.checkout.accounts;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +13,6 @@ public final class EntityDocument {
 
     private String type;
 
-    @SerializedName("file_id")
     private String fileId;
 
 }

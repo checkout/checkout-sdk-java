@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.processing;
 
-import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +21,6 @@ public final class Processing {
      * Only applicable for unreferenced refunds.
      * [Optional]
      */
-    @SerializedName("processing_speed")
     private String processingSpeed;
 
 }

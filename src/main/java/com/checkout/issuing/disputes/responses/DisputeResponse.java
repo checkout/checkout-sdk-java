@@ -11,7 +11,6 @@ import com.checkout.issuing.disputes.entities.DisputeMerchant;
 import com.checkout.issuing.disputes.entities.DisputePreArbitration;
 import com.checkout.issuing.disputes.entities.DisputeRepresentment;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -98,7 +97,6 @@ public final class DisputeResponse extends Resource {
      * Provides instructions on the amendments required before the dispute can proceed, if the dispute
      * status is action_required
      */
-    @SerializedName("action_details")
     private IssuingDisputeActionDetails actionDetails;
 
 }

@@ -4,7 +4,6 @@ import com.checkout.common.CountryCode;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.Payer;
 import com.checkout.payments.previous.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,7 +16,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class RequestPagoFacilSource extends AbstractRequestSource {
 
-    @SerializedName("integration_type")
     private final IntegrationType integrationType = IntegrationType.REDIRECT;
 
     private CountryCode country;

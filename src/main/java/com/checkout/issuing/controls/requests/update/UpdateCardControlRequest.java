@@ -3,7 +3,6 @@ package com.checkout.issuing.controls.requests.update;
 import com.checkout.issuing.controls.requests.MccLimit;
 import com.checkout.issuing.controls.requests.MidLimit;
 import com.checkout.issuing.controls.requests.VelocityLimit;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,12 +12,9 @@ public final class UpdateCardControlRequest {
 
     private String description;
 
-    @SerializedName("velocity_limit")
     private VelocityLimit velocityLimit;
 
-    @SerializedName("mcc_limit")
     private MccLimit mccLimit;
 
-    @SerializedName("mid_limit")
     private MidLimit midLimit;
 }

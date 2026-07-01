@@ -12,7 +12,6 @@ public abstract class CardControlRequest {
 
     private String description;
 
-    @SerializedName("target_id")
     private String targetId;
 
     protected CardControlRequest(final ControlType type,

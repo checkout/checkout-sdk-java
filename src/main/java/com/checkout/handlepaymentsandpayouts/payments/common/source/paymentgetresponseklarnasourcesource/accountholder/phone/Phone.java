@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.payments.common.source.paymentgetresponseklarnasourcesource.accountholder.phone;
 
-import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +19,6 @@ public final class Phone {
     /**
      * [Optional]
      */
-    @SerializedName("country_code")
     private String countryCode;
 
     /**

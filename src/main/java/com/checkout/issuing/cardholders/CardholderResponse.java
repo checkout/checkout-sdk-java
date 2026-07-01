@@ -1,7 +1,6 @@
 package com.checkout.issuing.cardholders;
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -21,9 +20,7 @@ public final class CardholderResponse extends Resource {
 
     private String reference;
 
-    @SerializedName("created_date")
     private Instant createdDate;
 
-    @SerializedName("last_modified_date")
     private Instant lastModifiedDate;
 }

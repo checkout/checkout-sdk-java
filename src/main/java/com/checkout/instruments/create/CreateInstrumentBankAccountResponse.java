@@ -2,7 +2,6 @@ package com.checkout.instruments.create;
 
 import com.checkout.common.BankDetails;
 import com.checkout.common.InstrumentType;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -16,16 +15,12 @@ public final class CreateInstrumentBankAccountResponse extends CreateInstrumentR
 
     private BankDetails bank;
 
-    @SerializedName("swift_bic")
     private String swiftBic;
 
-    @SerializedName("account_number")
     private String accountNumber;
 
-    @SerializedName("bank_code")
     private String bankCode;
 
-    @SerializedName("iban")
     private String iban;
 
 }

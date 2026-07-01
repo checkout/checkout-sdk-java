@@ -1,6 +1,5 @@
 package com.checkout.sessions;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +17,6 @@ public final class Optimization {
 
     private String framework;
 
-    @SerializedName("optimized_properties")
     private List<OptimizedProperties> optimizedProperties;
 
 }

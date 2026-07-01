@@ -8,19 +8,15 @@ import lombok.Data;
 @Builder
 public final class CardholderAccessTokenRequest {
 
-    @SerializedName("grant_type")
     private String grantType;
 
     @SerializedName("client_id")
     private String clientID;
 
-    @SerializedName("client_secret")
     private String clientSecret;
 
-    @SerializedName("cardholder_id")
     private String cardholderId;
 
-    @SerializedName("single_use")
     private Boolean singleUse;
 
 }

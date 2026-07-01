@@ -1,7 +1,6 @@
 package com.checkout.accounts;
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -38,6 +37,5 @@ public final class EntityRequirementUpdateResponse extends Resource {
      * [Optional]
      * Format: date-time (RFC 3339)
      */
-    @SerializedName("submitted_at")
     private Instant submittedAt;
 }

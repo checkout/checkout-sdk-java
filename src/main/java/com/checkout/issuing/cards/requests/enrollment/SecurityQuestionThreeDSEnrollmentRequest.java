@@ -1,7 +1,6 @@
 package com.checkout.issuing.cards.requests.enrollment;
 
 import com.checkout.common.Phone;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,7 +13,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class SecurityQuestionThreeDSEnrollmentRequest extends ThreeDSEnrollmentRequest {
 
-    @SerializedName("security_pair")
     private SecurityPair securityPair;
 
     @Builder

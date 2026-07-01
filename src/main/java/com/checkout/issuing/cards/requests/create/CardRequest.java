@@ -2,7 +2,6 @@ package com.checkout.issuing.cards.requests.create;
 
 import com.checkout.issuing.cards.requests.update.IssuingCardMetadata;
 import com.checkout.issuing.cards.CardType;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -12,7 +11,6 @@ public abstract class CardRequest {
 
     private final CardType type;
 
-    @SerializedName("cardholder_id")
     private String cardholderId;
 
     private CardLifetime lifetime;
@@ -34,7 +32,6 @@ public abstract class CardRequest {
      * </p>
      * Format: yyyy-MM-dd
      */
-    @SerializedName("revocation_date")
     private LocalDate revocationDate;
 
     /**
@@ -47,16 +44,12 @@ public abstract class CardRequest {
      * [Optional]
      * </p>
      */
-    @SerializedName("activation_date")
     private String activationDate;
 
-    @SerializedName("card_product_id")
     private String cardProductId;
 
-    @SerializedName("display_name")
     private String displayName;
 
-    @SerializedName("activate_card")
     private Boolean activateCard;
 
     protected CardRequest(final CardType type,

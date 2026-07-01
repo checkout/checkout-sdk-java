@@ -3,7 +3,6 @@ package com.checkout.tokens;
 import com.checkout.common.CardCategory;
 import com.checkout.common.CardType;
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -39,7 +38,6 @@ public final class TokenMetadataResponse extends Resource {
      * [Required]
      * Format: date-time (RFC 3339)
      */
-    @SerializedName("expires_on")
     private Instant expiresOn;
 
     /**
@@ -47,14 +45,12 @@ public final class TokenMetadataResponse extends Resource {
      * [Required]
      * min 1, max 12
      */
-    @SerializedName("expiry_month")
     private Integer expiryMonth;
 
     /**
      * The card expiry year.
      * [Required]
      */
-    @SerializedName("expiry_year")
     private Integer expiryYear;
 
     /**
@@ -80,7 +76,6 @@ public final class TokenMetadataResponse extends Resource {
      * [Optional]
      * Enum: "CREDIT" "DEBIT" "PREPAID" "CHARGE" "DEFERRED DEBIT"
      */
-    @SerializedName("card_type")
     private CardType cardType;
 
     /**
@@ -88,7 +83,6 @@ public final class TokenMetadataResponse extends Resource {
      * [Optional]
      * Enum: "CONSUMER" "COMMERCIAL"
      */
-    @SerializedName("card_category")
     private CardCategory cardCategory;
 
     /**
@@ -103,27 +97,23 @@ public final class TokenMetadataResponse extends Resource {
         * min 2 characters
         * max 2 characters
      */
-    @SerializedName("issuer_country")
     private String issuerCountry;
 
     /**
      * The issuer or card scheme's product identifier.
      * [Optional]
      */
-    @SerializedName("product_id")
     private String productId;
 
     /**
      * The issuer or card scheme's product type.
      * [Optional]
      */
-    @SerializedName("product_type")
     private String productType;
 
     /**
      * Partial billing address — city and country only.
      * [Optional]
      */
-    @SerializedName("billing_address")
     private TokenMetadataBillingAddress billingAddress;
 }

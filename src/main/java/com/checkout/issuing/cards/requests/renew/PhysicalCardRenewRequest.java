@@ -2,7 +2,6 @@ package com.checkout.issuing.cards.requests.renew;
 
 import com.checkout.issuing.cards.requests.create.ShippingInstruction;
 import com.checkout.issuing.cards.requests.update.IssuingCardMetadata;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,7 +14,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class PhysicalCardRenewRequest extends RenewCardRequest {
 
-    @SerializedName("shipping_instructions")
     private ShippingInstruction shippingInstructions;
 
     @Builder

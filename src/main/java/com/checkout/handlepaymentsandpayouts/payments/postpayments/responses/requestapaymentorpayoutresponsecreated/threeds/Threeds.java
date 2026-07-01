@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.threeds;
 
-import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,7 +35,6 @@ public final class Threeds {
      * Indicates the reason why the payment was upgraded to 3D Secure.
      * [Optional]
      */
-    @SerializedName("upgrade_reason")
     private String upgradeReason;
 
 }

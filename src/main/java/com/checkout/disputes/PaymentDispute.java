@@ -18,7 +18,6 @@ public final class PaymentDispute extends Resource {
 
     private String id;
 
-    @SerializedName("action_id")
     private String actionId;
 
     private Long amount;
@@ -29,14 +28,12 @@ public final class PaymentDispute extends Resource {
 
     private String arn;
 
-    @SerializedName("processed_on")
     private Instant processedOn;
 
     /**
      * Not available on Previous
      */
 
-    @SerializedName("processing_channel_id")
     private String processingChannelId;
 
     private String mcc;
@@ -46,7 +43,6 @@ public final class PaymentDispute extends Resource {
 
     private String eci;
 
-    @SerializedName("has_refund")
     private Boolean hasRefund;
 
     private String reference;

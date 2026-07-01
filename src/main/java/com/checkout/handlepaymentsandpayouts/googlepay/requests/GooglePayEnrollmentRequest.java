@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.googlepay.requests;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +17,6 @@ public final class GooglePayEnrollmentRequest {
      * [Required]
      * </p>
      */
-    @SerializedName("entity_id")
     private String entityId;
 
     /**
@@ -27,7 +25,6 @@ public final class GooglePayEnrollmentRequest {
      * [Required]
      * </p>
      */
-    @SerializedName("email_address")
     private String emailAddress;
 
     /**
@@ -36,7 +33,6 @@ public final class GooglePayEnrollmentRequest {
      * [Required]
      * </p>
      */
-    @SerializedName("accept_terms_of_service")
     private Boolean acceptTermsOfService;
 
 }

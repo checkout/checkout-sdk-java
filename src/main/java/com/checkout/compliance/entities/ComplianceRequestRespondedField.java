@@ -1,6 +1,5 @@
 package com.checkout.compliance.entities;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +18,6 @@ public final class ComplianceRequestRespondedField {
 
     private String value;
 
-    @SerializedName("not_available")
     private Boolean notAvailable;
 
 }

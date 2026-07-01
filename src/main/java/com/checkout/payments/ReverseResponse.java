@@ -1,7 +1,6 @@
 package com.checkout.payments;
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -11,7 +10,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class ReverseResponse extends Resource {
 
-    @SerializedName("action_id")
     private String actionId;
 
     private String reference;
@@ -23,7 +21,6 @@ public final class ReverseResponse extends Resource {
      * "Void" if the payment is in an Authorized state.
      * [Optional]
      */
-    @SerializedName("action_type")
     private String actionType;
 
 }

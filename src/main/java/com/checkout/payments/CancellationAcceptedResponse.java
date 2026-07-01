@@ -1,7 +1,6 @@
 package com.checkout.payments;
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -14,7 +13,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class CancellationAcceptedResponse extends Resource {
 
-    @SerializedName("action_id")
     private String actionId;
 
     private String reference;

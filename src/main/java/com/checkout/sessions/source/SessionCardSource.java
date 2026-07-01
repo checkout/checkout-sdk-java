@@ -4,7 +4,6 @@ import com.checkout.common.Phone;
 import com.checkout.sessions.SessionAddress;
 import com.checkout.sessions.SessionScheme;
 import com.checkout.sessions.SessionSourceType;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,17 +16,14 @@ public final class SessionCardSource extends SessionSource {
 
     private String number;
 
-    @SerializedName("expiry_month")
     private Integer expiryMonth;
 
-    @SerializedName("expiry_year")
     private Integer expiryYear;
 
     private String name;
 
     private Boolean stored;
 
-    @SerializedName("store_for_future_use")
     private Boolean storeForFutureUse;
 
     @Builder

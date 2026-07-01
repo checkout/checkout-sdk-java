@@ -5,7 +5,6 @@ import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unre
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.destination.common.accountholder.common.billingaddress.BillingAddress;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.destination.common.accountholder.common.identification.Identification;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.destination.common.accountholder.common.phone.Phone;
-import com.google.gson.annotations.SerializedName;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -33,7 +32,6 @@ public final class GovernmentAccountHolder extends AbstractAccountHolder {
      * [Required]
      * &lt;= 50
      */
-    @SerializedName("company_name")
     private String companyName;
 
     /**
@@ -42,7 +40,6 @@ public final class GovernmentAccountHolder extends AbstractAccountHolder {
      * perform.
      * [Optional]
      */
-    @SerializedName("billing_address")
     private BillingAddress billingAddress;
 
     /**

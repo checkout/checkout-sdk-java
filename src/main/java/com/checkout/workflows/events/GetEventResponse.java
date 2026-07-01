@@ -1,7 +1,6 @@
 package com.checkout.workflows.events;
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -26,7 +25,6 @@ public final class GetEventResponse extends Resource {
 
     private Map<String, Object> data;
 
-    @SerializedName("action_invocations")
     private List<EventActionInvocation> actionInvocations;
 
 }

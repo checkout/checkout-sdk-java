@@ -1,6 +1,5 @@
 package com.checkout.sessions.channel;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,7 +10,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class MerchantInitiatedSession extends ChannelData {
 
-    @SerializedName("request_type")
     private RequestType requestType;
 
     @Builder

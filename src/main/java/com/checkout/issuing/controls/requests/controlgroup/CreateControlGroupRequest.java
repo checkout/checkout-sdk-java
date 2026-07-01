@@ -1,6 +1,5 @@
 package com.checkout.issuing.controls.requests.controlgroup;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,10 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public final class CreateControlGroupRequest {
 
-    @SerializedName("target_id")
     private String targetId;
 
-    @SerializedName("fail_if")
     private ControlGroupFailIf failIf;
 
     private List<ControlGroupControl> controls;

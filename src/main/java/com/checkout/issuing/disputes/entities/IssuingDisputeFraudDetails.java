@@ -1,6 +1,5 @@
 package com.checkout.issuing.disputes.entities;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +20,6 @@ public final class IssuingDisputeFraudDetails {
      * [Required]
      * </p>
      */
-    @SerializedName("fraud_type")
     private IssuingDisputeFraudType fraudType;
 
     /**

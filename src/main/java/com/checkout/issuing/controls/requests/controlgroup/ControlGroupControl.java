@@ -1,7 +1,6 @@
 package com.checkout.issuing.controls.requests.controlgroup;
 
 import com.checkout.issuing.controls.requests.ControlType;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 /**
@@ -15,7 +14,6 @@ public abstract class ControlGroupControl {
      * Enum: "mcc_limit" "mid_limit" "velocity_limit"
      * [Required]
      */
-    @SerializedName("control_type")
     private final ControlType controlType;
 
     /**

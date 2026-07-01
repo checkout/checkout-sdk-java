@@ -2,7 +2,6 @@ package com.checkout.payments.contexts;
 
 import com.checkout.common.CustomerRequest;
 import com.checkout.common.Phone;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,7 +14,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public final class PaymentContextsCustomerRequest extends CustomerRequest {
 
-    @SerializedName("email_verified")
     private Boolean emailVerified;
 
     private PaymentContextsCustomerSummary summary;

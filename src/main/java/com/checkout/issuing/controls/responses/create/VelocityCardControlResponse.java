@@ -2,7 +2,6 @@ package com.checkout.issuing.controls.responses.create;
 
 import com.checkout.issuing.controls.requests.ControlType;
 import com.checkout.issuing.controls.requests.VelocityLimit;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,7 +14,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class VelocityCardControlResponse extends CardControlResponse {
 
-    @SerializedName("velocity_limit")
     private VelocityLimit velocityLimit;
 
     @Builder

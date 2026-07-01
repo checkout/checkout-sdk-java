@@ -2,7 +2,6 @@ package com.checkout.handlepaymentsandpayouts.payments.common.source.multibancos
 
 import com.checkout.handlepaymentsandpayouts.payments.common.source.AbstractSource;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType;
-import com.google.gson.annotations.SerializedName;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -24,14 +23,12 @@ public final class MultibancoSource extends AbstractSource {
      * Multibanco payment reference
      * [Optional]
      */
-    @SerializedName("payment_reference")
     private String paymentReference;
 
     /**
      * The identifier of a supplier charging for its service or product
      * [Optional]
      */
-    @SerializedName("service_supplier_id")
     private String serviceSupplierId;
 
     /**

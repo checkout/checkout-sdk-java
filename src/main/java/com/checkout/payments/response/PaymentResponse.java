@@ -31,13 +31,10 @@ public final class PaymentResponse extends Resource implements Serializable {
 
     private String id;
 
-    @SerializedName("payment_type")
     private PaymentType paymentType;
 
-    @SerializedName("payment_plan")
     private PaymentPlan paymentPlan;
 
-    @SerializedName("action_id")
     private String actionId;
 
     private Long amount;
@@ -50,16 +47,12 @@ public final class PaymentResponse extends Resource implements Serializable {
 
     private PaymentStatus status;
 
-    @SerializedName("auth_code")
     private String authCode;
 
-    @SerializedName("response_code")
     private String responseCode;
 
-    @SerializedName("response_summary")
     private String responseSummary;
 
-    @SerializedName("expires_on")
     private Instant expiresOn;
 
     @SerializedName("3ds")
@@ -71,7 +64,6 @@ public final class PaymentResponse extends Resource implements Serializable {
 
     private PaymentResponseBalances balances;
 
-    @SerializedName("processed_on")
     private Instant processedOn;
 
     private String reference;
@@ -80,12 +72,10 @@ public final class PaymentResponse extends Resource implements Serializable {
 
     private String eci;
 
-    @SerializedName("scheme_id")
     private String schemeId;
 
     private PaymentRetryResponse retry;
 
-    @SerializedName("payment_ip")
     private String paymentIp;
 
     private PaymentRecipient recipient;

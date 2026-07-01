@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.segment;
 
-import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +28,6 @@ public final class Segment {
      * [Optional]
      * &lt;= 50
      */
-    @SerializedName("business_category")
     private String businessCategory;
 
     /**

@@ -1,7 +1,6 @@
 package com.checkout.payments;
 
 import com.checkout.payments.request.Device;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,7 +29,6 @@ public final class RiskRequest {
      * [Optional]
      * ^(dsid)_(\w{26})$
      */
-    @SerializedName("device_session_id")
     private String deviceSessionId;
 
     /**

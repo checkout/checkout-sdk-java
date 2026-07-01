@@ -2,7 +2,6 @@ package com.checkout.issuing.controls.requests.controlgroup;
 
 import com.checkout.issuing.controls.requests.ControlType;
 import com.checkout.issuing.controls.requests.MccLimit;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,7 +21,6 @@ public final class MccControlGroupControl extends ControlGroupControl {
      * The MCC limit configuration that defines which merchant category codes to block or allow.
      * [Required]
      */
-    @SerializedName("mcc_limit")
     private MccLimit mccLimit;
 
     @Builder

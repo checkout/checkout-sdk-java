@@ -2,7 +2,6 @@ package com.checkout.payments.request.destination;
 
 import com.checkout.common.AccountHolder;
 import com.checkout.payments.PaymentDestinationType;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,13 +16,10 @@ public final class PaymentRequestCardDestination extends PaymentRequestDestinati
 
     private String number;
 
-    @SerializedName("expiry_month")
     private Integer expiryMonth;
 
-    @SerializedName("expiry_year")
     private Integer expiryYear;
 
-    @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
     @Builder

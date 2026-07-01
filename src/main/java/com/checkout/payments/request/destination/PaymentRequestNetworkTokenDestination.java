@@ -3,7 +3,6 @@ package com.checkout.payments.request.destination;
 import com.checkout.common.AccountHolder;
 import com.checkout.payments.NetworkTokenType;
 import com.checkout.payments.PaymentDestinationType;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,20 +17,16 @@ public final class PaymentRequestNetworkTokenDestination extends PaymentRequestD
 
     private String token;
 
-    @SerializedName("expiry_month")
     private Integer expiryMonth;
 
-    @SerializedName("expiry_year")
     private Integer expiryYear;
 
-    @SerializedName("token_type")
     private NetworkTokenType tokenType;
 
     private String cryptogram;
 
     private String eci;
 
-    @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
     @Builder

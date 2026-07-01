@@ -1,6 +1,5 @@
 package com.checkout.metadata.card;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 /**
@@ -15,7 +14,6 @@ public final class PullFunds {
      * accounts in different countries.
      * [Optional]
      */
-    @SerializedName("cross_border")
     private Boolean crossBorder;
 
     /**

@@ -3,7 +3,6 @@ package com.checkout.payments.previous.request.source.apm;
 import com.checkout.common.CountryCode;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.previous.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -19,42 +18,32 @@ import java.util.Map;
 @ToString(callSuper = true)
 public final class RequestKlarnaSource extends AbstractRequestSource {
 
-    @SerializedName("authorization_token")
     private String authorizationToken;
 
     private String locale;
 
-    @SerializedName("purchase_country")
     private CountryCode purchaseCountry;
 
-    @SerializedName("auto_capture")
     private Boolean autoCapture;
 
-    @SerializedName("billing_address")
     private Map<String, String> billingAddress;
 
-    @SerializedName("shipping_address")
     private Map<String, String> shippingAddress;
 
-    @SerializedName("tax_amount")
     private Integer taxAmount;
 
     private List<Map<String, String>> products;
 
     private Map<String, String> customer;
 
-    @SerializedName("merchant_reference1")
     private String merchantReference1;
 
-    @SerializedName("merchant_reference2")
     private String merchantReference2;
 
-    @SerializedName("merchant_data")
     private String merchantData;
 
     private Map<String, String> attachment;
 
-    @SerializedName("custom_payment_method_ids")
     private List<Map<String, String>> customPaymentMethodIds;
 
     @Builder

@@ -45,7 +45,6 @@ public final class RequestAPaymentOrPayoutResponseCreated extends Resource {
      * ^(act)_(\w{26})$
      * 30 characters
      */
-    @SerializedName("action_id")
     private String actionId;
 
     /**
@@ -77,42 +76,36 @@ public final class RequestAPaymentOrPayoutResponseCreated extends Resource {
      * The Gateway response code
      * [Required]
      */
-    @SerializedName("response_code")
     private String responseCode;
 
     /**
      * The date/time the payment was processed
      * [Required]
      */
-    @SerializedName("processed_on")
     private Instant processedOn;
 
     /**
      * The full amount from the original authorization, if a partial authorization was requested and approved.
      * [Optional]
      */
-    @SerializedName("amount_requested")
     private Integer amountRequested;
 
     /**
      * The acquirer authorization code if the payment was authorized
      * [Optional]
      */
-    @SerializedName("auth_code")
     private String authCode;
 
     /**
      * The Gateway response summary
      * [Optional]
      */
-    @SerializedName("response_summary")
     private String responseSummary;
 
     /**
      * The timestamp (ISO 8601 code) for when the authorization's validity period expires
      * [Optional]
      */
-    @SerializedName("expires_on")
     private String expiresOn;
 
     /**
@@ -175,7 +168,6 @@ public final class RequestAPaymentOrPayoutResponseCreated extends Resource {
      * The scheme transaction identifier
      * [Optional]
      */
-    @SerializedName("scheme_id")
     private String schemeId;
 
     /**

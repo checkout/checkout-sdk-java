@@ -1,6 +1,5 @@
 package com.checkout.payments.contexts;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +17,5 @@ public final class PaymentContextsAirlineData {
 
     private List<PaymentContextsPassenger> passenger;
 
-    @SerializedName("flight_leg_details")
     private List<PaymentContextsFlightLegDetails> flightLegDetails;
 }

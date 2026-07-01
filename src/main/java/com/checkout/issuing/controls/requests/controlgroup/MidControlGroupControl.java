@@ -2,7 +2,6 @@ package com.checkout.issuing.controls.requests.controlgroup;
 
 import com.checkout.issuing.controls.requests.ControlType;
 import com.checkout.issuing.controls.requests.MidLimit;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,7 +21,6 @@ public final class MidControlGroupControl extends ControlGroupControl {
      * The MID limit configuration that defines which merchant identifiers to block or allow.
      * [Required]
      */
-    @SerializedName("mid_limit")
     private MidLimit midLimit;
 
     @Builder

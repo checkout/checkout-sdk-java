@@ -26,16 +26,12 @@ public final class PaymentPlan {
     private Long amount;
 
     // Common properties
-    @SerializedName("days_between_payments")
     private Integer daysBetweenPayments;
 
-    @SerializedName("total_number_of_payments")
     private Integer totalNumberOfPayments;
 
-    @SerializedName("current_payment_number")
     private Integer currentPaymentNumber;
 
-    @SerializedName("expiry")
     private String expiry;
 
     /**
@@ -53,7 +49,6 @@ public final class PaymentPlan {
      * created without an initial payment ({@code amount} set to {@code 0}).
      * [Optional]
      */
-    @SerializedName("start_date")
     private String startDate;
 
 }

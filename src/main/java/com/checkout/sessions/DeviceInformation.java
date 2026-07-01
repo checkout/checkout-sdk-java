@@ -1,6 +1,5 @@
 package com.checkout.sessions;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +18,6 @@ public final class DeviceInformation {
      * The unique identifier for the device.
      * [Optional]
      */
-    @SerializedName("device_id")
     private String deviceId;
 
     /**
@@ -27,6 +25,5 @@ public final class DeviceInformation {
      * [Optional]
      * Pattern: ^(dsid)_(\w{26})$
      */
-    @SerializedName("device_session_id")
     private String deviceSessionId;
 }

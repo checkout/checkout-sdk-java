@@ -2,7 +2,6 @@ package com.checkout.handlepaymentsandpayouts.payments.common.source.idealsource
 
 import com.checkout.handlepaymentsandpayouts.payments.common.source.AbstractSource;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType;
-import com.google.gson.annotations.SerializedName;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -49,7 +48,6 @@ public final class IdealSource extends AbstractSource {
      * outside the Netherlands from disclosing this information, field may be omitted.
      * [Optional]
      */
-    @SerializedName("account_holder")
     private String accountHolder;
 
     /**

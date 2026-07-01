@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.setups.entities.order;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,13 +24,11 @@ public final class OrderSubMerchant {
     /**
      * The category of products or services offered by the sub-merchant
      */
-    @SerializedName("product_category")
     private String productCategory;
 
     /**
      * The number of trades or transactions the sub-merchant has conducted
      */
-    @SerializedName("number_of_trades")
     private Integer numberOfTrades;
 
     /**
@@ -39,6 +36,5 @@ public final class OrderSubMerchant {
      * [Optional]
      * Format: yyyy-MM-dd
      */
-    @SerializedName("registration_date")
     private LocalDate registrationDate;
 }

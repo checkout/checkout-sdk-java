@@ -3,7 +3,6 @@ package com.checkout.issuing.disputes.requests;
 import com.checkout.common.Resource;
 import com.checkout.issuing.disputes.entities.DisputeEvidence;
 import com.checkout.issuing.disputes.entities.IssuingDisputeFraudDetails;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -49,7 +48,6 @@ public final class AmendDisputeRequest extends Resource {
      * Provides the fraud category, and additional context if available.
      * This field is required if reason specifies a fraud-related dispute.
      */
-    @SerializedName("fraud_details")
     private IssuingDisputeFraudDetails fraudDetails;
 
     /**
@@ -61,7 +59,6 @@ public final class AmendDisputeRequest extends Resource {
      * </p>
      * max 13000 characters
      */
-    @SerializedName("reason_change_justification")
     @Size(max = 13000)
     private String reasonChangeJustification;
 
@@ -73,7 +70,6 @@ public final class AmendDisputeRequest extends Resource {
      * </p>
      * max 1000 characters
      */
-    @SerializedName("action_response")
     @Size(max = 1000)
     private String actionResponse;
 

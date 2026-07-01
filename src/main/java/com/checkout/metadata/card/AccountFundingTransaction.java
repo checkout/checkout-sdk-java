@@ -1,6 +1,5 @@
 package com.checkout.metadata.card;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 /**
@@ -14,6 +13,5 @@ public final class AccountFundingTransaction {
      * to fund other non-merchant accounts.
      * [Optional]
      */
-    @SerializedName("aft_indicator")
     private AftIndicator aftIndicator;
 }

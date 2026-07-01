@@ -2,7 +2,6 @@ package com.checkout.reconciliation.previous;
 
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -16,10 +15,8 @@ public final class StatementData extends Resource {
 
     private String id;
 
-    @SerializedName("period_start")
     private String periodStart;
 
-    @SerializedName("period_end")
     private String periodEnd;
 
     private String date;

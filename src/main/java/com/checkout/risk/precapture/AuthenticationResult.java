@@ -1,6 +1,5 @@
 package com.checkout.risk.precapture;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,7 +13,6 @@ public final class AuthenticationResult {
 
     private Boolean succeeded;
 
-    @SerializedName("liability_shifted")
     private Boolean liabilityShifted;
 
     private String method;

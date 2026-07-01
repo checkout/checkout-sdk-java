@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.destination.common.accountholder.common.identification;
 
-import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,7 +37,6 @@ public final class Identification {
      * [Optional]
      * 2 characters
      */
-    @SerializedName("issuing_country")
     private String issuingCountry;
 
     /**
@@ -47,7 +45,6 @@ public final class Identification {
      * [Optional]
      * 10 characters
      */
-    @SerializedName("date_of_expiry")
     private String dateOfExpiry;
 
 }

@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.instruction;
 
-import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +23,6 @@ public final class Instruction {
      * For Mastercard, use C60
      * [Optional]
      */
-    @SerializedName("funds_transfer_type")
     private String fundsTransferType;
 
     /**

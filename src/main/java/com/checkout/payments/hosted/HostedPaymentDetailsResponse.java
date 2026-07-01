@@ -6,7 +6,6 @@ import com.checkout.common.CustomerResponse;
 import com.checkout.common.Resource;
 import com.checkout.common.Product;
 import com.checkout.payments.BillingInformation;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -29,16 +28,12 @@ public final class HostedPaymentDetailsResponse extends Resource {
 
     private BillingInformation billing;
 
-    @SerializedName("success_url")
     private String successUrl;
 
-    @SerializedName("cancel_url")
     private String cancelUrl;
 
-    @SerializedName("failure_url")
     private String failureUrl;
 
-    @SerializedName("payment_id")
     private String paymentId;
 
     private String reference;
@@ -52,7 +47,6 @@ public final class HostedPaymentDetailsResponse extends Resource {
 
     private Map<String, Object> metadata;
 
-    @SerializedName("amount_allocations")
     private List<AmountAllocations> amountAllocations;
 
 }

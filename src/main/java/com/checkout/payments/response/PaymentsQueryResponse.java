@@ -1,7 +1,6 @@
 package com.checkout.payments.response;
 
 import com.checkout.HttpMetadata;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import javax.validation.constraints.Size;
@@ -16,7 +15,6 @@ public final class PaymentsQueryResponse extends HttpMetadata {
 
     private Integer skip;
 
-    @SerializedName("total_count")
     private Integer totalCount;
 
     private List<GetPaymentResponse> data;

@@ -1,7 +1,6 @@
 package com.checkout.accounts;
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,7 +38,6 @@ public class EntityRequirementListItem extends Resource {
      * Defaults to {@code entity} if the URN cannot be parsed.
      * [Optional]
      */
-    @SerializedName("resource_type")
     private String resourceType;
 
     /**
@@ -77,7 +75,6 @@ public class EntityRequirementListItem extends Resource {
      * responses) that do not map to a specific field on the entity.
      * [Optional]
      */
-    @SerializedName("field_path")
     private String fieldPath;
 
     /**
@@ -85,7 +82,6 @@ public class EntityRequirementListItem extends Resource {
      * May be {@code null} if no mapping exists.
      * [Optional]
      */
-    @SerializedName("field_urn")
     private String fieldUrn;
 
     /**

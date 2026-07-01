@@ -5,7 +5,6 @@ import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unre
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.destination.common.accountholder.common.billingaddress.BillingAddress;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.destination.common.accountholder.common.identification.Identification;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.destination.common.accountholder.common.phone.Phone;
-import com.google.gson.annotations.SerializedName;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -33,7 +32,6 @@ public final class IndividualAccountHolder extends AbstractAccountHolder {
      * [Required]
      * &lt;= 50
      */
-    @SerializedName("first_name")
     private String firstName;
 
     /**
@@ -46,7 +44,6 @@ public final class IndividualAccountHolder extends AbstractAccountHolder {
      * [Required]
      * &lt;= 50
      */
-    @SerializedName("last_name")
     private String lastName;
 
     /**
@@ -54,7 +51,6 @@ public final class IndividualAccountHolder extends AbstractAccountHolder {
      * [Optional]
      * &lt;= 50
      */
-    @SerializedName("middle_name")
     private String middleName;
 
     /**
@@ -63,7 +59,6 @@ public final class IndividualAccountHolder extends AbstractAccountHolder {
      * perform.
      * [Optional]
      */
-    @SerializedName("billing_address")
     private BillingAddress billingAddress;
 
     /**
@@ -92,7 +87,6 @@ public final class IndividualAccountHolder extends AbstractAccountHolder {
      * [Optional]
      * 10 characters
      */
-    @SerializedName("date_of_birth")
     private String dateOfBirth;
 
     /**
@@ -100,7 +94,6 @@ public final class IndividualAccountHolder extends AbstractAccountHolder {
      * [Optional]
      * 2 characters
      */
-    @SerializedName("country_of_birth")
     private String countryOfBirth;
 
     /**

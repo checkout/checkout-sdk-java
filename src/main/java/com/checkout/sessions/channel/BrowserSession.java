@@ -1,6 +1,5 @@
 package com.checkout.sessions.channel;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,36 +12,26 @@ import lombok.ToString;
 public final class BrowserSession extends ChannelData {
 
     @Builder.Default
-    @SerializedName("three_ds_method_completion")
     private ThreeDsMethodCompletion threeDsMethodCompletion = ThreeDsMethodCompletion.U;
 
-    @SerializedName("accept_header")
     private String acceptHeader;
 
-    @SerializedName("java_enabled")
     private Boolean javaEnabled;
 
-    @SerializedName("javascript_enabled")
     private Boolean javascriptEnabled;
 
-    @SerializedName("language")
     private String language;
 
-    @SerializedName("color_depth")
     private String colorDepth;
 
-    @SerializedName("screen_height")
     private String screenHeight;
 
-    @SerializedName("screen_width")
     private String screenWidth;
 
     private String timezone;
 
-    @SerializedName("user_agent")
     private String userAgent;
 
-    @SerializedName("ip_address")
     private String ipAddress;
 
     @Builder

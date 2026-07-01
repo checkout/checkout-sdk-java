@@ -1,6 +1,5 @@
 package com.checkout.balances;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 @Data
@@ -18,7 +17,6 @@ public final class Balances {
      * A breakdown of the funds held in the {@code collateral} balance.
      * [Optional]
      */
-    @SerializedName("collateral_breakdown")
     private CollateralBreakdown collateralBreakdown;
 
 }

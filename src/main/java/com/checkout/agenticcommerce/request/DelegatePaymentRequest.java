@@ -1,6 +1,5 @@
 package com.checkout.agenticcommerce.request;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +21,6 @@ public class DelegatePaymentRequest {
      * Card payment method details for the delegated payment.
      * <p>[Required]</p>
      */
-    @SerializedName("payment_method")
     private DelegatePaymentMethod paymentMethod;
 
     /**
@@ -36,7 +34,6 @@ public class DelegatePaymentRequest {
      * <p>[Optional]</p>
      * <p>When provided, {@code name}, {@code line_one}, {@code city}, {@code postal_code}, and {@code country} are required within this object.</p>
      */
-    @SerializedName("billing_address")
     private DelegatePaymentBillingAddress billingAddress;
 
     /**
@@ -44,7 +41,6 @@ public class DelegatePaymentRequest {
      * <p>[Required]</p>
      * <p>Type: array of object; each element: {@code type} [Required] (string), {@code score} [Required] (integer), {@code action} [Required] (string).</p>
      */
-    @SerializedName("risk_signals")
     private List<RiskSignal> riskSignals;
 
     /**

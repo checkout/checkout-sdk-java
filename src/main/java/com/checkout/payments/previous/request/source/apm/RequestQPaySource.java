@@ -2,7 +2,6 @@ package com.checkout.payments.previous.request.source.apm;
 
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.previous.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,7 +20,6 @@ public final class RequestQPaySource extends AbstractRequestSource {
 
     private String language;
 
-    @SerializedName("national_id")
     private String nationalId;
 
     @Builder

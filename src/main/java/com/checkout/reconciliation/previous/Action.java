@@ -1,7 +1,6 @@
 package com.checkout.reconciliation.previous;
 
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 import java.util.List;
@@ -13,13 +12,10 @@ public final class Action {
 
     private String id;
 
-    @SerializedName("processed_on")
     private String processedOn;
 
-    @SerializedName("response_code")
     private String responseCode;
 
-    @SerializedName("response_description")
     private String responseDescription;
 
     private List<Breakdown> breakdown;

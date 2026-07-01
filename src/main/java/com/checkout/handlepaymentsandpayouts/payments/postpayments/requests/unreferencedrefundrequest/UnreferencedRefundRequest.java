@@ -2,7 +2,6 @@ package com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unr
 
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.source.Source;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.destination.AbstractDestination;
-import com.google.gson.annotations.SerializedName;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.instruction.Instruction;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.segment.Segment;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.processing.Processing;
@@ -55,7 +54,6 @@ public final class UnreferencedRefundRequest {
      * The type of the payment
      * [Required]
      */
-    @SerializedName("payment_type")
     private String paymentType;
 
     /**
@@ -63,7 +61,6 @@ public final class UnreferencedRefundRequest {
      * [Required]
      * ^(pc)_(\w{26})$
      */
-    @SerializedName("processing_channel_id")
     private String processingChannelId;
 
     /**
@@ -91,7 +88,6 @@ public final class UnreferencedRefundRequest {
      * The previous related payment identifier. This could be the ID of the payment that you want to refund.
      * [Optional]
      */
-    @SerializedName("previous_payment_id")
     private String previousPaymentId;
 
     /**

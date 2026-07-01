@@ -1,7 +1,6 @@
 package com.checkout.issuing.cards.responses;
 
 import com.checkout.issuing.cards.CardType;
-import com.google.gson.annotations.SerializedName;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +12,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class VirtualCardDetailsResponse extends CardDetailsResponse {
 
-    @SerializedName("is_single_use")
     private Boolean isSingleUse;
 
     public VirtualCardDetailsResponse() {

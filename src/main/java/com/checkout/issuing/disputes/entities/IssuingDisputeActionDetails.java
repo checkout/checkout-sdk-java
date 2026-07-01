@@ -1,6 +1,5 @@
 package com.checkout.issuing.disputes.entities;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 /**
@@ -25,7 +24,6 @@ public final class IssuingDisputeActionDetails {
      * [Optional]
      * </p>
      */
-    @SerializedName("last_action_response")
     private String lastActionResponse;
 
 }

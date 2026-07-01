@@ -3,7 +3,6 @@ package com.checkout.handlepaymentsandpayouts.payments.common.source.paymentgetr
 import com.checkout.handlepaymentsandpayouts.payments.common.source.AbstractSource;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.paymentgetresponsegiropaysourcesource.accountholder.AccountHolder;
-import com.google.gson.annotations.SerializedName;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -48,14 +47,12 @@ public final class PaymentGetResponseGiropaySourceSource extends AbstractSource 
      * Account holder information.
      * [Optional]
      */
-    @SerializedName("account_holder_name")
     private String accountHolderName;
 
     /**
      * The account holder details
      * [Optional]
      */
-    @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
     /**

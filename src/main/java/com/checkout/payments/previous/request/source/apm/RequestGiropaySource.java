@@ -2,7 +2,6 @@ package com.checkout.payments.previous.request.source.apm;
 
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.previous.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +23,6 @@ public final class RequestGiropaySource extends AbstractRequestSource {
 
     private String bic;
 
-    @SerializedName("info_fields")
     private List<InfoFields> infoFields;
 
     @Builder

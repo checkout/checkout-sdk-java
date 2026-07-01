@@ -2,7 +2,6 @@ package com.checkout.issuing.cards.requests.create;
 
 import com.checkout.issuing.cards.CardType;
 import com.checkout.issuing.cards.requests.update.IssuingCardMetadata;
-import com.google.gson.annotations.SerializedName;
 
 import java.time.LocalDate;
 import lombok.Builder;
@@ -17,7 +16,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class VirtualCardRequest extends CardRequest {
 
-    @SerializedName("is_single_use")
     private Boolean isSingleUse;
 
     @Builder

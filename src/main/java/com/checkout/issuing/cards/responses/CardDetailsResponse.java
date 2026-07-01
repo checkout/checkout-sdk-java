@@ -7,7 +7,6 @@ import com.checkout.issuing.cards.CardStatus;
 import com.checkout.issuing.cards.CardType;
 import com.checkout.issuing.cards.IssuingScheme;
 import com.checkout.issuing.cards.requests.update.IssuingCardMetadata;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -24,13 +23,10 @@ public abstract class CardDetailsResponse extends Resource {
 
     protected String id;
 
-    @SerializedName("cardholder_id")
     protected String cardholderId;
 
-    @SerializedName("card_product_id")
     protected String cardProductId;
 
-    @SerializedName("client_id")
     protected String clientId;
 
     /**
@@ -39,7 +35,6 @@ public abstract class CardDetailsResponse extends Resource {
      * ^ent_[a-z0-9]{26}$
      * min 30 characters, max 30 characters
      */
-    @SerializedName("entity_id")
     protected String entityId;
 
     /**
@@ -48,27 +43,20 @@ public abstract class CardDetailsResponse extends Resource {
      * ^usr_[a-z0-9]{26}$
      * min 30 characters, max 30 characters
      */
-    @SerializedName("user_id")
     protected String userId;
 
-    @SerializedName("last_four")
     protected String lastFour;
 
-    @SerializedName("expiry_month")
     protected Integer expiryMonth;
 
-    @SerializedName("expiry_year")
     protected Integer expiryYear;
 
     protected CardStatus status;
 
-    @SerializedName("display_name")
     protected String displayName;
 
-    @SerializedName("billing_currency")
     protected Currency billingCurrency;
 
-    @SerializedName("issuing_country")
     protected CountryCode issuingCountry;
 
     protected String reference;
@@ -79,10 +67,8 @@ public abstract class CardDetailsResponse extends Resource {
      */
     protected IssuingCardMetadata metadata;
 
-    @SerializedName("created_date")
     protected Instant createdDate;
 
-    @SerializedName("last_modified_date")
     protected Instant lastModifiedDate;
 
     /**
@@ -91,7 +77,6 @@ public abstract class CardDetailsResponse extends Resource {
      * [Optional]
      * </p>
      */
-    @SerializedName("activation_date")
     protected String activationDate;
 
     /**
@@ -102,7 +87,6 @@ public abstract class CardDetailsResponse extends Resource {
      * </p>
      * Format: yyyy-MM-dd
      */
-    @SerializedName("revocation_date")
     protected LocalDate revocationDate;
 
     /**
@@ -111,7 +95,6 @@ public abstract class CardDetailsResponse extends Resource {
      * ^crd_[a-z0-9]{26}$
      * min 30 characters, max 30 characters
      */
-    @SerializedName("root_card_id")
     protected String rootCardId;
 
     /**
@@ -120,7 +103,6 @@ public abstract class CardDetailsResponse extends Resource {
      * ^crd_[a-z0-9]{26}$
      * min 30 characters, max 30 characters
      */
-    @SerializedName("parent_card_id")
     protected String parentCardId;
 
     /**

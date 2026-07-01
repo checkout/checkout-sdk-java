@@ -1,6 +1,5 @@
 package com.checkout.agenticcommerce.request;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,7 +28,6 @@ public class DelegatePaymentAllowance {
      * <p>
      * [Required]
      */
-    @SerializedName("max_amount")
     private Long maxAmount;
 
     /**
@@ -50,7 +48,6 @@ public class DelegatePaymentAllowance {
      * <p>
      * Length: &lt;= 256 characters
      */
-    @SerializedName("merchant_id")
     private String merchantId;
 
     /**
@@ -58,7 +55,6 @@ public class DelegatePaymentAllowance {
      * <p>
      * [Required]
      */
-    @SerializedName("checkout_session_id")
     private String checkoutSessionId;
 
     /**
@@ -68,6 +64,5 @@ public class DelegatePaymentAllowance {
      * <p>
      * Format: date-time (RFC 3339)
      */
-    @SerializedName("expires_at")
     private Instant expiresAt;
 }

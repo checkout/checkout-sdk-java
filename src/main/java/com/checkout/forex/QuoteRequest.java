@@ -11,17 +11,13 @@ import lombok.NonNull;
 public final class QuoteRequest {
 
     @NonNull
-    @SerializedName("source_currency")
     private Currency sourceCurrency;
 
-    @SerializedName("source_amount")
     private Long sourceAmount;
 
     @NonNull
-    @SerializedName("destination_currency")
     private Currency destinationCurrency;
 
-    @SerializedName("destination_amount")
     private Long destinationAmount;
 
     @NonNull

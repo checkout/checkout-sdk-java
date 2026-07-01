@@ -1,6 +1,5 @@
 package com.checkout.forward.requests.sources;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -24,7 +23,6 @@ public final class IdSource extends AbstractSource {
      * or iOS to collect and tokenize the CVV and pass the value in this field. The token will replace the placeholder
      * {{card_cvv}} value in destination_request.body (Optional, pattern ^(tok)_(\w{26})$)
      */
-    @SerializedName("cvv_token")
     private String cvvToken;
 
     /**

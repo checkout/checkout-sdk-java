@@ -1,6 +1,5 @@
 package com.checkout.agenticcommerce.request;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +31,6 @@ public class DelegatePaymentMethod {
      * <p>
      * [Required]
      */
-    @SerializedName("card_number_type")
     private CardNumberType cardNumberType;
 
     /**
@@ -51,7 +49,6 @@ public class DelegatePaymentMethod {
      * <p>
      * Length: &lt;= 2 characters
      */
-    @SerializedName("exp_month")
     private String expMonth;
 
     /**
@@ -63,7 +60,6 @@ public class DelegatePaymentMethod {
      * <p>
      * Length: &lt;= 4 characters
      */
-    @SerializedName("exp_year")
     private String expYear;
 
     /**
@@ -96,7 +92,6 @@ public class DelegatePaymentMethod {
      * <p>
      * [Optional]
      */
-    @SerializedName("eci_value")
     private String eciValue;
 
     /**
@@ -104,7 +99,6 @@ public class DelegatePaymentMethod {
      * <p>
      * [Optional]
      */
-    @SerializedName("checks_performed")
     private List<String> checksPerformed;
 
     /**
@@ -123,7 +117,6 @@ public class DelegatePaymentMethod {
      * <p>
      * [Optional]
      */
-    @SerializedName("display_card_funding_type")
     private CardFundingType displayCardFundingType;
 
     /**
@@ -131,7 +124,6 @@ public class DelegatePaymentMethod {
      * <p>
      * [Optional]
      */
-    @SerializedName("display_wallet_type")
     private String displayWalletType;
 
     /**
@@ -139,7 +131,6 @@ public class DelegatePaymentMethod {
      * <p>
      * [Optional]
      */
-    @SerializedName("display_brand")
     private String displayBrand;
 
     /**
@@ -151,7 +142,6 @@ public class DelegatePaymentMethod {
      * <p>
      * Length: &lt;= 4 characters
      */
-    @SerializedName("display_last4")
     private String displayLast4;
 
     /**

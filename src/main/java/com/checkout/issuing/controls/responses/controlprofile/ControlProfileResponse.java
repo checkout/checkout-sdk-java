@@ -1,7 +1,6 @@
 package com.checkout.issuing.controls.responses.controlprofile;
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,9 +16,7 @@ public final class ControlProfileResponse extends Resource {
 
     private String name;
 
-    @SerializedName("created_date")
     private Instant createdDate;
 
-    @SerializedName("last_modified_date")
     private Instant lastModifiedDate;
 }

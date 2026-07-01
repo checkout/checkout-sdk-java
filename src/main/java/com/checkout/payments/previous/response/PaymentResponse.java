@@ -20,14 +20,12 @@ import java.time.Instant;
 @ToString(callSuper = true)
 public final class PaymentResponse extends Resource {
 
-    @SerializedName("action_id")
     private String actionId;
 
     private Long amount;
 
     private Boolean approved;
 
-    @SerializedName("auth_code")
     private String authCode;
 
     private String id;
@@ -45,22 +43,18 @@ public final class PaymentResponse extends Resource {
 
     private String reference;
 
-    @SerializedName("response_code")
     private String responseCode;
 
-    @SerializedName("response_summary")
     private String responseSummary;
 
     private RiskAssessment risk;
 
-    @SerializedName("processed_on")
     private Instant processedOn;
 
     private PaymentProcessing processing;
 
     private String eci;
 
-    @SerializedName("scheme_id")
     private String schemeId;
 
 }

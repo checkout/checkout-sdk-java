@@ -2,7 +2,6 @@ package com.checkout.tokens;
 
 import com.checkout.common.Address;
 import com.checkout.common.Phone;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -12,7 +11,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class CardTokenResponse extends TokenResponse {
 
-    @SerializedName("billing_address")
     private Address billingAddress;
 
     private Phone phone;

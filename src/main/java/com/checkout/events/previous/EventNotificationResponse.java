@@ -1,7 +1,6 @@
 package com.checkout.events.previous;
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -19,7 +18,6 @@ public final class EventNotificationResponse extends Resource {
 
     private Boolean success;
 
-    @SerializedName("content_type")
     private String contentType;
 
     private List<AttemptSummaryResponse> attempts;

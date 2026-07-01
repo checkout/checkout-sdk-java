@@ -3,7 +3,6 @@ package com.checkout.handlepaymentsandpayouts.payments.common.source.paymentgetr
 import com.checkout.handlepaymentsandpayouts.payments.common.source.AbstractSource;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.paymentgetresponseklarnasourcesource.accountholder.AccountHolder;
-import com.google.gson.annotations.SerializedName;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -25,7 +24,6 @@ public final class PaymentGetResponseKlarnaSourceSource extends AbstractSource {
      * object describes payee details
      * [Optional]
      */
-    @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
     /**

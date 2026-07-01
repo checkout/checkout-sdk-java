@@ -6,7 +6,6 @@ import com.checkout.risk.Device;
 import com.checkout.risk.RiskPayment;
 import com.checkout.risk.RiskShippingDetails;
 import com.checkout.risk.source.RiskPaymentRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,7 +16,6 @@ import java.util.Map;
 @Builder
 public final class PreCaptureAssessmentRequest {
 
-    @SerializedName("assessment_id")
     private String assessmentId;
 
     private Instant date;
@@ -38,10 +36,8 @@ public final class PreCaptureAssessmentRequest {
 
     private Map<String, Object> metadata;
 
-    @SerializedName("authentication_result")
     private AuthenticationResult authenticationResult;
 
-    @SerializedName("authorization_result")
     private AuthorizationResult authorizationResult;
 
 }

@@ -1,7 +1,6 @@
 package com.checkout.payments.previous.request.destination;
 
 import com.checkout.payments.PaymentDestinationType;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,10 +15,8 @@ public final class PaymentRequestIdDestination extends PaymentRequestDestination
 
     private String id;
 
-    @SerializedName("first_name")
     private String firstName;
 
-    @SerializedName("last_name")
     private String lastName;
 
     @Builder

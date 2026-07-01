@@ -2,7 +2,6 @@ package com.checkout.issuing.controls.requests.controlgroup;
 
 import com.checkout.issuing.controls.requests.ControlType;
 import com.checkout.issuing.controls.requests.VelocityLimit;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -23,7 +22,6 @@ public final class VelocityControlGroupControl extends ControlGroupControl {
      * The velocity limit configuration that defines transaction frequency and amount restrictions over time periods.
      * [Required]
      */
-    @SerializedName("velocity_limit")
     private VelocityLimit velocityLimit;
 
     @Builder

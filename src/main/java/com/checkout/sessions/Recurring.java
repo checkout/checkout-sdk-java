@@ -1,6 +1,5 @@
 package com.checkout.sessions;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +12,6 @@ import lombok.NoArgsConstructor;
 public final class Recurring {
 
     @Builder.Default
-    @SerializedName("days_between_payments")
     private Long daysBetweenPayments = 1L;
 
     @Builder.Default

@@ -3,7 +3,6 @@ package com.checkout.sources.previous;
 import com.checkout.common.Address;
 import com.checkout.common.CustomerRequest;
 import com.checkout.common.Phone;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,10 +15,8 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class SepaSourceRequest extends SourceRequest {
 
-    @SerializedName("billing_address")
     private Address billingAddress;
 
-    @SerializedName("source_data")
     private SourceData sourceData;
 
     @Builder

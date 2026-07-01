@@ -4,7 +4,6 @@ import com.checkout.common.Resource;
 import com.checkout.issuing.disputes.entities.DisputeEvidence;
 import com.checkout.issuing.disputes.entities.DisputeReasonChange;
 import com.checkout.issuing.disputes.entities.IssuingDisputeFraudDetails;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -56,6 +55,5 @@ public final class EscalateDisputeRequest extends Resource {
      * [Optional]
      * </p>
      */
-    @SerializedName("fraud_details")
     private IssuingDisputeFraudDetails fraudDetails;
 }

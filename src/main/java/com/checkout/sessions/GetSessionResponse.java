@@ -19,10 +19,8 @@ public class GetSessionResponse extends Resource {
 
     private String id;
 
-    @SerializedName("session_secret")
     private String sessionSecret;
 
-    @SerializedName("transaction_id")
     private String transactionId;
 
     private SessionScheme scheme;
@@ -35,46 +33,37 @@ public class GetSessionResponse extends Resource {
 
     private Boolean challenged;
 
-    @SerializedName("authentication_type")
     private AuthenticationType authenticationType;
 
-    @SerializedName("authentication_category")
     private Category authenticationCategory;
 
     private DsPublicKeys certificates;
 
     private SessionStatus status;
 
-    @SerializedName("status_reason")
     private StatusReason statusReason;
 
     private Boolean approved;
 
-    @SerializedName("protocol_version")
     private String protocolVersion;
 
     @SerializedName("account_info")
     private CardholderAccountInfo cardholderAccountInfo;
 
-    @SerializedName("merchant_risk_info")
     private MerchantRiskInfo merchantRiskInfo;
 
     private String reference;
 
-    @SerializedName("transaction_type")
     private TransactionType transactionType;
 
-    @SerializedName("next_actions")
     private List<NextAction> nextActions;
 
     private Ds ds;
 
     private Acs acs;
 
-    @SerializedName("response_code")
     private ResponseCode responseCode;
 
-    @SerializedName("response_status_reason")
     private String responseStatusReason;
 
     private String pareq;
@@ -85,7 +74,6 @@ public class GetSessionResponse extends Resource {
 
     private String xid;
 
-    @SerializedName("cardholder_info")
     private String cardholderInfo;
 
     private CardInfo card;
@@ -94,26 +82,20 @@ public class GetSessionResponse extends Resource {
 
     private Installment installment;
 
-    @SerializedName("initial_transaction")
     private InitialTransaction initialTransaction;
 
-    @SerializedName("customer_ip")
     private String customerIp;
 
-    @SerializedName("authentication_date")
     private Instant authenticationDate;
 
     private ThreeDSExemption exemption;
 
-    @SerializedName("flow_type")
     private ThreeDSFlowType flowType;
 
-    @SerializedName("challenge_indicator")
     private ChallengeIndicator challengeIndicator;
 
     private Optimization optimization;
 
-    @SerializedName("scheme_info")
     private SchemeInfo schemeInfo;
 
 }

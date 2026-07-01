@@ -1,6 +1,5 @@
 package com.checkout.agenticcommerce.request;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,7 +30,6 @@ public class DelegatePaymentBillingAddress {
      * <p>
      * Length: &lt;= 60 characters
      */
-    @SerializedName("line_one")
     private String lineOne;
 
     /**
@@ -41,7 +39,6 @@ public class DelegatePaymentBillingAddress {
      * <p>
      * Length: &lt;= 60 characters
      */
-    @SerializedName("line_two")
     private String lineTwo;
 
     /**
@@ -67,7 +64,6 @@ public class DelegatePaymentBillingAddress {
      * <p>
      * Length: &lt;= 20 characters
      */
-    @SerializedName("postal_code")
     private String postalCode;
 
     /**

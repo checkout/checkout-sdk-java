@@ -21,7 +21,6 @@ public final class SenderInformation {
     @SerializedName("lastName")
     private String lastName;
 
-    @SerializedName("dob")
     private String dob;
 
     private String address;
