@@ -6,7 +6,6 @@ import com.checkout.issuing.cards.requests.credentials.CardCredentialsQuery;
 import com.checkout.issuing.cards.requests.enrollment.PasswordThreeDSEnrollmentRequest;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSUpdateRequest;
 import com.checkout.issuing.cards.requests.renew.RenewCardRequest;
-import com.checkout.issuing.cards.requests.revocation.ScheduleRevocationRequest;
 import com.checkout.issuing.cards.requests.revoke.RevokeCardRequest;
 import com.checkout.issuing.cards.requests.revoke.RevokeReason;
 import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
@@ -165,33 +164,6 @@ class IssuingCardsTestIT extends BaseIssuingTestIT {
         validateRenewCardResponse(renewResponse, cardResponse.getId());
     }
 
-    @Test
-    void shouldScheduleCardRevocation() {
-        final CardResponse cardResponse = createCard(cardholder.getId(), true);
-
-        final ScheduleRevocationRequest request = createScheduleRevocationRequest();
-
-        final VoidResponse scheduleResponse = blocking(() ->
-                issuingApi.issuingClient().scheduleCardRevocation(cardResponse.getId(), request));
-
-        validateVoidResponse(scheduleResponse);
-    }
-
-    @Test
-    void shouldDeleteScheduledRevocation() {
-        final CardResponse cardResponse = createCard(cardholder.getId(), true);
-
-        // First schedule a revocation
-        final ScheduleRevocationRequest scheduleRequest = createScheduleRevocationRequest();
-        blocking(() -> issuingApi.issuingClient().scheduleCardRevocation(cardResponse.getId(), scheduleRequest));
-
-        // Then delete it
-        final VoidResponse deleteResponse = blocking(() ->
-                issuingApi.issuingClient().deleteScheduledRevocation(cardResponse.getId()));
-
-        validateVoidResponse(deleteResponse);
-    }
-
     // Synchronous methods
     @Test
     void shouldCreateCardSync() {
@@ -315,33 +287,6 @@ class IssuingCardsTestIT extends BaseIssuingTestIT {
         validateRenewCardResponse(renewResponse, cardResponse.getId());
     }
 
-    @Test
-    void shouldScheduleCardRevocationSync() {
-        final CardResponse cardResponse = createCard(cardholder.getId(), true);
-
-        final ScheduleRevocationRequest request = createScheduleRevocationRequest();
-
-        final VoidResponse scheduleResponse = 
-                issuingApi.issuingClient().scheduleCardRevocationSync(cardResponse.getId(), request);
-
-        validateVoidResponse(scheduleResponse);
-    }
-
-    @Test
-    void shouldDeleteScheduledRevocationSync() {
-        final CardResponse cardResponse = createCard(cardholder.getId(), true);
-
-        // First schedule a revocation
-        final ScheduleRevocationRequest scheduleRequest = createScheduleRevocationRequest();
-        issuingApi.issuingClient().scheduleCardRevocationSync(cardResponse.getId(), scheduleRequest);
-
-        // Then delete it
-        final VoidResponse deleteResponse = 
-                issuingApi.issuingClient().deleteScheduledRevocationSync(cardResponse.getId());
-
-        validateVoidResponse(deleteResponse);
-    }
-
     // Common methods
     private PasswordThreeDSEnrollmentRequest createThreeDSEnrollmentRequest() {
         return PasswordThreeDSEnrollmentRequest.builder()
@@ -379,6 +324,8 @@ class IssuingCardsTestIT extends BaseIssuingTestIT {
                 .reference("Updated-Reference-987")
                 .expiryMonth(12)
                 .expiryYear(2025)
+                .activationDate("2026-06-01T10:00Z")
+                .revocationDate(java.time.LocalDate.of(2026, 7, 1))
                 .build();
     }
 
@@ -386,12 +333,6 @@ class IssuingCardsTestIT extends BaseIssuingTestIT {
         return com.checkout.issuing.cards.requests.renew.VirtualCardRenewRequest.builder()
                 .displayName("John Kennedy Renewed")
                 .reference("Renewed-X-123456-N11")
-                .build();
-    }
-
-    private ScheduleRevocationRequest createScheduleRevocationRequest() {
-        return ScheduleRevocationRequest.builder()
-                .revocationDate("2025-12-31")
                 .build();
     }
 

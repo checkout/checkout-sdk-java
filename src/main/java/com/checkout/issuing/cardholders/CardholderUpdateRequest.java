@@ -32,6 +32,4 @@ public class CardholderUpdateRequest {
 
     @SerializedName("residency_address")
     private Address residencyAddress;
-
-    private CardholderDocument document;
 }

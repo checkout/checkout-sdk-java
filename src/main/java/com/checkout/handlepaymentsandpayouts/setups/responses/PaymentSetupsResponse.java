@@ -4,11 +4,14 @@ import com.checkout.common.Resource;
 import com.checkout.common.Currency;
 import com.checkout.handlepaymentsandpayouts.setups.entities.accountFundingTransaction.PaymentSetupAccountFundingTransaction;
 import com.checkout.handlepaymentsandpayouts.setups.entities.billing.PaymentSetupBilling;
+import com.checkout.handlepaymentsandpayouts.setups.entities.billingDescriptor.PaymentSetupBillingDescriptor;
 import com.checkout.handlepaymentsandpayouts.setups.entities.customer.Customer;
 import com.checkout.handlepaymentsandpayouts.setups.entities.industry.Industry;
 import com.checkout.handlepaymentsandpayouts.setups.entities.order.Order;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
+import com.checkout.handlepaymentsandpayouts.setups.entities.presentmentDetails.PaymentSetupPresentmentDetails;
 import com.checkout.handlepaymentsandpayouts.setups.entities.settings.Settings;
+import com.checkout.handlepaymentsandpayouts.setups.entities.terminal.PaymentSetupTerminal;
 import com.checkout.payments.PaymentType;
 
 import java.util.List;
@@ -120,4 +123,30 @@ public final class PaymentSetupsResponse extends Resource {
      * [Optional]
      */
     private PaymentSetupAccountFundingTransaction accountFundingTransaction;
+
+    /**
+     * The billing descriptor for the payment.
+     * [Optional]
+     */
+    private PaymentSetupBillingDescriptor billingDescriptor;
+
+    /**
+     * The latest payment response from the gateway, populated when auto-confirm succeeds during setup
+     * creation. For the full response schema, see Request a Payment or Payout.
+     * [Optional] readOnly
+     */
+    private Object latestPayment;
+
+    /**
+     * The amount and currency to present to the customer, when the settlement currency differs from the
+     * customer-facing currency.
+     * [Optional]
+     */
+    private PaymentSetupPresentmentDetails presentmentDetails;
+
+    /**
+     * Terminal details.
+     * [Optional]
+     */
+    private PaymentSetupTerminal terminal;
 }

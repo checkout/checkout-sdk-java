@@ -2,6 +2,8 @@ package com.checkout.issuing.disputes.requests;
 
 import com.checkout.common.Resource;
 import com.checkout.issuing.disputes.entities.DisputeEvidence;
+import com.checkout.issuing.disputes.entities.IssuingDisputeFraudDetails;
+import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -70,5 +72,15 @@ public final class CreateDisputeRequest extends Resource {
      */
     @Size(max = 100)
     private String justification;
+
+    /**
+     * Contains all fraud-related information to be sent with the chargeback.
+     * This field is required if the dispute has a fraud-related reason code.
+     * <p>
+     * [Optional]
+     * </p>
+     */
+    @SerializedName("fraud_details")
+    private IssuingDisputeFraudDetails fraudDetails;
 
 }

@@ -24,4 +24,10 @@ public final class Klarna extends PaymentMethodBase {
      * [Optional]
      */
     private PaymentMethodAction action;
+
+    /**
+     * The account holder details returned by Klarna after the shopper completes verification.
+     * [Optional] readOnly
+     */
+    private KlarnaAccountHolder accountHolder;
 }

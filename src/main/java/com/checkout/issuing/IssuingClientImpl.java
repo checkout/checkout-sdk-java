@@ -20,7 +20,6 @@ import com.checkout.issuing.cards.requests.credentials.CardCredentialsQuery;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSEnrollmentRequest;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSUpdateRequest;
 import com.checkout.issuing.cards.requests.renew.RenewCardRequest;
-import com.checkout.issuing.cards.requests.revocation.ScheduleRevocationRequest;
 import com.checkout.issuing.cards.requests.revoke.RevokeCardRequest;
 import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
 import com.checkout.issuing.cards.requests.update.UpdateCardRequest;
@@ -56,6 +55,7 @@ import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
 import com.checkout.issuing.testing.responses.CardAuthorizationIncrementingResponse;
 import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
 import com.checkout.issuing.testing.responses.CardAuthorizationReversalResponse;
+import com.checkout.issuing.disputes.requests.AmendDisputeRequest;
 import com.checkout.issuing.disputes.requests.CreateDisputeRequest;
 import com.checkout.issuing.disputes.requests.EscalateDisputeRequest;
 import com.checkout.issuing.disputes.requests.SubmitDisputeRequest;
@@ -108,8 +108,6 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     private static final String RENEW_PATH = "renew";
 
-    private static final String SCHEDULE_REVOCATION_PATH = "schedule-revocation";
-
     private static final String ACCESS_TOKEN_PATH = "access/connect/token";
     private static final String DISPUTES_PATH = "disputes";
 
@@ -120,6 +118,8 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     private static final String ESCALATE_PATH = "escalate";
 
     private static final String SUBMIT_PATH = "submit";
+
+    private static final String AMEND_PATH = "amend";
 
     public IssuingClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
@@ -590,28 +590,6 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
-    public CompletableFuture<VoidResponse> scheduleCardRevocation(final String cardId, final ScheduleRevocationRequest scheduleRevocationRequest) {
-        validateParams("cardId", cardId, "scheduleRevocationRequest", scheduleRevocationRequest);
-        return apiClient.postAsync(
-                buildPath(ISSUING_PATH, CARDS_PATH, cardId, SCHEDULE_REVOCATION_PATH),
-                sdkAuthorization(),
-                VoidResponse.class,
-                scheduleRevocationRequest,
-                null
-        );
-    }
-
-    @Override
-    public CompletableFuture<VoidResponse> deleteScheduledRevocation(final String cardId) {
-        validateParams("cardId", cardId);
-        return apiClient.deleteAsync(
-                buildPath(ISSUING_PATH, CARDS_PATH, cardId, SCHEDULE_REVOCATION_PATH),
-                sdkAuthorization(),
-                VoidResponse.class
-        );
-    }
-
-    @Override
     public CompletableFuture<DisputeResponse> createDispute(final CreateDisputeRequest createDisputeRequest, String idempotencyKey) {
         validateCreateDisputeRequest(createDisputeRequest);
         return apiClient.postAsync(
@@ -667,6 +645,19 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 sdkAuthorization(),
                 DisputeResponse.class,
                 submitDisputeRequest,
+                idempotencyKey
+        );
+    }
+
+    @Override
+    public CompletableFuture<DisputeResponse> amendDispute(final String disputeId, String idempotencyKey,
+                                                                final AmendDisputeRequest amendDisputeRequest) {
+        validateDisputeIdAndAmendRequest(disputeId, amendDisputeRequest);
+        return apiClient.postAsync(
+                buildPath(ISSUING_PATH, DISPUTES_PATH, disputeId, AMEND_PATH),
+                sdkAuthorization(),
+                DisputeResponse.class,
+                amendDisputeRequest,
                 idempotencyKey
         );
     }
@@ -1157,28 +1148,6 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
-    public VoidResponse scheduleCardRevocationSync(final String cardId, final ScheduleRevocationRequest scheduleRevocationRequest) {
-        validateParams("cardId", cardId, "scheduleRevocationRequest", scheduleRevocationRequest);
-        return apiClient.post(
-                buildPath(ISSUING_PATH, CARDS_PATH, cardId, SCHEDULE_REVOCATION_PATH),
-                sdkAuthorization(),
-                VoidResponse.class,
-                scheduleRevocationRequest,
-                null
-        );
-    }
-
-    @Override
-    public VoidResponse deleteScheduledRevocationSync(final String cardId) {
-        validateParams("cardId", cardId);
-        return apiClient.delete(
-                buildPath(ISSUING_PATH, CARDS_PATH, cardId, SCHEDULE_REVOCATION_PATH),
-                sdkAuthorization(),
-                VoidResponse.class
-        );
-    }
-
-    @Override
     public DisputeResponse createDisputeSync(final CreateDisputeRequest createDisputeRequest, String idempotencyKey) {
         validateCreateDisputeRequest(createDisputeRequest);
         return apiClient.post(
@@ -1234,6 +1203,19 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 sdkAuthorization(),
                 DisputeResponse.class,
                 submitDisputeRequest,
+                idempotencyKey
+        );
+    }
+
+    @Override
+    public DisputeResponse amendDisputeSync(final String disputeId, String idempotencyKey,
+                                                final AmendDisputeRequest amendDisputeRequest) {
+        validateDisputeIdAndAmendRequest(disputeId, amendDisputeRequest);
+        return apiClient.post(
+                buildPath(ISSUING_PATH, DISPUTES_PATH, disputeId, AMEND_PATH),
+                sdkAuthorization(),
+                DisputeResponse.class,
+                amendDisputeRequest,
                 idempotencyKey
         );
     }
@@ -1350,6 +1332,10 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     private void validateDisputeIdAndEscalateRequest(final String disputeId, final EscalateDisputeRequest escalateDisputeRequest) {
         validateParams("disputeId", disputeId, "escalateDisputeRequest", escalateDisputeRequest);
+    }
+
+    private void validateDisputeIdAndAmendRequest(final String disputeId, final AmendDisputeRequest amendDisputeRequest) {
+        validateParams("disputeId", disputeId, "amendDisputeRequest", amendDisputeRequest);
     }
 
     private void validateDisputeIdAndSubmitRequest(final String disputeId, final SubmitDisputeRequest submitDisputeRequest) {

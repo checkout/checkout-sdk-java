@@ -29,10 +29,12 @@ public final class VirtualCardRequest extends CardRequest {
                                final Boolean activateCard,
                                final Boolean isSingleUse,
                                final IssuingCardMetadata metadata,
-                               final LocalDate revocationDate) {
+                               final LocalDate revocationDate,
+                               final String activationDate) {
         super(CardType.VIRTUAL, cardholderId, lifetime, reference, cardProductId, displayName, activateCard);
         this.isSingleUse = isSingleUse;
         setMetadata(metadata);
         setRevocationDate(revocationDate);
+        setActivationDate(activationDate);
     }
 }

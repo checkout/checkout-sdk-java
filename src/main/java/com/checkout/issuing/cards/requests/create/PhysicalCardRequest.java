@@ -29,11 +29,13 @@ public final class PhysicalCardRequest extends CardRequest {
                                 final Boolean activateCard,
                                 final ShippingInstruction shippingInstructions,
                                 final IssuingCardMetadata metadata,
-                                final LocalDate revocationDate) {
+                                final LocalDate revocationDate,
+                                final String activationDate) {
         super(CardType.PHYSICAL, cardholderId, lifetime, reference, cardProductId, displayName, activateCard);
         this.shippingInstructions = shippingInstructions;
         setMetadata(metadata);
         setRevocationDate(revocationDate);
+        setActivationDate(activationDate);
     }
 
 }

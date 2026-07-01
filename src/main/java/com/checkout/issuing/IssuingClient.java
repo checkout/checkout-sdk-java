@@ -15,7 +15,6 @@ import com.checkout.issuing.cards.requests.credentials.CardCredentialsQuery;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSEnrollmentRequest;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSUpdateRequest;
 import com.checkout.issuing.cards.requests.renew.RenewCardRequest;
-import com.checkout.issuing.cards.requests.revocation.ScheduleRevocationRequest;
 import com.checkout.issuing.cards.requests.revoke.RevokeCardRequest;
 import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
 import com.checkout.issuing.cards.requests.update.UpdateCardRequest;
@@ -51,6 +50,7 @@ import com.checkout.issuing.testing.requests.CardAuthorizationReversalRequest;
 import com.checkout.issuing.testing.responses.CardAuthorizationIncrementingResponse;
 import com.checkout.issuing.testing.responses.CardAuthorizationResponse;
 import com.checkout.issuing.testing.responses.CardAuthorizationReversalResponse;
+import com.checkout.issuing.disputes.requests.AmendDisputeRequest;
 import com.checkout.issuing.disputes.requests.CreateDisputeRequest;
 import com.checkout.issuing.disputes.requests.EscalateDisputeRequest;
 import com.checkout.issuing.disputes.requests.SubmitDisputeRequest;
@@ -156,9 +156,6 @@ public interface IssuingClient {
 
     CompletableFuture<RenewCardResponse> renewCard(final String cardId, final RenewCardRequest renewCardRequest);
 
-    CompletableFuture<VoidResponse> scheduleCardRevocation(final String cardId, final ScheduleRevocationRequest scheduleRevocationRequest);
-
-    CompletableFuture<VoidResponse> deleteScheduledRevocation(final String cardId);
     CompletableFuture<DisputeResponse> createDispute(final CreateDisputeRequest createDisputeRequest, String idempotencyKey);
 
     CompletableFuture<DisputeResponse> getDispute(final String disputeId);
@@ -172,6 +169,8 @@ public interface IssuingClient {
      */
     @Deprecated
     CompletableFuture<DisputeResponse> submitDispute(final String disputeId, String idempotencyKey, final SubmitDisputeRequest submitDisputeRequest);
+
+    CompletableFuture<DisputeResponse> amendDispute(final String disputeId, String idempotencyKey, final AmendDisputeRequest amendDisputeRequest);
 
     CompletableFuture<TransactionsListResponse> getListTransactions(final TransactionsQuery queryFilter);
 
@@ -286,9 +285,6 @@ public interface IssuingClient {
 
     RenewCardResponse renewCardSync(String cardId, RenewCardRequest renewCardRequest);
 
-    VoidResponse scheduleCardRevocationSync(String cardId, ScheduleRevocationRequest scheduleRevocationRequest);
-
-    VoidResponse deleteScheduledRevocationSync(String cardId);
     DisputeResponse createDisputeSync(CreateDisputeRequest createDisputeRequest, String idempotencyKey);
 
     DisputeResponse getDisputeSync(String disputeId);
@@ -302,6 +298,8 @@ public interface IssuingClient {
      */
     @Deprecated
     DisputeResponse submitDisputeSync(String disputeId, String idempotencyKey, SubmitDisputeRequest submitDisputeRequest);
+
+    DisputeResponse amendDisputeSync(String disputeId, String idempotencyKey, AmendDisputeRequest amendDisputeRequest);
 
     TransactionsListResponse getListTransactionsSync(TransactionsQuery queryFilter);
 

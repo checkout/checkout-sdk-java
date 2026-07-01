@@ -41,4 +41,10 @@ public final class Order {
      */
     @SerializedName("discount_amount")
     private Long discountAmount;
+
+    /**
+     * The amount allocations representing the sub-entities on whose behalf the payment is processed
+     */
+    @SerializedName("amount_allocations")
+    private List<PaymentSetupAmountAllocation> amountAllocations;
 }
