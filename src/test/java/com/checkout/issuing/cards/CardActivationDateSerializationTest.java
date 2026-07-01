@@ -1,12 +1,16 @@
 package com.checkout.issuing.cards;
 
 import com.checkout.GsonSerializer;
+import com.checkout.issuing.cards.requests.create.ReturnCredentialsType;
 import com.checkout.issuing.cards.requests.create.VirtualCardRequest;
 import com.checkout.issuing.cards.requests.update.UpdateCardRequest;
 import com.checkout.issuing.cards.responses.VirtualCardDetailsResponse;
+import com.checkout.issuing.controls.requests.create.MccCardControlRequest;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -83,5 +87,26 @@ class CardActivationDateSerializationTest {
         assertEquals("crd_root", response.getRootCardId());
         assertEquals("crd_parent", response.getParentCardId());
         assertEquals(java.time.LocalDate.of(2026, 7, 1), response.getRevocationDate());
+    }
+
+    @Test
+    void shouldSerializeVirtualCardControlFieldsOnCreateRequest() {
+        final VirtualCardRequest request = VirtualCardRequest.builder()
+                .cardholderId("crh_test")
+                .returnCredentials(Arrays.asList(ReturnCredentialsType.NUMBER, ReturnCredentialsType.CVC2))
+                .controlProfiles(Collections.singletonList("ctrprf_test"))
+                .controls(Collections.singletonList(
+                        MccCardControlRequest.builder().description("MCC control").build()))
+                .build();
+
+        final String json = serializer.toJson(request);
+
+        assertTrue(json.contains("\"return_credentials\""));
+        assertTrue(json.contains("\"number\""));
+        assertTrue(json.contains("\"cvc2\""));
+        assertTrue(json.contains("\"control_profiles\""));
+        assertTrue(json.contains("ctrprf_test"));
+        assertTrue(json.contains("\"controls\""));
+        assertTrue(json.contains("\"control_type\":\"mcc_limit\""));
     }
 }

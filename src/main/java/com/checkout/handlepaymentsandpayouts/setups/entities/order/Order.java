@@ -40,6 +40,40 @@ public final class Order {
     private Long discountAmount;
 
     /**
+     * The unique identifier for the invoice.
+     * [Optional]
+     */
+    private String invoiceId;
+
+    /**
+     * The total shipping amount for the order.
+     * [Optional]
+     * &gt;= 0
+     */
+    private Long shippingAmount;
+
+    /**
+     * The total surcharge amount for the order.
+     * [Optional]
+     * &gt;= 0
+     */
+    private Long surchargeAmount;
+
+    /**
+     * The total tax amount for the order.
+     * [Optional]
+     * &gt;= 0
+     */
+    private Long taxAmount;
+
+    /**
+     * The total tipping amount for the order.
+     * [Optional]
+     * &gt;= 0
+     */
+    private Long tippingAmount;
+
+    /**
      * The amount allocations representing the sub-entities on whose behalf the payment is processed
      */
     private List<PaymentSetupAmountAllocation> amountAllocations;

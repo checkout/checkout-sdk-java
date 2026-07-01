@@ -110,4 +110,25 @@ class PaymentSetupsNewFieldsSerializationTest {
         assertTrue(json.contains("\"account_holder\""));
         assertTrue(json.contains("John Smith"));
     }
+
+    @Test
+    void shouldSerializeOrderAmountFields() {
+        final com.checkout.handlepaymentsandpayouts.setups.entities.order.Order order =
+                com.checkout.handlepaymentsandpayouts.setups.entities.order.Order.builder()
+                        .invoiceId("inv_123")
+                        .shippingAmount(500L)
+                        .surchargeAmount(150L)
+                        .taxAmount(200L)
+                        .tippingAmount(100L)
+                        .discountAmount(50L)
+                        .build();
+
+        final String json = serializer.toJson(order);
+
+        assertTrue(json.contains("\"invoice_id\""));
+        assertTrue(json.contains("\"shipping_amount\""));
+        assertTrue(json.contains("\"surcharge_amount\""));
+        assertTrue(json.contains("\"tax_amount\""));
+        assertTrue(json.contains("\"tipping_amount\""));
+    }
 }
