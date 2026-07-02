@@ -3,7 +3,6 @@ package com.checkout.payments.previous.request.source;
 import com.checkout.common.Address;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,14 +17,12 @@ public final class RequestTokenSource extends AbstractRequestSource {
 
     private String token;
 
-    @SerializedName("billing_address")
     private Address billingAddress;
 
     private Phone phone;
 
     private Boolean stored;
 
-    @SerializedName("store_for_future_use")
     private Boolean storeForFutureUse;
 
     @Builder

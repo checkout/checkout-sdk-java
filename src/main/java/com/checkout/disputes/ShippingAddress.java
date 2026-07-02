@@ -19,10 +19,8 @@ public final class ShippingAddress {
 
     private String city;
 
-    @SerializedName("state_region")
     private String stateRegion;
 
-    @SerializedName("postal_code")
     private String postalCode;
 
     private String country;

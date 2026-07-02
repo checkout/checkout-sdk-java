@@ -1,7 +1,6 @@
 package com.checkout.balances;
 
 import com.checkout.common.Currency;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 import java.time.Instant;
@@ -14,12 +13,10 @@ public final class CurrencyAccountBalance {
      * Returned only when the request is made with {@code withCurrencyAccountId=true}.
      * [Optional]
      */
-    @SerializedName("currency_account_id")
     private String currencyAccountId;
 
     private String descriptor;
 
-    @SerializedName("holding_currency")
     private Currency holdingCurrency;
 
     private Balances balances;
@@ -31,7 +28,6 @@ public final class CurrencyAccountBalance {
      * [Optional]
      * Format: date-time (RFC 3339)
      */
-    @SerializedName("balances_as_of")
     private Instant balancesAsOf;
 
 }

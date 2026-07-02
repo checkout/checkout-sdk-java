@@ -18,7 +18,6 @@ public final class PaymentInstrumentDetailsResponse extends Resource {
 
     private InstrumentStatus status;
 
-    @SerializedName("instrument_id")
     private String instrumentId;
 
     private String label;

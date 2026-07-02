@@ -1,6 +1,5 @@
 package com.checkout.issuing.controls.requests.query;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,6 +7,5 @@ import lombok.Data;
 @Builder
 public final class CardControlsQuery {
 
-    @SerializedName("target_id")
     private String targetId;
 }

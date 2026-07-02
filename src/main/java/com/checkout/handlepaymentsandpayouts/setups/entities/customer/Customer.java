@@ -1,7 +1,6 @@
 package com.checkout.handlepaymentsandpayouts.setups.entities.customer;
 
 import com.checkout.common.Phone;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,6 +39,5 @@ public final class Customer {
     /**
      * Details of the account the customer holds with the merchant
      */
-    @SerializedName("merchant_account")
     private MerchantAccount merchantAccount;
 }

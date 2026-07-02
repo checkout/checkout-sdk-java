@@ -36,13 +36,10 @@ public final class GetPaymentResponse extends Resource {
 
     private String id;
 
-    @SerializedName("authentication_id")
     private String authenticationId;
 
-    @SerializedName("processing_channel_id")
     private String processingChannelId;
 
-    @SerializedName("requested_on")
     private Instant requestedOn;
 
     private ResponseSource source;
@@ -53,7 +50,6 @@ public final class GetPaymentResponse extends Resource {
 
     private Long amount;
 
-    @SerializedName("amount_requested")
     private Long amountRequested;
 
     private Currency currency;
@@ -61,7 +57,6 @@ public final class GetPaymentResponse extends Resource {
     @SerializedName("payment_type")
     private PaymentType type;
 
-    @SerializedName("payment_plan")
     private PaymentPlan paymentPlan;
 
     private String reference;
@@ -70,7 +65,6 @@ public final class GetPaymentResponse extends Resource {
 
     private Boolean approved;
 
-    @SerializedName("expires_on")
     private Instant expiresOn;
 
     private PaymentStatus status;
@@ -97,7 +91,6 @@ public final class GetPaymentResponse extends Resource {
 
     private ShippingDetails shipping;
 
-    @SerializedName("payment_ip")
     private String paymentIp;
 
     /**
@@ -107,7 +100,6 @@ public final class GetPaymentResponse extends Resource {
     @Deprecated
     private MarketplaceData marketplace;
 
-    @SerializedName("amount_allocations")
     private List<AmountAllocations> amountAllocations;
 
     private PaymentRecipient recipient;
@@ -120,20 +112,16 @@ public final class GetPaymentResponse extends Resource {
 
     private String eci;
 
-    @SerializedName("scheme_id")
     private String schemeId;
 
     private List<PaymentActionSummary> actions;
 
     private PaymentRetryResponse retry;
 
-    @SerializedName("pan_type_processed")
     private PanProcessedType panTypeProcessed;
 
-    @SerializedName("cko_network_token_available")
     private Boolean ckoNetworkTokenAvailable;
 
-    @SerializedName("processed_on")
     private String processedOn;
 
     private PaymentInstruction instruction;

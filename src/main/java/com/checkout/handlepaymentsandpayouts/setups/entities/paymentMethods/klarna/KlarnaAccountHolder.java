@@ -1,13 +1,12 @@
 package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.klarna;
 
-import com.checkout.common.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Klarna account holder information.
+ * The account holder details returned by Klarna after the shopper completes verification.
  */
 @Data
 @Builder
@@ -16,8 +15,8 @@ import lombok.NoArgsConstructor;
 public final class KlarnaAccountHolder {
 
     /**
-     * The billing address of the Klarna account holder.
-     * [Optional]
+     * The full name of the account holder.
+     * [Optional] readOnly
      */
-    private Address billingAddress;
+    private String name;
 }

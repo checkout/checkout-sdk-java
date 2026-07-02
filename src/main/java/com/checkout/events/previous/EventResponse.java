@@ -1,7 +1,6 @@
 package com.checkout.events.previous;
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -21,7 +20,6 @@ public final class EventResponse extends Resource {
 
     private String version;
 
-    @SerializedName("created_on")
     private Instant createdOn;
 
     private Map<String, Object> data;

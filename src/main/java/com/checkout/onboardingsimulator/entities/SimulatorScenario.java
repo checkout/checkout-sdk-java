@@ -1,6 +1,5 @@
 package com.checkout.onboardingsimulator.entities;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -51,6 +50,5 @@ public final class SimulatorScenario {
      * Requirement fields applied when the scenario runs, if any.
      * [Optional]
      */
-    @SerializedName("requirements_due")
     private List<String> requirementsDue;
 }

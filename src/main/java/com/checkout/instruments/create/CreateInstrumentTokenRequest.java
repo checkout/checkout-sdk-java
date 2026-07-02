@@ -2,7 +2,6 @@ package com.checkout.instruments.create;
 
 import com.checkout.common.AccountHolder;
 import com.checkout.common.InstrumentType;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,7 +16,6 @@ public final class CreateInstrumentTokenRequest extends CreateInstrumentRequest 
 
     private String token;
 
-    @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
     private CreateCustomerInstrumentRequest customer;

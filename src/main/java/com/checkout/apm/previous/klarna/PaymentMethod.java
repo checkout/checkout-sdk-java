@@ -1,6 +1,5 @@
 package com.checkout.apm.previous.klarna;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 @Data
@@ -10,7 +9,6 @@ public final class PaymentMethod {
 
     private String name;
 
-    @SerializedName("asset_urls")
     private AssetUrl assetUrls;
 
     @Data

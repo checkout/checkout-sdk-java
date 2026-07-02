@@ -12,15 +12,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public final class UpdateInstrumentRequest {
 
-    @SerializedName("expiry_month")
     private int expiryMonth;
 
-    @SerializedName("expiry_year")
     private int expiryYear;
 
     private String name;
 
-    @SerializedName("account_holder")
     private InstrumentAccountHolder accountHolder;
 
     private Customer customer;

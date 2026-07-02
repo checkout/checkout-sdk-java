@@ -31,7 +31,6 @@ public final class GetPaymentResponse extends Resource {
 
     private String id;
 
-    @SerializedName("requested_on")
     private Instant requestedOn;
 
     private ResponseSource source;
@@ -42,7 +41,6 @@ public final class GetPaymentResponse extends Resource {
 
     private Currency currency;
 
-    @SerializedName("payment_type")
     private PaymentType paymentType;
 
     private String reference;
@@ -60,12 +58,10 @@ public final class GetPaymentResponse extends Resource {
 
     private CustomerResponse customer;
 
-    @SerializedName("billing_descriptor")
     private BillingDescriptor billingDescriptor;
 
     private ShippingDetails shipping;
 
-    @SerializedName("payment_ip")
     private String paymentIp;
 
     private PaymentRecipient recipient;
@@ -74,7 +70,6 @@ public final class GetPaymentResponse extends Resource {
 
     private String eci;
 
-    @SerializedName("scheme_id")
     private String schemeId;
 
     private List<PaymentActionSummary> actions = new ArrayList<>();

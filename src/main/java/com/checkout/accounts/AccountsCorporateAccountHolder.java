@@ -4,7 +4,6 @@ import com.checkout.common.AccountHolderIdentification;
 import com.checkout.common.AccountHolderType;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,7 +16,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class AccountsCorporateAccountHolder extends AccountsAccountHolder {
 
-    @SerializedName("company_name")
     private String companyName;
 
     @Builder

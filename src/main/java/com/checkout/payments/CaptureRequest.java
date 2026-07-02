@@ -3,7 +3,6 @@ package com.checkout.payments;
 import com.checkout.common.AmountAllocations;
 import com.checkout.common.MarketplaceData;
 import com.checkout.payments.request.PaymentCustomerRequest;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +20,6 @@ public final class CaptureRequest {
 
     private Long amount;
 
-    @SerializedName("capture_type")
     private CaptureType captureType;
 
     private String reference;
@@ -30,7 +28,6 @@ public final class CaptureRequest {
 
     private String description;
 
-    @SerializedName("billing_descriptor")
     private BillingDescriptor billingDescriptor;
 
     private ShippingDetails shipping;
@@ -44,7 +41,6 @@ public final class CaptureRequest {
     @Deprecated
     private MarketplaceData marketplace;
 
-    @SerializedName("amount_allocations")
     private List<AmountAllocations> amountAllocations;
 
     private ProcessingSettings processing;

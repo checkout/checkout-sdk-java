@@ -2,7 +2,6 @@ package com.checkout.payments.sender;
 
 import com.checkout.common.AccountHolderIdentification;
 import com.checkout.common.Address;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,15 +14,12 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class PaymentGovernmentSender extends PaymentSender {
 
-    @SerializedName("company_name")
     private String companyName;
 
     private Address address;
 
-    @SerializedName("reference_type")
     private String referenceType;
 
-    @SerializedName("source_of_funds")
     private SourceOfFunds sourceOfFunds;
 
     private AccountHolderIdentification identification;

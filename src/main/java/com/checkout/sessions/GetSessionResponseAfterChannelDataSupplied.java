@@ -16,10 +16,8 @@ public final class GetSessionResponseAfterChannelDataSupplied extends Resource {
 
     private String id;
 
-    @SerializedName("session_secret")
     private String sessionSecret;
 
-    @SerializedName("transaction_id")
     private String transactionId;
 
     private SessionScheme scheme;
@@ -32,46 +30,37 @@ public final class GetSessionResponseAfterChannelDataSupplied extends Resource {
 
     private Boolean challenged;
 
-    @SerializedName("authentication_type")
     private AuthenticationType authenticationType;
 
-    @SerializedName("authentication_category")
     private Category authenticationCategory;
 
     private DsPublicKeys certificates;
 
     private SessionStatus status;
 
-    @SerializedName("status_reason")
     private StatusReason statusReason;
 
     private Boolean approved;
 
-    @SerializedName("protocol_version")
     private String protocolVersion;
 
     @SerializedName("account_info")
     private CardholderAccountInfo cardholderAccountInfo;
 
-    @SerializedName("merchant_risk_info")
     private MerchantRiskInfo merchantRiskInfo;
 
     private String reference;
 
-    @SerializedName("transaction_type")
     private String transactionType;
 
-    @SerializedName("next_actions")
     private List<NextAction> nextActions;
 
     private Ds ds;
 
     private Acs acs;
 
-    @SerializedName("response_code")
     private ResponseCode responseCode;
 
-    @SerializedName("response_status_reason")
     private String responseStatusReason;
 
     private String pareq;

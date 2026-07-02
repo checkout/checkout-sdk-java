@@ -1,7 +1,6 @@
 package com.checkout.workflows.conditions.response;
 
 import com.checkout.workflows.conditions.WorkflowConditionType;
-import com.google.gson.annotations.SerializedName;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +14,6 @@ import java.util.List;
 @ToString(callSuper = true)
 public final class ProcessingChannelWorkflowConditionResponse extends WorkflowConditionResponse {
 
-    @SerializedName("processing_channels")
     private List<String> processingChannels;
 
     public ProcessingChannelWorkflowConditionResponse() {

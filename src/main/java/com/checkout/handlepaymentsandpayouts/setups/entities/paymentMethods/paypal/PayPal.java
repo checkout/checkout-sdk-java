@@ -3,7 +3,6 @@ package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.pay
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodAction;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodBase;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodInitialization;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -24,7 +23,6 @@ public final class PayPal extends PaymentMethodBase {
      * The user action for the PayPal widget.
      * <p>[Optional]</p>
      */
-    @SerializedName("user_action")
     private PayPalUserAction userAction;
 
     /**
@@ -32,14 +30,12 @@ public final class PayPal extends PaymentMethodBase {
      * <p>[Optional]</p>
      * Maximum length: 127 characters.
      */
-    @SerializedName("brand_name")
     private String brandName;
 
     /**
      * Where to obtain the shipping information.
      * <p>[Optional]</p>
      */
-    @SerializedName("shipping_preference")
     private PayPalShippingPreference shippingPreference;
 
     /**

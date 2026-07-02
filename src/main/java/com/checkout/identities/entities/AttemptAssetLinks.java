@@ -1,7 +1,6 @@
 package com.checkout.identities.entities;
 
 import com.checkout.common.Link;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +20,6 @@ public final class AttemptAssetLinks {
      * [Required]
      * Format: uri
      */
-    @SerializedName("asset_url")
     private Link assetUrl;
 
 }

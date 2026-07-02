@@ -1,6 +1,5 @@
 package com.checkout.payments.contexts;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +18,6 @@ public final class PaymentContextsCustomerSummary {
      * [Optional]
      * Format: yyyy-MM-dd
      */
-    @SerializedName("registration_date")
     private LocalDate registrationDate;
 
     /**
@@ -27,7 +25,6 @@ public final class PaymentContextsCustomerSummary {
      * [Optional]
      * Format: yyyy-MM-dd
      */
-    @SerializedName("first_transaction_date")
     private LocalDate firstTransactionDate;
 
     /**
@@ -35,21 +32,18 @@ public final class PaymentContextsCustomerSummary {
      * [Optional]
      * Format: yyyy-MM-dd
      */
-    @SerializedName("last_payment_date")
     private LocalDate lastPaymentDate;
 
     /**
      * The total number of orders the customer has placed.
      * [Optional]
      */
-    @SerializedName("total_order_count")
     private Integer totalOrderCount;
 
     /**
      * The amount of the customer's last payment.
      * [Optional]
      */
-    @SerializedName("last_payment_amount")
     private Float lastPaymentAmount;
 
 }

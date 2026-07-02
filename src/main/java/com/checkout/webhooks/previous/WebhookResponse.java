@@ -1,7 +1,6 @@
 package com.checkout.webhooks.previous;
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -23,10 +22,8 @@ public final class WebhookResponse extends Resource {
 
     private Map<String, String> headers = new HashMap<>();
 
-    @SerializedName("content_type")
     private String contentType;
 
-    @SerializedName("event_types")
     private List<String> eventTypes;
 
 }

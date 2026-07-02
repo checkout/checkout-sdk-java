@@ -2,7 +2,6 @@ package com.checkout.apm.previous.klarna;
 
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.ShippingInfo;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,10 +24,8 @@ public final class OrderCaptureRequest {
 
     private Klarna klarna;
 
-    @SerializedName("shipping_info")
     private ShippingInfo shippingInfo;
 
-    @SerializedName("shipping_delay")
     private Long shippingDelay;
 
     @Data
@@ -41,10 +38,8 @@ public final class OrderCaptureRequest {
 
         private List<KlarnaProduct> products;
 
-        @SerializedName("shipping_info")
         private List<ShippingInfo> shippingInfo;
 
-        @SerializedName("shipping_delay")
         private Integer shippingDelay;
 
     }

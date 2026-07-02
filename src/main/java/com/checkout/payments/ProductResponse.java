@@ -21,33 +21,24 @@ public final class ProductResponse {
 
     private Long quantity;
 
-    @SerializedName("unit_price")
     private Long unitPrice;
 
     private String reference;
 
-    @SerializedName("commodity_code")
     private String commodityCode;
 
-    @SerializedName("unit_of_measure")
     private String unitOfMeasure;
 
-    @SerializedName("total_amount")
     private Long totalAmount;
 
-    @SerializedName("tax_rate")
     private Long taxRate;
 
-    @SerializedName("tax_amount")
     private Long taxAmount;
 
-    @SerializedName("discount_amount")
     private Long discountAmount;
 
-    @SerializedName("wxpay_goods_id")
     private String wxpayGoodsId;
 
-    @SerializedName("image_url")
     private String imageUrl;
 
     private String url;
@@ -59,7 +50,6 @@ public final class ProductResponse {
      * [Optional]
      * Format: yyyy-MM-dd
      */
-    @SerializedName("service_ends_on")
     private LocalDate serviceEndsOn;
 
     public ProductType getTypeAsEnum() {

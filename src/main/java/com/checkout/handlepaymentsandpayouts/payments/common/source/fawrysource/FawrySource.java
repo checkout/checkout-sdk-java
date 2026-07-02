@@ -2,7 +2,6 @@ package com.checkout.handlepaymentsandpayouts.payments.common.source.fawrysource
 
 import com.checkout.handlepaymentsandpayouts.payments.common.source.AbstractSource;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType;
-import com.google.gson.annotations.SerializedName;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -31,7 +30,6 @@ public final class FawrySource extends AbstractSource {
      * The customer pays using this number at Fawry's outlets
      * [Optional]
      */
-    @SerializedName("reference_number")
     private String referenceNumber;
 
     /**

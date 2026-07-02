@@ -1,6 +1,5 @@
 package com.checkout.issuing.testing.requests;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,10 +10,8 @@ import lombok.Data;
 @Builder
 public class SimulateOobAuthenticationRequest {
 
-    @SerializedName("card_id")
     private String cardId;
 
-    @SerializedName("transaction_details")
     private OobTransactionDetails transactionDetails;
 
 }

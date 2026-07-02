@@ -4,7 +4,6 @@ import com.checkout.common.Phone;
 import com.checkout.sessions.SessionAddress;
 import com.checkout.sessions.SessionScheme;
 import com.checkout.sessions.SessionSourceType;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,10 +16,8 @@ public final class NetworkTokenSource extends SessionSource {
 
     private String token;
 
-    @SerializedName("expiry_month")
     private Integer expiryMonth;
 
-    @SerializedName("expiry_year")
     private Integer expiryYear;
 
     private String name;

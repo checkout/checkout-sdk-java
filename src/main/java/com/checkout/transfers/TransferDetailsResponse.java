@@ -1,7 +1,6 @@
 package com.checkout.transfers;
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -20,13 +19,10 @@ public final class TransferDetailsResponse extends Resource {
 
     private TransferStatus status;
 
-    @SerializedName("transfer_type")
     private TransferType transferType;
 
-    @SerializedName("requested_on")
     private Instant requestedOn;
 
-    @SerializedName("reason_codes")
     private List<String> reasonCodes;
 
     private TransferSourceResponse source;

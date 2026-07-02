@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.setups.entities.customer;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,7 +27,6 @@ public final class MerchantAccount {
      * [Optional]
      * Format: yyyy-MM-dd
      */
-    @SerializedName("registration_date")
     private LocalDate registrationDate;
 
     /**
@@ -36,14 +34,12 @@ public final class MerchantAccount {
      * [Optional]
      * Format: yyyy-MM-dd
      */
-    @SerializedName("last_modified")
     private LocalDate lastModified;
 
     /**
      * Indicates whether this is a returning customer.
      * [Optional]
      */
-    @SerializedName("returning_customer")
     private Boolean returningCustomer;
 
     /**
@@ -51,7 +47,6 @@ public final class MerchantAccount {
      * [Optional]
      * Format: yyyy-MM-dd
      */
-    @SerializedName("first_transaction_date")
     private LocalDate firstTransactionDate;
 
     /**
@@ -59,20 +54,17 @@ public final class MerchantAccount {
      * [Optional]
      * Format: yyyy-MM-dd
      */
-    @SerializedName("last_transaction_date")
     private LocalDate lastTransactionDate;
 
     /**
      * The total number of orders the customer has placed with the merchant.
      * [Optional]
      */
-    @SerializedName("total_order_count")
     private Integer totalOrderCount;
 
     /**
      * The amount of the customer's last payment with the merchant.
      * [Optional]
      */
-    @SerializedName("last_payment_amount")
     private Long lastPaymentAmount;
 }

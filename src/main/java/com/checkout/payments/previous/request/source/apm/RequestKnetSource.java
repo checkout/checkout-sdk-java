@@ -4,7 +4,6 @@ import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.PaymentMethodDetails;
 import com.checkout.payments.previous.request.source.AbstractRequestSource;
 import com.checkout.tokens.ApplePayTokenData;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -19,33 +18,24 @@ public final class RequestKnetSource extends AbstractRequestSource {
 
     private String language;
 
-    @SerializedName("user_defined_field1")
     private String userDefinedField1;
 
-    @SerializedName("user_defined_field2")
     private String userDefinedField2;
 
-    @SerializedName("user_defined_field3")
     private String userDefinedField3;
 
-    @SerializedName("user_defined_field4")
     private String userDefinedField4;
 
-    @SerializedName("user_defined_field5")
     private String userDefinedField5;
 
-    @SerializedName("card_token")
     private String cardToken;
 
     private String ptlf;
 
-    @SerializedName("token_type")
     private String tokenType;
 
-    @SerializedName("token_data")
     private ApplePayTokenData tokenData;
 
-    @SerializedName("payment_method_details")
     private PaymentMethodDetails paymentMethodDetails;
 
     @Builder

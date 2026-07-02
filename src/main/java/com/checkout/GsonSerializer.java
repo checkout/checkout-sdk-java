@@ -493,7 +493,9 @@ public final class GsonSerializer implements Serializer {
                         java.lang.reflect.Field field = Arrays.stream(ProductResponse.class.getDeclaredFields())
                                 .filter(f -> {
                                     SerializedName annotation = f.getAnnotation(SerializedName.class);
-                                    return (annotation != null && annotation.value().equals(jsonKey)) || f.getName().equals(jsonKey);
+                                    return (annotation != null && annotation.value().equals(jsonKey))
+                                            || f.getName().equals(jsonKey)
+                                            || FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES.translateName(f).equals(jsonKey);
                                 })
                                 .findFirst()
                                 .orElse(null);

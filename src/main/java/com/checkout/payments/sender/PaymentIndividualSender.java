@@ -3,7 +3,6 @@ package com.checkout.payments.sender;
 import com.checkout.common.AccountHolderIdentification;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -40,7 +39,6 @@ public final class PaymentIndividualSender extends PaymentSender {
      * @deprecated Renamed to {@link #dateOfBirth} (date_of_birth) per API changelog 2025/02/21.
      */
     @Deprecated
-    @SerializedName("dob")
     private String dob;
 
     /**

@@ -1,6 +1,5 @@
 package com.checkout;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,13 +7,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public final class RequestMetrics {
 
-    @SerializedName("prev_request_id")
     private String prevRequestId;
 
-    @SerializedName("request_id")
     private String requestId;
 
-    @SerializedName("prev_request_duration")
     private Long prevRequestDuration;
 
     public String toTelemetryHeader() {

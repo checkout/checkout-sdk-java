@@ -3,7 +3,6 @@ package com.checkout.handlepaymentsandpayouts.setups.entities.industry;
 import com.checkout.payments.contexts.PaymentContextsFlightLegDetails;
 import com.checkout.payments.contexts.PaymentContextsPassenger;
 import com.checkout.payments.contexts.PaymentContextsTicket;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,6 +32,5 @@ public final class AirlineData {
     /**
      * Details of each leg of the flight journey
      */
-    @SerializedName("flight_leg_details")
     private List<PaymentContextsFlightLegDetails> flightLegDetails;
 }

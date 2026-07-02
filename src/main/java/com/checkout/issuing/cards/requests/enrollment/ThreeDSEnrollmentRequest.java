@@ -1,7 +1,6 @@
 package com.checkout.issuing.cards.requests.enrollment;
 
 import com.checkout.common.Phone;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -11,6 +10,5 @@ public abstract class ThreeDSEnrollmentRequest {
 
     private String locale;
 
-    @SerializedName("phone_number")
     private Phone phoneNumber;
 }

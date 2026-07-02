@@ -1,7 +1,6 @@
 package com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.destination.common.accountholder.common.phone;
 
 import com.checkout.common.CountryCode;
-import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,7 +22,6 @@ public final class Phone {
      * [Required]
      * [ 1 .. 7 ] characters
      */
-    @SerializedName("country_code")
     private CountryCode countryCode;
 
     /**

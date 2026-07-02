@@ -1,6 +1,5 @@
 package com.checkout.payments.contexts;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,14 +17,12 @@ public final class PaymentContextsGuests {
      * The first name of the guest.
      * [Optional]
      */
-    @SerializedName("first_name")
     private String firstName;
 
     /**
      * The last name of the guest.
      * [Optional]
      */
-    @SerializedName("last_name")
     private String lastName;
 
     /**
@@ -33,6 +30,5 @@ public final class PaymentContextsGuests {
      * [Optional]
      * Format: yyyy-MM-dd
      */
-    @SerializedName("date_of_birth")
     private LocalDate dateOfBirth;
 }

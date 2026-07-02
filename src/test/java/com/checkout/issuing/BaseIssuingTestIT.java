@@ -7,8 +7,6 @@ import com.checkout.OAuthScope;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
-import com.checkout.common.DocumentType;
-import com.checkout.issuing.cardholders.CardholderDocument;
 import com.checkout.issuing.cardholders.CardholderRequest;
 import com.checkout.issuing.cardholders.CardholderResponse;
 import com.checkout.issuing.cardholders.CardholderType;
@@ -61,12 +59,6 @@ public abstract class BaseIssuingTestIT extends SandboxTestFixture {
                 .dateOfBirth("1985-05-15")
                 .billingAddress(TestHelper.createAddress())
                 .residencyAddress(TestHelper.createAddress())
-                .document(
-                        CardholderDocument.builder()
-                                .type(DocumentType.NATIONAL_IDENTITY_CARD)
-                                .frontDocumentId("file_6lbss42ezvoufcb2beo76rvwly")
-                                .backDocumentId("file_aaz5pemp6326zbuvevp6qroqu4")
-                                .build())
                 .build();
 
         final CardholderResponse cardholderResponse = blocking(() ->

@@ -32,10 +32,8 @@ public final class PaymentRequest {
 
     private Currency currency;
 
-    @SerializedName("payment_type")
     private PaymentType paymentType;
 
-    @SerializedName("merchant_initiated")
     private Boolean merchantInitiated;
 
     private String reference;
@@ -44,12 +42,10 @@ public final class PaymentRequest {
 
     private Boolean capture;
 
-    @SerializedName("capture_on")
     private Instant captureOn;
 
     private CustomerRequest customer;
 
-    @SerializedName("billing_descriptor")
     private BillingDescriptor billingDescriptor;
 
     private ShippingDetails shipping;
@@ -57,18 +53,14 @@ public final class PaymentRequest {
     @SerializedName("3ds")
     private ThreeDSRequest threeDS;
 
-    @SerializedName("previous_payment_id")
     private String previousPaymentId;
 
     private RiskRequest risk;
 
-    @SerializedName("success_url")
     private String successUrl;
 
-    @SerializedName("failure_url")
     private String failureUrl;
 
-    @SerializedName("payment_ip")
     private String paymentIp;
 
     private PaymentRecipient recipient;

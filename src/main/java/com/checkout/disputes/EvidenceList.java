@@ -1,6 +1,5 @@
 package com.checkout.disputes;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +17,6 @@ public final class EvidenceList {
 
     private DisputeRelevantEvidence type;
 
-    @SerializedName("dispute_id")
     private String disputeId;
 
 }

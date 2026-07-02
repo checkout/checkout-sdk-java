@@ -5,11 +5,15 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.alip
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.alipay.AlipayHk;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.alma.Alma;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.applepay.ApplePay;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.bacs.Bacs;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.bancontact.Bancontact;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.benefit.Benefit;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.bizum.Bizum;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.blik.Blik;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.card.Card;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.cardpresent.CardPresent;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.paybybank.PayByBank;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.stablecoin.Stablecoin;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.dana.Dana;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.eps.Eps;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.gcash.GCash;
@@ -279,4 +283,28 @@ public final class PaymentMethods {
      * [Optional]
      */
     private Card card;
+
+    /**
+     * Bacs payment method configuration.
+     * [Optional]
+     */
+    private Bacs bacs;
+
+    /**
+     * Card Present payment method configuration.
+     * [Optional]
+     */
+    private CardPresent cardPresent;
+
+    /**
+     * Pay by Bank (Open Banking) payment method configuration.
+     * [Optional]
+     */
+    private PayByBank payByBank;
+
+    /**
+     * Stablecoin payment method configuration.
+     * [Optional]
+     */
+    private Stablecoin stablecoin;
 }

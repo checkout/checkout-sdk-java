@@ -3,7 +3,6 @@ package com.checkout.instruments.update;
 import com.checkout.common.AccountHolder;
 import com.checkout.common.InstrumentType;
 import com.checkout.common.UpdateCustomerRequest;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -16,15 +15,12 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class UpdateInstrumentCardRequest extends UpdateInstrumentRequest {
 
-    @SerializedName("expiry_month")
     private Integer expiryMonth;
 
-    @SerializedName("expiry_year")
     private Integer expiryYear;
 
     private String name;
 
-    @SerializedName("account_holder")
     private AccountHolder accountHolder;
 
     private UpdateCustomerRequest customer;

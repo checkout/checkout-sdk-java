@@ -1,6 +1,5 @@
 package com.checkout.metadata.card;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 /**
@@ -15,7 +14,6 @@ public final class CardMetadataPayouts {
      * [Optional]
      * Enum: "not_supported" "standard" "fast_funds" "unknown"
      */
-    @SerializedName("domestic_non_money_transfer")
     private PayoutsTransactionsType domesticNonMoneyTransfer;
 
     /**
@@ -23,7 +21,6 @@ public final class CardMetadataPayouts {
      * [Optional]
      * Enum: "not_supported" "standard" "fast_funds" "unknown"
      */
-    @SerializedName("cross_border_non_money_transfer")
     private PayoutsTransactionsType crossBorderNonMoneyTransfer;
 
     /**
@@ -31,7 +28,6 @@ public final class CardMetadataPayouts {
      * [Optional]
      * Enum: "not_supported" "standard" "fast_funds" "unknown"
      */
-    @SerializedName("domestic_gambling")
     private PayoutsTransactionsType domesticGambling;
 
     /**
@@ -39,7 +35,6 @@ public final class CardMetadataPayouts {
      * [Optional]
      * Enum: "not_supported" "standard" "fast_funds" "unknown"
      */
-    @SerializedName("cross_border_gambling")
     private PayoutsTransactionsType crossBorderGambling;
 
     /**
@@ -47,7 +42,6 @@ public final class CardMetadataPayouts {
      * [Optional]
      * Enum: "not_supported" "standard" "fast_funds" "unknown"
      */
-    @SerializedName("domestic_money_transfer")
     private PayoutsTransactionsType domesticMoneyTransfer;
 
     /**
@@ -55,6 +49,5 @@ public final class CardMetadataPayouts {
      * [Optional]
      * Enum: "not_supported" "standard" "fast_funds" "unknown"
      */
-    @SerializedName("cross_border_money_transfer")
     private PayoutsTransactionsType crossBorderMoneyTransfer;
 }

@@ -23,16 +23,12 @@ public final class RequestFawrySource extends AbstractRequestSource {
 
     private String description;
 
-    @SerializedName("customer_profile_id")
     private String customerProfileId;
 
-    @SerializedName("customer_email")
     private String customerEmail;
 
-    @SerializedName("customer_mobile")
     private String customerMobile;
 
-    @SerializedName("expires_on")
     private Instant expiresOn;
 
     private List<Product> products;

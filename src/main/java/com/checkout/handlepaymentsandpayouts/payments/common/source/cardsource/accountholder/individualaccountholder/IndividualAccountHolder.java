@@ -3,7 +3,6 @@ package com.checkout.handlepaymentsandpayouts.payments.common.source.cardsource.
 import com.checkout.handlepaymentsandpayouts.payments.common.source.cardsource.accountholder.AbstractAccountHolder;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.cardsource.accountholder.AccountHolderType;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.cardsource.accountholder.individualaccountholder.accountnameinquirydetails.AccountNameInquiryDetails;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -27,7 +26,6 @@ public final class IndividualAccountHolder extends AbstractAccountHolder {
      * [Required]
      * &lt;= 35
      */
-    @SerializedName("first_name")
     private String firstName;
 
     /**
@@ -37,14 +35,12 @@ public final class IndividualAccountHolder extends AbstractAccountHolder {
      * [Required]
      * &lt;= 35
      */
-    @SerializedName("last_name")
     private String lastName;
 
     /**
      * The result of the Account Name Inquiry check.
      * [Required]
      */
-    @SerializedName("account_name_inquiry")
     private AccountNameInquiryType accountNameInquiry;
 
     /**
@@ -53,14 +49,12 @@ public final class IndividualAccountHolder extends AbstractAccountHolder {
      * [Optional]
      * &lt;= 35
      */
-    @SerializedName("middle_name")
     private String middleName;
 
     /**
      * Details of the Account Name Inquiry check.
      * [Optional]
      */
-    @SerializedName("account_name_inquiry_details")
     private AccountNameInquiryDetails accountNameInquiryDetails;
 
     /**

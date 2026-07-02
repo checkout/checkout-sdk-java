@@ -2,7 +2,6 @@ package com.checkout.payments.request;
 
 import com.checkout.common.CustomerRequest;
 import com.checkout.common.Phone;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,7 +16,6 @@ public final class PaymentCustomerRequest extends CustomerRequest {
 
     private String id;
 
-    @SerializedName("tax_number")
     private String taxNumber;
 
     @Builder

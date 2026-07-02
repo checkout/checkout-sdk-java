@@ -1,7 +1,6 @@
 package com.checkout.accounts;
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -21,7 +20,6 @@ public final class OnboardEntityResponse extends Resource {
 
     private Capabilities capabilities;
 
-    @SerializedName("requirements_due")
     private List<RequirementsDue> requirementsDue;
 
 }

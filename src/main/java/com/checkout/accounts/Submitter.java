@@ -1,6 +1,5 @@
 package com.checkout.accounts;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +18,5 @@ public final class Submitter {
      * IP address of the end-user (the sub-entity's representative) submitting the onboarding request.
      * [Required]
      */
-    @SerializedName("ip_address")
     private String ipAddress;
 }

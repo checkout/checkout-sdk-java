@@ -1,6 +1,5 @@
 package com.checkout.disputes;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,16 +31,12 @@ public final class DisputesQueryFilter {
      */
     private String statuses;
 
-    @SerializedName("payment_id")
     private String paymentId;
 
-    @SerializedName("payment_reference")
     private String paymentReference;
 
-    @SerializedName("payment_arn")
     private String paymentArn;
 
-    @SerializedName("this_channel_only")
     private Boolean thisChannelOnly;
 
     /**
@@ -51,22 +46,17 @@ public final class DisputesQueryFilter {
     /**
      * One or more comma-separated client entities. This works like a logical OR operator
      */
-    @SerializedName("entity_ids")
     private String entityIds;
 
     /**
      * One or more comma-separated sub-entities. This works like a logical OR operator
      */
-    @SerializedName("sub_entity_ids")
     private String subEntityIds;
 
-    @SerializedName("payment_mcc")
     private String paymentMcc;
 
-    @SerializedName("processing_channel_ids")
     private String processingChannelIds;
 
-    @SerializedName("segment_ids")
     private String SegmentIds;
 
 }

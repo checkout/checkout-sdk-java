@@ -4,6 +4,7 @@ import com.checkout.common.Resource;
 import com.checkout.issuing.disputes.entities.DisputeArbitration;
 import com.checkout.issuing.disputes.entities.DisputeChargeback;
 import com.checkout.issuing.disputes.entities.DisputeAmount;
+import com.checkout.issuing.disputes.entities.IssuingDisputeActionDetails;
 import com.checkout.issuing.disputes.entities.IssuingDisputeStatus;
 import com.checkout.issuing.disputes.entities.IssuingDisputeStatusReason;
 import com.checkout.issuing.disputes.entities.DisputeMerchant;
@@ -91,5 +92,11 @@ public final class DisputeResponse extends Resource {
      * The dispute details during the arbitration stage
      */
     private DisputeArbitration arbitration;
+
+    /**
+     * Provides instructions on the amendments required before the dispute can proceed, if the dispute
+     * status is action_required
+     */
+    private IssuingDisputeActionDetails actionDetails;
 
 }

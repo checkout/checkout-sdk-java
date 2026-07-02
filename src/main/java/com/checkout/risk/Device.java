@@ -1,6 +1,5 @@
 package com.checkout.risk;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
@@ -22,7 +21,6 @@ public final class Device {
 
     private Instant date;
 
-    @SerializedName("user_agent")
     private String userAgent;
 
     private String fingerprint;

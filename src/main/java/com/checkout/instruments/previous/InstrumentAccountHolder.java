@@ -2,7 +2,6 @@ package com.checkout.instruments.previous;
 
 import com.checkout.common.Address;
 import com.checkout.common.Phone;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public final class InstrumentAccountHolder {
 
-    @SerializedName("billing_address")
     private Address billingAddress;
 
     private Phone phone;

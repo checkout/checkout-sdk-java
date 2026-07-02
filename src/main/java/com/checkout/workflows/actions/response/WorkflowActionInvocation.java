@@ -9,7 +9,6 @@ import java.util.Map;
 @Data
 public final class WorkflowActionInvocation {
 
-    @SerializedName("invocation_id")
     private String invocationId;
 
     private Timestamp timestamp;

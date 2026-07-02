@@ -2,7 +2,6 @@ package com.checkout.payments.previous.request.source.apm;
 
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.previous.request.source.AbstractRequestSource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,13 +16,10 @@ import java.util.Map;
 @ToString(callSuper = true)
 public final class RequestPayPalSource extends AbstractRequestSource {
 
-    @SerializedName("invoice_number")
     private String invoiceNumber;
 
-    @SerializedName("recipient_name")
     private String recipientName;
 
-    @SerializedName("logo_url")
     private String logoUrl;
 
     private Map<String, String> stc;

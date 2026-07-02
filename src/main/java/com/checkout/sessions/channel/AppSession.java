@@ -14,25 +14,19 @@ import java.util.List;
 @ToString(callSuper = true)
 public final class AppSession extends ChannelData {
 
-    @SerializedName("sdk_app_id")
     private String sdkAppId;
 
-    @SerializedName("sdk_max_timeout")
     private Long sdkMaxTimeout;
 
     @SerializedName("sdk_ephem_pub_key")
     private SdkEphemeralPublicKey sdkEphemeralPublicKey;
 
-    @SerializedName("sdk_reference_number")
     private String sdkReferenceNumber;
 
-    @SerializedName("sdk_encrypted_data")
     private String sdkEncryptedData;
 
-    @SerializedName("sdk_transaction_id")
     private String sdkTransactionId;
 
-    @SerializedName("sdk_interface_type")
     private SdkInterfaceType sdkInterfaceType;
 
     @SerializedName("sdk_ui_elements")

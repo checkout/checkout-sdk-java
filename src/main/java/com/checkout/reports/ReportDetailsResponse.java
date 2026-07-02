@@ -1,7 +1,6 @@
 package com.checkout.reports;
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -16,10 +15,8 @@ public final class ReportDetailsResponse extends Resource {
 
     private String id;
 
-    @SerializedName("created_on")
     private String createdOn;
 
-    @SerializedName("last_modified_on")
     private String lastModifiedOn;
 
     private String type;

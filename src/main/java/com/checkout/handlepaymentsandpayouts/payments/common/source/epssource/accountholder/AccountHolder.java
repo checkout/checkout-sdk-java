@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.payments.common.source.epssource.accountholder;
 
-import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,14 +20,12 @@ public final class AccountHolder {
      * The first name of the account holder
      * [Required]
      */
-    @SerializedName("first_name")
     private String firstName;
 
     /**
      * The last name of the account holder
      * [Required]
      */
-    @SerializedName("last_name")
     private String lastName;
 
 }

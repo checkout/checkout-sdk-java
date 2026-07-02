@@ -3,7 +3,6 @@ package com.checkout.issuing.cards.responses;
 import com.checkout.common.Resource;
 import com.checkout.issuing.cards.IssuingDevice;
 import com.checkout.issuing.cards.IssuingRequestor;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -18,16 +17,12 @@ public final class GetDigitalCardResponse extends Resource {
 
     private String id;
 
-    @SerializedName("card_id")
     private String cardId;
 
-    @SerializedName("client_id")
     private String clientId;
 
-    @SerializedName("entity_id")
     private String entityId;
 
-    @SerializedName("last_four")
     private String lastFour;
 
     /**
@@ -40,14 +35,12 @@ public final class GetDigitalCardResponse extends Resource {
      */
     private String type;
 
-    @SerializedName("scheme_card_id")
     private String schemeCardId;
 
     private IssuingRequestor requestor;
 
     private IssuingDevice device;
 
-    @SerializedName("provisioned_on")
     private String provisionedOn;
 
 }

@@ -1,7 +1,6 @@
 package com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.destination.common.accountholder.common.billingaddress;
 
 import com.checkout.common.CountryCode;
-import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +23,6 @@ public final class BillingAddress {
      * [Optional]
      * &lt;= 200
      */
-    @SerializedName("address_line1")
     private String addressLine1;
 
     /**
@@ -32,7 +30,6 @@ public final class BillingAddress {
      * [Optional]
      * &lt;= 200
      */
-    @SerializedName("address_line2")
     private String addressLine2;
 
     /**

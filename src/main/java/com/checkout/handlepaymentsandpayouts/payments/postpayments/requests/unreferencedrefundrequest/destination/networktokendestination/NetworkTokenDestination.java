@@ -3,7 +3,6 @@ package com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unr
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.destination.AbstractDestination;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.destination.DestinationType;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.destination.common.accountholder.AbstractAccountHolder;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -31,7 +30,6 @@ public final class NetworkTokenDestination extends AbstractDestination {
      * [Required]
      * [ 1 .. 2 ] characters &gt;= 1
      */
-    @SerializedName("expiry_month")
     private Integer expiryMonth;
 
     /**
@@ -39,14 +37,12 @@ public final class NetworkTokenDestination extends AbstractDestination {
      * [Required]
      * 4 characters
      */
-    @SerializedName("expiry_year")
     private Integer expiryYear;
 
     /**
      * The network token type.
      * [Required]
      */
-    @SerializedName("token_type")
     private TokenType tokenType;
 
     /**
@@ -68,7 +64,6 @@ public final class NetworkTokenDestination extends AbstractDestination {
      * The unreferenced refund destination account holder.
      * [Required]
      */
-    @SerializedName("account_holder")
     private AbstractAccountHolder accountHolder;
 
     /**

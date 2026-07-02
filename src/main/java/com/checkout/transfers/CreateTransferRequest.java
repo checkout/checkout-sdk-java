@@ -1,6 +1,5 @@
 package com.checkout.transfers;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +13,6 @@ public final class CreateTransferRequest {
 
     private String reference;
 
-    @SerializedName("transfer_type")
     private TransferType transferType;
 
     private TransferSourceRequest source;

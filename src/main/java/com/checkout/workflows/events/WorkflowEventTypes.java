@@ -1,6 +1,5 @@
 package com.checkout.workflows.events;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 import java.util.List;
@@ -10,7 +9,6 @@ public final class WorkflowEventTypes {
 
     private String id;
 
-    @SerializedName("display_name")
     private String displayName;
 
     private String description;

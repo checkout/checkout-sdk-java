@@ -3,7 +3,6 @@ package com.checkout.risk.source;
 import com.checkout.common.Address;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,15 +17,12 @@ public final class CardSourcePrism extends RiskPaymentRequestSource {
 
     private String number;
 
-    @SerializedName("expiry_month")
     private Integer expiryMonth;
 
-    @SerializedName("expiry_year")
     private Integer expiryYear;
 
     private String name;
 
-    @SerializedName("billing_address")
     private Address billingAddress;
 
     private Phone phone;

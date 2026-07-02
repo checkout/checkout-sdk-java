@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.googlepay.requests;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +18,6 @@ public final class GooglePayRegisterDomainRequest {
      * </p>
      * Format: hostname
      */
-    @SerializedName("web_domain")
     private String webDomain;
 
 }

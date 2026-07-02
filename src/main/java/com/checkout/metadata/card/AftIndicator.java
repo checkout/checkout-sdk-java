@@ -1,6 +1,5 @@
 package com.checkout.metadata.card;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 /**
@@ -15,6 +14,5 @@ public final class AftIndicator {
      * cross-border Account Funding Transactions.
      * [Optional]
      */
-    @SerializedName("pull_funds")
     private PullFunds pullFunds;
 }

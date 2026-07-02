@@ -3,6 +3,7 @@ package com.checkout.issuing.disputes.requests;
 import com.checkout.common.Resource;
 import com.checkout.issuing.disputes.entities.DisputeEvidence;
 import com.checkout.issuing.disputes.entities.DisputeReasonChange;
+import com.checkout.issuing.disputes.entities.IssuingDisputeFraudDetails;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -45,4 +46,14 @@ public final class EscalateDisputeRequest extends Resource {
      * The change to the dispute reason and your justification for changing it
      */
     private DisputeReasonChange reasonChange;
+
+    /**
+     * Provides fraud-related details.
+     * This field is required if the dispute has a fraud-related reason code at the escalation stage,
+     * or after a requested reason code change to a fraud code.
+     * <p>
+     * [Optional]
+     * </p>
+     */
+    private IssuingDisputeFraudDetails fraudDetails;
 }

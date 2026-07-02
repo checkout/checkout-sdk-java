@@ -24,7 +24,6 @@ public final class PaymentInstrumentRequest {
 
     private InstrumentDocument document;
 
-    @SerializedName("instrument_details")
     private InstrumentDetails instrumentDetails;
 
 }

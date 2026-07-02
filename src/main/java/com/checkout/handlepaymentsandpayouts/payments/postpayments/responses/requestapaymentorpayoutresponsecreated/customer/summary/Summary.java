@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.customer.summary;
 
-import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,49 +20,42 @@ public final class Summary {
      * The date the customer registered.
      * [Optional]
      */
-    @SerializedName("registration_date")
     private String registrationDate;
 
     /**
      * The date of the customer's first transaction.
      * [Optional]
      */
-    @SerializedName("first_transaction_date")
     private String firstTransactionDate;
 
     /**
      * The date of the customer's last payment.
      * [Optional]
      */
-    @SerializedName("last_payment_date")
     private String lastPaymentDate;
 
     /**
      * The total number of orders made by the customer.
      * [Optional]
      */
-    @SerializedName("total_order_count")
     private Integer totalOrderCount;
 
     /**
      * The amount of the customer's last payment.
      * [Optional]
      */
-    @SerializedName("last_payment_amount")
     private Double lastPaymentAmount;
 
     /**
      * Specifies whether the customer is a premium customer.
      * [Optional]
      */
-    @SerializedName("is_premium_customer")
     private Boolean isPremiumCustomer;
 
     /**
      * Specifies whether the customer is a returning customer.
      * [Optional]
      */
-    @SerializedName("is_returning_customer")
     private Boolean isReturningCustomer;
 
     /**
@@ -76,7 +68,6 @@ public final class Summary {
      * The lifetime value is an indicator of how valuable the relationship with the customer is to your company.
      * [Optional]
      */
-    @SerializedName("lifetime_value")
     private Double lifetimeValue;
 
 }

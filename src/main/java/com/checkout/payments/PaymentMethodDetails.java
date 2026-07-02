@@ -1,6 +1,5 @@
 package com.checkout.payments;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +9,6 @@ import lombok.Data;
 @AllArgsConstructor
 public final class PaymentMethodDetails {
 
-    @SerializedName("display_name")
     private String displayName;
 
     private String type;

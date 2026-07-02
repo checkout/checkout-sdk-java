@@ -85,7 +85,6 @@ public final class KnetSource extends AbstractSource {
      * [Optional]
      * ^[0-9]{8}$
      */
-    @SerializedName("card_token")
     private String cardToken;
 
     /**
@@ -101,14 +100,12 @@ public final class KnetSource extends AbstractSource {
      * The payment identifier assigned by KNet Gateway.
      * [Optional]
      */
-    @SerializedName("knet_payment_id")
     private String knetPaymentId;
 
     /**
      * The state of the payment, returned by KNet Gateway after the customer is redirected from the payment page.
      * [Optional]
      */
-    @SerializedName("knet_result")
     private String knetResult;
 
     /**
@@ -116,35 +113,30 @@ public final class KnetSource extends AbstractSource {
      * populated in rare cases when the redirection from the payment page did not occur properly.
      * [Optional]
      */
-    @SerializedName("inquiry_result")
     private String inquiryResult;
 
     /**
      * The result transaction reference, given by some banks/institutions.
      * [Optional]
      */
-    @SerializedName("bank_reference")
     private String bankReference;
 
     /**
      * The transaction identifier assigned by KNet Gateway.
      * [Optional]
      */
-    @SerializedName("knet_transaction_id")
     private String knetTransactionId;
 
     /**
      * The resulting authorization code from the issuing bank.
      * [Optional]
      */
-    @SerializedName("auth_code")
     private String authCode;
 
     /**
      * The auth response code / reason code relating to the issuing bank authorization code.
      * [Optional]
      */
-    @SerializedName("auth_response_code")
     private String authResponseCode;
 
     /**
@@ -152,7 +144,6 @@ public final class KnetSource extends AbstractSource {
      * match the actual transaction date. The format is MMDD.
      * [Optional]
      */
-    @SerializedName("post_date")
     private String postDate;
 
     /**
@@ -171,7 +162,6 @@ public final class KnetSource extends AbstractSource {
      * The KNET text detail for the error, including an error code.
      * [Optional]
      */
-    @SerializedName("error_text")
     private String errorText;
 
     /**

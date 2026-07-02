@@ -1,6 +1,5 @@
 package com.checkout.payments.response;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,13 +15,10 @@ public final class PaymentRetryResponse {
      */
     private Boolean enabled;
 
-    @SerializedName("max_attempts")
     private Integer maxAttempts;
 
-    @SerializedName("ends_on")
     private Instant endsOn;
 
-    @SerializedName("next_attempt_on")
     private Instant nextAttemptOn;
 
 }

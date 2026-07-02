@@ -1,6 +1,5 @@
 package com.checkout.payments;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +17,5 @@ public final class AirlineData {
 
     private List<Passenger> passenger;
 
-    @SerializedName("flight_leg_details")
     private List<FlightLegDetails> flightLegDetails;
 }

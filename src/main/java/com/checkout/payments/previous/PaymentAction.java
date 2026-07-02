@@ -3,7 +3,6 @@ package com.checkout.payments.previous;
 import com.checkout.common.Resource;
 import com.checkout.payments.ActionType;
 import com.checkout.payments.Processing;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -21,20 +20,16 @@ public final class PaymentAction extends Resource {
 
     private ActionType type;
 
-    @SerializedName("processed_on")
     private Instant processedOn;
 
     private Long amount;
 
     private Boolean approved;
 
-    @SerializedName("auth_code")
     private String authCode;
 
-    @SerializedName("response_code")
     private String responseCode;
 
-    @SerializedName("response_summary")
     private String responseSummary;
 
     private Processing processing;

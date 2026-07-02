@@ -3,7 +3,6 @@ package com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unr
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.destination.AbstractDestination;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.destination.DestinationType;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.requests.unreferencedrefundrequest.destination.common.accountholder.AbstractAccountHolder;
-import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -32,7 +31,6 @@ public final class TokenDestination extends AbstractDestination {
      * The unreferenced refund destination account holder.
      * [Optional]
      */
-    @SerializedName("account_holder")
     private AbstractAccountHolder accountHolder;
 
     /**

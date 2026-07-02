@@ -1,7 +1,6 @@
 package com.checkout.risk.precapture;
 
 import com.checkout.common.Resource;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -11,7 +10,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class PreCaptureAssessmentResponse extends Resource {
 
-    @SerializedName("assessment_id")
     private String assessmentId;
 
     private PreCaptureResult result;

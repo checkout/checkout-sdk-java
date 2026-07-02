@@ -2,7 +2,6 @@ package com.checkout.handlepaymentsandpayouts.setups.entities.order;
 
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.contexts.PaymentContextsItems;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,13 +31,50 @@ public final class Order {
     /**
      * Information about sub-merchants involved in the order
      */
-    @SerializedName("sub_merchants")
     private List<OrderSubMerchant> subMerchants;
 
     /**
      * &gt;= 0
      * The discount amount applied to the order
      */
-    @SerializedName("discount_amount")
     private Long discountAmount;
+
+    /**
+     * The unique identifier for the invoice.
+     * [Optional]
+     */
+    private String invoiceId;
+
+    /**
+     * The total shipping amount for the order.
+     * [Optional]
+     * &gt;= 0
+     */
+    private Long shippingAmount;
+
+    /**
+     * The total surcharge amount for the order.
+     * [Optional]
+     * &gt;= 0
+     */
+    private Long surchargeAmount;
+
+    /**
+     * The total tax amount for the order.
+     * [Optional]
+     * &gt;= 0
+     */
+    private Long taxAmount;
+
+    /**
+     * The total tipping amount for the order.
+     * [Optional]
+     * &gt;= 0
+     */
+    private Long tippingAmount;
+
+    /**
+     * The amount allocations representing the sub-entities on whose behalf the payment is processed
+     */
+    private List<PaymentSetupAmountAllocation> amountAllocations;
 }

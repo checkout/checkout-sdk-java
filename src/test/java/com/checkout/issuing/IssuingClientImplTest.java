@@ -20,7 +20,6 @@ import com.checkout.issuing.cards.requests.credentials.CardCredentialsQuery;
 import com.checkout.issuing.cards.requests.enrollment.PasswordThreeDSEnrollmentRequest;
 import com.checkout.issuing.cards.requests.enrollment.ThreeDSUpdateRequest;
 import com.checkout.issuing.cards.requests.renew.RenewCardRequest;
-import com.checkout.issuing.cards.requests.revocation.ScheduleRevocationRequest;
 import com.checkout.issuing.cards.requests.revoke.RevokeCardRequest;
 import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
 import com.checkout.issuing.cards.requests.update.UpdateCardRequest;
@@ -49,6 +48,7 @@ import com.checkout.issuing.controls.responses.controlprofile.ControlProfilesQue
 import com.checkout.issuing.disputes.requests.CreateDisputeRequest;
 import com.checkout.issuing.disputes.requests.EscalateDisputeRequest;
 import com.checkout.issuing.disputes.requests.SubmitDisputeRequest;
+import com.checkout.issuing.disputes.requests.AmendDisputeRequest;
 import com.checkout.issuing.disputes.responses.DisputeResponse;
 import com.checkout.issuing.transactions.requests.TransactionsQuery;
 import com.checkout.issuing.transactions.responses.TransactionsListResponse;
@@ -408,39 +408,6 @@ public class IssuingClientImplTest {
             final CompletableFuture<RenewCardResponse> future = client.renewCard("card_id", request);
 
             validateRenewCardResponse(response, future.get());
-        }
-
-        @Test
-        void shouldScheduleCardRevocation() throws ExecutionException, InterruptedException {
-            final ScheduleRevocationRequest request = createScheduleRevocationRequest();
-            final VoidResponse response = createVoidResponse();
-
-            when(apiClient.postAsync(
-                    "issuing/cards/card_id/schedule-revocation",
-                    authorization,
-                    VoidResponse.class,
-                    request,
-                    null
-            )).thenReturn(CompletableFuture.completedFuture(response));
-
-            final CompletableFuture<VoidResponse> future = client.scheduleCardRevocation("card_id", request);
-
-            validateVoidResponse(response, future.get());
-        }
-
-        @Test
-        void shouldDeleteScheduledRevocation() throws ExecutionException, InterruptedException {
-            final VoidResponse response = createVoidResponse();
-
-            when(apiClient.deleteAsync(
-                    "issuing/cards/card_id/schedule-revocation",
-                    authorization,
-                    VoidResponse.class
-            )).thenReturn(CompletableFuture.completedFuture(response));
-
-            final CompletableFuture<VoidResponse> future = client.deleteScheduledRevocation("card_id");
-
-            validateVoidResponse(response, future.get());
         }
     }
 
@@ -952,6 +919,24 @@ public class IssuingClientImplTest {
 
             validateDisputeResponse(response, future.get());
         }
+
+        @Test
+        void shouldAmendDispute() throws ExecutionException, InterruptedException {
+            final AmendDisputeRequest request = createAmendDisputeRequest();
+            final DisputeResponse response = createDisputeResponse();
+
+            when(apiClient.postAsync(
+                    "issuing/disputes/dispute_id/amend",
+                    authorization,
+                    DisputeResponse.class,
+                    request,
+                    "idempotencyKey"
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            final CompletableFuture<DisputeResponse> future = client.amendDispute("dispute_id", "idempotencyKey", request);
+
+            validateDisputeResponse(response, future.get());
+        }
     }
 
     // Synchronous methods
@@ -1252,39 +1237,6 @@ public class IssuingClientImplTest {
             final RenewCardResponse actualResponse = client.renewCardSync("card_id", request);
 
             validateRenewCardResponse(expectedResponse, actualResponse);
-        }
-
-        @Test
-        void shouldScheduleCardRevocationSync() {
-            final ScheduleRevocationRequest request = createScheduleRevocationRequest();
-            final VoidResponse expectedResponse = createVoidResponse();
-
-            when(apiClient.post(
-                    "issuing/cards/card_id/schedule-revocation",
-                    authorization,
-                    VoidResponse.class,
-                    request,
-                    null
-            )).thenReturn(expectedResponse);
-
-            final VoidResponse actualResponse = client.scheduleCardRevocationSync("card_id", request);
-
-            validateVoidResponse(expectedResponse, actualResponse);
-        }
-
-        @Test
-        void shouldDeleteScheduledRevocationSync() {
-            final VoidResponse expectedResponse = createVoidResponse();
-
-            when(apiClient.delete(
-                    "issuing/cards/card_id/schedule-revocation",
-                    authorization,
-                    VoidResponse.class
-            )).thenReturn(expectedResponse);
-
-            final VoidResponse actualResponse = client.deleteScheduledRevocationSync("card_id");
-
-            validateVoidResponse(expectedResponse, actualResponse);
         }
     }
 
@@ -1794,6 +1746,24 @@ public class IssuingClientImplTest {
 
             validateDisputeResponse(expectedResponse, actualResponse);
         }
+
+        @Test
+        void shouldAmendDisputeSync() {
+            final AmendDisputeRequest request = createAmendDisputeRequest();
+            final DisputeResponse expectedResponse = createDisputeResponse();
+
+            when(apiClient.post(
+                    "issuing/disputes/dispute_id/amend",
+                    authorization,
+                    DisputeResponse.class,
+                    request,
+                    "idempotencyKey"
+            )).thenReturn(expectedResponse);
+
+            final DisputeResponse actualResponse = client.amendDisputeSync("dispute_id", "idempotencyKey", request);
+
+            validateDisputeResponse(expectedResponse, actualResponse);
+        }
     }
 
     @Nested
@@ -1972,10 +1942,6 @@ public class IssuingClientImplTest {
         return mock(RenewCardResponse.class);
     }
 
-    private ScheduleRevocationRequest createScheduleRevocationRequest() {
-        return mock(ScheduleRevocationRequest.class);
-    }
-
     private CardControlRequest createCardControlRequest() {
         return mock(CardControlRequest.class);
     }
@@ -2050,6 +2016,10 @@ public class IssuingClientImplTest {
 
     private SubmitDisputeRequest createSubmitDisputeRequest() {
         return mock(SubmitDisputeRequest.class);
+    }
+
+    private AmendDisputeRequest createAmendDisputeRequest() {
+        return mock(AmendDisputeRequest.class);
     }
 
     private void validateCardholderResponse(CardholderResponse expected, CardholderResponse actual) {

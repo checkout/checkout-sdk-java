@@ -1,6 +1,5 @@
 package com.checkout.payments.request;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +21,6 @@ public final class Device {
      * [Optional]
      * &lt;= 2048
      */
-    @SerializedName("user_agent")
     private String userAgent;
 
     /**
@@ -58,7 +56,6 @@ public final class Device {
      * Specifies if the device is running in a virtual machine.
      * [Optional]
      */
-    @SerializedName("virtual_machine")
     private Boolean virtualMachine;
 
     /**
@@ -84,7 +81,6 @@ public final class Device {
      * property.
      * [Optional]
      */
-    @SerializedName("java_enabled")
     private Boolean javaEnabled;
 
     /**
@@ -94,7 +90,6 @@ public final class Device {
      * version, this field is ignored.
      * [Optional]
      */
-    @SerializedName("javascript_enabled")
     private Boolean javascriptEnabled;
 
     /**
@@ -111,7 +106,6 @@ public final class Device {
      * [Optional]
      * [ 1 .. 2 ] characters
      */
-    @SerializedName("color_depth")
     private String colorDepth;
 
     /**
@@ -119,7 +113,6 @@ public final class Device {
      * [Optional]
      * [ 1 .. 6 ] characters
      */
-    @SerializedName("screen_height")
     private String screenHeight;
 
     /**
@@ -127,7 +120,6 @@ public final class Device {
      * [Optional]
      * [ 1 .. 6 ] characters
      */
-    @SerializedName("screen_width")
     private String screenWidth;
 
     /**
@@ -135,14 +127,12 @@ public final class Device {
      * more accurate information about the customer's browser.
      * [Optional]
      */
-    @SerializedName("user_agent_client_hint")
     private String userAgentClientHint;
 
     /**
      * Indicates whether the Payments API is enabled for all parent frames.
      * [Optional]
      */
-    @SerializedName("iframe_payment_allowed")
     private Boolean iframePaymentAllowed;
 
     /**
@@ -150,7 +140,6 @@ public final class Device {
      * [Optional]
      * &lt;= 2048
      */
-    @SerializedName("accept_header")
     private String acceptHeader;
 
 }

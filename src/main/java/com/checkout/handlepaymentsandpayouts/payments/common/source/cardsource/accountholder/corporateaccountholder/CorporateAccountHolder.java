@@ -3,7 +3,6 @@ package com.checkout.handlepaymentsandpayouts.payments.common.source.cardsource.
 import com.checkout.handlepaymentsandpayouts.payments.common.source.cardsource.accountholder.AbstractAccountHolder;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.cardsource.accountholder.AccountHolderType;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.cardsource.accountholder.common.AccountNameInquiryType;
-import com.google.gson.annotations.SerializedName;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -28,14 +27,12 @@ public final class CorporateAccountHolder extends AbstractAccountHolder {
      * [Required]
      * &lt;= 35
      */
-    @SerializedName("company_name")
     private String companyName;
 
     /**
      * The Account Name Inquiry check result.
      * [Required]
      */
-    @SerializedName("account_name_inquiry")
     private AccountNameInquiryType accountNameInquiry;
 
     /**
