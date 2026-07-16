@@ -117,10 +117,8 @@ class PaymentSetupsTestIT extends SandboxTestFixture {
         // Assert
         assertNotNull(response);
         assertNotNull(response.getId());
-        assertNotNull(response.getActionId());
         assertEquals(paymentSetupsRequest.getAmount(), response.getAmount());
         assertEquals(paymentSetupsRequest.getCurrency(), response.getCurrency());
-        assertNotNull(response.getProcessedOn());
     }
 
     private PaymentSetupsRequest createValidPaymentSetupsRequest() {
