@@ -2,21 +2,24 @@ package com.checkout.handlepaymentsandpayouts.setups.responses;
 
 import com.checkout.common.Resource;
 import com.checkout.common.Currency;
-import com.checkout.payments.PaymentStatus;
-import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.threeds.Threeds;
-import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.risk.Risk;
-import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.customer.Customer;
-import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.processing.Processing;
-import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.balances.Balances;
-import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.subscription.Subscription;
-import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.retry.Retry;
-import com.google.gson.annotations.SerializedName;
+import com.checkout.handlepaymentsandpayouts.setups.entities.accountFundingTransaction.PaymentSetupAccountFundingTransaction;
+import com.checkout.handlepaymentsandpayouts.setups.entities.billing.PaymentSetupBilling;
+import com.checkout.handlepaymentsandpayouts.setups.entities.billingDescriptor.PaymentSetupBillingDescriptor;
+import com.checkout.handlepaymentsandpayouts.setups.entities.customer.Customer;
+import com.checkout.handlepaymentsandpayouts.setups.entities.industry.Industry;
+import com.checkout.handlepaymentsandpayouts.setups.entities.order.Order;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
+import com.checkout.handlepaymentsandpayouts.setups.entities.presentmentDetails.PaymentSetupPresentmentDetails;
+import com.checkout.handlepaymentsandpayouts.setups.entities.settings.Settings;
+import com.checkout.handlepaymentsandpayouts.setups.entities.terminal.PaymentSetupTerminal;
+import com.checkout.payments.PaymentType;
+
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import java.time.Instant;
 
 /**
  * Payment setup confirmation response
@@ -29,144 +32,121 @@ import java.time.Instant;
 public final class PaymentSetupsConfirmResponse extends Resource {
 
     /**
-     * The payment's unique identifier.
+     * The unique identifier of the payment setup.
      * [Optional]
      */
     private String id;
 
     /**
-     * The unique identifier for the action performed against this payment.
-     * [Optional]
+     * The processing channel used for the payment setup.
+     * [Required]
+     * Pattern: ^(pc)_(\w{26})$
      */
-    private String actionId;
+    private String processingChannelId;
 
     /**
-     * The payment amount.
-     * [Optional]
+     * The payment amount in the minor currency unit.
+     * [Required]
      */
     private Long amount;
 
     /**
-     * The three-letter ISO currency code of the payment.
-     * [Optional]
+     * The three-letter ISO currency code.
+     * [Required]
      */
     private Currency currency;
 
     /**
-     * Whether or not the authorization or capture was successful.
+     * The type of payment.
      * [Optional]
+     * Enum: "Regular" "Recurring" "MOTO" "Installment" "PayLater" "Unscheduled"
      */
-    private Boolean approved;
+    private PaymentType paymentType;
 
     /**
-     * The status of the payment.
-     * [Optional]
-     */
-    private PaymentStatus status;
-
-    /**
-     * The Gateway response code.
-     * [Optional]
-     */
-    private String responseCode;
-
-    /**
-     * The date and time at which the payment was processed.
-     * [Optional]
-     * Format: date-time (ISO 8601)
-     */
-    private Instant processedOn;
-
-    /**
-     * The full amount from the original authorization, if a partial authorization was requested and approved.
-     * [Optional]
-     */
-    private Long amountRequested;
-
-    /**
-     * The acquirer authorization code if the payment was authorized.
-     * [Optional]
-     */
-    private String authCode;
-
-    /**
-     * The Gateway response summary.
-     * [Optional]
-     */
-    private String responseSummary;
-
-    /**
-     * The timestamp for when the authorization's validity period expires.
-     * [Optional]
-     * Format: date-time (ISO 8601)
-     */
-    private String expiresOn;
-
-    /**
-     * Provides 3D Secure enrollment status if the payment was downgraded to non-3D Secure.
-     * [Optional]
-     */
-    @SerializedName("3ds")
-    private Threeds threeDSecure;
-
-    /**
-     * Returns the payment's risk assessment results.
-     * [Optional]
-     */
-    private Risk risk;
-
-    /**
-     * The source of the payment.
-     * [Optional]
-     */
-    private PaymentSetupSource source;
-
-    /**
-     * The customer associated with the payment, if provided in the request.
-     * [Optional]
-     */
-    private Customer customer;
-
-    /**
-     * The payment balances.
-     * [Optional]
-     */
-    private Balances balances;
-
-    /**
-     * Your reference for the payment.
+     * A reference you can use to identify the payment setup, such as an order number.
      * [Optional]
      */
     private String reference;
 
     /**
-     * The details of the subscription.
+     * A description of the payment setup.
      * [Optional]
      */
-    private Subscription subscription;
+    private String description;
 
     /**
-     * Returns information related to the processing of the payment.
+     * The payment method configuration for this setup.
      * [Optional]
      */
-    private Processing processing;
+    private PaymentMethods paymentMethods;
 
     /**
-     * The final Electronic Commerce Indicator (ECI) security level used to authorize the payment.
-     * Applicable for 3D Secure and network token payments.
+     * The payment setup configuration settings.
      * [Optional]
      */
-    private String eci;
+    private Settings settings;
 
     /**
-     * The scheme transaction identifier.
+     * Details about the customer.
      * [Optional]
      */
-    private String schemeId;
+    private Customer customer;
 
     /**
-     * The retry information.
+     * Details about the order associated with this payment setup.
      * [Optional]
      */
-    private Retry retry;
+    private Order order;
+
+    /**
+     * Industry-specific information for specialized payment scenarios.
+     * [Optional]
+     */
+    private Industry industry;
+
+    /**
+     * The billing details for the payment.
+     * [Optional]
+     */
+    private PaymentSetupBilling billing;
+
+    /**
+     * An ordered list of available payment method names. The order indicates the recommended
+     * presentation priority, with the first item being the highest priority.
+     * [Optional]
+     */
+    private List<String> availablePaymentMethods;
+
+    /**
+     * Account funding transaction details for the payment.
+     * [Optional]
+     */
+    private PaymentSetupAccountFundingTransaction accountFundingTransaction;
+
+    /**
+     * The billing descriptor for the payment.
+     * [Optional]
+     */
+    private PaymentSetupBillingDescriptor billingDescriptor;
+
+    /**
+     * The latest payment response from the gateway, populated when auto-confirm succeeds during setup
+     * creation. For the full response schema, see Request a Payment or Payout.
+     * [Optional] readOnly
+     */
+    private Object latestPayment;
+
+    /**
+     * The amount and currency to present to the customer, when the settlement currency differs from the
+     * customer-facing currency.
+     * [Optional]
+     */
+    private PaymentSetupPresentmentDetails presentmentDetails;
+
+    /**
+     * Terminal details.
+     * [Optional]
+     */
+    private PaymentSetupTerminal terminal;
 }
