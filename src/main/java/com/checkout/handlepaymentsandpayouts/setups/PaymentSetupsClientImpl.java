@@ -68,15 +68,15 @@ public class PaymentSetupsClientImpl extends AbstractClient implements PaymentSe
     /**
      * Confirms a payment setup.
      *
-     * @param id                    The payment setup ID
-     * @param paymentMethodOptionId The payment method option ID
+     * @param id                The payment setup ID
+     * @param paymentMethodName The name of the payment method to process the payment with (for example, {@code tabby}, {@code klarna}, {@code card})
      * @return CompletableFuture containing the payment setup confirmation response
      */
     @Override
     public CompletableFuture<PaymentSetupsConfirmResponse> confirmPaymentSetup(final String id,
-            final String paymentMethodOptionId) {
-        validateParams("id", id, "paymentMethodOptionId", paymentMethodOptionId);
-        return apiClient.postAsync(buildPath(PAYMENT_SETUPS_PATH, id, CONFIRM_PATH, paymentMethodOptionId),
+            final String paymentMethodName) {
+        validateParams("id", id, "paymentMethodName", paymentMethodName);
+        return apiClient.postAsync(buildPath(PAYMENT_SETUPS_PATH, id, CONFIRM_PATH, paymentMethodName),
                 sdkAuthorization(), PaymentSetupsConfirmResponse.class, null, null);
     }
 }

@@ -106,12 +106,12 @@ class PaymentSetupsTestIT extends SandboxTestFixture {
                 checkoutApi.paymentSetupsClient().createPaymentSetup(paymentSetupsRequest);
         final PaymentSetupsResponse createResponse = createFuture.join();
 
-        // This would require extracting a payment method option ID from the create response
-        final String paymentMethodOptionId = "opt_test_12345"; // This should come from the payment setup response
+        // The name of the payment method to process the payment with (for example, tabby, klarna, card)
+        final String paymentMethodName = "card";
 
         // Act
         final CompletableFuture<PaymentSetupsConfirmResponse> confirmFuture =
-                checkoutApi.paymentSetupsClient().confirmPaymentSetup(createResponse.getId(), paymentMethodOptionId);
+                checkoutApi.paymentSetupsClient().confirmPaymentSetup(createResponse.getId(), paymentMethodName);
         final PaymentSetupsConfirmResponse response = confirmFuture.join();
 
         // Assert

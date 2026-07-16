@@ -40,8 +40,8 @@ public interface PaymentSetupsClient {
      * Confirms a payment setup.
      *
      * @param id The payment setup ID
-     * @param paymentMethodOptionId The payment method option ID
+     * @param paymentMethodName The name of the payment method to process the payment with (for example, {@code tabby}, {@code klarna}, {@code card})
      * @return CompletableFuture containing the payment setup confirmation response
      */
-    CompletableFuture<PaymentSetupsConfirmResponse> confirmPaymentSetup(String id, String paymentMethodOptionId);
+    CompletableFuture<PaymentSetupsConfirmResponse> confirmPaymentSetup(String id, String paymentMethodName);
 }

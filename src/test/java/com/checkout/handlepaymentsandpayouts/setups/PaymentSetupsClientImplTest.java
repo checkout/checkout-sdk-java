@@ -95,15 +95,15 @@ class PaymentSetupsClientImplTest {
     @Test
     void shouldConfirmPaymentSetup() throws ExecutionException, InterruptedException {
         final String paymentSetupId = "ps_test_123456789";
-        final String paymentMethodOptionId = "pmo_test_987654321";
+        final String paymentMethodName = "card";
         final PaymentSetupsConfirmResponse response = mock(PaymentSetupsConfirmResponse.class);
 
-        when(apiClient.postAsync(eq("payments/setups/" + paymentSetupId + "/confirm/" + paymentMethodOptionId), 
+        when(apiClient.postAsync(eq("payments/setups/" + paymentSetupId + "/confirm/" + paymentMethodName),
                 eq(authorization), eq(PaymentSetupsConfirmResponse.class), isNull(), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
-        final CompletableFuture<PaymentSetupsConfirmResponse> future = 
-                client.confirmPaymentSetup(paymentSetupId, paymentMethodOptionId);
+        final CompletableFuture<PaymentSetupsConfirmResponse> future =
+                client.confirmPaymentSetup(paymentSetupId, paymentMethodName);
 
         assertNotNull(future.get());
         assertEquals(response, future.get());
