@@ -86,7 +86,7 @@ public class ForwardClientImplTest {
         final CreateSecretRequest request = createSecretRequest();
         final SecretResponse response = mock(SecretResponse.class);
 
-        when(apiClient.postAsync(eq("forward/secrets"), eq(authorization), eq(SecretResponse.class),
+        when(apiClient.postAsync(eq("secrets"), eq(authorization), eq(SecretResponse.class),
                 eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
@@ -99,7 +99,7 @@ public class ForwardClientImplTest {
     void shouldListSecrets() throws ExecutionException, InterruptedException {
         final SecretsListResponse response = mock(SecretsListResponse.class);
 
-        when(apiClient.getAsync(eq("forward/secrets"), eq(authorization), eq(SecretsListResponse.class)))
+        when(apiClient.getAsync(eq("secrets"), eq(authorization), eq(SecretsListResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<SecretsListResponse> future = client.listSecrets();
@@ -169,7 +169,7 @@ public class ForwardClientImplTest {
         final CreateSecretRequest request = createSecretRequest();
         final SecretResponse response = mock(SecretResponse.class);
 
-        when(apiClient.post(eq("forward/secrets"), eq(authorization), eq(SecretResponse.class),
+        when(apiClient.post(eq("secrets"), eq(authorization), eq(SecretResponse.class),
                 eq(request), isNull()))
                 .thenReturn(response);
 
@@ -182,7 +182,7 @@ public class ForwardClientImplTest {
     void shouldListSecretsSync() throws ExecutionException, InterruptedException {
         final SecretsListResponse response = mock(SecretsListResponse.class);
 
-        when(apiClient.get(eq("forward/secrets"), eq(authorization), eq(SecretsListResponse.class)))
+        when(apiClient.get(eq("secrets"), eq(authorization), eq(SecretsListResponse.class)))
                 .thenReturn(response);
 
         final SecretsListResponse result = client.listSecretsSync();

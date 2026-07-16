@@ -40,12 +40,12 @@ public class ForwardClientImpl extends AbstractClient implements ForwardClient {
     @Override
     public CompletableFuture<SecretResponse> createSecret(final CreateSecretRequest createSecretRequest) {
         CheckoutUtils.validateParams("createSecretRequest", createSecretRequest);
-        return apiClient.postAsync(buildPath(FORWARD_PATH, SECRETS_PATH), sdkAuthorization(), SecretResponse.class, createSecretRequest, null);
+        return apiClient.postAsync(SECRETS_PATH, sdkAuthorization(), SecretResponse.class, createSecretRequest, null);
     }
 
     @Override
     public CompletableFuture<SecretsListResponse> listSecrets() {
-        return apiClient.getAsync(buildPath(FORWARD_PATH, SECRETS_PATH), sdkAuthorization(), SecretsListResponse.class);
+        return apiClient.getAsync(SECRETS_PATH, sdkAuthorization(), SecretsListResponse.class);
     }
 
     @Override
@@ -76,12 +76,12 @@ public class ForwardClientImpl extends AbstractClient implements ForwardClient {
     @Override
     public SecretResponse createSecretSync(final CreateSecretRequest createSecretRequest) {
         CheckoutUtils.validateParams("createSecretRequest", createSecretRequest);
-        return apiClient.post(buildPath(FORWARD_PATH, SECRETS_PATH), sdkAuthorization(), SecretResponse.class, createSecretRequest, null);
+        return apiClient.post(SECRETS_PATH, sdkAuthorization(), SecretResponse.class, createSecretRequest, null);
     }
 
     @Override
     public SecretsListResponse listSecretsSync() {
-        return apiClient.get(buildPath(FORWARD_PATH, SECRETS_PATH), sdkAuthorization(), SecretsListResponse.class);
+        return apiClient.get(SECRETS_PATH, sdkAuthorization(), SecretsListResponse.class);
     }
 
     @Override
