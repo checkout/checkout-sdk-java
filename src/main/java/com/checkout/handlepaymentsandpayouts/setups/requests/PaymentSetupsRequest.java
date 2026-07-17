@@ -8,7 +8,10 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.customer.Customer;
 import com.checkout.handlepaymentsandpayouts.setups.entities.industry.Industry;
 import com.checkout.handlepaymentsandpayouts.setups.entities.order.Order;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
+import com.checkout.handlepaymentsandpayouts.setups.entities.billingDescriptor.PaymentSetupBillingDescriptor;
+import com.checkout.handlepaymentsandpayouts.setups.entities.presentmentDetails.PaymentSetupPresentmentDetails;
 import com.checkout.handlepaymentsandpayouts.setups.entities.settings.Settings;
+import com.checkout.handlepaymentsandpayouts.setups.entities.terminal.PaymentSetupTerminal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -104,4 +107,23 @@ public final class PaymentSetupsRequest {
      * [Optional]
      */
     private PaymentSetupAccountFundingTransaction accountFundingTransaction;
+
+    /**
+     * The billing descriptor for the payment.
+     * [Optional]
+     */
+    private PaymentSetupBillingDescriptor billingDescriptor;
+
+    /**
+     * The amount and currency to present to the customer, when the settlement currency differs from the
+     * customer-facing currency.
+     * [Optional]
+     */
+    private PaymentSetupPresentmentDetails presentmentDetails;
+
+    /**
+     * Terminal details.
+     * [Optional]
+     */
+    private PaymentSetupTerminal terminal;
 }
