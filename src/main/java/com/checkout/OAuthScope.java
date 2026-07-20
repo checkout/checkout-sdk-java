@@ -53,6 +53,7 @@ public enum OAuthScope {
     TRANSFERS_CREATE("transfers:create"),
     TRANSFERS_VIEW("transfers:view"),
     VAULT("vault"),
+    VAULT_APME_ENROLLMENT("vault:apme-enrollment"),
     VAULT_CARD_METADATA("vault:card-metadata"),
     VAULT_INSTRUMENTS("vault:instruments"),
     VAULT_TOKENIZATION("vault:tokenization"),
