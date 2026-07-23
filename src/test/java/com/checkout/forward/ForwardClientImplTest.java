@@ -113,7 +113,7 @@ public class ForwardClientImplTest {
         final UpdateSecretRequest request = createUpdateSecretRequest();
         final SecretResponse response = mock(SecretResponse.class);
 
-        when(apiClient.patchAsync(eq("forward/secrets/" + name), eq(authorization), eq(SecretResponse.class),
+        when(apiClient.patchAsync(eq("secrets/" + name), eq(authorization), eq(SecretResponse.class),
                 eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
@@ -127,7 +127,7 @@ public class ForwardClientImplTest {
         final String name = "secret_name";
         final EmptyResponse response = mock(EmptyResponse.class);
 
-        when(apiClient.deleteAsync(eq("forward/secrets/" + name), eq(authorization)))
+        when(apiClient.deleteAsync(eq("secrets/" + name), eq(authorization)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<EmptyResponse> future = client.deleteSecret(name);
@@ -196,7 +196,7 @@ public class ForwardClientImplTest {
         final UpdateSecretRequest request = createUpdateSecretRequest();
         final SecretResponse response = mock(SecretResponse.class);
 
-        when(apiClient.patch(eq("forward/secrets/" + name), eq(authorization), eq(SecretResponse.class),
+        when(apiClient.patch(eq("secrets/" + name), eq(authorization), eq(SecretResponse.class),
                 eq(request), isNull()))
                 .thenReturn(response);
 
@@ -210,7 +210,7 @@ public class ForwardClientImplTest {
         final String name = "secret_name";
         final EmptyResponse response = mock(EmptyResponse.class);
 
-        when(apiClient.delete(eq("forward/secrets/" + name), eq(authorization)))
+        when(apiClient.delete(eq("secrets/" + name), eq(authorization)))
                 .thenReturn(response);
 
         final EmptyResponse result = client.deleteSecretSync(name);

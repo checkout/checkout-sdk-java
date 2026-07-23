@@ -51,13 +51,13 @@ public class ForwardClientImpl extends AbstractClient implements ForwardClient {
     @Override
     public CompletableFuture<SecretResponse> updateSecret(final String name, final UpdateSecretRequest updateSecretRequest) {
         CheckoutUtils.validateParams("name", name,"updateSecretRequest", updateSecretRequest);
-        return apiClient.patchAsync(buildPath(FORWARD_PATH, SECRETS_PATH, name), sdkAuthorization(), SecretResponse.class, updateSecretRequest, null);
+        return apiClient.patchAsync(buildPath(SECRETS_PATH, name), sdkAuthorization(), SecretResponse.class, updateSecretRequest, null);
     }
 
     @Override
     public CompletableFuture<EmptyResponse> deleteSecret(final String name) {
         CheckoutUtils.validateParams("name", name);
-        return apiClient.deleteAsync(buildPath(FORWARD_PATH, SECRETS_PATH, name), sdkAuthorization());
+        return apiClient.deleteAsync(buildPath(SECRETS_PATH, name), sdkAuthorization());
     }
 
     // Synchronous methods
@@ -87,13 +87,13 @@ public class ForwardClientImpl extends AbstractClient implements ForwardClient {
     @Override
     public SecretResponse updateSecretSync(final String name, final UpdateSecretRequest updateSecretRequest) {
         CheckoutUtils.validateParams("name", name, "updateSecretRequest", updateSecretRequest);
-        return apiClient.patch(buildPath(FORWARD_PATH, SECRETS_PATH, name), sdkAuthorization(), SecretResponse.class, updateSecretRequest, null);
+        return apiClient.patch(buildPath(SECRETS_PATH, name), sdkAuthorization(), SecretResponse.class, updateSecretRequest, null);
     }
 
     @Override
     public EmptyResponse deleteSecretSync(final String name) {
         CheckoutUtils.validateParams("name", name);
-        return apiClient.delete(buildPath(FORWARD_PATH, SECRETS_PATH, name), sdkAuthorization());
+        return apiClient.delete(buildPath(SECRETS_PATH, name), sdkAuthorization());
     }
 
 }
