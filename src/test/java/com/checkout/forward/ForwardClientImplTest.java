@@ -86,7 +86,7 @@ public class ForwardClientImplTest {
         final CreateSecretRequest request = createSecretRequest();
         final SecretResponse response = mock(SecretResponse.class);
 
-        when(apiClient.postAsync(eq("forward/secrets"), eq(authorization), eq(SecretResponse.class),
+        when(apiClient.postAsync(eq("secrets"), eq(authorization), eq(SecretResponse.class),
                 eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
@@ -99,7 +99,7 @@ public class ForwardClientImplTest {
     void shouldListSecrets() throws ExecutionException, InterruptedException {
         final SecretsListResponse response = mock(SecretsListResponse.class);
 
-        when(apiClient.getAsync(eq("forward/secrets"), eq(authorization), eq(SecretsListResponse.class)))
+        when(apiClient.getAsync(eq("secrets"), eq(authorization), eq(SecretsListResponse.class)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<SecretsListResponse> future = client.listSecrets();
@@ -113,7 +113,7 @@ public class ForwardClientImplTest {
         final UpdateSecretRequest request = createUpdateSecretRequest();
         final SecretResponse response = mock(SecretResponse.class);
 
-        when(apiClient.patchAsync(eq("forward/secrets/" + name), eq(authorization), eq(SecretResponse.class),
+        when(apiClient.patchAsync(eq("secrets/" + name), eq(authorization), eq(SecretResponse.class),
                 eq(request), isNull()))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
@@ -127,7 +127,7 @@ public class ForwardClientImplTest {
         final String name = "secret_name";
         final EmptyResponse response = mock(EmptyResponse.class);
 
-        when(apiClient.deleteAsync(eq("forward/secrets/" + name), eq(authorization)))
+        when(apiClient.deleteAsync(eq("secrets/" + name), eq(authorization)))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<EmptyResponse> future = client.deleteSecret(name);
@@ -169,7 +169,7 @@ public class ForwardClientImplTest {
         final CreateSecretRequest request = createSecretRequest();
         final SecretResponse response = mock(SecretResponse.class);
 
-        when(apiClient.post(eq("forward/secrets"), eq(authorization), eq(SecretResponse.class),
+        when(apiClient.post(eq("secrets"), eq(authorization), eq(SecretResponse.class),
                 eq(request), isNull()))
                 .thenReturn(response);
 
@@ -182,7 +182,7 @@ public class ForwardClientImplTest {
     void shouldListSecretsSync() throws ExecutionException, InterruptedException {
         final SecretsListResponse response = mock(SecretsListResponse.class);
 
-        when(apiClient.get(eq("forward/secrets"), eq(authorization), eq(SecretsListResponse.class)))
+        when(apiClient.get(eq("secrets"), eq(authorization), eq(SecretsListResponse.class)))
                 .thenReturn(response);
 
         final SecretsListResponse result = client.listSecretsSync();
@@ -196,7 +196,7 @@ public class ForwardClientImplTest {
         final UpdateSecretRequest request = createUpdateSecretRequest();
         final SecretResponse response = mock(SecretResponse.class);
 
-        when(apiClient.patch(eq("forward/secrets/" + name), eq(authorization), eq(SecretResponse.class),
+        when(apiClient.patch(eq("secrets/" + name), eq(authorization), eq(SecretResponse.class),
                 eq(request), isNull()))
                 .thenReturn(response);
 
@@ -210,7 +210,7 @@ public class ForwardClientImplTest {
         final String name = "secret_name";
         final EmptyResponse response = mock(EmptyResponse.class);
 
-        when(apiClient.delete(eq("forward/secrets/" + name), eq(authorization)))
+        when(apiClient.delete(eq("secrets/" + name), eq(authorization)))
                 .thenReturn(response);
 
         final EmptyResponse result = client.deleteSecretSync(name);
