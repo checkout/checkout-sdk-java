@@ -60,6 +60,12 @@ class AccountsClientImplTest {
 
     private AccountsClient accountsClient;
 
+    private static final Headers SCHEMA_V3_HEADERS =
+            Headers.builder().accept("application/json;schema_version=3.0").build();
+
+    private static final Headers SCHEMA_V2_HEADERS =
+            Headers.builder().accept("application/json;schema_version=2.0").build();
+
     @BeforeEach
     void setUp() {
         lenient().when(sdkCredentials.getAuthorization(SdkAuthorizationType.SECRET_KEY_OR_OAUTH)).thenReturn(authorization);
@@ -207,7 +213,7 @@ class AccountsClientImplTest {
         final OnboardEntityRequest request = createOnboardEntityRequest();
         final OnboardEntityResponse expectedResponse = createOnboardEntityResponse();
 
-        when(apiClient.postAsync(eq("accounts/entities"), eq(authorization), eq(OnboardEntityResponse.class), eq(request), isNull()))
+        when(apiClient.postAsync(eq("accounts/entities"), eq(authorization), eq(OnboardEntityResponse.class), eq(request), isNull(), eq(SCHEMA_V3_HEADERS)))
                 .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<OnboardEntityResponse> future = accountsClient.createEntity(request);
@@ -219,7 +225,7 @@ class AccountsClientImplTest {
     void shouldGetEntity() throws ExecutionException, InterruptedException {
         final OnboardEntityDetailsResponse expectedResponse = createOnboardEntityDetailsResponse();
 
-        when(apiClient.getAsync("accounts/entities/entity_id", authorization, OnboardEntityDetailsResponse.class))
+        when(apiClient.getAsync("accounts/entities/entity_id", authorization, OnboardEntityDetailsResponse.class, SCHEMA_V3_HEADERS))
                 .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<OnboardEntityDetailsResponse> future = accountsClient.getEntity("entity_id");
@@ -232,10 +238,60 @@ class AccountsClientImplTest {
         final OnboardEntityRequest request = createOnboardEntityRequest();
         final OnboardEntityResponse expectedResponse = createOnboardEntityResponse();
 
-        when(apiClient.putAsync(eq("accounts/entities/entity_id"), eq(authorization), eq(OnboardEntityResponse.class), eq(request)))
+        when(apiClient.putAsync(eq("accounts/entities/entity_id"), eq(authorization), eq(OnboardEntityResponse.class), eq(request), eq(SCHEMA_V3_HEADERS)))
                 .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<OnboardEntityResponse> future = accountsClient.updateEntity(request, "entity_id");
+
+        validateResponse(expectedResponse, future.get());
+    }
+
+    @Test
+    void shouldCreateEntityWithSchemaVersionOverride() throws ExecutionException, InterruptedException {
+        final OnboardEntityRequest request = createOnboardEntityRequest();
+        final OnboardEntityResponse expectedResponse = createOnboardEntityResponse();
+
+        when(apiClient.postAsync(eq("accounts/entities"), eq(authorization), eq(OnboardEntityResponse.class), eq(request), isNull(), eq(SCHEMA_V2_HEADERS)))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<OnboardEntityResponse> future = accountsClient.createEntity(request, "2.0");
+
+        validateResponse(expectedResponse, future.get());
+    }
+
+    @Test
+    void shouldGetEntityWithSchemaVersionOverride() throws ExecutionException, InterruptedException {
+        final OnboardEntityDetailsResponse expectedResponse = createOnboardEntityDetailsResponse();
+
+        when(apiClient.getAsync("accounts/entities/entity_id", authorization, OnboardEntityDetailsResponse.class, SCHEMA_V2_HEADERS))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<OnboardEntityDetailsResponse> future = accountsClient.getEntity("entity_id", "2.0");
+
+        validateResponse(expectedResponse, future.get());
+    }
+
+    @Test
+    void shouldUpdateEntityWithSchemaVersionOverride() throws ExecutionException, InterruptedException {
+        final OnboardEntityRequest request = createOnboardEntityRequest();
+        final OnboardEntityResponse expectedResponse = createOnboardEntityResponse();
+
+        when(apiClient.putAsync(eq("accounts/entities/entity_id"), eq(authorization), eq(OnboardEntityResponse.class), eq(request), eq(SCHEMA_V2_HEADERS)))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<OnboardEntityResponse> future = accountsClient.updateEntity(request, "entity_id", "2.0");
+
+        validateResponse(expectedResponse, future.get());
+    }
+
+    @Test
+    void shouldGetEntityRequirementsWithSchemaVersionOverride() throws ExecutionException, InterruptedException {
+        final EntityRequirementListResponse expectedResponse = new EntityRequirementListResponse();
+
+        when(apiClient.getAsync("accounts/entities/entity_id/requirements", authorization, EntityRequirementListResponse.class, SCHEMA_V2_HEADERS))
+                .thenReturn(CompletableFuture.completedFuture(expectedResponse));
+
+        final CompletableFuture<EntityRequirementListResponse> future = accountsClient.getEntityRequirements("entity_id", "2.0");
 
         validateResponse(expectedResponse, future.get());
     }
@@ -348,7 +404,7 @@ class AccountsClientImplTest {
         final OnboardEntityRequest request = createOnboardEntityRequest();
         final OnboardEntityResponse expectedResponse = createOnboardEntityResponse();
 
-        when(apiClient.post(eq("accounts/entities"), eq(authorization), eq(OnboardEntityResponse.class), eq(request), isNull()))
+        when(apiClient.post(eq("accounts/entities"), eq(authorization), eq(OnboardEntityResponse.class), eq(request), isNull(), eq(SCHEMA_V3_HEADERS)))
                 .thenReturn(expectedResponse);
 
         final OnboardEntityResponse actualResponse = accountsClient.createEntitySync(request);
@@ -360,7 +416,7 @@ class AccountsClientImplTest {
     void shouldGetEntitySync() {
         final OnboardEntityDetailsResponse expectedResponse = createOnboardEntityDetailsResponse();
 
-        when(apiClient.get("accounts/entities/entity_id", authorization, OnboardEntityDetailsResponse.class))
+        when(apiClient.get("accounts/entities/entity_id", authorization, OnboardEntityDetailsResponse.class, SCHEMA_V3_HEADERS))
                 .thenReturn(expectedResponse);
 
         final OnboardEntityDetailsResponse actualResponse = accountsClient.getEntitySync("entity_id");
@@ -373,7 +429,7 @@ class AccountsClientImplTest {
         final OnboardEntityRequest request = createOnboardEntityRequest();
         final OnboardEntityResponse expectedResponse = createOnboardEntityResponse();
 
-        when(apiClient.put(eq("accounts/entities/entity_id"), eq(authorization), eq(OnboardEntityResponse.class), eq(request)))
+        when(apiClient.put(eq("accounts/entities/entity_id"), eq(authorization), eq(OnboardEntityResponse.class), eq(request), eq(SCHEMA_V3_HEADERS)))
                 .thenReturn(expectedResponse);
 
         final OnboardEntityResponse actualResponse = accountsClient.updateEntitySync(request, "entity_id");
@@ -621,7 +677,7 @@ class AccountsClientImplTest {
     void shouldGetEntityRequirements() throws ExecutionException, InterruptedException {
         final EntityRequirementListResponse expectedResponse = createEntityRequirementListResponse();
 
-        when(apiClient.getAsync("accounts/entities/entity_id/requirements", authorization, EntityRequirementListResponse.class))
+        when(apiClient.getAsync("accounts/entities/entity_id/requirements", authorization, EntityRequirementListResponse.class, SCHEMA_V3_HEADERS))
                 .thenReturn(CompletableFuture.completedFuture(expectedResponse));
 
         final CompletableFuture<EntityRequirementListResponse> future = accountsClient.getEntityRequirements("entity_id");
@@ -733,7 +789,7 @@ class AccountsClientImplTest {
     void shouldGetEntityRequirementsSync() {
         final EntityRequirementListResponse expectedResponse = createEntityRequirementListResponse();
 
-        when(apiClient.get("accounts/entities/entity_id/requirements", authorization, EntityRequirementListResponse.class))
+        when(apiClient.get("accounts/entities/entity_id/requirements", authorization, EntityRequirementListResponse.class, SCHEMA_V3_HEADERS))
                 .thenReturn(expectedResponse);
 
         final EntityRequirementListResponse actualResponse = accountsClient.getEntityRequirementsSync("entity_id");

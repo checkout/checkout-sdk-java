@@ -26,4 +26,8 @@ public final class ProcessingDetails {
 
     private Currency currency;
 
+    private Integer averageOrderFulfillmentTime;
+
+    private ProcessingDetailsPayments payments;
+
 }

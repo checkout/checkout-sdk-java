@@ -23,6 +23,11 @@ public final class OnboardEntityRequest {
 
     private ProcessingDetails processingDetails;
 
+    /**
+     * @deprecated Not used by the Accounts API v3.0 schema; a sub-entity is represented via
+     * {@link #company} (with representatives). Retained for v2.0 compatibility.
+     */
+    @Deprecated
     private Individual individual;
 
     private OnboardSubEntityDocuments documents;
@@ -44,5 +49,7 @@ public final class OnboardEntityRequest {
      * [Optional]
      */
     private Submitter submitter;
+
+    private AgreedTerms agreedTerms;
 
 }

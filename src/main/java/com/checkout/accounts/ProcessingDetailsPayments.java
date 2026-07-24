@@ -9,12 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class DateOfIncorporation {
+public final class ProcessingDetailsPayments {
 
-    private Integer month;
-
-    private Integer year;
-
-    private Integer day;
+    private ProcessingDetailsAch ach;
 
 }

@@ -39,4 +39,6 @@ public final class OnboardSubEntityDocuments {
 
     private FinancialVerification financialVerification;
 
+    private FinancialStatements financialStatements;
+
 }

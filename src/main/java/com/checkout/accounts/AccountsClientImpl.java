@@ -36,7 +36,15 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
     private static final String RESERVE_RULES_PATH = "reserve-rules";
     private static final String REQUIREMENTS_PATH = "requirements";
 
+    private static final String DEFAULT_SCHEMA_VERSION = "3.0";
+
     private final ApiClient filesClient;
+
+    private static Headers buildSchemaVersionHeaders(final String schemaVersion) {
+        return Headers.builder()
+                .accept("application/json;schema_version=" + schemaVersion)
+                .build();
+    }
 
     public AccountsClientImpl(final ApiClient apiClient,
                               final ApiClient filesClient,
@@ -77,13 +85,19 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
 
     @Override
     public CompletableFuture<OnboardEntityResponse> createEntity(final OnboardEntityRequest entityRequest) {
+        return createEntity(entityRequest, DEFAULT_SCHEMA_VERSION);
+    }
+
+    @Override
+    public CompletableFuture<OnboardEntityResponse> createEntity(final OnboardEntityRequest entityRequest, final String schemaVersion) {
         validateEntityRequest(entityRequest);
         return apiClient.postAsync(
                 buildPath(ACCOUNTS_PATH, ENTITIES_PATH),
                 sdkAuthorization(),
                 OnboardEntityResponse.class,
                 entityRequest,
-                null);
+                null,
+                buildSchemaVersionHeaders(schemaVersion));
     }
 
     @Override
@@ -97,21 +111,33 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
 
     @Override
     public CompletableFuture<OnboardEntityDetailsResponse> getEntity(final String entityId) {
+        return getEntity(entityId, DEFAULT_SCHEMA_VERSION);
+    }
+
+    @Override
+    public CompletableFuture<OnboardEntityDetailsResponse> getEntity(final String entityId, final String schemaVersion) {
         validateEntityId(entityId);
         return apiClient.getAsync(
                 buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId),
                 sdkAuthorization(),
-                OnboardEntityDetailsResponse.class);
+                OnboardEntityDetailsResponse.class,
+                buildSchemaVersionHeaders(schemaVersion));
     }
 
     @Override
     public CompletableFuture<OnboardEntityResponse> updateEntity(final OnboardEntityRequest entityRequest, final String entityId) {
+        return updateEntity(entityRequest, entityId, DEFAULT_SCHEMA_VERSION);
+    }
+
+    @Override
+    public CompletableFuture<OnboardEntityResponse> updateEntity(final OnboardEntityRequest entityRequest, final String entityId, final String schemaVersion) {
         validateEntityRequestAndId(entityRequest, entityId);
         return apiClient.putAsync(
                 buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId),
                 sdkAuthorization(),
                 OnboardEntityResponse.class,
-                entityRequest);
+                entityRequest,
+                buildSchemaVersionHeaders(schemaVersion));
     }
 
     @Override
@@ -243,11 +269,17 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
 
     @Override
     public CompletableFuture<EntityRequirementListResponse> getEntityRequirements(final String entityId) {
+        return getEntityRequirements(entityId, DEFAULT_SCHEMA_VERSION);
+    }
+
+    @Override
+    public CompletableFuture<EntityRequirementListResponse> getEntityRequirements(final String entityId, final String schemaVersion) {
         validateEntityId(entityId);
         return apiClient.getAsync(
                 buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, REQUIREMENTS_PATH),
                 sdkAuthorization(),
-                EntityRequirementListResponse.class);
+                EntityRequirementListResponse.class,
+                buildSchemaVersionHeaders(schemaVersion));
     }
 
     @Override
@@ -302,13 +334,19 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
 
     @Override
     public OnboardEntityResponse createEntitySync(final OnboardEntityRequest entityRequest) {
+        return createEntitySync(entityRequest, DEFAULT_SCHEMA_VERSION);
+    }
+
+    @Override
+    public OnboardEntityResponse createEntitySync(final OnboardEntityRequest entityRequest, final String schemaVersion) {
         validateEntityRequest(entityRequest);
         return apiClient.post(
                 buildPath(ACCOUNTS_PATH, ENTITIES_PATH),
                 sdkAuthorization(),
                 OnboardEntityResponse.class,
                 entityRequest,
-                null);
+                null,
+                buildSchemaVersionHeaders(schemaVersion));
     }
 
     @Override
@@ -322,21 +360,33 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
 
     @Override
     public OnboardEntityDetailsResponse getEntitySync(final String entityId) {
+        return getEntitySync(entityId, DEFAULT_SCHEMA_VERSION);
+    }
+
+    @Override
+    public OnboardEntityDetailsResponse getEntitySync(final String entityId, final String schemaVersion) {
         validateEntityId(entityId);
         return apiClient.get(
                 buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId),
                 sdkAuthorization(),
-                OnboardEntityDetailsResponse.class);
+                OnboardEntityDetailsResponse.class,
+                buildSchemaVersionHeaders(schemaVersion));
     }
 
     @Override
     public OnboardEntityResponse updateEntitySync(final OnboardEntityRequest entityRequest, final String entityId) {
+        return updateEntitySync(entityRequest, entityId, DEFAULT_SCHEMA_VERSION);
+    }
+
+    @Override
+    public OnboardEntityResponse updateEntitySync(final OnboardEntityRequest entityRequest, final String entityId, final String schemaVersion) {
         validateEntityRequestAndId(entityRequest, entityId);
         return apiClient.put(
                 buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId),
                 sdkAuthorization(),
                 OnboardEntityResponse.class,
-                entityRequest);
+                entityRequest,
+                buildSchemaVersionHeaders(schemaVersion));
     }
 
     @Override
@@ -465,11 +515,17 @@ public class AccountsClientImpl extends AbstractClient implements AccountsClient
 
     @Override
     public EntityRequirementListResponse getEntityRequirementsSync(final String entityId) {
+        return getEntityRequirementsSync(entityId, DEFAULT_SCHEMA_VERSION);
+    }
+
+    @Override
+    public EntityRequirementListResponse getEntityRequirementsSync(final String entityId, final String schemaVersion) {
         validateEntityId(entityId);
         return apiClient.get(
                 buildPath(ACCOUNTS_PATH, ENTITIES_PATH, entityId, REQUIREMENTS_PATH),
                 sdkAuthorization(),
-                EntityRequirementListResponse.class);
+                EntityRequirementListResponse.class,
+                buildSchemaVersionHeaders(schemaVersion));
     }
 
     @Override
