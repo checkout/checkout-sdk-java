@@ -26,13 +26,13 @@ public final class OnboardSubEntityDocuments {
 
     private ProofOfPrincipalAddress proofOfPrincipalAddress;
 
-    @SerializedName("additional_document_1")
+    @SerializedName("additional_document1")
     private AdditionalDocument additionalDocument1;
 
-    @SerializedName("additional_document_2")
+    @SerializedName("additional_document2")
     private AdditionalDocument additionalDocument2;
 
-    @SerializedName("additional_document_3")
+    @SerializedName("additional_document3")
     private AdditionalDocument additionalDocument3;
 
     private TaxVerification taxVerification;
