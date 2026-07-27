@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 
@@ -161,6 +162,86 @@ class AccountsTestIT extends SandboxTestFixture {
 
         final OnboardEntityDetailsResponse entityDetailsResponse = checkoutApi.accountsClient().getEntitySync(entityResponse.getId(), "2.0");
         validateCompanyEntityDetails(entityDetailsResponse, onboardEntityRequest, randomReference);
+    }
+
+    // ===================== Accounts API schema_version 3.0 =====================
+    // v3.0 onboards a sub-entity as a company whose representatives carry nested `individual`
+    // details + `roles`, plus a required `processing_details` object. These mirror the 2.0
+    // onboarding tests above (which pin schema_version to "2.0"); here createEntity/getEntity/
+    // updateEntity use the SDK default (3.0). They run through the accounts-scoped OAuth client,
+    // which is the one provisioned for v3.0 onboarding.
+    @Test
+    void shouldCreateGetAndUpdateOnboardCompanyEntityV3() {
+        final CheckoutApi checkoutApi = getAccountsCheckoutApi();
+        final String randomReference = RandomStringUtils.random(15, true, true);
+        final OnboardEntityRequest onboardEntityRequest = buildCompanyEntityV3(randomReference);
+
+        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(onboardEntityRequest));
+        validateEntityCreationResponse(entityResponse, randomReference);
+
+        final OnboardEntityDetailsResponse entityDetailsResponse = blocking(() -> checkoutApi.accountsClient().getEntity(entityResponse.getId()));
+        validateCompanyEntityDetails(entityDetailsResponse, onboardEntityRequest, randomReference);
+
+        final OnboardEntityResponse updatedEntityResponse = blocking(() -> checkoutApi.accountsClient().updateEntity(onboardEntityRequest, entityResponse.getId()));
+        assertNotNull(updatedEntityResponse);
+        assertNotNull(updatedEntityResponse.getId());
+    }
+
+    @Test
+    void shouldCreateGetAndUpdateOnboardCompanyEntitySyncV3() {
+        final CheckoutApi checkoutApi = getAccountsCheckoutApi();
+        final String randomReference = RandomStringUtils.random(15, true, true);
+        final OnboardEntityRequest onboardEntityRequest = buildCompanyEntityV3(randomReference);
+
+        final OnboardEntityResponse entityResponse = checkoutApi.accountsClient().createEntitySync(onboardEntityRequest);
+        validateEntityCreationResponse(entityResponse, randomReference);
+
+        final OnboardEntityDetailsResponse entityDetailsResponse = checkoutApi.accountsClient().getEntitySync(entityResponse.getId());
+        validateCompanyEntityDetails(entityDetailsResponse, onboardEntityRequest, randomReference);
+
+        final OnboardEntityResponse updatedEntityResponse = checkoutApi.accountsClient().updateEntitySync(onboardEntityRequest, entityResponse.getId());
+        assertNotNull(updatedEntityResponse);
+        assertNotNull(updatedEntityResponse.getId());
+    }
+
+    @Test
+    void shouldCreateAndRetrievePaymentInstrumentV3() throws URISyntaxException {
+        final CheckoutApi checkoutApi = getAccountsCheckoutApi();
+
+        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient()
+                .createEntity(buildCompanyEntityV3(RandomStringUtils.random(15, true, true))));
+        assertNotNull(entityResponse);
+        assertNotNull(entityResponse.getId());
+
+        final IdResponse file = uploadFile();
+        final PaymentInstrumentRequest instrumentRequest = buildPaymentInstrumentRequest(file.getId());
+
+        final IdResponse instrumentResponse = blocking(() -> checkoutApi.accountsClient().createPaymentInstrument(entityResponse.getId(), instrumentRequest));
+        assertNotNull(instrumentResponse);
+        assertNotNull(instrumentResponse.getId());
+
+        final PaymentInstrumentDetailsResponse instrumentDetailsResponse = blocking(() -> checkoutApi.accountsClient().retrievePaymentInstrumentDetails(entityResponse.getId(), instrumentResponse.getId()));
+        validatePaymentInstrumentDetailsResponse(instrumentDetailsResponse);
+    }
+
+    @Test
+    void shouldCreateAndRetrievePaymentInstrumentSyncV3() throws URISyntaxException {
+        final CheckoutApi checkoutApi = getAccountsCheckoutApi();
+
+        final OnboardEntityResponse entityResponse = checkoutApi.accountsClient()
+                .createEntitySync(buildCompanyEntityV3(RandomStringUtils.random(15, true, true)));
+        assertNotNull(entityResponse);
+        assertNotNull(entityResponse.getId());
+
+        final IdResponse file = uploadFileSync();
+        final PaymentInstrumentRequest instrumentRequest = buildPaymentInstrumentRequest(file.getId());
+
+        final IdResponse instrumentResponse = checkoutApi.accountsClient().createPaymentInstrumentSync(entityResponse.getId(), instrumentRequest);
+        assertNotNull(instrumentResponse);
+        assertNotNull(instrumentResponse.getId());
+
+        final PaymentInstrumentDetailsResponse instrumentDetailsResponse = checkoutApi.accountsClient().retrievePaymentInstrumentDetailsSync(entityResponse.getId(), instrumentResponse.getId());
+        validatePaymentInstrumentDetailsResponse(instrumentDetailsResponse);
     }
 
     @Test
@@ -611,6 +692,89 @@ class AccountsTestIT extends SandboxTestFixture {
                                 .highestTransactionValue(2500L)
                                 .build())
 
+                        .build())
+                .build();
+    }
+
+    // Builds an onboarding request that conforms to the Accounts API v3.0 schema: the representative
+    // carries nested `individual` details + `roles`, the company has `businessType` +
+    // `dateOfIncorporation`, and `processingDetails` is populated. The holding-currency scope is
+    // configured on the platform (USD here) while `processingDetails.currency` reflects the
+    // sub-entity region (GBP) — the two are independent.
+    private static OnboardEntityRequest buildCompanyEntityV3(final String randomReference) {
+        final Address address = Address.builder()
+                .addressLine1("90 Tottenham Court Road")
+                .city("London")
+                .zip("W1T4TJ")
+                .country(CountryCode.GB)
+                .build();
+
+        return OnboardEntityRequest.builder()
+                .reference(randomReference)
+                .contactDetails(ContactDetails.builder()
+                        .phone(AccountPhone.builder()
+                                .countryCode(CountryCode.GB)
+                                .number("2345678910")
+                                .build())
+                        .emailAddresses(EntityEmailAddresses.builder()
+                                .primary(generateRandomEmail())
+                                .build())
+                        .build())
+                .profile(Profile.builder()
+                        .urls(Collections.singletonList("https://www.superheroexample.com"))
+                        .mccs(Collections.singletonList("0742"))
+                        .defaultHoldingCurrency(Currency.USD)
+                        .holdingCurrencies(Collections.singletonList(Currency.USD))
+                        .build())
+                .company(Company.builder()
+                        .businessRegistrationNumber("01234567")
+                        .businessType(BusinessType.LIMITED_COMPANY)
+                        .legalName("Super Hero Masks Inc.")
+                        .tradingName("Super Hero Masks")
+                        .dateOfIncorporation(DateOfIncorporation.builder()
+                                .day(1)
+                                .month(6)
+                                .year(2010)
+                                .build())
+                        .principalAddress(address)
+                        .registeredAddress(address)
+                        .representatives(Collections.singletonList(Representative.builder()
+                                .individual(RepresentativeIndividual.builder()
+                                        .firstName("John")
+                                        .lastName("Doe")
+                                        .dateOfBirth(DateOfBirth.builder()
+                                                .day(5)
+                                                .month(6)
+                                                .year(1995)
+                                                .build())
+                                        .placeOfBirth(PlaceOfBirth.builder()
+                                                .country(CountryCode.GB)
+                                                .build())
+                                        .address(address)
+                                        .build())
+                                .roles(Arrays.asList(
+                                        EntityRoles.UBO,
+                                        EntityRoles.AUTHORISED_SIGNATORY,
+                                        EntityRoles.DIRECTOR,
+                                        EntityRoles.CONTROL_PERSON))
+                                .build()))
+                        .build())
+                .processingDetails(ProcessingDetails.builder()
+                        .annualProcessingVolume(1000000)
+                        .averageTransactionValue(5000)
+                        .averageOrderFulfillmentTime(3)
+                        .highestTransactionValue(25000)
+                        .currency(Currency.GBP)
+                        .settlementCountry(CountryCode.GB.name())
+                        .targetCountries(Collections.singletonList(CountryCode.GB.name()))
+                        .payments(ProcessingDetailsPayments.builder()
+                                .ach(ProcessingDetailsAch.builder()
+                                        .annualAchVolume(1000000)
+                                        .averageAchTransactionSize(5000)
+                                        .estimatedMonthlyCreditVolume(100000)
+                                        .averageCreditAmount(5000)
+                                        .build())
+                                .build())
                         .build())
                 .build();
     }
