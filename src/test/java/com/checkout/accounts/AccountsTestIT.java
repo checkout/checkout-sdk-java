@@ -50,17 +50,17 @@ class AccountsTestIT extends SandboxTestFixture {
         final String randomReference = RandomStringUtils.random(15, true, true);
         final OnboardEntityRequest onboardEntityRequest = buildIndividualEntity(randomReference);
 
-        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(onboardEntityRequest));
+        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(onboardEntityRequest, "2.0"));
         validateEntityCreationResponse(entityResponse, randomReference);
 
-        final OnboardEntityDetailsResponse entityDetailsResponse = blocking(() -> checkoutApi.accountsClient().getEntity(entityResponse.getId()));
+        final OnboardEntityDetailsResponse entityDetailsResponse = blocking(() -> checkoutApi.accountsClient().getEntity(entityResponse.getId(), "2.0"));
         validateIndividualEntityDetails(entityDetailsResponse, onboardEntityRequest, randomReference);
 
         onboardEntityRequest.getIndividual().setFirstName("Jhon");
-        final OnboardEntityResponse updatedEntityResponse = blocking(() -> checkoutApi.accountsClient().updateEntity(onboardEntityRequest, entityResponse.getId()));
+        final OnboardEntityResponse updatedEntityResponse = blocking(() -> checkoutApi.accountsClient().updateEntity(onboardEntityRequest, entityResponse.getId(), "2.0"));
         assertNotNull(updatedEntityResponse);
 
-        final OnboardEntityDetailsResponse verifyUpdated = blocking(() -> checkoutApi.accountsClient().getEntity(entityResponse.getId()));
+        final OnboardEntityDetailsResponse verifyUpdated = blocking(() -> checkoutApi.accountsClient().getEntity(entityResponse.getId(), "2.0"));
         assertEquals(onboardEntityRequest.getIndividual().getFirstName(), verifyUpdated.getIndividual().getFirstName());
     }
 
@@ -70,10 +70,10 @@ class AccountsTestIT extends SandboxTestFixture {
         final String randomReference = RandomStringUtils.random(15, true, true);
         final OnboardEntityRequest onboardEntityRequest = buildCompanyEntity(randomReference);
 
-        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(onboardEntityRequest));
+        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(onboardEntityRequest, "2.0"));
         validateEntityCreationResponse(entityResponse, randomReference);
 
-        final OnboardEntityDetailsResponse entityDetailsResponse = blocking(() -> checkoutApi.accountsClient().getEntity(entityResponse.getId()));
+        final OnboardEntityDetailsResponse entityDetailsResponse = blocking(() -> checkoutApi.accountsClient().getEntity(entityResponse.getId(), "2.0"));
         validateCompanyEntityDetails(entityDetailsResponse, onboardEntityRequest, randomReference);
     }
 
@@ -114,7 +114,7 @@ class AccountsTestIT extends SandboxTestFixture {
         final CheckoutApi checkoutApi = getAccountsCheckoutApi();
 
         final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient()
-                .createEntity(buildCompanyEntity(RandomStringUtils.random(15, true, true))));
+                .createEntity(buildCompanyEntity(RandomStringUtils.random(15, true, true)), "2.0"));
         assertNotNull(entityResponse);
         assertNotNull(entityResponse.getId());
 
@@ -136,17 +136,17 @@ class AccountsTestIT extends SandboxTestFixture {
         final String randomReference = RandomStringUtils.random(15, true, true);
         final OnboardEntityRequest onboardEntityRequest = buildIndividualEntity(randomReference);
 
-        final OnboardEntityResponse entityResponse = checkoutApi.accountsClient().createEntitySync(onboardEntityRequest);
+        final OnboardEntityResponse entityResponse = checkoutApi.accountsClient().createEntitySync(onboardEntityRequest, "2.0");
         validateEntityCreationResponse(entityResponse, randomReference);
 
-        final OnboardEntityDetailsResponse entityDetailsResponse = checkoutApi.accountsClient().getEntitySync(entityResponse.getId());
+        final OnboardEntityDetailsResponse entityDetailsResponse = checkoutApi.accountsClient().getEntitySync(entityResponse.getId(), "2.0");
         validateIndividualEntityDetails(entityDetailsResponse, onboardEntityRequest, randomReference);
 
         onboardEntityRequest.getIndividual().setFirstName("Jhon");
-        final OnboardEntityResponse updatedEntityResponse = checkoutApi.accountsClient().updateEntitySync(onboardEntityRequest, entityResponse.getId());
+        final OnboardEntityResponse updatedEntityResponse = checkoutApi.accountsClient().updateEntitySync(onboardEntityRequest, entityResponse.getId(), "2.0");
         assertNotNull(updatedEntityResponse);
 
-        final OnboardEntityDetailsResponse verifyUpdated = checkoutApi.accountsClient().getEntitySync(entityResponse.getId());
+        final OnboardEntityDetailsResponse verifyUpdated = checkoutApi.accountsClient().getEntitySync(entityResponse.getId(), "2.0");
         assertEquals(onboardEntityRequest.getIndividual().getFirstName(), verifyUpdated.getIndividual().getFirstName());
     }
 
@@ -156,10 +156,10 @@ class AccountsTestIT extends SandboxTestFixture {
         final String randomReference = RandomStringUtils.random(15, true, true);
         final OnboardEntityRequest onboardEntityRequest = buildCompanyEntity(randomReference);
 
-        final OnboardEntityResponse entityResponse = checkoutApi.accountsClient().createEntitySync(onboardEntityRequest);
+        final OnboardEntityResponse entityResponse = checkoutApi.accountsClient().createEntitySync(onboardEntityRequest, "2.0");
         validateEntityCreationResponse(entityResponse, randomReference);
 
-        final OnboardEntityDetailsResponse entityDetailsResponse = checkoutApi.accountsClient().getEntitySync(entityResponse.getId());
+        final OnboardEntityDetailsResponse entityDetailsResponse = checkoutApi.accountsClient().getEntitySync(entityResponse.getId(), "2.0");
         validateCompanyEntityDetails(entityDetailsResponse, onboardEntityRequest, randomReference);
     }
 
@@ -175,7 +175,7 @@ class AccountsTestIT extends SandboxTestFixture {
         final CheckoutApi checkoutApi = getAccountsCheckoutApi();
 
         final OnboardEntityResponse entityResponse = checkoutApi.accountsClient()
-                .createEntitySync(buildCompanyEntity(RandomStringUtils.random(15, true, true)));
+                .createEntitySync(buildCompanyEntity(RandomStringUtils.random(15, true, true)), "2.0");
         assertNotNull(entityResponse);
         assertNotNull(entityResponse.getId());
 
@@ -281,7 +281,7 @@ class AccountsTestIT extends SandboxTestFixture {
     void shouldGetEntityRequirements() {
         final String entityId = Objects.requireNonNull(System.getenv("CHECKOUT_DEFAULT_ENTITY_ID"));
 
-        final EntityRequirementListResponse response = blocking(() -> checkoutApi.accountsClient().getEntityRequirements(entityId));
+        final EntityRequirementListResponse response = blocking(() -> checkoutApi.accountsClient().getEntityRequirements(entityId, "2.0"));
         validateEntityRequirementListResponse(response);
     }
 
@@ -289,7 +289,7 @@ class AccountsTestIT extends SandboxTestFixture {
     @Test
     void shouldGetEntityRequirementDetails() {
         final String entityId = Objects.requireNonNull(System.getenv("CHECKOUT_DEFAULT_ENTITY_ID"));
-        final EntityRequirementListResponse listResponse = blocking(() -> checkoutApi.accountsClient().getEntityRequirements(entityId));
+        final EntityRequirementListResponse listResponse = blocking(() -> checkoutApi.accountsClient().getEntityRequirements(entityId, "2.0"));
         assertNotNull(listResponse.getData());
         assertNotNull(listResponse.getData().get(0));
 
@@ -302,7 +302,7 @@ class AccountsTestIT extends SandboxTestFixture {
     @Test
     void shouldResolveEntityRequirement() {
         final String entityId = Objects.requireNonNull(System.getenv("CHECKOUT_DEFAULT_ENTITY_ID"));
-        final EntityRequirementListResponse listResponse = blocking(() -> checkoutApi.accountsClient().getEntityRequirements(entityId));
+        final EntityRequirementListResponse listResponse = blocking(() -> checkoutApi.accountsClient().getEntityRequirements(entityId, "2.0"));
         assertNotNull(listResponse.getData());
         assertNotNull(listResponse.getData().get(0));
 
@@ -420,7 +420,7 @@ class AccountsTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(entityRequest));
+        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(entityRequest, "2.0"));
         assertNotNull(entityResponse);
         assertNotNull(entityResponse.getId());
         return entityResponse.getId();
