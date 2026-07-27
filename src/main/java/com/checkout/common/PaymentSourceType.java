@@ -30,6 +30,8 @@ public enum PaymentSourceType {
     BENEFITPAY,
     @SerializedName("bizum")
     BIZUM,
+    @SerializedName("blik")
+    BLIK,
     @SerializedName("boleto")
     BOLETO,
     @SerializedName("card")
