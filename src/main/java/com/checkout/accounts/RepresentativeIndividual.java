@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -21,6 +23,10 @@ public final class RepresentativeIndividual {
     private DateOfBirth dateOfBirth;
 
     private PlaceOfBirth placeOfBirth;
+
+    private List<Citizenship> citizenships;
+
+    private NationalIdType nationalIdType;
 
     private String nationalIdNumber;
 

@@ -1,6 +1,7 @@
 package com.checkout.accounts;
 
 import com.checkout.GsonSerializer;
+import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import org.junit.jupiter.api.Test;
 
@@ -97,6 +98,11 @@ class AccountsV3SerializationTest {
                 .individual(RepresentativeIndividual.builder()
                         .firstName("John")
                         .lastName("Representative")
+                        .citizenships(Collections.singletonList(Citizenship.builder()
+                                .type("citizenship")
+                                .country(CountryCode.US)
+                                .build()))
+                        .nationalIdType(NationalIdType.SSN)
                         .nationalIdNumber("AB123456C")
                         .emailAddress("john@example.com")
                         .build())
@@ -109,6 +115,10 @@ class AccountsV3SerializationTest {
 
         assertTrue(json.contains("\"individual\""));
         assertTrue(json.contains("\"first_name\""));
+        assertTrue(json.contains("\"citizenships\""));
+        assertTrue(json.contains("\"country\""));
+        assertTrue(json.contains("\"national_id_type\""));
+        assertTrue(json.contains("ssn"));
         assertTrue(json.contains("\"national_id_number\""));
         assertTrue(json.contains("\"email_address\""));
         assertTrue(json.contains("\"company_position\""));
