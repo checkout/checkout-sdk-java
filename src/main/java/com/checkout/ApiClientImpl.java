@@ -60,11 +60,29 @@ public class ApiClientImpl implements ApiClient {
     }
 
     @Override
+    public <T extends HttpMetadata> CompletableFuture<T> getAsync(final String path, final SdkAuthorization authorization, final Class<T> responseType, final IHeaders headers) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return executeAsyncOrSync(
+                () -> get(path, authorization, responseType, headers),
+                () -> sendRequestAsync(GET, path, authorization, null, null, responseType, headers)
+        );
+    }
+
+    @Override
     public <T extends HttpMetadata> CompletableFuture<T> putAsync(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request) {
         validateParams(PATH, path, AUTHORIZATION, authorization);
         return executeAsyncOrSync(
                 () -> put(path, authorization, responseType, request),
                 () -> sendRequestAsync(PUT, path, authorization, request, null, responseType)
+        );
+    }
+
+    @Override
+    public <T extends HttpMetadata> CompletableFuture<T> putAsync(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request, final IHeaders headers) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return executeAsyncOrSync(
+                () -> put(path, authorization, responseType, request, headers),
+                () -> sendRequestAsync(PUT, path, authorization, request, null, responseType, headers)
         );
     }
 
@@ -327,9 +345,21 @@ public class ApiClientImpl implements ApiClient {
     }
 
     @Override
+    public <T extends HttpMetadata> T get(final String path, final SdkAuthorization authorization, final Class<T> responseType, final IHeaders headers) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(GET, path, authorization, null, null, responseType, headers);
+    }
+
+    @Override
     public <T extends HttpMetadata> T put(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request) {
         validateParams(PATH, path, AUTHORIZATION, authorization);
         return sendRequestSync(PUT, path, authorization, request, null, responseType);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T put(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request, final IHeaders headers) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(PUT, path, authorization, request, null, responseType, headers);
     }
 
     @Override

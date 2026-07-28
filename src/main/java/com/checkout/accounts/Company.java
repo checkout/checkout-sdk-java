@@ -36,4 +36,8 @@ public final class Company {
 
     private BusinessType businessType;
 
+    private List<String> additionalTradingNames;
+
+    private Boolean isRegisteredCompany;
+
 }

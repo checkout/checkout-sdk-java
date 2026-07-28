@@ -9,12 +9,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class DateOfIncorporation {
+public final class AgreedTerms {
 
-    private Integer month;
+    private String date;
 
-    private Integer year;
+    private String ipAddress;
 
-    private Integer day;
+    private String name;
+
+    private String email;
+
+    private String version;
 
 }

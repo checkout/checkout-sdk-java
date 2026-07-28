@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class DateOfIncorporation {
+public final class FinancialStatements {
 
-    private Integer month;
+    private FinancialStatementsType type;
 
-    private Integer year;
-
-    private Integer day;
+    private String front;
 
 }

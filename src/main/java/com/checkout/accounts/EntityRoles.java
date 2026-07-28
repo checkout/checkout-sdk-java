@@ -9,5 +9,9 @@ public enum EntityRoles {
     @SerializedName("legal_representative")
     LEGAL_REPRESENTATIVE,
     @SerializedName("authorised_signatory")
-    AUTHORISED_SIGNATORY
+    AUTHORISED_SIGNATORY,
+    @SerializedName("director")
+    DIRECTOR,
+    @SerializedName("control_person")
+    CONTROL_PERSON
 }

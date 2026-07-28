@@ -20,11 +20,17 @@ public class Headers implements IHeaders {
     @SerializedName("if-match")
     private String ifMatch;
 
+    @SerializedName("accept")
+    private String accept;
+
     @Override
     public Map<String, String> getHeaders() {
         final Map<String, String> headers = new LinkedHashMap<>();
         if (ifMatch != null) {
             headers.put("if-match", ifMatch);
+        }
+        if (accept != null) {
+            headers.put("Accept", accept);
         }
         return headers;
     }

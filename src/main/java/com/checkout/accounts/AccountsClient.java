@@ -26,11 +26,17 @@ public interface AccountsClient {
 
     CompletableFuture<OnboardEntityResponse> createEntity(OnboardEntityRequest entityRequest);
 
+    CompletableFuture<OnboardEntityResponse> createEntity(OnboardEntityRequest entityRequest, String schemaVersion);
+
     CompletableFuture<PaymentInstrumentDetailsResponse> retrievePaymentInstrumentDetails(String entityId, String paymentInstrumentId);
 
     CompletableFuture<OnboardEntityDetailsResponse> getEntity(String entityId);
 
+    CompletableFuture<OnboardEntityDetailsResponse> getEntity(String entityId, String schemaVersion);
+
     CompletableFuture<OnboardEntityResponse> updateEntity(OnboardEntityRequest entityRequest, String entityId);
+
+    CompletableFuture<OnboardEntityResponse> updateEntity(OnboardEntityRequest entityRequest, String entityId, String schemaVersion);
 
     /**
      * @deprecated Use {{@link #createPaymentInstrument(String, PaymentInstrumentRequest)}} instead
@@ -71,6 +77,8 @@ public interface AccountsClient {
      */
     CompletableFuture<EntityRequirementListResponse> getEntityRequirements(String entityId);
 
+    CompletableFuture<EntityRequirementListResponse> getEntityRequirements(String entityId, String schemaVersion);
+
     /**
      * Retrieves detailed information for a single requirement.
      *
@@ -99,11 +107,17 @@ public interface AccountsClient {
         
     OnboardEntityResponse createEntitySync(final OnboardEntityRequest entityRequest);
 
+    OnboardEntityResponse createEntitySync(final OnboardEntityRequest entityRequest, final String schemaVersion);
+
     PaymentInstrumentDetailsResponse retrievePaymentInstrumentDetailsSync(final String entityId, final String paymentInstrumentId);
 
     OnboardEntityDetailsResponse getEntitySync(final String entityId);
 
+    OnboardEntityDetailsResponse getEntitySync(final String entityId, final String schemaVersion);
+
     OnboardEntityResponse updateEntitySync(final OnboardEntityRequest entityRequest, final String entityId);
+
+    OnboardEntityResponse updateEntitySync(final OnboardEntityRequest entityRequest, final String entityId, final String schemaVersion);
 
     EmptyResponse createPaymentInstrumentSync(final AccountsPaymentInstrument accountsPaymentInstrument, final String entityId);
 
@@ -134,6 +148,8 @@ public interface AccountsClient {
      * Synchronous variant of {@link #getEntityRequirements(String)}.
      */
     EntityRequirementListResponse getEntityRequirementsSync(final String entityId);
+
+    EntityRequirementListResponse getEntityRequirementsSync(final String entityId, final String schemaVersion);
 
     /**
      * Synchronous variant of {@link #getEntityRequirementDetails(String, String)}.
