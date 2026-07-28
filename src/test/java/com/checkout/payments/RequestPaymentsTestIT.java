@@ -382,7 +382,7 @@ class RequestPaymentsTestIT extends AbstractPaymentsTestIT {
                 .currency(Currency.GBP)
                 .amount(10L)
                 .capture(true)
-                .successUrl("https://testing.checkout.com/sucess")
+                .successUrl("https://testing.checkout.com/success")
                 .failureUrl("https://testing.checkout.com/failure")
                 .build();
     }

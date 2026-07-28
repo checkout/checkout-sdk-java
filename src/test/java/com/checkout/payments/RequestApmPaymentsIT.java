@@ -44,6 +44,7 @@ import com.checkout.payments.request.source.apm.RequestAlmaSource;
 import com.checkout.payments.request.source.apm.RequestBancontactSource;
 import com.checkout.payments.request.source.apm.RequestBenefitSource;
 import com.checkout.payments.request.source.apm.RequestBizumSource;
+import com.checkout.payments.request.source.apm.RequestBlikSource;
 import com.checkout.payments.request.source.apm.RequestCvConnectSource;
 import com.checkout.payments.request.source.apm.RequestEpsSource;
 import com.checkout.payments.request.source.apm.RequestFawrySource;
@@ -199,6 +200,12 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     @Test
+    void shouldMakeBlikPayment() throws ExecutionException, InterruptedException {
+        final PaymentRequest paymentRequest = createBlikPaymentRequest();
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), MERCHANT_CATEGORY_CODE_REQUIRED);
+    }
+
+    @Test
     void shouldMakeMultiBancoPayment() throws ExecutionException, InterruptedException {
         final PaymentRequest paymentRequest = createMultiBancoPaymentRequest();
         checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), PAYEE_NOT_ONBOARDED);
@@ -215,7 +222,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     @Test
     void shouldMakeStcPayPayment() throws ExecutionException, InterruptedException {
         final PaymentRequest paymentRequest = createStcPayPaymentRequest();
-        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), "merchant_data_delegated_authentication_failed");
+        checkErrorItem(() -> paymentsClient.requestPayment(paymentRequest), MERCHANT_DATA_DELEGATED_AUTHENTICATION_FAILED);
     }
 
     @Test
@@ -426,7 +433,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     @Test
     void shouldMakeStcPayPaymentSync() {
         final PaymentRequest paymentRequest = createStcPayPaymentRequest();
-        checkErrorItemSync(() -> paymentsClient.requestPaymentSync(paymentRequest), "merchant_data_delegated_authentication_failed");
+        checkErrorItemSync(() -> paymentsClient.requestPaymentSync(paymentRequest), MERCHANT_DATA_DELEGATED_AUTHENTICATION_FAILED);
     }
 
     @Test
@@ -556,6 +563,14 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
         return createBasePaymentRequest(createBancontactSource(), Currency.EUR, 100L).build();
     }
 
+    private PaymentRequest createBlikPaymentRequest() {
+        // Blik limits reference to 35 characters; a dashed UUID is 36, so strip the dashes to get 32.
+        return createBasePaymentRequest(new RequestBlikSource(), Currency.PLN, 100L)
+                .reference(UUID.randomUUID().toString().replace("-", ""))
+                .processing(ProcessingSettings.builder().partnerCode("123456").build())
+                .build();
+    }
+
     private PaymentRequest createMultiBancoPaymentRequest() {
         return createBasePaymentRequest(createMultiBancoSource(), Currency.EUR, 10L).build();
     }
@@ -637,7 +652,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .currency(Currency.SAR)
                 .amount(10000L)
                 .capture(true)
-                .successUrl("https://testing.checkout.com/sucess")
+                .successUrl("https://testing.checkout.com/success")
                 .failureUrl("https://testing.checkout.com/failure")
                 .reference("ORD-5023-4E89")
                 .processing(ProcessingSettings.builder().taxAmount(500L).shippingAmount(1000L).build())
@@ -653,7 +668,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .currency(currency)
                 .amount(amount)
                 .capture(true)
-                .successUrl("https://testing.checkout.com/sucess")
+                .successUrl("https://testing.checkout.com/success")
                 .failureUrl("https://testing.checkout.com/failure");
     }
 

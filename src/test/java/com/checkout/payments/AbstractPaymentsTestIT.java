@@ -33,7 +33,9 @@ public abstract class AbstractPaymentsTestIT extends SandboxTestFixture {
     public static final String APM_SERVICE_UNAVAILABLE = "apm_service_unavailable";
     public static final String PAYMENT_METHOD_NOT_SUPPORTED = "payment_method_not_supported";
     public static final String APM_CURRENCY_NOT_SUPPORTED = "currency_not_supported";
-
+    public static final String MERCHANT_CATEGORY_CODE_REQUIRED = "merchant_category_code_required";
+    public static final String MERCHANT_DATA_DELEGATED_AUTHENTICATION_FAILED = "merchant_data_delegated_authentication_failed";
+    
     public AbstractPaymentsTestIT() {
         super(PlatformType.DEFAULT);
         this.paymentsClient = checkoutApi.paymentsClient();
