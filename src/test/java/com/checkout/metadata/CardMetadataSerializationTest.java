@@ -24,6 +24,8 @@ import com.checkout.metadata.card.source.CardMetadataTokenSource;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -299,6 +301,72 @@ class CardMetadataSerializationTest {
         assertTrue(response.getLocalSchemes().contains(SchemeLocalType.SHAZAM));
         assertTrue(response.getLocalSchemes().contains(SchemeLocalType.PAYPAK));
         assertTrue(response.getLocalSchemes().contains(SchemeLocalType.MAESTRO));
+    }
+
+    @Test
+    void shouldDeserializeEveryCardTypeValue() {
+        final Map<String, CardType> expected = new LinkedHashMap<>();
+        // Spellings returned by the API on the current platform.
+        expected.put("CREDIT", CardType.CREDIT);
+        expected.put("DEBIT", CardType.DEBIT);
+        expected.put("PREPAID", CardType.PREPAID);
+        expected.put("CHARGE", CardType.CHARGE);
+        expected.put("DEFERRED DEBIT", CardType.DEFERRED_DEBIT);
+        expected.put("NETWORK TOKEN", CardType.NETWORK_TOKEN);
+        expected.put("UNKNOWN", CardType.UNKNOWN);
+        // Spellings returned by the API on the previous platform, plus the values Gson writes.
+        expected.put("Credit", CardType.CREDIT);
+        expected.put("Debit", CardType.DEBIT);
+        expected.put("Prepaid", CardType.PREPAID);
+        expected.put("Charge", CardType.CHARGE);
+        expected.put("Deferred Debit", CardType.DEFERRED_DEBIT);
+        expected.put("Network Token", CardType.NETWORK_TOKEN);
+        expected.put("Unknown", CardType.UNKNOWN);
+
+        for (final Map.Entry<String, CardType> entry : expected.entrySet()) {
+            final String json = "{\"bin\":\"45434720\",\"card_type\":\"" + entry.getKey() + "\"}";
+
+            final CardMetadataResponse response = serializer.fromJson(json, CardMetadataResponse.class);
+
+            assertNotNull(response);
+            assertEquals(entry.getValue(), response.getCardType(),
+                    "card_type '" + entry.getKey() + "' did not deserialize");
+        }
+    }
+
+    @Test
+    void shouldDeserializeEveryCardCategoryValue() {
+        final Map<String, CardCategory> expected = new LinkedHashMap<>();
+        // Spellings returned by the API on the current platform.
+        expected.put("CONSUMER", CardCategory.CONSUMER);
+        expected.put("COMMERCIAL", CardCategory.COMMERCIAL);
+        expected.put("UNKNOWN", CardCategory.UNKNOWN);
+        // Spellings returned by the API on the previous platform, plus the values Gson writes.
+        expected.put("Consumer", CardCategory.CONSUMER);
+        expected.put("Commercial", CardCategory.COMMERCIAL);
+        expected.put("Unknown", CardCategory.UNKNOWN);
+
+        for (final Map.Entry<String, CardCategory> entry : expected.entrySet()) {
+            final String json = "{\"bin\":\"45434720\",\"card_category\":\"" + entry.getKey() + "\"}";
+
+            final CardMetadataResponse response = serializer.fromJson(json, CardMetadataResponse.class);
+
+            assertNotNull(response);
+            assertEquals(entry.getValue(), response.getCardCategory(),
+                    "card_category '" + entry.getKey() + "' did not deserialize");
+        }
+    }
+
+    @Test
+    void shouldReturnNullForUnrecognizedCardTypeAndCardCategory() {
+        final String json = "{\"bin\":\"45434720\",\"card_type\":\"NOT_A_CARD_TYPE\","
+                + "\"card_category\":\"NOT_A_CARD_CATEGORY\"}";
+
+        final CardMetadataResponse response = serializer.fromJson(json, CardMetadataResponse.class);
+
+        assertNotNull(response);
+        assertNull(response.getCardType());
+        assertNull(response.getCardCategory());
     }
 
     @Test
