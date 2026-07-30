@@ -34,6 +34,8 @@ import com.checkout.identities.identityverification.IdentityVerificationClient;
 import com.checkout.identities.identityverification.IdentityVerificationClientImpl;
 import com.checkout.identities.iddocumentverification.IdDocumentVerificationClient;
 import com.checkout.identities.iddocumentverification.IdDocumentVerificationClientImpl;
+import com.checkout.identities.addressdocumentverification.AddressDocumentVerificationClient;
+import com.checkout.identities.addressdocumentverification.AddressDocumentVerificationClientImpl;
 import com.checkout.identities.amlscreening.AmlScreeningClient;
 import com.checkout.identities.amlscreening.AmlScreeningClientImpl;
 import com.checkout.instruments.InstrumentsClient;
@@ -105,6 +107,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final ApplicantClient applicantClient;
     private final IdentityVerificationClient identityVerificationClient;
     private final IdDocumentVerificationClient idDocumentVerificationClient;
+    private final AddressDocumentVerificationClient addressDocumentVerificationClient;
     private final AmlScreeningClient amlScreeningClient;
     private final NetworkTokensClient networkTokensClient;
     private final StandaloneAccountUpdaterClient standaloneAccountUpdaterClient;
@@ -146,6 +149,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.applicantClient = new ApplicantClientImpl(identityApiClient, configuration);
         this.identityVerificationClient = new IdentityVerificationClientImpl(identityApiClient, configuration);
         this.idDocumentVerificationClient = new IdDocumentVerificationClientImpl(identityApiClient, configuration);
+        this.addressDocumentVerificationClient = new AddressDocumentVerificationClientImpl(identityApiClient, configuration);
         this.amlScreeningClient = new AmlScreeningClientImpl(identityApiClient, configuration);
         this.networkTokensClient = new NetworkTokensClientImpl(this.apiClient, configuration);
         this.standaloneAccountUpdaterClient = new StandaloneAccountUpdaterClientImpl(this.apiClient, configuration);
@@ -276,6 +280,9 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
 
     @Override
     public IdDocumentVerificationClient idDocumentVerificationClient() { return idDocumentVerificationClient; }
+
+    @Override
+    public AddressDocumentVerificationClient addressDocumentVerificationClient() { return addressDocumentVerificationClient; }
 
     @Override
     public AmlScreeningClient amlScreeningClient() { return amlScreeningClient; }

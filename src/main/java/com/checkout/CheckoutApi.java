@@ -17,6 +17,7 @@ import com.checkout.identities.faceauthentications.FaceAuthenticationClient;
 import com.checkout.identities.applicants.ApplicantClient;
 import com.checkout.identities.identityverification.IdentityVerificationClient;
 import com.checkout.identities.iddocumentverification.IdDocumentVerificationClient;
+import com.checkout.identities.addressdocumentverification.AddressDocumentVerificationClient;
 import com.checkout.identities.amlscreening.AmlScreeningClient;
 import com.checkout.instruments.InstrumentsClient;
 import com.checkout.issuing.IssuingClient;
@@ -97,6 +98,8 @@ public interface CheckoutApi extends CheckoutApmApi {
     IdentityVerificationClient identityVerificationClient();
 
     IdDocumentVerificationClient idDocumentVerificationClient();
+
+    AddressDocumentVerificationClient addressDocumentVerificationClient();
 
     AmlScreeningClient amlScreeningClient();
 
