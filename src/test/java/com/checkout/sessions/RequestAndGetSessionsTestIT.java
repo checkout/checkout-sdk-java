@@ -1,6 +1,5 @@
 package com.checkout.sessions;
 
-import com.checkout.common.ChallengeIndicator;
 import com.checkout.sessions.channel.ChannelData;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,32 +17,32 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
 
     private static Stream<Arguments> sessionsTypes_browserSession() {
         return Stream.of(
-                Arguments.of(Category.PAYMENT, ChallengeIndicator.NO_PREFERENCE, TransactionType.GOODS_SERVICE),
-                Arguments.of(Category.NON_PAYMENT, ChallengeIndicator.CHALLENGE_REQUESTED, TransactionType.CHECK_ACCEPTANCE),
-                Arguments.of(Category.NON_PAYMENT, ChallengeIndicator.CHALLENGE_REQUESTED_MANDATE, TransactionType.ACCOUNT_FUNDING)
+                Arguments.of(Category.PAYMENT, SessionChallengeIndicator.NO_PREFERENCE, TransactionType.GOODS_SERVICE),
+                Arguments.of(Category.NON_PAYMENT, SessionChallengeIndicator.CHALLENGE_REQUESTED, TransactionType.CHECK_ACCEPTANCE),
+                Arguments.of(Category.NON_PAYMENT, SessionChallengeIndicator.CHALLENGE_REQUESTED_MANDATE, TransactionType.ACCOUNT_FUNDING)
         );
     }
 
     private static Stream<Arguments> sessionsTypes_appSession() {
         return Stream.of(
-                Arguments.of(Category.PAYMENT, ChallengeIndicator.NO_PREFERENCE, TransactionType.GOODS_SERVICE),
-                Arguments.of(Category.NON_PAYMENT, ChallengeIndicator.CHALLENGE_REQUESTED, TransactionType.CHECK_ACCEPTANCE),
-                Arguments.of(Category.NON_PAYMENT, ChallengeIndicator.CHALLENGE_REQUESTED_MANDATE, TransactionType.ACCOUNT_FUNDING)
+                Arguments.of(Category.PAYMENT, SessionChallengeIndicator.NO_PREFERENCE, TransactionType.GOODS_SERVICE),
+                Arguments.of(Category.NON_PAYMENT, SessionChallengeIndicator.CHALLENGE_REQUESTED, TransactionType.CHECK_ACCEPTANCE),
+                Arguments.of(Category.NON_PAYMENT, SessionChallengeIndicator.CHALLENGE_REQUESTED_MANDATE, TransactionType.ACCOUNT_FUNDING)
         );
     }
 
     private static Stream<Arguments> sessionsTypes_merchantInitiatedSession() {
         return Stream.of(
-                Arguments.of(Category.PAYMENT, ChallengeIndicator.NO_PREFERENCE, TransactionType.GOODS_SERVICE),
-                Arguments.of(Category.NON_PAYMENT, ChallengeIndicator.CHALLENGE_REQUESTED, TransactionType.CHECK_ACCEPTANCE),
-                Arguments.of(Category.NON_PAYMENT, ChallengeIndicator.CHALLENGE_REQUESTED_MANDATE, TransactionType.ACCOUNT_FUNDING)
+                Arguments.of(Category.PAYMENT, SessionChallengeIndicator.NO_PREFERENCE, TransactionType.GOODS_SERVICE),
+                Arguments.of(Category.NON_PAYMENT, SessionChallengeIndicator.CHALLENGE_REQUESTED, TransactionType.CHECK_ACCEPTANCE),
+                Arguments.of(Category.NON_PAYMENT, SessionChallengeIndicator.CHALLENGE_REQUESTED_MANDATE, TransactionType.ACCOUNT_FUNDING)
         );
     }
 
     @ParameterizedTest
     @MethodSource("sessionsTypes_browserSession")
     void shouldRequestAndGetCardSession_browserSession(final Category category,
-                                                       final ChallengeIndicator challengeIndicator,
+                                                       final SessionChallengeIndicator challengeIndicator,
                                                        final TransactionType transactionType) {
 
         final ChannelData browserSession = browserSession();
@@ -64,7 +63,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
     @ParameterizedTest
     @MethodSource("sessionsTypes_appSession")
     void shouldRequestAndGetCardSession_appSession(final Category category,
-                                                   final ChallengeIndicator challengeIndicator,
+                                                   final SessionChallengeIndicator challengeIndicator,
                                                    final TransactionType transactionType) {
 
         final ChannelData appSession = appSession();
@@ -83,7 +82,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
     @ParameterizedTest
     @MethodSource("sessionsTypes_merchantInitiatedSession")
     void shouldRequestAndGetCardSession_merchantInitiatedSession(final Category category,
-                                                                 final ChallengeIndicator challengeIndicator,
+                                                                 final SessionChallengeIndicator challengeIndicator,
                                                                  final TransactionType transactionType) {
 
         final ChannelData merchantInitiatedSession = merchantInitiatedSession();
@@ -102,7 +101,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
     @ParameterizedTest
     @MethodSource("sessionsTypes_browserSession")
     void shouldRequestAndGetCardSessionSync_browserSession(final Category category,
-                                                           final ChallengeIndicator challengeIndicator,
+                                                           final SessionChallengeIndicator challengeIndicator,
                                                            final TransactionType transactionType) {
 
         final ChannelData browserSession = browserSession();
@@ -123,7 +122,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
     @ParameterizedTest
     @MethodSource("sessionsTypes_appSession")
     void shouldRequestAndGetCardSessionSync_appSession(final Category category,
-                                                       final ChallengeIndicator challengeIndicator,
+                                                       final SessionChallengeIndicator challengeIndicator,
                                                        final TransactionType transactionType) {
 
         final ChannelData appSession = appSession();
@@ -142,7 +141,7 @@ class RequestAndGetSessionsTestIT extends AbstractSessionsTestIT {
     @ParameterizedTest
     @MethodSource("sessionsTypes_merchantInitiatedSession")
     void shouldRequestAndGetCardSessionSync_merchantInitiatedSession(final Category category,
-                                                                     final ChallengeIndicator challengeIndicator,
+                                                                     final SessionChallengeIndicator challengeIndicator,
                                                                      final TransactionType transactionType) {
 
         final ChannelData merchantInitiatedSession = merchantInitiatedSession();
