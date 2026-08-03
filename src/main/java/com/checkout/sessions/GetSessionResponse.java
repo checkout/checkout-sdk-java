@@ -61,8 +61,6 @@ public class GetSessionResponse extends Resource {
     /**
      * The three-letter ISO currency code.
      * [Required]
-     * min 3 characters
-     * max 3 characters
      */
     private Currency currency;
 
