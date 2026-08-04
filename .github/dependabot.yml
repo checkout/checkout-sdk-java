@@ -3,4 +3,17 @@ updates:
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
-      interval: "daily" 
+      interval: "daily"
+    groups:
+      test-deps:
+        patterns:
+          - "org.junit*"
+          - "org.mockito*"
+          - "org.apache.logging.log4j*"
+          - "org.hamcrest*"
+    open-pull-requests-limit: 10
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
