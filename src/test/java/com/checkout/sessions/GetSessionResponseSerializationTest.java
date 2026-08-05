@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -86,6 +87,16 @@ class GetSessionResponseSerializationTest {
                 + "\"optimization\":{\"optimized\":true,\"framework\":\"acceptance_rates\","
                 + "\"optimized_properties\":[{\"field\":\"amount\",\"original_value\":\"1\",\"optimized_value\":\"2\"}]},"
                 + "\"scheme_info\":{\"name\":\"visa\",\"score\":\"0.5\",\"avalgo\":\"1\"},"
+                + "\"3ds\":{\"challenge_request\":\"creq\",\"interaction_counter\":\"03\","
+                + "\"error_details\":{\"error_code\":\"101\",\"error_component\":\"D\","
+                + "\"error_detail\":\"acctNumber\",\"error_description\":\"missing\"}},"
+                + "\"experience\":\"3ds\","
+                + "\"preferred_experiences\":{\"google_spa\":{\"status\":\"available\"},"
+                + "\"3ds\":{\"status\":\"processed\",\"reason\":[\"Invalid response\"]}},"
+                + "\"google_spa\":{\"challenge_url\":\"https://google.example/challenge\","
+                + "\"initial_timeout\":\"5\",\"max_timeout\":\"10\","
+                + "\"iframe\":{\"height\":\"400\",\"width\":\"250\"},"
+                + "\"token\":{\"number\":\"4242\",\"expiry_month\":12,\"expiry_year\":2030}},"
                 + "\"_links\":{\"self\":{\"href\":\"https://api.checkout.com/sessions/sid_y3oqhf46pyzuxjbcn2giaqnb44\"}}"
                 + "}";
     }
@@ -223,6 +234,39 @@ class GetSessionResponseSerializationTest {
         assertEquals("cb-code", response.getExemption().getCode());
     }
 
+    /**
+     * The 3ds, experience, preferred_experiences and google_spa fields were previously unmodelled, so
+     * the Google SPA and preferred-experience data the API returns was dropped.
+     */
+    @Test
+    void shouldDeserializeTheExperienceFields() {
+        assertNotNull(response.getThreeDs());
+        assertEquals("creq", response.getThreeDs().getChallengeRequest());
+        assertEquals("03", response.getThreeDs().getInteractionCounter());
+        assertNotNull(response.getThreeDs().getErrorDetails());
+        assertEquals("101", response.getThreeDs().getErrorDetails().getErrorCode());
+        assertEquals("D", response.getThreeDs().getErrorDetails().getErrorComponent());
+
+        assertEquals(Experience.THREE_DS, response.getExperience());
+
+        assertNotNull(response.getPreferredExperiences());
+        assertEquals(ExperienceStatus.AVAILABLE,
+                response.getPreferredExperiences().getGoogleSpa().getStatus());
+        assertEquals(ExperienceStatus.PROCESSED,
+                response.getPreferredExperiences().getThreeDs().getStatus());
+        assertEquals(Collections.singletonList("Invalid response"),
+                response.getPreferredExperiences().getThreeDs().getReason());
+
+        assertNotNull(response.getGoogleSpa());
+        assertEquals("https://google.example/challenge", response.getGoogleSpa().getChallengeUrl());
+        assertEquals("5", response.getGoogleSpa().getInitialTimeout());
+        assertNotNull(response.getGoogleSpa().getIframe());
+        assertEquals("400", response.getGoogleSpa().getIframe().getHeight());
+        assertNotNull(response.getGoogleSpa().getToken());
+        assertEquals("4242", response.getGoogleSpa().getToken().getNumber());
+        assertEquals(12, response.getGoogleSpa().getToken().getExpiryMonth());
+    }
+
     @Test
     void shouldDeserializeInheritedLinks() {
         assertNotNull(response.getSelfLink());
@@ -248,7 +292,7 @@ class GetSessionResponseSerializationTest {
                 throw new AssertionError(e);
             }
         }
-        assertTrue(fields.length >= 40, "expected at least 40 declared properties, found " + fields.length);
+        assertTrue(fields.length >= 44, "expected at least 44 declared properties, found " + fields.length);
     }
 
 }

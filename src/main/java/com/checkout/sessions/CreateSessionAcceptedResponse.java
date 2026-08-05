@@ -175,4 +175,50 @@ public final class CreateSessionAcceptedResponse extends Resource {
      */
     private Optimization optimization;
 
+    /**
+     * Specifies if the session was completed.
+     * [Optional]
+     */
+    private Boolean completed;
+
+    /**
+     * Identifies the type of transaction being authenticated.
+     * [Optional]
+     * Default: {@link TransactionType#GOODS_SERVICE}
+     * max 50 characters
+     */
+    private TransactionType transactionType;
+
+    /**
+     * Public certificates specific to a Directory Server (DS) for encrypting device data and
+     * verifying ACS signed content. Required when the channel is {@code app}.
+     * [Optional]
+     */
+    private DsPublicKeys certificates;
+
+    /**
+     * The directory server (DS) information. Can be empty if the session is pending or communication
+     * with the DS failed.
+     * [Optional]
+     */
+    private Ds ds;
+
+    /**
+     * The authentication experience that was used for processing.
+     * [Optional]
+     */
+    private Experience experience;
+
+    /**
+     * Reports the outcome of each experience requested for the session.
+     * [Optional]
+     */
+    private SessionPreferredExperiences preferredExperiences;
+
+    /**
+     * Details of Google SPA (Secure Payment Authentication).
+     * [Optional]
+     */
+    private GoogleSpaInfo googleSpa;
+
 }

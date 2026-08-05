@@ -310,4 +310,29 @@ public class GetSessionResponse extends Resource {
      */
     private SchemeInfo schemeInfo;
 
+    /**
+     * This object provides more information about the 3DS experience.
+     * [Optional]
+     */
+    @SerializedName("3ds")
+    private ThreeDSInfo threeDs;
+
+    /**
+     * Reports the outcome of each experience requested for the session.
+     * [Optional]
+     */
+    private SessionPreferredExperiences preferredExperiences;
+
+    /**
+     * The authentication experience that was used for processing.
+     * [Optional]
+     */
+    private Experience experience;
+
+    /**
+     * Details of Google SPA (Secure Payment Authentication).
+     * [Optional]
+     */
+    private GoogleSpaInfo googleSpa;
+
 }

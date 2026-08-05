@@ -12,6 +12,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -190,5 +192,18 @@ public final class SessionRequest {
      * [Optional]
      */
     private DeviceInformation deviceInformation;
+
+    /**
+     * This object contains the Google SPA properties (non-hosted only).
+     * [Optional]
+     */
+    private GoogleSpa googleSpa;
+
+    /**
+     * Indicates the chosen experience(s) for this session.
+     * Available experiences are {@link Experience#THREE_DS} and {@link Experience#GOOGLE_SPA}.
+     * [Optional]
+     */
+    private List<Experience> preferredExperiences;
 
 }

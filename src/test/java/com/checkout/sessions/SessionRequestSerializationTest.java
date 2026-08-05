@@ -11,7 +11,10 @@ import com.checkout.sessions.completion.NonHostedCompletionInfo;
 import com.checkout.sessions.source.SessionCardSource;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -107,6 +110,10 @@ class SessionRequestSerializationTest {
                         .deviceId("device-id")
                         .deviceSessionId("device-session-id")
                         .build())
+                .googleSpa(GoogleSpa.builder()
+                        .continueUrl("https://merchant.com/continue")
+                        .build())
+                .preferredExperiences(Arrays.asList(Experience.THREE_DS, Experience.GOOGLE_SPA))
                 .build();
     }
 
@@ -142,7 +149,6 @@ class SessionRequestSerializationTest {
                 "billing_descriptor",
                 "reference",
                 "merchant_risk_info",
-                "prior_transaction_reference",
                 "transaction_type",
                 "shipping_address",
                 "shipping_address_matches_billing",
@@ -152,12 +158,23 @@ class SessionRequestSerializationTest {
                 "installment",
                 "optimization",
                 "initial_transaction",
-                "device_information"
+                "device_information",
+                "google_spa",
+                "preferred_experiences"
         };
 
         for (final String key : expectedKeys) {
             assertTrue(json.contains("\"" + key + "\""), "missing property " + key + " in " + json);
         }
+
+        // Reflection guard: a field added to SessionRequest without being classified as either a spec
+        // property or a known non-spec property fails here. Synthetic fields are skipped because
+        // JaCoCo injects $jacocoData under Gradle.
+        final long declared = java.util.Arrays.stream(SessionRequest.class.getDeclaredFields())
+                .filter(field -> !field.isSynthetic())
+                .count();
+        assertEquals(expectedKeys.length, declared,
+                "SessionRequest declares a property this test classifies as neither spec nor known-extra");
     }
 
     @Test
@@ -171,7 +188,6 @@ class SessionRequestSerializationTest {
         assertTrue(json.contains("\"authentication_category\":\"payment\""), json);
         assertTrue(json.contains("\"challenge_indicator\":\"trusted_listing_prompt\""), json);
         assertTrue(json.contains("\"reference\":\"ORD-5023-4E89\""), json);
-        assertTrue(json.contains("\"prior_transaction_reference\":\"prior-txn-ref\""), json);
         assertTrue(json.contains("\"transaction_type\":\"goods_service\""), json);
         assertTrue(json.contains("\"shipping_address_matches_billing\":true"), json);
     }

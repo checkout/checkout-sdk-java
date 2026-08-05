@@ -56,6 +56,17 @@ class CreateSessionAcceptedResponseSerializationTest {
                 + "\"challenge_indicator\":\"transaction_risk_assessment\","
                 + "\"optimization\":{\"optimized\":true,\"framework\":\"acceptance_rates\","
                 + "\"optimized_properties\":[{\"field\":\"amount\",\"original_value\":\"1\",\"optimized_value\":\"2\"}]},"
+                + "\"completed\":false,"
+                + "\"transaction_type\":\"goods_service\","
+                + "\"certificates\":{\"ds_public\":\"ds-public-key\",\"ca_public\":\"ca-public-key\"},"
+                + "\"ds\":{\"ds_id\":\"ds-id\",\"reference_number\":\"ds-ref\",\"transaction_id\":\"ds-txn\"},"
+                + "\"experience\":\"3ds\","
+                + "\"preferred_experiences\":{\"google_spa\":{\"status\":\"available\"},"
+                + "\"3ds\":{\"status\":\"processed\",\"reason\":[\"Invalid response\"]}},"
+                + "\"google_spa\":{\"challenge_url\":\"https://google.example/challenge\","
+                + "\"initial_timeout\":\"5\",\"max_timeout\":\"10\","
+                + "\"iframe\":{\"height\":\"400\",\"width\":\"250\"},"
+                + "\"token\":{\"number\":\"4242\",\"expiry_month\":12,\"expiry_year\":2030}},"
                 + "\"_links\":{\"self\":{\"href\":\"https://api.checkout.com/sessions/sid_y3oqhf46pyzuxjbcn2giaqnb44\"}}"
                 + "}";
     }
@@ -132,6 +143,35 @@ class CreateSessionAcceptedResponseSerializationTest {
         assertEquals(1, response.getOptimization().getOptimizedProperties().size());
     }
 
+    /**
+     * The seven fields below were previously unmodelled on this class, leaving the 202 response of
+     * POST /sessions inconsistent with GET /sessions/{id}.
+     */
+    @Test
+    void shouldDeserializeTheFieldsSharedWithGetSessionResponse() {
+        assertEquals(Boolean.FALSE, response.getCompleted());
+        assertEquals(TransactionType.GOODS_SERVICE, response.getTransactionType());
+
+        assertNotNull(response.getCertificates());
+        assertEquals("ds-public-key", response.getCertificates().getDsPublic());
+
+        assertNotNull(response.getDs());
+        assertEquals("ds-id", response.getDs().getDsId());
+
+        assertEquals(Experience.THREE_DS, response.getExperience());
+
+        assertNotNull(response.getPreferredExperiences());
+        assertEquals(ExperienceStatus.AVAILABLE,
+                response.getPreferredExperiences().getGoogleSpa().getStatus());
+        assertEquals(ExperienceStatus.PROCESSED,
+                response.getPreferredExperiences().getThreeDs().getStatus());
+
+        assertNotNull(response.getGoogleSpa());
+        assertEquals("https://google.example/challenge", response.getGoogleSpa().getChallengeUrl());
+        assertNotNull(response.getGoogleSpa().getToken());
+        assertEquals("4242", response.getGoogleSpa().getToken().getNumber());
+    }
+
     @Test
     void shouldDeserializeInheritedLinks() {
         assertNotNull(response.getSelfLink());
@@ -157,7 +197,7 @@ class CreateSessionAcceptedResponseSerializationTest {
                 throw new AssertionError(e);
             }
         }
-        assertTrue(fields.length >= 22, "expected at least 22 declared properties, found " + fields.length);
+        assertTrue(fields.length >= 29, "expected at least 29 declared properties, found " + fields.length);
     }
 
 }
