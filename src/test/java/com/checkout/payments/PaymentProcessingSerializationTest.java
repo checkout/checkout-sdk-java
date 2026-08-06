@@ -195,6 +195,7 @@ class PaymentProcessingSerializationTest {
                 + "\"recommendation_code\":\"R001\","
                 + "\"scheme\":\"Mastercard\","
                 + "\"pan_type_processed\":\"fpan\","
+                + "\"fallback_source_used\":true,"
                 + "\"cko_network_token_available\":false,"
                 + "\"purchase_country\":\"GB\","
                 + "\"scheme_merchant_id\":\"SMI001\","
@@ -215,6 +216,7 @@ class PaymentProcessingSerializationTest {
         assertEquals("Acquirer Bank", processing.getAcquirerName());
         assertEquals(CountryCode.GB, processing.getAcquirerCountryCode());
         assertEquals(PanProcessedType.FPAN, processing.getPanTypeProcessed());
+        assertEquals(Boolean.TRUE, processing.getFallbackSourceUsed());
         assertEquals(Boolean.FALSE, processing.getCkoNetworkTokenAvailable());
         assertEquals(CountryCode.GB, processing.getPurchaseCountry());
         assertEquals("SMI001", processing.getSchemeMerchantId());
@@ -222,6 +224,28 @@ class PaymentProcessingSerializationTest {
         assertEquals("biz_001", processing.getBizumPaymentId());
         assertEquals("rec_001", processing.getReconciliationId());
         assertEquals("MTL-XYZ-789", processing.getSchemeTransactionLinkId());
+    }
+
+    @Test
+    void shouldDeserializeFallbackSourceUsed() {
+        final String json = "{\"fallback_source_used\":true}";
+
+        final PaymentProcessing processing = serializer.fromJson(json, PaymentProcessing.class);
+
+        assertNotNull(processing);
+        assertEquals(Boolean.TRUE, processing.getFallbackSourceUsed());
+    }
+
+    @Test
+    void shouldRoundTripFallbackSourceUsed() {
+        final PaymentProcessing processing = new PaymentProcessing();
+        processing.setFallbackSourceUsed(false);
+
+        final String json = serializer.toJson(processing);
+        final PaymentProcessing deserialized = serializer.fromJson(json, PaymentProcessing.class);
+
+        assertTrue(json.contains("\"fallback_source_used\":false"));
+        assertEquals(Boolean.FALSE, deserialized.getFallbackSourceUsed());
     }
 
     @Test

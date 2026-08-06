@@ -142,6 +142,12 @@ public final class PaymentProcessing {
     private Long surchargeAmount;
 
     /**
+     * Indicates whether the {@code fallback_source} field was used for the payment.
+     * [Optional]
+     */
+    private Boolean fallbackSourceUsed;
+
+    /**
      * Indicates whether a Checkout.com Network Token was available for the payment.
      * [Optional]
      */
