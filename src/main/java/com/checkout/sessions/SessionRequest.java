@@ -116,16 +116,6 @@ public final class SessionRequest {
     private MerchantRiskInfo merchantRiskInfo;
 
     /**
-     * A reference to a previous transaction for this cardholder.
-     * <p>
-     * Note: this field is not present in the {@code SessionRequest} schema of the Checkout.com API
-     * Reference. It is retained for backwards compatibility pending confirmation from the API
-     * owners.
-     * [Optional]
-     */
-    private String priorTransactionReference;
-
-    /**
      * Identifies the type of transaction being authenticated.
      * [Optional]
      * Default: {@link TransactionType#GOODS_SERVICE}

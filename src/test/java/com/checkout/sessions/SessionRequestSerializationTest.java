@@ -65,7 +65,6 @@ class SessionRequestSerializationTest {
                         .isPreorder(false)
                         .isReorder(false)
                         .build())
-                .priorTransactionReference("prior-txn-ref")
                 .transactionType(TransactionType.GOODS_SERVICE)
                 .shippingAddress(SessionAddress.builderSessionAddress()
                         .addressLine1("Checkout.com")
@@ -167,14 +166,13 @@ class SessionRequestSerializationTest {
             assertTrue(json.contains("\"" + key + "\""), "missing property " + key + " in " + json);
         }
 
-        // Reflection guard: a field added to SessionRequest without being classified as either a spec
-        // property or a known non-spec property fails here. Synthetic fields are skipped because
-        // JaCoCo injects $jacocoData under Gradle.
+        // Reflection guard: SessionRequest must declare exactly the spec properties above and nothing
+        // else. Synthetic fields are skipped because JaCoCo injects $jacocoData under Gradle.
         final long declared = java.util.Arrays.stream(SessionRequest.class.getDeclaredFields())
                 .filter(field -> !field.isSynthetic())
                 .count();
         assertEquals(expectedKeys.length, declared,
-                "SessionRequest declares a property this test classifies as neither spec nor known-extra");
+                "SessionRequest declares a property that is not in the SessionRequest spec schema");
     }
 
     @Test
