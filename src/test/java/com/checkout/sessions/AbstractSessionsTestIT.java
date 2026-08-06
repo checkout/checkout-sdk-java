@@ -4,7 +4,6 @@ import com.checkout.CardSourceHelper;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.TestHelper;
-import com.checkout.common.ChallengeIndicator;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.Phone;
@@ -30,7 +29,7 @@ abstract class AbstractSessionsTestIT extends SandboxTestFixture {
 
     protected SessionResponse createNonHostedSession(final ChannelData channelData,
                                                      final Category authenticationCategory,
-                                                     final ChallengeIndicator challengeIndicator,
+                                                     final SessionChallengeIndicator challengeIndicator,
                                                      final TransactionType transactionType) {
 
         final SessionRequest sessionRequest = createNonHostedSessionRequest(channelData, authenticationCategory, challengeIndicator, transactionType);
@@ -45,7 +44,7 @@ abstract class AbstractSessionsTestIT extends SandboxTestFixture {
     // Common methods
     protected SessionRequest createNonHostedSessionRequest(final ChannelData channelData,
                                                           final Category authenticationCategory,
-                                                          final ChallengeIndicator challengeIndicator,
+                                                          final SessionChallengeIndicator challengeIndicator,
                                                           final TransactionType transactionType) {
         return SessionRequest.builder()
                 .source(createSessionCardSource())
@@ -73,7 +72,7 @@ abstract class AbstractSessionsTestIT extends SandboxTestFixture {
                 .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
                 .authenticationType(AuthenticationType.REGULAR)
                 .authenticationCategory(Category.PAYMENT)
-                .challengeIndicator(ChallengeIndicator.NO_PREFERENCE)
+                .challengeIndicator(SessionChallengeIndicator.NO_PREFERENCE)
                 .reference("ORD-5023-4E89")
                 .transactionType(TransactionType.GOODS_SERVICE)
                 .shippingAddress(createShippingAddress())

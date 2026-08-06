@@ -11,9 +11,35 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * The five exemption values are deprecated on this shared enum in favour of
+ * {@link com.checkout.sessions.SessionChallengeIndicator}, but they are deliberately kept and still
+ * covered here: removing them would break merchants that already reference them.
+ */
+@SuppressWarnings("deprecation")
 class ChallengeIndicatorTest {
 
     private final Serializer serializer = new GsonSerializer();
+
+    private static Stream<Arguments> baseChallengeIndicators() {
+        return Stream.of(
+                Arguments.of(ChallengeIndicator.NO_PREFERENCE, "\"no_preference\""),
+                Arguments.of(ChallengeIndicator.NO_CHALLENGE_REQUESTED, "\"no_challenge_requested\""),
+                Arguments.of(ChallengeIndicator.CHALLENGE_REQUESTED, "\"challenge_requested\""),
+                Arguments.of(ChallengeIndicator.CHALLENGE_REQUESTED_MANDATE, "\"challenge_requested_mandate\"")
+        );
+    }
+
+    /**
+     * The four base values are the only ones accepted by the {@code 3ds.challenge_indicator} fields
+     * that use this enum.
+     */
+    @ParameterizedTest
+    @MethodSource("baseChallengeIndicators")
+    void shouldRoundTripTheFourBaseValues(final ChallengeIndicator value, final String expectedJson) {
+        assertEquals(expectedJson, serializer.toJson(value));
+        assertEquals(value, serializer.fromJson(expectedJson, ChallengeIndicator.class));
+    }
 
     private static Stream<Arguments> challengeIndicators() {
         return Stream.of(
