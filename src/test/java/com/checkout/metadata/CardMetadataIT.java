@@ -1,5 +1,6 @@
 package com.checkout.metadata;
 
+import com.checkout.TestDomainConfiguration;
 import com.checkout.CardSourceHelper;
 import com.checkout.CheckoutApi;
 import com.checkout.CheckoutApiImpl;
@@ -160,10 +161,10 @@ class CardMetadataIT extends SandboxTestFixture {
     // ─── Helpers ────────────────────────────────────────────────────────────
 
     private CheckoutApiImpl createStaticKeyApi() {
-        return CheckoutSdk.builder().staticKeys()
+        return TestDomainConfiguration.configureDomain(CheckoutSdk.builder().staticKeys()
                 .publicKey(System.getenv("CHECKOUT_DEFAULT_PUBLIC_KEY"))
                 .secretKey(System.getenv("CHECKOUT_DEFAULT_SECRET_KEY"))
-                .environment(Environment.SANDBOX)
+                .environment(Environment.SANDBOX))
                 .build();
     }
 

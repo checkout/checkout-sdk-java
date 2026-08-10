@@ -1,5 +1,6 @@
 package com.checkout.accounts;
 
+import com.checkout.TestDomainConfiguration;
 import com.checkout.CheckoutApi;
 import com.checkout.CheckoutSdk;
 import com.checkout.Environment;
@@ -194,13 +195,13 @@ class AccountsPayoutSchedulesIT {
     }
 
     private CheckoutApi getPayoutSchedulesCheckoutApi() {
-        return CheckoutSdk.builder()
+        return TestDomainConfiguration.configureDomain(CheckoutSdk.builder()
                 .oAuth()
                 .clientCredentials(
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_PAYOUT_SCHEDULE_CLIENT_ID")),
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_PAYOUT_SCHEDULE_CLIENT_SECRET")))
                 .scopes(OAuthScope.MARKETPLACE)
-                .environment(Environment.SANDBOX)
+                .environment(Environment.SANDBOX))
                 .build();
     }
 
