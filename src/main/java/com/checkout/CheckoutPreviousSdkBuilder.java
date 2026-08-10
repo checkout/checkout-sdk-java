@@ -13,6 +13,13 @@ public final class CheckoutPreviousSdkBuilder {
         private String publicKey;
         private String secretKey;
 
+        // The Previous (ABC) platform predates merchant-specific subdomains, so it is exempt
+        // from the mandatory environmentSubdomain/useLegacyDomain configuration.
+        @Override
+        protected boolean requiresEnvironmentSubdomain() {
+            return false;
+        }
+
         public CheckoutStaticKeysSdkBuilder publicKey(final String publicKey) {
             this.publicKey = publicKey;
             return this;

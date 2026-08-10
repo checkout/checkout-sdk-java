@@ -67,6 +67,7 @@ class CheckoutSdkTelemetryIntegrationTest {
                 .secretKey(requireNonNull(System.getenv("CHECKOUT_DEFAULT_SECRET_KEY")))
                 .recordTelemetry(telemetryEnabled)
                 .environment(SANDBOX)
+                .environmentSubdomain("1234doma")
                 .httpClientBuilder(httpClientBuilderMock)
                 .build();
     }

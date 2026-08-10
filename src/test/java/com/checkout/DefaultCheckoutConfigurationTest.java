@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -66,14 +67,11 @@ class DefaultCheckoutConfigurationTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "  ", " - ", "a b", "ab c1", "foo-", "-foo", "ABC123", "FOO", "test-123", "foo-bar", "pl-"})
-    void shouldCreateConfigurationWithBadSubdomain(String subdomain) {
+    void shouldFailWithBadSubdomain(String subdomain) {
 
-        final StaticKeysSdkCredentials credentials = Mockito.mock(StaticKeysSdkCredentials.class);
-        final EnvironmentSubdomain environmentSubdomain = new EnvironmentSubdomain(Environment.SANDBOX, subdomain);
-
-        final CheckoutConfiguration configuration = new DefaultCheckoutConfiguration(credentials, Environment.SANDBOX, environmentSubdomain, DEFAULT_CLIENT_BUILDER, DEFAULT_EXECUTOR, DEFAULT_TRANSPORT_CONFIGURATION, false);
-        assertEquals("https://api.sandbox.checkout.com/", configuration.getEnvironmentSubdomain().getCheckoutApi().toString());
-        assertEquals("https://access.sandbox.checkout.com/connect/token", configuration.getEnvironmentSubdomain().getOAuthAuthorizationApi().toString());
+        final CheckoutArgumentException exception = assertThrows(CheckoutArgumentException.class,
+                () -> new EnvironmentSubdomain(Environment.SANDBOX, subdomain));
+        assertTrue(exception.getMessage().contains("invalid environment subdomain"));
     }
 
     @Test
