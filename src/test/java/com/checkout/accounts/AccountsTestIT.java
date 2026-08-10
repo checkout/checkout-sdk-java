@@ -1,5 +1,6 @@
 package com.checkout.accounts;
 
+import com.checkout.TestDomainConfiguration;
 import com.checkout.CheckoutApi;
 import com.checkout.CheckoutSdk;
 import com.checkout.Environment;
@@ -794,13 +795,13 @@ class AccountsTestIT extends SandboxTestFixture {
     }
 
     private CheckoutApi getAccountsCheckoutApi() {
-        return CheckoutSdk.builder()
+        return TestDomainConfiguration.configureDomain(CheckoutSdk.builder()
                 .oAuth()
                 .clientCredentials(
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_ACCOUNTS_CLIENT_ID")),
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_ACCOUNTS_CLIENT_SECRET")))
                 .scopes(OAuthScope.ACCOUNTS)
-                .environment(Environment.SANDBOX)
+                .environment(Environment.SANDBOX))
                 .build();
     }
 

@@ -1,5 +1,6 @@
 package com.checkout.payments;
 
+import com.checkout.TestDomainConfiguration;
 import static com.checkout.TestHelper.createAddress;
 import static com.checkout.TestHelper.createPhone;
 import static com.checkout.TestHelper.getAccountHolder;
@@ -934,12 +935,12 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
 
     // API builders
     private CheckoutApi createPreviewApi() {
-        return CheckoutSdk.builder()
+        return TestDomainConfiguration.configureDomain(CheckoutSdk.builder()
                 .oAuth()
                 .clientCredentials(
                         requireNonNull(System.getenv("CHECKOUT_PREVIEW_OAUTH_CLIENT_ID")),
                         requireNonNull(System.getenv("CHECKOUT_PREVIEW_OAUTH_CLIENT_SECRET")))
-                .environment(Environment.SANDBOX)
+                .environment(Environment.SANDBOX))
                 .build();
     }
 

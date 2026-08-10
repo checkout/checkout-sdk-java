@@ -1,5 +1,6 @@
 package com.checkout.issuing;
 
+import com.checkout.TestDomainConfiguration;
 import com.checkout.CheckoutApi;
 import com.checkout.CheckoutSdk;
 import com.checkout.Environment;
@@ -34,7 +35,7 @@ public abstract class BaseIssuingTestIT extends SandboxTestFixture {
     }
 
     private CheckoutApi getIssuingCheckoutApi() {
-        return CheckoutSdk.builder()
+        return TestDomainConfiguration.configureDomain(CheckoutSdk.builder()
                 .oAuth()
                 .clientCredentials(
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_ISSUING_CLIENT_ID")),
@@ -42,7 +43,7 @@ public abstract class BaseIssuingTestIT extends SandboxTestFixture {
                 .scopes(OAuthScope.VAULT, OAuthScope.ISSUING_CLIENT, OAuthScope.ISSUING_CARD_MGMT,
                         OAuthScope.ISSUING_CONTROLS_READ, OAuthScope.ISSUING_CONTROLS_WRITE,
                         OAuthScope.ISSUING_TRANSACTIONS_READ, OAuthScope.ISSUING_TRANSACTIONS_WRITE)
-                .environment(Environment.SANDBOX)
+                .environment(Environment.SANDBOX))
                 .build();
     }
 

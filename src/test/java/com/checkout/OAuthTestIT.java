@@ -70,6 +70,7 @@ class OAuthTestIT extends SandboxTestFixture {
 
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void shouldInitAuthorization() {
 
@@ -82,6 +83,7 @@ class OAuthTestIT extends SandboxTestFixture {
                             "fake")
                     .scopes(OAuthScope.GATEWAY)
                     .environment(Environment.SANDBOX)
+                    .useLegacyDomain()
                     .build();
             fail();
         } catch (final Exception e) {
