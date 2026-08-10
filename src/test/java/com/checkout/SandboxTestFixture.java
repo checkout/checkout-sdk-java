@@ -61,26 +61,26 @@ public abstract class SandboxTestFixture {
                                                         .setConnectionTimeToLive(60, TimeUnit.SECONDS)
                                                         .evictIdleConnections(30, TimeUnit.SECONDS);
 
-                this.checkoutApi = CheckoutSdk.builder()
+                this.checkoutApi = configureDomain(CheckoutSdk.builder()
                         .staticKeys()
                         .publicKey(requireNonNull(System.getenv("CHECKOUT_DEFAULT_PUBLIC_KEY")))
                         .secretKey(requireNonNull(System.getenv("CHECKOUT_DEFAULT_SECRET_KEY")))
                         .environment(Environment.SANDBOX)
                         .executor(Executors.newFixedThreadPool(100))
-                        .httpClientBuilder(httpClientBuilder)
+                        .httpClientBuilder(httpClientBuilder))
                         .build();
                 break;
             case DEFAULT:
-                this.checkoutApi = CheckoutSdk.builder()
+                this.checkoutApi = configureDomain(CheckoutSdk.builder()
                         .staticKeys()
                         .publicKey(requireNonNull(System.getenv("CHECKOUT_DEFAULT_PUBLIC_KEY")))
                         .secretKey(requireNonNull(System.getenv("CHECKOUT_DEFAULT_SECRET_KEY")))
                         .environment(Environment.SANDBOX)
-                        .executor(CUSTOM_EXECUTOR)
+                        .executor(CUSTOM_EXECUTOR))
                         .build();
                 break;
             case DEFAULT_OAUTH:
-                this.checkoutApi = CheckoutSdk.builder()
+                this.checkoutApi = configureDomain(CheckoutSdk.builder()
                         .oAuth()
                         .clientCredentials(
                                 requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_ID")),
@@ -92,11 +92,27 @@ public abstract class SandboxTestFixture {
                                 OAuthScope.VAULT_CARD_METADATA, OAuthScope.FINANCIAL_ACTIONS, OAuthScope.FORWARD, 
                                 OAuthScope.FORWARD_SECRETS, OAuthScope.PAYMENTS_SEARCH)
                         .environment(Environment.SANDBOX)
-                        .executor(CUSTOM_EXECUTOR)
+                        .executor(CUSTOM_EXECUTOR))
                         .build();
-            case CUSTOM:                
+            case CUSTOM:
                 break;
         }
+    }
+
+    /**
+     * The merchant-specific subdomain is mandatory, so the fixtures read it from
+     * {@code CHECKOUT_MERCHANT_SUBDOMAIN}. Where that variable is not configured the suite
+     * falls back to the shared hosts, which is the only reason this touches the deprecated
+     * opt-out.
+     */
+    @SuppressWarnings("deprecation")
+    protected static <T extends CheckoutApiClient> AbstractCheckoutSdkBuilder<T> configureDomain(
+            final AbstractCheckoutSdkBuilder<T> builder) {
+        final String subdomain = System.getenv("CHECKOUT_MERCHANT_SUBDOMAIN");
+        if (subdomain != null && !subdomain.trim().isEmpty()) {
+            return builder.environmentSubdomain(subdomain);
+        }
+        return builder.useLegacyDomain();
     }
 
     protected <T> T blocking(final Supplier<CompletableFuture<T>> supplier) {

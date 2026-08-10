@@ -18,6 +18,7 @@ class CheckoutSdkBuilderSynchronousTest {
                 .publicKey(VALID_DEFAULT_PK)
                 .secretKey(VALID_DEFAULT_SK)
                 .environment(Environment.SANDBOX)
+                .environmentSubdomain("1234doma")
                 .synchronous(true)
                 .build();
 
@@ -35,6 +36,7 @@ class CheckoutSdkBuilderSynchronousTest {
                 .publicKey(VALID_DEFAULT_PK)
                 .secretKey(VALID_DEFAULT_SK)
                 .environment(Environment.SANDBOX)
+                .environmentSubdomain("1234doma")
                 .resilience4jConfiguration(resilience4jConfig)
                 .build();
 
@@ -49,6 +51,7 @@ class CheckoutSdkBuilderSynchronousTest {
                 .publicKey(VALID_DEFAULT_PK)
                 .secretKey(VALID_DEFAULT_SK)
                 .environment(Environment.SANDBOX)
+                .environmentSubdomain("1234doma")
                 .synchronous(true)
                 .resilience4jConfiguration(resilience4jConfig)
                 .build();
@@ -63,6 +66,7 @@ class CheckoutSdkBuilderSynchronousTest {
                 .publicKey(VALID_DEFAULT_PK)
                 .secretKey(VALID_DEFAULT_SK)
                 .environment(Environment.SANDBOX)
+                .environmentSubdomain("1234doma")
                 .build();
 
         assertNotNull(checkoutApi);
@@ -90,6 +94,7 @@ class CheckoutSdkBuilderSynchronousTest {
                 .publicKey(VALID_DEFAULT_PK)
                 .secretKey(VALID_DEFAULT_SK)
                 .environment(Environment.SANDBOX)
+                .environmentSubdomain("1234doma")
                 .synchronous(true)
                 .resilience4jConfiguration(resilience4jConfig)
                 .build();

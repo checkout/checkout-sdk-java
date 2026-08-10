@@ -41,6 +41,7 @@ class CheckoutSdkTest {
                 .publicKey(VALID_PREVIOUS_PK)
                 .secretKey(VALID_PREVIOUS_SK)
                 .environment(Environment.SANDBOX)
+                .environmentSubdomain("1234doma")
                 .build();
 
         assertNotNull(defaultCheckoutApi);
@@ -69,6 +70,7 @@ class CheckoutSdkTest {
                 .publicKey(VALID_DEFAULT_PK)
                 .secretKey(VALID_DEFAULT_SK)
                 .environment(Environment.SANDBOX)
+                .environmentSubdomain("1234doma")
                 .build();
 
         assertNotNull(checkoutApi);

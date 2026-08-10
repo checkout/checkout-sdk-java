@@ -28,6 +28,7 @@ class SynchronousAsyncClientComparisonTest {
                 .publicKey(VALID_DEFAULT_PK)
                 .secretKey(VALID_DEFAULT_SK)
                 .environment(Environment.SANDBOX)
+                .environmentSubdomain("1234doma")
                 .synchronous(true)  // Synchronous mode
                 .build();
 
@@ -36,6 +37,7 @@ class SynchronousAsyncClientComparisonTest {
                 .publicKey(VALID_DEFAULT_PK)
                 .secretKey(VALID_DEFAULT_SK)
                 .environment(Environment.SANDBOX)
+                .environmentSubdomain("1234doma")
                 .synchronous(false)  // Asynchronous mode (default)
                 .build();
 
@@ -111,6 +113,7 @@ class SynchronousAsyncClientComparisonTest {
                 .publicKey(VALID_DEFAULT_PK)
                 .secretKey(VALID_DEFAULT_SK)
                 .environment(Environment.SANDBOX)
+                .environmentSubdomain("1234doma")
                 .synchronous(true)
                 .build();
 
@@ -118,6 +121,7 @@ class SynchronousAsyncClientComparisonTest {
                 .publicKey(VALID_DEFAULT_PK)
                 .secretKey(VALID_DEFAULT_SK)
                 .environment(Environment.SANDBOX)
+                .environmentSubdomain("1234doma")
                 .synchronous(false)
                 .build();
 
@@ -142,6 +146,7 @@ class SynchronousAsyncClientComparisonTest {
                 .publicKey(VALID_DEFAULT_PK)
                 .secretKey(VALID_DEFAULT_SK)
                 .environment(Environment.SANDBOX)
+                .environmentSubdomain("1234doma")
                 .synchronous(true)
                 .build();
 
@@ -149,6 +154,7 @@ class SynchronousAsyncClientComparisonTest {
                 .publicKey(VALID_DEFAULT_PK)
                 .secretKey(VALID_DEFAULT_SK)
                 .environment(Environment.SANDBOX)
+                .environmentSubdomain("1234doma")
                 .synchronous(false)
                 .build();
 
