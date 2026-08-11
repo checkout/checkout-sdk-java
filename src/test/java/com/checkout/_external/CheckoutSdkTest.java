@@ -37,11 +37,12 @@ class CheckoutSdkTest {
     @Test
     void shouldCreatePreviousSdk() {
 
+        // No subdomain here on purpose: the Previous (ABC) platform predates merchant-specific
+        // subdomains and is exempt, so this also covers that exemption.
         final CheckoutApi defaultCheckoutApi = CheckoutSdk.builder().previous().staticKeys()
                 .publicKey(VALID_PREVIOUS_PK)
                 .secretKey(VALID_PREVIOUS_SK)
                 .environment(Environment.SANDBOX)
-                .environmentSubdomain("1234doma")
                 .build();
 
         assertNotNull(defaultCheckoutApi);
