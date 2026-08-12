@@ -61,26 +61,32 @@ public abstract class SandboxTestFixture {
                                                         .setConnectionTimeToLive(60, TimeUnit.SECONDS)
                                                         .evictIdleConnections(30, TimeUnit.SECONDS);
 
-                this.checkoutApi = TestDomainConfiguration.configureDomain(CheckoutSdk.builder()
+                this.checkoutApi = CheckoutSdk.builder()
                         .staticKeys()
                         .publicKey(requireNonNull(System.getenv("CHECKOUT_DEFAULT_PUBLIC_KEY")))
                         .secretKey(requireNonNull(System.getenv("CHECKOUT_DEFAULT_SECRET_KEY")))
                         .environment(Environment.SANDBOX)
                         .executor(Executors.newFixedThreadPool(100))
-                        .httpClientBuilder(httpClientBuilder))
+                        .httpClientBuilder(httpClientBuilder)
+                        // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
+                        // the token request would come back invalid_client. Opting out explicitly until they are.
+                        .useLegacyDomain()
                         .build();
                 break;
             case DEFAULT:
-                this.checkoutApi = TestDomainConfiguration.configureDomain(CheckoutSdk.builder()
+                this.checkoutApi = CheckoutSdk.builder()
                         .staticKeys()
                         .publicKey(requireNonNull(System.getenv("CHECKOUT_DEFAULT_PUBLIC_KEY")))
                         .secretKey(requireNonNull(System.getenv("CHECKOUT_DEFAULT_SECRET_KEY")))
                         .environment(Environment.SANDBOX)
-                        .executor(CUSTOM_EXECUTOR))
+                        .executor(CUSTOM_EXECUTOR)
+                        // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
+                        // the token request would come back invalid_client. Opting out explicitly until they are.
+                        .useLegacyDomain()
                         .build();
                 break;
             case DEFAULT_OAUTH:
-                this.checkoutApi = TestDomainConfiguration.configureDomain(CheckoutSdk.builder()
+                this.checkoutApi = CheckoutSdk.builder()
                         .oAuth()
                         .clientCredentials(
                                 requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_ID")),
@@ -92,7 +98,10 @@ public abstract class SandboxTestFixture {
                                 OAuthScope.VAULT_CARD_METADATA, OAuthScope.FINANCIAL_ACTIONS, OAuthScope.FORWARD, 
                                 OAuthScope.FORWARD_SECRETS, OAuthScope.PAYMENTS_SEARCH)
                         .environment(Environment.SANDBOX)
-                        .executor(CUSTOM_EXECUTOR))
+                        .executor(CUSTOM_EXECUTOR)
+                        // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
+                        // the token request would come back invalid_client. Opting out explicitly until they are.
+                        .useLegacyDomain()
                         .build();
             case CUSTOM:
                 break;

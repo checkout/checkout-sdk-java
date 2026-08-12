@@ -1,6 +1,5 @@
 package com.checkout.metadata;
 
-import com.checkout.TestDomainConfiguration;
 import com.checkout.CardSourceHelper;
 import com.checkout.CheckoutApi;
 import com.checkout.CheckoutApiImpl;
@@ -161,10 +160,13 @@ class CardMetadataIT extends SandboxTestFixture {
     // ─── Helpers ────────────────────────────────────────────────────────────
 
     private CheckoutApiImpl createStaticKeyApi() {
-        return TestDomainConfiguration.configureDomain(CheckoutSdk.builder().staticKeys()
+        return CheckoutSdk.builder().staticKeys()
                 .publicKey(System.getenv("CHECKOUT_DEFAULT_PUBLIC_KEY"))
                 .secretKey(System.getenv("CHECKOUT_DEFAULT_SECRET_KEY"))
-                .environment(Environment.SANDBOX))
+                .environment(Environment.SANDBOX)
+                // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
+                // the token request would come back invalid_client. Opting out explicitly until they are.
+                .useLegacyDomain()
                 .build();
     }
 
