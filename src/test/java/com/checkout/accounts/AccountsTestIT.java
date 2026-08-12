@@ -1,6 +1,5 @@
 package com.checkout.accounts;
 
-import com.checkout.TestDomainConfiguration;
 import com.checkout.CheckoutApi;
 import com.checkout.CheckoutSdk;
 import com.checkout.Environment;
@@ -795,13 +794,16 @@ class AccountsTestIT extends SandboxTestFixture {
     }
 
     private CheckoutApi getAccountsCheckoutApi() {
-        return TestDomainConfiguration.configureDomain(CheckoutSdk.builder()
+        return CheckoutSdk.builder()
                 .oAuth()
                 .clientCredentials(
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_ACCOUNTS_CLIENT_ID")),
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_ACCOUNTS_CLIENT_SECRET")))
                 .scopes(OAuthScope.ACCOUNTS)
-                .environment(Environment.SANDBOX))
+                .environment(Environment.SANDBOX)
+                // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
+                // the token request would come back invalid_client. Opting out explicitly until they are.
+                .useLegacyDomain()
                 .build();
     }
 

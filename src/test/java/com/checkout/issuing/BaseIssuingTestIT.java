@@ -1,6 +1,5 @@
 package com.checkout.issuing;
 
-import com.checkout.TestDomainConfiguration;
 import com.checkout.CheckoutApi;
 import com.checkout.CheckoutSdk;
 import com.checkout.Environment;
@@ -35,7 +34,7 @@ public abstract class BaseIssuingTestIT extends SandboxTestFixture {
     }
 
     private CheckoutApi getIssuingCheckoutApi() {
-        return TestDomainConfiguration.configureDomain(CheckoutSdk.builder()
+        return CheckoutSdk.builder()
                 .oAuth()
                 .clientCredentials(
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_ISSUING_CLIENT_ID")),
@@ -43,7 +42,10 @@ public abstract class BaseIssuingTestIT extends SandboxTestFixture {
                 .scopes(OAuthScope.VAULT, OAuthScope.ISSUING_CLIENT, OAuthScope.ISSUING_CARD_MGMT,
                         OAuthScope.ISSUING_CONTROLS_READ, OAuthScope.ISSUING_CONTROLS_WRITE,
                         OAuthScope.ISSUING_TRANSACTIONS_READ, OAuthScope.ISSUING_TRANSACTIONS_WRITE)
-                .environment(Environment.SANDBOX))
+                .environment(Environment.SANDBOX)
+                // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
+                // the token request would come back invalid_client. Opting out explicitly until they are.
+                .useLegacyDomain()
                 .build();
     }
 

@@ -113,13 +113,16 @@ class OAuthTestIT extends SandboxTestFixture {
     @Test
     void shouldInstantiateCheckoutApiWithOAuth_defaultAuthorizeUrl() {
 
-        final CheckoutApi checkoutApi = TestDomainConfiguration.configureDomain(CheckoutSdk.builder()
+        final CheckoutApi checkoutApi = CheckoutSdk.builder()
                 .oAuth()
                 .clientCredentials(
                         System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_ID"),
                         System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_SECRET"))
                 .scopes(OAuthScope.GATEWAY)
-                .environment(Environment.SANDBOX))
+                .environment(Environment.SANDBOX)
+                // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
+                // the token request would come back invalid_client. Opting out explicitly until they are.
+                .useLegacyDomain()
                 .build();
 
         assertNotNull(checkoutApi);
@@ -130,14 +133,17 @@ class OAuthTestIT extends SandboxTestFixture {
     @Test
     void shouldInstantiateCheckoutApiWithOAuth_customAuthorizeUrl() throws URISyntaxException {
 
-        final CheckoutApi checkoutApi = TestDomainConfiguration.configureDomain(CheckoutSdk.builder()
+        final CheckoutApi checkoutApi = CheckoutSdk.builder()
                 .oAuth()
                 .clientCredentials(
                         new URI(OAUTH_AUTHORIZE_URL),
                         System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_ID"),
                         System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_SECRET"))
                 .scopes(OAuthScope.GATEWAY)
-                .environment(Environment.SANDBOX))
+                .environment(Environment.SANDBOX)
+                // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
+                // the token request would come back invalid_client. Opting out explicitly until they are.
+                .useLegacyDomain()
                 .build();
 
         assertNotNull(checkoutApi);
@@ -148,7 +154,7 @@ class OAuthTestIT extends SandboxTestFixture {
     void shouldFailInitAuthorizationWithCustomEnvironment() {
 
         try {
-            TestDomainConfiguration.configureDomain(CheckoutSdk.builder()
+            CheckoutSdk.builder()
                     .oAuth()
                     .clientCredentials(
                             System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_ID"),
@@ -156,7 +162,11 @@ class OAuthTestIT extends SandboxTestFixture {
                     .scopes(OAuthScope.GATEWAY)
                     .environment(CustomEnvironment.builder()
                             .oAuthAuthorizationApi(create("https://the.oauth.uri/connect/token"))
-                            .build()))
+                            .build())
+                    // The sandbox OAuth clients are not provisioned for the merchant-specific
+                    // subdomain, so the token request would come back invalid_client. Opting out
+                    // explicitly until they are.
+                    .useLegacyDomain()
                     .build();
             fail();
         } catch (final Exception e) {
