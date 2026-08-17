@@ -30,6 +30,7 @@ class PayoutScheduleIsvSerializationTest {
                 .threshold(100)
                 .balanceMinimum(500L)
                 .carryForwardEnabled(true)
+                .paymentInstrumentId("ppi_w4jelhppmfiufdnatam37wrfc4")
                 .recurrence(ScheduleFrequencyWeeklyRequest.builder()
                         .byDays(Collections.singletonList(DaySchedule.MONDAY))
                         .build())
@@ -39,6 +40,7 @@ class PayoutScheduleIsvSerializationTest {
 
         assertTrue(json.contains("\"balance_minimum\":500"), json);
         assertTrue(json.contains("\"carry_forward_enabled\":true"), json);
+        assertTrue(json.contains("\"payment_instrument_id\":\"ppi_w4jelhppmfiufdnatam37wrfc4\""), json);
         assertTrue(json.contains("\"by_day\":[\"monday\"]"), json);
     }
 
@@ -61,6 +63,7 @@ class PayoutScheduleIsvSerializationTest {
 
         assertFalse(json.contains("balance_minimum"), json);
         assertFalse(json.contains("carry_forward_enabled"), json);
+        assertFalse(json.contains("payment_instrument_id"), json);
         assertTrue(json.contains("\"by_month_day\":[1,15]"), json);
     }
 
@@ -68,6 +71,7 @@ class PayoutScheduleIsvSerializationTest {
     void shouldDeserializeIsvScheduleFields() {
         final String json = "{\"enabled\":true,\"threshold\":100,\"balance_minimum\":500,"
                 + "\"carry_forward_enabled\":true,"
+                + "\"payment_instrument_id\":\"ppi_w4jelhppmfiufdnatam37wrfc4\","
                 + "\"recurrence\":{\"frequency\":\"Weekly\",\"by_day\":[\"monday\"]}}";
 
         final CurrencySchedule schedule = serializer.fromJson(json, CurrencySchedule.class);
@@ -76,6 +80,7 @@ class PayoutScheduleIsvSerializationTest {
         assertEquals(100, schedule.getThreshold());
         assertEquals(500L, schedule.getBalanceMinimum());
         assertTrue(schedule.getCarryForwardEnabled());
+        assertEquals("ppi_w4jelhppmfiufdnatam37wrfc4", schedule.getPaymentInstrumentId());
     }
 
     /**
@@ -91,5 +96,6 @@ class PayoutScheduleIsvSerializationTest {
 
         assertNull(schedule.getBalanceMinimum());
         assertNull(schedule.getCarryForwardEnabled());
+        assertNull(schedule.getPaymentInstrumentId());
     }
 }

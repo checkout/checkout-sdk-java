@@ -11,6 +11,12 @@ public final class CurrencySchedule {
     private Integer threshold;
 
     /**
+     * The ID of the platforms payment instrument this schedule pays out to.
+     */
+    @SerializedName("payment_instrument_id")
+    private String paymentInstrumentId;
+
+    /**
      * The amount, in the minor units of the schedule's currency, retained in the sub-entity's
      * available balance. Only the funds above this are paid out.
      *
