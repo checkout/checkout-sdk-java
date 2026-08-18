@@ -16,7 +16,7 @@ public final class OnboardSubEntityDocuments {
 
     private CompanyVerification companyVerification;
 
-    private ArticlesOfAssociationType articlesOfAssociation;
+    private ArticlesOfAssociation articlesOfAssociation;
 
     private BankVerification bankVerification;
 
