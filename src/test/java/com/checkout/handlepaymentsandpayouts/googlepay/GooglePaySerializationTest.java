@@ -15,6 +15,7 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -146,6 +147,65 @@ class GooglePaySerializationTest {
         assertNotNull(deserialized);
         assertEquals(original.getTosAcceptedTime(), deserialized.getTosAcceptedTime());
         assertEquals(original.getState(), deserialized.getState());
+    }
+
+    /**
+     * The body a real POST /googlepay/enrollments returns in sandbox, which is not what the
+     * swagger example below says: it also carries merchant_id, and the spec omits it while
+     * setting additionalProperties false. A merchant reported the field as missing.
+     */
+    @Test
+    void shouldDeserializeTheRealGooglePayEnrollmentResponse() {
+        String json = "{"
+                + "\"merchant_id\":\"12345678901234567890\","
+                + "\"tos_accepted_time\":\"2026-08-13T09:12:41Z\","
+                + "\"state\":\"ACTIVE\""
+                + "}";
+
+        GooglePayEnrollmentResponse response = serializer.fromJson(json, GooglePayEnrollmentResponse.class);
+
+        assertNotNull(response);
+        assertEquals("12345678901234567890", response.getMerchantId());
+        assertEquals(Instant.parse("2026-08-13T09:12:41Z"), response.getTosAcceptedTime());
+        assertEquals(GooglePayEnrollmentState.ACTIVE, response.getState());
+    }
+
+    /**
+     * merchant_id is what the caller needs to initialise Google Pay on the client, so losing it
+     * is the whole defect. Asserted on its own to make that unmissable.
+     */
+    @Test
+    void shouldNotSilentlyDropMerchantId() {
+        String json = "{"
+                + "\"merchant_id\":\"12345678901234567890\","
+                + "\"tos_accepted_time\":\"2026-08-13T09:12:41Z\","
+                + "\"state\":\"ACTIVE\""
+                + "}";
+
+        assertNotNull(serializer.fromJson(json, GooglePayEnrollmentResponse.class).getMerchantId());
+    }
+
+    /**
+     * A missing merchant_id has to come back null rather than empty: a caller must be able to
+     * tell "not returned" from "returned blank".
+     */
+    @Test
+    void shouldLeaveMerchantIdNullWhenAbsent() {
+        String json = "{\"tos_accepted_time\":\"2026-08-13T09:12:41Z\",\"state\":\"ACTIVE\"}";
+
+        GooglePayEnrollmentResponse response = serializer.fromJson(json, GooglePayEnrollmentResponse.class);
+
+        assertNull(response.getMerchantId());
+        assertEquals(GooglePayEnrollmentState.ACTIVE, response.getState());
+    }
+
+    @Test
+    void shouldSerializeMerchantIdAsSnakeCase() {
+        GooglePayEnrollmentResponse response = new GooglePayEnrollmentResponse();
+        response.setMerchantId("12345678901234567890");
+        response.setState(GooglePayEnrollmentState.ACTIVE);
+
+        assertTrue(serializer.toJson(response).contains("\"merchant_id\":\"12345678901234567890\""));
     }
 
     @Test
