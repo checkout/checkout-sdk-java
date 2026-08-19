@@ -9,7 +9,7 @@ jobs:
   job-container:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v7
       - id: setup-java-11-build
         uses: actions/setup-java@v2
         with:
