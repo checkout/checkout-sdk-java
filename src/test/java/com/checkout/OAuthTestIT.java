@@ -70,6 +70,7 @@ class OAuthTestIT extends SandboxTestFixture {
 
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     void shouldInitAuthorization() {
 
@@ -82,6 +83,7 @@ class OAuthTestIT extends SandboxTestFixture {
                             "fake")
                     .scopes(OAuthScope.GATEWAY)
                     .environment(Environment.SANDBOX)
+                    .useLegacyDomain()
                     .build();
             fail();
         } catch (final Exception e) {
@@ -118,6 +120,9 @@ class OAuthTestIT extends SandboxTestFixture {
                         System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_SECRET"))
                 .scopes(OAuthScope.GATEWAY)
                 .environment(Environment.SANDBOX)
+                // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
+                // the token request would come back invalid_client. Opting out explicitly until they are.
+                .useLegacyDomain()
                 .build();
 
         assertNotNull(checkoutApi);
@@ -136,6 +141,9 @@ class OAuthTestIT extends SandboxTestFixture {
                         System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_SECRET"))
                 .scopes(OAuthScope.GATEWAY)
                 .environment(Environment.SANDBOX)
+                // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
+                // the token request would come back invalid_client. Opting out explicitly until they are.
+                .useLegacyDomain()
                 .build();
 
         assertNotNull(checkoutApi);
@@ -155,6 +163,10 @@ class OAuthTestIT extends SandboxTestFixture {
                     .environment(CustomEnvironment.builder()
                             .oAuthAuthorizationApi(create("https://the.oauth.uri/connect/token"))
                             .build())
+                    // The sandbox OAuth clients are not provisioned for the merchant-specific
+                    // subdomain, so the token request would come back invalid_client. Opting out
+                    // explicitly until they are.
+                    .useLegacyDomain()
                     .build();
             fail();
         } catch (final Exception e) {

@@ -43,6 +43,9 @@ public abstract class BaseIssuingTestIT extends SandboxTestFixture {
                         OAuthScope.ISSUING_CONTROLS_READ, OAuthScope.ISSUING_CONTROLS_WRITE,
                         OAuthScope.ISSUING_TRANSACTIONS_READ, OAuthScope.ISSUING_TRANSACTIONS_WRITE)
                 .environment(Environment.SANDBOX)
+                // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
+                // the token request would come back invalid_client. Opting out explicitly until they are.
+                .useLegacyDomain()
                 .build();
     }
 

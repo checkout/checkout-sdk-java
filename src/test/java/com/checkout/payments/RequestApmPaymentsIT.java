@@ -940,6 +940,9 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                         requireNonNull(System.getenv("CHECKOUT_PREVIEW_OAUTH_CLIENT_ID")),
                         requireNonNull(System.getenv("CHECKOUT_PREVIEW_OAUTH_CLIENT_SECRET")))
                 .environment(Environment.SANDBOX)
+                // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
+                // the token request would come back invalid_client. Opting out explicitly until they are.
+                .useLegacyDomain()
                 .build();
     }
 

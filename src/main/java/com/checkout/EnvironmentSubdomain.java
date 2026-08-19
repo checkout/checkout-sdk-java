@@ -24,36 +24,29 @@ public final class EnvironmentSubdomain {
     }
 
     /**
-     * Applies subdomain transformation to any given URI.
-     * If the subdomain is valid (alphanumeric pattern), prepends it to the host.
-     * Otherwise, returns the original URI unchanged.
+     * Applies subdomain transformation to any given URI, prepending the subdomain to the host.
      *
      * @param originalUrl the original URI to transform
      * @param subdomain the subdomain to prepend
-     * @return the transformed URI with subdomain, or original URI if subdomain is invalid
+     * @return the transformed URI with subdomain
+     * @throws CheckoutArgumentException if the subdomain is not a valid merchant-specific subdomain
      */
     private static URI createUrlWithSubdomain(URI originalUrl, String subdomain) {
-        URI newEnvironment = null;
+        Pattern pattern = Pattern.compile("^(?:pl-)?[a-z0-9]+$");
+        Matcher matcher = subdomain == null ? null : pattern.matcher(subdomain);
+        if (matcher == null || !matcher.matches()) {
+            throw new CheckoutArgumentException("invalid environment subdomain - provide your merchant-specific subdomain, the first 8 characters of your client ID (see https://api-reference.checkout.com/#section/Base-URLs)");
+        }
+
+        String host = originalUrl.getHost();
+        String scheme = originalUrl.getScheme();
+        int port = originalUrl.getPort();
+        String newHost = subdomain + "." + host;
         try {
-            newEnvironment = new URI(originalUrl.toString());
+            return new URI(scheme, null, newHost, port, originalUrl.getPath(), originalUrl.getQuery(), originalUrl.getFragment());
         } catch (final URISyntaxException e) {
             throw new CheckoutException(e);
         }
-        
-        Pattern pattern = Pattern.compile("^(?:pl-)?[a-z0-9]+$");
-        Matcher matcher = pattern.matcher(subdomain);
-        if (matcher.matches()) {
-            String host = originalUrl.getHost();
-            String scheme = originalUrl.getScheme();
-            int port = originalUrl.getPort();
-            String newHost = subdomain + "." + host;
-            try {
-                newEnvironment = new URI(scheme, null, newHost, port, originalUrl.getPath(), originalUrl.getQuery(), originalUrl.getFragment());
-            } catch (final URISyntaxException e) {
-                throw new CheckoutException(e);
-            }
-        }
-        return newEnvironment;
     }
 
 }

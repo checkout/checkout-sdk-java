@@ -201,6 +201,9 @@ class AccountsPayoutSchedulesIT {
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_PAYOUT_SCHEDULE_CLIENT_SECRET")))
                 .scopes(OAuthScope.MARKETPLACE)
                 .environment(Environment.SANDBOX)
+                // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
+                // the token request would come back invalid_client. Opting out explicitly until they are.
+                .useLegacyDomain()
                 .build();
     }
 

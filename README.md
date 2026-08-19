@@ -85,6 +85,10 @@ If you don't have your own API keys, you can sign up for a test account [here](h
 
 **PLEASE NEVER SHARE OR PUBLISH YOUR CHECKOUT CREDENTIALS.**
 
+### Subdomain value
+
+Requests must be made through your merchant-specific subdomain (MSSD): the first 8 characters of your client ID (excluding `cli_`). For example, if your client ID is `cli_vkuhvk4vjn2edkps7dfsq6emqm`, your subdomain is `vkuhvk4v`. When `environmentSubdomain` is set the SDK sends requests to `https://vkuhvk4v.api.checkout.com`. See [Base URLs](https://api-reference.checkout.com/#section/Base-URLs) and [API endpoints](https://www.checkout.com/docs/developer-resources/api/api-endpoints) for further details, and for where to find your unique client ID.
+
 ### Default
 
 Default keys client instantiation can be done as follows:
@@ -99,7 +103,7 @@ public static void main(String[] args) {
             .publicKey("public_key")  // optional, only required for operations related with tokens
             .secretKey("secret_key")
             .environment(Environment.PRODUCTION)  // required
-            .environmentSubdomain("subdomain") // optional, Merchant-specific DNS name
+            .environmentSubdomain("subdomain") // required, Merchant-specific DNS name, the first 8 characters of your client ID
             .executor() // optional for a custom Executor Service
             .build();
     
@@ -125,7 +129,7 @@ final CheckoutApi checkoutApi = CheckoutSdk.builder()
         //.clientCredentials(new URI("https://access.sandbox.checkout.com/connect/token"), "client_id", "client_secret")
         .scopes(OAuthScope.GATEWAY, OAuthScope.VAULT, OAuthScope.FX)
         .environment(Environment.PRODUCTION)  // required
-        .environmentSubdomain("subdomain") // optional, Merchant-specific DNS name
+        .environmentSubdomain("subdomain") // required, Merchant-specific DNS name, the first 8 characters of your client ID
         .executor() // optional for a custom Executor Service
         .build();
 
@@ -149,7 +153,7 @@ public static void main(String[] args) {
             .publicKey("public_key")  // optional, only required for operations related with tokens
             .secretKey("secret_key")
             .environment(Environment.PRODUCTION)  // required
-            .environmentSubdomain("subdomain") // optional, Merchant-specific DNS name
+            .environmentSubdomain("subdomain") // optional for the Previous platform, Merchant-specific DNS name
             .executor() // optional for a custom Executor Service
             .build();
     
@@ -399,7 +403,7 @@ final CheckoutApi checkoutApi = CheckoutSdk.builder()
         .staticKeys()
         .secretKey("secret_key")
         .environment(Environment.PRODUCTION)  // required
-        .environmentSubdomain("subdomain") // optional, Merchant-specific DNS name
+        .environmentSubdomain("subdomain") // required, Merchant-specific DNS name, the first 8 characters of your client ID
         .httpClientBuilder(customHttpClient) // optional for a custom HttpClient
         .build();
 ```
@@ -655,6 +659,23 @@ final CheckoutApi checkoutApi = CheckoutSdk.builder()
 - For asynchronous operations, implement your own retry logic using CompletableFuture patterns
 - All resilience patterns are optional - configure only what you need
 - Rate limiter helps respect API rate limits and prevent overwhelming the service
+
+## Legacy domain (emergency use only)
+
+> :warning: **Only use if merchant specific sub domains are causing issues.** Connecting through your merchant-specific subdomain (see [Subdomain value](#subdomain-value)) is the supported way of using the Checkout.com API, and non-subdomain usage will be deprecated.
+
+If, in exceptional circumstances, you cannot use your merchant-specific subdomain, you can explicitly opt out by calling `useLegacyDomain()` instead of `environmentSubdomain(...)`:
+
+```java
+final CheckoutApi checkoutApi = CheckoutSdk.builder()
+        .staticKeys()
+        .secretKey("secret_key")
+        .environment(Environment.SANDBOX)
+        .useLegacyDomain() // deprecated, emergency fallback only
+        .build();
+```
+
+This routes requests to `api.checkout.com` (or `api.sandbox.checkout.com`) and `access.checkout.com` (or `access.sandbox.checkout.com`). The method is annotated `@Deprecated` and produces a compile-time warning. Exactly one of `environmentSubdomain(...)` or `useLegacyDomain()` must be set: the SDK throws a `CheckoutArgumentException` if both, or neither, are set. The Previous (ABC) platform predates merchant-specific subdomains and is exempt from this requirement.
 
 ## Code of Conduct
 
