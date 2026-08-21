@@ -15,6 +15,13 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+/**
+ * A weekly payout schedule.
+ *
+ * <p>SaaS seller (ISV) sub-entities accept working days only, Monday to Friday: a schedule set to
+ * a Saturday or Sunday is rejected. Their payout is based on the available balance as of 00:00 in
+ * the sub-entity's time zone. Standard sub-entities accept any day.
+ */
 public final class ScheduleFrequencyWeeklyRequest extends ScheduleRequest {
 
     @SerializedName("by_day")
