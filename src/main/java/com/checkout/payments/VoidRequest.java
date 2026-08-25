@@ -14,6 +14,12 @@ import java.util.Map;
 @AllArgsConstructor
 public final class VoidRequest {
 
+    /**
+     * The amount to void. If not specified, the full payment amount is voided.
+     * Integer, min 0, max 9999999999.
+     */
+    private Long amount;
+
     private String reference;
 
     @Builder.Default
