@@ -54,7 +54,7 @@ class FlowLocaleAndStatusDeserializationTest {
                 .reference("order-002")
                 .sessionData("sd_tok_xyz789")
                 .capture(true)
-                .description("Full submit request")
+                .processingChannelId("pc_abcdefghijklmnopqrstuvwxyz")
                 .build();
 
         String json = serializer.toJson(request);
