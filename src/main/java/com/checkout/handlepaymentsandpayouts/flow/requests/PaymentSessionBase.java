@@ -1,12 +1,10 @@
 package com.checkout.handlepaymentsandpayouts.flow.requests;
 
 import com.checkout.payments.ProductRequest;
-import com.checkout.payments.PaymentType;
 import com.checkout.payments.ThreeDSRequest;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -51,12 +49,4 @@ public abstract class PaymentSessionBase {
      */
     @SerializedName("3ds")
     private ThreeDSRequest threeDS;
-
-    /**
-     * Must be specified for card-not-present (CNP) payments. Default: "Regular"
-     * [Optional]
-     * Enum: "Regular" "Recurring" "MOTO" "Installment" "PayLater" "Unscheduled"
-     */
-    @Builder.Default
-    private PaymentType paymentType = PaymentType.REGULAR;
 }

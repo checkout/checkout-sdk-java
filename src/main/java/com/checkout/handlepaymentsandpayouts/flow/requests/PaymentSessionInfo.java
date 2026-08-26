@@ -2,19 +2,15 @@ package com.checkout.handlepaymentsandpayouts.flow.requests;
 
 import com.checkout.common.Currency;
 import com.checkout.handlepaymentsandpayouts.flow.entities.Customer;
-import com.checkout.payments.AuthorizationType;
 import com.checkout.payments.BillingInformation;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.BillingDescriptor;
-import com.checkout.payments.PaymentPlan;
 import com.checkout.payments.PaymentRecipient;
 import com.checkout.payments.ProcessingSettings;
 import com.checkout.payments.PaymentInstruction;
 import com.checkout.common.AmountAllocations;
-import com.checkout.payments.RiskRequest;
 import com.checkout.payments.sender.PaymentSender;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -25,7 +21,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Extended base class for payment session requests that include full payment details
+ * Extended base class for payment session requests that include full payment details.
+ *
+ * This class holds only the fields that every payment session request accepts, whether it
+ * creates a session or submits a payment attempt for an existing one. Fields that only the
+ * session creation endpoints accept live in PaymentSessionCreateBase.
  */
 @Data
 @SuperBuilder
@@ -70,12 +70,6 @@ public abstract class PaymentSessionInfo extends PaymentSessionBase {
     private BillingDescriptor billingDescriptor;
 
     /**
-     * A description for the payment.
-     * [Optional]
-     */
-    private String description;
-
-    /**
      * The customer's details. Required if source.type is tamara.
      * [Optional]
      */
@@ -115,20 +109,9 @@ public abstract class PaymentSessionInfo extends PaymentSessionBase {
     /**
      * The sub-entities that the payment is being processed on behalf of.
      * [Optional]
+     * min 1 max 50 items
      */
     private List<AmountAllocations> amountAllocations;
-
-    /**
-     * Configures the risk assessment performed during payment processing.
-     * [Optional]
-     */
-    private RiskRequest risk;
-
-    /**
-     * The merchant's display name.
-     * [Optional]
-     */
-    private String displayName;
 
     /**
      * Allows you to store additional information about a transaction with custom fields.
@@ -143,31 +126,10 @@ public abstract class PaymentSessionInfo extends PaymentSessionBase {
     private PaymentSender sender;
 
     /**
-     * Specifies whether to capture the payment, if applicable. Default: true
-     * [Optional]
-     */
-    @Builder.Default
-    private Boolean capture = true;
-
-    /**
      * A timestamp specifying when to capture the payment, as an ISO 8601 code.
-     * If a value is provided, capture is automatically set to true.
+     * If a value is provided, capture is automatically set to true by the API.
      * [Optional]
      * Format: date-time (ISO 8601)
      */
     private Instant captureOn;
-
-    /**
-     * The authorization type.
-     * [Optional]
-     * Enum: "Final" "Estimated"
-     * Default: "Final"
-     */
-    private AuthorizationType authorizationType;
-
-    /**
-     * The information to process a recurring payment request. To be used when the payment_type is Recurring.
-     * [Optional]
-     */
-    private PaymentPlan paymentPlan;
 }
