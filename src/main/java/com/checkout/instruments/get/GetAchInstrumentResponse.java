@@ -8,20 +8,20 @@ import lombok.ToString;
 import java.time.Instant;
 
 /**
- * SEPA instrument response.
+ * ACH instrument response.
  *
  * <p>The id and the fingerprint are inherited from {@link GetInstrumentResponse}.
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class GetSepaInstrumentResponse extends GetInstrumentResponse {
+public final class GetAchInstrumentResponse extends GetInstrumentResponse {
 
     /**
      * The underlying instrument type.
      * [Required]
      */
-    private final InstrumentType type = InstrumentType.SEPA;
+    private final InstrumentType type = InstrumentType.ACH;
 
     /**
      * The date and time the instrument was created.
@@ -44,15 +44,15 @@ public final class GetSepaInstrumentResponse extends GetInstrumentResponse {
     private String vaultId;
 
     /**
-     * The details of the SEPA mandate.
-     * [Optional]
+     * The details of the bank account.
+     * [Required]
      */
-    private GetSepaInstrumentData instrumentData;
+    private GetAchInstrumentData instrumentData;
 
     /**
-     * The account holder's details.
-     * [Optional]
+     * The account holder details.
+     * [Required]
      */
-    private GetSepaAccountHolder accountHolder;
+    private GetAchAccountHolder accountHolder;
 
 }

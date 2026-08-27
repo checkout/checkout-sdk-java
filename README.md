@@ -159,6 +159,83 @@ public static void main(String[] args) {
         }
 ```
 
+### Bacs Direct Debit
+
+Send a pre-notification (advance notice) to a payer before collecting funds from their account. The
+endpoint accepts the secret key only, so it is not available on an OAuth-only client.
+
+```java
+import com.checkout.CheckoutApi;
+import com.checkout.apm.bacs.BacsNotificationRequest;
+import com.checkout.apm.bacs.BacsNotificationResponse;
+import com.checkout.apm.bacs.BacsNotificationType;
+import com.checkout.common.Currency;
+
+import java.time.LocalDate;
+
+final BacsNotificationRequest request = BacsNotificationRequest.builder()
+        .sourceId("src_wmlfc3zyhqzehihu7giusaaawu")
+        .notificationType(BacsNotificationType.ADVANCE_NOTICE)
+        .collectionDate(LocalDate.of(2026, 7, 15))
+        .amount(4999L)
+        .currency(Currency.GBP)
+        .reference("INV-12345")                 // optional
+        .customerEmail("customer@example.com")
+        .billingDescriptor("CHECKOUT")
+        .supportEmail("support@test.com")
+        .supportPhone("+447700900123")          // optional
+        .build();
+
+final CompletableFuture<BacsNotificationResponse> notification =
+        checkoutApi.bacsClient().sendNotification(request);
+```
+
+A Bacs Direct Debit instrument is stored, updated and retrieved through the instruments client. Note
+that the Bacs `payment_type` values are capitalized (`Recurring`, `Regular`), unlike the SEPA ones,
+so use `BacsPaymentType` and not `SepaPaymentType`:
+
+```java
+import com.checkout.common.CountryCode;
+import com.checkout.common.Currency;
+import com.checkout.instruments.BacsPaymentType;
+import com.checkout.instruments.create.CreateBacsAccountHolder;
+import com.checkout.instruments.create.CreateBacsBillingAddress;
+import com.checkout.instruments.create.CreateBacsInstrumentAccount;
+import com.checkout.instruments.create.CreateBacsInstrumentData;
+import com.checkout.instruments.create.CreateInstrumentBacsRequest;
+import com.checkout.instruments.create.CreateInstrumentBacsResponse;
+import com.checkout.instruments.get.GetBacsInstrumentResponse;
+
+final CreateInstrumentBacsRequest request = CreateInstrumentBacsRequest.builder()
+        .account(CreateBacsInstrumentAccount.builder()
+                .processingChannelId("pc_q4dbxom5jbgudnjzjpz7j2z6uq")
+                .build())
+        .instrumentData(CreateBacsInstrumentData.builder()
+                .accountNumber("86753246")      // 8 characters
+                .bankCode("040004")             // the sort code, 6 characters
+                .country(CountryCode.GB)
+                .currency(Currency.GBP)
+                .paymentType(BacsPaymentType.RECURRING)
+                .build())
+        .accountHolder(CreateBacsAccountHolder.builder()
+                .firstName("John")
+                .lastName("Smith")
+                .billingAddress(CreateBacsBillingAddress.builder()
+                        .country(CountryCode.GB)
+                        .build())
+                .build())
+        .build();
+
+final CreateInstrumentBacsResponse created =
+        checkoutApi.instrumentsClient().<CreateInstrumentBacsResponse>create(request).get();
+
+final GetBacsInstrumentResponse stored =
+        (GetBacsInstrumentResponse) checkoutApi.instrumentsClient().get(created.getId()).get();
+```
+
+To take a payment against a stored Bacs instrument, use `RequestBacsSource`. The payment response
+returns a `BacsResponseSource`.
+
 ## Logging
 
 The SDK supports SLF4J as logger provider, you need to provide your configuration file through `resources` folder.

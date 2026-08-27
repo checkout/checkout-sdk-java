@@ -1,5 +1,6 @@
 package com.checkout.instruments.get;
 
+import com.checkout.common.AccountHolder;
 import com.checkout.common.AccountType;
 import com.checkout.common.BankDetails;
 import com.checkout.common.CountryCode;
@@ -35,5 +36,11 @@ public final class GetBankAccountInstrumentResponse extends GetInstrumentRespons
     private CountryCode country;
 
     private BankDetails bank;
+
+    /**
+     * The account holder details.
+     * [Optional]
+     */
+    private AccountHolder accountHolder;
 
 }

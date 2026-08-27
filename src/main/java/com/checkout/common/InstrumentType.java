@@ -2,6 +2,9 @@ package com.checkout.common;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * The type of payment instrument.
+ */
 public enum InstrumentType {
 
     @SerializedName("bank_account")
@@ -13,6 +16,10 @@ public enum InstrumentType {
     @SerializedName("card")
     CARD,
 
+    /**
+     * Retained for the previous-platform instruments API. Not a value of the current platform's
+     * instrument type.
+     */
     @SerializedName("card_token")
     CARD_TOKEN,
 
@@ -20,6 +27,9 @@ public enum InstrumentType {
     SEPA,
 
     @SerializedName("ach")
-    ACH
+    ACH,
+
+    @SerializedName("bacs")
+    BACS
 
 }
