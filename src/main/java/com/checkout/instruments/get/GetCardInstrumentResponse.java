@@ -119,4 +119,10 @@ public final class GetCardInstrumentResponse extends GetInstrumentResponse {
      */
     private Boolean regulatedIndicator;
 
+    /**
+     * The account holder details.
+     * [Optional]
+     */
+    private GetCardAccountHolder accountHolder;
+
 }
