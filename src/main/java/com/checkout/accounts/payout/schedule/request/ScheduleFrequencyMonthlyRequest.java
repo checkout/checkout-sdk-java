@@ -14,6 +14,13 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+/**
+ * A monthly payout schedule.
+ *
+ * <p>SaaS seller (ISV) sub-entities accept only these combinations, in any order: {@code [1]},
+ * {@code [15]}, {@code [1, 15]} or {@code [1, 16]}. Their payout is based on the available balance
+ * as of 00:00 in the sub-entity's time zone. Standard sub-entities accept any day from 1 to 28.
+ */
 public final class ScheduleFrequencyMonthlyRequest extends ScheduleRequest {
 
     @SerializedName("by_month_day")
