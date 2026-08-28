@@ -9,8 +9,8 @@ import com.checkout.common.Phone;
 import com.checkout.instruments.create.CreateInstrumentSepaRequest;
 import com.checkout.instruments.create.CreateInstrumentSepaResponse;
 import com.checkout.instruments.create.InstrumentData;
+import com.checkout.instruments.update.SepaPaymentType;
 import com.checkout.payments.AbstractPaymentsTestIT;
-import com.checkout.payments.PaymentType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -25,7 +25,7 @@ public class SepaInstrumentsTestIT extends AbstractPaymentsTestIT {
                         .accoountNumber("FR7630006000011234567890189")
                         .country(CountryCode.FR)
                         .currency(Currency.EUR)
-                        .paymentType(PaymentType.RECURRING)
+                        .paymentType(SepaPaymentType.RECURRING)
                         .build())
                 .accountHolder(AccountHolder.builder()
                         .type(AccountHolderType.INDIVIDUAL)

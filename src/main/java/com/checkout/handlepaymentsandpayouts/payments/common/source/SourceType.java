@@ -7,6 +7,9 @@ public enum SourceType {
     @SerializedName("card")
     CARD,
 
+    @SerializedName("ach")
+    ACH,
+
     @SerializedName("afterpay")
     AFTERPAY,
 
@@ -22,8 +25,14 @@ public enum SourceType {
     @SerializedName("alma")
     ALMA,
 
+    @SerializedName("bacs")
+    BACS,
+
     @SerializedName("bancontact")
     BANCONTACT,
+
+    @SerializedName("bank_account")
+    BANK_ACCOUNT,
 
     @SerializedName("benefit")
     BENEFIT,

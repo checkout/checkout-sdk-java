@@ -115,6 +115,9 @@ public final class GsonSerializer implements Serializer {
                     CheckoutUtils.TYPE
                 )
                     .registerSubtype(com.checkout.handlepaymentsandpayouts.payments.common.source.cardsource.CardSource.class, identifier(com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType.CARD))
+                    .registerSubtype(com.checkout.handlepaymentsandpayouts.payments.common.source.achsource.AchSource.class, identifier(com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType.ACH))
+                    .registerSubtype(com.checkout.handlepaymentsandpayouts.payments.common.source.bacssource.BacsSource.class, identifier(com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType.BACS))
+                    .registerSubtype(com.checkout.handlepaymentsandpayouts.payments.common.source.bankaccountsource.BankAccountSource.class, identifier(com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType.BANK_ACCOUNT))
                     .registerSubtype(com.checkout.handlepaymentsandpayouts.payments.common.source.afterpaysource.AfterpaySource.class, identifier(com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType.AFTERPAY))
                     .registerSubtype(com.checkout.handlepaymentsandpayouts.payments.common.source.alipaycnsource.AlipayCnSource.class, identifier(com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType.ALIPAY_CN))
                     .registerSubtype(com.checkout.handlepaymentsandpayouts.payments.common.source.alipayhksource.AlipayHkSource.class, identifier(com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType.ALIPAY_HK))

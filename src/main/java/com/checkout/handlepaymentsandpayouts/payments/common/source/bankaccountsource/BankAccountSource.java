@@ -1,4 +1,4 @@
-package com.checkout.handlepaymentsandpayouts.payments.common.source.alipaycnsource;
+package com.checkout.handlepaymentsandpayouts.payments.common.source.bankaccountsource;
 
 import com.checkout.handlepaymentsandpayouts.payments.common.source.AbstractSource;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType;
@@ -9,14 +9,14 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * alipay_cn source Class
+ * bank_account source Class
  * The source of the payment
  */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public final class AlipayCnSource extends AbstractSource {
+public final class BankAccountSource extends AbstractSource {
 
     /**
      * The payment instrument identifier
@@ -26,18 +26,18 @@ public final class AlipayCnSource extends AbstractSource {
     private String id;
 
     /**
-     * Initializes a new instance of the AlipayCnSource class.
+     * Initializes a new instance of the BankAccountSource class.
      */
     @Builder
-    private AlipayCnSource(
+    private BankAccountSource(
         final String id
     ) {
-        super(SourceType.ALIPAY_CN);
+        super(SourceType.BANK_ACCOUNT);
         this.id = id;
     }
 
-    public AlipayCnSource() {
-        super(SourceType.ALIPAY_CN);
+    public BankAccountSource() {
+        super(SourceType.BANK_ACCOUNT);
     }
 
 }

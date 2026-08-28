@@ -8,7 +8,9 @@ import com.checkout.common.Currency;
 import com.checkout.instruments.create.CreateCustomerInstrumentRequest;
 import com.checkout.instruments.create.CreateInstrumentSepaRequest;
 import com.checkout.instruments.create.InstrumentData;
-import com.checkout.payments.PaymentType;
+import com.checkout.instruments.update.SepaPaymentType;
+import com.checkout.instruments.update.UpdateInstrumentSepaResponse;
+import com.checkout.payments.request.source.apm.MandateType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -18,9 +20,18 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class CreateInstrumentSepaRequestSerializationTest {
+/**
+ * Schema validation tests for the SEPA variants of the instruments endpoints.
+ */
+class SepaInstrumentSerializationTest {
+
+    private static final String FINGERPRINT_PATTERN = "^([a-z0-9]{26})$";
 
     private final GsonSerializer serializer = new GsonSerializer();
+
+    // ------------------------------------------------------------------
+    // StoreSepaInstrumentRequest
+    // ------------------------------------------------------------------
 
     @Test
     void shouldSerializeTypeAsSepa() {
@@ -49,7 +60,7 @@ class CreateInstrumentSepaRequestSerializationTest {
                         .accoountNumber("DE89370400440532013000")
                         .country(CountryCode.DE)
                         .currency(Currency.EUR)
-                        .paymentType(PaymentType.RECURRING)
+                        .paymentType(SepaPaymentType.RECURRING)
                         .build())
                 .accountHolder(AccountHolder.builder()
                         .firstName("Hans")
@@ -63,6 +74,52 @@ class CreateInstrumentSepaRequestSerializationTest {
         assertTrue(json.contains("\"account_number\":\"DE89370400440532013000\""));
         assertTrue(json.contains("\"country\":\"DE\""));
         assertTrue(json.contains("\"currency\":\"EUR\""));
+        assertTrue(json.contains("\"payment_type\":\"recurring\""));
+    }
+
+    /**
+     * The store request once typed paymentType as the generic payments payment type, whose
+     * constants serialize capitalized, so a SEPA instrument could not be created at all: the
+     * specification pins this field to recurring or regular in lowercase. No test asserted the wire
+     * value, which is why the defect survived.
+     */
+    @Test
+    void shouldSerializePaymentTypeLowercaseOnTheStoreRequest() {
+        assertTrue(serializer.toJson(storeRequestWithPaymentType(SepaPaymentType.RECURRING))
+                .contains("\"payment_type\":\"recurring\""));
+        assertTrue(serializer.toJson(storeRequestWithPaymentType(SepaPaymentType.REGULAR))
+                .contains("\"payment_type\":\"regular\""));
+    }
+
+    @Test
+    void shouldSerializeMandateType() {
+        final CreateInstrumentSepaRequest request = CreateInstrumentSepaRequest.builder()
+                .instrumentData(InstrumentData.builder()
+                        .type(MandateType.B2B)
+                        .accoountNumber("DE89370400440532013000")
+                        .country(CountryCode.DE)
+                        .currency(Currency.EUR)
+                        .paymentType(SepaPaymentType.REGULAR)
+                        .build())
+                .build();
+
+        final String json = serializer.toJson(request);
+        final CreateInstrumentSepaRequest result =
+                serializer.fromJson(json, CreateInstrumentSepaRequest.class);
+
+        assertTrue(json.contains("\"type\":\"B2B\""));
+        assertEquals(MandateType.B2B, result.getInstrumentData().getType());
+    }
+
+    private CreateInstrumentSepaRequest storeRequestWithPaymentType(final SepaPaymentType paymentType) {
+        return CreateInstrumentSepaRequest.builder()
+                .instrumentData(InstrumentData.builder()
+                        .accoountNumber("DE89370400440532013000")
+                        .country(CountryCode.DE)
+                        .currency(Currency.EUR)
+                        .paymentType(paymentType)
+                        .build())
+                .build();
     }
 
     @Test
@@ -140,7 +197,7 @@ class CreateInstrumentSepaRequestSerializationTest {
                         .accoountNumber("ES9121000418450200051332")
                         .country(CountryCode.ES)
                         .currency(Currency.EUR)
-                        .paymentType(PaymentType.RECURRING)
+                        .paymentType(SepaPaymentType.RECURRING)
                         .build())
                 .accountHolder(AccountHolder.builder()
                         .firstName("Carlos")
@@ -190,5 +247,26 @@ class CreateInstrumentSepaRequestSerializationTest {
         assertNotNull(request);
         assertDoesNotThrow(() -> serializer.toJson(request));
         assertNull(request.getCustomer());
+    }
+
+    // ------------------------------------------------------------------
+    // Update response
+    // ------------------------------------------------------------------
+
+    @Test
+    void shouldDeserializeUpdateResponse() {
+        final String json = "{"
+                + "\"type\":\"sepa\","
+                + "\"id\":\"src_wmlfc3zyhqzehihu7giusaaawu\","
+                + "\"fingerprint\":\"vnsdrvikkvre3dtrjjvlm5du4q\""
+                + "}";
+
+        final UpdateInstrumentSepaResponse response =
+                serializer.fromJson(json, UpdateInstrumentSepaResponse.class);
+
+        assertEquals(com.checkout.common.InstrumentType.SEPA, response.getType());
+        assertEquals("src_wmlfc3zyhqzehihu7giusaaawu", response.getId());
+        assertEquals("vnsdrvikkvre3dtrjjvlm5du4q", response.getFingerprint());
+        assertTrue(response.getFingerprint().matches(FINGERPRINT_PATTERN));
     }
 }

@@ -10,6 +10,7 @@ import com.checkout.instruments.create.CreateInstrumentAchRequest;
 import com.checkout.instruments.create.CreateInstrumentAchResponse;
 import com.checkout.instruments.get.GetAchInstrumentResponse;
 import com.checkout.instruments.update.AchInstrumentAccountType;
+import com.checkout.instruments.update.UpdateInstrumentAchResponse;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -173,7 +174,7 @@ class AchInstrumentSerializationTest {
     }
 
     // ------------------------------------------------------------------
-    // Store response
+    // Store and update responses
     // ------------------------------------------------------------------
 
     @Test
@@ -186,6 +187,23 @@ class AchInstrumentSerializationTest {
 
         final CreateInstrumentAchResponse response =
                 serializer.fromJson(json, CreateInstrumentAchResponse.class);
+
+        assertEquals(com.checkout.common.InstrumentType.ACH, response.getType());
+        assertEquals("src_wmlfc3zyhqzehihu7giusaaawu", response.getId());
+        assertEquals("vnsdrvikkvre3dtrjjvlm5du4q", response.getFingerprint());
+        assertTrue(response.getFingerprint().matches(FINGERPRINT_PATTERN));
+    }
+
+    @Test
+    void shouldDeserializeUpdateResponse() {
+        final String json = "{"
+                + "\"type\":\"ach\","
+                + "\"id\":\"src_wmlfc3zyhqzehihu7giusaaawu\","
+                + "\"fingerprint\":\"vnsdrvikkvre3dtrjjvlm5du4q\""
+                + "}";
+
+        final UpdateInstrumentAchResponse response =
+                serializer.fromJson(json, UpdateInstrumentAchResponse.class);
 
         assertEquals(com.checkout.common.InstrumentType.ACH, response.getType());
         assertEquals("src_wmlfc3zyhqzehihu7giusaaawu", response.getId());
