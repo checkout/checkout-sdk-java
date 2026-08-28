@@ -16,6 +16,11 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 
+/**
+ * Update SEPA mandate details.
+ *
+ * <p>Nothing in this request is required by the specification.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
@@ -46,6 +51,12 @@ public final class UpdateInstrumentSepaRequest extends UpdateInstrumentRequest {
         super(InstrumentType.SEPA);
     }
 
+    /**
+     * The details of the SEPA mandate being updated.
+     *
+     * <p>The payment type is the SEPA enum, whose wire values are lowercase. The equivalent Bacs
+     * Direct Debit field is capitalized, so the two must not share a type.
+     */
     @Data
     @Builder
     @NoArgsConstructor
