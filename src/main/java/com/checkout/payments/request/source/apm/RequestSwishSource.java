@@ -10,6 +10,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Swish source.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)

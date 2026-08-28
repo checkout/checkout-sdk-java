@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * WeChat Pay source.
+ */
 @Getter
 @Setter
 @ToString(callSuper = true)

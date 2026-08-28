@@ -2,6 +2,9 @@ package com.checkout.instruments.get;
 
 import lombok.Data;
 
+/**
+ * The network token provisioned for a stored card instrument.
+ */
 @Data
 public final class InstrumentNetworkToken {
 

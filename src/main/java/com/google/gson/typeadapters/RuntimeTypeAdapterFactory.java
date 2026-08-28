@@ -270,12 +270,13 @@ public final class RuntimeTypeAdapterFactory<T> implements TypeAdapterFactory {
 
                 final JsonObject clone = new JsonObject();
 
+                if (jsonObject.has(typeFieldName)) {
+                    throw new JsonParseException("cannot serialize " + srcType.getName()
+                            + " because it already defines a field named " + typeFieldName);
+                }
                 clone.add(typeFieldName, new JsonPrimitive(label));
 
                 for (final Map.Entry<String, JsonElement> e : jsonObject.entrySet()) {
-                    if (typeFieldName.equals(e.getKey())) {
-                        continue;
-                    }
                     clone.add(e.getKey(), e.getValue());
                 }
                 Streams.write(clone, out);

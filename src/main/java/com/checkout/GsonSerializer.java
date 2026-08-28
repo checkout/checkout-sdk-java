@@ -112,7 +112,8 @@ public final class GsonSerializer implements Serializer {
             .registerTypeAdapterFactory(
                 RuntimeTypeAdapterFactory.of(
                     com.checkout.handlepaymentsandpayouts.payments.common.source.AbstractSource.class,
-                    CheckoutUtils.TYPE
+                    CheckoutUtils.TYPE,
+                    true
                 )
                     .registerSubtype(com.checkout.handlepaymentsandpayouts.payments.common.source.cardsource.CardSource.class, identifier(com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType.CARD))
                     .registerSubtype(com.checkout.handlepaymentsandpayouts.payments.common.source.achsource.AchSource.class, identifier(com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType.ACH))
@@ -187,47 +188,47 @@ public final class GsonSerializer implements Serializer {
                     .registerSubtype(com.checkout.payments.sender.PaymentIndividualSender.class, identifier(SenderType.INDIVIDUAL))
                     .registerSubtype(com.checkout.payments.sender.PaymentInstrumentSender.class, identifier(SenderType.INSTRUMENT)))
             // Instruments CS2
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.instruments.create.CreateInstrumentResponse.class, CheckoutUtils.TYPE)
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.instruments.create.CreateInstrumentResponse.class, CheckoutUtils.TYPE, true)
                     .registerSubtype(com.checkout.instruments.create.CreateInstrumentBankAccountResponse.class, identifier(InstrumentType.BANK_ACCOUNT))
                     .registerSubtype(com.checkout.instruments.create.CreateInstrumentTokenResponse.class, identifier(InstrumentType.CARD))
                     .registerSubtype(com.checkout.instruments.create.CreateInstrumentSepaResponse.class, identifier(InstrumentType.SEPA))
                     .registerSubtype(com.checkout.instruments.create.CreateInstrumentBacsResponse.class, identifier(InstrumentType.BACS))
                     .registerSubtype(com.checkout.instruments.create.CreateInstrumentAchResponse.class, identifier(InstrumentType.ACH)))
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.instruments.get.GetInstrumentResponse.class, CheckoutUtils.TYPE)
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.instruments.get.GetInstrumentResponse.class, CheckoutUtils.TYPE, true)
                     .registerSubtype(com.checkout.instruments.get.GetBankAccountInstrumentResponse.class, identifier(InstrumentType.BANK_ACCOUNT))
                     .registerSubtype(com.checkout.instruments.get.GetCardInstrumentResponse.class, identifier(InstrumentType.CARD))
                     .registerSubtype(com.checkout.instruments.get.GetSepaInstrumentResponse.class, identifier(InstrumentType.SEPA))
                     .registerSubtype(com.checkout.instruments.get.GetBacsInstrumentResponse.class, identifier(InstrumentType.BACS))
                     .registerSubtype(com.checkout.instruments.get.GetAchInstrumentResponse.class, identifier(InstrumentType.ACH)))
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.instruments.update.UpdateInstrumentResponse.class, CheckoutUtils.TYPE)
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.instruments.update.UpdateInstrumentResponse.class, CheckoutUtils.TYPE, true)
                     .registerSubtype(com.checkout.instruments.update.UpdateInstrumentBankAccountResponse.class, identifier(InstrumentType.BANK_ACCOUNT))
                     .registerSubtype(com.checkout.instruments.update.UpdateInstrumentCardResponse.class, identifier(InstrumentType.CARD))
                     .registerSubtype(com.checkout.instruments.update.UpdateInstrumentSepaResponse.class, identifier(InstrumentType.SEPA))
                     .registerSubtype(com.checkout.instruments.update.UpdateInstrumentAchResponse.class, identifier(InstrumentType.ACH))
                     .registerSubtype(com.checkout.instruments.update.UpdateInstrumentBacsResponse.class, identifier(InstrumentType.BACS)))
             // Workflows CS2
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.workflows.actions.response.WorkflowActionResponse.class, CheckoutUtils.TYPE)
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.workflows.actions.response.WorkflowActionResponse.class, CheckoutUtils.TYPE, true)
                     .registerSubtype(com.checkout.workflows.actions.response.WebhookWorkflowActionResponse.class, identifier(WorkflowActionType.WEBHOOK)))
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.workflows.conditions.response.WorkflowConditionResponse.class, CheckoutUtils.TYPE)
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.workflows.conditions.response.WorkflowConditionResponse.class, CheckoutUtils.TYPE, true)
                     .registerSubtype(com.checkout.workflows.conditions.response.EventWorkflowConditionResponse.class, identifier(WorkflowConditionType.EVENT))
                     .registerSubtype(com.checkout.workflows.conditions.response.EntityWorkflowConditionResponse.class, identifier(WorkflowConditionType.ENTITY))
                     .registerSubtype(com.checkout.workflows.conditions.response.ProcessingChannelWorkflowConditionResponse.class, identifier(WorkflowConditionType.PROCESSING_CHANNEL)))
             // Accounts CS2 - PayoutSchedules
             .registerTypeAdapter(GetScheduleResponse.class, getScheduleResponseDeserializer())
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.accounts.payout.schedule.response.ScheduleResponse.class, CheckoutUtils.FREQUENCY)
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.accounts.payout.schedule.response.ScheduleResponse.class, CheckoutUtils.FREQUENCY, true)
                     .registerSubtype(com.checkout.accounts.payout.schedule.response.ScheduleFrequencyDailyResponse.class, CheckoutUtils.DAILY)
                     .registerSubtype(com.checkout.accounts.payout.schedule.response.ScheduleFrequencyWeeklyResponse.class, CheckoutUtils.WEEKLY)
                     .registerSubtype(ScheduleFrequencyMonthlyResponse.class, CheckoutUtils.MONTHLY))
             // Issuing CS2 - CardDetailsResponse
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(CardDetailsResponse.class, CheckoutUtils.TYPE)
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(CardDetailsResponse.class, CheckoutUtils.TYPE, true)
                     .registerSubtype(PhysicalCardDetailsResponse.class, identifier(CardType.PHYSICAL))
                     .registerSubtype(VirtualCardDetailsResponse.class, identifier(CardType.VIRTUAL)))
             // Issuing CS2 - CardControlsResponse
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(CardControlResponse.class, CheckoutUtils.CONTROL_TYPE)
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(CardControlResponse.class, CheckoutUtils.CONTROL_TYPE, true)
                     .registerSubtype(VelocityCardControlResponse.class, identifier(ControlType.VELOCITY_LIMIT))
                     .registerSubtype(MccCardControlResponse.class, identifier(ControlType.MCC_LIMIT)))
             // Issuing CS2 - ControlGroupControl
-            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.issuing.controls.requests.controlgroup.ControlGroupControl.class, CheckoutUtils.CONTROL_TYPE)
+            .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.issuing.controls.requests.controlgroup.ControlGroupControl.class, CheckoutUtils.CONTROL_TYPE, true)
                     .registerSubtype(com.checkout.issuing.controls.requests.controlgroup.VelocityControlGroupControl.class, identifier(ControlType.VELOCITY_LIMIT))
                     .registerSubtype(com.checkout.issuing.controls.requests.controlgroup.MccControlGroupControl.class, identifier(ControlType.MCC_LIMIT))
                     .registerSubtype(com.checkout.issuing.controls.requests.controlgroup.MidControlGroupControl.class, identifier(ControlType.MID_LIMIT)))

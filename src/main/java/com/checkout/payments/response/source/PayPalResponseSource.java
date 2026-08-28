@@ -6,6 +6,11 @@ import lombok.ToString;
 
 import static com.checkout.common.PaymentSourceType.PAYPAL;
 
+/**
+ * PayPal source.
+ *
+ * <p>The type and the id are inherited from {@link AbstractResponseSource}.
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
@@ -21,6 +26,9 @@ public final class PayPalResponseSource extends AbstractResponseSource implement
         this.type = PAYPAL;
     }
 
+    /**
+     * The PayPal account holder details.
+     */
     @Data
     public static final class AccountHolder {
 

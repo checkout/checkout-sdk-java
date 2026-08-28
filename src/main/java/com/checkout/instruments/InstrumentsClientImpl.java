@@ -20,6 +20,9 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * The default {@link InstrumentsClient} implementation.
+ */
 public class InstrumentsClientImpl extends AbstractClient implements InstrumentsClient {
 
     private static final String INSTRUMENTS_PATH = "instruments";

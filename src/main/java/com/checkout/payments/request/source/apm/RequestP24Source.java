@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * P24 source.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
