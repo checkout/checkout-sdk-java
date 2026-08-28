@@ -7,6 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 
 import com.checkout.GsonSerializer;
+import com.checkout.handlepaymentsandpayouts.payments.common.source.AbstractSource;
+import com.checkout.handlepaymentsandpayouts.payments.common.source.achsource.AchSource;
+import com.checkout.handlepaymentsandpayouts.payments.common.source.alipaycnsource.AlipayCnSource;
+import com.checkout.handlepaymentsandpayouts.payments.common.source.bacssource.BacsSource;
+import com.checkout.handlepaymentsandpayouts.payments.common.source.bankaccountsource.BankAccountSource;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.cardsource.CardSource;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.currencyaccountsource.CurrencyAccountSource;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.klarnasource.KlarnaSource;
@@ -148,6 +153,67 @@ public final  class RequestAPaymentOrPayoutResponseCreatedSerializationTest {
         assertInstanceOf(SepaSource.class, response.getSource());
         SepaSource sepaSource = (SepaSource) response.getSource();
         assertEquals("src_sepa_123", sepaSource.getId());
+    }
+
+    // ------------------------------------------------------------------
+    // PaymentDeclinedSourceResponse - the ach, alipay_cn, bank_account, sepa
+    // and bacs branches of the PaymentResponseSource discriminator. The schema
+    // declares a type and an id, and requires both.
+    // ------------------------------------------------------------------
+
+    @Test
+    void shouldDeserializeAlipayCnSourceWithId() {
+        AbstractSource source = declinedSourceOfType("alipay_cn", "src_alipay_cn_123");
+
+        assertInstanceOf(AlipayCnSource.class, source);
+        assertEquals("src_alipay_cn_123", ((AlipayCnSource) source).getId());
+    }
+
+    @Test
+    void shouldDeserializeAchSourceWithId() {
+        AbstractSource source = declinedSourceOfType("ach", "src_ach_123");
+
+        assertInstanceOf(AchSource.class, source);
+        assertEquals("src_ach_123", ((AchSource) source).getId());
+    }
+
+    @Test
+    void shouldDeserializeBacsSourceWithId() {
+        AbstractSource source = declinedSourceOfType("bacs", "src_bacs_123");
+
+        assertInstanceOf(BacsSource.class, source);
+        assertEquals("src_bacs_123", ((BacsSource) source).getId());
+    }
+
+    @Test
+    void shouldDeserializeBankAccountSourceWithId() {
+        AbstractSource source = declinedSourceOfType("bank_account", "src_bank_account_123");
+
+        assertInstanceOf(BankAccountSource.class, source);
+        assertEquals("src_bank_account_123", ((BankAccountSource) source).getId());
+    }
+
+    private AbstractSource declinedSourceOfType(final String type, final String sourceId) {
+        String json = "{\n" +
+                "  \"id\": \"pay_123\",\n" +
+                "  \"amount\": 1000,\n" +
+                "  \"currency\": \"USD\",\n" +
+                "  \"approved\": false,\n" +
+                "  \"status\": \"Declined\",\n" +
+                "  \"response_code\": \"20005\",\n" +
+                "  \"processed_on\": \"2021-06-08T12:25:01Z\",\n" +
+                "  \"source\": {\n" +
+                "    \"type\": \"" + type + "\",\n" +
+                "    \"id\": \"" + sourceId + "\"\n" +
+                "  }\n" +
+                "}";
+
+        RequestAPaymentOrPayoutResponseCreated response =
+                serializer.fromJson(json, RequestAPaymentOrPayoutResponseCreated.class);
+
+        assertNotNull(response);
+        assertNotNull(response.getSource());
+        return response.getSource();
     }
 
     @Test

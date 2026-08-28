@@ -7,9 +7,6 @@ import lombok.ToString;
 
 /**
  * Update Bacs Direct Debit account instrument response.
- *
- * <p>The fingerprint is inherited from {@link UpdateInstrumentResponse}. The id is declared here
- * because the shared update response does not carry it.
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

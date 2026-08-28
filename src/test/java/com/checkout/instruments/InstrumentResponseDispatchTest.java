@@ -7,19 +7,25 @@ import com.checkout.instruments.create.CreateInstrumentResponse;
 import com.checkout.instruments.get.GetAchInstrumentResponse;
 import com.checkout.instruments.get.GetBacsInstrumentResponse;
 import com.checkout.instruments.get.GetInstrumentResponse;
+import com.checkout.instruments.update.UpdateInstrumentAchResponse;
 import com.checkout.instruments.update.UpdateInstrumentBacsResponse;
 import com.checkout.instruments.update.UpdateInstrumentResponse;
+import com.checkout.instruments.update.UpdateInstrumentSepaResponse;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 /**
- * Polymorphic dispatch tests for the Bacs Direct Debit and ACH instrument responses.
+ * Polymorphic dispatch tests for the Bacs Direct Debit, ACH and SEPA instrument responses.
  *
  * <p>Before these subtypes were registered on the three instrument factories, every assertion here
  * failed with a JsonParseException, because none of the factories declares a default subtype. ACH
  * was already registered on the update factory but not on create or get.
+ *
+ * <p>The update assertions also guard the id, which the specification declares on the sepa, ach and
+ * bacs update responses. It was once declared on the bacs variant only, and was silently dropped on
+ * the other two.
  */
 class InstrumentResponseDispatchTest {
 
@@ -46,7 +52,34 @@ class InstrumentResponseDispatchTest {
 
         final UpdateInstrumentBacsResponse bacs = assertInstanceOf(UpdateInstrumentBacsResponse.class, response);
         assertEquals(com.checkout.common.InstrumentType.BACS, bacs.getType());
+        assertEquals("src_wmlfc3zyhqzehihu7giusaaawu", bacs.getId());
         assertEquals("vnsdrvikkvre3dtrjjvlm5du4q", bacs.getFingerprint());
+    }
+
+    @Test
+    void shouldDispatchUpdateResponseToSepaSubtype() {
+        final String json = "{\"type\":\"sepa\",\"id\":\"src_wmlfc3zyhqzehihu7giusaaawu\","
+                + "\"fingerprint\":\"vnsdrvikkvre3dtrjjvlm5du4q\"}";
+
+        final UpdateInstrumentResponse response = serializer.fromJson(json, UpdateInstrumentResponse.class);
+
+        final UpdateInstrumentSepaResponse sepa = assertInstanceOf(UpdateInstrumentSepaResponse.class, response);
+        assertEquals(com.checkout.common.InstrumentType.SEPA, sepa.getType());
+        assertEquals("src_wmlfc3zyhqzehihu7giusaaawu", sepa.getId());
+        assertEquals("vnsdrvikkvre3dtrjjvlm5du4q", sepa.getFingerprint());
+    }
+
+    @Test
+    void shouldDispatchUpdateResponseToAchSubtype() {
+        final String json = "{\"type\":\"ach\",\"id\":\"src_wmlfc3zyhqzehihu7giusaaawu\","
+                + "\"fingerprint\":\"vnsdrvikkvre3dtrjjvlm5du4q\"}";
+
+        final UpdateInstrumentResponse response = serializer.fromJson(json, UpdateInstrumentResponse.class);
+
+        final UpdateInstrumentAchResponse ach = assertInstanceOf(UpdateInstrumentAchResponse.class, response);
+        assertEquals(com.checkout.common.InstrumentType.ACH, ach.getType());
+        assertEquals("src_wmlfc3zyhqzehihu7giusaaawu", ach.getId());
+        assertEquals("vnsdrvikkvre3dtrjjvlm5du4q", ach.getFingerprint());
     }
 
     @Test

@@ -6,7 +6,7 @@ import com.checkout.common.Currency;
 import com.checkout.handlepaymentsandpayouts.setups.entities.customer.MerchantAccount;
 import com.checkout.handlepaymentsandpayouts.setups.entities.order.OrderSubMerchant;
 import com.checkout.instruments.create.InstrumentData;
-import com.checkout.payments.PaymentType;
+import com.checkout.instruments.update.SepaPaymentType;
 import com.checkout.payments.ProductRequest;
 import com.checkout.payments.ProductResponse;
 import com.checkout.payments.request.ItemSubType;
@@ -205,7 +205,7 @@ class LocalDateFieldsRegressionTest {
                 .accoountNumber("DE89370400440532013000")
                 .country(CountryCode.DE)
                 .currency(Currency.EUR)
-                .paymentType(PaymentType.REGULAR)
+                .paymentType(SepaPaymentType.REGULAR)
                 .mandateId("MANDATE-XYZ-999")
                 .dateOfSignature(LocalDate.of(2021, 3, 15))
                 .build();
@@ -217,7 +217,7 @@ class LocalDateFieldsRegressionTest {
         assertEquals("DE89370400440532013000", deserialized.getAccoountNumber());
         assertEquals(CountryCode.DE, deserialized.getCountry());
         assertEquals(Currency.EUR, deserialized.getCurrency());
-        assertEquals(PaymentType.REGULAR, deserialized.getPaymentType());
+        assertEquals(SepaPaymentType.REGULAR, deserialized.getPaymentType());
         assertEquals("MANDATE-XYZ-999", deserialized.getMandateId());
         assertEquals(LocalDate.of(2021, 3, 15), deserialized.getDateOfSignature());
     }
