@@ -74,6 +74,8 @@ public final class GetSepaInstrumentData {
      * created, it may take up to five seconds for the generated date of signature to be available.
      * [Required]
      * Format: yyyy-MM-dd
+     * min 10 characters
+     * max 10 characters
      */
     private LocalDate dateOfSignature;
 
