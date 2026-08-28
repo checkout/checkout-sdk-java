@@ -5,6 +5,12 @@ import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
 import lombok.*;
 
+/**
+ * Illicado source.
+ *
+ * <p>The current specification's payment request source
+ * list does not declare this source. It is retained for backwards compatibility.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)

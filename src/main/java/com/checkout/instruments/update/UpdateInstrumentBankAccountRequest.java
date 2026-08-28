@@ -13,36 +13,94 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Update bank account details.
+ *
+ * <p>Nothing in this request is required by the specification.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class UpdateInstrumentBankAccountRequest extends UpdateInstrumentRequest {
 
+    /**
+     * The type of account.
+     * [Optional]
+     * Enum: "savings" "current" "cash"
+     */
     private AccountType accountType;
 
+    /**
+     * Number (which can contain letters) that identifies the account.
+     * [Optional]
+     */
     private String accountNumber;
 
+    /**
+     * Code that identifies the bank.
+     * [Optional]
+     */
     private String bankCode;
 
+    /**
+     * Code that identifies the bank branch.
+     * [Optional]
+     */
     private String branchCode;
 
+    /**
+     * Internationally agreed standard for identifying bank account.
+     * [Optional]
+     */
     private String iban;
 
+    /**
+     * The combination of bank code and/or branch code and account number.
+     * [Optional]
+     */
     private String bban;
 
+    /**
+     * 8 or 11 character code which identifies the bank or bank branch.
+     * [Optional]
+     */
     private String swiftBic;
 
+    /**
+     * The three-letter ISO currency code of the account's currency.
+     * [Optional]
+     */
     private Currency currency;
 
+    /**
+     * The two-letter ISO country code of where the account is based.
+     * [Optional]
+     */
     private CountryCode country;
 
+    /**
+     * The ID of the primary processing channel this instrument is intended to be used for.
+     * [Optional]
+     */
     private String processingChannelId;
 
+    /**
+     * The account holder details.
+     * [Optional]
+     */
     private AccountHolder accountHolder;
 
+    /**
+     * Details of the bank.
+     * [Optional]
+     */
     private BankDetails bank;
 
+    /**
+     * The customer's details.
+     * [Optional]
+     */
     private UpdateCustomerRequest customer;
 
     @Builder
@@ -59,7 +117,7 @@ public final class UpdateInstrumentBankAccountRequest extends UpdateInstrumentRe
                                                final AccountHolder accountHolder,
                                                final BankDetails bank,
                                                final UpdateCustomerRequest customer) {
-        super(InstrumentType.TOKEN);
+        super(InstrumentType.BANK_ACCOUNT);
         this.accountType = accountType;
         this.accountNumber = accountNumber;
         this.bankCode = bankCode;
@@ -76,7 +134,7 @@ public final class UpdateInstrumentBankAccountRequest extends UpdateInstrumentRe
     }
 
     public UpdateInstrumentBankAccountRequest() {
-        super(InstrumentType.TOKEN);
+        super(InstrumentType.BANK_ACCOUNT);
     }
 
 }

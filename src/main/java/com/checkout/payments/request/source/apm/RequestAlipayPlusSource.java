@@ -5,6 +5,9 @@ import com.checkout.payments.request.source.AbstractRequestSource;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+/**
+ * Alipay Plus source.
+ */
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public final class RequestAlipayPlusSource extends AbstractRequestSource {

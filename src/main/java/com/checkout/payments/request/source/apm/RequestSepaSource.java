@@ -11,6 +11,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * SEPA Direct Debit source.
+ *
+ * <p>This is the current-platform source, whose type on the wire is "sepa". The previous platform
+ * references a stored mandate through the generic "id" source instead; use
+ * {@link com.checkout.payments.previous.request.source.apm.RequestSepaSource} for that.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)

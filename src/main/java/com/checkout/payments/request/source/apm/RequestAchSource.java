@@ -11,6 +11,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * An ach payment source.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)

@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Alma payment source.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)

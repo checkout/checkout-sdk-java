@@ -2,6 +2,9 @@ package com.checkout.instruments.get;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * The banking network used to filter the bank account fields returned.
+ */
 public enum PaymentNetwork {
 
     @SerializedName("local")

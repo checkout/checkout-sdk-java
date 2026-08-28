@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * A Tamara payment source.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
