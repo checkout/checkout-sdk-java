@@ -125,8 +125,6 @@ public static void main(String[] args) {
 final CheckoutApi checkoutApi = CheckoutSdk.builder()
         .oAuth()
         .clientCredentials("client_id", "client_secret")
-        // for a specific authorization endpoint
-        //.clientCredentials(new URI("https://access.sandbox.checkout.com/connect/token"), "client_id", "client_secret")
         .scopes(OAuthScope.GATEWAY, OAuthScope.VAULT, OAuthScope.FX)
         .environment(Environment.PRODUCTION)  // required
         .environmentSubdomain("subdomain") // required, Merchant-specific DNS name, the first 8 characters of your client ID

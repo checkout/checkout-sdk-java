@@ -62,17 +62,37 @@ class CheckoutSdkBuilderTest {
     }
 
     @Test
-    void shouldCreateCheckoutAndInitOAuthSdk() throws URISyntaxException {
+    void shouldFailToCreateOAuthSdkWithBothAuthorizationUriAndSubdomain() throws URISyntaxException {
+
+        final URI authorizationUri = new URI("https://access.sandbox.checkout.com/connect/token");
+
+        final CheckoutArgumentException exception = assertThrows(CheckoutArgumentException.class,
+                () -> new CheckoutSdkBuilder().oAuth()
+                        .clientCredentials(authorizationUri, "client_id", "client_secret")
+                        .scopes(OAuthScope.GATEWAY)
+                        .environment(Environment.SANDBOX)
+                        .environmentSubdomain("1234doma")
+                        .build());
+
+        assertEquals("AuthorizationUri and environmentSubdomain cannot both be set - the token endpoint is derived from your subdomain. Combine authorizationUri with useLegacyDomain() if you need a custom token host.", exception.getMessage());
+
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test
+    void shouldCreateOAuthSdkWithExplicitAuthorizationUriAndLegacyDomain() throws URISyntaxException {
 
         try {
             new CheckoutSdkBuilder().oAuth()
                     .clientCredentials(new URI("test"), "client_id", "client_secret")
                     .scopes(OAuthScope.GATEWAY)
                     .environment(Environment.SANDBOX)
-                    .environmentSubdomain("1234doma")
+                    .useLegacyDomain()
                     .build();
             fail();
         } catch (final CheckoutException e) {
+            // The generic failure (no invalid_client from the shared sandbox host) proves the
+            // token request was sent to the explicit authorization URI, not the environment default
             assertEquals("OAuth client_credentials authentication failed", e.getMessage());
         }
 

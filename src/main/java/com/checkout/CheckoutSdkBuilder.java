@@ -50,14 +50,17 @@ public final class CheckoutSdkBuilder {
 
         @Override
         protected SdkCredentials getSdkCredentials() {
+            final EnvironmentSubdomain environmentSubdomain = getEnvironmentSubdomain();
+            if (this.authorizationUri != null && environmentSubdomain != null) {
+                throw new CheckoutArgumentException("AuthorizationUri and environmentSubdomain cannot both be set - the token endpoint is derived from your subdomain. Combine authorizationUri with useLegacyDomain() if you need a custom token host.");
+            }
             if (this.authorizationUri == null) {
                 final IEnvironment environment = getEnvironment();
                 if (environment == null) {
                     throw new CheckoutArgumentException("Invalid configuration. Please specify an Environment or a specific OAuth authorizationURI.");
                 }
-                final EnvironmentSubdomain envSubdomain = getEnvironmentSubdomain();
-                if (envSubdomain != null) {
-                    this.authorizationUri = envSubdomain.getOAuthAuthorizationApi();
+                if (environmentSubdomain != null) {
+                    this.authorizationUri = environmentSubdomain.getOAuthAuthorizationApi();
                 } else {
                     this.authorizationUri = environment.getOAuthAuthorizationApi();
                 }
