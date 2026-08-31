@@ -1,8 +1,7 @@
 package com.checkout.payments.request.source.apm;
 
-import com.checkout.common.AccountHolder;
+import com.checkout.common.CountryCode;
 import com.checkout.common.PaymentSourceType;
-import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.request.source.AbstractRequestSource;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -21,26 +20,27 @@ public final class RequestSwishSource extends AbstractRequestSource {
 
     /**
      * The two-letter ISO country code of the payment.
-     * [Optional]
+      * [Required]
+      * Enum: "SE"
      */
-    private String paymentCountry;
+     private CountryCode paymentCountry;
 
     /**
      * The account holder's details.
-     * [Optional]
+      * [Required]
      */
-    private AccountHolder accountHolder;
+    private RequestSwishAccountHolder accountHolder;
 
     /**
      * A description of the purchase shown on the customer's statement.
      * [Optional]
      */
-    private BillingDescriptor billingDescriptor;
+    private RequestSwishBillingDescriptor billingDescriptor;
 
     @Builder
-    private RequestSwishSource(final String paymentCountry,
-                                final AccountHolder accountHolder,
-                                final BillingDescriptor billingDescriptor) {
+    private RequestSwishSource(final CountryCode paymentCountry,
+                                final RequestSwishAccountHolder accountHolder,
+                                final RequestSwishBillingDescriptor billingDescriptor) {
         super(PaymentSourceType.SWISH);
         this.paymentCountry = paymentCountry;
         this.accountHolder = accountHolder;

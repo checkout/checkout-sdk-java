@@ -23,6 +23,10 @@ public final class InstrumentCustomerResponse extends CustomerResponse {
      * [Optional]
      */
     @SerializedName("default")
-    private boolean isDefault;
+    private Boolean isDefault;
+
+    public Boolean isDefault() {
+        return isDefault;
+    }
 
 }

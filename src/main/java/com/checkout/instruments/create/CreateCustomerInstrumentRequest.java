@@ -35,14 +35,22 @@ public final class CreateCustomerInstrumentRequest extends CustomerRequest {
      * [Optional]
      */
     @SerializedName("default")
-    private boolean defaultInstrument;
+    private Boolean defaultInstrument;
+
+    /**
+     * @deprecated Use {@link #getDefaultInstrument()}.
+     */
+    @Deprecated
+    public Boolean isDefaultInstrument() {
+        return defaultInstrument;
+    }
 
     @Builder
     private CreateCustomerInstrumentRequest(final String email,
                                            final String name,
                                            final Phone phone,
                                            final String id,
-                                           final boolean defaultInstrument) {
+                                           final Boolean defaultInstrument) {
         super(email, name, phone);
         this.id = id;
         this.defaultInstrument = defaultInstrument;

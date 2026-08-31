@@ -1,6 +1,7 @@
 package com.checkout.instruments.create;
 
 import com.checkout.common.BankDetails;
+import com.checkout.common.CustomerResponse;
 import com.checkout.common.InstrumentType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,9 +10,9 @@ import lombok.ToString;
 /**
  * Store bank account instrument response.
  *
- * <p>The id, the fingerprint and the customer are inherited from
- * {@link CreateInstrumentResponse}. This is one of only two store responses the specification
- * declares a customer on, the other being {@link CreateInstrumentTokenResponse}.
+ * <p>The id and fingerprint are inherited from {@link CreateInstrumentResponse}. This is one of
+ * only two store responses the specification declares a customer on, the other being
+ * {@link CreateInstrumentTokenResponse}.
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -53,5 +54,11 @@ public final class CreateInstrumentBankAccountResponse extends CreateInstrumentR
      * [Optional]
      */
     private String iban;
+
+    /**
+     * The customer that the instrument is associated with.
+     * [Optional]
+     */
+    private CustomerResponse customer;
 
 }
