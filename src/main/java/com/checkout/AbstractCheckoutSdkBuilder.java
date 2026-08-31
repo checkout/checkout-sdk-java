@@ -23,9 +23,6 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
     }
 
     public AbstractCheckoutSdkBuilder<T> environmentSubdomain(final String subdomain) {
-        if (subdomain == null) {
-            throw new CheckoutArgumentException("subdomain must be specified");
-        }
         this.subdomain = subdomain;
         return this;
     }
@@ -112,7 +109,7 @@ public abstract class AbstractCheckoutSdkBuilder<T extends CheckoutApiClient> {
             throw new CheckoutArgumentException("environmentSubdomain and useLegacyDomain cannot both be set - provide only your merchant-specific subdomain");
         }
         if (subdomain == null && !useLegacyDomain && requiresEnvironmentSubdomain()) {
-            throw new CheckoutArgumentException("environmentSubdomain is required - provide your merchant-specific subdomain (the first 8 characters of your client ID, see https://api-reference.checkout.com/#section/Base-URLs), or call useLegacyDomain() to opt out only if merchant specific sub domains are causing issues");
+            throw new CheckoutArgumentException("environmentSubdomain is required - provide your merchant-specific subdomain (typically your client ID excluding the cli_ prefix, see https://api-reference.checkout.com/#section/Base-URLs), or call useLegacyDomain() to opt out only if merchant specific sub domains are causing issues");
         }
     }
 

@@ -68,9 +68,7 @@ public abstract class SandboxTestFixture {
                         .environment(Environment.SANDBOX)
                         .executor(Executors.newFixedThreadPool(100))
                         .httpClientBuilder(httpClientBuilder)
-                        // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
-                        // the token request would come back invalid_client. Opting out explicitly until they are.
-                        .useLegacyDomain()
+                        .environmentSubdomain(requireNonNull(System.getenv("CHECKOUT_MERCHANT_SUBDOMAIN")))
                         .build();
                 break;
             case DEFAULT:
@@ -80,9 +78,7 @@ public abstract class SandboxTestFixture {
                         .secretKey(requireNonNull(System.getenv("CHECKOUT_DEFAULT_SECRET_KEY")))
                         .environment(Environment.SANDBOX)
                         .executor(CUSTOM_EXECUTOR)
-                        // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
-                        // the token request would come back invalid_client. Opting out explicitly until they are.
-                        .useLegacyDomain()
+                        .environmentSubdomain(requireNonNull(System.getenv("CHECKOUT_MERCHANT_SUBDOMAIN")))
                         .build();
                 break;
             case DEFAULT_OAUTH:
@@ -99,8 +95,8 @@ public abstract class SandboxTestFixture {
                                 OAuthScope.FORWARD_SECRETS, OAuthScope.PAYMENTS_SEARCH)
                         .environment(Environment.SANDBOX)
                         .executor(CUSTOM_EXECUTOR)
-                        // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
-                        // the token request would come back invalid_client. Opting out explicitly until they are.
+                        // The sandbox OAuth clients lack subdomain provisioning, so the token request
+                        // would come back invalid_client. Opting out explicitly until they are provisioned.
                         .useLegacyDomain()
                         .build();
             case CUSTOM:

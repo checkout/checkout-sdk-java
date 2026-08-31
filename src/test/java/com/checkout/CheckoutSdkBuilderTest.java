@@ -127,6 +127,21 @@ class CheckoutSdkBuilderTest {
 
     }
 
+    @Test
+    void shouldTreatNullSubdomainAsUnsetAndFailAtBuildTime() {
+
+        final CheckoutArgumentException exception = assertThrows(CheckoutArgumentException.class,
+                () -> new CheckoutSdkBuilder().staticKeys()
+                        .publicKey(VALID_DEFAULT_PK)
+                        .secretKey(VALID_DEFAULT_SK)
+                        .environment(Environment.SANDBOX)
+                        .environmentSubdomain(null)
+                        .build());
+
+        assertTrue(exception.getMessage().contains("environmentSubdomain is required"));
+
+    }
+
     @SuppressWarnings("deprecation")
     @Test
     void shouldFailToCreateCheckoutSdkWithBothSubdomainAndLegacyDomain() {

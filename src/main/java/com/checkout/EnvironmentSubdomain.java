@@ -7,6 +7,8 @@ import java.util.regex.Matcher;
 
 public final class EnvironmentSubdomain {
 
+    private static final Pattern SUBDOMAIN_PATTERN = Pattern.compile("^(?:pl-)?[a-z0-9]+$");
+
     private URI checkoutApi;
     private URI oAuthAuthorizationApi;
 
@@ -32,10 +34,9 @@ public final class EnvironmentSubdomain {
      * @throws CheckoutArgumentException if the subdomain is not a valid merchant-specific subdomain
      */
     private static URI createUrlWithSubdomain(URI originalUrl, String subdomain) {
-        Pattern pattern = Pattern.compile("^(?:pl-)?[a-z0-9]+$");
-        Matcher matcher = subdomain == null ? null : pattern.matcher(subdomain);
+        Matcher matcher = subdomain == null ? null : SUBDOMAIN_PATTERN.matcher(subdomain);
         if (matcher == null || !matcher.matches()) {
-            throw new CheckoutArgumentException("invalid environment subdomain - provide your merchant-specific subdomain, the first 8 characters of your client ID (see https://api-reference.checkout.com/#section/Base-URLs)");
+            throw new CheckoutArgumentException("invalid environment subdomain - provide your merchant-specific subdomain, typically your client ID excluding the cli_ prefix (see https://api-reference.checkout.com/#section/Base-URLs)");
         }
 
         String host = originalUrl.getHost();
