@@ -202,8 +202,8 @@ class IssuingCardholdersTestIT extends BaseIssuingTestIT {
     private CardholderAccessTokenRequest createCardholderAccessTokenRequest() {
         return CardholderAccessTokenRequest.builder()
                 .grantType("client_credentials")
-                .clientID(System.getenv("CHECKOUT_DEFAULT_OAUTH_ISSUING_CLIENT_ID"))
-                .clientSecret(System.getenv("CHECKOUT_DEFAULT_OAUTH_ISSUING_CLIENT_SECRET"))
+                .clientID(System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_ID"))
+                .clientSecret(System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_SECRET"))
                 .cardholderId(cardholder.getId())
                 .singleUse(true)
                 .build();
