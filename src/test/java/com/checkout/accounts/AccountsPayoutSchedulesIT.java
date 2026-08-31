@@ -197,8 +197,8 @@ class AccountsPayoutSchedulesIT {
         return CheckoutSdk.builder()
                 .oAuth()
                 .clientCredentials(
-                        requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_ID")),
-                        requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_CLIENT_SECRET")))
+                        requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_PAYOUT_SCHEDULE_CLIENT_ID")),
+                        requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_PAYOUT_SCHEDULE_CLIENT_SECRET")))
                 .scopes(OAuthScope.MARKETPLACE)
                 .environment(Environment.SANDBOX)
                 // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
