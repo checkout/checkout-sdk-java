@@ -1,7 +1,6 @@
 package com.checkout.instruments.create;
 
 import com.checkout.HttpMetadata;
-import com.checkout.common.CustomerResponse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -25,20 +24,5 @@ public abstract class CreateInstrumentResponse extends HttpMetadata {
      * ^([a-z0-9]{26})$
      */
     protected String fingerprint;
-
-    /**
-     * The customer that the instrument is associated with.
-     *
-     * <p>Only the token and bank_account variants declare this property. The sepa, ach and bacs
-     * store responses do not, so on those three it is always null and does not belong here.
-     * [Optional]
-     *
-     * @deprecated declared on the wrong level. This will move to
-     * {@link CreateInstrumentTokenResponse} and {@link CreateInstrumentBankAccountResponse}, the
-     * only two variants the specification declares it on, in the next major version. Read it from
-     * the concrete response type rather than from this base class.
-     */
-    @Deprecated
-    protected CustomerResponse customer;
 
 }

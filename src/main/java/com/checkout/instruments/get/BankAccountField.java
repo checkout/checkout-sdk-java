@@ -1,6 +1,4 @@
 package com.checkout.instruments.get;
-
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 import java.util.List;
@@ -45,7 +43,7 @@ public final class BankAccountField {
      * Whether the field is required.
      * [Required]
      */
-    private boolean required;
+    private Boolean required;
 
     /**
      * A regular expression that can be used to validate the input of the field.
@@ -57,18 +55,13 @@ public final class BankAccountField {
      * The minimum length of the field.
      * [Optional]
      */
-    private int minLength;
+    private Integer minLength;
 
     /**
      * The maximum length of the field.
      * [Optional]
-     *
-     * <p>The Java field name is lowercase where the neighbouring minLength is camel case. The wire
-     * name is correct because of the explicit annotation, so this is a source-only defect;
-     * renaming the field is breaking and is deferred to the next major version.
      */
-    @SerializedName("max_length")
-    private int maxlength;
+    private Integer maxLength;
 
     /**
      * The allowed options for the field.

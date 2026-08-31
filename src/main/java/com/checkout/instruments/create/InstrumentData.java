@@ -37,13 +37,36 @@ public final class InstrumentData {
      * [Required]
      * min 15 characters
      * max 34 characters
-     *
-     * <p>The Java field name carries a typo. The wire name is correct because of the explicit
-     * annotation, so this is a source-only defect; renaming the field is breaking and is deferred
-     * to the next major version.
      */
     @SerializedName("account_number")
-    private String accoountNumber;
+    private String accountNumber;
+
+    /**
+     * @deprecated Use {@link #getAccountNumber()}.
+     */
+    @Deprecated
+    public String getAccoountNumber() {
+        return accountNumber;
+    }
+
+    /**
+     * @deprecated Use {@link #setAccountNumber(String)}.
+     */
+    @Deprecated
+    public void setAccoountNumber(final String accountNumber) {
+        this.accountNumber = accountNumber;
+    }
+
+    public static class InstrumentDataBuilder {
+
+        /**
+         * @deprecated Use {@link #accountNumber(String)}.
+         */
+        @Deprecated
+        public InstrumentDataBuilder accoountNumber(final String accountNumber) {
+            return accountNumber(accountNumber);
+        }
+    }
 
     /**
      * The country of the account.

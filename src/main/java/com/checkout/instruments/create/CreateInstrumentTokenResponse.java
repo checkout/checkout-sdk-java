@@ -3,7 +3,10 @@ package com.checkout.instruments.create;
 import com.checkout.common.CardCategory;
 import com.checkout.common.CardType;
 import com.checkout.common.CountryCode;
+import com.checkout.common.AccountHolderResponse;
+import com.checkout.common.CustomerResponse;
 import com.checkout.common.InstrumentType;
+import com.checkout.instruments.get.InstrumentNetworkToken;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -11,9 +14,9 @@ import lombok.ToString;
 /**
  * Card instrument response.
  *
- * <p>The id, the fingerprint and the customer are inherited from
- * {@link CreateInstrumentResponse}. The instrument type is card rather than token: the
- * specification maps the token store request onto a card store response.
+ * <p>The id and fingerprint are inherited from {@link CreateInstrumentResponse}. The instrument
+ * type is card rather than token: the specification maps the token store request onto a card
+ * store response.
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -108,5 +111,23 @@ public final class CreateInstrumentTokenResponse extends CreateInstrumentRespons
      * [Optional]
      */
     private String productType;
+
+    /**
+     * The account holder details.
+     * [Optional]
+     */
+    private AccountHolderResponse accountHolder;
+
+    /**
+     * The customer that the instrument is associated with.
+     * [Optional]
+     */
+    private CustomerResponse customer;
+
+    /**
+     * The network token provisioned for this instrument.
+     * [Optional]
+     */
+    private InstrumentNetworkToken networkToken;
 
 }
