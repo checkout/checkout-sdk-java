@@ -933,6 +933,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     // API builders
+    @SuppressWarnings("deprecation")
     private CheckoutApi createPreviewApi() {
         return CheckoutSdk.builder()
                 .oAuth()

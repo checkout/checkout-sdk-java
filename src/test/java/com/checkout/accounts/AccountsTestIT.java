@@ -793,6 +793,7 @@ class AccountsTestIT extends SandboxTestFixture {
         return fileResponse;
     }
 
+    @SuppressWarnings("deprecation")
     private CheckoutApi getAccountsCheckoutApi() {
         return CheckoutSdk.builder()
                 .oAuth()

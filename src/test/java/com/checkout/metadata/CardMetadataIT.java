@@ -160,13 +160,13 @@ class CardMetadataIT extends SandboxTestFixture {
     // ─── Helpers ────────────────────────────────────────────────────────────
 
     private CheckoutApiImpl createStaticKeyApi() {
+        // Static keys never call the token endpoint, so this client runs against the real
+        // merchant subdomain: only the sandbox OAuth clients lack provisioning.
         return CheckoutSdk.builder().staticKeys()
                 .publicKey(System.getenv("CHECKOUT_DEFAULT_PUBLIC_KEY"))
                 .secretKey(System.getenv("CHECKOUT_DEFAULT_SECRET_KEY"))
                 .environment(Environment.SANDBOX)
-                // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
-                // the token request would come back invalid_client. Opting out explicitly until they are.
-                .useLegacyDomain()
+                .environmentSubdomain(System.getenv("CHECKOUT_MERCHANT_SUBDOMAIN"))
                 .build();
     }
 

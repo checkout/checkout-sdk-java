@@ -42,6 +42,7 @@ public abstract class SandboxTestFixture {
 
     protected TokensClient tokensClient;
 
+    @SuppressWarnings("deprecation")
     public SandboxTestFixture(final PlatformType platformType) {
         switch (platformType) {
             case PREVIOUS:

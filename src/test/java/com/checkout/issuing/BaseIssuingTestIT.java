@@ -33,6 +33,7 @@ public abstract class BaseIssuingTestIT extends SandboxTestFixture {
         issuingApi = getIssuingCheckoutApi();
     }
 
+    @SuppressWarnings("deprecation")
     private CheckoutApi getIssuingCheckoutApi() {
         return CheckoutSdk.builder()
                 .oAuth()

@@ -193,6 +193,7 @@ class AccountsPayoutSchedulesIT {
         assertNotNull(schedule.getRecurrence().getFrequency());
     }
 
+    @SuppressWarnings("deprecation")
     private CheckoutApi getPayoutSchedulesCheckoutApi() {
         return CheckoutSdk.builder()
                 .oAuth()

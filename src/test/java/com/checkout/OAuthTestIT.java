@@ -111,6 +111,7 @@ class OAuthTestIT extends SandboxTestFixture {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     void shouldInstantiateCheckoutApiWithOAuth_defaultAuthorizeUrl() {
 
         final CheckoutApi checkoutApi = CheckoutSdk.builder()
