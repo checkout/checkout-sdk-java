@@ -11,6 +11,7 @@ import static com.checkout.TestHelper.VALID_DEFAULT_PK;
 import static com.checkout.TestHelper.VALID_DEFAULT_SK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -23,6 +24,7 @@ class CheckoutSdkBuilderTest {
                 .publicKey(VALID_DEFAULT_PK)
                 .secretKey(VALID_DEFAULT_SK)
                 .environment(Environment.SANDBOX)
+                .environmentSubdomain("1234doma")
                 .build();
 
         assertNotNull(checkoutApi1);
@@ -30,6 +32,7 @@ class CheckoutSdkBuilderTest {
         final CheckoutApi checkoutApi2 = new CheckoutSdkBuilder().staticKeys()
                 .secretKey(VALID_DEFAULT_SK)
                 .environment(Environment.SANDBOX)
+                .environmentSubdomain("1234doma")
                 .build();
 
         assertNotNull(checkoutApi2);
@@ -59,16 +62,37 @@ class CheckoutSdkBuilderTest {
     }
 
     @Test
-    void shouldCreateCheckoutAndInitOAuthSdk() throws URISyntaxException {
+    void shouldFailToCreateOAuthSdkWithBothAuthorizationUriAndSubdomain() throws URISyntaxException {
+
+        final URI authorizationUri = new URI("https://access.sandbox.checkout.com/connect/token");
+
+        final CheckoutArgumentException exception = assertThrows(CheckoutArgumentException.class,
+                () -> new CheckoutSdkBuilder().oAuth()
+                        .clientCredentials(authorizationUri, "client_id", "client_secret")
+                        .scopes(OAuthScope.GATEWAY)
+                        .environment(Environment.SANDBOX)
+                        .environmentSubdomain("1234doma")
+                        .build());
+
+        assertEquals("AuthorizationUri and environmentSubdomain cannot both be set - the token endpoint is derived from your subdomain. Combine authorizationUri with useLegacyDomain() if you need a custom token host.", exception.getMessage());
+
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test
+    void shouldCreateOAuthSdkWithExplicitAuthorizationUriAndLegacyDomain() throws URISyntaxException {
 
         try {
             new CheckoutSdkBuilder().oAuth()
                     .clientCredentials(new URI("test"), "client_id", "client_secret")
                     .scopes(OAuthScope.GATEWAY)
                     .environment(Environment.SANDBOX)
+                    .useLegacyDomain()
                     .build();
             fail();
         } catch (final CheckoutException e) {
+            // The generic failure (no invalid_client from the shared sandbox host) proves the
+            // token request was sent to the explicit authorization URI, not the environment default
             assertEquals("OAuth client_credentials authentication failed", e.getMessage());
         }
 
@@ -94,6 +118,93 @@ class CheckoutSdkBuilderTest {
 
     }
 
+    @SuppressWarnings("deprecation")
+    @Test
+    void shouldCreateStaticKeysCheckoutSdkWithLegacyDomain() {
+
+        final CheckoutApi checkoutApi = new CheckoutSdkBuilder().staticKeys()
+                .publicKey(VALID_DEFAULT_PK)
+                .secretKey(VALID_DEFAULT_SK)
+                .environment(Environment.SANDBOX)
+                .useLegacyDomain()
+                .build();
+
+        assertNotNull(checkoutApi);
+
+    }
+
+    @Test
+    void shouldFailToCreateCheckoutSdkWithoutSubdomainOrLegacyDomain() {
+
+        final CheckoutArgumentException exception = assertThrows(CheckoutArgumentException.class,
+                () -> new CheckoutSdkBuilder().staticKeys()
+                        .publicKey(VALID_DEFAULT_PK)
+                        .secretKey(VALID_DEFAULT_SK)
+                        .environment(Environment.SANDBOX)
+                        .build());
+
+        assertTrue(exception.getMessage().contains("environmentSubdomain is required"));
+
+    }
+
+    @Test
+    void shouldTreatNullSubdomainAsUnsetAndFailAtBuildTime() {
+
+        final CheckoutArgumentException exception = assertThrows(CheckoutArgumentException.class,
+                () -> new CheckoutSdkBuilder().staticKeys()
+                        .publicKey(VALID_DEFAULT_PK)
+                        .secretKey(VALID_DEFAULT_SK)
+                        .environment(Environment.SANDBOX)
+                        .environmentSubdomain(null)
+                        .build());
+
+        assertTrue(exception.getMessage().contains("environmentSubdomain is required"));
+
+    }
+
+    @SuppressWarnings("deprecation")
+    @Test
+    void shouldFailToCreateCheckoutSdkWithBothSubdomainAndLegacyDomain() {
+
+        final CheckoutArgumentException exception = assertThrows(CheckoutArgumentException.class,
+                () -> new CheckoutSdkBuilder().staticKeys()
+                        .publicKey(VALID_DEFAULT_PK)
+                        .secretKey(VALID_DEFAULT_SK)
+                        .environment(Environment.SANDBOX)
+                        .environmentSubdomain("1234doma")
+                        .useLegacyDomain()
+                        .build());
+
+        assertTrue(exception.getMessage().contains("cannot both be set"));
+
+    }
+
+    @Test
+    void shouldFailToCreateCheckoutSdkWithInvalidSubdomain() {
+
+        final CheckoutArgumentException exception = assertThrows(CheckoutArgumentException.class,
+                () -> new CheckoutSdkBuilder().staticKeys()
+                        .publicKey(VALID_DEFAULT_PK)
+                        .secretKey(VALID_DEFAULT_SK)
+                        .environment(Environment.SANDBOX)
+                        .environmentSubdomain("not a subdomain")
+                        .build());
+
+        assertTrue(exception.getMessage().contains("invalid environment subdomain"));
+
+    }
+
+    @Test
+    void shouldCreatePreviousSdkWithoutSubdomain() {
+
+        assertNotNull(new CheckoutSdkBuilder().previous().staticKeys()
+                .publicKey(TestHelper.VALID_PREVIOUS_PK)
+                .secretKey(TestHelper.VALID_PREVIOUS_SK)
+                .environment(Environment.SANDBOX)
+                .build());
+
+    }
+
     @Test
     void shouldFailToCreateCheckoutSdks() {
 
@@ -102,6 +213,7 @@ class CheckoutSdkBuilderTest {
                     .publicKey(INVALID_DEFAULT_PK)
                     .secretKey(VALID_DEFAULT_SK)
                     .environment(Environment.SANDBOX)
+                    .environmentSubdomain("1234doma")
                     .build();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
@@ -113,6 +225,7 @@ class CheckoutSdkBuilderTest {
                     .publicKey(VALID_DEFAULT_PK)
                     .secretKey(INVALID_DEFAULT_SK)
                     .environment(Environment.SANDBOX)
+                    .environmentSubdomain("1234doma")
                     .build();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);
@@ -123,6 +236,7 @@ class CheckoutSdkBuilderTest {
             new CheckoutSdkBuilder().staticKeys()
                     .publicKey(VALID_DEFAULT_PK)
                     .secretKey(VALID_DEFAULT_SK)
+                    .environmentSubdomain("1234doma")
                     .build();
         } catch (final Exception e) {
             assertTrue(e instanceof CheckoutArgumentException);

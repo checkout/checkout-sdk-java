@@ -793,6 +793,7 @@ class AccountsTestIT extends SandboxTestFixture {
         return fileResponse;
     }
 
+    @SuppressWarnings("deprecation")
     private CheckoutApi getAccountsCheckoutApi() {
         return CheckoutSdk.builder()
                 .oAuth()
@@ -801,6 +802,9 @@ class AccountsTestIT extends SandboxTestFixture {
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_ACCOUNTS_CLIENT_SECRET")))
                 .scopes(OAuthScope.ACCOUNTS)
                 .environment(Environment.SANDBOX)
+                // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
+                // the token request would come back invalid_client. Opting out explicitly until they are.
+                .useLegacyDomain()
                 .build();
     }
 
