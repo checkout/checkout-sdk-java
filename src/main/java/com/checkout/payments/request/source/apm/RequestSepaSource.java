@@ -37,8 +37,9 @@ public final class RequestSepaSource extends AbstractRequestSource {
     private String accountNumber;
 
     /**
-     * The BIC/SWIFT code of the bank.
-     * [Optional]
+     * Not declared by PaymentRequestSEPAV4Source. No SEPA schema in the specification declares a
+     * bank code, and the SEPA source is identified by IBAN through accountNumber. Retained
+     * for retro-compatibility purposes only. Possibly an obsoleted field.
      */
     private String bankCode;
 
