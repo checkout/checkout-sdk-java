@@ -27,7 +27,6 @@ import com.checkout.Environment;
 import com.checkout.TestHelper;
 import com.checkout.common.AccountHolder;
 import com.checkout.common.AccountHolderType;
-import com.checkout.common.AccountType;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
@@ -37,6 +36,7 @@ import com.checkout.common.Phone;
 import com.checkout.payments.request.PaymentCustomerRequest;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.source.AbstractRequestSource;
+import com.checkout.payments.request.source.apm.AchSourceAccountType;
 import com.checkout.payments.request.source.apm.RequestAchSource;
 import com.checkout.payments.request.source.apm.RequestAfterPaySource;
 import com.checkout.payments.request.source.apm.RequestAlipayPlusSource;
@@ -815,7 +815,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
 
     private RequestAchSource createAchSource() {
         return RequestAchSource.builder()
-                .accountType(AccountType.SAVINGS)
+                .accountType(AchSourceAccountType.SAVINGS)
                 .country(CountryCode.GB)
                 .accountNumber("8784738748973829")
                 .bankCode("BANK")
