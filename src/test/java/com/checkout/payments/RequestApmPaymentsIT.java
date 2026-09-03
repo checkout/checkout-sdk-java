@@ -1,5 +1,8 @@
 package com.checkout.payments;
 
+import com.checkout.payments.request.source.apm.RequestAchAccountHolder;
+import com.checkout.payments.request.source.apm.RequestSepaBillingAddress;
+import com.checkout.payments.request.source.apm.RequestSepaAccountHolder;
 import static com.checkout.TestHelper.createAddress;
 import static com.checkout.TestHelper.createPhone;
 import static com.checkout.TestHelper.getAccountHolder;
@@ -849,11 +852,11 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     // Account holder builders
-    private AccountHolder createSepaAccountHolder() {
-        return AccountHolder.builder()
+    private RequestSepaAccountHolder createSepaAccountHolder() {
+        return RequestSepaAccountHolder.builder()
                 .firstName("Name")
                 .lastName("Last")
-                .billingAddress(Address.builder()
+                .billingAddress(RequestSepaBillingAddress.builder()
                         .addressLine1("Address Line 1")
                         .addressLine2("Max_10_c__")
                         .city("City")
@@ -863,12 +866,14 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .build();
     }
 
-    private AccountHolder createAchAccountHolder() {
-        return AccountHolder.builder()
+    private RequestAchAccountHolder createAchAccountHolder() {
+        // AccountHolderAch declares no phone, so the previous .phone(...) was a field the
+        // schema does not accept at this position.
+        return RequestAchAccountHolder.builder()
+                .type(AccountHolderType.INDIVIDUAL)
                 .firstName("John")
                 .lastName("Doe")
                 .billingAddress(createAddress())
-                .phone(createPhone())
                 .build();
     }
 

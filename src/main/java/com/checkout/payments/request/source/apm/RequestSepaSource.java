@@ -1,6 +1,5 @@
 package com.checkout.payments.request.source.apm;
 
-import com.checkout.common.AccountHolder;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.PaymentSourceType;
@@ -72,7 +71,7 @@ public final class RequestSepaSource extends AbstractRequestSource {
      * The account holder's personal information.
      * [Required]
      */
-    private AccountHolder accountHolder;
+    private RequestSepaAccountHolder accountHolder;
 
     @Builder
     private RequestSepaSource(
@@ -83,7 +82,7 @@ public final class RequestSepaSource extends AbstractRequestSource {
             final String mandateId,
             final MandateType mandateType,
             final String dateOfSignature,
-            final AccountHolder accountHolder
+            final RequestSepaAccountHolder accountHolder
     ) {
         super(PaymentSourceType.SEPAV4);
         this.country = country;

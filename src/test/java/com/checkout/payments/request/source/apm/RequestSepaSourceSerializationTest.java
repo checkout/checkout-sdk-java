@@ -1,9 +1,6 @@
 package com.checkout.payments.request.source.apm;
 
 import com.checkout.GsonSerializer;
-import com.checkout.common.AccountHolder;
-import com.checkout.common.AccountHolderType;
-import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import org.junit.jupiter.api.Test;
@@ -23,10 +20,10 @@ class RequestSepaSourceSerializationTest {
                 .country(CountryCode.FR)
                 .accountNumber("FR7630006000011234567890189")
                 .currency(Currency.EUR)
-                .accountHolder(AccountHolder.builder()
+                .accountHolder(RequestSepaAccountHolder.builder()
                         .firstName("John")
                         .lastName("Smith")
-                        .billingAddress(Address.builder()
+                        .billingAddress(RequestSepaBillingAddress.builder()
                                 .addressLine1("123 Rue de la Paix")
                                 .city("Paris")
                                 .zip("75000")
@@ -47,12 +44,12 @@ class RequestSepaSourceSerializationTest {
                 .mandateId("123456")
                 .mandateType(MandateType.B2B)
                 .dateOfSignature("2022-08-02")
-                .accountHolder(AccountHolder.builder()
-                        .type(AccountHolderType.CORPORATE)
+                .accountHolder(RequestSepaAccountHolder.builder()
+                        .type(RequestSepaAccountHolderType.CORPORATE)
                         .firstName("John")
                         .lastName("Smith")
                         .companyName("Acme Corp")
-                        .billingAddress(Address.builder()
+                        .billingAddress(RequestSepaBillingAddress.builder()
                                 .addressLine1("123 Rue de la Paix")
                                 .city("Paris")
                                 .zip("75000")
@@ -71,10 +68,10 @@ class RequestSepaSourceSerializationTest {
                 .accountNumber("FR7630006000011234567890189")
                 .currency(Currency.EUR)
                 .mandateType(MandateType.B2B)
-                .accountHolder(AccountHolder.builder()
+                .accountHolder(RequestSepaAccountHolder.builder()
                         .firstName("John")
                         .lastName("Smith")
-                        .billingAddress(Address.builder()
+                        .billingAddress(RequestSepaBillingAddress.builder()
                                 .country(CountryCode.FR).build())
                         .build())
                 .build();
@@ -92,10 +89,10 @@ class RequestSepaSourceSerializationTest {
                 .accountNumber("FR7630006000011234567890189")
                 .currency(Currency.EUR)
                 .mandateType(MandateType.CORE)
-                .accountHolder(AccountHolder.builder()
+                .accountHolder(RequestSepaAccountHolder.builder()
                         .firstName("John")
                         .lastName("Smith")
-                        .billingAddress(Address.builder()
+                        .billingAddress(RequestSepaBillingAddress.builder()
                                 .country(CountryCode.FR).build())
                         .build())
                 .build();
@@ -115,10 +112,10 @@ class RequestSepaSourceSerializationTest {
                 .mandateId("123456")
                 .mandateType(MandateType.B2B)
                 .dateOfSignature("2022-08-02")
-                .accountHolder(AccountHolder.builder()
+                .accountHolder(RequestSepaAccountHolder.builder()
                         .firstName("John")
                         .lastName("Smith")
-                        .billingAddress(Address.builder()
+                        .billingAddress(RequestSepaBillingAddress.builder()
                                 .country(CountryCode.FR).build())
                         .build())
                 .build();

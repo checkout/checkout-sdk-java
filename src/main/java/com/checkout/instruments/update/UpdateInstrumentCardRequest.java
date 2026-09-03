@@ -69,7 +69,7 @@ public final class UpdateInstrumentCardRequest extends UpdateInstrumentRequest {
         this.customer = customer;
     }
 
-    public UpdateInstrumentCardRequest(final InstrumentType type) {
+    public UpdateInstrumentCardRequest() {
         super(InstrumentType.CARD);
     }
 

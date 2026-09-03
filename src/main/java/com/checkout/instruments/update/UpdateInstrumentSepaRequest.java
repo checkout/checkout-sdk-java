@@ -1,6 +1,5 @@
 package com.checkout.instruments.update;
 
-import com.checkout.common.AccountHolder;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.InstrumentType;
@@ -37,11 +36,11 @@ public final class UpdateInstrumentSepaRequest extends UpdateInstrumentRequest {
      * The account holder details.
      * [Optional]
      */
-    private AccountHolder accountHolder;
+    private UpdateSepaAccountHolder accountHolder;
 
     @Builder
     private UpdateInstrumentSepaRequest(final SepaInstrumentData instrumentData,
-                                        final AccountHolder accountHolder) {
+                                        final UpdateSepaAccountHolder accountHolder) {
         super(InstrumentType.SEPA);
         this.instrumentData = instrumentData;
         this.accountHolder = accountHolder;

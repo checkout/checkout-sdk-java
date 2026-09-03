@@ -1,6 +1,5 @@
 package com.checkout.payments.request.source.apm;
 
-import com.checkout.common.AccountHolder;
 import com.checkout.common.CountryCode;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
@@ -54,7 +53,7 @@ public final class RequestAchSource extends AbstractRequestSource {
      * Supports date_of_birth and identification (SSN) fields.
      * [Required]
      */
-    private AccountHolder accountHolder;
+    private RequestAchAccountHolder accountHolder;
 
     @Builder
     private RequestAchSource(
@@ -62,7 +61,7 @@ public final class RequestAchSource extends AbstractRequestSource {
             final CountryCode country,
             final String accountNumber,
             final String bankCode,
-            final AccountHolder accountHolder) {
+            final RequestAchAccountHolder accountHolder) {
         super(PaymentSourceType.ACH);
         this.accountType = accountType;
         this.country = country;

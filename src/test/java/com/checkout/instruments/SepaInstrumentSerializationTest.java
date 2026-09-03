@@ -1,8 +1,8 @@
 package com.checkout.instruments;
 
+import com.checkout.instruments.create.CreateSepaAccountHolder;
+import com.checkout.instruments.create.CreateSepaBillingAddress;
 import com.checkout.GsonSerializer;
-import com.checkout.common.AccountHolder;
-import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.instruments.create.CreateCustomerInstrumentRequest;
@@ -41,7 +41,7 @@ class SepaInstrumentSerializationTest {
                         .country(CountryCode.FR)
                         .currency(Currency.EUR)
                         .build())
-                .accountHolder(AccountHolder.builder()
+                .accountHolder(CreateSepaAccountHolder.builder()
                         .firstName("Jane")
                         .lastName("Smith")
                         .build())
@@ -62,7 +62,7 @@ class SepaInstrumentSerializationTest {
                         .currency(Currency.EUR)
                         .paymentType(SepaPaymentType.RECURRING)
                         .build())
-                .accountHolder(AccountHolder.builder()
+                .accountHolder(CreateSepaAccountHolder.builder()
                         .firstName("Hans")
                         .lastName("Muller")
                         .build())
@@ -126,10 +126,10 @@ class SepaInstrumentSerializationTest {
     void shouldSerializeAccountHolder() {
         final CreateInstrumentSepaRequest request = CreateInstrumentSepaRequest.builder()
                 .instrumentData(InstrumentData.builder().build())
-                .accountHolder(AccountHolder.builder()
+                .accountHolder(CreateSepaAccountHolder.builder()
                         .firstName("Marie")
                         .lastName("Dupont")
-                        .billingAddress(Address.builder()
+                        .billingAddress(CreateSepaBillingAddress.builder()
                                 .addressLine1("10 Rue de la Paix")
                                 .city("Paris")
                                 .country(CountryCode.FR)
@@ -149,7 +149,7 @@ class SepaInstrumentSerializationTest {
     void shouldSerializeOptionalCustomer() {
         final CreateInstrumentSepaRequest request = CreateInstrumentSepaRequest.builder()
                 .instrumentData(InstrumentData.builder().build())
-                .accountHolder(AccountHolder.builder().build())
+                .accountHolder(CreateSepaAccountHolder.builder().build())
                 .customer(CreateCustomerInstrumentRequest.builder()
                         .email("customer@example.com")
                         .name("Jane Smith")
@@ -199,10 +199,10 @@ class SepaInstrumentSerializationTest {
                         .currency(Currency.EUR)
                         .paymentType(SepaPaymentType.RECURRING)
                         .build())
-                .accountHolder(AccountHolder.builder()
+                .accountHolder(CreateSepaAccountHolder.builder()
                         .firstName("Carlos")
                         .lastName("García")
-                        .billingAddress(Address.builder()
+                        .billingAddress(CreateSepaBillingAddress.builder()
                                 .addressLine1("Calle Mayor 1")
                                 .city("Madrid")
                                 .country(CountryCode.ES)
@@ -226,7 +226,7 @@ class SepaInstrumentSerializationTest {
     void shouldNotSerializeNullOptionalCustomer() {
         final CreateInstrumentSepaRequest request = CreateInstrumentSepaRequest.builder()
                 .instrumentData(InstrumentData.builder().build())
-                .accountHolder(AccountHolder.builder().build())
+                .accountHolder(CreateSepaAccountHolder.builder().build())
                 .build();
 
         final String json = serializer.toJson(request);
