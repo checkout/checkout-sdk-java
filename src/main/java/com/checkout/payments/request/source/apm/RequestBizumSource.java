@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Bizum source.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)

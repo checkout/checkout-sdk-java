@@ -1,7 +1,5 @@
 package com.checkout.payments.request.source.apm;
 
-import com.checkout.common.AccountHolder;
-import com.checkout.common.AccountType;
 import com.checkout.common.CountryCode;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.payments.request.source.AbstractRequestSource;
@@ -11,6 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * An ach payment source.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
@@ -21,8 +22,10 @@ public final class RequestAchSource extends AbstractRequestSource {
      * The type of Direct Debit account.
      * [Required]
      * Enum: "savings" "checking" "cash"
+     * <p>Deliberately not {@link com.checkout.common.AccountType}, which declares "current"
+     * instead of "checking" and is rejected at this position.
      */
-    private AccountType accountType;
+    private AchSourceAccountType accountType;
 
     /**
      * The source country as an ISO 3166-1 alpha-2 code.
@@ -50,15 +53,15 @@ public final class RequestAchSource extends AbstractRequestSource {
      * Supports date_of_birth and identification (SSN) fields.
      * [Required]
      */
-    private AccountHolder accountHolder;
+    private RequestAchAccountHolder accountHolder;
 
     @Builder
     private RequestAchSource(
-            final AccountType accountType,
+            final AchSourceAccountType accountType,
             final CountryCode country,
             final String accountNumber,
             final String bankCode,
-            final AccountHolder accountHolder) {
+            final RequestAchAccountHolder accountHolder) {
         super(PaymentSourceType.ACH);
         this.accountType = accountType;
         this.country = country;

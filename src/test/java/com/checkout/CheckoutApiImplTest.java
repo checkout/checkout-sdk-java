@@ -40,6 +40,7 @@ class CheckoutApiImplTest {
         assertNotNull(checkoutApi.onboardingSimulatorClient());
         // APMs
         assertNotNull(checkoutApi.idealClient());
+        assertNotNull(checkoutApi.bacsClient());
     }
 
 }

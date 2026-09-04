@@ -2,6 +2,7 @@ package com.checkout.handlepaymentsandpayouts.payments.common.source.alipaycnsou
 
 import com.checkout.handlepaymentsandpayouts.payments.common.source.AbstractSource;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.SourceType;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,8 +19,23 @@ import lombok.ToString;
 public final class AlipayCnSource extends AbstractSource {
 
     /**
+     * The payment instrument identifier
+     * [Required]
+     * ^(src)_(\w{26})$
+     */
+    private String id;
+
+    /**
      * Initializes a new instance of the AlipayCnSource class.
      */
+    @Builder
+    private AlipayCnSource(
+        final String id
+    ) {
+        super(SourceType.ALIPAY_CN);
+        this.id = id;
+    }
+
     public AlipayCnSource() {
         super(SourceType.ALIPAY_CN);
     }

@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * A seQura payment source.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)

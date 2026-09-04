@@ -1,5 +1,7 @@
 package com.checkout;
 
+import com.checkout.apm.bacs.BacsClient;
+import com.checkout.apm.bacs.BacsClientImpl;
 import com.checkout.apm.ideal.IdealClient;
 import com.checkout.apm.ideal.IdealClientImpl;
 import com.checkout.apm.previous.klarna.KlarnaClient;
@@ -14,18 +16,24 @@ public abstract class AbstractCheckoutApmApi {
     protected final ApiClient apiClient;
 
     private final IdealClient idealClient;
+    private final BacsClient bacsClient;
     private final KlarnaClient klarnaClient;
     private final SepaClient sepaClient;
 
     protected AbstractCheckoutApmApi(final CheckoutConfiguration configuration) {
         this.apiClient = getBaseApiClient(configuration);
         this.idealClient = new IdealClientImpl(apiClient, configuration);
+        this.bacsClient = new BacsClientImpl(apiClient, configuration);
         this.klarnaClient = new KlarnaClientImpl(apiClient, configuration);
         this.sepaClient = new SepaClientImpl(apiClient, configuration);
     }
 
     public IdealClient idealClient() {
         return idealClient;
+    }
+
+    public BacsClient bacsClient() {
+        return bacsClient;
     }
 
     public KlarnaClient klarnaClient() {

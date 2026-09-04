@@ -3,14 +3,19 @@ package com.checkout.common;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Comprehensive enum for all payment method types across different APIs
- * Consolidates values from payment methods, flow APIs, and other payment contexts
+ * The type of payment method.
+ *
+ * <p>This is a consolidated enum covering every payment method type the SDK sees, across
+ * GET /payment-methods, the flow API and the payment session entities. The specification's
+ * PaymentMethod.type enum is a subset of it, so the constants declared here that the current
+ * specification does not list are deliberate rather than invented, and must not be removed by a
+ * reverse comparison against a single endpoint.
  */
 public enum PaymentMethodType {
 
     @SerializedName("accel")
     ACCEL,
-    @SerializedName("ach") 
+    @SerializedName("ach")
     ACH,
     @SerializedName("alipay_cn")
     ALIPAY_CN,
@@ -24,6 +29,8 @@ public enum PaymentMethodType {
     AMEX,
     @SerializedName("applepay")
     APPLEPAY,
+    @SerializedName("bacs")
+    BACS,
     @SerializedName("bancontact")
     BANCONTACT,
     @SerializedName("benefit")
@@ -100,6 +107,10 @@ public enum PaymentMethodType {
     QPAY,
     @SerializedName("rabbit_line_pay")
     RABBIT_LINE_PAY,
+    /**
+     * Fully supported by the API but deliberately unlisted in the public specification, so that
+     * merchants do not disable Remember Me en masse. Do not remove it as an unspecified value.
+     */
     @SerializedName("remember_me")
     REMEMBER_ME,
     @SerializedName("sepa")
@@ -137,7 +148,8 @@ public enum PaymentMethodType {
     @SerializedName("wechatpay")
     WECHATPAY,
 
-    // Payment method categories
+    // Payment method categories. These are grouping values used by the flow and payment session
+    // entities, not values of the specification's PaymentMethod.type enum.
     @SerializedName("card_scheme")
     CARD_SCHEME,
     @SerializedName("bank_redirects")

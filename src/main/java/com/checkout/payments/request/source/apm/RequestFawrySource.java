@@ -15,6 +15,9 @@ import lombok.ToString;
 import java.time.Instant;
 import java.util.List;
 
+/**
+ * Fawry source.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)

@@ -1,6 +1,5 @@
 package com.checkout.payments.request.source.apm;
 
-import com.checkout.common.AccountHolder;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.PaymentSourceType;
@@ -11,6 +10,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * SEPA Direct Debit source.
+ *
+ * <p>This is the current-platform source, whose type on the wire is "sepa". The previous platform
+ * references a stored mandate through the generic "id" source instead; use
+ * {@link com.checkout.payments.previous.request.source.apm.RequestSepaSource} for that.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
@@ -30,8 +36,9 @@ public final class RequestSepaSource extends AbstractRequestSource {
     private String accountNumber;
 
     /**
-     * The BIC/SWIFT code of the bank.
-     * [Optional]
+     * Not declared by PaymentRequestSEPAV4Source. No SEPA schema in the specification declares a
+     * bank code, and the SEPA source is identified by IBAN through accountNumber. Retained
+     * for retro-compatibility purposes only. Possibly an obsoleted field.
      */
     private String bankCode;
 
@@ -64,7 +71,7 @@ public final class RequestSepaSource extends AbstractRequestSource {
      * The account holder's personal information.
      * [Required]
      */
-    private AccountHolder accountHolder;
+    private RequestSepaAccountHolder accountHolder;
 
     @Builder
     private RequestSepaSource(
@@ -75,7 +82,7 @@ public final class RequestSepaSource extends AbstractRequestSource {
             final String mandateId,
             final MandateType mandateType,
             final String dateOfSignature,
-            final AccountHolder accountHolder
+            final RequestSepaAccountHolder accountHolder
     ) {
         super(PaymentSourceType.SEPAV4);
         this.country = country;

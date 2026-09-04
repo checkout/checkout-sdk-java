@@ -5,6 +5,9 @@ import com.checkout.payments.request.source.AbstractRequestSource;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+/**
+ * MobilePay request source.
+ */
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class RequestMobilePaySource extends AbstractRequestSource {

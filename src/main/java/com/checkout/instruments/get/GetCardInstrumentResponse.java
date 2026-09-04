@@ -9,11 +9,20 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+/**
+ * Card instrument response.
+ *
+ * <p>The id and the fingerprint are inherited from {@link GetInstrumentResponse}.
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class GetCardInstrumentResponse extends GetInstrumentResponse {
 
+    /**
+     * The underlying instrument type.
+     * [Required]
+     */
     private final InstrumentType type = InstrumentType.CARD;
 
     /**
@@ -118,5 +127,11 @@ public final class GetCardInstrumentResponse extends GetInstrumentResponse {
      * [Required]
      */
     private Boolean regulatedIndicator;
+
+    /**
+     * The account holder details.
+     * [Optional]
+     */
+    private GetCardAccountHolder accountHolder;
 
 }

@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Multibanco source.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)

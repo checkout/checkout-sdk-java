@@ -1,6 +1,5 @@
 package com.checkout.instruments.create;
 
-import com.checkout.common.AccountHolder;
 import com.checkout.common.InstrumentType;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -8,6 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * Store SEPA mandate details.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
@@ -24,7 +26,7 @@ public final class CreateInstrumentSepaRequest extends CreateInstrumentRequest {
      * The account holder details. Must include first_name, last_name, and billing_address.
      * [Required]
      */
-    private AccountHolder accountHolder;
+    private CreateSepaAccountHolder accountHolder;
 
     /**
      * The customer details. Associates the instrument with an existing or new customer.
@@ -34,7 +36,7 @@ public final class CreateInstrumentSepaRequest extends CreateInstrumentRequest {
 
     @Builder
     private CreateInstrumentSepaRequest(final InstrumentData instrumentData,
-                                        final AccountHolder accountHolder,
+                                        final CreateSepaAccountHolder accountHolder,
                                         final CreateCustomerInstrumentRequest customer) {
         super(InstrumentType.SEPA);
         this.instrumentData = instrumentData;

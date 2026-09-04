@@ -1,5 +1,8 @@
 package com.checkout.payments;
 
+import com.checkout.payments.request.source.apm.RequestAchAccountHolder;
+import com.checkout.payments.request.source.apm.RequestSepaBillingAddress;
+import com.checkout.payments.request.source.apm.RequestSepaAccountHolder;
 import static com.checkout.TestHelper.createAddress;
 import static com.checkout.TestHelper.createPhone;
 import static com.checkout.TestHelper.getAccountHolder;
@@ -27,7 +30,6 @@ import com.checkout.Environment;
 import com.checkout.TestHelper;
 import com.checkout.common.AccountHolder;
 import com.checkout.common.AccountHolderType;
-import com.checkout.common.AccountType;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
@@ -37,6 +39,7 @@ import com.checkout.common.Phone;
 import com.checkout.payments.request.PaymentCustomerRequest;
 import com.checkout.payments.request.PaymentRequest;
 import com.checkout.payments.request.source.AbstractRequestSource;
+import com.checkout.payments.request.source.apm.AchSourceAccountType;
 import com.checkout.payments.request.source.apm.RequestAchSource;
 import com.checkout.payments.request.source.apm.RequestAfterPaySource;
 import com.checkout.payments.request.source.apm.RequestAlipayPlusSource;
@@ -815,7 +818,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
 
     private RequestAchSource createAchSource() {
         return RequestAchSource.builder()
-                .accountType(AccountType.SAVINGS)
+                .accountType(AchSourceAccountType.SAVINGS)
                 .country(CountryCode.GB)
                 .accountNumber("8784738748973829")
                 .bankCode("BANK")
@@ -849,11 +852,11 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
     }
 
     // Account holder builders
-    private AccountHolder createSepaAccountHolder() {
-        return AccountHolder.builder()
+    private RequestSepaAccountHolder createSepaAccountHolder() {
+        return RequestSepaAccountHolder.builder()
                 .firstName("Name")
                 .lastName("Last")
-                .billingAddress(Address.builder()
+                .billingAddress(RequestSepaBillingAddress.builder()
                         .addressLine1("Address Line 1")
                         .addressLine2("Max_10_c__")
                         .city("City")
@@ -863,12 +866,14 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .build();
     }
 
-    private AccountHolder createAchAccountHolder() {
-        return AccountHolder.builder()
+    private RequestAchAccountHolder createAchAccountHolder() {
+        // AccountHolderAch declares no phone, so the previous .phone(...) was a field the
+        // schema does not accept at this position.
+        return RequestAchAccountHolder.builder()
+                .type(AccountHolderType.INDIVIDUAL)
                 .firstName("John")
                 .lastName("Doe")
                 .billingAddress(createAddress())
-                .phone(createPhone())
                 .build();
     }
 

@@ -1,6 +1,5 @@
 package com.checkout.instruments.update;
 
-import com.checkout.common.AccountHolder;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.InstrumentType;
@@ -16,6 +15,11 @@ import lombok.ToString;
 
 import java.time.LocalDate;
 
+/**
+ * Update SEPA mandate details.
+ *
+ * <p>Nothing in this request is required by the specification.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
@@ -32,11 +36,11 @@ public final class UpdateInstrumentSepaRequest extends UpdateInstrumentRequest {
      * The account holder details.
      * [Optional]
      */
-    private AccountHolder accountHolder;
+    private UpdateSepaAccountHolder accountHolder;
 
     @Builder
     private UpdateInstrumentSepaRequest(final SepaInstrumentData instrumentData,
-                                        final AccountHolder accountHolder) {
+                                        final UpdateSepaAccountHolder accountHolder) {
         super(InstrumentType.SEPA);
         this.instrumentData = instrumentData;
         this.accountHolder = accountHolder;
@@ -46,6 +50,12 @@ public final class UpdateInstrumentSepaRequest extends UpdateInstrumentRequest {
         super(InstrumentType.SEPA);
     }
 
+    /**
+     * The details of the SEPA mandate being updated.
+     *
+     * <p>The payment type is the SEPA enum, whose wire values are lowercase. The equivalent Bacs
+     * Direct Debit field is capitalized, so the two must not share a type.
+     */
     @Data
     @Builder
     @NoArgsConstructor

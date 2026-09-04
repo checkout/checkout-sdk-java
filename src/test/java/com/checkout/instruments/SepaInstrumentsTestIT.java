@@ -1,16 +1,15 @@
 package com.checkout.instruments;
 
-import com.checkout.common.AccountHolder;
-import com.checkout.common.AccountHolderType;
-import com.checkout.common.Address;
+import com.checkout.instruments.InstrumentAccountHolderType;
+import com.checkout.instruments.create.CreateSepaAccountHolder;
+import com.checkout.instruments.create.CreateSepaBillingAddress;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
-import com.checkout.common.Phone;
 import com.checkout.instruments.create.CreateInstrumentSepaRequest;
 import com.checkout.instruments.create.CreateInstrumentSepaResponse;
 import com.checkout.instruments.create.InstrumentData;
+import com.checkout.instruments.update.SepaPaymentType;
 import com.checkout.payments.AbstractPaymentsTestIT;
-import com.checkout.payments.PaymentType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -25,23 +24,18 @@ public class SepaInstrumentsTestIT extends AbstractPaymentsTestIT {
                         .accoountNumber("FR7630006000011234567890189")
                         .country(CountryCode.FR)
                         .currency(Currency.EUR)
-                        .paymentType(PaymentType.RECURRING)
+                        .paymentType(SepaPaymentType.RECURRING)
                         .build())
-                .accountHolder(AccountHolder.builder()
-                        .type(AccountHolderType.INDIVIDUAL)
+                .accountHolder(CreateSepaAccountHolder.builder()
+                        .type(InstrumentAccountHolderType.INDIVIDUAL)
                         .firstName("Ali")
                         .lastName("Farid")
-                        .dateOfBirth("1986-01-01T00:00:00.000Z")
-                        .billingAddress(Address.builder()
+                        .billingAddress(CreateSepaBillingAddress.builder()
                                 .addressLine1("Rue Exemple")
                                 .addressLine2("1")
                                 .city("Paris")
                                 .zip("1234")
                                 .country(CountryCode.FR)
-                                .build())
-                        .phone(Phone.builder()
-                                .countryCode("33")
-                                .number("123456789")
                                 .build())
                         .build())
                 .build();

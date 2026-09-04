@@ -2,6 +2,13 @@ package com.checkout.common;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * The payment source type.
+ *
+ * <p>This enum is the union of the source types accepted on payment requests and returned on
+ * payment responses, on both the current and the previous platform, so it also carries
+ * previous-platform values that the current API specification no longer declares.
+ */
 public enum PaymentSourceType {
 
     @SerializedName("ach")
@@ -20,6 +27,8 @@ public enum PaymentSourceType {
     ALMA,
     @SerializedName("applepay")
     APPLEPAY,
+    @SerializedName("bacs")
+    BACS,
     @SerializedName("bancontact")
     BANCONTACT,
     @SerializedName("bank_account")
@@ -98,6 +107,21 @@ public enum PaymentSourceType {
     QPAY,
     @SerializedName("rapipago")
     RAPIPAGO,
+    /**
+     * Shares the wire value of {@link #ID}, because the previous platform references a stored SEPA
+     * mandate through the generic "id" source. Nothing in the SDK passes this constant any more:
+     * the previous-platform source now uses {@link #ID} directly, which is how the .NET SDK models
+     * the same call.
+     *
+     * <p>Gson resolves an incoming "id" to whichever of the two constants is declared last, which
+     * is this one, so deserializing a previous-platform source yields SEPA rather than ID. Removing
+     * this constant would correct that but is a breaking change, so it is deprecated instead. Do
+     * not reorder the two constants: that would silently change what "id" deserializes to.
+     *
+     * @deprecated use {@link #ID} for the previous platform and {@link #SEPAV4} for the current
+     * platform, where the wire value is "sepa".
+     */
+    @Deprecated
     @SerializedName("id")
     SEPA,
     @SerializedName("sepa")

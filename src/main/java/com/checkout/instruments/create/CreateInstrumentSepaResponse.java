@@ -11,11 +11,21 @@ import lombok.ToString;
 
 import java.time.Instant;
 
+/**
+ * Store SEPA mandate instrument response.
+ *
+ * <p>The id and the fingerprint are inherited from {@link CreateInstrumentResponse}. The
+ * fingerprint is required for this variant and matches the pattern {@code ^([a-z0-9]{26})$}.
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public final class CreateInstrumentSepaResponse extends CreateInstrumentResponse {
 
+    /**
+     * The type of instrument.
+     * [Required]
+     */
     private final InstrumentType type = InstrumentType.SEPA;
 
 }
