@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.time.Instant;
 
+/**
+ * The balances held by a single currency account (sub-account).
+ */
 @Data
 public final class CurrencyAccountBalance {
 
@@ -15,10 +18,22 @@ public final class CurrencyAccountBalance {
      */
     private String currencyAccountId;
 
+    /**
+     * A descriptor for the currency account.
+     * [Optional]
+     */
     private String descriptor;
 
+    /**
+     * The holding currency of the currency account (the three character ISO 4217 code).
+     * [Optional]
+     */
     private Currency holdingCurrency;
 
+    /**
+     * The balance values for the currency account.
+     * [Optional]
+     */
     private Balances balances;
 
     /**
