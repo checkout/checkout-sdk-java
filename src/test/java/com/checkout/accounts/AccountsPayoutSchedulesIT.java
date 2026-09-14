@@ -200,7 +200,9 @@ class AccountsPayoutSchedulesIT {
                 .clientCredentials(
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_PAYOUT_SCHEDULE_CLIENT_ID")),
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_PAYOUT_SCHEDULE_CLIENT_SECRET")))
-                .scopes(OAuthScope.MARKETPLACE)
+                // The marketplace scope was retired; both payout-schedules operations document
+                // accounts as their OAuth requirement.
+                .scopes(OAuthScope.ACCOUNTS)
                 .environment(Environment.SANDBOX)
                 // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
                 // the token request would come back invalid_client. Opting out explicitly until they are.
