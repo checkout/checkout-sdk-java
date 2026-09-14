@@ -10,6 +10,14 @@ package com.checkout;
  * {@code compliance-requests:respond}, {@code vault:gpayme-enrollment} and
  * {@code vault:tokens-metadata}.</p>
  *
+ * <p>Five further constants -- {@code issuing:card-mgmt}, {@code issuing:client},
+ * {@code marketplace}, {@code middleware:gateway} and {@code middleware:payment-context} --
+ * appear nowhere in the specification at all, but the authorization server still grants them and
+ * callers still request them, so they are kept for backward compatibility. Each is marked inline.
+ * Do not assume a scope is dead because the specification omits it: the sandbox payouts client is
+ * provisioned for {@code marketplace} and answers a request for {@code accounts} with
+ * {@code invalid_scope}.</p>
+ *
  * <p>Constants are ordered alphabetically. Note that {@link #PAYMENT_CONTEXT} and
  * {@link #GATEWAY_PAYMENT_CONTEXTS} are different scopes: the specification requires the former for
  * {@code GET /payment-contexts/{id}} and the latter for {@code POST /payment-contexts}.
@@ -18,7 +26,6 @@ package com.checkout;
  * that is the value the authorization server is documented to accept.</p>
  */
 public enum OAuthScope {
-
     ACCOUNTS("accounts"),
     BALANCES("balances"),
     BALANCES_TOP_UP_INSTRUCTIONS("balances:top-up-instructions"),
@@ -57,6 +64,8 @@ public enum OAuthScope {
     IDENTITY_VERIFICATION("identity-verification"),
     ISSUING_CARD_MANAGEMENT_READ("issuing:card-management-read"),
     ISSUING_CARD_MANAGEMENT_WRITE("issuing:card-management-write"),
+    ISSUING_CARD_MGMT("issuing:card-mgmt"), // not in spec; kept for backward compat
+    ISSUING_CLIENT("issuing:client"), // not in spec; kept for backward compat
     ISSUING_CONTROLS_READ("issuing:controls-read"),
     ISSUING_CONTROLS_WRITE("issuing:controls-write"),
     ISSUING_DISPUTES("issuing-disputes"),
@@ -64,9 +73,12 @@ public enum OAuthScope {
     ISSUING_DISPUTES_WRITE("issuing:disputes-write"),
     ISSUING_TRANSACTIONS_READ("issuing:transactions-read"),
     ISSUING_TRANSACTIONS_WRITE("issuing:transactions-write"),
+    MARKETPLACE("marketplace"), // not in spec; kept for backward compat
     MIDDLEWARE("middleware"),
+    MIDDLEWARE_GATEWAY("middleware:gateway"), // not in spec; kept for backward compat
     MIDDLEWARE_MERCHANTS_PUBLIC("middleware:merchants-public"),
     MIDDLEWARE_MERCHANTS_SECRET("middleware:merchants-secret"),
+    MIDDLEWARE_PAYMENT_CONTEXT("middleware:payment-context"), // not in spec; kept for backward compat
     PAYMENT_CONTEXT("Payment Context"),
     PAYMENT_SESSIONS("payment-sessions"),
     PAYMENTS_SEARCH("payments:search"),

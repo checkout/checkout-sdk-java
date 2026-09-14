@@ -55,6 +55,24 @@ class OAuthScopeTest {
     }
 
     /**
+     * These five scopes appear nowhere in the specification -- neither in the clientCredentials
+     * scope map nor in any operation's security requirement -- so a sweep driven by the spec alone
+     * would delete them. They are kept deliberately: the authorization server still grants them and
+     * callers still request them. {@code marketplace} is the proof: the sandbox payouts client is
+     * provisioned for it and answers a request for {@code accounts} with {@code invalid_scope}.
+     *
+     * <p>This test exists to stop the next specification-driven tidy-up from removing them.</p>
+     */
+    @Test
+    void shouldRetainTheLegacyScopesTheSpecificationOmits() {
+        assertEquals("issuing:card-mgmt", OAuthScope.ISSUING_CARD_MGMT.getScope());
+        assertEquals("issuing:client", OAuthScope.ISSUING_CLIENT.getScope());
+        assertEquals("marketplace", OAuthScope.MARKETPLACE.getScope());
+        assertEquals("middleware:gateway", OAuthScope.MIDDLEWARE_GATEWAY.getScope());
+        assertEquals("middleware:payment-context", OAuthScope.MIDDLEWARE_PAYMENT_CONTEXT.getScope());
+    }
+
+    /**
      * PAYMENT_CONTEXT and GATEWAY_PAYMENT_CONTEXTS are one letter apart as names but are unrelated
      * scopes, so this pins which is which. GATEWAY_PAYMENT_CONTEXTS was called PAYMENT_CONTEXTS
      * until the spec sync; had the new constant been added without that rename, a caller reaching
