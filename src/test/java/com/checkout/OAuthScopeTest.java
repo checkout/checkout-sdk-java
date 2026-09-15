@@ -40,6 +40,7 @@ class OAuthScopeTest {
      */
     @Test
     void shouldExposeDocumentedValuesForScopesAddedInSpecSync() {
+        assertEquals("agentic:inventory", OAuthScope.AGENTIC_INVENTORY.getScope());
         assertEquals("disputes:scheme-files", OAuthScope.DISPUTES_SCHEME_FILES.getScope());
         assertEquals("flow:reflow", OAuthScope.FLOW_REFLOW.getScope());
         assertEquals("issuing-disputes", OAuthScope.ISSUING_DISPUTES.getScope());

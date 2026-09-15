@@ -27,6 +27,7 @@ package com.checkout;
  */
 public enum OAuthScope {
     ACCOUNTS("accounts"),
+    AGENTIC_INVENTORY("agentic:inventory"),
     BALANCES("balances"),
     BALANCES_TOP_UP_INSTRUCTIONS("balances:top-up-instructions"),
     BALANCES_VIEW("balances:view"),
