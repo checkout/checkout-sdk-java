@@ -40,7 +40,11 @@ public abstract class BaseIssuingTestIT extends SandboxTestFixture {
                 .clientCredentials(
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_ISSUING_CLIENT_ID")),
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_ISSUING_CLIENT_SECRET")))
-                .scopes(OAuthScope.VAULT, OAuthScope.ISSUING_CLIENT, OAuthScope.ISSUING_CARD_MGMT,
+                // issuing:card-mgmt and issuing:client were retired: neither is declared in the
+                // spec's scope map nor requested by any operation. The card-management pair below
+                // replaces the former; the latter has no documented equivalent.
+                .scopes(OAuthScope.VAULT, OAuthScope.ISSUING_CARD_MANAGEMENT_READ,
+                        OAuthScope.ISSUING_CARD_MANAGEMENT_WRITE,
                         OAuthScope.ISSUING_CONTROLS_READ, OAuthScope.ISSUING_CONTROLS_WRITE,
                         OAuthScope.ISSUING_TRANSACTIONS_READ, OAuthScope.ISSUING_TRANSACTIONS_WRITE)
                 .environment(Environment.SANDBOX)
