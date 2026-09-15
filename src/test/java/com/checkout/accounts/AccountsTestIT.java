@@ -41,6 +41,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AccountsTestIT extends SandboxTestFixture {
 
+    // Memoised so the v2.0 sub-entity tests share a single token exchange. See createTestEntity().
+    private CheckoutApi accountsApi;
+
     AccountsTestIT() {
         super(PlatformType.DEFAULT_OAUTH);
     }
@@ -84,7 +87,6 @@ class AccountsTestIT extends SandboxTestFixture {
         validateFileUploadResponse(fileResponse);
     }
 
-    @Disabled("Recently giving a 503 with 'no healthy upstream' description from the API, disabled")
     @Test
     void shouldUploadFileForEntity() {
         final String entityId = createTestEntity();
@@ -92,7 +94,7 @@ class AccountsTestIT extends SandboxTestFixture {
                 .purpose(FilePurpose.IDENTITY_VERIFICATION)
                 .build();
 
-        final FileUploadResponse response = blocking(() -> checkoutApi.accountsClient().uploadFile(entityId, fileUploadRequest));
+        final FileUploadResponse response = blocking(() -> accountsApi().accountsClient().uploadFile(entityId, fileUploadRequest));
         validateFileUploadResponseForEntity(response);
     }
 
@@ -103,10 +105,10 @@ class AccountsTestIT extends SandboxTestFixture {
                 .purpose(FilePurpose.IDENTITY_VERIFICATION)
                 .build();
 
-        final FileUploadResponse uploadResponse = blocking(() -> checkoutApi.accountsClient().uploadFile(entityId, fileUploadRequest));
+        final FileUploadResponse uploadResponse = blocking(() -> accountsApi().accountsClient().uploadFile(entityId, fileUploadRequest));
         validateFileUploadResponseForEntity(uploadResponse);
 
-        final FileDetailsResponse detailsResponse = blocking(() -> checkoutApi.accountsClient().retrieveFile(entityId, uploadResponse.getId()));
+        final FileDetailsResponse detailsResponse = blocking(() -> accountsApi().accountsClient().retrieveFile(entityId, uploadResponse.getId()));
         validateFileDetailsResponseForEntity(detailsResponse, uploadResponse.getId());
     }
 
@@ -278,7 +280,7 @@ class AccountsTestIT extends SandboxTestFixture {
                 .purpose(FilePurpose.IDENTITY_VERIFICATION)
                 .build();
 
-        final FileUploadResponse response = checkoutApi.accountsClient().uploadFileSync(entityId, fileUploadRequest);
+        final FileUploadResponse response = accountsApi().accountsClient().uploadFileSync(entityId, fileUploadRequest);
         validateFileUploadResponseForEntity(response);
     }
 
@@ -289,10 +291,10 @@ class AccountsTestIT extends SandboxTestFixture {
                 .purpose(FilePurpose.IDENTITY_VERIFICATION)
                 .build();
 
-        final FileUploadResponse uploadResponse = checkoutApi.accountsClient().uploadFileSync(entityId, fileUploadRequest);
+        final FileUploadResponse uploadResponse = accountsApi().accountsClient().uploadFileSync(entityId, fileUploadRequest);
         validateFileUploadResponseForEntity(uploadResponse);
 
-        final FileDetailsResponse detailsResponse = checkoutApi.accountsClient().retrieveFileSync(entityId, uploadResponse.getId());
+        final FileDetailsResponse detailsResponse = accountsApi().accountsClient().retrieveFileSync(entityId, uploadResponse.getId());
         validateFileDetailsResponseForEntity(detailsResponse, uploadResponse.getId());
     }
 
@@ -300,7 +302,7 @@ class AccountsTestIT extends SandboxTestFixture {
     void shouldGetEntityMembers() {
         final String entityId = createTestEntity();
 
-        final EntityMembersResponse response = blocking(() -> checkoutApi.accountsClient().getEntityMembers(entityId));
+        final EntityMembersResponse response = blocking(() -> accountsApi().accountsClient().getEntityMembers(entityId));
         validateEntityMembersResponse(response);
     }
 
@@ -309,7 +311,7 @@ class AccountsTestIT extends SandboxTestFixture {
         final String entityId = createTestEntity();
         
         // Get entity members first to find a valid user ID
-        final EntityMembersResponse membersResponse = blocking(() -> checkoutApi.accountsClient().getEntityMembers(entityId));
+        final EntityMembersResponse membersResponse = blocking(() -> accountsApi().accountsClient().getEntityMembers(entityId));
         validateEntityMembersResponse(membersResponse);
         
         // Skip test if no members found
@@ -321,7 +323,7 @@ class AccountsTestIT extends SandboxTestFixture {
         final String userId = membersResponse.getData().get(0).getUserId();
         assertNotNull(userId, "First entity member should have a user ID");
 
-        final EntityMemberResponse response = blocking(() -> checkoutApi.accountsClient().reinviteEntityMember(entityId, userId));
+        final EntityMemberResponse response = blocking(() -> accountsApi().accountsClient().reinviteEntityMember(entityId, userId));
         validateEntityMemberResponse(response);
     }
 
@@ -330,10 +332,10 @@ class AccountsTestIT extends SandboxTestFixture {
         final String entityId = createTestEntity();
         final ReserveRuleRequest createRequest = buildReserveRuleRequest();
 
-        final ReserveRuleCreateResponse createResponse = blocking(() -> checkoutApi.accountsClient().createReserveRule(entityId, createRequest));
+        final ReserveRuleCreateResponse createResponse = blocking(() -> accountsApi().accountsClient().createReserveRule(entityId, createRequest));
         validateReserveRuleCreateResponse(createResponse);
 
-        final ReserveRuleResponse getResponse = blocking(() -> checkoutApi.accountsClient().getReserveRule(entityId, createResponse.getId()));
+        final ReserveRuleResponse getResponse = blocking(() -> accountsApi().accountsClient().getReserveRule(entityId, createResponse.getId()));
         validateReserveRuleResponse(getResponse);
 
         // Get Etag from the creation response headers
@@ -345,7 +347,7 @@ class AccountsTestIT extends SandboxTestFixture {
 
         // Update (with the If-Match header when using the etag)
         final ReserveRuleRequest updateRequest = buildReserveRuleRequestWithEtag(etag); // Set the Etag for concurrency control
-        final ReserveRuleCreateResponse updateResponse = blocking(() -> checkoutApi.accountsClient().updateReserveRule(entityId, createResponse.getId(), updateRequest));
+        final ReserveRuleCreateResponse updateResponse = blocking(() -> accountsApi().accountsClient().updateReserveRule(entityId, createResponse.getId(), updateRequest));
         validateReserveRuleCreateResponse(updateResponse);
     }
 
@@ -353,7 +355,7 @@ class AccountsTestIT extends SandboxTestFixture {
     void shouldGetReserveRules() {
         final String entityId = createTestEntity();
 
-        final ReserveRulesResponse response = blocking(() -> checkoutApi.accountsClient().getReserveRules(entityId));
+        final ReserveRulesResponse response = blocking(() -> accountsApi().accountsClient().getReserveRules(entityId));
         validateReserveRulesResponse(response);
     }
 
@@ -400,7 +402,7 @@ class AccountsTestIT extends SandboxTestFixture {
     void shouldGetEntityMembersSync() {
         final String entityId = createTestEntity();
 
-        final EntityMembersResponse response = checkoutApi.accountsClient().getEntityMembersSync(entityId);
+        final EntityMembersResponse response = accountsApi().accountsClient().getEntityMembersSync(entityId);
         validateEntityMembersResponse(response);
     }
 
@@ -409,7 +411,7 @@ class AccountsTestIT extends SandboxTestFixture {
         final String entityId = createTestEntity();
         
         // Get entity members first to find a valid user ID
-        final EntityMembersResponse membersResponse = checkoutApi.accountsClient().getEntityMembersSync(entityId);
+        final EntityMembersResponse membersResponse = accountsApi().accountsClient().getEntityMembersSync(entityId);
         validateEntityMembersResponse(membersResponse);
         
         // Skip test if no members found
@@ -421,7 +423,7 @@ class AccountsTestIT extends SandboxTestFixture {
         final String userId = membersResponse.getData().get(0).getUserId();
         assertNotNull(userId, "First entity member should have a user ID");
 
-        final EntityMemberResponse response = checkoutApi.accountsClient().reinviteEntityMemberSync(entityId, userId);
+        final EntityMemberResponse response = accountsApi().accountsClient().reinviteEntityMemberSync(entityId, userId);
         validateEntityMemberResponse(response);
     }
 
@@ -430,10 +432,10 @@ class AccountsTestIT extends SandboxTestFixture {
         final String entityId = createTestEntity();
         final ReserveRuleRequest createRequest = buildReserveRuleRequest();
 
-        final ReserveRuleCreateResponse createResponse = checkoutApi.accountsClient().createReserveRuleSync(entityId, createRequest);
+        final ReserveRuleCreateResponse createResponse = accountsApi().accountsClient().createReserveRuleSync(entityId, createRequest);
         validateReserveRuleCreateResponse(createResponse);
 
-        final ReserveRuleResponse getResponse = checkoutApi.accountsClient().getReserveRuleSync(entityId, createResponse.getId());
+        final ReserveRuleResponse getResponse = accountsApi().accountsClient().getReserveRuleSync(entityId, createResponse.getId());
         validateReserveRuleResponse(getResponse);
 
         // Get Etag from the creation response headers
@@ -445,7 +447,7 @@ class AccountsTestIT extends SandboxTestFixture {
 
         // Update (with the If-Match header when using the etag)
         final ReserveRuleRequest updateRequest = buildReserveRuleRequestWithEtag(etag); // Set the Etag for concurrency control
-        final ReserveRuleCreateResponse updateResponse = checkoutApi.accountsClient().updateReserveRuleSync(entityId, createResponse.getId(), updateRequest);
+        final ReserveRuleCreateResponse updateResponse = accountsApi().accountsClient().updateReserveRuleSync(entityId, createResponse.getId(), updateRequest);
         validateReserveRuleCreateResponse(updateResponse);
     }
 
@@ -453,11 +455,19 @@ class AccountsTestIT extends SandboxTestFixture {
     void shouldGetReserveRulesSync() {
         final String entityId = createTestEntity();
 
-        final ReserveRulesResponse response = checkoutApi.accountsClient().getReserveRulesSync(entityId);
+        final ReserveRulesResponse response = accountsApi().accountsClient().getReserveRulesSync(entityId);
         validateReserveRulesResponse(response);
     }
 
     // Common methods
+
+    // Sub-entities created here are onboarded against the Accounts API v2.0 schema (flat
+    // `company.representatives[]` details rather than the v3.0 nested `individual`), so they must go
+    // through the accounts-scoped OAuth client: that is the one whose platform is provisioned for the
+    // v2.0 schema. The default OAuth client rejects the same payload with
+    // 422 company_representatives_0_invalid, and sub-entities are scoped to the platform that created
+    // them, so every follow-up call (members, reserve rules, files) has to reuse the same client or it
+    // comes back 404.
     private String createTestEntity() {
         final String randomReference = RandomStringUtils.random(15, true, true);
         final OnboardEntityRequest entityRequest = OnboardEntityRequest.builder()
@@ -501,7 +511,7 @@ class AccountsTestIT extends SandboxTestFixture {
                         .build())
                 .build();
 
-        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(entityRequest, "2.0"));
+        final OnboardEntityResponse entityResponse = blocking(() -> accountsApi().accountsClient().createEntity(entityRequest, "2.0"));
         assertNotNull(entityResponse);
         assertNotNull(entityResponse.getId());
         return entityResponse.getId();
@@ -793,6 +803,13 @@ class AccountsTestIT extends SandboxTestFixture {
         return fileResponse;
     }
 
+    private CheckoutApi accountsApi() {
+        if (accountsApi == null) {
+            accountsApi = getAccountsCheckoutApi();
+        }
+        return accountsApi;
+    }
+
     @SuppressWarnings("deprecation")
     private CheckoutApi getAccountsCheckoutApi() {
         return CheckoutSdk.builder()
@@ -800,7 +817,9 @@ class AccountsTestIT extends SandboxTestFixture {
                 .clientCredentials(
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_ACCOUNTS_CLIENT_ID")),
                         requireNonNull(System.getenv("CHECKOUT_DEFAULT_OAUTH_ACCOUNTS_CLIENT_SECRET")))
-                .scopes(OAuthScope.ACCOUNTS)
+                // `files` is required on top of `accounts` for the per-entity file endpoints; the
+                // finer-grained files:* scopes are not granted to this client (invalid_scope).
+                .scopes(OAuthScope.ACCOUNTS, OAuthScope.FILES)
                 .environment(Environment.SANDBOX)
                 // The sandbox OAuth clients are not provisioned for the merchant-specific subdomain, so
                 // the token request would come back invalid_client. Opting out explicitly until they are.
