@@ -1,6 +1,6 @@
 package com.checkout.handlepaymentsandpayouts.setups.entities.industry;
 
-import com.checkout.payments.contexts.PaymentContextsAccommodationData;
+import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,10 +20,12 @@ public final class Industry {
     /**
      * Airline industry-specific data for flight bookings and related payments
      */
+    @SerializedName("airline")
     private AirlineData airlineData;
 
     /**
-     * Accommodation industry-specific data for hotel bookings and related payments
+     * Accommodation industry-specific data for hotel and cruise bookings and related payments
      */
-    private List<PaymentContextsAccommodationData> accommodationData;
+    @SerializedName("accommodation")
+    private List<AccommodationData> accommodationData;
 }
