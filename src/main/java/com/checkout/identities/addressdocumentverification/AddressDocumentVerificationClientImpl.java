@@ -34,6 +34,12 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
         super(apiClient, configuration, SdkAuthorizationType.SECRET_KEY_OR_OAUTH);
     }
 
+    /**
+     * Create an address document verification
+     *
+     * @param addressDocumentVerificationRequest the address document verification request
+     * @return a {@link CompletableFuture} containing the {@link AddressDocumentVerificationResponse}
+     */
     @Override
     public CompletableFuture<AddressDocumentVerificationResponse> createAddressDocumentVerification(
             final AddressDocumentVerificationRequest addressDocumentVerificationRequest) {
@@ -42,6 +48,12 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
                 AddressDocumentVerificationResponse.class, addressDocumentVerificationRequest, null);
     }
 
+    /**
+     * Retrieve an address document verification
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @return a {@link CompletableFuture} containing the {@link AddressDocumentVerificationResponse}
+     */
     @Override
     public CompletableFuture<AddressDocumentVerificationResponse> getAddressDocumentVerification(
             final String addressDocumentVerificationId) {
@@ -50,6 +62,12 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
                 sdkAuthorization(), AddressDocumentVerificationResponse.class);
     }
 
+    /**
+     * Anonymize an address document verification
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @return a {@link CompletableFuture} containing the {@link AddressDocumentVerificationResponse}
+     */
     @Override
     public CompletableFuture<AddressDocumentVerificationResponse> anonymizeAddressDocumentVerification(
             final String addressDocumentVerificationId) {
@@ -58,6 +76,13 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
                 sdkAuthorization(), AddressDocumentVerificationResponse.class, null, null);
     }
 
+    /**
+     * Create an address document verification attempt
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @param attemptRequest the attempt request
+     * @return a {@link CompletableFuture} containing the {@link AddressDocumentVerificationAttemptResponse}
+     */
     @Override
     public CompletableFuture<AddressDocumentVerificationAttemptResponse> createAddressDocumentVerificationAttempt(
             final String addressDocumentVerificationId,
@@ -69,6 +94,12 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
                 null);
     }
 
+    /**
+     * Retrieve all address document verification attempts
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @return a {@link CompletableFuture} containing the {@link AddressDocumentVerificationAttemptsResponse}
+     */
     @Override
     public CompletableFuture<AddressDocumentVerificationAttemptsResponse> getAddressDocumentVerificationAttempts(
             final String addressDocumentVerificationId) {
@@ -92,6 +123,13 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
                 sdkAuthorization(), queryFilter, AddressDocumentVerificationAttemptsResponse.class);
     }
 
+    /**
+     * Retrieve a specific address document verification attempt
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @param attemptId the attempt ID
+     * @return a {@link CompletableFuture} containing the {@link AddressDocumentVerificationAttemptResponse}
+     */
     @Override
     public CompletableFuture<AddressDocumentVerificationAttemptResponse> getAddressDocumentVerificationAttempt(
             final String addressDocumentVerificationId, final String attemptId) {
@@ -100,6 +138,12 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
                 sdkAuthorization(), AddressDocumentVerificationAttemptResponse.class);
     }
 
+    /**
+     * Generate and download a PDF report
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @return a {@link CompletableFuture} containing the {@link AddressDocumentVerificationReportResponse}
+     */
     @Override
     public CompletableFuture<AddressDocumentVerificationReportResponse> getAddressDocumentVerificationReport(
             final String addressDocumentVerificationId) {
@@ -126,6 +170,12 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
 
     // Synchronous methods
 
+    /**
+     * Create an address document verification
+     *
+     * @param addressDocumentVerificationRequest the address document verification request
+     * @return the {@link AddressDocumentVerificationResponse}
+     */
     @Override
     public AddressDocumentVerificationResponse createAddressDocumentVerificationSync(
             final AddressDocumentVerificationRequest addressDocumentVerificationRequest) {
@@ -134,6 +184,12 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
                 AddressDocumentVerificationResponse.class, addressDocumentVerificationRequest, null);
     }
 
+    /**
+     * Retrieve an address document verification
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @return the {@link AddressDocumentVerificationResponse}
+     */
     @Override
     public AddressDocumentVerificationResponse getAddressDocumentVerificationSync(final String addressDocumentVerificationId) {
         validateParams("addressDocumentVerificationId", addressDocumentVerificationId);
@@ -141,6 +197,12 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
                 sdkAuthorization(), AddressDocumentVerificationResponse.class);
     }
 
+    /**
+     * Anonymize an address document verification
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @return the {@link AddressDocumentVerificationResponse}
+     */
     @Override
     public AddressDocumentVerificationResponse anonymizeAddressDocumentVerificationSync(final String addressDocumentVerificationId) {
         validateParams("addressDocumentVerificationId", addressDocumentVerificationId);
@@ -148,6 +210,13 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
                 sdkAuthorization(), AddressDocumentVerificationResponse.class, null, null);
     }
 
+    /**
+     * Create an address document verification attempt
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @param attemptRequest the attempt request
+     * @return the {@link AddressDocumentVerificationAttemptResponse}
+     */
     @Override
     public AddressDocumentVerificationAttemptResponse createAddressDocumentVerificationAttemptSync(
             final String addressDocumentVerificationId,
@@ -159,6 +228,12 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
                 null);
     }
 
+    /**
+     * Retrieve all address document verification attempts
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @return the {@link AddressDocumentVerificationAttemptsResponse}
+     */
     @Override
     public AddressDocumentVerificationAttemptsResponse getAddressDocumentVerificationAttemptsSync(final String addressDocumentVerificationId) {
         validateParams("addressDocumentVerificationId", addressDocumentVerificationId);
@@ -181,6 +256,13 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
                 sdkAuthorization(), queryFilter, AddressDocumentVerificationAttemptsResponse.class);
     }
 
+    /**
+     * Retrieve a specific address document verification attempt
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @param attemptId the attempt ID
+     * @return the {@link AddressDocumentVerificationAttemptResponse}
+     */
     @Override
     public AddressDocumentVerificationAttemptResponse getAddressDocumentVerificationAttemptSync(
             final String addressDocumentVerificationId, final String attemptId) {
@@ -189,6 +271,12 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
                 sdkAuthorization(), AddressDocumentVerificationAttemptResponse.class);
     }
 
+    /**
+     * Generate and download a PDF report
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @return the {@link AddressDocumentVerificationReportResponse}
+     */
     @Override
     public AddressDocumentVerificationReportResponse getAddressDocumentVerificationReportSync(final String addressDocumentVerificationId) {
         validateParams("addressDocumentVerificationId", addressDocumentVerificationId);

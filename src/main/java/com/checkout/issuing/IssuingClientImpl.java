@@ -566,6 +566,13 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    /**
+     * Update a card's details
+     *
+     * @param cardId the card ID
+     * @param updateCardRequest the card fields to update
+     * @return a {@link CompletableFuture} containing the {@link UpdateCardResponse}
+     */
     @Override
     public CompletableFuture<UpdateCardResponse> updateCard(final String cardId, final UpdateCardRequest updateCardRequest) {
         validateParams("cardId", cardId, "updateCardRequest", updateCardRequest);
@@ -578,6 +585,17 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    /**
+     * Update a card's details, sending the optional return-encrypted-cvv and Encryption-Key
+     * headers. Set return-encrypted-cvv to true to receive the card's encrypted CVV in the
+     * response; the API returns a 422 with error code encryption_key_required if Encryption-Key
+     * is not also supplied.
+     *
+     * @param cardId the card ID
+     * @param updateCardRequest the card fields to update
+     * @param headers the optional return-encrypted-cvv and Encryption-Key headers
+     * @return a {@link CompletableFuture} containing the {@link UpdateCardResponse}
+     */
     @Override
     public CompletableFuture<UpdateCardResponse> updateCard(final String cardId, final UpdateCardRequest updateCardRequest,
                                                             final CardUpdateHeaders headers) {
@@ -1138,6 +1156,13 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    /**
+     * Update a card's details
+     *
+     * @param cardId the card ID
+     * @param updateCardRequest the card fields to update
+     * @return the {@link UpdateCardResponse}
+     */
     @Override
     public UpdateCardResponse updateCardSync(final String cardId, final UpdateCardRequest updateCardRequest) {
         validateParams("cardId", cardId, "updateCardRequest", updateCardRequest);
@@ -1150,6 +1175,17 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         );
     }
 
+    /**
+     * Update a card's details, sending the optional return-encrypted-cvv and Encryption-Key
+     * headers. Set return-encrypted-cvv to true to receive the card's encrypted CVV in the
+     * response; the API returns a 422 with error code encryption_key_required if Encryption-Key
+     * is not also supplied.
+     *
+     * @param cardId the card ID
+     * @param updateCardRequest the card fields to update
+     * @param headers the optional return-encrypted-cvv and Encryption-Key headers
+     * @return the {@link UpdateCardResponse}
+     */
     @Override
     public UpdateCardResponse updateCardSync(final String cardId, final UpdateCardRequest updateCardRequest,
                                              final CardUpdateHeaders headers) {

@@ -515,6 +515,48 @@ class IdentitiesSerializationTest {
         assertEquals(CountryCode.FR, doc.getNationality());
     }
 
+    /**
+     * The tolerant behaviour that makes typing these fields safe: an unrecognised code
+     * deserializes to null rather than throwing or silently becoming the first enum constant, and
+     * it does not disturb sibling fields.
+     */
+    @Test
+    void shouldReadAnUnknownCountryAsNullWithoutDisturbingSiblings() {
+        final DocumentDetails doc = serializer.fromJson(
+                "{\"nationality\":\"ZZ\",\"document_issuing_country\":\"GB\"}", DocumentDetails.class);
+
+        assertNotNull(doc);
+        assertNull(doc.getNationality());
+        assertEquals(CountryCode.GB, doc.getDocumentIssuingCountry());
+    }
+
+    /**
+     * CountryCode declares an alpha-3 alternate for every value, so a three-letter code resolves.
+     * This is a Java-only capability; the .NET enum accepts alpha-2 only.
+     */
+    @Test
+    void shouldResolveTheAlphaThreeAlternate() {
+        final DocumentDetails doc = serializer.fromJson("{\"nationality\":\"GBR\"}", DocumentDetails.class);
+
+        assertEquals(CountryCode.GB, doc.getNationality());
+    }
+
+    /**
+     * Pins a known limitation rather than asserting desired behaviour. The spec pattern for
+     * IdvDocument.nationality and document_issuing_country is ^[A-Za-z]{2}$, so a lowercase code is
+     * valid per the specification, but CountryCode declares only uppercase values and uppercase
+     * alpha-3 alternates, so a lowercase code reads as null. Before this row these two fields were
+     * plain Strings and would have carried the raw value through. Reported internally; if the API
+     * is confirmed to emit lowercase codes, CountryCode needs lowercase alternates, which is a
+     * change to a type shared across the whole SDK.
+     */
+    @Test
+    void shouldCurrentlyReadALowercaseCountryAsNull() {
+        final DocumentDetails doc = serializer.fromJson("{\"nationality\":\"gb\"}", DocumentDetails.class);
+
+        assertNull(doc.getNationality());
+    }
+
     @Test
     void shouldKeepThePhonePrefixAsAStringNotACountryCode() {
         // IdvPhoneNumber.country_code is a dialling prefix (pattern ^\+(\d+)$, for example +33),
