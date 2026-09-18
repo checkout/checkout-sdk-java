@@ -30,6 +30,7 @@ import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsR
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
 import com.checkout.issuing.cards.responses.renew.RenewCardResponse;
+import com.checkout.issuing.cards.requests.update.CardUpdateHeaders;
 import com.checkout.issuing.cards.responses.update.UpdateCardResponse;
 import com.checkout.issuing.controls.requests.create.CardControlRequest;
 import com.checkout.issuing.controls.requests.query.CardControlsQuery;
@@ -574,6 +575,20 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 UpdateCardResponse.class,
                 updateCardRequest,
                 null
+        );
+    }
+
+    @Override
+    public CompletableFuture<UpdateCardResponse> updateCard(final String cardId, final UpdateCardRequest updateCardRequest,
+                                                            final CardUpdateHeaders headers) {
+        validateParams("cardId", cardId, "updateCardRequest", updateCardRequest);
+        return apiClient.patchAsync(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId),
+                sdkAuthorization(),
+                UpdateCardResponse.class,
+                updateCardRequest,
+                null,
+                headers
         );
     }
 
@@ -1132,6 +1147,20 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 UpdateCardResponse.class,
                 updateCardRequest,
                 null
+        );
+    }
+
+    @Override
+    public UpdateCardResponse updateCardSync(final String cardId, final UpdateCardRequest updateCardRequest,
+                                             final CardUpdateHeaders headers) {
+        validateParams("cardId", cardId, "updateCardRequest", updateCardRequest);
+        return apiClient.patch(
+                buildPath(ISSUING_PATH, CARDS_PATH, cardId),
+                sdkAuthorization(),
+                UpdateCardResponse.class,
+                updateCardRequest,
+                null,
+                headers
         );
     }
 

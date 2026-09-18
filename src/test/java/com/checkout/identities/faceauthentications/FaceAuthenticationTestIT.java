@@ -1,5 +1,7 @@
 package com.checkout.identities.faceauthentications;
 
+import com.checkout.common.CountryCode;
+
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.identities.entities.AttemptAssetsQueryFilter;
@@ -287,7 +289,7 @@ class FaceAuthenticationTestIT extends SandboxTestFixture {
         return FaceAuthenticationAttemptRequest.builder()
                 .redirectUrl("https://example.com/redirect?session=" + generateRandomString(10))
                 .clientInformation(ClientInformation.builder()
-                        .preSelectedResidenceCountry("GB")
+                        .preSelectedResidenceCountry(CountryCode.GB)
                         .preSelectedLanguage("en-US")
                         .build())
                 .build();

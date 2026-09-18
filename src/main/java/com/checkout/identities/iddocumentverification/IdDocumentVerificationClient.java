@@ -3,9 +3,13 @@ package com.checkout.identities.iddocumentverification;
 import com.checkout.identities.iddocumentverification.requests.IdDocumentVerificationAttemptRequest;
 import com.checkout.identities.iddocumentverification.requests.IdDocumentVerificationRequest;
 import com.checkout.identities.iddocumentverification.responses.IdDocumentVerificationAttemptResponse;
+import com.checkout.identities.iddocumentverification.responses.IdDocumentVerificationAttemptAssetsResponse;
 import com.checkout.identities.iddocumentverification.responses.IdDocumentVerificationAttemptsResponse;
 import com.checkout.identities.iddocumentverification.responses.IdDocumentVerificationReportResponse;
 import com.checkout.identities.iddocumentverification.responses.IdDocumentVerificationResponse;
+
+import com.checkout.identities.entities.AttemptAssetsQueryFilter;
+import com.checkout.identities.entities.AttemptsQueryFilter;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -56,6 +60,15 @@ public interface IdDocumentVerificationClient {
     CompletableFuture<IdDocumentVerificationAttemptsResponse> getIdDocumentVerificationAttempts(String idDocumentVerificationId);
 
     /**
+     * Retrieve a page of ID document verification attempts
+     *
+     * @param idDocumentVerificationId the ID document verification ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationAttemptsResponse}
+     */
+    CompletableFuture<IdDocumentVerificationAttemptsResponse> getIdDocumentVerificationAttempts(String idDocumentVerificationId, AttemptsQueryFilter queryFilter);
+
+    /**
      * Retrieve a specific ID document verification attempt
      *
      * @param idDocumentVerificationId the ID document verification ID
@@ -71,6 +84,17 @@ public interface IdDocumentVerificationClient {
      * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationReportResponse}
      */
     CompletableFuture<IdDocumentVerificationReportResponse> getIdDocumentVerificationReport(String idDocumentVerificationId);
+
+    /**
+     * Retrieve the assets (the front and back images of the document) uploaded for an ID document verification attempt.
+     * Beta.
+     *
+     * @param idDocumentVerificationId the ID document verification ID
+     * @param attemptId the attempt ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationAttemptAssetsResponse}
+     */
+    CompletableFuture<IdDocumentVerificationAttemptAssetsResponse> getIdDocumentVerificationAttemptAssets(String idDocumentVerificationId, String attemptId, AttemptAssetsQueryFilter queryFilter);
 
     // Synchronous methods
 
@@ -116,6 +140,15 @@ public interface IdDocumentVerificationClient {
     IdDocumentVerificationAttemptsResponse getIdDocumentVerificationAttemptsSync(String idDocumentVerificationId);
 
     /**
+     * Retrieve a page of ID document verification attempts
+     *
+     * @param idDocumentVerificationId the ID document verification ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return the {@link IdDocumentVerificationAttemptsResponse}
+     */
+    IdDocumentVerificationAttemptsResponse getIdDocumentVerificationAttemptsSync(String idDocumentVerificationId, AttemptsQueryFilter queryFilter);
+
+    /**
      * Retrieve a specific ID document verification attempt
      *
      * @param idDocumentVerificationId the ID document verification ID
@@ -131,4 +164,15 @@ public interface IdDocumentVerificationClient {
      * @return the {@link IdDocumentVerificationReportResponse}
      */
     IdDocumentVerificationReportResponse getIdDocumentVerificationReportSync(String idDocumentVerificationId);
+
+    /**
+     * Retrieve the assets (the front and back images of the document) uploaded for an ID document verification attempt.
+     * Beta.
+     *
+     * @param idDocumentVerificationId the ID document verification ID
+     * @param attemptId the attempt ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return the {@link IdDocumentVerificationAttemptAssetsResponse}
+     */
+    IdDocumentVerificationAttemptAssetsResponse getIdDocumentVerificationAttemptAssetsSync(String idDocumentVerificationId, String attemptId, AttemptAssetsQueryFilter queryFilter);
 }

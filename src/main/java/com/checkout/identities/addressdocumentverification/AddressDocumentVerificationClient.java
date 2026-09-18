@@ -3,9 +3,13 @@ package com.checkout.identities.addressdocumentverification;
 import com.checkout.identities.addressdocumentverification.requests.AddressDocumentVerificationAttemptRequest;
 import com.checkout.identities.addressdocumentverification.requests.AddressDocumentVerificationRequest;
 import com.checkout.identities.addressdocumentverification.responses.AddressDocumentVerificationAttemptResponse;
+import com.checkout.identities.addressdocumentverification.responses.AddressDocumentVerificationAttemptAssetsResponse;
 import com.checkout.identities.addressdocumentverification.responses.AddressDocumentVerificationAttemptsResponse;
 import com.checkout.identities.addressdocumentverification.responses.AddressDocumentVerificationReportResponse;
 import com.checkout.identities.addressdocumentverification.responses.AddressDocumentVerificationResponse;
+
+import com.checkout.identities.entities.AttemptAssetsQueryFilter;
+import com.checkout.identities.entities.AttemptsQueryFilter;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -56,6 +60,15 @@ public interface AddressDocumentVerificationClient {
     CompletableFuture<AddressDocumentVerificationAttemptsResponse> getAddressDocumentVerificationAttempts(String addressDocumentVerificationId);
 
     /**
+     * Retrieve a page of address document verification attempts
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return a {@link CompletableFuture} containing the {@link AddressDocumentVerificationAttemptsResponse}
+     */
+    CompletableFuture<AddressDocumentVerificationAttemptsResponse> getAddressDocumentVerificationAttempts(String addressDocumentVerificationId, AttemptsQueryFilter queryFilter);
+
+    /**
      * Retrieve a specific address document verification attempt
      *
      * @param addressDocumentVerificationId the address document verification ID
@@ -71,6 +84,17 @@ public interface AddressDocumentVerificationClient {
      * @return a {@link CompletableFuture} containing the {@link AddressDocumentVerificationReportResponse}
      */
     CompletableFuture<AddressDocumentVerificationReportResponse> getAddressDocumentVerificationReport(String addressDocumentVerificationId);
+
+    /**
+     * Retrieve the assets (the document image) uploaded for an address document verification attempt.
+     * Beta.
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @param attemptId the attempt ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return a {@link CompletableFuture} containing the {@link AddressDocumentVerificationAttemptAssetsResponse}
+     */
+    CompletableFuture<AddressDocumentVerificationAttemptAssetsResponse> getAddressDocumentVerificationAttemptAssets(String addressDocumentVerificationId, String attemptId, AttemptAssetsQueryFilter queryFilter);
 
     // Synchronous methods
 
@@ -116,6 +140,15 @@ public interface AddressDocumentVerificationClient {
     AddressDocumentVerificationAttemptsResponse getAddressDocumentVerificationAttemptsSync(String addressDocumentVerificationId);
 
     /**
+     * Retrieve a page of address document verification attempts
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return the {@link AddressDocumentVerificationAttemptsResponse}
+     */
+    AddressDocumentVerificationAttemptsResponse getAddressDocumentVerificationAttemptsSync(String addressDocumentVerificationId, AttemptsQueryFilter queryFilter);
+
+    /**
      * Retrieve a specific address document verification attempt
      *
      * @param addressDocumentVerificationId the address document verification ID
@@ -131,4 +164,15 @@ public interface AddressDocumentVerificationClient {
      * @return the {@link AddressDocumentVerificationReportResponse}
      */
     AddressDocumentVerificationReportResponse getAddressDocumentVerificationReportSync(String addressDocumentVerificationId);
+
+    /**
+     * Retrieve the assets (the document image) uploaded for an address document verification attempt.
+     * Beta.
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @param attemptId the attempt ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return the {@link AddressDocumentVerificationAttemptAssetsResponse}
+     */
+    AddressDocumentVerificationAttemptAssetsResponse getAddressDocumentVerificationAttemptAssetsSync(String addressDocumentVerificationId, String attemptId, AttemptAssetsQueryFilter queryFilter);
 }

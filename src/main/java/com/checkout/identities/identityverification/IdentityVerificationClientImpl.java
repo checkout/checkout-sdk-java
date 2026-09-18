@@ -14,6 +14,8 @@ import com.checkout.identities.identityverification.responses.IdentityVerificati
 import com.checkout.identities.identityverification.responses.IdentityVerificationReportResponse;
 import com.checkout.identities.identityverification.responses.IdentityVerificationResponse;
 
+import com.checkout.identities.entities.AttemptsQueryFilter;
+
 import java.util.concurrent.CompletableFuture;
 
 import static com.checkout.common.CheckoutUtils.validateParams;
@@ -122,6 +124,21 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
         validateParams("identityVerificationId", identityVerificationId);
         return apiClient.getAsync(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, ATTEMPTS_PATH),
                 sdkAuthorization(), IdentityVerificationAttemptsResponse.class);
+    }
+
+    /**
+     * Retrieve a page of identity verification attempts
+     *
+     * @param identityVerificationId the identity verification ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return a {@link CompletableFuture} containing the {@link IdentityVerificationAttemptsResponse}
+     */
+    @Override
+    public CompletableFuture<IdentityVerificationAttemptsResponse> getIdentityVerificationAttempts(
+            final String identityVerificationId, final AttemptsQueryFilter queryFilter) {
+        validateParams("identityVerificationId", identityVerificationId);
+        return apiClient.queryAsync(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, ATTEMPTS_PATH),
+                sdkAuthorization(), queryFilter, IdentityVerificationAttemptsResponse.class);
     }
 
     /**
@@ -236,6 +253,21 @@ public class IdentityVerificationClientImpl extends AbstractClient implements Id
         validateParams("identityVerificationId", identityVerificationId);
         return apiClient.get(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, ATTEMPTS_PATH),
                 sdkAuthorization(), IdentityVerificationAttemptsResponse.class);
+    }
+
+    /**
+     * Retrieve a page of identity verification attempts
+     *
+     * @param identityVerificationId the identity verification ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return the {@link IdentityVerificationAttemptsResponse}
+     */
+    @Override
+    public IdentityVerificationAttemptsResponse getIdentityVerificationAttemptsSync(
+            final String identityVerificationId, final AttemptsQueryFilter queryFilter) {
+        validateParams("identityVerificationId", identityVerificationId);
+        return apiClient.query(buildPath(IDENTITY_VERIFICATIONS_PATH, identityVerificationId, ATTEMPTS_PATH),
+                sdkAuthorization(), queryFilter, IdentityVerificationAttemptsResponse.class);
     }
 
     /**

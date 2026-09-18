@@ -5,6 +5,7 @@ import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
+import com.checkout.identities.entities.AttemptsQueryFilter;
 import com.checkout.identities.entities.AttemptAssetsQueryFilter;
 import com.checkout.identities.faceauthentications.requests.FaceAuthenticationAttemptRequest;
 import com.checkout.identities.faceauthentications.requests.FaceAuthenticationRequest;
@@ -274,5 +275,17 @@ class FaceAuthenticationClientImplTest {
 
         assertNotNull(result);
         assertEquals(response, result);
+    }
+    @Test
+    void shouldGetAttemptsPaginated() throws ExecutionException, InterruptedException {
+        final FaceAuthenticationAttemptsResponse response = new FaceAuthenticationAttemptsResponse();
+        final AttemptsQueryFilter query = AttemptsQueryFilter.builder().skip(6).limit(5).build();
+        final String id = "faceAuthenticationId_test";
+
+        when(apiClient.queryAsync("face-authentications/" + id + "/attempts", authorization,
+                query, FaceAuthenticationAttemptsResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        assertEquals(response, client.getFaceAuthenticationAttempts(id, query).get());
     }
 }

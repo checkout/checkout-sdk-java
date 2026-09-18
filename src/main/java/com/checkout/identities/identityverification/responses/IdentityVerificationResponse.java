@@ -4,7 +4,9 @@ import com.checkout.identities.entities.Face;
 import com.checkout.identities.entities.VerifiedIdentity;
 import com.checkout.identities.entities.DocumentDetails;
 import com.checkout.identities.entities.BaseIdentityResponseStatus;
-import com.checkout.identities.entities.DeclaredData;
+import com.checkout.identities.entities.Certification;
+import com.checkout.identities.entities.IdentityDeclaredData;
+import com.checkout.identities.entities.RiskLabel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,7 +38,7 @@ public final class IdentityVerificationResponse extends BaseIdentityResponseStat
     /**
      * The personal details provided by the applicant.
      */
-    private DeclaredData declaredData;
+    private IdentityDeclaredData declaredData;
 
     /**
      * The URL to redirect the applicant to after the attempt.
@@ -46,8 +48,21 @@ public final class IdentityVerificationResponse extends BaseIdentityResponseStat
 
     /**
      * One or more codes that provide more information about risks associated with the verification.
+     * [Required]
      */
-    private List<String> riskLabels;
+    private List<RiskLabel> riskLabels;
+
+    /**
+     * The certifications associated with the identity verification.
+     * [Optional]
+     */
+    private List<Certification> certifications;
+
+    /**
+     * The version of the verification policy applied. Only returned for certified verifications.
+     * [Optional]
+     */
+    private String verificationPolicyVersion;
 
     /**
      * The details of the applicant's identity documents.

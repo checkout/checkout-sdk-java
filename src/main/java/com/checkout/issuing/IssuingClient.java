@@ -26,6 +26,7 @@ import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsR
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
 import com.checkout.issuing.cards.responses.renew.RenewCardResponse;
+import com.checkout.issuing.cards.requests.update.CardUpdateHeaders;
 import com.checkout.issuing.cards.responses.update.UpdateCardResponse;
 import com.checkout.issuing.controls.requests.create.CardControlRequest;
 import com.checkout.issuing.controls.requests.query.CardControlsQuery;
@@ -153,6 +154,19 @@ public interface IssuingClient {
     );
 
     CompletableFuture<UpdateCardResponse> updateCard(final String cardId, final UpdateCardRequest updateCardRequest);
+
+    /**
+     * Update a card's details, sending the optional return-encrypted-cvv and Encryption-Key
+     * headers. Set return-encrypted-cvv to true to receive the card's encrypted CVV in the
+     * response; the API returns a 422 with error code encryption_key_required if Encryption-Key
+     * is not also supplied.
+     *
+     * @param cardId the card ID
+     * @param updateCardRequest the card fields to update
+     * @param headers the optional return-encrypted-cvv and Encryption-Key headers
+     * @return a {@link CompletableFuture} containing the {@link UpdateCardResponse}
+     */
+    CompletableFuture<UpdateCardResponse> updateCard(String cardId, UpdateCardRequest updateCardRequest, CardUpdateHeaders headers);
 
     CompletableFuture<RenewCardResponse> renewCard(final String cardId, final RenewCardRequest renewCardRequest);
 
@@ -282,6 +296,19 @@ public interface IssuingClient {
     );
 
     UpdateCardResponse updateCardSync(String cardId, UpdateCardRequest updateCardRequest);
+
+    /**
+     * Update a card's details, sending the optional return-encrypted-cvv and Encryption-Key
+     * headers. Set return-encrypted-cvv to true to receive the card's encrypted CVV in the
+     * response; the API returns a 422 with error code encryption_key_required if Encryption-Key
+     * is not also supplied.
+     *
+     * @param cardId the card ID
+     * @param updateCardRequest the card fields to update
+     * @param headers the optional return-encrypted-cvv and Encryption-Key headers
+     * @return the {@link UpdateCardResponse}
+     */
+    UpdateCardResponse updateCardSync(String cardId, UpdateCardRequest updateCardRequest, CardUpdateHeaders headers);
 
     RenewCardResponse renewCardSync(String cardId, RenewCardRequest renewCardRequest);
 

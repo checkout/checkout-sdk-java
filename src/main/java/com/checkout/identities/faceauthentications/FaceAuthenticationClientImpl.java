@@ -12,6 +12,8 @@ import com.checkout.identities.faceauthentications.responses.FaceAuthenticationA
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationAttemptsResponse;
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationResponse;
 
+import com.checkout.identities.entities.AttemptsQueryFilter;
+
 import java.util.concurrent.CompletableFuture;
 
 import static com.checkout.common.CheckoutUtils.validateParams;
@@ -97,6 +99,21 @@ public class FaceAuthenticationClientImpl extends AbstractClient implements Face
         validateParams("faceAuthenticationId", faceAuthenticationId);
         return apiClient.getAsync(buildPath(FACE_AUTHENTICATIONS_PATH, faceAuthenticationId, ATTEMPTS_PATH), 
                 sdkAuthorization(), FaceAuthenticationAttemptsResponse.class);
+    }
+
+    /**
+     * Retrieve a page of face authentication attempts
+     *
+     * @param faceAuthenticationId the face authentication ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return a {@link CompletableFuture} containing the {@link FaceAuthenticationAttemptsResponse}
+     */
+    @Override
+    public CompletableFuture<FaceAuthenticationAttemptsResponse> getFaceAuthenticationAttempts(
+            final String faceAuthenticationId, final AttemptsQueryFilter queryFilter) {
+        validateParams("faceAuthenticationId", faceAuthenticationId);
+        return apiClient.queryAsync(buildPath(FACE_AUTHENTICATIONS_PATH, faceAuthenticationId, ATTEMPTS_PATH),
+                sdkAuthorization(), queryFilter, FaceAuthenticationAttemptsResponse.class);
     }
 
     /**
@@ -198,6 +215,21 @@ public class FaceAuthenticationClientImpl extends AbstractClient implements Face
         validateParams("faceAuthenticationId", faceAuthenticationId);
         return apiClient.get(buildPath(FACE_AUTHENTICATIONS_PATH, faceAuthenticationId, ATTEMPTS_PATH), 
                 sdkAuthorization(), FaceAuthenticationAttemptsResponse.class);
+    }
+
+    /**
+     * Retrieve a page of face authentication attempts
+     *
+     * @param faceAuthenticationId the face authentication ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return the {@link FaceAuthenticationAttemptsResponse}
+     */
+    @Override
+    public FaceAuthenticationAttemptsResponse getFaceAuthenticationAttemptsSync(
+            final String faceAuthenticationId, final AttemptsQueryFilter queryFilter) {
+        validateParams("faceAuthenticationId", faceAuthenticationId);
+        return apiClient.query(buildPath(FACE_AUTHENTICATIONS_PATH, faceAuthenticationId, ATTEMPTS_PATH),
+                sdkAuthorization(), queryFilter, FaceAuthenticationAttemptsResponse.class);
     }
 
     /**

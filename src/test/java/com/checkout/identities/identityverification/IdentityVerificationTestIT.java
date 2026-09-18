@@ -1,5 +1,11 @@
 package com.checkout.identities.identityverification;
 
+import com.checkout.identities.entities.IdentityVerificationClientInformation;
+
+import com.checkout.identities.entities.IdentityDeclaredData;
+
+import com.checkout.common.CountryCode;
+
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.identities.entities.AttemptAssetsQueryFilter;
@@ -320,15 +326,16 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
                 .build();
     }
 
-    private DeclaredData createDeclaredData() {
-        return DeclaredData.builder()
+    private IdentityDeclaredData createDeclaredData() {
+        return IdentityDeclaredData.builder()
                 .name("John Doe")
+                .birthDate("1994-10-15")
                 .build();
     }
 
-    private ClientInformation createClientInformation() {
-        return ClientInformation.builder()
-                .preSelectedResidenceCountry("GB")
+    private IdentityVerificationClientInformation createClientInformation() {
+        return IdentityVerificationClientInformation.builder()
+                .preSelectedResidenceCountry(CountryCode.GB)
                 .preSelectedLanguage("en")
                 .build();
     }
@@ -387,7 +394,7 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
 
     private void validateGeneratedIdentityVerificationReport(final IdentityVerificationReportResponse report) {
         assertNotNull(report);
-        assertNotNull(report.getSignedUrl());
+        assertNotNull(report.getPdfReport());
         // Add specific validation for report data
     }
 }

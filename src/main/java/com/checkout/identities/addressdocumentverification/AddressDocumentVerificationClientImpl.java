@@ -7,9 +7,13 @@ import com.checkout.SdkAuthorizationType;
 import com.checkout.identities.addressdocumentverification.requests.AddressDocumentVerificationAttemptRequest;
 import com.checkout.identities.addressdocumentverification.requests.AddressDocumentVerificationRequest;
 import com.checkout.identities.addressdocumentverification.responses.AddressDocumentVerificationAttemptResponse;
+import com.checkout.identities.addressdocumentverification.responses.AddressDocumentVerificationAttemptAssetsResponse;
 import com.checkout.identities.addressdocumentverification.responses.AddressDocumentVerificationAttemptsResponse;
 import com.checkout.identities.addressdocumentverification.responses.AddressDocumentVerificationReportResponse;
 import com.checkout.identities.addressdocumentverification.responses.AddressDocumentVerificationResponse;
+
+import com.checkout.identities.entities.AttemptAssetsQueryFilter;
+import com.checkout.identities.entities.AttemptsQueryFilter;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -23,6 +27,7 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
     private static final String ADDRESS_DOCUMENT_VERIFICATIONS_PATH = "address-document-verifications";
     private static final String ANONYMIZE_PATH = "anonymize";
     private static final String ATTEMPTS_PATH = "attempts";
+    private static final String ASSETS_PATH = "assets";
     private static final String PDF_REPORT_PATH = "pdf-report";
 
     public AddressDocumentVerificationClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
@@ -72,6 +77,21 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
                 sdkAuthorization(), AddressDocumentVerificationAttemptsResponse.class);
     }
 
+    /**
+     * Retrieve a page of address document verification attempts
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return a {@link CompletableFuture} containing the {@link AddressDocumentVerificationAttemptsResponse}
+     */
+    @Override
+    public CompletableFuture<AddressDocumentVerificationAttemptsResponse> getAddressDocumentVerificationAttempts(
+            final String addressDocumentVerificationId, final AttemptsQueryFilter queryFilter) {
+        validateParams("addressDocumentVerificationId", addressDocumentVerificationId);
+        return apiClient.queryAsync(buildPath(ADDRESS_DOCUMENT_VERIFICATIONS_PATH, addressDocumentVerificationId, ATTEMPTS_PATH),
+                sdkAuthorization(), queryFilter, AddressDocumentVerificationAttemptsResponse.class);
+    }
+
     @Override
     public CompletableFuture<AddressDocumentVerificationAttemptResponse> getAddressDocumentVerificationAttempt(
             final String addressDocumentVerificationId, final String attemptId) {
@@ -86,6 +106,22 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
         validateParams("addressDocumentVerificationId", addressDocumentVerificationId);
         return apiClient.getAsync(buildPath(ADDRESS_DOCUMENT_VERIFICATIONS_PATH, addressDocumentVerificationId, PDF_REPORT_PATH),
                 sdkAuthorization(), AddressDocumentVerificationReportResponse.class);
+    }
+
+    /**
+     * Retrieve the assets (the document image) uploaded for an address document verification attempt
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @param attemptId the attempt ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return a {@link CompletableFuture} containing the {@link AddressDocumentVerificationAttemptAssetsResponse}
+     */
+    @Override
+    public CompletableFuture<AddressDocumentVerificationAttemptAssetsResponse> getAddressDocumentVerificationAttemptAssets(
+            final String addressDocumentVerificationId, final String attemptId, final AttemptAssetsQueryFilter queryFilter) {
+        validateParams("addressDocumentVerificationId", addressDocumentVerificationId, "attemptId", attemptId);
+        return apiClient.queryAsync(buildPath(ADDRESS_DOCUMENT_VERIFICATIONS_PATH, addressDocumentVerificationId, ATTEMPTS_PATH, attemptId, ASSETS_PATH),
+                sdkAuthorization(), queryFilter, AddressDocumentVerificationAttemptAssetsResponse.class);
     }
 
     // Synchronous methods
@@ -130,6 +166,21 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
                 sdkAuthorization(), AddressDocumentVerificationAttemptsResponse.class);
     }
 
+    /**
+     * Retrieve a page of address document verification attempts
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return the {@link AddressDocumentVerificationAttemptsResponse}
+     */
+    @Override
+    public AddressDocumentVerificationAttemptsResponse getAddressDocumentVerificationAttemptsSync(
+            final String addressDocumentVerificationId, final AttemptsQueryFilter queryFilter) {
+        validateParams("addressDocumentVerificationId", addressDocumentVerificationId);
+        return apiClient.query(buildPath(ADDRESS_DOCUMENT_VERIFICATIONS_PATH, addressDocumentVerificationId, ATTEMPTS_PATH),
+                sdkAuthorization(), queryFilter, AddressDocumentVerificationAttemptsResponse.class);
+    }
+
     @Override
     public AddressDocumentVerificationAttemptResponse getAddressDocumentVerificationAttemptSync(
             final String addressDocumentVerificationId, final String attemptId) {
@@ -143,5 +194,21 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
         validateParams("addressDocumentVerificationId", addressDocumentVerificationId);
         return apiClient.get(buildPath(ADDRESS_DOCUMENT_VERIFICATIONS_PATH, addressDocumentVerificationId, PDF_REPORT_PATH),
                 sdkAuthorization(), AddressDocumentVerificationReportResponse.class);
+    }
+
+    /**
+     * Retrieve the assets (the document image) uploaded for an address document verification attempt
+     *
+     * @param addressDocumentVerificationId the address document verification ID
+     * @param attemptId the attempt ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return the {@link AddressDocumentVerificationAttemptAssetsResponse}
+     */
+    @Override
+    public AddressDocumentVerificationAttemptAssetsResponse getAddressDocumentVerificationAttemptAssetsSync(
+            final String addressDocumentVerificationId, final String attemptId, final AttemptAssetsQueryFilter queryFilter) {
+        validateParams("addressDocumentVerificationId", addressDocumentVerificationId, "attemptId", attemptId);
+        return apiClient.query(buildPath(ADDRESS_DOCUMENT_VERIFICATIONS_PATH, addressDocumentVerificationId, ATTEMPTS_PATH, attemptId, ASSETS_PATH),
+                sdkAuthorization(), queryFilter, AddressDocumentVerificationAttemptAssetsResponse.class);
     }
 }

@@ -18,8 +18,10 @@ import lombok.NoArgsConstructor;
 public final class IdentityVerificationReportResponse extends Resource {
 
     /**
-     * The pre-signed URL to the captured image of the document.
+     * The pre-signed URL to the PDF report.
+     * [Required]
+     * Format: uri
      */
-    private String signedUrl;
+    private String pdfReport;
 
 }

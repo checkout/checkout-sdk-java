@@ -28,6 +28,8 @@ public interface ApiClient {
 
     <T extends HttpMetadata> CompletableFuture<T> patchAsync(String path, SdkAuthorization authorization, Class<T> responseType, Object request, String idempotencyKey);
 
+    <T extends HttpMetadata> CompletableFuture<T> patchAsync(String path, SdkAuthorization authorization, Class<T> responseType, Object request, String idempotencyKey, IHeaders headers);
+
     CompletableFuture<? extends HttpMetadata> postAsync(String path, SdkAuthorization authorization, Map<Integer, Class<? extends HttpMetadata>> resultTypeMappings, Object request, String idempotencyKey);
 
     CompletableFuture<EmptyResponse> deleteAsync(String path, SdkAuthorization authorization);
@@ -52,6 +54,8 @@ public interface ApiClient {
     <T extends HttpMetadata> T put(String path, SdkAuthorization authorization, Class<T> responseType, Object request, IHeaders headers);
 
     <T extends HttpMetadata> T patch(String path, SdkAuthorization authorization, Class<T> responseType, Object request, String idempotencyKey);
+
+    <T extends HttpMetadata> T patch(String path, SdkAuthorization authorization, Class<T> responseType, Object request, String idempotencyKey, IHeaders headers);
 
     <T extends HttpMetadata> T patch(String path, SdkAuthorization authorization, Type type, Object request, String idempotencyKey);
 

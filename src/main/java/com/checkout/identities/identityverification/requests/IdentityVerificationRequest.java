@@ -1,6 +1,6 @@
 package com.checkout.identities.identityverification.requests;
 
-import com.checkout.identities.entities.DeclaredData;
+import com.checkout.identities.entities.IdentityDeclaredData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +25,7 @@ public final class IdentityVerificationRequest {
      * The personal details provided by the applicant.
      * [Required]
      */
-    private DeclaredData declaredData;
+    private IdentityDeclaredData declaredData;
 
     /**
      * Your configuration ID.

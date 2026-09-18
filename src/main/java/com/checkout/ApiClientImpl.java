@@ -96,6 +96,15 @@ public class ApiClientImpl implements ApiClient {
     }
 
     @Override
+    public <T extends HttpMetadata> CompletableFuture<T> patchAsync(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request, final String idempotencyKey, final IHeaders headers) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return executeAsyncOrSync(
+                () -> patch(path, authorization, responseType, request, idempotencyKey, headers),
+                () -> sendRequestAsync(PATCH, path, authorization, request, idempotencyKey, responseType, headers)
+        );
+    }
+
+    @Override
     public <T extends HttpMetadata> CompletableFuture<T> patchAsync(final String path, final SdkAuthorization authorization, final Type type, final Object request, final String idempotencyKey) {
         validateParams(PATH, path, AUTHORIZATION, authorization, "type", type, "request", request);
         return executeAsyncOrSync(
@@ -366,6 +375,12 @@ public class ApiClientImpl implements ApiClient {
     public <T extends HttpMetadata> T patch(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request, final String idempotencyKey) {
         validateParams(PATH, path, AUTHORIZATION, authorization);
         return sendRequestSync(PATCH, path, authorization, request, idempotencyKey, responseType);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T patch(final String path, final SdkAuthorization authorization, final Class<T> responseType, final Object request, final String idempotencyKey, final IHeaders headers) {
+        validateParams(PATH, path, AUTHORIZATION, authorization);
+        return sendRequestSync(PATCH, path, authorization, request, idempotencyKey, responseType, headers);
     }
 
     @Override
