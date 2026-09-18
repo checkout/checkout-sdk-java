@@ -1,5 +1,7 @@
 package com.checkout.identities.faceauthentications.responses;
 
+import com.checkout.identities.entities.RiskLabel;
+
 import com.checkout.identities.entities.Face;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,7 +36,7 @@ public final class FaceAuthenticationResponse extends BaseIdentityResponseStatus
     /**
      * One or more codes that provide more information about risks associated with the verification.
      */
-    private List<String> riskLabels;
+    private List<RiskLabel> riskLabels;
 
     /**
      * The details of the image of the applicant's face extracted from the video.

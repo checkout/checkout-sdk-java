@@ -5,6 +5,7 @@ import com.checkout.CheckoutConfiguration;
 import com.checkout.SdkAuthorization;
 import com.checkout.SdkAuthorizationType;
 import com.checkout.SdkCredentials;
+import com.checkout.identities.entities.AttemptsQueryFilter;
 import com.checkout.identities.entities.AttemptAssetsQueryFilter;
 import com.checkout.identities.identityverification.requests.CreateAndOpenIdentityVerificationRequest;
 import com.checkout.identities.identityverification.requests.IdentityVerificationRequest;
@@ -364,5 +365,17 @@ class IdentityVerificationClientImplTest {
 
     private IdentityVerificationReportResponse createIdentityVerificationReportResponse() {
         return mock(IdentityVerificationReportResponse.class);
+    }
+    @Test
+    void shouldGetAttemptsPaginated() throws ExecutionException, InterruptedException {
+        final IdentityVerificationAttemptsResponse response = new IdentityVerificationAttemptsResponse();
+        final AttemptsQueryFilter query = AttemptsQueryFilter.builder().skip(6).limit(5).build();
+        final String id = "identityVerificationId_test";
+
+        when(apiClient.queryAsync("identity-verifications/" + id + "/attempts", authorization,
+                query, IdentityVerificationAttemptsResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        assertEquals(response, client.getIdentityVerificationAttempts(id, query).get());
     }
 }

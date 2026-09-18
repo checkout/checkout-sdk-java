@@ -7,9 +7,13 @@ import com.checkout.SdkAuthorizationType;
 import com.checkout.identities.iddocumentverification.requests.IdDocumentVerificationAttemptRequest;
 import com.checkout.identities.iddocumentverification.requests.IdDocumentVerificationRequest;
 import com.checkout.identities.iddocumentverification.responses.IdDocumentVerificationAttemptResponse;
+import com.checkout.identities.iddocumentverification.responses.IdDocumentVerificationAttemptAssetsResponse;
 import com.checkout.identities.iddocumentverification.responses.IdDocumentVerificationAttemptsResponse;
 import com.checkout.identities.iddocumentverification.responses.IdDocumentVerificationReportResponse;
 import com.checkout.identities.iddocumentverification.responses.IdDocumentVerificationResponse;
+
+import com.checkout.identities.entities.AttemptAssetsQueryFilter;
+import com.checkout.identities.entities.AttemptsQueryFilter;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -23,6 +27,7 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
     private static final String ID_DOCUMENT_VERIFICATIONS_PATH = "id-document-verifications";
     private static final String ANONYMIZE_PATH = "anonymize";
     private static final String ATTEMPTS_PATH = "attempts";
+    private static final String ASSETS_PATH = "assets";
     private static final String PDF_REPORT_PATH = "pdf-report";
 
     public IdDocumentVerificationClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
@@ -104,6 +109,21 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
     }
 
     /**
+     * Retrieve a page of ID document verification attempts
+     *
+     * @param idDocumentVerificationId the ID document verification ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationAttemptsResponse}
+     */
+    @Override
+    public CompletableFuture<IdDocumentVerificationAttemptsResponse> getIdDocumentVerificationAttempts(
+            final String idDocumentVerificationId, final AttemptsQueryFilter queryFilter) {
+        validateParams("idDocumentVerificationId", idDocumentVerificationId);
+        return apiClient.queryAsync(buildPath(ID_DOCUMENT_VERIFICATIONS_PATH, idDocumentVerificationId, ATTEMPTS_PATH),
+                sdkAuthorization(), queryFilter, IdDocumentVerificationAttemptsResponse.class);
+    }
+
+    /**
      * Retrieve a specific ID document verification attempt
      *
      * @param idDocumentVerificationId the ID document verification ID
@@ -130,6 +150,22 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
         validateParams("idDocumentVerificationId", idDocumentVerificationId);
         return apiClient.getAsync(buildPath(ID_DOCUMENT_VERIFICATIONS_PATH, idDocumentVerificationId, PDF_REPORT_PATH),
                 sdkAuthorization(), IdDocumentVerificationReportResponse.class);
+    }
+
+    /**
+     * Retrieve the assets (the front and back images of the document) uploaded for an ID document verification attempt
+     *
+     * @param idDocumentVerificationId the ID document verification ID
+     * @param attemptId the attempt ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return a {@link CompletableFuture} containing the {@link IdDocumentVerificationAttemptAssetsResponse}
+     */
+    @Override
+    public CompletableFuture<IdDocumentVerificationAttemptAssetsResponse> getIdDocumentVerificationAttemptAssets(
+            final String idDocumentVerificationId, final String attemptId, final AttemptAssetsQueryFilter queryFilter) {
+        validateParams("idDocumentVerificationId", idDocumentVerificationId, "attemptId", attemptId);
+        return apiClient.queryAsync(buildPath(ID_DOCUMENT_VERIFICATIONS_PATH, idDocumentVerificationId, ATTEMPTS_PATH, attemptId, ASSETS_PATH),
+                sdkAuthorization(), queryFilter, IdDocumentVerificationAttemptAssetsResponse.class);
     }
 
     // Synchronous methods
@@ -206,6 +242,21 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
     }
 
     /**
+     * Retrieve a page of ID document verification attempts
+     *
+     * @param idDocumentVerificationId the ID document verification ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return the {@link IdDocumentVerificationAttemptsResponse}
+     */
+    @Override
+    public IdDocumentVerificationAttemptsResponse getIdDocumentVerificationAttemptsSync(
+            final String idDocumentVerificationId, final AttemptsQueryFilter queryFilter) {
+        validateParams("idDocumentVerificationId", idDocumentVerificationId);
+        return apiClient.query(buildPath(ID_DOCUMENT_VERIFICATIONS_PATH, idDocumentVerificationId, ATTEMPTS_PATH),
+                sdkAuthorization(), queryFilter, IdDocumentVerificationAttemptsResponse.class);
+    }
+
+    /**
      * Retrieve a specific ID document verification attempt
      *
      * @param idDocumentVerificationId the ID document verification ID
@@ -231,5 +282,21 @@ public class IdDocumentVerificationClientImpl extends AbstractClient implements 
         validateParams("idDocumentVerificationId", idDocumentVerificationId);
         return apiClient.get(buildPath(ID_DOCUMENT_VERIFICATIONS_PATH, idDocumentVerificationId, PDF_REPORT_PATH),
                 sdkAuthorization(), IdDocumentVerificationReportResponse.class);
+    }
+
+    /**
+     * Retrieve the assets (the front and back images of the document) uploaded for an ID document verification attempt
+     *
+     * @param idDocumentVerificationId the ID document verification ID
+     * @param attemptId the attempt ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return the {@link IdDocumentVerificationAttemptAssetsResponse}
+     */
+    @Override
+    public IdDocumentVerificationAttemptAssetsResponse getIdDocumentVerificationAttemptAssetsSync(
+            final String idDocumentVerificationId, final String attemptId, final AttemptAssetsQueryFilter queryFilter) {
+        validateParams("idDocumentVerificationId", idDocumentVerificationId, "attemptId", attemptId);
+        return apiClient.query(buildPath(ID_DOCUMENT_VERIFICATIONS_PATH, idDocumentVerificationId, ATTEMPTS_PATH, attemptId, ASSETS_PATH),
+                sdkAuthorization(), queryFilter, IdDocumentVerificationAttemptAssetsResponse.class);
     }
 }

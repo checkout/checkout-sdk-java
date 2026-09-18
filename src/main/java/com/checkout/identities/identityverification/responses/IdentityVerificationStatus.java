@@ -25,6 +25,9 @@ public enum IdentityVerificationStatus {
     @SerializedName("checks_in_progress")
     CHECKS_IN_PROGRESS,
 
+    @SerializedName("created")
+    CREATED,
+
     /**
      * Identity verification declined
      */

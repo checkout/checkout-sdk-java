@@ -1,5 +1,7 @@
 package com.checkout.identities.addressdocumentverification.responses;
 
+import com.checkout.common.CountryCode;
+
 import lombok.Data;
 
 /**
@@ -42,5 +44,5 @@ public final class Address {
      * The two-letter ISO country code of the address.
      * max 2 characters
      */
-    private String country;
+    private CountryCode country;
 }

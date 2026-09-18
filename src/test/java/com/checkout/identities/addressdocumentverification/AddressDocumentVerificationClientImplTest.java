@@ -11,6 +11,9 @@ import com.checkout.identities.addressdocumentverification.responses.AddressDocu
 import com.checkout.identities.addressdocumentverification.responses.AddressDocumentVerificationAttemptsResponse;
 import com.checkout.identities.addressdocumentverification.responses.AddressDocumentVerificationReportResponse;
 import com.checkout.identities.addressdocumentverification.responses.AddressDocumentVerificationResponse;
+import com.checkout.identities.addressdocumentverification.responses.AddressDocumentVerificationAttemptAssetsResponse;
+import com.checkout.identities.entities.AttemptAssetsQueryFilter;
+import com.checkout.identities.entities.AttemptsQueryFilter;
 import com.checkout.identities.entities.DeclaredData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -142,5 +145,45 @@ class AddressDocumentVerificationClientImplTest {
                 .userJourneyId("usj_tkoi5db4hryu5cei5vwoabr7we")
                 .declaredData(DeclaredData.builder().name("Hannah Bret").build())
                 .build();
+    }
+    @Test
+    void shouldGetAttemptsPaginated() throws ExecutionException, InterruptedException {
+        final AddressDocumentVerificationAttemptsResponse response = new AddressDocumentVerificationAttemptsResponse();
+        final AttemptsQueryFilter query = AttemptsQueryFilter.builder().skip(6).limit(5).build();
+
+        when(apiClient.queryAsync("address-document-verifications/" + ADV_ID + "/attempts", authorization,
+                query, AddressDocumentVerificationAttemptsResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        assertEquals(response, client.getAddressDocumentVerificationAttempts(ADV_ID, query).get());
+    }
+
+    @Test
+    void shouldGetAttemptAssets() throws ExecutionException, InterruptedException {
+        final AddressDocumentVerificationAttemptAssetsResponse response =
+                new AddressDocumentVerificationAttemptAssetsResponse();
+        final AttemptAssetsQueryFilter query = AttemptAssetsQueryFilter.builder().skip(0).limit(10).build();
+
+        when(apiClient.queryAsync(
+                "address-document-verifications/" + ADV_ID + "/attempts/" + ATTEMPT_ID + "/assets",
+                authorization, query, AddressDocumentVerificationAttemptAssetsResponse.class))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        assertEquals(response,
+                client.getAddressDocumentVerificationAttemptAssets(ADV_ID, ATTEMPT_ID, query).get());
+    }
+
+    @Test
+    void shouldGetAttemptAssetsSync() {
+        final AddressDocumentVerificationAttemptAssetsResponse response =
+                new AddressDocumentVerificationAttemptAssetsResponse();
+        final AttemptAssetsQueryFilter query = AttemptAssetsQueryFilter.builder().limit(10).build();
+
+        when(apiClient.query(
+                "address-document-verifications/" + ADV_ID + "/attempts/" + ATTEMPT_ID + "/assets",
+                authorization, query, AddressDocumentVerificationAttemptAssetsResponse.class))
+                .thenReturn(response);
+
+        assertNotNull(client.getAddressDocumentVerificationAttemptAssetsSync(ADV_ID, ATTEMPT_ID, query));
     }
 }

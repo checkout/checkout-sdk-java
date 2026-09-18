@@ -1,6 +1,7 @@
 package com.checkout.identities.faceauthentications.requests;
 
 import com.checkout.identities.entities.ClientInformation;
+import com.checkout.identities.entities.PhoneNumber;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +21,12 @@ public final class FaceAuthenticationAttemptRequest {
      * [Required]
      */
     private String redirectUrl;
+
+    /**
+     * The applicant's mobile phone number, if sharing the attempt URL via SMS.
+     * [Optional]
+     */
+    private PhoneNumber phoneNumber;
 
     /**
      * The applicant's details.

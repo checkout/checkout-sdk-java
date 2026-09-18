@@ -10,6 +10,8 @@ import com.checkout.identities.identityverification.responses.IdentityVerificati
 import com.checkout.identities.identityverification.responses.IdentityVerificationReportResponse;
 import com.checkout.identities.identityverification.responses.IdentityVerificationResponse;
 
+import com.checkout.identities.entities.AttemptsQueryFilter;
+
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -58,6 +60,15 @@ public interface IdentityVerificationClient {
      * @return a {@link CompletableFuture} containing the {@link IdentityVerificationAttemptsResponse}
      */
     CompletableFuture<IdentityVerificationAttemptsResponse> getIdentityVerificationAttempts(String identityVerificationId);
+
+    /**
+     * Retrieve a page of identity verification attempts
+     *
+     * @param identityVerificationId the identity verification ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return a {@link CompletableFuture} containing the {@link IdentityVerificationAttemptsResponse}
+     */
+    CompletableFuture<IdentityVerificationAttemptsResponse> getIdentityVerificationAttempts(String identityVerificationId, AttemptsQueryFilter queryFilter);
 
     /**
      * Create an identity verification attempt
@@ -136,6 +147,15 @@ public interface IdentityVerificationClient {
      * @return the {@link IdentityVerificationAttemptsResponse}
      */
     IdentityVerificationAttemptsResponse getIdentityVerificationAttemptsSync(String identityVerificationId);
+
+    /**
+     * Retrieve a page of identity verification attempts
+     *
+     * @param identityVerificationId the identity verification ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return the {@link IdentityVerificationAttemptsResponse}
+     */
+    IdentityVerificationAttemptsResponse getIdentityVerificationAttemptsSync(String identityVerificationId, AttemptsQueryFilter queryFilter);
 
     /**
      * Create an identity verification attempt

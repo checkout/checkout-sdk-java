@@ -13,44 +13,52 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * GSON serialization tests for the 2026-06-29 card activation/revocation date changes.
- * activation_date supports a round-hour datetime; revocation_date is date-only (yyyy-MM-dd).
+ * GSON serialization tests for the issuing card scheduled_activation_date and revocation_date
+ * fields.
+ *
+ * Swagger 2026-09-02 replaced activation_date with scheduled_activation_date on add-card-request,
+ * get-card-response and update-card-request. The old key is gone from the API, so these tests
+ * assert the new key is emitted and the old one is neither emitted nor mapped.
+ * scheduled_activation_date supports a round-hour datetime; revocation_date is date-only
+ * (yyyy-MM-dd).
  */
-class CardActivationDateSerializationTest {
+class CardScheduledActivationDateSerializationTest {
 
     private final GsonSerializer serializer = new GsonSerializer();
 
     @Test
-    void shouldSerializeActivationAndRevocationDateOnCreateRequest() {
+    void shouldSerializeScheduledActivationAndRevocationDateOnCreateRequest() {
         final VirtualCardRequest request = VirtualCardRequest.builder()
                 .cardholderId("crh_test")
-                .activationDate("2026-06-01T10:00Z")
+                .scheduledActivationDate("2026-06-01T10:00Z")
                 .revocationDate(LocalDate.of(2026, 7, 1))
                 .build();
 
         final String json = serializer.toJson(request);
 
-        assertTrue(json.contains("\"activation_date\""));
+        assertTrue(json.contains("\"scheduled_activation_date\""));
         assertTrue(json.contains("2026-06-01T10:00Z"));
         assertTrue(json.contains("\"revocation_date\""));
         assertTrue(json.contains("2026-07-01"));
     }
 
     @Test
-    void shouldSerializeActivationAndRevocationDateOnUpdateRequest() {
+    void shouldSerializeScheduledActivationAndRevocationDateOnUpdateRequest() {
         final UpdateCardRequest request = UpdateCardRequest.builder()
                 .reference("X-123")
-                .activationDate("2026-06-01T10:00Z")
+                .scheduledActivationDate("2026-06-01T10:00Z")
                 .revocationDate(LocalDate.of(2026, 7, 1))
                 .build();
 
         final String json = serializer.toJson(request);
 
-        assertTrue(json.contains("\"activation_date\""));
+        assertTrue(json.contains("\"scheduled_activation_date\""));
         assertTrue(json.contains("\"revocation_date\""));
         assertTrue(json.contains("2026-07-01"));
     }
@@ -58,29 +66,29 @@ class CardActivationDateSerializationTest {
     @Test
     void shouldRoundTripUpdateCardRequest() {
         final UpdateCardRequest original = UpdateCardRequest.builder()
-                .activationDate("2026-06-01T10:00Z")
+                .scheduledActivationDate("2026-06-01T10:00Z")
                 .revocationDate(LocalDate.of(2026, 7, 1))
                 .build();
 
         final UpdateCardRequest deserialized =
                 serializer.fromJson(serializer.toJson(original), UpdateCardRequest.class);
 
-        assertEquals(original.getActivationDate(), deserialized.getActivationDate());
+        assertEquals(original.getScheduledActivationDate(), deserialized.getScheduledActivationDate());
         assertEquals(original.getRevocationDate(), deserialized.getRevocationDate());
     }
 
     @Test
-    void shouldDeserializeActivationDateOnCardResponse() {
+    void shouldDeserializeScheduledActivationDateOnCardResponse() {
         final String json = "{\"type\":\"virtual\",\"id\":\"crd_test\",\"entity_id\":\"ent_test\","
                 + "\"user_id\":\"usr_test\",\"scheme\":\"mastercard\",\"root_card_id\":\"crd_root\","
                 + "\"parent_card_id\":\"crd_parent\",\"revocation_date\":\"2026-07-01\","
-                + "\"activation_date\":\"2026-06-01T10:00Z\"}";
+                + "\"scheduled_activation_date\":\"2026-06-01T10:00Z\"}";
 
         final VirtualCardDetailsResponse response =
                 serializer.fromJson(json, VirtualCardDetailsResponse.class);
 
         assertNotNull(response);
-        assertEquals("2026-06-01T10:00Z", response.getActivationDate());
+        assertEquals("2026-06-01T10:00Z", response.getScheduledActivationDate());
         assertEquals("ent_test", response.getEntityId());
         assertEquals("usr_test", response.getUserId());
         assertEquals(com.checkout.issuing.cards.IssuingScheme.MASTERCARD, response.getScheme());
@@ -108,5 +116,27 @@ class CardActivationDateSerializationTest {
         assertTrue(json.contains("ctrprf_test"));
         assertTrue(json.contains("\"controls\""));
         assertTrue(json.contains("\"control_type\":\"mcc_limit\""));
+    }
+
+    @Test
+    void shouldNotSerializeTheRemovedActivationDateKey() {
+        final UpdateCardRequest request = UpdateCardRequest.builder()
+                .scheduledActivationDate("2026-06-01T10:00Z")
+                .build();
+
+        final String json = serializer.toJson(request);
+
+        assertTrue(json.contains("\"scheduled_activation_date\""));
+        assertFalse(json.contains("\"activation_date\""));
+    }
+
+    @Test
+    void shouldNotMapTheRemovedActivationDateKeyOnUpdateRequest() {
+        final String json = "{\"activation_date\":\"2026-06-01T10:00Z\"}";
+
+        final UpdateCardRequest request = serializer.fromJson(json, UpdateCardRequest.class);
+
+        assertNotNull(request);
+        assertNull(request.getScheduledActivationDate());
     }
 }
