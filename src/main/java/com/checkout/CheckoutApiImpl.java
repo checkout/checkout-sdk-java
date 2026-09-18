@@ -40,6 +40,8 @@ import com.checkout.identities.amlscreening.AmlScreeningClient;
 import com.checkout.identities.amlscreening.AmlScreeningClientImpl;
 import com.checkout.instruments.InstrumentsClient;
 import com.checkout.instruments.InstrumentsClientImpl;
+import com.checkout.inventory.InventoryClient;
+import com.checkout.inventory.InventoryClientImpl;
 import com.checkout.issuing.IssuingClient;
 import com.checkout.issuing.IssuingClientImpl;
 import com.checkout.metadata.MetadataClient;
@@ -87,6 +89,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     private final AccountsClient accountsClient;
     private final SessionsClient sessionsClient;
     private final ForexClient forexClient;
+    private final InventoryClient inventoryClient;
     private final PaymentLinksClient paymentLinksClient;
     private final PaymentMethodsClient paymentMethodsClient;
     private final HostedPaymentsClient hostedPaymentsClient;
@@ -125,6 +128,7 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
         this.workflowsClient = new WorkflowsClientImpl(this.apiClient, configuration);
         this.sessionsClient = new SessionsClientImpl(this.apiClient, configuration);
         this.forexClient = new ForexClientImpl(this.apiClient, configuration);
+        this.inventoryClient = new InventoryClientImpl(this.apiClient, configuration);
         this.paymentLinksClient = new PaymentLinksClientImpl(this.apiClient, configuration);
         this.paymentMethodsClient = new PaymentMethodsClientImpl(this.apiClient, configuration);
         this.hostedPaymentsClient = new HostedPaymentsClientImpl(this.apiClient, configuration);
@@ -205,6 +209,11 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     @Override
     public ForexClient forexClient() {
         return forexClient;
+    }
+
+    @Override
+    public InventoryClient inventoryClient() {
+        return inventoryClient;
     }
 
     @Override

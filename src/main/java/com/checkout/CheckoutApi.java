@@ -20,6 +20,7 @@ import com.checkout.identities.iddocumentverification.IdDocumentVerificationClie
 import com.checkout.identities.addressdocumentverification.AddressDocumentVerificationClient;
 import com.checkout.identities.amlscreening.AmlScreeningClient;
 import com.checkout.instruments.InstrumentsClient;
+import com.checkout.inventory.InventoryClient;
 import com.checkout.issuing.IssuingClient;
 import com.checkout.metadata.MetadataClient;
 import com.checkout.networktokens.NetworkTokensClient;
@@ -58,6 +59,8 @@ public interface CheckoutApi extends CheckoutApmApi {
     SessionsClient sessionsClient();
 
     ForexClient forexClient();
+
+    InventoryClient inventoryClient();
 
     PaymentLinksClient paymentLinksClient();
 
