@@ -80,7 +80,7 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
      * Create an address document verification attempt
      *
      * @param addressDocumentVerificationId the address document verification ID
-     * @param attemptRequest the attempt request
+     * @param addressDocumentVerificationAttemptRequest the attempt request
      * @return a {@link CompletableFuture} containing the {@link AddressDocumentVerificationAttemptResponse}
      */
     @Override
@@ -214,7 +214,7 @@ public class AddressDocumentVerificationClientImpl extends AbstractClient implem
      * Create an address document verification attempt
      *
      * @param addressDocumentVerificationId the address document verification ID
-     * @param attemptRequest the attempt request
+     * @param addressDocumentVerificationAttemptRequest the attempt request
      * @return the {@link AddressDocumentVerificationAttemptResponse}
      */
     @Override
