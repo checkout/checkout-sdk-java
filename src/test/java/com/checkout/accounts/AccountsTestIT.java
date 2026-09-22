@@ -708,9 +708,14 @@ class AccountsTestIT extends SandboxTestFixture {
 
     // Builds an onboarding request that conforms to the Accounts API v3.0 schema: the representative
     // carries nested `individual` details + `roles`, the company has `businessType` +
-    // `dateOfIncorporation`, and `processingDetails` is populated. The holding-currency scope is
-    // configured on the platform (USD here) while `processingDetails.currency` reflects the
-    // sub-entity region (GBP) — the two are independent.
+    // `dateOfIncorporation`, and `processingDetails` is populated.
+    //
+    // Every currency here has to sit inside the platform's currency scope, which is USD only. This
+    // previously set `processingDetails.currency` to GBP on the theory that the profile reflects the
+    // platform while processing details reflect the sub-entity region, and that the two are
+    // independent. The API rejects that with `processing_details_currency_invalid_for_currency_scope`.
+    // Widening the profile to GBP instead is also rejected, because the scope itself does not permit
+    // GBP. The GB addresses and `settlementCountry` are unaffected and still accepted.
     private static OnboardEntityRequest buildCompanyEntityV3(final String randomReference) {
         final Address address = Address.builder()
                 .addressLine1("90 Tottenham Court Road")
@@ -774,7 +779,7 @@ class AccountsTestIT extends SandboxTestFixture {
                         .averageTransactionValue(5000)
                         .averageOrderFulfillmentTime(3)
                         .highestTransactionValue(25000)
-                        .currency(Currency.GBP)
+                        .currency(Currency.USD)
                         .settlementCountry(CountryCode.GB.name())
                         .targetCountries(Collections.singletonList(CountryCode.GB.name()))
                         .payments(ProcessingDetailsPayments.builder()

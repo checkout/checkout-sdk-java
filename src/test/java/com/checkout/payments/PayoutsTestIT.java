@@ -50,7 +50,11 @@ class PayoutsTestIT extends SandboxTestFixture {
                 .source(createPayoutSource())
                 .destination(createCardDestination())
                 .amount(10L)
-                .currency(Currency.EUR)
+                // The sandbox currency account this draws from (ca_qcc7x4...) settles GBP only.
+                // Asking for EUR is rejected with a 422 carrying an empty error_codes array, so the
+                // cause is not visible in the response. GBP also matches the GB sender and billing
+                // addresses below.
+                .currency(Currency.GBP)
                 .sender(createPayoutSender())
                 .reference("Pay-out to Card - Money Transfer")
                 .billingDescriptor(createPayoutBillingDescriptor())
