@@ -1,8 +1,15 @@
 package com.checkout.identities.identityverification;
 
+import com.checkout.identities.entities.IdentityVerificationClientInformation;
+
+import com.checkout.identities.entities.IdentityDeclaredData;
+
+import com.checkout.common.CountryCode;
+
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.identities.entities.AttemptAssetsQueryFilter;
+import com.checkout.identities.entities.AttemptsQueryFilter;
 import com.checkout.identities.entities.ClientInformation;
 import com.checkout.identities.entities.DeclaredData;
 import com.checkout.identities.identityverification.requests.CreateAndOpenIdentityVerificationRequest;
@@ -306,6 +313,26 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
                 .build();
     }
 
+    @Test
+    @Disabled("Integration test - requires valid identity verification ID")
+    void shouldGetIdentityVerificationAttemptsPaginatedSync() {
+        // Arrange
+        final IdentityVerificationResponse created = checkoutApi.identityVerificationClient()
+                .createIdentityVerificationSync(createIdentityVerificationRequest());
+        checkoutApi.identityVerificationClient()
+                .createIdentityVerificationAttemptSync(created.getId(), createIdentityVerificationAttemptRequest());
+        final AttemptsQueryFilter queryFilter = AttemptsQueryFilter.builder().skip(0).limit(5).build();
+
+        // Act
+        final IdentityVerificationAttemptsResponse attempts = checkoutApi.identityVerificationClient()
+                .getIdentityVerificationAttemptsSync(created.getId(), queryFilter);
+
+        // Assert
+        assertNotNull(attempts);
+        assertNotNull(attempts.getData());
+        assertEquals(5, attempts.getLimit());
+    }
+
     private IdentityVerificationRequest createIdentityVerificationRequest() {
         return IdentityVerificationRequest.builder()
                 .applicantId("app_test_" + UUID.randomUUID().toString().substring(0, 8))
@@ -320,15 +347,16 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
                 .build();
     }
 
-    private DeclaredData createDeclaredData() {
-        return DeclaredData.builder()
+    private IdentityDeclaredData createDeclaredData() {
+        return IdentityDeclaredData.builder()
                 .name("John Doe")
+                .birthDate("1994-10-15")
                 .build();
     }
 
-    private ClientInformation createClientInformation() {
-        return ClientInformation.builder()
-                .preSelectedResidenceCountry("GB")
+    private IdentityVerificationClientInformation createClientInformation() {
+        return IdentityVerificationClientInformation.builder()
+                .preSelectedResidenceCountry(CountryCode.GB)
                 .preSelectedLanguage("en")
                 .build();
     }
@@ -387,7 +415,7 @@ class IdentityVerificationTestIT extends SandboxTestFixture {
 
     private void validateGeneratedIdentityVerificationReport(final IdentityVerificationReportResponse report) {
         assertNotNull(report);
-        assertNotNull(report.getSignedUrl());
+        assertNotNull(report.getPdfReport());
         // Add specific validation for report data
     }
 }

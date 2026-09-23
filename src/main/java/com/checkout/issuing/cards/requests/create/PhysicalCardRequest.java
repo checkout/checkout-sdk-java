@@ -16,6 +16,10 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class PhysicalCardRequest extends CardRequest {
 
+    /**
+     * The shipping instructions for the physical card.
+     * [Required]
+     */
     private ShippingInstruction shippingInstructions;
 
     @Builder
@@ -28,12 +32,12 @@ public final class PhysicalCardRequest extends CardRequest {
                                 final ShippingInstruction shippingInstructions,
                                 final IssuingCardMetadata metadata,
                                 final LocalDate revocationDate,
-                                final String activationDate) {
+                                final String scheduledActivationDate) {
         super(CardType.PHYSICAL, cardholderId, lifetime, reference, cardProductId, displayName, activateCard);
         this.shippingInstructions = shippingInstructions;
         setMetadata(metadata);
         setRevocationDate(revocationDate);
-        setActivationDate(activationDate);
+        setScheduledActivationDate(scheduledActivationDate);
     }
 
 }

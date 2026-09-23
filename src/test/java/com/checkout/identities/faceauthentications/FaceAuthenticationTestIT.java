@@ -1,8 +1,11 @@
 package com.checkout.identities.faceauthentications;
 
+import com.checkout.common.CountryCode;
+
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
 import com.checkout.identities.entities.AttemptAssetsQueryFilter;
+import com.checkout.identities.entities.AttemptsQueryFilter;
 import com.checkout.identities.entities.ClientInformation;
 import com.checkout.identities.faceauthentications.requests.FaceAuthenticationAttemptRequest;
 import com.checkout.identities.faceauthentications.requests.FaceAuthenticationRequest;
@@ -276,6 +279,26 @@ class FaceAuthenticationTestIT extends SandboxTestFixture {
     }
 
     // Common methods
+    @Test
+    @Disabled("Integration test - requires valid face authentication ID")
+    void shouldGetFaceAuthenticationAttemptsPaginatedSync() {
+        // Arrange
+        final FaceAuthenticationResponse created = checkoutApi.faceAuthenticationClient()
+                .createFaceAuthenticationSync(createFaceAuthenticationRequest());
+        checkoutApi.faceAuthenticationClient()
+                .createFaceAuthenticationAttemptSync(created.getId(), createFaceAuthenticationAttemptRequest());
+        final AttemptsQueryFilter queryFilter = AttemptsQueryFilter.builder().skip(0).limit(5).build();
+
+        // Act
+        final FaceAuthenticationAttemptsResponse attempts = checkoutApi.faceAuthenticationClient()
+                .getFaceAuthenticationAttemptsSync(created.getId(), queryFilter);
+
+        // Assert
+        assertNotNull(attempts);
+        assertNotNull(attempts.getData());
+        assertEquals(5, attempts.getLimit());
+    }
+
     private static FaceAuthenticationRequest createFaceAuthenticationRequest() {
         return FaceAuthenticationRequest.builder()
                 .applicantId("aplt_" + generateRandomString(26)) // Mock applicant ID - should be real in integration tests
@@ -287,7 +310,7 @@ class FaceAuthenticationTestIT extends SandboxTestFixture {
         return FaceAuthenticationAttemptRequest.builder()
                 .redirectUrl("https://example.com/redirect?session=" + generateRandomString(10))
                 .clientInformation(ClientInformation.builder()
-                        .preSelectedResidenceCountry("GB")
+                        .preSelectedResidenceCountry(CountryCode.GB)
                         .preSelectedLanguage("en-US")
                         .build())
                 .build();

@@ -2,6 +2,9 @@ package com.checkout.identities.iddocumentverification;
 
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
+import com.checkout.identities.entities.AttemptAssetsQueryFilter;
+import com.checkout.identities.entities.AttemptsQueryFilter;
+import com.checkout.identities.iddocumentverification.responses.IdDocumentVerificationAttemptAssetsResponse;
 import com.checkout.identities.entities.DeclaredData;
 import com.checkout.identities.iddocumentverification.requests.IdDocumentVerificationAttemptRequest;
 import com.checkout.identities.iddocumentverification.requests.IdDocumentVerificationRequest;
@@ -242,6 +245,46 @@ class IdDocumentVerificationTestIT extends SandboxTestFixture {
 
         // Assert
         validateGeneratedIdDocumentVerificationReport(report);
+    }
+
+    @Test
+    @Disabled("Integration test - requires valid ID document verification and attempt IDs")
+    void shouldGetIdDocumentVerificationAttemptAssetsSync() {
+        // Arrange
+        final IdDocumentVerificationResponse created = checkoutApi.idDocumentVerificationClient()
+                .createIdDocumentVerificationSync(createIdDocumentVerificationRequest());
+        final IdDocumentVerificationAttemptResponse createdAttempt = checkoutApi.idDocumentVerificationClient()
+                .createIdDocumentVerificationAttemptSync(created.getId(), createIdDocumentVerificationAttemptRequest());
+        final AttemptAssetsQueryFilter queryFilter = AttemptAssetsQueryFilter.builder().skip(0).limit(10).build();
+
+        // Act
+        final IdDocumentVerificationAttemptAssetsResponse assets = checkoutApi.idDocumentVerificationClient()
+                .getIdDocumentVerificationAttemptAssetsSync(created.getId(), createdAttempt.getId(), queryFilter);
+
+        // Assert
+        assertNotNull(assets);
+        assertNotNull(assets.getData());
+        assertEquals(10, assets.getLimit());
+    }
+
+    @Test
+    @Disabled("Integration test - requires valid ID document verification ID")
+    void shouldGetIdDocumentVerificationAttemptsPaginatedSync() {
+        // Arrange
+        final IdDocumentVerificationResponse created = checkoutApi.idDocumentVerificationClient()
+                .createIdDocumentVerificationSync(createIdDocumentVerificationRequest());
+        checkoutApi.idDocumentVerificationClient()
+                .createIdDocumentVerificationAttemptSync(created.getId(), createIdDocumentVerificationAttemptRequest());
+        final AttemptsQueryFilter queryFilter = AttemptsQueryFilter.builder().skip(0).limit(5).build();
+
+        // Act
+        final IdDocumentVerificationAttemptsResponse attempts = checkoutApi.idDocumentVerificationClient()
+                .getIdDocumentVerificationAttemptsSync(created.getId(), queryFilter);
+
+        // Assert
+        assertNotNull(attempts);
+        assertNotNull(attempts.getData());
+        assertEquals(5, attempts.getLimit());
     }
 
     // Common methods

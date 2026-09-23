@@ -8,6 +8,8 @@ import com.checkout.identities.faceauthentications.responses.FaceAuthenticationA
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationAttemptsResponse;
 import com.checkout.identities.faceauthentications.responses.FaceAuthenticationResponse;
 
+import com.checkout.identities.entities.AttemptsQueryFilter;
+
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -55,6 +57,15 @@ public interface FaceAuthenticationClient {
      * @return CompletableFuture containing the face authentication attempts response
      */
     CompletableFuture<FaceAuthenticationAttemptsResponse> getFaceAuthenticationAttempts(String faceAuthenticationId);
+
+    /**
+     * Retrieve a page of face authentication attempts
+     *
+     * @param faceAuthenticationId the face authentication ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return a {@link CompletableFuture} containing the {@link FaceAuthenticationAttemptsResponse}
+     */
+    CompletableFuture<FaceAuthenticationAttemptsResponse> getFaceAuthenticationAttempts(String faceAuthenticationId, AttemptsQueryFilter queryFilter);
 
     /**
      * Retrieves a specific attempt for a face authentication.
@@ -117,6 +128,15 @@ public interface FaceAuthenticationClient {
      * @return The face authentication attempts response
      */
     FaceAuthenticationAttemptsResponse getFaceAuthenticationAttemptsSync(String faceAuthenticationId);
+
+    /**
+     * Retrieve a page of face authentication attempts
+     *
+     * @param faceAuthenticationId the face authentication ID
+     * @param queryFilter the pagination query parameters (skip and limit)
+     * @return the {@link FaceAuthenticationAttemptsResponse}
+     */
+    FaceAuthenticationAttemptsResponse getFaceAuthenticationAttemptsSync(String faceAuthenticationId, AttemptsQueryFilter queryFilter);
 
     /**
      * Retrieves a specific attempt for a face authentication.

@@ -19,14 +19,42 @@ import java.time.LocalDate;
 @ToString(callSuper = true)
 public abstract class CardDetailsResponse extends Resource {
 
+    /**
+     * The card type.
+     * [Required]
+     */
     protected final CardType type;
 
+    /**
+     * The card's unique identifier.
+     * [Required]
+     * Pattern: ^crd_[a-z0-9]{26}$
+     * min 30 characters, max 30 characters
+     */
     protected String id;
 
+    /**
+     * The cardholder's unique identifier.
+     * [Required]
+     * Pattern: ^crh_[a-z0-9]{26}$
+     * min 30 characters, max 30 characters
+     */
     protected String cardholderId;
 
+    /**
+     * The card product's unique identifier.
+     * [Required]
+     * Pattern: ^pro_[a-z0-9]{26}$
+     * min 30 characters, max 30 characters
+     */
     protected String cardProductId;
 
+    /**
+     * The client's unique identifier.
+     * [Required]
+     * Pattern: ^cli_[a-z0-9]{26}$
+     * min 30 characters, max 30 characters
+     */
     protected String clientId;
 
     /**
@@ -45,20 +73,59 @@ public abstract class CardDetailsResponse extends Resource {
      */
     protected String userId;
 
+    /**
+     * The last four digits of the card number, also known as the PAN.
+     * [Required]
+     * Pattern: ^[0-9]{4}$
+     */
     protected String lastFour;
 
+    /**
+     * The card's expiration month.
+     * [Required]
+     * min 1, max 12
+     */
     protected Integer expiryMonth;
 
+    /**
+     * The card's expiration year.
+     * [Required]
+     * min 4 characters, max 4 characters
+     */
     protected Integer expiryYear;
 
+    /**
+     * The card's status, which determines whether it can approve incoming transactions.
+     * [Required]
+     */
     protected CardStatus status;
 
+    /**
+     * The name to display on the card.
+     * [Optional]
+     * Pattern: ^[0-9a-zA-Z.\- ]{2,26}$
+     * min 2 characters, max 26 characters
+     */
     protected String displayName;
 
+    /**
+     * The issuing currency, as a three-letter ISO 4217 currency code.
+     * [Required]
+     */
     protected Currency billingCurrency;
 
+    /**
+     * The issuing country, as a two-letter ISO 3166-1 alpha-2 country code.
+     * [Required]
+     * min 2 characters, max 2 characters
+     */
     protected CountryCode issuingCountry;
 
+    /**
+     * Your reference.
+     * [Optional]
+     * max 256 characters
+     */
     protected String reference;
 
     /**
@@ -67,25 +134,38 @@ public abstract class CardDetailsResponse extends Resource {
      */
     protected IssuingCardMetadata metadata;
 
+    /**
+     * The date and time when the card was created, in UTC.
+     * [Optional]
+     */
     protected Instant createdDate;
 
+    /**
+     * The date and time when the card was last modified, in UTC.
+     * [Optional]
+     */
     protected Instant lastModifiedDate;
 
     /**
-     * ISO 8601 date scheduling the card's activation.
+     * Date scheduling the card's first activation. Only applies to the initial activation of a
+     * card. Two formats are supported: date only (YYYY-MM-DD, treated as midnight UTC), or date
+     * with round hour (YYYY-MM-DDTHH:mmZ in UTC, or YYYY-MM-DDTHH:mm+HH:mm with offset). Only
+     * round hours are allowed when a time is provided (HH:00). The value must be at least the next
+     * round hour after the request time.
      * <p>
      * [Optional]
      * </p>
+     * Example: 2026-06-01T10:00Z
      */
-    protected String activationDate;
+    protected String scheduledActivationDate;
 
     /**
-     * Date for the card to be automatically revoked. Must be after the current date and date only in the
-     * form yyyy-mm-dd.
+     * Date scheduling the card's automatic revocation.
      * <p>
      * [Optional]
      * </p>
-     * Format: yyyy-MM-dd
+     * Format: date (YYYY-MM-DD, time is midnight UTC)
+     * Example: 2027-03-12
      */
     protected LocalDate revocationDate;
 

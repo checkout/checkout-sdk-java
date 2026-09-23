@@ -11,5 +11,10 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public final class AddressDocumentVerificationReportResponse extends Resource {
 
-    private String signedUrl;
+    /**
+     * The pre-signed URL to the PDF report.
+     * [Required]
+     * Format: uri
+     */
+    private String pdfReport;
 }

@@ -18,6 +18,11 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public final class VirtualCardRequest extends CardRequest {
 
+    /**
+     * Sets whether the virtual card should expire after a single use.
+     * [Optional]
+     * Default: false
+     */
     private Boolean isSingleUse;
 
     /**
@@ -48,7 +53,7 @@ public final class VirtualCardRequest extends CardRequest {
                                final Boolean isSingleUse,
                                final IssuingCardMetadata metadata,
                                final LocalDate revocationDate,
-                               final String activationDate,
+                               final String scheduledActivationDate,
                                final List<ReturnCredentialsType> returnCredentials,
                                final List<String> controlProfiles,
                                final List<CardControlRequest> controls) {
@@ -59,6 +64,6 @@ public final class VirtualCardRequest extends CardRequest {
         this.controls = controls;
         setMetadata(metadata);
         setRevocationDate(revocationDate);
-        setActivationDate(activationDate);
+        setScheduledActivationDate(scheduledActivationDate);
     }
 }

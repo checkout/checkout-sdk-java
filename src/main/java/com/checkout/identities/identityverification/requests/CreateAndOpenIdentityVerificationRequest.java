@@ -1,6 +1,6 @@
 package com.checkout.identities.identityverification.requests;
 
-import com.checkout.identities.entities.DeclaredData;
+import com.checkout.identities.entities.IdentityDeclaredData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +19,7 @@ public final class CreateAndOpenIdentityVerificationRequest {
      * The personal details provided by the applicant.
      * [Required]
      */
-    private DeclaredData declaredData;
+    private IdentityDeclaredData declaredData;
 
     /**
      * The URL to redirect the applicant to after the attempt.

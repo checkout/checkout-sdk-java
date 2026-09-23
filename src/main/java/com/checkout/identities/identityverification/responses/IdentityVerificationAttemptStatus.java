@@ -29,5 +29,8 @@ public enum IdentityVerificationAttemptStatus {
     PENDING_REDIRECTION,
 
     @SerializedName("capture_refused")
-    CAPTURE_REFUSED
+    CAPTURE_REFUSED,
+
+    @SerializedName("terminated")
+    TERMINATED
 }

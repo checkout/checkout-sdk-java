@@ -324,7 +324,7 @@ class IssuingCardsTestIT extends BaseIssuingTestIT {
                 .reference("Updated-Reference-987")
                 .expiryMonth(12)
                 .expiryYear(2025)
-                .activationDate("2026-06-01T10:00Z")
+                .scheduledActivationDate("2026-06-01T10:00Z")
                 .revocationDate(java.time.LocalDate.of(2026, 7, 1))
                 .build();
     }
