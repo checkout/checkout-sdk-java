@@ -164,10 +164,30 @@ public abstract class CardDetailsResponse extends Resource {
      * <p>
      * [Optional]
      * </p>
-     * Format: date (YYYY-MM-DD, time is midnight UTC)
-     * Example: 2027-03-12
+     * Format: yyyy-MM-dd
+     *
+     * @deprecated Use {@link #scheduledRevocationDate} instead.
      */
+    @Deprecated
     protected LocalDate revocationDate;
+
+    /**
+     * The card will be revoked at midnight UTC on the date specified.
+     * <p>
+     * [Optional]
+     * </p>
+     * Format: yyyy-MM-dd
+     */
+    protected LocalDate scheduledRevocationDate;
+
+    /**
+     * The date and time the card was last activated.
+     * <p>
+     * [Optional, nullable, read only]
+     * </p>
+     * Returns {@code null} if the card has never been activated.
+     */
+    protected Instant lastActivatedOn;
 
     /**
      * When a card is renewed, the unique identifier of the first card in the renewal history.

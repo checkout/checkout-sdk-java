@@ -32,11 +32,13 @@ public final class PhysicalCardRequest extends CardRequest {
                                 final ShippingInstruction shippingInstructions,
                                 final IssuingCardMetadata metadata,
                                 final LocalDate revocationDate,
+                                final LocalDate scheduledRevocationDate,
                                 final String scheduledActivationDate) {
         super(CardType.PHYSICAL, cardholderId, lifetime, reference, cardProductId, displayName, activateCard);
         this.shippingInstructions = shippingInstructions;
         setMetadata(metadata);
         setRevocationDate(revocationDate);
+        setScheduledRevocationDate(scheduledRevocationDate);
         setScheduledActivationDate(scheduledActivationDate);
     }
 
