@@ -49,7 +49,9 @@ class PaymentContextsAirlineSerializationTest {
 
         assertTrue(json.contains("\"ticket\":{"), json);
         assertFalse(json.contains("\"ticket\":["), json);
-        assertTrue(json.contains("\"passenger\":[{"), json);
+        // POST /payment-contexts rejects the array form with passenger_required, so one
+        // passenger serializes as an object.
+        assertTrue(json.contains("\"passenger\":{"), json);
         assertTrue(json.contains("\"class_of_travelling\":\"J\""), json);
         assertTrue(json.contains("\"stop_over_code\":\"x\""), json);
         assertTrue(json.contains("\"flight_number\":\"101\""), json);

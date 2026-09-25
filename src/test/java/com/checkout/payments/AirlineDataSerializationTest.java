@@ -153,12 +153,14 @@ class AirlineDataSerializationTest {
     }
 
     /**
-     * Only a deserializer is registered for the single-or-array shape, never a serializer, so
-     * writing always goes through Gson's reflective adapter and emits an array. If a serializer
-     * were ever added, every request carrying airline data would change shape and this fails.
+     * Pins the outbound cardinality against the live API: an object is accepted on every request
+     * surface, an array only on POST /payments. Hosted payments, payment links and payment
+     * contexts all reject the array form, and ProcessingSettings is shared with hosted payments
+     * and payment links, so "always an array" would break them. See
+     * GsonSerializer.singleOrArrayPassengerFactory for the sandbox-verified matrix.
      */
     @Test
-    void shouldAlwaysSerializePassengerAsAnArray() {
+    void shouldSerializeASinglePassengerAsAnObject() {
         final AirlineData airline = AirlineData.builder()
                 .passenger(Collections.singletonList(
                         Passenger.builder().firstName("John").lastName("White").build()))
@@ -166,8 +168,35 @@ class AirlineDataSerializationTest {
 
         final String json = serializer.toJson(airline);
 
-        assertTrue(json.contains("\"passenger\":[{"), json);
-        assertFalse(json.contains("\"passenger\":{"), json);
+        assertTrue(json.contains("\"passenger\":{"), json);
+        assertFalse(json.contains("\"passenger\":["), json);
+    }
+
+    @Test
+    void shouldSerializeSeveralPassengersAsAnArray() {
+        final AirlineData airline = AirlineData.builder()
+                .passenger(Arrays.asList(
+                        Passenger.builder().firstName("John").build(),
+                        Passenger.builder().firstName("Jane").build()))
+                .build();
+
+        assertTrue(serializer.toJson(airline).contains("\"passenger\":[{"));
+    }
+
+    /**
+     * An empty array and an explicit null are both rejected with
+     * processing_airline_data_0_passenger_invalid, so the member has to be absent.
+     */
+    @Test
+    void shouldOmitPassengerWhenThereAreNone() {
+        assertFalse(serializer.toJson(AirlineData.builder()
+                .ticket(Ticket.builder().number("045").build())
+                .passenger(Collections.<Passenger>emptyList())
+                .build()).contains("passenger"));
+
+        assertFalse(serializer.toJson(AirlineData.builder()
+                .ticket(Ticket.builder().number("045").build())
+                .build()).contains("passenger"));
     }
 
     @Test

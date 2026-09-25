@@ -40,6 +40,11 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.annotations.SerializedName;
+import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import lombok.Getter;
@@ -108,13 +113,15 @@ public final class GsonSerializer implements Serializer {
             .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (LocalDate date, Type typeOfSrc, JsonSerializationContext context) ->
                     new JsonPrimitive(date.format(DateTimeFormatter.ISO_LOCAL_DATE)))
             .registerTypeAdapter(LocalDate.class, getLocalDateJsonDeserializer())
-            // processing.airline_data[].passenger is oneOf[array, object]: PayPal returns a
-            // single object where the array shape is declared. Read both, always write an array.
+            // processing.airline_data[].passenger arrives as an array or as a single object.
+            // These two read both shapes into a List.
             //
             // Bound by element type, so the second registration also covers PaymentSetupAirline
-            // .passengers, which the spec declares array-only. Accepting a bare object there is
-            // wider than the spec grants but cannot lose data, and TypeToken cannot distinguish
-            // the two call sites. Deliberate; revisit only if a wrapper type is introduced.
+            // .passengers, which the spec declares array-only. Accepting a bare object there on
+            // READ is wider than the spec grants but cannot lose data. Writing is handled by
+            // singleOrArrayPassengerFactory below, which is scoped to the two airline types so
+            // that setups .passengers keeps emitting an array (the API rejects an object there
+            // with industry.airline[0].passengers_property_invalid).
             .registerTypeAdapter(
                     new TypeToken<List<com.checkout.payments.Passenger>>() {
                     }.getType(),
@@ -123,6 +130,7 @@ public final class GsonSerializer implements Serializer {
                     new TypeToken<List<com.checkout.payments.contexts.PaymentContextsPassenger>>() {
                     }.getType(),
                     singleOrArrayDeserializer(com.checkout.payments.contexts.PaymentContextsPassenger.class))
+            .registerTypeAdapterFactory(singleOrArrayPassengerFactory())
             // Payments - AbstractSource (polymorphic deserialization)
             .registerTypeAdapterFactory(
                 RuntimeTypeAdapterFactory.of(
@@ -489,6 +497,79 @@ public final class GsonSerializer implements Serializer {
      * @param <T>         the list element type
      * @return a deserializer that accepts a single object or an array
      */
+    /**
+     * Writes {@code processing.airline_data[].passenger} as a single object when there is exactly
+     * one passenger and as an array only when there are several.
+     *
+     * <p>The live API does not match the specification in either direction. Verified against the
+     * sandbox on 2026-09-25 with a complete {@code airline_data} block:
+     *
+     * <pre>
+     * surface                  passenger: object   passenger: array
+     * POST /payments           201                 201
+     * POST /hosted-payments    accepted            422 processing_airline_data_0_passenger_invalid
+     * POST /payment-links      accepted            422 processing_airline_data_0_passenger_invalid
+     * POST /payment-contexts   201                 422 passenger_required
+     * </pre>
+     *
+     * <p>A single object is accepted on every request surface; an array only on
+     * {@code POST /payments}. {@link com.checkout.payments.ProcessingSettings} is shared by
+     * {@code POST /payments}, hosted payments and payment links, so always emitting an array
+     * would break the latter two.
+     *
+     * <p>An empty array and an explicit null are both rejected with
+     * {@code processing_airline_data_0_passenger_invalid}, so an empty list drops the member
+     * entirely.
+     *
+     * <p>Scoped to the two airline types by raw class, so {@code PaymentSetupAirline.passengers}
+     * is untouched: the API rejects an object there with
+     * {@code industry.airline[0].passengers_property_invalid}.
+     *
+     * @return a factory that fixes up the passenger cardinality on write
+     */
+    private static TypeAdapterFactory singleOrArrayPassengerFactory() {
+        return new TypeAdapterFactory() {
+            @Override
+            public <T> TypeAdapter<T> create(final Gson gson, final TypeToken<T> type) {
+                final Class<?> raw = type.getRawType();
+                if (!com.checkout.payments.AirlineData.class.equals(raw)
+                        && !com.checkout.payments.contexts.PaymentContextsAirlineData.class.equals(raw)) {
+                    return null;
+                }
+
+                // getDelegateAdapter returns the adapter Gson would otherwise use, so the
+                // reflective serializer still writes every other field and this cannot recurse.
+                final TypeAdapter<T> delegate = gson.getDelegateAdapter(this, type);
+                final TypeAdapter<JsonElement> elements = gson.getAdapter(JsonElement.class);
+
+                return new TypeAdapter<T>() {
+                    @Override
+                    public void write(final JsonWriter out, final T value) throws IOException {
+                        final JsonElement tree = delegate.toJsonTree(value);
+                        if (tree.isJsonObject()) {
+                            final JsonObject object = tree.getAsJsonObject();
+                            final JsonElement passenger = object.get("passenger");
+                            if (passenger != null && passenger.isJsonArray()) {
+                                final JsonArray array = passenger.getAsJsonArray();
+                                if (array.size() == 0) {
+                                    object.remove("passenger");
+                                } else if (array.size() == 1) {
+                                    object.add("passenger", array.get(0));
+                                }
+                            }
+                        }
+                        elements.write(out, tree);
+                    }
+
+                    @Override
+                    public T read(final JsonReader in) throws IOException {
+                        return delegate.read(in);
+                    }
+                };
+            }
+        };
+    }
+
     private static <T> JsonDeserializer<List<T>> singleOrArrayDeserializer(final Class<T> elementType) {
         return (json, typeOfT, context) -> {
             if (json == null || json.isJsonNull()) {

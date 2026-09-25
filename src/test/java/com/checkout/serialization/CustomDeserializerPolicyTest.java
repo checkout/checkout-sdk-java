@@ -157,19 +157,59 @@ class CustomDeserializerPolicyTest {
     }
 
     /**
-     * Only a deserializer is registered, so writing goes through the reflective adapter and
-     * always emits an array. Registering a serializer would silently change every outbound
-     * request that carries airline data.
+     * singleOrArrayPassengerFactory wraps the reflective adapter on the write side and applies
+     * the cardinality the live API requires: an object for one passenger, an array for several.
+     * It is scoped to the two airline types, so PaymentSetupAirline.passengers is untouched.
      */
     @Test
-    void singleOrArrayDeserializer_isReadOnlySoWritesStayAnArray() {
-        final String json = serializer.toJson(AirlineData.builder()
+    void singleOrArrayPassengerFactory_writesOneAsObjectAndSeveralAsArray() {
+        final String one = serializer.toJson(AirlineData.builder()
                 .passenger(Collections.singletonList(
                         Passenger.builder().firstName("John").build()))
                 .build());
 
-        assertTrue(json.contains("\"passenger\":[{"), json);
-        assertTrue(!json.contains("\"passenger\":{"), json);
+        assertTrue(one.contains("\"passenger\":{"), one);
+        assertTrue(!one.contains("\"passenger\":["), one);
+
+        final String many = serializer.toJson(AirlineData.builder()
+                .passenger(java.util.Arrays.asList(
+                        Passenger.builder().firstName("John").build(),
+                        Passenger.builder().firstName("Jane").build()))
+                .build());
+
+        assertTrue(many.contains("\"passenger\":[{"), many);
+    }
+
+    /**
+     * The factory must not reach PaymentSetupAirline.passengers: the API rejects an object there
+     * with industry.airline[0].passengers_property_invalid.
+     */
+    @Test
+    void singleOrArrayPassengerFactory_leavesPaymentSetupPassengersAsAnArray() {
+        final String json = serializer.toJson(
+                com.checkout.handlepaymentsandpayouts.setups.entities.industry.AirlineData.builder()
+                        .passengers(Collections.singletonList(
+                                com.checkout.payments.contexts.PaymentContextsPassenger.builder()
+                                        .firstName("John").build()))
+                        .build());
+
+        assertTrue(json.contains("\"passengers\":[{"), json);
+    }
+
+    @Test
+    void singleOrArrayPassengerFactory_roundTripsASinglePassenger() {
+        final AirlineData original = AirlineData.builder()
+                .passenger(Collections.singletonList(Passenger.builder()
+                        .firstName("John")
+                        .dateOfBirth(LocalDate.of(1990, 5, 26))
+                        .build()))
+                .build();
+
+        final AirlineData result = serializer.fromJson(serializer.toJson(original), AirlineData.class);
+
+        assertEquals(1, result.getPassenger().size());
+        assertEquals("John", result.getPassenger().get(0).getFirstName());
+        assertEquals(LocalDate.of(1990, 5, 26), result.getPassenger().get(0).getDateOfBirth());
     }
 
     @Test
