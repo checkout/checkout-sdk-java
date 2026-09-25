@@ -12,6 +12,14 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Settings that control how the payment is processed.
+ * <p>
+ * Shared across several request shapes. {@code POST /payments} resolves to
+ * {@code PaymentRequestProcessing}, while hosted payments, payment links and payment sessions
+ * resolve to the wider {@code PaymentInterfacesProcessing}. A field is therefore not necessarily
+ * read by every endpoint that accepts this object; the fields below name the exceptions.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -262,9 +270,27 @@ public final class ProcessingSettings {
     private Aggregator aggregator;
 
     /**
+     * A key-and-value pair with merchant-specific data for the transaction.
+     * [Optional]
+     * <p>
+     * Declared on {@code PaymentInterfacesProcessing}, so it is read by hosted payments, payment
+     * links and payment sessions, and not by {@code POST /payments}. The specification types it
+     * as a single object while describing it as "an array of key-and-value pairs"; the declared
+     * type is followed here. Payment contexts model the array form as
+     * {@code List<PaymentContextsPartnerCustomerRiskData>}.
+     */
+    private PartnerCustomerRiskData partnerCustomerRiskData;
+
+    /**
      * The origination country for hub model payments.
      * [Optional]
+     *
+     * @deprecated Not in the current specification. Serializes as
+     * {@code hub_model_origination_country}, which appears in neither the current (NAS) nor the
+     * Previous (ABC) spec, so the gateway discards it. Retained for backwards compatibility and
+     * will be removed in a future version.
      */
+    @Deprecated
     private CountryCode hubModelOriginationCountry;
 
     /**

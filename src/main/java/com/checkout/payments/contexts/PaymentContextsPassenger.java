@@ -1,6 +1,6 @@
 package com.checkout.payments.contexts;
 
-import com.checkout.common.Address;
+import com.checkout.payments.PassengerAddress;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * Contains information about a passenger on the flight.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -34,8 +37,8 @@ public final class PaymentContextsPassenger {
     private LocalDate dateOfBirth;
 
     /**
-     * The passenger's address.
+     * Contains information about the passenger's address.
      * [Optional]
      */
-    private Address address;
+    private PassengerAddress address;
 }

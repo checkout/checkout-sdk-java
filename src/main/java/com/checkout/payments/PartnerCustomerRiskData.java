@@ -6,24 +6,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Contains information about a room booked by the customer.
+ * A key-and-value pair with merchant-specific data for the transaction.
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class AccommodationRoom {
+public final class PartnerCustomerRiskData {
 
     /**
-     * The room rate amount.
+     * The key for the pair.
      * [Optional]
      */
-    private String rate;
+    private String key;
 
     /**
-     * The number of nights at the specified room rate.
+     * The value for the pair.
      * [Optional]
      */
-    private String numberOfNightsAtRoomRate;
-
+    private String value;
 }
