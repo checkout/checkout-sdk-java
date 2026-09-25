@@ -49,10 +49,22 @@ public abstract class CardRequest {
      * <p>
      * [Optional]
      * </p>
-     * Format: date (YYYY-MM-DD, time is midnight UTC)
-     * Example: 2027-03-12
+     * Format: yyyy-MM-dd
+     *
+     * @deprecated Use {@link #scheduledRevocationDate} instead. If both fields are provided,
+     * {@code scheduledRevocationDate} overrides this value.
      */
+    @Deprecated
     private LocalDate revocationDate;
+
+    /**
+     * The card will be revoked at midnight UTC on the date specified.
+     * <p>
+     * [Optional]
+     * </p>
+     * Format: yyyy-MM-dd
+     */
+    private LocalDate scheduledRevocationDate;
 
     /**
      * Date scheduling the card's first activation. Only applies to the initial activation of a

@@ -25,6 +25,7 @@ import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
 import com.checkout.issuing.cards.requests.update.UpdateCardRequest;
 import com.checkout.issuing.cards.responses.CardDetailsResponse;
 import com.checkout.issuing.cards.responses.CardResponse;
+import com.checkout.issuing.cards.responses.activate.ActivateCardResponse;
 import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
@@ -306,19 +307,19 @@ public class IssuingClientImplTest {
 
         @Test
         void shouldActivateCard() throws ExecutionException, InterruptedException {
-            final VoidResponse response = createVoidResponse();
+            final ActivateCardResponse response = createActivateCardResponse();
 
             when(apiClient.postAsync(
                     "issuing/cards/card_id/activate",
                     authorization,
-                    VoidResponse.class,
+                    ActivateCardResponse.class,
                     null,
                     null
             )).thenReturn(CompletableFuture.completedFuture(response));
 
-            final CompletableFuture<VoidResponse> future = client.activateCard("card_id");
+            final CompletableFuture<ActivateCardResponse> future = client.activateCard("card_id");
 
-            validateVoidResponse(response, future.get());
+            validateActivateCardResponse(response, future.get());
         }
 
         @Test
@@ -1135,19 +1136,19 @@ public class IssuingClientImplTest {
 
         @Test
         void shouldActivateCardSync() {
-            final VoidResponse expectedResponse = createVoidResponse();
+            final ActivateCardResponse expectedResponse = createActivateCardResponse();
 
             when(apiClient.post(
                     "issuing/cards/card_id/activate",
                     authorization,
-                    VoidResponse.class,
+                    ActivateCardResponse.class,
                     null,
                     null
             )).thenReturn(expectedResponse);
 
-            final VoidResponse actualResponse = client.activateCardSync("card_id");
+            final ActivateCardResponse actualResponse = client.activateCardSync("card_id");
 
-            validateVoidResponse(expectedResponse, actualResponse);
+            validateActivateCardResponse(expectedResponse, actualResponse);
         }
 
         @Test
@@ -1910,6 +1911,10 @@ public class IssuingClientImplTest {
         return mock(VoidResponse.class);
     }
 
+    private ActivateCardResponse createActivateCardResponse() {
+        return mock(ActivateCardResponse.class);
+    }
+
     private CardCredentialsQuery createCardCredentialsQuery() {
         return mock(CardCredentialsQuery.class);
     }
@@ -2073,6 +2078,11 @@ public class IssuingClientImplTest {
     }
 
     private void validateVoidResponse(VoidResponse expected, VoidResponse actual) {
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+    }
+
+    private void validateActivateCardResponse(ActivateCardResponse expected, ActivateCardResponse actual) {
         assertNotNull(actual);
         assertEquals(expected, actual);
     }

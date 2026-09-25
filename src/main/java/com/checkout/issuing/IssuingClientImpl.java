@@ -25,6 +25,7 @@ import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
 import com.checkout.issuing.cards.requests.update.UpdateCardRequest;
 import com.checkout.issuing.cards.responses.CardDetailsResponse;
 import com.checkout.issuing.cards.responses.CardResponse;
+import com.checkout.issuing.cards.responses.activate.ActivateCardResponse;
 import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse;
@@ -254,12 +255,12 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
-    public CompletableFuture<VoidResponse> activateCard(final String cardId) {
+    public CompletableFuture<ActivateCardResponse> activateCard(final String cardId) {
         validateParams("cardId", cardId);
         return apiClient.postAsync(
                 buildPath(ISSUING_PATH, CARDS_PATH, cardId, ACTIVATE_PATH),
                 sdkAuthorization(),
-                VoidResponse.class,
+                ActivateCardResponse.class,
                 null,
                 null
         );
@@ -845,12 +846,12 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
-    public VoidResponse activateCardSync(final String cardId) {
+    public ActivateCardResponse activateCardSync(final String cardId) {
         validateCardId(cardId);
         return apiClient.post(
                 buildPath(ISSUING_PATH, CARDS_PATH, cardId, ACTIVATE_PATH),
                 sdkAuthorization(),
-                VoidResponse.class,
+                ActivateCardResponse.class,
                 null,
                 null
         );
