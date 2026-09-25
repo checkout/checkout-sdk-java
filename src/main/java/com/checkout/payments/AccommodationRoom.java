@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Contains information about a room booked by the customer.
+ */
 @Data
 @Builder
 @NoArgsConstructor

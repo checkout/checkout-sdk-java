@@ -108,6 +108,16 @@ public final class GsonSerializer implements Serializer {
             .registerTypeAdapter(LocalDate.class, (JsonSerializer<LocalDate>) (LocalDate date, Type typeOfSrc, JsonSerializationContext context) ->
                     new JsonPrimitive(date.format(DateTimeFormatter.ISO_LOCAL_DATE)))
             .registerTypeAdapter(LocalDate.class, getLocalDateJsonDeserializer())
+            // processing.airline_data[].passenger is oneOf[array, object]: PayPal returns a
+            // single object where the array shape is declared. Read both, always write an array.
+            .registerTypeAdapter(
+                    new TypeToken<List<com.checkout.payments.Passenger>>() {
+                    }.getType(),
+                    singleOrArrayDeserializer(com.checkout.payments.Passenger.class))
+            .registerTypeAdapter(
+                    new TypeToken<List<com.checkout.payments.contexts.PaymentContextsPassenger>>() {
+                    }.getType(),
+                    singleOrArrayDeserializer(com.checkout.payments.contexts.PaymentContextsPassenger.class))
             // Payments - AbstractSource (polymorphic deserialization)
             .registerTypeAdapterFactory(
                 RuntimeTypeAdapterFactory.of(
@@ -451,6 +461,43 @@ public final class GsonSerializer implements Serializer {
                 }
                 throw ex;
             }
+        };
+    }
+
+    /**
+     * Reads a property the specification declares as {@code oneOf[array, object]} into a list,
+     * accepting either shape on the wire and normalizing a bare object into a single-element list.
+     * <p>
+     * The first property to need this is {@code processing.airline_data[].passenger}.
+     * {@code AirlineData} declares it as an array, while
+     * {@code PaymentInterfacesProcessingAirlineData} declares it as {@code oneOf[array, object]}
+     * with the note "PayPal requires a single object". Both branches resolve to the same object,
+     * so normalizing to a list loses nothing.
+     * <p>
+     * Only a deserializer is registered, never a serializer, so writing still goes through Gson's
+     * reflective adapter and always emits an array. That is the only valid outbound shape for
+     * {@code AirlineData}. Element deserialization is delegated to the supplied context, so the
+     * global {@code LOWER_CASE_WITH_UNDERSCORES} naming policy and the {@code LocalDate} adapter
+     * still apply; this deserializer never maps property names itself.
+     *
+     * @param elementType the list element type
+     * @param <T>         the list element type
+     * @return a deserializer that accepts a single object or an array
+     */
+    private static <T> JsonDeserializer<List<T>> singleOrArrayDeserializer(final Class<T> elementType) {
+        return (json, typeOfT, context) -> {
+            if (json == null || json.isJsonNull()) {
+                return null;
+            }
+            final List<T> values = new ArrayList<>();
+            if (json.isJsonArray()) {
+                for (final JsonElement element : json.getAsJsonArray()) {
+                    values.add(context.deserialize(element, elementType));
+                }
+            } else {
+                values.add(context.deserialize(json, elementType));
+            }
+            return values;
         };
     }
 

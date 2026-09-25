@@ -1,7 +1,6 @@
 package com.checkout.payments.contexts;
 
 import com.checkout.common.Address;
-import com.checkout.common.CountryCode;
 import com.checkout.common.Phone;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +10,9 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Contains information about the accommodation booked by the customer.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -50,16 +52,23 @@ public final class PaymentContextsAccommodationData {
     private Address address;
 
     /**
-     * The state of the accommodation.
+     * The state or province of the address country
+     * (ISO 3166-2 code of up to two alphanumeric characters).
      * [Optional]
+     * <p>
+     * A free-form string, not a country code. The specification's own example is {@code FL},
+     * which is a US state rather than a country.
      */
-    private CountryCode state;
+    private String state;
 
     /**
-     * The country of the accommodation.
+     * The ISO country code of the address.
      * [Optional]
+     * <p>
+     * A free-form string rather than an ISO 3166-1 alpha-2 enum: the specification's example is
+     * the three-letter code {@code USA}, which no alpha-2 enum can represent.
      */
-    private CountryCode country;
+    private String country;
 
     /**
      * The city of the accommodation.

@@ -11,6 +11,7 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.industry.Industry;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -24,7 +25,8 @@ class PaymentSetupsIndustrySerializationTest {
     @Test
     void shouldSerializeIndustryUnderCorrectJsonKeys() {
         final Industry industry = Industry.builder()
-                .airlineData(AirlineData.builder().totalNumberOfPassengers(2L).build())
+                .airlineData(Collections.singletonList(
+                        AirlineData.builder().totalNumberOfPassengers(2L).build()))
                 .accommodationData(Collections.singletonList(
                         AccommodationData.builder().name("Grand Hotel").build()))
                 .build();
@@ -105,4 +107,71 @@ class PaymentSetupsIndustrySerializationTest {
         assertEquals("Acme Insurance", deserialized.getInsurance().getCompany());
         assertEquals(Currency.USD, deserialized.getInsurance().getPrice().getCurrency());
     }
+
+    // ------------------------------------------------------------------------
+    // Industry cardinality
+    //
+    // The spec declares both industry.airline and industry.accommodation as arrays. airline was
+    // modelled as a single object, so it serialized as an object under a key the API expects to
+    // be an array, and the value never reached the gateway. The keys were already correct; only
+    // the airline cardinality was wrong.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldSerializeBothIndustryEntriesAsArrays() {
+        final Industry industry = Industry.builder()
+                .airlineData(Collections.singletonList(
+                        AirlineData.builder().travelType("international").build()))
+                .accommodationData(Collections.singletonList(
+                        AccommodationData.builder().name("Grand Hotel").build()))
+                .build();
+
+        final String json = serializer.toJson(industry);
+
+        assertTrue(json.contains("\"airline\":[{"), json);
+        assertTrue(json.contains("\"accommodation\":[{"), json);
+        assertTrue(!json.contains("\"airline\":{"), json);
+        assertTrue(!json.contains("\"accommodation\":{"), json);
+    }
+
+    @Test
+    void shouldRoundTripMultipleIndustryEntries() {
+        final Industry industry = Industry.builder()
+                .airlineData(Arrays.asList(
+                        AirlineData.builder().travelType("domestic").build(),
+                        AirlineData.builder().travelType("international").build()))
+                .accommodationData(Arrays.asList(
+                        AccommodationData.builder().name("Grand Hotel").build(),
+                        AccommodationData.builder().name("Alpine Lodge").build()))
+                .build();
+
+        final Industry result = serializer.fromJson(serializer.toJson(industry), Industry.class);
+
+        assertEquals(2, result.getAirlineData().size());
+        assertEquals("domestic", result.getAirlineData().get(0).getTravelType());
+        assertEquals("international", result.getAirlineData().get(1).getTravelType());
+        assertEquals(2, result.getAccommodationData().size());
+        assertEquals("Grand Hotel", result.getAccommodationData().get(0).getName());
+        assertEquals("Alpine Lodge", result.getAccommodationData().get(1).getName());
+    }
+
+    @Test
+    void shouldDeserializeIndustryFromTheSpecKeysAsArrays() {
+        final String json = "{"
+                + "\"airline\":[{\"travel_type\":\"international\",\"trip_type\":\"round_trip\"}],"
+                + "\"accommodation\":[{\"name\":\"Grand Hotel\",\"number_of_rooms\":2}]"
+                + "}";
+
+        final Industry result = serializer.fromJson(json, Industry.class);
+
+        assertNotNull(result.getAirlineData());
+        assertEquals(1, result.getAirlineData().size());
+        assertEquals("international", result.getAirlineData().get(0).getTravelType());
+        assertEquals("round_trip", result.getAirlineData().get(0).getTripType());
+        assertNotNull(result.getAccommodationData());
+        assertEquals(1, result.getAccommodationData().size());
+        assertEquals("Grand Hotel", result.getAccommodationData().get(0).getName());
+        assertEquals(2, result.getAccommodationData().get(0).getNumberOfRooms());
+    }
+
 }

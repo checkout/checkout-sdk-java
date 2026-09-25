@@ -4,16 +4,21 @@ import com.checkout.GsonSerializer;
 import com.checkout.ItemsResponse;
 import com.checkout.accounts.payout.schedule.response.GetScheduleResponse;
 import com.checkout.common.Currency;
+import com.checkout.common.CountryCode;
 import com.checkout.payments.PaymentAction;
+import com.checkout.payments.Passenger;
+import com.checkout.payments.AirlineData;
 import com.checkout.payments.ProductResponse;
 import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -109,4 +114,70 @@ class CustomDeserializerPolicyTest {
         assertEquals("Approved", first.getResponseSummary());
         assertEquals("ref-1", first.getReference());
     }
+
+    /**
+     * singleOrArrayDeserializer normalizes the oneOf[array, object] shape of
+     * processing.airline_data[].passenger into a list. It delegates each element to the default
+     * (policy-aware) Gson, so snake_case keys map to annotation-less camelCase fields and the
+     * LocalDate adapter still applies. It must never map property names itself.
+     */
+    @Test
+    void singleOrArrayDeserializer_honorsNamingPolicyForASingleObject() {
+        final String json = "{\"passenger\":{"
+                + "\"first_name\":\"John\","
+                + "\"last_name\":\"White\","
+                + "\"date_of_birth\":\"1990-05-26\","
+                + "\"address\":{\"country\":\"US\"}"
+                + "}}";
+
+        final AirlineData airline = serializer.fromJson(json, AirlineData.class);
+
+        assertNotNull(airline.getPassenger());
+        assertEquals(1, airline.getPassenger().size());
+        assertEquals("John", airline.getPassenger().get(0).getFirstName());
+        assertEquals("White", airline.getPassenger().get(0).getLastName());
+        assertEquals(LocalDate.of(1990, 5, 26), airline.getPassenger().get(0).getDateOfBirth());
+        assertEquals(CountryCode.US, airline.getPassenger().get(0).getAddress().getCountry());
+    }
+
+    @Test
+    void singleOrArrayDeserializer_honorsNamingPolicyForAnArray() {
+        final String json = "{\"passenger\":["
+                + "{\"first_name\":\"John\",\"date_of_birth\":\"1990-05-26\"},"
+                + "{\"first_name\":\"Jane\",\"date_of_birth\":\"1992-01-03\"}"
+                + "]}";
+
+        final AirlineData airline = serializer.fromJson(json, AirlineData.class);
+
+        assertEquals(2, airline.getPassenger().size());
+        assertEquals("John", airline.getPassenger().get(0).getFirstName());
+        assertEquals(LocalDate.of(1990, 5, 26), airline.getPassenger().get(0).getDateOfBirth());
+        assertEquals("Jane", airline.getPassenger().get(1).getFirstName());
+        assertEquals(LocalDate.of(1992, 1, 3), airline.getPassenger().get(1).getDateOfBirth());
+    }
+
+    /**
+     * Only a deserializer is registered, so writing goes through the reflective adapter and
+     * always emits an array. Registering a serializer would silently change every outbound
+     * request that carries airline data.
+     */
+    @Test
+    void singleOrArrayDeserializer_isReadOnlySoWritesStayAnArray() {
+        final String json = serializer.toJson(AirlineData.builder()
+                .passenger(Collections.singletonList(
+                        Passenger.builder().firstName("John").build()))
+                .build());
+
+        assertTrue(json.contains("\"passenger\":[{"), json);
+        assertTrue(!json.contains("\"passenger\":{"), json);
+    }
+
+    @Test
+    void singleOrArrayDeserializer_readsNullAsNull() {
+        final AirlineData airline =
+                serializer.fromJson("{\"passenger\":null}", AirlineData.class);
+
+        assertNull(airline.getPassenger());
+    }
+
 }
