@@ -110,6 +110,11 @@ public final class GsonSerializer implements Serializer {
             .registerTypeAdapter(LocalDate.class, getLocalDateJsonDeserializer())
             // processing.airline_data[].passenger is oneOf[array, object]: PayPal returns a
             // single object where the array shape is declared. Read both, always write an array.
+            //
+            // Bound by element type, so the second registration also covers PaymentSetupAirline
+            // .passengers, which the spec declares array-only. Accepting a bare object there is
+            // wider than the spec grants but cannot lose data, and TypeToken cannot distinguish
+            // the two call sites. Deliberate; revisit only if a wrapper type is introduced.
             .registerTypeAdapter(
                     new TypeToken<List<com.checkout.payments.Passenger>>() {
                     }.getType(),

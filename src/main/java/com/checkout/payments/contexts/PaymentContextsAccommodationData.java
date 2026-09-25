@@ -12,7 +12,15 @@ import java.util.List;
 
 /**
  * Contains information about the accommodation booked by the customer.
+ *
+ * @deprecated Duplicates {@link com.checkout.payments.AccommodationData}, which maps the same
+ * specification schema. Payment contexts, {@code POST /payments} and the
+ * {@code GET /payments/{id}} response all resolve {@code accommodation_data} to that one schema,
+ * and maintaining two classes for it let them drift. Use
+ * {@link com.checkout.payments.AccommodationData} instead. Retained for backwards compatibility
+ * and will be removed in a future version.
  */
+@Deprecated
 @Data
 @Builder
 @NoArgsConstructor

@@ -46,8 +46,12 @@ public final class AccommodationData {
     private LocalDate checkOutDate;
 
     /**
-     * The address of the accommodation property.
+     * The address details of the accommodation.
      * [Optional]
+     * <p>
+     * The specification defines only {@code address_line1} and {@code zip} on this object. The
+     * wider {@link Address} type is reused for consistency with the rest of the SDK; the
+     * remaining members are not read by the API on this property.
      */
     private Address address;
 

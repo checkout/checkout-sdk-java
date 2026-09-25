@@ -25,9 +25,9 @@ class PaymentSetupsIndustrySerializationTest {
     @Test
     void shouldSerializeIndustryUnderCorrectJsonKeys() {
         final Industry industry = Industry.builder()
-                .airlineData(Collections.singletonList(
+                .airline(Collections.singletonList(
                         AirlineData.builder().totalNumberOfPassengers(2L).build()))
-                .accommodationData(Collections.singletonList(
+                .accommodation(Collections.singletonList(
                         AccommodationData.builder().name("Grand Hotel").build()))
                 .build();
 
@@ -120,9 +120,9 @@ class PaymentSetupsIndustrySerializationTest {
     @Test
     void shouldSerializeBothIndustryEntriesAsArrays() {
         final Industry industry = Industry.builder()
-                .airlineData(Collections.singletonList(
+                .airline(Collections.singletonList(
                         AirlineData.builder().travelType("international").build()))
-                .accommodationData(Collections.singletonList(
+                .accommodation(Collections.singletonList(
                         AccommodationData.builder().name("Grand Hotel").build()))
                 .build();
 
@@ -137,22 +137,22 @@ class PaymentSetupsIndustrySerializationTest {
     @Test
     void shouldRoundTripMultipleIndustryEntries() {
         final Industry industry = Industry.builder()
-                .airlineData(Arrays.asList(
+                .airline(Arrays.asList(
                         AirlineData.builder().travelType("domestic").build(),
                         AirlineData.builder().travelType("international").build()))
-                .accommodationData(Arrays.asList(
+                .accommodation(Arrays.asList(
                         AccommodationData.builder().name("Grand Hotel").build(),
                         AccommodationData.builder().name("Alpine Lodge").build()))
                 .build();
 
         final Industry result = serializer.fromJson(serializer.toJson(industry), Industry.class);
 
-        assertEquals(2, result.getAirlineData().size());
-        assertEquals("domestic", result.getAirlineData().get(0).getTravelType());
-        assertEquals("international", result.getAirlineData().get(1).getTravelType());
-        assertEquals(2, result.getAccommodationData().size());
-        assertEquals("Grand Hotel", result.getAccommodationData().get(0).getName());
-        assertEquals("Alpine Lodge", result.getAccommodationData().get(1).getName());
+        assertEquals(2, result.getAirline().size());
+        assertEquals("domestic", result.getAirline().get(0).getTravelType());
+        assertEquals("international", result.getAirline().get(1).getTravelType());
+        assertEquals(2, result.getAccommodation().size());
+        assertEquals("Grand Hotel", result.getAccommodation().get(0).getName());
+        assertEquals("Alpine Lodge", result.getAccommodation().get(1).getName());
     }
 
     @Test
@@ -164,14 +164,14 @@ class PaymentSetupsIndustrySerializationTest {
 
         final Industry result = serializer.fromJson(json, Industry.class);
 
-        assertNotNull(result.getAirlineData());
-        assertEquals(1, result.getAirlineData().size());
-        assertEquals("international", result.getAirlineData().get(0).getTravelType());
-        assertEquals("round_trip", result.getAirlineData().get(0).getTripType());
-        assertNotNull(result.getAccommodationData());
-        assertEquals(1, result.getAccommodationData().size());
-        assertEquals("Grand Hotel", result.getAccommodationData().get(0).getName());
-        assertEquals(2, result.getAccommodationData().get(0).getNumberOfRooms());
+        assertNotNull(result.getAirline());
+        assertEquals(1, result.getAirline().size());
+        assertEquals("international", result.getAirline().get(0).getTravelType());
+        assertEquals("round_trip", result.getAirline().get(0).getTripType());
+        assertNotNull(result.getAccommodation());
+        assertEquals(1, result.getAccommodation().size());
+        assertEquals("Grand Hotel", result.getAccommodation().get(0).getName());
+        assertEquals(2, result.getAccommodation().get(0).getNumberOfRooms());
     }
 
 }

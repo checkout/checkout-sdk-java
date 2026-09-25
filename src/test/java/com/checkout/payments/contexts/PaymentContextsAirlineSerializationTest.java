@@ -2,6 +2,7 @@ package com.checkout.payments.contexts;
 
 import com.checkout.GsonSerializer;
 import com.checkout.common.CountryCode;
+import com.checkout.payments.AccommodationData;
 import com.checkout.payments.PassengerAddress;
 import org.junit.jupiter.api.Test;
 
@@ -169,13 +170,50 @@ class PaymentContextsAirlineSerializationTest {
                 + "\"room\":[{\"rate\":\"70\",\"number_of_nights_at_room_rate\":\"3\"}]"
                 + "}";
 
-        final PaymentContextsAccommodationData data =
-                serializer.fromJson(json, PaymentContextsAccommodationData.class);
+        // PaymentContextsProcessing.accommodationData now uses the shared AccommodationData, so
+        // that is the type this wire shape has to land in.
+        final AccommodationData data = serializer.fromJson(json, AccommodationData.class);
 
         assertEquals("The Sea View Hotel", data.getName());
         assertEquals("FL", data.getState());
         assertEquals("USA", data.getCountry());
         assertEquals("Los Angeles", data.getCity());
         assertEquals("3", data.getRoom().get(0).getNumberOfNightsAtRoomRate());
+    }
+
+    /**
+     * PaymentContextsProcessing.accommodationData is typed with the shared AccommodationData.
+     * The old PaymentContextsAccommodationData is deprecated but retained, and still has to
+     * deserialize for anyone holding a reference to it.
+     */
+    @Test
+    void shouldCarryAccommodationDataOnTheProcessingBlockUsingTheSharedType() {
+        final String json = "{\"accommodation_data\":[{"
+                + "\"name\":\"The Sea View Hotel\",\"state\":\"FL\",\"country\":\"USA\","
+                + "\"room\":[{\"rate\":\"70\",\"number_of_nights_at_room_rate\":\"3\"}]"
+                + "}]}";
+
+        final PaymentContextsProcessing processing =
+                serializer.fromJson(json, PaymentContextsProcessing.class);
+
+        assertEquals(1, processing.getAccommodationData().size());
+        final AccommodationData shared = processing.getAccommodationData().get(0);
+        assertEquals("The Sea View Hotel", shared.getName());
+        assertEquals("FL", shared.getState());
+        assertEquals("USA", shared.getCountry());
+        assertEquals("3", shared.getRoom().get(0).getNumberOfNightsAtRoomRate());
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void deprecatedPaymentContextsAccommodationDataStillDeserializes() {
+        final String json = "{\"name\":\"Alpine Lodge\",\"state\":\"FL\",\"country\":\"USA\"}";
+
+        final PaymentContextsAccommodationData legacy =
+                serializer.fromJson(json, PaymentContextsAccommodationData.class);
+
+        assertEquals("Alpine Lodge", legacy.getName());
+        assertEquals("FL", legacy.getState());
+        assertEquals("USA", legacy.getCountry());
     }
 }

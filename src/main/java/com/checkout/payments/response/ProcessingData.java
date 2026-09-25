@@ -9,6 +9,12 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Returns information related to the processing of the payment.
+ * <p>
+ * The response counterpart of {@link com.checkout.payments.ProcessingSettings}, returned under
+ * {@code processing} on {@code GET /payments/{id}}.
+ */
 @Data
 public final class ProcessingData {
 

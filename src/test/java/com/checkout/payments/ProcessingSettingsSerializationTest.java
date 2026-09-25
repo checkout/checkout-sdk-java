@@ -149,6 +149,7 @@ class ProcessingSettingsSerializationTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation") // hubModelOriginationCountry is retained but not in any spec
     void shouldRoundTripSerialize() {
         final ProcessingSettings original = ProcessingSettings.builder()
                 .panPreference(PanProcessedType.DPAN)
@@ -223,4 +224,46 @@ class ProcessingSettingsSerializationTest {
         assertNotNull(settings);
         assertEquals("MTL-001", settings.getSchemeTransactionLinkId());
     }
+
+    // ------------------------------------------------------------------------
+    // partner_customer_risk_data
+    //
+    // Declared on PaymentInterfacesProcessing, so hosted payments, payment links and payment
+    // sessions all read it. The field was missing from this class entirely, so a Java merchant
+    // on those endpoints could not send it at all.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldSerializePartnerCustomerRiskData() {
+        final String json = serializer.toJson(ProcessingSettings.builder()
+                .partnerCustomerRiskData(PartnerCustomerRiskData.builder()
+                        .key("risk_score")
+                        .value("42")
+                        .build())
+                .build());
+
+        assertTrue(json.contains("\"partner_customer_risk_data\""), json);
+        assertTrue(json.contains("\"key\":\"risk_score\""), json);
+        assertTrue(json.contains("\"value\":\"42\""), json);
+    }
+
+    @Test
+    void shouldDeserializePartnerCustomerRiskData() {
+        final String json = "{\"partner_customer_risk_data\":"
+                + "{\"key\":\"risk_score\",\"value\":\"42\"}}";
+
+        final ProcessingSettings settings = serializer.fromJson(json, ProcessingSettings.class);
+
+        assertNotNull(settings.getPartnerCustomerRiskData());
+        assertEquals("risk_score", settings.getPartnerCustomerRiskData().getKey());
+        assertEquals("42", settings.getPartnerCustomerRiskData().getValue());
+    }
+
+    @Test
+    void shouldOmitPartnerCustomerRiskDataWhenNotSet() {
+        final String json = serializer.toJson(ProcessingSettings.builder().orderId("ord_1").build());
+
+        assertTrue(!json.contains("partner_customer_risk_data"), json);
+    }
+
 }
