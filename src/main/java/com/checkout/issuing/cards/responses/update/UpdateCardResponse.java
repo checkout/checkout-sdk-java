@@ -150,4 +150,11 @@ public final class UpdateCardResponse extends Resource {
      * Format: date-time (RFC 3339)
      */
     private Instant lastModifiedDate;
+
+    /**
+     * Specifies whether the virtual card is set to expire after a single use.
+     * Only present when the underlying card is virtual; physical cards never send it.
+     * [Optional]
+     */
+    private Boolean isSingleUse;
 }

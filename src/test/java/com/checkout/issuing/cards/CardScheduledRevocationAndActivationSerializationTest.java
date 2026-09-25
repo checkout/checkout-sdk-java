@@ -132,4 +132,17 @@ class CardScheduledRevocationAndActivationSerializationTest {
         assertNotNull(response.getLastModifiedDate());
         assertFalse(serializer.toJson(response).contains("encrypted_cvv"));
     }
+
+    // Verifies the 2026-09-23 spec update: update-card-response gained a virtual/physical
+    // discriminator, and the virtual variant adds is_single_use.
+    @Test
+    void shouldDeserializeIsSingleUseOnVirtualCardUpdateResponse() {
+        final String json = "{\"type\":\"virtual\",\"last_modified_date\":\"2019-09-10T10:11:12Z\","
+                + "\"is_single_use\":true}";
+
+        final UpdateCardResponse response = serializer.fromJson(json, UpdateCardResponse.class);
+
+        assertNotNull(response);
+        assertEquals(Boolean.TRUE, response.getIsSingleUse());
+    }
 }
