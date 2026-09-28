@@ -31,4 +31,13 @@ public final class CardResponse extends Resource {
     protected String reference;
 
     protected Instant createdDate;
+
+    /**
+     * The date and time the card was last activated.
+     * <p>
+     * [Optional, nullable, read only]
+     * </p>
+     * Returns {@code null} if the card has never been activated.
+     */
+    protected Instant lastActivatedOn;
 }

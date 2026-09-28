@@ -19,6 +19,7 @@ import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentResponse
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSUpdateResponse;
 import com.checkout.issuing.cards.responses.renew.RenewCardResponse;
 import com.checkout.issuing.cards.responses.update.UpdateCardResponse;
+import com.checkout.issuing.cards.responses.activate.ActivateCardResponse;
 import com.checkout.payments.VoidResponse;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
@@ -85,7 +86,7 @@ class IssuingCardsTestIT extends BaseIssuingTestIT {
 
     @Test
     void shouldActivateCard() {
-        final VoidResponse activationResponse = blocking(() ->
+        final ActivateCardResponse activationResponse = blocking(() ->
                 issuingApi.issuingClient().activateCard(card.getId()));
 
         validateActivateCardResponse(activationResponse);
@@ -208,7 +209,7 @@ class IssuingCardsTestIT extends BaseIssuingTestIT {
 
     @Test
     void shouldActivateCardSync() {
-        final VoidResponse activationResponse = 
+        final ActivateCardResponse activationResponse = 
                 issuingApi.issuingClient().activateCardSync(card.getId());
 
         validateActivateCardResponse(activationResponse);
@@ -359,9 +360,10 @@ class IssuingCardsTestIT extends BaseIssuingTestIT {
         assertNotNull(response);
     }
 
-    private void validateActivateCardResponse(VoidResponse activatedResponse) {
+    private void validateActivateCardResponse(ActivateCardResponse activatedResponse) {
         assertNotNull(activatedResponse);
         assertEquals(HttpStatus.SC_OK, activatedResponse.getHttpStatusCode());
+        assertNotNull(activatedResponse.getLastActivatedOn());
     }
 
     private void validateCredentialsResponse(CardCredentialsResponse credentialsResponse) {

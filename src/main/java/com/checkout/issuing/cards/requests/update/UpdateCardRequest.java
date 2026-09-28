@@ -1,5 +1,6 @@
 package com.checkout.issuing.cards.requests.update;
 
+import com.checkout.issuing.cards.CardStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,17 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public final class UpdateCardRequest {
+
+    /**
+     * Set the card's status to {@code ACTIVE} to reactivate an {@code INACTIVE} or
+     * {@code SUSPENDED} card. The API only accepts {@code active} for this field.
+     * <p>
+     * [Optional]
+     * </p>
+     * Mutually exclusive with {@link #scheduledActivationDate}: submitting both results in the
+     * API error {@code scheduled_activation_date_conflicts_with_activation}.
+     */
+    private CardStatus status;
 
     /**
      * Your reference.
@@ -58,8 +70,20 @@ public final class UpdateCardRequest {
      * <p>
      * [Optional]
      * </p>
-     * Format: date (YYYY-MM-DD, time is midnight UTC)
-     * Example: 2027-03-12
+     * Format: yyyy-MM-dd
+     *
+     * @deprecated Use {@link #scheduledRevocationDate} instead. If both fields are provided,
+     * {@code scheduledRevocationDate} overrides this value.
      */
+    @Deprecated
     private LocalDate revocationDate;
+
+    /**
+     * The card will be revoked at midnight UTC on the date specified.
+     * <p>
+     * [Optional]
+     * </p>
+     * Format: yyyy-MM-dd
+     */
+    private LocalDate scheduledRevocationDate;
 }

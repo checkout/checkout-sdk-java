@@ -20,6 +20,7 @@ import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
 import com.checkout.issuing.cards.requests.update.UpdateCardRequest;
 import com.checkout.issuing.cards.responses.CardDetailsResponse;
 import com.checkout.issuing.cards.responses.CardResponse;
+import com.checkout.issuing.cards.responses.activate.ActivateCardResponse;
 import com.checkout.issuing.cards.responses.GetDigitalCardResponse;
 import com.checkout.issuing.cards.responses.credentials.CardCredentialsResponse;
 import com.checkout.issuing.cards.responses.enrollment.ThreeDSEnrollmentDetailsResponse;
@@ -87,7 +88,7 @@ public interface IssuingClient {
 
     CompletableFuture<ThreeDSEnrollmentDetailsResponse> getCardThreeDSDetails(String cardId);
 
-    CompletableFuture<VoidResponse> activateCard(String cardId);
+    CompletableFuture<ActivateCardResponse> activateCard(String cardId);
 
     CompletableFuture<CardCredentialsResponse> getCardCredentials(final String cardId, final CardCredentialsQuery queryFilter);
 
@@ -229,7 +230,7 @@ public interface IssuingClient {
 
     ThreeDSEnrollmentDetailsResponse getCardThreeDSDetailsSync(String cardId);
 
-    VoidResponse activateCardSync(String cardId);
+    ActivateCardResponse activateCardSync(String cardId);
 
     CardCredentialsResponse getCardCredentialsSync(String cardId, CardCredentialsQuery queryFilter);
 

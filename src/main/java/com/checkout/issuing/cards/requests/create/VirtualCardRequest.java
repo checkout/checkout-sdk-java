@@ -53,6 +53,7 @@ public final class VirtualCardRequest extends CardRequest {
                                final Boolean isSingleUse,
                                final IssuingCardMetadata metadata,
                                final LocalDate revocationDate,
+                               final LocalDate scheduledRevocationDate,
                                final String scheduledActivationDate,
                                final List<ReturnCredentialsType> returnCredentials,
                                final List<String> controlProfiles,
@@ -64,6 +65,7 @@ public final class VirtualCardRequest extends CardRequest {
         this.controls = controls;
         setMetadata(metadata);
         setRevocationDate(revocationDate);
+        setScheduledRevocationDate(scheduledRevocationDate);
         setScheduledActivationDate(scheduledActivationDate);
     }
 }
