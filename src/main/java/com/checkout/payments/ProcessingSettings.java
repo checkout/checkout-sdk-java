@@ -302,6 +302,17 @@ public final class ProcessingSettings {
     /**
      * Sender information. Used for Previous API only.
      * [Optional]
+     *
+     * <p>Not in the current specification. The property appears under neither
+     * {@code senderInformation} nor {@code sender_information} in any spec available to this
+     * workspace, including the live API reference, and no processing schema declares a sender
+     * property of any kind. Deprecated in practice; the current API carries sender details in the
+     * top level {@code sender} object on the payment request instead.
+     *
+     * <p>Left exactly as it was on purpose. Gson's global
+     * {@code LOWER_CASE_WITH_UNDERSCORES} policy sends this as {@code sender_information}. There
+     * is no evidence establishing which key, if either, the gateway reads, so nothing here
+     * overrides that. Do not add a {@code @SerializedName} without a live confirmation.
      */
     private SenderInformation senderInformation;
 
