@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * Contains information about a flight leg booked by the customer.
+ */
 @Data
 @Builder
 @NoArgsConstructor

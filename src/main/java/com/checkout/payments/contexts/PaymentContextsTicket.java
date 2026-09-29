@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * Contains information about the airline ticket.
+ */
 @Data
 @Builder
 @NoArgsConstructor

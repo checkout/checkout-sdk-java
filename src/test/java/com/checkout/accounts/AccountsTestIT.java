@@ -486,22 +486,36 @@ class AccountsTestIT extends SandboxTestFixture {
                         .principalAddress(TestHelper.createAddress())
                         .registeredAddress(TestHelper.createAddress())
                         .representatives(Collections.singletonList(Representative.builder()
-                                .firstName("John")
-                                .lastName("Doe")
-                                .address(TestHelper.createAddress())
-                                .identification(Identification.builder()
-                                        .nationalIdNumber("AB123456C")
+                                // The nested `individual` shape, not the flat
+                                // firstName/lastName/address fields. Established against the
+                                // sandbox on 2026-09-29: the flat shape is rejected with 422
+                                // company_representatives_0_invalid on BOTH schema 2.0 and 3.0,
+                                // while this nested shape returns 201 on both. The swagger agrees:
+                                // representatives.items is a oneOf whose "Person of Interest"
+                                // variant requires `individual` and `roles`, with `individual`
+                                // requiring first_name, last_name, date_of_birth, place_of_birth
+                                // and address. buildCompanyEntity already used this shape; these
+                                // two fixtures had been left on the flat one.
+                                .individual(RepresentativeIndividual.builder()
+                                        .firstName("John")
+                                        .lastName("Doe")
+                                        .dateOfBirth(DateOfBirth.builder()
+                                                .day(5)
+                                                .month(6)
+                                                .year(1995)
+                                                .build())
+                                        .placeOfBirth(PlaceOfBirth.builder()
+                                                .country(CountryCode.GB)
+                                                .build())
+                                        .address(TestHelper.createAddress())
                                         .build())
-                                .phone(buildAccountPhone())
-                                .dateOfBirth(DateOfBirth.builder()
-                                        .day(5)
-                                        .month(6)
-                                        .year(1995)
-                                        .build())
-                                .placeOfBirth(PlaceOfBirth.builder()
-                                        .country(CountryCode.GB)
-                                        .build())
-                                .roles(Collections.singletonList(EntityRoles.UBO))
+                                // Role coverage is validated across the representative set: a set
+                                // without an authorised_signatory, a director and a control_person
+                                // is rejected with the corresponding *_required error codes.
+                                .roles(Arrays.asList(EntityRoles.UBO,
+                                        EntityRoles.AUTHORISED_SIGNATORY,
+                                        EntityRoles.DIRECTOR,
+                                        EntityRoles.CONTROL_PERSON))
                                 .build()))
                         .financialDetails(EntityFinancialDetails.builder()
                                 .annualProcessingVolume(120000L)
@@ -679,22 +693,36 @@ class AccountsTestIT extends SandboxTestFixture {
                         .principalAddress(address)
                         .registeredAddress(address)
                         .representatives(Collections.singletonList(Representative.builder()
-                                .firstName("John")
-                                .lastName("Doe")
-                                .address(address)
-                                .identification(Identification.builder()
-                                        .nationalIdNumber("AB123456C")
+                                // The nested `individual` shape, not the flat
+                                // firstName/lastName/address fields. Established against the
+                                // sandbox on 2026-09-29: the flat shape is rejected with 422
+                                // company_representatives_0_invalid on BOTH schema 2.0 and 3.0,
+                                // while this nested shape returns 201 on both. The swagger agrees:
+                                // representatives.items is a oneOf whose "Person of Interest"
+                                // variant requires `individual` and `roles`, with `individual`
+                                // requiring first_name, last_name, date_of_birth, place_of_birth
+                                // and address. buildCompanyEntity already used this shape; these
+                                // two fixtures had been left on the flat one.
+                                .individual(RepresentativeIndividual.builder()
+                                        .firstName("John")
+                                        .lastName("Doe")
+                                        .dateOfBirth(DateOfBirth.builder()
+                                                .day(5)
+                                                .month(6)
+                                                .year(1995)
+                                                .build())
+                                        .placeOfBirth(PlaceOfBirth.builder()
+                                                .country(CountryCode.ES)
+                                                .build())
+                                        .address(address)
                                         .build())
-                                .phone(buildAccountPhone())
-                                .dateOfBirth(DateOfBirth.builder()
-                                        .day(5)
-                                        .month(6)
-                                        .year(1995)
-                                        .build())
-                                .placeOfBirth(PlaceOfBirth.builder()
-                                        .country(CountryCode.ES)
-                                        .build())
-                                .roles(Collections.singletonList(EntityRoles.UBO))
+                                // Role coverage is validated across the representative set: a set
+                                // without an authorised_signatory, a director and a control_person
+                                // is rejected with the corresponding *_required error codes.
+                                .roles(Arrays.asList(EntityRoles.UBO,
+                                        EntityRoles.AUTHORISED_SIGNATORY,
+                                        EntityRoles.DIRECTOR,
+                                        EntityRoles.CONTROL_PERSON))
                                 .build()))
                         .financialDetails(EntityFinancialDetails.builder()
                                 .annualProcessingVolume(120000L)

@@ -12,6 +12,14 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Settings that control how the payment is processed.
+ * <p>
+ * Shared across several request shapes. {@code POST /payments} resolves to
+ * {@code PaymentRequestProcessing}, while hosted payments, payment links and payment sessions
+ * resolve to the wider {@code PaymentInterfacesProcessing}. A field is therefore not necessarily
+ * read by every endpoint that accepts this object; the fields below name the exceptions.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -29,7 +37,7 @@ public final class ProcessingSettings {
      * The total amount of sales tax on the total purchase amount.
      * [Optional]
      */
-    private Long taxAmount;
+    private Double taxAmount;
 
     /**
      * The surcharge amount applied to the transaction in minor currency units by the merchant.
@@ -41,25 +49,25 @@ public final class ProcessingSettings {
      * The discount amount applied to the transaction by the merchant.
      * [Optional]
      */
-    private Long discountAmount;
+    private Double discountAmount;
 
     /**
      * The total charges for any import or export duty included in the transaction.
      * [Optional]
      */
-    private Long dutyAmount;
+    private Double dutyAmount;
 
     /**
      * The total freight or shipping and handling charges for the transaction.
      * [Optional]
      */
-    private Long shippingAmount;
+    private Double shippingAmount;
 
     /**
      * The tax amount on the freight or shipping and handling charges for the transaction.
      * [Optional]
      */
-    private Long shippingTaxAmount;
+    private Double shippingTaxAmount;
 
     /**
      * Indicates if the payment is an Account Funding Transaction (AFT).
@@ -103,7 +111,7 @@ public final class ProcessingSettings {
      * The original order amount when a payment is split. Indicates the full order price.
      * [Optional]
      */
-    private Long originalOrderAmount;
+    private Double originalOrderAmount;
 
     /**
      * Merchant receipt ID.
@@ -262,9 +270,27 @@ public final class ProcessingSettings {
     private Aggregator aggregator;
 
     /**
+     * A key-and-value pair with merchant-specific data for the transaction.
+     * [Optional]
+     * <p>
+     * Declared on {@code PaymentInterfacesProcessing}, so it is read by hosted payments, payment
+     * links and payment sessions, and not by {@code POST /payments}. The specification types it
+     * as a single object while describing it as "an array of key-and-value pairs"; the declared
+     * type is followed here. Payment contexts model the array form as
+     * {@code List<PaymentContextsPartnerCustomerRiskData>}.
+     */
+    private PartnerCustomerRiskData partnerCustomerRiskData;
+
+    /**
      * The origination country for hub model payments.
      * [Optional]
+     *
+     * @deprecated Not in the current specification. Serializes as
+     * {@code hub_model_origination_country}, which appears in neither the current (NAS) nor the
+     * Previous (ABC) spec, so the gateway discards it. Retained for backwards compatibility and
+     * will be removed in a future version.
      */
+    @Deprecated
     private CountryCode hubModelOriginationCountry;
 
     /**
@@ -276,6 +302,17 @@ public final class ProcessingSettings {
     /**
      * Sender information. Used for Previous API only.
      * [Optional]
+     *
+     * <p>Not in the current specification. The property appears under neither
+     * {@code senderInformation} nor {@code sender_information} in any spec available to this
+     * workspace, including the live API reference, and no processing schema declares a sender
+     * property of any kind. Deprecated in practice; the current API carries sender details in the
+     * top level {@code sender} object on the payment request instead.
+     *
+     * <p>Left exactly as it was on purpose. Gson's global
+     * {@code LOWER_CASE_WITH_UNDERSCORES} policy sends this as {@code sender_information}. There
+     * is no evidence establishing which key, if either, the gateway reads, so nothing here
+     * overrides that. Do not add a {@code @SerializedName} without a live confirmation.
      */
     private SenderInformation senderInformation;
 

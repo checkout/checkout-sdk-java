@@ -41,7 +41,8 @@ class AccommodationDataSerializationTest {
                         .city("Paris")
                         .country(CountryCode.FR)
                         .build())
-                .country(CountryCode.FR)
+                .country("USA")
+                .state("FL")
                 .city("Paris")
                 .numberOfRooms(2)
                 .guests(Arrays.asList(
@@ -87,7 +88,8 @@ class AccommodationDataSerializationTest {
                 + "\"booking_reference\":\"BK-12345\","
                 + "\"check_in_date\":\"2025-06-01\","
                 + "\"check_out_date\":\"2025-06-05\","
-                + "\"country\":\"FR\","
+                + "\"country\":\"USA\","
+                + "\"state\":\"FL\","
                 + "\"city\":\"Paris\","
                 + "\"number_of_rooms\":2,"
                 + "\"guests\":[{"
@@ -108,7 +110,10 @@ class AccommodationDataSerializationTest {
         assertEquals("BK-12345", data.getBookingReference());
         assertEquals(LocalDate.of(2025, 6, 1), data.getCheckInDate());
         assertEquals(LocalDate.of(2025, 6, 5), data.getCheckOutDate());
-        assertEquals(CountryCode.FR, data.getCountry());
+        // country and state are free-form strings. Typed as the CountryCode enum they could
+        // not carry "USA", a three-letter code, or "FL", a US state.
+        assertEquals("USA", data.getCountry());
+        assertEquals("FL", data.getState());
         assertEquals("Paris", data.getCity());
         assertEquals(2, data.getNumberOfRooms());
         assertNotNull(data.getGuests());
@@ -126,7 +131,7 @@ class AccommodationDataSerializationTest {
                 .bookingReference("BK-12345")
                 .checkInDate(LocalDate.of(2025, 6, 1))
                 .checkOutDate(LocalDate.of(2025, 6, 5))
-                .country(CountryCode.FR)
+                .country("USA")
                 .numberOfRooms(1)
                 .guests(Arrays.asList(
                         AccommodationGuest.builder()
@@ -143,7 +148,7 @@ class AccommodationDataSerializationTest {
         assertEquals("Grand Hotel", deserialized.getName());
         assertEquals("BK-12345", deserialized.getBookingReference());
         assertEquals(LocalDate.of(2025, 6, 1), deserialized.getCheckInDate());
-        assertEquals(CountryCode.FR, deserialized.getCountry());
+        assertEquals("USA", deserialized.getCountry());
         assertEquals(1, deserialized.getNumberOfRooms());
         assertNotNull(deserialized.getGuests());
         assertEquals("John", deserialized.getGuests().get(0).getFirstName());

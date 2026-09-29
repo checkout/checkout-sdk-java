@@ -1,6 +1,7 @@
 package com.checkout;
 
 import com.checkout.common.PaymentMethodType;
+import com.checkout.common.CountryCode;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.financial.FinancialActionsQueryResponse;
 import com.checkout.issuing.cardholders.CardholderCardsResponse;
@@ -28,6 +29,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.io.IOException;
 
 import static com.checkout.TestHelper.getMock;
@@ -179,6 +181,59 @@ class GsonSerializerTest {
 
         assertNotNull(paymentDetailsResponse);
         assertNotNull(paymentDetailsResponse.getPaymentPlan());
+    }
+
+    /**
+     * The same mock, driven for its airline and accommodation sub-tree.
+     *
+     * <p>GET /payments/{id} deserializes into GetPaymentResponse, whose processing is a
+     * ProcessingData. processing.airline_data[].passenger is an array; SDKs that typed it as a
+     * single object threw on the whole call for any payment carrying passenger data. Reported
+     * internally. The mock already carried the correct shape and nothing asserted it: the test
+     * above only checks getPaymentPlan().
+     */
+    @Test
+    void shouldDeserializePaymentDetailsAirlineAndAccommodationSubTree() {
+
+        final com.checkout.payments.response.GetPaymentResponse response = serializer.fromJson(getMock("/mocks/payments/response/plan/get_payment_details_response.json"), com.checkout.payments.response.GetPaymentResponse.class);
+
+        assertNotNull(response.getProcessing());
+
+        assertNotNull(response.getProcessing().getAirlineData());
+        assertEquals(1, response.getProcessing().getAirlineData().size());
+
+        final com.checkout.payments.AirlineData airline = response.getProcessing().getAirlineData().get(0);
+
+        assertEquals("045-21351455613", airline.getTicket().getNumber());
+        assertEquals(LocalDate.of(2023, 5, 20), airline.getTicket().getIssueDate());
+        assertEquals("AI", airline.getTicket().getIssuingCarrierCode());
+        assertEquals("B", airline.getTicket().getTravelPackageIndicator());
+
+        assertNotNull(airline.getPassenger());
+        assertEquals(1, airline.getPassenger().size());
+        assertEquals("John", airline.getPassenger().get(0).getFirstName());
+        assertEquals("White", airline.getPassenger().get(0).getLastName());
+        assertEquals(LocalDate.of(1990, 5, 26), airline.getPassenger().get(0).getDateOfBirth());
+        assertEquals(CountryCode.US, airline.getPassenger().get(0).getAddress().getCountry());
+
+        final com.checkout.payments.FlightLegDetails leg = airline.getFlightLegDetails().get(0);
+
+        // These three were dropped on the floor before: flight_number was typed as an integer,
+        // and class_of_travelling / stop_over_code did not exist on the class at all.
+        assertEquals("101", leg.getFlightNumber());
+        assertEquals("J", leg.getClassOfTravelling());
+        assertEquals("x", leg.getStopOverCode());
+        assertEquals(LocalDate.of(2023, 6, 19), leg.getDepartureDate());
+        assertEquals("LHR", leg.getDepartureAirport());
+        assertEquals("LAX", leg.getArrivalAirport());
+
+        assertNotNull(response.getProcessing().getAccommodationData());
+        assertEquals("The Sea View Hotel", response.getProcessing().getAccommodationData().get(0).getName());
+        // state and country are free-form strings, not country codes.
+        assertEquals("US", response.getProcessing().getAccommodationData().get(0).getState());
+        assertEquals("CA", response.getProcessing().getAccommodationData().get(0).getCountry());
+        assertEquals("70", response.getProcessing().getAccommodationData().get(0).getRoom().get(0).getRate());
+        assertEquals("3", response.getProcessing().getAccommodationData().get(0).getRoom().get(0).getNumberOfNightsAtRoomRate());
     }
 
     @Test

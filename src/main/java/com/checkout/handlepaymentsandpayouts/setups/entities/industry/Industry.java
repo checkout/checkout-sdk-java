@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.setups.entities.industry;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * Industry-specific payment setup information
+ * Industry-specific information.
  */
 @Data
 @Builder
@@ -18,14 +17,21 @@ import java.util.List;
 public final class Industry {
 
     /**
-     * Airline industry-specific data for flight bookings and related payments
+     * Airline industry-specific data for flight bookings and related payments.
+     * [Optional]
+     * <p>
+     * Maps the specification property {@code airline}, which is an array. This was previously a
+     * single object named {@code airlineData}, so it needed an explicit serialized-name override
+     * to reach the right key at all, and it serialized as an object where the API expects an
+     * array, meaning the value never reached the gateway.
      */
-    @SerializedName("airline")
-    private AirlineData airlineData;
+    private List<AirlineData> airline;
 
     /**
-     * Accommodation industry-specific data for hotel and cruise bookings and related payments
+     * Accommodation industry-specific data for hotel and cruise bookings and related payments.
+     * [Optional]
+     * <p>
+     * Maps the specification property {@code accommodation}.
      */
-    @SerializedName("accommodation")
-    private List<AccommodationData> accommodationData;
+    private List<AccommodationData> accommodation;
 }

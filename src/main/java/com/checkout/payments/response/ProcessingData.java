@@ -9,6 +9,12 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Returns information related to the processing of the payment.
+ * <p>
+ * The response counterpart of {@link com.checkout.payments.ProcessingSettings}, returned under
+ * {@code processing} on {@code GET /payments/{id}}.
+ */
 @Data
 public final class ProcessingData {
 
@@ -42,7 +48,7 @@ public final class ProcessingData {
      * Total tax amount of the order.
      * [Optional]
      */
-    private Long taxAmount;
+    private Double taxAmount;
 
     /**
      * The country where the purchase was made. ISO 3166-1 alpha-2 country code.
