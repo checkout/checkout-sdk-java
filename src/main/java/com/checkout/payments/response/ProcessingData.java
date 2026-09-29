@@ -48,7 +48,7 @@ public final class ProcessingData {
      * Total tax amount of the order.
      * [Optional]
      */
-    private Long taxAmount;
+    private Double taxAmount;
 
     /**
      * The country where the purchase was made. ISO 3166-1 alpha-2 country code.

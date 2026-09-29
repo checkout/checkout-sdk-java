@@ -31,19 +31,19 @@ public final class PaymentContextsProcessing {
      * The discount amount the merchant applied to the transaction.
      * [Optional]
      */
-    private Integer discountAmount;
+    private Double discountAmount;
 
     /**
      * The total freight or shipping and handling charges for the transaction.
      * [Optional]
      */
-    private Integer shippingAmount;
+    private Double shippingAmount;
 
     /**
      * The total tax amount for the transaction, in the minor currency unit.
      * [Optional]
      */
-    private Integer taxAmount;
+    private Double taxAmount;
 
     /**
      * Invoice ID number.

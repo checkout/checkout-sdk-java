@@ -8,7 +8,9 @@ import com.checkout.common.CountryCode;
 import com.checkout.payments.PaymentAction;
 import com.checkout.payments.Passenger;
 import com.checkout.payments.AirlineData;
+import com.checkout.payments.ProcessingSettings;
 import com.checkout.payments.ProductResponse;
+import com.checkout.payments.response.ProcessingData;
 import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.Test;
 
@@ -34,6 +36,44 @@ class CustomDeserializerPolicyTest {
      * getProductDeserializer matches JSON keys against @SerializedName, the exact field name, OR the
      * naming-policy translation. This verifies snake_case keys map to annotation-less camelCase fields.
      */
+    // The swagger types tax_amount, discount_amount, shipping_amount, shipping_tax_amount,
+    // duty_amount and original_order_amount as `number`, not `integer`, and the live API honours
+    // that: POST /payments with "tax_amount": 10.5 returns 201 and GET /payments/{id} echoes 10.5
+    // back. While these fields were Long, Gson threw
+    // JsonSyntaxException: NumberFormatException: Expected a long but was 10.5 on that response,
+    // so the whole payment failed to deserialize. Keep them Double.
+    @Test
+    void processingAcceptsFractionalAmounts() {
+        final String json = "{\"tax_amount\":10.5,\"discount_amount\":0.25,"
+                + "\"shipping_amount\":3.75,\"shipping_tax_amount\":1.5,"
+                + "\"duty_amount\":2.05,\"original_order_amount\":99.99}";
+
+        final ProcessingSettings settings = serializer.fromJson(json, ProcessingSettings.class);
+
+        assertEquals(10.5d, settings.getTaxAmount());
+        assertEquals(0.25d, settings.getDiscountAmount());
+        assertEquals(3.75d, settings.getShippingAmount());
+        assertEquals(1.5d, settings.getShippingTaxAmount());
+        assertEquals(2.05d, settings.getDutyAmount());
+        assertEquals(99.99d, settings.getOriginalOrderAmount());
+    }
+
+    @Test
+    void processingDataAcceptsFractionalTaxAmount() {
+        final ProcessingData data =
+                serializer.fromJson("{\"tax_amount\":10.5}", ProcessingData.class);
+
+        assertEquals(10.5d, data.getTaxAmount());
+    }
+
+    @Test
+    void processingStillAcceptsWholeAmounts() {
+        final ProcessingSettings settings =
+                serializer.fromJson("{\"tax_amount\":3000}", ProcessingSettings.class);
+
+        assertEquals(3000d, settings.getTaxAmount());
+    }
+
     @Test
     void productDeserializer_honorsNamingPolicyWithoutSerializedName() {
         final String json = "{"

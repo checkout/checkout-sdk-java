@@ -658,7 +658,7 @@ class RequestApmPaymentsIT extends AbstractPaymentsTestIT {
                 .successUrl("https://testing.checkout.com/success")
                 .failureUrl("https://testing.checkout.com/failure")
                 .reference("ORD-5023-4E89")
-                .processing(ProcessingSettings.builder().taxAmount(500L).shippingAmount(1000L).build())
+                .processing(ProcessingSettings.builder().taxAmount(500d).shippingAmount(1000d).build())
                 .processingChannelId("pc_zs5fqhybzc2e3jmq3efvybybpq")
                 .customer(createTamaraCustomer())
                 .items(Collections.singletonList(createTamaraProduct()))

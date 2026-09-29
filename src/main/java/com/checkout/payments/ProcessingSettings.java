@@ -37,7 +37,7 @@ public final class ProcessingSettings {
      * The total amount of sales tax on the total purchase amount.
      * [Optional]
      */
-    private Long taxAmount;
+    private Double taxAmount;
 
     /**
      * The surcharge amount applied to the transaction in minor currency units by the merchant.
@@ -49,25 +49,25 @@ public final class ProcessingSettings {
      * The discount amount applied to the transaction by the merchant.
      * [Optional]
      */
-    private Long discountAmount;
+    private Double discountAmount;
 
     /**
      * The total charges for any import or export duty included in the transaction.
      * [Optional]
      */
-    private Long dutyAmount;
+    private Double dutyAmount;
 
     /**
      * The total freight or shipping and handling charges for the transaction.
      * [Optional]
      */
-    private Long shippingAmount;
+    private Double shippingAmount;
 
     /**
      * The tax amount on the freight or shipping and handling charges for the transaction.
      * [Optional]
      */
-    private Long shippingTaxAmount;
+    private Double shippingTaxAmount;
 
     /**
      * Indicates if the payment is an Account Funding Transaction (AFT).
@@ -111,7 +111,7 @@ public final class ProcessingSettings {
      * The original order amount when a payment is split. Indicates the full order price.
      * [Optional]
      */
-    private Long originalOrderAmount;
+    private Double originalOrderAmount;
 
     /**
      * Merchant receipt ID.
