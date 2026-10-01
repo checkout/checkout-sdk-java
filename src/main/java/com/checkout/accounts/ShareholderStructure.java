@@ -5,14 +5,28 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Shareholder structure chart (including % of shares) certified by a competent authority
+ * individual and dated within the last 3 months.
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public final class ShareholderStructure {
 
+    /**
+     * The type of document.
+     * [Required]
+     */
     private ShareholderStructureType type;
 
+    /**
+     * The ID of the front side of the document as represented within Checkout.com systems.
+     * [Required]
+     * ^file_[a-z2-7]{26}$
+     * 31 characters
+     */
     private String front;
 
 }

@@ -19,6 +19,7 @@ import com.checkout.accounts.files.response.FileDetailsResponse;
 import com.checkout.accounts.files.entities.FilePurpose;
 import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
+import com.checkout.common.DocumentType;
 import com.checkout.common.Currency;
 import com.checkout.common.IdResponse;
 import com.checkout.common.InstrumentType;
@@ -172,6 +173,59 @@ class AccountsTestIT extends SandboxTestFixture {
     // onboarding tests above (which pin schema_version to "2.0"); here createEntity/getEntity/
     // updateEntity use the SDK default (3.0). They run through the accounts-scoped OAuth client,
     // which is the one provisioned for v3.0 onboarding.
+    // The representative's documents on schema 3.0. The sandbox platform resolves to a company
+    // variant (GB/US scope, USD only), where identity_verification and certified_authorised_signatory
+    // are the representative documents the API accepts; the EEA Sole Trader keys are covered by
+    // OnboardSubEntityDocumentsSerializationTest, since this platform rejects them.
+    @Test
+    void shouldCreateEntityWithRepresentativeDocuments() throws URISyntaxException {
+        final CheckoutApi checkoutApi = accountsApi();
+        final IdResponse identityFile = submitAccountsFile(checkoutApi, AccountsFilePurpose.IDENTITY_VERIFICATION);
+        final IdResponse signatoryFile = submitAccountsFile(checkoutApi, AccountsFilePurpose.CERTIFIED_AUTHORISED_SIGNATORY);
+
+        final OnboardEntityRequest request = buildCompanyEntityV3(RandomStringUtils.random(15, true, true));
+        request.getCompany().getRepresentatives().get(0).setDocuments(OnboardSubEntityDocuments.builder()
+                .identityVerification(Document.builder()
+                        .type(DocumentType.PASSPORT)
+                        .front(identityFile.getId())
+                        .build())
+                .certifiedAuthorisedSignatory(CertifiedAuthorisedSignatory.builder()
+                        .type(CertifiedAuthorisedSignatoryType.POWER_OF_ATTORNEY)
+                        .front(signatoryFile.getId())
+                        .build())
+                .build());
+
+        final OnboardEntityResponse entityResponse = blocking(() -> checkoutApi.accountsClient().createEntity(request));
+        assertNotNull(entityResponse.getId());
+
+        // The documents are linked on the representative, not dropped: the API echoes them back.
+        final OnboardEntityDetailsResponse details = blocking(() -> checkoutApi.accountsClient().getEntity(entityResponse.getId()));
+        final OnboardSubEntityDocuments linked = details.getCompany().getRepresentatives().get(0).getDocuments();
+        assertEquals(DocumentType.PASSPORT, linked.getIdentityVerification().getType());
+        assertEquals(identityFile.getId(), linked.getIdentityVerification().getFront());
+        assertEquals(CertifiedAuthorisedSignatoryType.POWER_OF_ATTORNEY, linked.getCertifiedAuthorisedSignatory().getType());
+        assertEquals(signatoryFile.getId(), linked.getCertifiedAuthorisedSignatory().getFront());
+    }
+
+    // The two EEA Sole Trader representative documents need their own upload purposes before they
+    // can be linked. Goes through POST /entities/{id}/files, the endpoint whose request schema
+    // (PlatformsFileUpload) defines the purpose enum.
+    @Test
+    void shouldUploadRepresentativeProofFilesForEntity() {
+        final String entityId = createTestEntity();
+
+        for (final FilePurpose purpose : new FilePurpose[]{FilePurpose.PROOF_OF_RESIDENTIAL_ADDRESS, FilePurpose.PROOF_OF_REGISTRATION}) {
+            final FileUploadResponse uploadResponse = blocking(() -> accountsApi().accountsClient()
+                    .uploadFile(entityId, FileUploadRequest.builder().purpose(purpose).build()));
+            validateFileUploadResponseForEntity(uploadResponse);
+
+            final FileDetailsResponse details = blocking(() -> accountsApi().accountsClient()
+                    .retrieveFile(entityId, uploadResponse.getId()));
+            validateFileDetailsResponseForEntity(details, uploadResponse.getId());
+            assertEquals(purpose, details.getPurpose());
+        }
+    }
+
     @Test
     void shouldCreateGetAndUpdateOnboardCompanyEntityV3() {
         final CheckoutApi checkoutApi = getAccountsCheckoutApi();
@@ -831,6 +885,18 @@ class AccountsTestIT extends SandboxTestFixture {
                 .purpose(AccountsFilePurpose.BANK_VERIFICATION)
                 .build();
         final IdResponse fileResponse = blocking(() -> checkoutApi.accountsClient().submitFile(fileRequest));
+        assertNotNull(fileResponse);
+        assertNotNull(fileResponse.getId());
+        return fileResponse;
+    }
+
+    private IdResponse submitAccountsFile(final CheckoutApi api, final AccountsFilePurpose purpose) throws URISyntaxException {
+        final File file = new File(getClass().getClassLoader().getResource("checkout.jpeg").toURI());
+        final IdResponse fileResponse = blocking(() -> api.accountsClient().submitFile(AccountsFileRequest.builder()
+                .file(file)
+                .contentType(ContentType.IMAGE_JPEG)
+                .purpose(purpose)
+                .build()));
         assertNotNull(fileResponse);
         assertNotNull(fileResponse.getId());
         return fileResponse;

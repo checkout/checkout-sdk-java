@@ -1,8 +1,10 @@
 package com.checkout.accounts;
 
 import com.checkout.GsonSerializer;
+import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
+import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -167,5 +169,60 @@ class AccountsV3SerializationTest {
         assertEquals(BusinessType.SEC_REGISTERED_ENTITY, serializer.fromJson("\"sec_registered_entity\"", BusinessType.class));
         assertEquals(CompanyPosition.CEO, serializer.fromJson("\"ceo\"", CompanyPosition.class));
         assertEquals(CompanyPosition.OTHER_NON_EXECUTIVE_NON_SENIOR, serializer.fromJson("\"other_non_executive_non_senior\"", CompanyPosition.class));
+    }
+
+    // ------------------------------------------------------------------------
+    // Controlling company representative
+    // EEA and GB Company Full (3.0) allow a representative that is a company:
+    // { id, company: { legal_name, trading_name, registered_address },
+    // ownership_percentage }. The field was not modelled.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldSerializeControllingCompanyRepresentative() {
+        final Representative representative = Representative.builder()
+                .company(Company.builder()
+                        .legalName("Parent Holdings Ltd")
+                        .tradingName("Parent Holdings")
+                        .registeredAddress(Address.builder()
+                                .addressLine1("1 Main Street")
+                                .city("London")
+                                .zip("W1T 4TJ")
+                                .country(CountryCode.GB)
+                                .build())
+                        .build())
+                .ownershipPercentage(60)
+                .build();
+
+        assertEquals(JsonParser.parseString("{\"ownership_percentage\":60,\"company\":{"
+                        + "\"legal_name\":\"Parent Holdings Ltd\",\"trading_name\":\"Parent Holdings\","
+                        + "\"registered_address\":{\"address_line1\":\"1 Main Street\",\"city\":\"London\","
+                        + "\"zip\":\"W1T 4TJ\",\"country\":\"GB\"}}}"),
+                JsonParser.parseString(serializer.toJson(representative)));
+    }
+
+    // ------------------------------------------------------------------------
+    // OnboardEntityDetailsResponse
+    // GET /accounts/entities/{id} returns documents and processing_details; neither
+    // was modelled, so the top-level documents could not be read back.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldDeserializeEntityDetailsDocumentsAndProcessingDetails() {
+        final OnboardEntityDetailsResponse response = serializer.fromJson("{"
+                        + "\"id\":\"ent_aaaaaaaaaaaaaaaaaaaaaaaaaa\","
+                        + "\"processing_details\":{\"currency\":\"USD\",\"annual_processing_volume\":1000000},"
+                        + "\"documents\":{\"bank_verification\":{\"type\":\"bank_statement\","
+                        + "\"front\":\"file_bankverificationaaaaaaaaaa\"}},"
+                        + "\"company\":{\"representatives\":[{\"documents\":{\"proof_of_registration\":"
+                        + "{\"type\":\"extract_from_trade_register\",\"front\":\"file_proofofregistrationaaaaaaa\"}}}]}}",
+                OnboardEntityDetailsResponse.class);
+
+        assertEquals(Currency.USD, response.getProcessingDetails().getCurrency());
+        assertEquals(1000000, response.getProcessingDetails().getAnnualProcessingVolume());
+        assertEquals(BankVerificationType.BANK_STATEMENT, response.getDocuments().getBankVerification().getType());
+        assertEquals("file_bankverificationaaaaaaaaaa", response.getDocuments().getBankVerification().getFront());
+        assertEquals(ProofOfRegistrationType.EXTRACT_FROM_TRADE_REGISTER, response.getCompany().getRepresentatives()
+                .get(0).getDocuments().getProofOfRegistration().getType());
     }
 }

@@ -2,6 +2,9 @@ package com.checkout.accounts.files.entities;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * The purpose of a sub-entity file upload (POST /entities/{entityId}/files).
+ */
 public enum FilePurpose {
     @SerializedName("additional_document")
     ADDITIONAL_DOCUMENT,

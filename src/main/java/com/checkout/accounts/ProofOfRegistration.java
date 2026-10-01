@@ -6,19 +6,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * A document showing transactions from the last 3 months.
+ * Proof of the sole trader's registration, for example an extract from a trade register.
+ * Representative documents only ({@code company.representatives[].documents}), EEA Sole Trader
+ * Full (3.0); not accepted at the top level.
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class BankVerification {
+public final class ProofOfRegistration {
 
     /**
-     * The type of document being used as bank verification.
+     * The type of document being used as proof of registration.
      * [Required]
      */
-    private BankVerificationType type;
+    private ProofOfRegistrationType type;
 
     /**
      * The ID of the front side of the document as represented within Checkout.com systems.
