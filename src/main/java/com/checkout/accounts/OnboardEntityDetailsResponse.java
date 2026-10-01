@@ -68,9 +68,10 @@ public final class OnboardEntityDetailsResponse extends Resource {
     private List<Instrument> instruments;
 
     /**
-     * The sub-entity's expected processing (Accounts API v3.0).
+     * The sub-entity's expected processing (Accounts API v3.0). Amounts are {@code Long}; see
+     * {@link EntityProcessingDetails}.
      */
-    private ProcessingDetails processingDetails;
+    private EntityProcessingDetails processingDetails;
 
     /**
      * The top-level documents used to support the verification of the sub-entity's details.

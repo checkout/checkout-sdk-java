@@ -10,6 +10,10 @@ import java.io.File;
 @AllArgsConstructor
 public abstract class AbstractFileRequest {
 
+    /**
+     * The file to upload.
+     * [Required]
+     */
     private File file;
 
     /**
