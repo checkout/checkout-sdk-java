@@ -2,6 +2,9 @@ package com.checkout.accounts;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * The document types accepted as memorandum or articles of association.
+ */
 public enum ArticlesOfAssociationType {
 
     @SerializedName("memorandum_of_association")

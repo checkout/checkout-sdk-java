@@ -2,6 +2,9 @@ package com.checkout.common;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * The document types accepted to confirm an individual's identity.
+ */
 public enum DocumentType {
 
     @SerializedName("passport")

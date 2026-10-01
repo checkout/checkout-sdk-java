@@ -6,14 +6,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Additional space for documents to be provided when requested. Carries a file ID only; the API
- * defines no document type for it.
+ * Proof of residential address of the representative. Representative documents only
+ * ({@code company.representatives[].documents}), EEA Sole Trader Full (3.0); not accepted at the
+ * top level.
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class AdditionalDocument {
+public final class ProofOfResidentialAddress {
+
+    /**
+     * The type of document being used as address verification.
+     * [Required]
+     */
+    private ProofOfResidentialAddressType type;
 
     /**
      * The ID of the front side of the document as represented within Checkout.com systems.
