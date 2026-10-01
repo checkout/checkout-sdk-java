@@ -34,6 +34,10 @@ public enum FilePurpose {
     PROOF_OF_RESIDENTIAL_ADDRESS,
     @SerializedName("proof_of_registration")
     PROOF_OF_REGISTRATION,
+    /**
+     * Not an onboarding upload purpose: POST /entities/{entityId}/files does not accept it
+     * ({@code PlatformsFileUpload} defines the other fourteen values only).
+     */
     @SerializedName("dispute_evidence")
     DISPUTE_EVIDENCE
 }

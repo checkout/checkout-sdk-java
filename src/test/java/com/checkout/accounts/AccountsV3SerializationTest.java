@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -219,10 +221,54 @@ class AccountsV3SerializationTest {
                 OnboardEntityDetailsResponse.class);
 
         assertEquals(Currency.USD, response.getProcessingDetails().getCurrency());
-        assertEquals(1000000, response.getProcessingDetails().getAnnualProcessingVolume());
+        assertEquals(Long.valueOf(1000000), response.getProcessingDetails().getAnnualProcessingVolume());
         assertEquals(BankVerificationType.BANK_STATEMENT, response.getDocuments().getBankVerification().getType());
         assertEquals("file_bankverificationaaaaaaaaaa", response.getDocuments().getBankVerification().getFront());
         assertEquals(ProofOfRegistrationType.EXTRACT_FROM_TRADE_REGISTER, response.getCompany().getRepresentatives()
                 .get(0).getDocuments().getProofOfRegistration().getType());
+    }
+
+    // Regression: processing_details amounts are integers in minor units with no maximum. Typed
+    // as Integer, any value above 2,147,483,647 (about 21.4 million in a two-decimal currency)
+    // made the whole GET /accounts/entities/{id} fail to deserialize.
+    @Test
+    void shouldDeserializeProcessingDetailsAmountsAboveIntegerRange() {
+        final OnboardEntityDetailsResponse response = serializer.fromJson("{\"processing_details\":{"
+                        + "\"annual_processing_volume\":3000000000,"
+                        + "\"average_transaction_value\":2500000000,"
+                        + "\"highest_transaction_value\":9000000000}}",
+                OnboardEntityDetailsResponse.class);
+
+        assertEquals(Long.valueOf(3000000000L), response.getProcessingDetails().getAnnualProcessingVolume());
+        assertEquals(Long.valueOf(2500000000L), response.getProcessingDetails().getAverageTransactionValue());
+        assertEquals(Long.valueOf(9000000000L), response.getProcessingDetails().getHighestTransactionValue());
+    }
+
+    // ------------------------------------------------------------------------
+    // AccountsFilePurpose
+    // submitFile sends getPurpose() on the wire, so every value is asserted as a string.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldExposeEveryAccountsFilePurposeWireValue() {
+        final Map<AccountsFilePurpose, String> expected = new EnumMap<>(AccountsFilePurpose.class);
+        expected.put(AccountsFilePurpose.BANK_VERIFICATION, "bank_verification");
+        expected.put(AccountsFilePurpose.IDENTIFICATION, "identification");
+        expected.put(AccountsFilePurpose.IDENTITY_VERIFICATION, "identity_verification");
+        expected.put(AccountsFilePurpose.COMPANY_VERIFICATION, "company_verification");
+        expected.put(AccountsFilePurpose.FINANCIAL_VERIFICATION, "financial_verification");
+        expected.put(AccountsFilePurpose.TAX_VERIFICATION, "tax_verification");
+        expected.put(AccountsFilePurpose.ADDITIONAL_DOCUMENT, "additional_document");
+        expected.put(AccountsFilePurpose.ARTICLES_OF_ASSOCIATION, "articles_of_association");
+        expected.put(AccountsFilePurpose.CERTIFIED_AUTHORISED_SIGNATORY, "certified_authorised_signatory");
+        expected.put(AccountsFilePurpose.COMPANY_OWNERSHIP, "company_ownership");
+        expected.put(AccountsFilePurpose.PROOF_OF_LEGALITY, "proof_of_legality");
+        expected.put(AccountsFilePurpose.PROOF_OF_PRINCIPAL_ADDRESS, "proof_of_principal_address");
+        expected.put(AccountsFilePurpose.SHAREHOLDER_STRUCTURE, "shareholder_structure");
+        expected.put(AccountsFilePurpose.PROOF_OF_RESIDENTIAL_ADDRESS, "proof_of_residential_address");
+        expected.put(AccountsFilePurpose.PROOF_OF_REGISTRATION, "proof_of_registration");
+
+        assertEquals(AccountsFilePurpose.values().length, expected.size(), "every value must be asserted");
+        expected.forEach((purpose, wire) -> assertEquals(wire, purpose.getPurpose(), purpose.name()));
     }
 }
