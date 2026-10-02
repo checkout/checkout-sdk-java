@@ -1,12 +1,16 @@
 package com.checkout.accounts;
 
 import com.checkout.GsonSerializer;
+import com.checkout.common.Address;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
+import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -167,5 +171,104 @@ class AccountsV3SerializationTest {
         assertEquals(BusinessType.SEC_REGISTERED_ENTITY, serializer.fromJson("\"sec_registered_entity\"", BusinessType.class));
         assertEquals(CompanyPosition.CEO, serializer.fromJson("\"ceo\"", CompanyPosition.class));
         assertEquals(CompanyPosition.OTHER_NON_EXECUTIVE_NON_SENIOR, serializer.fromJson("\"other_non_executive_non_senior\"", CompanyPosition.class));
+    }
+
+    // ------------------------------------------------------------------------
+    // Controlling company representative
+    // EEA and GB Company Full (3.0) allow a representative that is a company:
+    // { id, company: { legal_name, trading_name, registered_address },
+    // ownership_percentage }. The field was not modelled.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldSerializeControllingCompanyRepresentative() {
+        final Representative representative = Representative.builder()
+                .company(Company.builder()
+                        .legalName("Parent Holdings Ltd")
+                        .tradingName("Parent Holdings")
+                        .registeredAddress(Address.builder()
+                                .addressLine1("1 Main Street")
+                                .city("London")
+                                .zip("W1T 4TJ")
+                                .country(CountryCode.GB)
+                                .build())
+                        .build())
+                .ownershipPercentage(60)
+                .build();
+
+        assertEquals(JsonParser.parseString("{\"ownership_percentage\":60,\"company\":{"
+                        + "\"legal_name\":\"Parent Holdings Ltd\",\"trading_name\":\"Parent Holdings\","
+                        + "\"registered_address\":{\"address_line1\":\"1 Main Street\",\"city\":\"London\","
+                        + "\"zip\":\"W1T 4TJ\",\"country\":\"GB\"}}}"),
+                JsonParser.parseString(serializer.toJson(representative)));
+    }
+
+    // ------------------------------------------------------------------------
+    // OnboardEntityDetailsResponse
+    // GET /accounts/entities/{id} returns documents and processing_details; neither
+    // was modelled, so the top-level documents could not be read back.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldDeserializeEntityDetailsDocumentsAndProcessingDetails() {
+        final OnboardEntityDetailsResponse response = serializer.fromJson("{"
+                        + "\"id\":\"ent_aaaaaaaaaaaaaaaaaaaaaaaaaa\","
+                        + "\"processing_details\":{\"currency\":\"USD\",\"annual_processing_volume\":1000000},"
+                        + "\"documents\":{\"bank_verification\":{\"type\":\"bank_statement\","
+                        + "\"front\":\"file_bankverificationaaaaaaaaaa\"}},"
+                        + "\"company\":{\"representatives\":[{\"documents\":{\"proof_of_registration\":"
+                        + "{\"type\":\"extract_from_trade_register\",\"front\":\"file_proofofregistrationaaaaaaa\"}}}]}}",
+                OnboardEntityDetailsResponse.class);
+
+        assertEquals(Currency.USD, response.getProcessingDetails().getCurrency());
+        assertEquals(Long.valueOf(1000000), response.getProcessingDetails().getAnnualProcessingVolume());
+        assertEquals(BankVerificationType.BANK_STATEMENT, response.getDocuments().getBankVerification().getType());
+        assertEquals("file_bankverificationaaaaaaaaaa", response.getDocuments().getBankVerification().getFront());
+        assertEquals(ProofOfRegistrationType.EXTRACT_FROM_TRADE_REGISTER, response.getCompany().getRepresentatives()
+                .get(0).getDocuments().getProofOfRegistration().getType());
+    }
+
+    // Regression: processing_details amounts are integers in minor units with no maximum. Typed
+    // as Integer, any value above 2,147,483,647 (about 21.4 million in a two-decimal currency)
+    // made the whole GET /accounts/entities/{id} fail to deserialize.
+    @Test
+    void shouldDeserializeProcessingDetailsAmountsAboveIntegerRange() {
+        final OnboardEntityDetailsResponse response = serializer.fromJson("{\"processing_details\":{"
+                        + "\"annual_processing_volume\":3000000000,"
+                        + "\"average_transaction_value\":2500000000,"
+                        + "\"highest_transaction_value\":9000000000}}",
+                OnboardEntityDetailsResponse.class);
+
+        assertEquals(Long.valueOf(3000000000L), response.getProcessingDetails().getAnnualProcessingVolume());
+        assertEquals(Long.valueOf(2500000000L), response.getProcessingDetails().getAverageTransactionValue());
+        assertEquals(Long.valueOf(9000000000L), response.getProcessingDetails().getHighestTransactionValue());
+    }
+
+    // ------------------------------------------------------------------------
+    // AccountsFilePurpose
+    // submitFile sends getPurpose() on the wire, so every value is asserted as a string.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldExposeEveryAccountsFilePurposeWireValue() {
+        final Map<AccountsFilePurpose, String> expected = new EnumMap<>(AccountsFilePurpose.class);
+        expected.put(AccountsFilePurpose.BANK_VERIFICATION, "bank_verification");
+        expected.put(AccountsFilePurpose.IDENTIFICATION, "identification");
+        expected.put(AccountsFilePurpose.IDENTITY_VERIFICATION, "identity_verification");
+        expected.put(AccountsFilePurpose.COMPANY_VERIFICATION, "company_verification");
+        expected.put(AccountsFilePurpose.FINANCIAL_VERIFICATION, "financial_verification");
+        expected.put(AccountsFilePurpose.TAX_VERIFICATION, "tax_verification");
+        expected.put(AccountsFilePurpose.ADDITIONAL_DOCUMENT, "additional_document");
+        expected.put(AccountsFilePurpose.ARTICLES_OF_ASSOCIATION, "articles_of_association");
+        expected.put(AccountsFilePurpose.CERTIFIED_AUTHORISED_SIGNATORY, "certified_authorised_signatory");
+        expected.put(AccountsFilePurpose.COMPANY_OWNERSHIP, "company_ownership");
+        expected.put(AccountsFilePurpose.PROOF_OF_LEGALITY, "proof_of_legality");
+        expected.put(AccountsFilePurpose.PROOF_OF_PRINCIPAL_ADDRESS, "proof_of_principal_address");
+        expected.put(AccountsFilePurpose.SHAREHOLDER_STRUCTURE, "shareholder_structure");
+        expected.put(AccountsFilePurpose.PROOF_OF_RESIDENTIAL_ADDRESS, "proof_of_residential_address");
+        expected.put(AccountsFilePurpose.PROOF_OF_REGISTRATION, "proof_of_registration");
+
+        assertEquals(AccountsFilePurpose.values().length, expected.size(), "every value must be asserted");
+        expected.forEach((purpose, wire) -> assertEquals(wire, purpose.getPurpose(), purpose.name()));
     }
 }

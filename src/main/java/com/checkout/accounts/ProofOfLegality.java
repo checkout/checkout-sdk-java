@@ -5,14 +5,27 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * A regulatory licence document required for the company to operate (when applicable).
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public final class ProofOfLegality {
 
+    /**
+     * The type of document used for proof of legality.
+     * [Required]
+     */
     private ProofOfLegalityType type;
 
+    /**
+     * The ID of the front side of the document as represented within Checkout.com systems.
+     * [Required]
+     * ^file_[a-z2-7]{26}$
+     * 31 characters
+     */
     private String front;
 
 }

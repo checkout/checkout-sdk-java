@@ -18,10 +18,35 @@ import com.checkout.common.IdResponse;
 
 public interface AccountsClient {
 
+    /**
+     * Uploads a file to the Files API (POST /files on the Files host), as a multipart request. The
+     * returned ID is what document {@code front} and {@code back} fields take.
+     *
+     * @param accountsFileRequest the path to the file, its content type, and its purpose
+     * @return the ID of the uploaded file
+     */
     CompletableFuture<IdResponse> submitFile(AccountsFileRequest accountsFileRequest);
 
+    /**
+     * Creates a file upload for a sub-entity (POST /entities/{entityId}/files on the Files host).
+     * The response carries the file ID and an upload link; the file content itself is sent to that
+     * link, not in this request.
+     *
+     * @param entityId          the ID of the sub-entity
+     * @param fileUploadRequest the purpose of the file upload
+     * @return the file ID, the maximum size allowed, the MIME types allowed for the purpose, and the
+     * upload link
+     */
     CompletableFuture<FileUploadResponse> uploadFile(String entityId, FileUploadRequest fileUploadRequest);
 
+    /**
+     * Retrieves the details of a sub-entity's file (GET /entities/{entityId}/files/{fileId} on the
+     * Files host).
+     *
+     * @param entityId the ID of the sub-entity
+     * @param fileId   the ID of the file
+     * @return the file's status, size, MIME type, upload date and purpose
+     */
     CompletableFuture<FileDetailsResponse> retrieveFile(String entityId, String fileId);
 
     CompletableFuture<OnboardEntityResponse> createEntity(OnboardEntityRequest entityRequest);
@@ -99,10 +124,35 @@ public interface AccountsClient {
     CompletableFuture<EntityRequirementUpdateResponse> resolveEntityRequirement(String entityId, String requirementId, EntityRequirementUpdateRequest updateRequest);
 
     // Synchronous methods
+    /**
+     * Uploads a file to the Files API (POST /files on the Files host), as a multipart request. The
+     * returned ID is what document {@code front} and {@code back} fields take.
+     *
+     * @param accountsFileRequest the path to the file, its content type, and its purpose
+     * @return the ID of the uploaded file
+     */
     IdResponse submitFileSync(final AccountsFileRequest accountsFileRequest);
 
+    /**
+     * Creates a file upload for a sub-entity (POST /entities/{entityId}/files on the Files host).
+     * The response carries the file ID and an upload link; the file content itself is sent to that
+     * link, not in this request.
+     *
+     * @param entityId          the ID of the sub-entity
+     * @param fileUploadRequest the purpose of the file upload
+     * @return the file ID, the maximum size allowed, the MIME types allowed for the purpose, and the
+     * upload link
+     */
     FileUploadResponse uploadFileSync(final String entityId, final FileUploadRequest fileUploadRequest);
 
+    /**
+     * Retrieves the details of a sub-entity's file (GET /entities/{entityId}/files/{fileId} on the
+     * Files host).
+     *
+     * @param entityId the ID of the sub-entity
+     * @param fileId   the ID of the file
+     * @return the file's status, size, MIME type, upload date and purpose
+     */
     FileDetailsResponse retrieveFileSync(final String entityId, final String fileId);
         
     OnboardEntityResponse createEntitySync(final OnboardEntityRequest entityRequest);

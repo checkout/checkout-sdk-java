@@ -6,21 +6,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Audited or management-prepared financial statements (when applicable). US ISV Seller variants
- * only. Not the same document as {@link FinancialVerification}, whose type is the singular
- * {@code financial_statement}.
+ * Certified authorised signatory document. Required when the legal representative or other role
+ * owner is not registered on the certificate of incorporation. Representative documents only
+ * ({@code company.representatives[].documents}), EEA, GB and US Company Full (3.0) and US ISV
+ * Seller Company (3.0); not accepted at the top level.
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class FinancialStatements {
+public final class CertifiedAuthorisedSignatory {
 
     /**
      * The type of document.
      * [Required]
      */
-    private FinancialStatementsType type;
+    private CertifiedAuthorisedSignatoryType type;
 
     /**
      * The ID of the front side of the document as represented within Checkout.com systems.
