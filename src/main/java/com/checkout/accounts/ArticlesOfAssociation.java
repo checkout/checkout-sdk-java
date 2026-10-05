@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
  * Memorandum or articles of association document, supplied when onboarding a sub-entity.
  *
  * <p>Required on EEA and GB Company Full (3.0); optional on US Company Full (3.0) and the US ISV
- * Seller variants. The API expects an object carrying the
- * document type and the uploaded file ID, which is why this class exists: the field on
- * {@link OnboardSubEntityDocuments} used to be the {@link ArticlesOfAssociationType} enum, so
- * the SDK serialized a bare string and the API rejected the request.</p>
+ * Seller variants. The object carries the document type and the ID of the uploaded file.</p>
  */
 @Data
 @Builder

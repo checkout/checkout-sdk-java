@@ -17,9 +17,9 @@ public final class ContactDetails {
     /**
      * The phone number of the sub-entity.
      * [Required] for every Accounts API v2.0 variant and the US ISV Seller variants; [Optional] for the
-     * other v3.0 variants. On v3.0 {@code countryCode} is required and is the ISO 3166-1 alpha-2
-     * country where the number is registered (for example {@code FR}), not the dialling code; v2.0
-     * takes {@code number} only. {@code number} is the number without the country calling code, and
+     * other v3.0 variants; not part of the hosted onboarding invite request. On v3.0
+     * {@code countryCode} is required and is the ISO 3166-1 alpha-2 country where the number is
+     * registered (for example {@code FR}), not the dialling code; v2.0 takes {@code number} only. {@code number} is the number without the country calling code, and
      * its format depends on the variant:
      * <ul>
      * <li>v3.0 EEA: ^[0-9]{6,13}$, min 6 characters, max 13 characters</li>
@@ -34,13 +34,15 @@ public final class ContactDetails {
     /**
      * Email addresses for this sub-entity.
      * [Required] for every Accounts API v2.0 variant and the US ISV Seller variants; [Optional] for the
-     * other v3.0 variants.
+     * other v3.0 variants; not part of the hosted onboarding invite request.
      */
     private EntityEmailAddresses emailAddresses;
 
     /**
      * The details of the user responsible for onboarding the sub-entity.
-     * [Optional] (not part of the US ISV Seller variants)
+     * [Required] in the hosted onboarding invite request, together with reference and is_draft;
+     * [Optional] in the full onboarding variants (every Full and Lite variant); not part of the US ISV
+     * Seller variants.
      */
     private Invitee invitee;
 
