@@ -13,10 +13,12 @@ import lombok.NoArgsConstructor;
  * <li>The top-level request {@code documents}, on {@link OnboardEntityRequest}. The API
  * ignores keys it does not recognise here rather than rejecting them, so a misplaced document is
  * dropped silently.</li>
- * <li>A representative's {@code documents}, on {@link Representative}. This object is
- * strict: it accepts only {@code identity_verification}, {@code certified_authorised_signatory},
- * {@code proof_of_residential_address} and {@code proof_of_registration}, and rejects any other
- * key.</li>
+ * <li>A representative's {@code documents}, on {@link Representative}. It takes only
+ * {@code identity_verification}, {@code certified_authorised_signatory} (EEA, GB and US Company
+ * Full (3.0) and US ISV Seller Company (3.0)), {@code proof_of_residential_address} and
+ * {@code proof_of_registration}. On the EEA, GB and US Company Full (3.0) and Sole Trader Full
+ * (3.0) variants this object is strict and rejects any other key; it is not strict on the US ISV
+ * Seller variants (3.0) nor on any v2.0 variant.</li>
  * </ul>
  * Each field below says which of the two it belongs to.
  */

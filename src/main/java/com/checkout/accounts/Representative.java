@@ -105,10 +105,11 @@ public final class Representative {
     private List<EntityRoles> roles;
 
     /**
-     * Verification documents for the individual representative. The API validates this object
-     * strictly on v3.0: it accepts only {@code identity_verification},
-     * {@code certified_authorised_signatory}, {@code proof_of_residential_address} and
-     * {@code proof_of_registration}, and rejects any other key. See
+     * Verification documents for the individual representative. On the EEA, GB and US Company Full
+     * (3.0) and Sole Trader Full (3.0) variants this object is strict: it accepts only
+     * {@code identity_verification}, {@code certified_authorised_signatory},
+     * {@code proof_of_residential_address} and {@code proof_of_registration}, and rejects any other
+     * key. It is not strict on the US ISV Seller variants (3.0) nor on any v2.0 variant. See
      * {@link OnboardSubEntityDocuments} for which apply to each variant.
      * [Required] for the EEA, GB and US Sole Trader Full (3.0) variants and EEA Company Full (2.0);
      * [Optional] otherwise.

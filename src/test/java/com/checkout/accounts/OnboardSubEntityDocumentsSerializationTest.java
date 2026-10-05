@@ -63,11 +63,11 @@ class OnboardSubEntityDocumentsSerializationTest {
         final OnboardSubEntityDocuments documents = OnboardSubEntityDocuments.builder()
                 .bankVerification(BankVerification.builder()
                         .type(BankVerificationType.BANK_STATEMENT)
-                        .front("file_bank")
+                        .front("file_jj7e4kwpcenegfwy4dpscnf4kl")
                         .build())
                 .shareholderStructure(ShareholderStructure.builder()
                         .type(ShareholderStructureType.CERTIFIED_SHAREHOLDER_STRUCTURE)
-                        .front("file_shareholder")
+                        .front("file_v2jnxxmuzhnmne2xemjvypx3lb")
                         .build())
                 .build();
 
@@ -91,8 +91,8 @@ class OnboardSubEntityDocumentsSerializationTest {
     // ------------------------------------------------------------------------
     // Representative documents (company.representatives[].documents)
     // The EEA Sole Trader (3.0) keys and the company-variant certified authorised
-    // signatory. The representative object is strict on the API, so the exact key
-    // set matters.
+    // signatory. The representative object is strict on the Company Full and Sole
+    // Trader Full (3.0) variants of EEA, GB and US, so the exact key set matters.
     // ------------------------------------------------------------------------
 
     // Regression: EEA Sole Trader (3.0) needs proof_of_residential_address and proof_of_registration
@@ -178,11 +178,11 @@ class OnboardSubEntityDocumentsSerializationTest {
         final OnboardSubEntityDocuments documents = OnboardSubEntityDocuments.builder()
                 .companyVerification(CompanyVerification.builder()
                         .type(CompanyVerificationType.INCORPORATION_DOCUMENT)
-                        .front("file_aaaaaaaaaaaaaaaaaaaaaaaaaa")
+                        .front("file_reoytgtkcvtxlnco2u4l2ewg37")
                         .build())
                 .taxVerification(TaxVerification.builder()
                         .type(TaxVerificationType.EIN_LETTER)
-                        .front("file_aaaaaaaaaaaaaaaaaaaaaaaaaa")
+                        .front("file_reoytgtkcvtxlnco2u4l2ewg37")
                         .build())
                 .build();
 
@@ -201,7 +201,7 @@ class OnboardSubEntityDocumentsSerializationTest {
 
     @Test
     void shouldSerializeAndRoundTripEveryDocumentsField() {
-        final String file = "file_aaaaaaaaaaaaaaaaaaaaaaaaaa";
+        final String file = "file_reoytgtkcvtxlnco2u4l2ewg37";
         final OnboardSubEntityDocuments documents = OnboardSubEntityDocuments.builder()
                 .identityVerification(Document.builder().type(DocumentType.PASSPORT).front(file).back(file).build())
                 .companyVerification(CompanyVerification.builder()

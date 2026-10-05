@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 public final class Invitee {
 
     /**
-     * The main email address for this sub-entity. Despite the spec's wording, this is the address of
-     * the invitee, the user responsible for onboarding the sub-entity.
-     * [Optional]
+     * The email of the user responsible for onboarding the sub-entity.
+     * [Required] in the hosted onboarding invite request (with reference and is_draft); [Optional] in
+     * the full onboarding variants (every Full and Lite variant); not part of the US ISV Seller variants.
      * Format: email
      */
     private String email;
