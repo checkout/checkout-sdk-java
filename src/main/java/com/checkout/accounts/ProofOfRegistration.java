@@ -6,22 +6,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Memorandum or articles of association document, supplied when onboarding a sub-entity.
- *
- * <p>Required on EEA and GB Company Full (3.0); optional on US Company Full (3.0) and the US ISV
- * Seller variants. The object carries the document type and the ID of the uploaded file.</p>
+ * Proof of the sole trader's registration, for example an extract from a trade register.
+ * Representative documents only ({@code company.representatives[].documents}), EEA Sole Trader
+ * Full (3.0); not accepted at the top level.
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class ArticlesOfAssociation {
+public final class ProofOfRegistration {
 
     /**
-     * The type of document used.
+     * The type of document being used as proof of registration.
      * [Required]
      */
-    private ArticlesOfAssociationType type;
+    private ProofOfRegistrationType type;
 
     /**
      * The ID of the front side of the document as represented within Checkout.com systems.

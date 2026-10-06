@@ -2,6 +2,9 @@ package com.checkout.accounts.files.entities;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * The purpose of a sub-entity file upload (POST /entities/{entityId}/files).
+ */
 public enum FilePurpose {
     @SerializedName("additional_document")
     ADDITIONAL_DOCUMENT,
@@ -31,6 +34,10 @@ public enum FilePurpose {
     PROOF_OF_RESIDENTIAL_ADDRESS,
     @SerializedName("proof_of_registration")
     PROOF_OF_REGISTRATION,
+    /**
+     * Not an onboarding upload purpose: POST /entities/{entityId}/files does not accept it
+     * ({@code PlatformsFileUpload} defines the other fourteen values only).
+     */
     @SerializedName("dispute_evidence")
     DISPUTE_EVIDENCE
 }
