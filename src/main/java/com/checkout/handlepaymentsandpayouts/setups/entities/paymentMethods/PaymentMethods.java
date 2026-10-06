@@ -12,6 +12,7 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.bizu
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.blik.Blik;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.card.Card;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.cardpresent.CardPresent;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.cashapp.CashApp;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.paybybank.PayByBank;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.stablecoin.Stablecoin;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.dana.Dana;
@@ -42,6 +43,7 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.true
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.twint.Twint;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.vipps.Vipps;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.wechatpay.WeChatPay;
+import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -307,4 +309,11 @@ public final class PaymentMethods {
      * [Optional]
      */
     private Stablecoin stablecoin;
+
+    /**
+     * Cash App Pay payment method configuration. The wire key is a single word, cashapp.
+     * [Optional]
+     */
+    @SerializedName("cashapp")
+    private CashApp cashapp;
 }
