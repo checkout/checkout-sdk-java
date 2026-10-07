@@ -26,8 +26,9 @@ public final class Risk {
     /**
      * The risk score calculated by our Fraud Detection engine. Absent if not enough data provided.
      * [Optional]
+     * Decimal number, for example 22.5
      * [ 0 .. 100 ]
      */
-    private Integer score;
+    private Double score;
 
 }

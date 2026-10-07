@@ -1,8 +1,11 @@
 package com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +21,7 @@ import com.checkout.handlepaymentsandpayouts.payments.common.source.klarnasource
 import com.checkout.handlepaymentsandpayouts.payments.common.source.paypalsource.PaypalSource;
 import com.checkout.handlepaymentsandpayouts.payments.common.source.sepasource.SepaSource;
 import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.processing.Processing;
+import com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.risk.Risk;
 
 public final  class RequestAPaymentOrPayoutResponseCreatedSerializationTest {
 
@@ -242,6 +246,59 @@ public final  class RequestAPaymentOrPayoutResponseCreatedSerializationTest {
         assertEquals("ACQ001", processing.getAcquirerTransactionId());
         assertEquals("Mastercard", processing.getScheme());
         assertEquals("MTL-XYZ-789", processing.getSchemeTransactionLinkId());
+    }
+
+    // ------------------------------------------------------------------------
+    // Risk
+    // Returns the payment's risk assessment results. score is type number,
+    // min 0, max 100, so a fractional value must deserialize without error
+    // and without rounding.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldDeserializeRiskWithFractionalScore() {
+        String json = "{\"id\":\"pay_123\",\"risk\":{\"flagged\":true,\"score\":22.5}}";
+
+        RequestAPaymentOrPayoutResponseCreated response = serializer.fromJson(json, RequestAPaymentOrPayoutResponseCreated.class);
+
+        Risk risk = response.getRisk();
+        assertNotNull(risk);
+        assertTrue(risk.getFlagged());
+        assertEquals(22.5, risk.getScore());
+    }
+
+    @Test
+    void shouldDeserializeRiskSwaggerExample() {
+        String json = "{\"id\":\"pay_123\",\"risk\":{\"flagged\":true,\"score\":22}}";
+
+        RequestAPaymentOrPayoutResponseCreated response = serializer.fromJson(json, RequestAPaymentOrPayoutResponseCreated.class);
+
+        assertEquals(22.0, response.getRisk().getScore());
+    }
+
+    @Test
+    void shouldDeserializeRiskBoundaryScores() {
+        assertEquals(0.0, serializer.fromJson("{\"score\":0}", Risk.class).getScore());
+        assertEquals(100.0, serializer.fromJson("{\"score\":100}", Risk.class).getScore());
+    }
+
+    @Test
+    void shouldDeserializeRiskWithNullScore() {
+        Risk risk = serializer.fromJson("{\"flagged\":false}", Risk.class);
+
+        assertFalse(risk.getFlagged());
+        assertNull(risk.getScore());
+    }
+
+    @Test
+    void shouldRoundTripRiskAllProperties() {
+        Risk original = Risk.builder().flagged(true).score(22.5).build();
+
+        String json = serializer.toJson(original);
+        Risk deserialized = serializer.fromJson(json, Risk.class);
+
+        assertTrue(json.contains("\"score\":22.5"), json);
+        assertEquals(original, deserialized);
     }
 
 }
