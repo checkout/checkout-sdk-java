@@ -1,6 +1,5 @@
 package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.cashapp;
 
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,11 +21,10 @@ public final class CashAppCustomerProfile {
      * Cash App's identifier for the customer. This is not a Checkout.com customer identifier.
      * [Optional] readOnly
      */
-    @SerializedName("customer_id")
     private String customerId;
 
     /**
-     * The customer's Cashtag.
+     * The customer's $Cashtag.
      * [Optional] readOnly
      */
     private String cashtag;
@@ -35,35 +33,30 @@ public final class CashAppCustomerProfile {
      * Cash App's reference for the customer profile.
      * [Optional] readOnly
      */
-    @SerializedName("reference_id")
     private String referenceId;
 
     /**
      * The customer's full name.
      * [Optional] readOnly
      */
-    @SerializedName("full_name")
     private String fullName;
 
     /**
      * The customer's given name.
      * [Optional] readOnly
      */
-    @SerializedName("given_name")
     private String givenName;
 
     /**
      * The customer's middle name.
      * [Optional] readOnly
      */
-    @SerializedName("middle_name")
     private String middleName;
 
     /**
      * The customer's family name.
      * [Optional] readOnly
      */
-    @SerializedName("family_name")
     private String familyName;
 
     /**
@@ -73,10 +66,11 @@ public final class CashAppCustomerProfile {
     private String suffix;
 
     /**
-     * The customer's date of birth, kept as the raw string returned by the API.
-     * [Optional] readOnly, format date
+     * The customer's date of birth. Kept as the raw string returned by the API, because the
+     * provider's value is not always a plain yyyy-MM-dd date.
+     * [Optional] readOnly
+     * Format: date
      */
-    @SerializedName("birth_date")
     private String birthDate;
 
     /**
@@ -89,21 +83,20 @@ public final class CashAppCustomerProfile {
      * The customer's phone number.
      * [Optional] readOnly
      */
-    @SerializedName("phone_number")
     private String phoneNumber;
 
     /**
      * The customer's email address.
      * [Optional] readOnly
      */
-    @SerializedName("email_address")
     private String emailAddress;
 
     /**
-     * The date and time the customer's Cash App account was created, kept as the raw string
-     * returned by the API.
-     * [Optional] readOnly, format date-time
+     * The date and time the customer's Cash App account was created. Kept as the raw string
+     * returned by the API, so that a provider format the SDK does not expect cannot fail the
+     * whole response and lose the profile, which is only returned once.
+     * [Optional] readOnly
+     * Format: date-time
      */
-    @SerializedName("customer_since")
     private String customerSince;
 }

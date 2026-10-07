@@ -8,7 +8,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * The customer's address from their Cash App profile.
+ * The customer's address from their Cash App profile. The keys follow Cash App's naming
+ * (address_line_1, locality, administrative_district_level_1), not the Checkout.com address, so
+ * the line and district fields carry an explicit serialized name: the naming policy alone would
+ * produce address_line1.
  */
 @Data
 @Builder
@@ -60,12 +63,12 @@ public final class CashAppAddress {
      * The postal or zip code.
      * [Optional] readOnly
      */
-    @SerializedName("postal_code")
     private String postalCode;
 
     /**
-     * The address country, in ISO 3166-1 alpha-2 format. Max 2 characters.
+     * The address country, in ISO 3166-1 alpha-2 format.
      * [Optional] readOnly
+     * max 2 characters
      */
     private CountryCode country;
 }

@@ -7,12 +7,16 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.customer.CustomerDe
 import com.checkout.handlepaymentsandpayouts.setups.entities.customer.CustomerDeviceClient;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.cashapp.CashApp;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.cashapp.CashAppAction;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.cashapp.CashAppAddress;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.cashapp.CashAppCustomerProfile;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.cashapp.CashAppActionType;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.OsType;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodInitialization;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodStatus;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.klarna.Klarna;
 import com.checkout.handlepaymentsandpayouts.setups.requests.PaymentSetupsRequest;
+import com.checkout.handlepaymentsandpayouts.setups.responses.PaymentSetupsConfirmResponse;
 import com.checkout.handlepaymentsandpayouts.setups.responses.PaymentSetupsResponse;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -124,7 +128,7 @@ class CashAppSerializationTest {
                 + "\"ipv6\":\"2001:db8::1\",\"fingerprint\":\"fp_1\",\"locale\":\"en_GB\"}},"
                 + "\"payment_methods\":{\"cashapp\":{"
                 + "\"status\":\"action_required\","
-                + "\"flags\":[\"missing_device_client\"],"
+                + "\"flags\":[],"
                 + "\"initialization\":\"enabled\","
                 + "\"customer_profile_sharing\":true,"
                 + "\"customer_profile\":{"
@@ -165,7 +169,7 @@ class CashAppSerializationTest {
         final CashApp cashApp = response.getPaymentMethods().getCashapp();
         assertNotNull(cashApp);
         assertEquals(PaymentMethodStatus.ACTION_REQUIRED, cashApp.getStatus());
-        assertEquals(Collections.singletonList("missing_device_client"), cashApp.getFlags());
+        assertEquals(Collections.emptyList(), cashApp.getFlags());
         assertEquals(PaymentMethodInitialization.ENABLED, cashApp.getInitialization());
         assertEquals(Boolean.TRUE, cashApp.getCustomerProfileSharing());
         assertEquals("ORDER-99", cashApp.getReference());
@@ -229,5 +233,95 @@ class CashAppSerializationTest {
         final JsonObject action = parse(serializer.toJson(methods.getKlarna())).getAsJsonObject("action");
         assertFalse(action.has("redirect_url"));
         assertEquals("sdk", action.get("type").getAsString());
+    }
+
+    @Test
+    void shouldRoundTripCashAppWithEveryProperty() {
+        final CashApp original = new CashApp();
+        original.setStatus(PaymentMethodStatus.ACTION_REQUIRED);
+        original.setFlags(Collections.emptyList());
+        original.setInitialization(PaymentMethodInitialization.ENABLED);
+        original.setCustomerProfileSharing(true);
+        original.setReference("ORDER-99");
+        original.setAction(CashAppAction.builder()
+                .type(CashAppActionType.REDIRECT)
+                .redirectUrl("https://sandbox.api.cash.app/customer-request/v1/requests/GRR_f5xg6wrxhtv3p4w24g0wrexa/interstitial?validity_token=bap03y")
+                .build());
+        original.setCustomerProfile(CashAppCustomerProfile.builder()
+                .customerId("CST_AYVkuLzfsRqEhf4OyQFxQNv22m7IjNFjO6f2J5CDE2nxAC4-21wJ2H8_2kvsdIsDZMN4")
+                .cashtag("$CASHTAG_C_TOKEN")
+                .referenceId("value")
+                .fullName("John Middle Doe")
+                .givenName("John")
+                .middleName("Middle")
+                .familyName("Doe")
+                .suffix("Jr.")
+                .birthDate("1990-01-01T00:00:00.0000000")
+                .address(CashAppAddress.builder()
+                        .addressLine1("123 Main St")
+                        .addressLine2("Apt 2")
+                        .addressLine3("Floor 3")
+                        .locality("Springfield")
+                        .sublocality("Downtown")
+                        .administrativeDistrictLevel1("IL")
+                        .postalCode("62701")
+                        .country(CountryCode.US)
+                        .build())
+                .phoneNumber("5555555555")
+                .emailAddress("cash@cash.com")
+                .customerSince("1970-01-18T12:46:04.8000000+00:00")
+                .build());
+
+        final String json = serializer.toJson(original);
+        final JsonObject cashapp = parse(json);
+        final JsonObject profile = cashapp.getAsJsonObject("customer_profile");
+        final JsonObject address = profile.getAsJsonObject("address");
+
+        assertEquals(7, cashapp.size());
+        assertEquals("redirect", cashapp.getAsJsonObject("action").get("type").getAsString());
+        assertTrue(cashapp.getAsJsonObject("action").has("redirect_url"));
+        assertEquals(13, profile.size());
+        assertTrue(profile.has("customer_id"));
+        assertTrue(profile.has("reference_id"));
+        assertTrue(profile.has("customer_since"));
+        assertEquals(8, address.size());
+        assertEquals("123 Main St", address.get("address_line_1").getAsString());
+        assertEquals("Apt 2", address.get("address_line_2").getAsString());
+        assertEquals("Floor 3", address.get("address_line_3").getAsString());
+        assertEquals("IL", address.get("administrative_district_level_1").getAsString());
+        assertFalse(address.has("address_line1"));
+        assertFalse(address.has("administrative_district_level1"));
+
+        assertEquals(original, serializer.fromJson(json, CashApp.class));
+    }
+
+    @Test
+    void shouldDeserializeCashAppInConfirmResponse() {
+        final String json = "{\"id\":\"pst_cashapp\",\"payment_methods\":{\"cashapp\":{"
+                + "\"status\":\"action_required\",\"reference\":\"ORDER-99\","
+                + "\"action\":{\"type\":\"redirect\","
+                + "\"redirect_url\":\"https://sandbox.api.cash.app/customer-request/v1/requests/GRR_f5xg6wrxhtv3p4w24g0wrexa/interstitial?validity_token=bap03y\"}}}}";
+
+        final PaymentSetupsConfirmResponse response = serializer.fromJson(json, PaymentSetupsConfirmResponse.class);
+        final CashApp cashApp = response.getPaymentMethods().getCashapp();
+
+        assertEquals(PaymentMethodStatus.ACTION_REQUIRED, cashApp.getStatus());
+        assertEquals("ORDER-99", cashApp.getReference());
+        assertEquals(CashAppActionType.REDIRECT, cashApp.getAction().getType());
+        assertEquals("https://sandbox.api.cash.app/customer-request/v1/requests/GRR_f5xg6wrxhtv3p4w24g0wrexa/interstitial?validity_token=bap03y",
+                cashApp.getAction().getRedirectUrl());
+    }
+
+    @Test
+    void shouldDeserializeEverySpecPaymentMethodStatus() {
+        assertEquals(PaymentMethodStatus.UNAVAILABLE, statusOf("unavailable"));
+        assertEquals(PaymentMethodStatus.ACTION_REQUIRED, statusOf("action_required"));
+        assertEquals(PaymentMethodStatus.READY, statusOf("ready"));
+        assertEquals(PaymentMethodStatus.INITIALIZATION_REQUIRED, statusOf("initialization_required"));
+        assertEquals(PaymentMethodStatus.INVALID, statusOf("invalid"));
+    }
+
+    private PaymentMethodStatus statusOf(final String wireValue) {
+        return serializer.fromJson("{\"status\":\"" + wireValue + "\"}", CashApp.class).getStatus();
     }
 }

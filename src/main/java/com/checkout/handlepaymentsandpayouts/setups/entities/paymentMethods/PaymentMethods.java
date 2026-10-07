@@ -43,7 +43,6 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.true
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.twint.Twint;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.vipps.Vipps;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.wechatpay.WeChatPay;
-import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -311,9 +310,10 @@ public final class PaymentMethods {
     private Stablecoin stablecoin;
 
     /**
-     * Cash App Pay payment method configuration. The wire key is a single word, cashapp.
+     * The Cash App Pay payment method's details and configuration. The wire key is the single
+     * word cashapp, so keep this field name lowercase: the naming policy turns cashApp into
+     * cash_app.
      * [Optional]
      */
-    @SerializedName("cashapp")
     private CashApp cashapp;
 }

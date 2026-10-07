@@ -2,7 +2,6 @@ package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.cas
 
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodBase;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodInitialization;
-import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,28 +21,32 @@ public final class CashApp extends PaymentMethodBase {
     private PaymentMethodInitialization initialization = PaymentMethodInitialization.DISABLED;
 
     /**
-     * Whether the customer consents to share their Cash App customer profile with Checkout.com.
+     * Indicates whether the customer consents to share their Cash App customer profile with
+     * Checkout.com. When enabled, the customer profile is returned once, after the customer
+     * authorizes the payment.
      * [Optional]
      */
-    @SerializedName("customer_profile_sharing")
     private Boolean customerProfileSharing;
 
     /**
-     * The customer's Cash App profile that they consented to share. Cash App releases it only once,
-     * in the first successful response after the customer authorizes the payment.
+     * The customer's Cash App profile that they consented to share. Included in the response when
+     * customer_profile_sharing is enabled. Cash App releases this profile only once: it is present
+     * in the first successful response when you get the payment setup after the customer
+     * authorizes the payment, and every subsequent response omits it, so store it on first read.
      * [Optional] readOnly
      */
-    @SerializedName("customer_profile")
     private CashAppCustomerProfile customerProfile;
 
     /**
-     * A reference for the Cash App Pay transaction, returned by the provider. Max 80 characters.
+     * A reference for the Cash App Pay transaction, returned by the provider.
      * [Optional] readOnly
+     * max 80 characters
      */
     private String reference;
 
     /**
-     * The next available action for the payment method.
+     * The next available action for the payment method. When its type is redirect, send the
+     * customer to its redirect URL to authorize the payment with Cash App.
      * [Optional] readOnly
      */
     private CashAppAction action;
