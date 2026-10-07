@@ -474,6 +474,12 @@ class PaymentMethodsSerializationTest {
                 case AVAILABLE:
                     assertTrue(json.contains("\"available\""));
                     break;
+                case INITIALIZATION_REQUIRED:
+                    assertTrue(json.contains("\"initialization_required\""));
+                    break;
+                case INVALID:
+                    assertTrue(json.contains("\"invalid\""));
+                    break;
                 default:
                     throw new IllegalStateException("Unhandled status: " + status);
             }

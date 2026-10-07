@@ -108,4 +108,19 @@ class PaymentSetupsClientImplTest {
         assertNotNull(future.get());
         assertEquals(response, future.get());
     }
+
+    @Test
+    void shouldConfirmPaymentSetupWithCashApp() throws ExecutionException, InterruptedException {
+        final String paymentSetupId = "ps_test_123456789";
+        final PaymentSetupsConfirmResponse response = mock(PaymentSetupsConfirmResponse.class);
+
+        when(apiClient.postAsync(eq("payments/setups/" + paymentSetupId + "/confirm/cashapp"),
+                eq(authorization), eq(PaymentSetupsConfirmResponse.class), isNull(), isNull()))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<PaymentSetupsConfirmResponse> future =
+                client.confirmPaymentSetup(paymentSetupId, "cashapp");
+
+        assertEquals(response, future.get());
+    }
 }

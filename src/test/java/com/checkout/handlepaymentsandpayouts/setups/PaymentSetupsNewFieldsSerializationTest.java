@@ -3,7 +3,13 @@ package com.checkout.handlepaymentsandpayouts.setups;
 import com.checkout.GsonSerializer;
 import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
+import com.checkout.common.Phone;
 import com.checkout.handlepaymentsandpayouts.setups.entities.billingDescriptor.PaymentSetupBillingDescriptor;
+import com.checkout.handlepaymentsandpayouts.setups.entities.customer.Customer;
+import com.checkout.handlepaymentsandpayouts.setups.entities.customer.CustomerDevice;
+import com.checkout.handlepaymentsandpayouts.setups.entities.customer.CustomerDeviceClient;
+import com.checkout.handlepaymentsandpayouts.setups.entities.customer.CustomerEmail;
+import com.checkout.handlepaymentsandpayouts.setups.entities.customer.MerchantAccount;
 import com.checkout.handlepaymentsandpayouts.setups.entities.order.AmountAllocationCommission;
 import com.checkout.handlepaymentsandpayouts.setups.entities.order.PaymentSetupAmountAllocation;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
@@ -12,15 +18,21 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.bacs
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.bacs.BacsAccountHolderType;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.cardpresent.CardPresent;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.cardpresent.CardPresentPin;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.OsType;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.klarna.Klarna;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.klarna.KlarnaAccountHolder;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.paybybank.PayByBank;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.stablecoin.Stablecoin;
 import com.checkout.handlepaymentsandpayouts.setups.entities.presentmentDetails.PaymentSetupPresentmentDetails;
 import com.checkout.handlepaymentsandpayouts.setups.entities.terminal.PaymentSetupTerminal;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -130,5 +142,72 @@ class PaymentSetupsNewFieldsSerializationTest {
         assertTrue(json.contains("\"surcharge_amount\""));
         assertTrue(json.contains("\"tax_amount\""));
         assertTrue(json.contains("\"tipping_amount\""));
+    }
+
+    // ------------------------------------------------------------------------
+    // Customer
+    // PaymentSetup.customer: all 8 properties, including id, country and
+    // tax_number, which the model did not carry before.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldRoundTripCustomerWithEveryProperty() {
+        final Customer original = Customer.builder()
+                .id("cus_123456789")
+                .country(CountryCode.GB)
+                .taxNumber("GB123456789")
+                .name("John Smith")
+                .email(CustomerEmail.builder().address("johnsmith@example.com").verified(true).build())
+                .phone(Phone.builder().countryCode("+44").number("207 946 0000").build())
+                .device(CustomerDevice.builder()
+                        .locale("en_GB")
+                        .fingerprint("fp_abc123xyz")
+                        .ipv4("203.0.113.0")
+                        .ipv6("2001:db8:85a3::8a2e:370:7334")
+                        .client(CustomerDeviceClient.WEB)
+                        .os(OsType.ANDROID)
+                        .build())
+                .merchantAccount(MerchantAccount.builder()
+                        .id("acc_123")
+                        .registrationDate(LocalDate.of(2023, 1, 15))
+                        .lastModified(LocalDate.of(2024, 3, 10))
+                        .returningCustomer(true)
+                        .firstTransactionDate(LocalDate.of(2023, 2, 20))
+                        .lastTransactionDate(LocalDate.of(2024, 3, 9))
+                        .totalOrderCount(5)
+                        .lastPaymentAmount(1000L)
+                        .build())
+                .build();
+
+        final String json = serializer.toJson(original);
+        final JsonObject customer = JsonParser.parseString(json).getAsJsonObject();
+
+        assertEquals(8, customer.size());
+        assertEquals("cus_123456789", customer.get("id").getAsString());
+        assertEquals("GB", customer.get("country").getAsString());
+        assertEquals("GB123456789", customer.get("tax_number").getAsString());
+        assertFalse(customer.has("taxNumber"));
+        assertEquals(original, serializer.fromJson(json, Customer.class));
+    }
+
+    @Test
+    void shouldDeserializeCustomerSwaggerExample() {
+        final String json = "{\"country\":\"GB\",\"id\":\"cus_123456789\","
+                + "\"email\":{\"address\":\"johnsmith@example.com\",\"verified\":true},"
+                + "\"name\":\"John Smith\",\"tax_number\":\"GB123456789\","
+                + "\"phone\":{\"country_code\":\"+44\",\"number\":\"207 946 0000\"},"
+                + "\"device\":{\"locale\":\"en_GB\"}}";
+
+        final Customer customer = serializer.fromJson(json, Customer.class);
+
+        assertEquals(CountryCode.GB, customer.getCountry());
+        assertEquals("cus_123456789", customer.getId());
+        assertEquals("GB123456789", customer.getTaxNumber());
+        assertEquals("John Smith", customer.getName());
+        assertEquals("johnsmith@example.com", customer.getEmail().getAddress());
+        assertEquals(Boolean.TRUE, customer.getEmail().getVerified());
+        assertEquals("+44", customer.getPhone().getCountryCode());
+        assertEquals("207 946 0000", customer.getPhone().getNumber());
+        assertEquals("en_GB", customer.getDevice().getLocale());
     }
 }

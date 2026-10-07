@@ -1,13 +1,18 @@
 package com.checkout.handlepaymentsandpayouts.setups;
 
+import com.checkout.GsonSerializer;
 import com.checkout.PlatformType;
 import com.checkout.SandboxTestFixture;
+import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
 import com.checkout.common.Phone;
 import com.checkout.handlepaymentsandpayouts.setups.entities.customer.Customer;
 import com.checkout.handlepaymentsandpayouts.setups.entities.customer.CustomerDevice;
+import com.checkout.handlepaymentsandpayouts.setups.entities.customer.CustomerDeviceClient;
 import com.checkout.handlepaymentsandpayouts.setups.entities.customer.CustomerEmail;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.cashapp.CashApp;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.OsType;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodInitialization;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.klarna.Klarna;
 import com.checkout.handlepaymentsandpayouts.setups.entities.settings.Settings;
@@ -15,14 +20,21 @@ import com.checkout.payments.PaymentType;
 import com.checkout.handlepaymentsandpayouts.setups.requests.PaymentSetupsRequest;
 import com.checkout.handlepaymentsandpayouts.setups.responses.PaymentSetupsConfirmResponse;
 import com.checkout.handlepaymentsandpayouts.setups.responses.PaymentSetupsResponse;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class PaymentSetupsTestIT extends SandboxTestFixture {
 
@@ -119,6 +131,95 @@ class PaymentSetupsTestIT extends SandboxTestFixture {
         assertNotNull(response.getId());
         assertEquals(paymentSetupsRequest.getAmount(), response.getAmount());
         assertEquals(paymentSetupsRequest.getCurrency(), response.getCurrency());
+    }
+
+    @Test
+    void createPaymentSetupWithDeviceDetails_ShouldEchoDeviceAndReadEveryStatus() {
+        // Arrange
+        final PaymentSetupsRequest request = createCashAppPaymentSetupsRequest();
+
+        // Act
+        final PaymentSetupsResponse created =
+                checkoutApi.paymentSetupsClient().createPaymentSetup(request).join();
+        final PaymentSetupsResponse fetched =
+                checkoutApi.paymentSetupsClient().getPaymentSetup(created.getId()).join();
+
+        // Assert
+        final CustomerDevice device = fetched.getCustomer().getDevice();
+        assertEquals("en_US", device.getLocale());
+        assertEquals("fp_abc123xyz", device.getFingerprint());
+        assertEquals("203.0.113.0", device.getIpv4());
+        assertEquals(CustomerDeviceClient.WEB, device.getClient());
+        assertEquals(OsType.IOS, device.getOs());
+
+        // A status value the SDK does not model is read as null and then dropped on write,
+        // so every payment method the API returned must still carry its status here.
+        final JsonObject methods = JsonParser.parseString(new GsonSerializer().toJson(fetched.getPaymentMethods()))
+                .getAsJsonObject();
+        assertFalse(methods.entrySet().isEmpty());
+        for (final Map.Entry<String, JsonElement> method : methods.entrySet()) {
+            assertTrue(method.getValue().getAsJsonObject().has("status"), method.getKey() + " lost its status");
+        }
+    }
+
+    @Test
+    void createPaymentSetupWithCustomerIdentifiers_ShouldEchoThem() {
+        // Arrange
+        final PaymentSetupsRequest request = createValidPaymentSetupsRequest();
+        request.getCustomer().setId("cus_123456789");
+        request.getCustomer().setCountry(CountryCode.GB);
+        request.getCustomer().setTaxNumber("GB123456789");
+
+        // Act
+        final PaymentSetupsResponse created =
+                checkoutApi.paymentSetupsClient().createPaymentSetup(request).join();
+        final PaymentSetupsResponse fetched =
+                checkoutApi.paymentSetupsClient().getPaymentSetup(created.getId()).join();
+
+        // Assert
+        assertEquals("cus_123456789", fetched.getCustomer().getId());
+        assertEquals(CountryCode.GB, fetched.getCustomer().getCountry());
+        assertEquals("GB123456789", fetched.getCustomer().getTaxNumber());
+    }
+
+    @Test
+    void createPaymentSetupWithCashApp_ShouldReturnCashAppDetails() {
+        // Arrange
+        final PaymentSetupsRequest request = createCashAppPaymentSetupsRequest();
+
+        // Act
+        final PaymentSetupsResponse created =
+                checkoutApi.paymentSetupsClient().createPaymentSetup(request).join();
+        assumeTrue(created.getAvailablePaymentMethods() != null
+                        && created.getAvailablePaymentMethods().contains("cashapp"),
+                "Cash App Pay is not enabled on the sandbox processing channel");
+        final PaymentSetupsResponse fetched =
+                checkoutApi.paymentSetupsClient().getPaymentSetup(created.getId()).join();
+
+        // Assert
+        final CashApp cashApp = fetched.getPaymentMethods().getCashapp();
+        assertNotNull(cashApp);
+        assertNotNull(cashApp.getStatus());
+        assertEquals(PaymentMethodInitialization.ENABLED, cashApp.getInitialization());
+        assertEquals(Boolean.TRUE, cashApp.getCustomerProfileSharing());
+    }
+
+    private PaymentSetupsRequest createCashAppPaymentSetupsRequest() {
+        final CashApp cashApp = new CashApp();
+        cashApp.setInitialization(PaymentMethodInitialization.ENABLED);
+        cashApp.setCustomerProfileSharing(true);
+
+        final PaymentSetupsRequest request = createValidPaymentSetupsRequest();
+        request.setCurrency(Currency.USD);
+        request.setPaymentMethods(PaymentMethods.builder().cashapp(cashApp).build());
+        request.getCustomer().setDevice(CustomerDevice.builder()
+                .locale("en_US")
+                .fingerprint("fp_abc123xyz")
+                .ipv4("203.0.113.0")
+                .client(CustomerDeviceClient.WEB)
+                .os(OsType.IOS)
+                .build());
+        return request;
     }
 
     private PaymentSetupsRequest createValidPaymentSetupsRequest() {

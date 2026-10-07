@@ -12,6 +12,7 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.bizu
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.blik.Blik;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.card.Card;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.cardpresent.CardPresent;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.cashapp.CashApp;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.paybybank.PayByBank;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.stablecoin.Stablecoin;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.dana.Dana;
@@ -307,4 +308,12 @@ public final class PaymentMethods {
      * [Optional]
      */
     private Stablecoin stablecoin;
+
+    /**
+     * The Cash App Pay payment method's details and configuration. The wire key is the single
+     * word cashapp, so keep this field name lowercase: the naming policy turns cashApp into
+     * cash_app.
+     * [Optional]
+     */
+    private CashApp cashapp;
 }
