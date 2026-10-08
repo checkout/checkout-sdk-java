@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * <p>Covers the top-up instructions response
  * (GET /entities/{entityId}/currency-accounts/{currencyAccountId}/top-up-instructions) and the
  * entity balances response (GET /balances/{id}). Every value is taken from the field-level
- * {@code example} values in shared/swagger-latest.json; neither response schema carries a
+ * {@code example} values in the API reference; neither response schema carries a
  * top-level example.
  *
  * <p>The spec is explicit that neither funding rail is guaranteed: TopUpBankDetails declares no
@@ -273,9 +273,8 @@ class BalancesSerializationTest {
     // ------------------------------------------------------------------------
     // BalancesResponse / CurrencyAccountBalance / Balances / CollateralBreakdown
     //
-    // Added when Balance.operational was found missing from the SDK during the INT-1692 review;
-    // review-integrity.mdc section 9 requires a serialization test for a new field on an
-    // existing class.
+    // Covers every property, including Balance.operational, so a field missing from the model
+    // fails here instead of being silently dropped.
     // ------------------------------------------------------------------------
 
     @Test
