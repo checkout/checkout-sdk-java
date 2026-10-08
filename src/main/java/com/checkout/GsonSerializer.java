@@ -16,6 +16,7 @@ import com.checkout.issuing.cards.responses.VirtualCardDetailsResponse;
 import com.checkout.issuing.controls.requests.ControlType;
 import com.checkout.issuing.controls.responses.create.CardControlResponse;
 import com.checkout.issuing.controls.responses.create.MccCardControlResponse;
+import com.checkout.issuing.controls.responses.create.MidCardControlResponse;
 import com.checkout.issuing.controls.responses.create.VelocityCardControlResponse;
 import com.checkout.payments.PaymentDestinationType;
 import com.checkout.payments.ProductResponse;
@@ -249,7 +250,8 @@ public final class GsonSerializer implements Serializer {
             // Issuing CS2 - CardControlsResponse
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(CardControlResponse.class, CheckoutUtils.CONTROL_TYPE, true)
                     .registerSubtype(VelocityCardControlResponse.class, identifier(ControlType.VELOCITY_LIMIT))
-                    .registerSubtype(MccCardControlResponse.class, identifier(ControlType.MCC_LIMIT)))
+                    .registerSubtype(MccCardControlResponse.class, identifier(ControlType.MCC_LIMIT))
+                    .registerSubtype(MidCardControlResponse.class, identifier(ControlType.MID_LIMIT)))
             // Issuing CS2 - ControlGroupControl
             .registerTypeAdapterFactory(RuntimeTypeAdapterFactory.of(com.checkout.issuing.controls.requests.controlgroup.ControlGroupControl.class, CheckoutUtils.CONTROL_TYPE, true)
                     .registerSubtype(com.checkout.issuing.controls.requests.controlgroup.VelocityControlGroupControl.class, identifier(ControlType.VELOCITY_LIMIT))

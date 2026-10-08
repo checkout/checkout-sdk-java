@@ -96,14 +96,46 @@ public interface IssuingClient {
 
     CompletableFuture<VoidResponse> suspendCard(final String cardId, final SuspendCardRequest suspendCardRequest);
 
+    /**
+     * Creates a card control (POST /issuing/controls).
+     *
+     * @param cardControlRequest the control to create
+     * @return the created control, a subtype of {@link CardControlResponse} chosen by control_type
+     */
     CompletableFuture<CardControlResponse> createControl(final CardControlRequest cardControlRequest);
 
+    /**
+     * Creates a card control (POST /issuing/controls) with an idempotency key.
+     *
+     * @param cardControlRequest the control to create
+     * @param idempotencyKey the idempotency key
+     * @return the created control, a subtype of {@link CardControlResponse} chosen by control_type
+     */
     CompletableFuture<CardControlResponse> createControl(final CardControlRequest cardControlRequest, final String idempotencyKey);
 
+    /**
+     * Gets the controls applied to a target (GET /issuing/controls).
+     *
+     * @param queryFilter the target filter
+     * @return the list of controls, each a subtype of {@link CardControlResponse}
+     */
     CompletableFuture<CardControlsQueryResponse> getCardControls(final CardControlsQuery queryFilter);
 
+    /**
+     * Gets a card control (GET /issuing/controls/{controlId}).
+     *
+     * @param controlId the control ID
+     * @return the control, a subtype of {@link CardControlResponse} chosen by control_type
+     */
     CompletableFuture<CardControlResponse> getCardControlDetails(final String controlId);
 
+    /**
+     * Updates a card control (PUT /issuing/controls/{controlId}).
+     *
+     * @param controlId the control ID
+     * @param updateCardControlRequest the fields to update
+     * @return the updated control: {@link com.checkout.issuing.controls.responses.create.VelocityCardControlResponse}, {@link com.checkout.issuing.controls.responses.create.MccCardControlResponse} or {@link com.checkout.issuing.controls.responses.create.MidCardControlResponse}, chosen by control_type
+     */
     CompletableFuture<CardControlResponse> updateCardControl(final String controlId, final UpdateCardControlRequest updateCardControlRequest);
 
     CompletableFuture<IdResponse> removeCardControl(final String controlId);
@@ -238,14 +270,46 @@ public interface IssuingClient {
 
     VoidResponse suspendCardSync(String cardId, SuspendCardRequest suspendCardRequest);
 
+    /**
+     * Creates a card control (POST /issuing/controls).
+     *
+     * @param cardControlRequest the control to create
+     * @return the created control, a subtype of {@link CardControlResponse} chosen by control_type
+     */
     CardControlResponse createControlSync(CardControlRequest cardControlRequest);
 
+    /**
+     * Creates a card control (POST /issuing/controls) with an idempotency key.
+     *
+     * @param cardControlRequest the control to create
+     * @param idempotencyKey the idempotency key
+     * @return the created control, a subtype of {@link CardControlResponse} chosen by control_type
+     */
     CardControlResponse createControlSync(CardControlRequest cardControlRequest, String idempotencyKey);
 
+    /**
+     * Gets the controls applied to a target (GET /issuing/controls).
+     *
+     * @param queryFilter the target filter
+     * @return the list of controls, each a subtype of {@link CardControlResponse}
+     */
     CardControlsQueryResponse getCardControlsSync(CardControlsQuery queryFilter);
 
+    /**
+     * Gets a card control (GET /issuing/controls/{controlId}).
+     *
+     * @param controlId the control ID
+     * @return the control, a subtype of {@link CardControlResponse} chosen by control_type
+     */
     CardControlResponse getCardControlDetailsSync(String controlId);
 
+    /**
+     * Updates a card control (PUT /issuing/controls/{controlId}).
+     *
+     * @param controlId the control ID
+     * @param updateCardControlRequest the fields to update
+     * @return the updated control: {@link com.checkout.issuing.controls.responses.create.VelocityCardControlResponse}, {@link com.checkout.issuing.controls.responses.create.MccCardControlResponse} or {@link com.checkout.issuing.controls.responses.create.MidCardControlResponse}, chosen by control_type
+     */
     CardControlResponse updateCardControlSync(String controlId, UpdateCardControlRequest updateCardControlRequest);
 
     IdResponse removeCardControlSync(String controlId);
