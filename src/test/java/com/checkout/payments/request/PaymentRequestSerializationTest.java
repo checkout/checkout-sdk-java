@@ -1,9 +1,18 @@
 package com.checkout.payments.request;
 
 import com.checkout.GsonSerializer;
+import com.checkout.common.AccountHolder;
+import com.checkout.common.AccountHolderType;
+import com.checkout.common.Address;
+import com.checkout.common.CountryCode;
 import com.checkout.common.Currency;
+import com.checkout.common.PaymentSourceType;
+import com.checkout.common.Phone;
 import com.checkout.payments.AuthorizationType;
 import com.checkout.payments.PaymentType;
+import com.checkout.payments.request.source.RequestCardSource;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -252,5 +261,141 @@ class PaymentRequestSerializationTest {
         assertNull(request.getAmount());
         assertNull(request.getMerchantInitiated());
         assertNull(request.getPreviousPaymentId());
+    }
+
+    // ------------------------------------------------------------------------
+    // fallback_source
+    // Covers all 12 properties of the PaymentRequestFallbackSource schema.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldSerializeFallbackSourceWithAllProperties() {
+        final PaymentRequest request = PaymentRequest.builder()
+                .currency(Currency.USD)
+                .fallbackSource(buildFallbackSource())
+                .build();
+
+        final JsonObject json = JsonParser.parseString(serializer.toJson(request)).getAsJsonObject();
+
+        assertTrue(json.has("fallback_source"));
+        final JsonObject fallbackSource = json.getAsJsonObject("fallback_source");
+        assertEquals(12, fallbackSource.size());
+        assertEquals("card", fallbackSource.get("type").getAsString());
+        assertEquals("4543474002249996", fallbackSource.get("number").getAsString());
+        assertEquals(6, fallbackSource.get("expiry_month").getAsInt());
+        assertEquals(2030, fallbackSource.get("expiry_year").getAsInt());
+        assertEquals("Bruce Wayne", fallbackSource.get("name").getAsString());
+        assertEquals("956", fallbackSource.get("cvv").getAsString());
+        assertTrue(fallbackSource.get("stored").getAsBoolean());
+        assertFalse(fallbackSource.get("store_for_future_use").getAsBoolean());
+        assertFalse(fallbackSource.get("allow_update").getAsBoolean());
+        assertEquals("London", fallbackSource.getAsJsonObject("billing_address").get("city").getAsString());
+        assertEquals("44", fallbackSource.getAsJsonObject("phone").get("country_code").getAsString());
+        assertEquals("individual", fallbackSource.getAsJsonObject("account_holder").get("type").getAsString());
+        assertEquals("Bruce", fallbackSource.getAsJsonObject("account_holder").get("first_name").getAsString());
+    }
+
+    @Test
+    void shouldRoundTripFallbackSource() {
+        final PaymentRequest original = PaymentRequest.builder()
+                .currency(Currency.USD)
+                .fallbackSource(buildFallbackSource())
+                .build();
+
+        final String json = serializer.toJson(original);
+        final PaymentRequest deserialized = serializer.fromJson(json, PaymentRequest.class);
+
+        assertNotNull(deserialized.getFallbackSource());
+        assertEquals(PaymentSourceType.CARD, deserialized.getFallbackSource().getType());
+        assertEquals(original.getFallbackSource(), deserialized.getFallbackSource());
+    }
+
+    @Test
+    void shouldDeserializeFallbackSourceSwaggerExample() {
+        final String json = "{\"currency\":\"USD\",\"fallback_source\":{"
+                + "\"type\":\"card\",\"number\":\"4543474002249996\",\"expiry_month\":6,"
+                + "\"expiry_year\":2030,\"name\":\"Bruce Wayne\",\"cvv\":\"956\",\"stored\":true,"
+                + "\"store_for_future_use\":false,\"allow_update\":false,"
+                + "\"billing_address\":{\"address_line1\":\"123 High St.\",\"city\":\"London\",\"zip\":\"SW1A 1AA\",\"country\":\"GB\"},"
+                + "\"phone\":{\"country_code\":\"44\",\"number\":\"207 946 0000\"},"
+                + "\"account_holder\":{\"type\":\"individual\",\"first_name\":\"Bruce\",\"last_name\":\"Wayne\"}}}";
+
+        final PaymentRequest request = serializer.fromJson(json, PaymentRequest.class);
+
+        final RequestCardSource fallbackSource = request.getFallbackSource();
+        assertNotNull(fallbackSource);
+        assertEquals(PaymentSourceType.CARD, fallbackSource.getType());
+        assertEquals("4543474002249996", fallbackSource.getNumber());
+        assertEquals(6, fallbackSource.getExpiryMonth());
+        assertEquals(2030, fallbackSource.getExpiryYear());
+        assertEquals("Bruce Wayne", fallbackSource.getName());
+        assertEquals("956", fallbackSource.getCvv());
+        assertEquals(Boolean.TRUE, fallbackSource.getStored());
+        assertEquals(Boolean.FALSE, fallbackSource.getStoreForFutureUse());
+        assertEquals(Boolean.FALSE, fallbackSource.getAllowUpdate());
+        assertEquals("London", fallbackSource.getBillingAddress().getCity());
+        assertEquals(CountryCode.GB, fallbackSource.getBillingAddress().getCountry());
+        assertEquals("44", fallbackSource.getPhone().getCountryCode());
+        assertEquals("207 946 0000", fallbackSource.getPhone().getNumber());
+        assertEquals(AccountHolderType.INDIVIDUAL, fallbackSource.getAccountHolder().getType());
+        assertEquals("Bruce", fallbackSource.getAccountHolder().getFirstName());
+    }
+
+    @Test
+    void shouldNotSerializeNullFallbackSource() {
+        final PaymentRequest request = PaymentRequest.builder()
+                .currency(Currency.USD)
+                .build();
+
+        final String json = serializer.toJson(request);
+
+        assertFalse(json.contains("\"fallback_source\""));
+    }
+
+    @Test
+    void shouldSerializeAllowUpdateOnPrimaryCardSource() {
+        final PaymentRequest request = PaymentRequest.builder()
+                .currency(Currency.USD)
+                .source(RequestCardSource.builder()
+                        .number("4543474002249996")
+                        .expiryMonth(6)
+                        .expiryYear(2030)
+                        .allowUpdate(true)
+                        .build())
+                .build();
+
+        final JsonObject json = JsonParser.parseString(serializer.toJson(request)).getAsJsonObject();
+
+        assertTrue(json.getAsJsonObject("source").get("allow_update").getAsBoolean());
+    }
+
+    private static RequestCardSource buildFallbackSource() {
+        final Address address = Address.builder()
+                .addressLine1("123 High St.")
+                .city("London")
+                .zip("SW1A 1AA")
+                .country(CountryCode.GB)
+                .build();
+        final Phone phone = Phone.builder()
+                .countryCode("44")
+                .number("207 946 0000")
+                .build();
+        return RequestCardSource.builder()
+                .number("4543474002249996")
+                .expiryMonth(6)
+                .expiryYear(2030)
+                .name("Bruce Wayne")
+                .cvv("956")
+                .stored(true)
+                .storeForFutureUse(false)
+                .billingAddress(address)
+                .phone(phone)
+                .accountHolder(AccountHolder.builder()
+                        .type(AccountHolderType.INDIVIDUAL)
+                        .firstName("Bruce")
+                        .lastName("Wayne")
+                        .build())
+                .allowUpdate(false)
+                .build();
     }
 }

@@ -17,64 +17,76 @@ import lombok.ToString;
 public final class RequestCardSource extends AbstractRequestSource {
 
     /**
-     * The card number (without separators). Write-only.
-     * [Optional]
+     * The card number (without separators).
+     * [Required]
      */
     private String number;
 
     /**
      * The expiry month of the card.
-     * [Optional]
+     * [Required]
+     * min 1, max 12
      */
     private Integer expiryMonth;
 
     /**
-     * The expiry year of the card.
-     * [Optional]
+     * 4-digit expiry year of the card.
+     * [Required]
      */
     private Integer expiryYear;
 
     /**
-     * The cardholder's name. Write-only.
+     * The name of the cardholder.
      * [Optional]
      */
     private String name;
 
     /**
-     * The card verification value/code. 3 digits, except for American Express (4 digits). Write-only.
+     * The card verification value/code. 3 digits, except for American Express (4 digits).
      * [Optional]
+     * min 3 characters, max 4 characters
      */
     private String cvv;
 
     /**
-     * Set to true for payments that use stored card details. Write-only.
+     * Indicates whether this card is being submitted from your own stored card-on-file system, rather than
+     * being entered by the customer at the time of payment. Set to true when you provide card details that
+     * you already have on file for the customer.
      * [Optional]
      */
     private Boolean stored;
 
     /**
-     * Set to true if you intend to reuse the payment credentials in subsequent payments. Write-only.
+     * This must be set to true if you intend to reuse the payment credentials in subsequent payments.
+     * Setting the field as false will mean that a payment instrument will not be included in the payment
+     * response.
      * [Optional]
      */
     private Boolean storeForFutureUse;
 
     /**
-     * The payment source owner's billing address.
+     * The billing address of the cardholder.
      * [Optional]
      */
     private Address billingAddress;
 
     /**
-     * The payment source owner's phone number.
+     * The phone number of the cardholder.
      * [Optional]
      */
     private Phone phone;
 
     /**
-     * The card account holder's details.
+     * Information about the account holder of the card.
      * [Optional]
      */
     private AccountHolder accountHolder;
+
+    /**
+     * Specifies whether to use the Real-Time Account Updater to update the card information.
+     * [Optional]
+     */
+    private Boolean allowUpdate;
 
     @Builder
     private RequestCardSource(final String number,
@@ -86,7 +98,8 @@ public final class RequestCardSource extends AbstractRequestSource {
                               final Boolean storeForFutureUse,
                               final Address billingAddress,
                               final Phone phone,
-                              final AccountHolder accountHolder) {
+                              final AccountHolder accountHolder,
+                              final Boolean allowUpdate) {
         super(PaymentSourceType.CARD);
         this.number = number;
         this.expiryMonth = expiryMonth;
@@ -98,6 +111,7 @@ public final class RequestCardSource extends AbstractRequestSource {
         this.billingAddress = billingAddress;
         this.phone = phone;
         this.accountHolder = accountHolder;
+        this.allowUpdate = allowUpdate;
     }
 
     public RequestCardSource() {
