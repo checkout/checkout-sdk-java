@@ -43,6 +43,7 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.true
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.twint.Twint;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.vipps.Vipps;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.wechatpay.WeChatPay;
+import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -298,9 +299,10 @@ public final class PaymentMethods {
     private CardPresent cardPresent;
 
     /**
-     * Pay by Bank (Open Banking) payment method configuration.
+     * Pay by Bank (Open Banking) payment method configuration. Serialized as {@code paybybank}.
      * [Optional]
      */
+    @SerializedName("paybybank")
     private PayByBank payByBank;
 
     /**
