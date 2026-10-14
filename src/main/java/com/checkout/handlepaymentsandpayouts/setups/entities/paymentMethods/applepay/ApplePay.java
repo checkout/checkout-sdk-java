@@ -4,6 +4,7 @@ import com.checkout.common.Phone;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.CardAccountHolder;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodBase;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentSetupScheme;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.WalletToken;
 import com.checkout.payments.PreferredSchema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,17 +26,10 @@ public final class ApplePay extends PaymentMethodBase {
     private ApplePayTokenData tokenData;
 
     /**
-     * The Apple Pay payment token string.
+     * The Checkout.com Apple Pay token.
      * [Optional]
      */
-    private String token;
-
-    /**
-     * The date and time the token expires.
-     * [Optional]
-     * Format: date-time (ISO 8601)
-     */
-    private Instant expiresOn;
+    private WalletToken token;
 
     /**
      * Set to true if you intend to reuse the payment credentials in subsequent payments. If set to
@@ -67,4 +61,25 @@ public final class ApplePay extends PaymentMethodBase {
      * [Optional]
      */
     private PreferredSchema preferredScheme;
+
+    /**
+     * @deprecated Use {@link WalletToken#getExpiresOn()} through {@link #getToken()}. The API
+     * expects this value under {@code token} and drops it at the Apple Pay level.
+     */
+    @Deprecated
+    public Instant getExpiresOn() {
+        return token == null ? null : token.getExpiresOn();
+    }
+
+    /**
+     * @deprecated Use {@link WalletToken#setExpiresOn(Instant)} through {@link #setToken(WalletToken)}.
+     * The API expects this value under {@code token}; this setter now writes it there.
+     */
+    @Deprecated
+    public void setExpiresOn(final Instant expiresOn) {
+        if (token == null) {
+            token = new WalletToken();
+        }
+        token.setExpiresOn(expiresOn);
+    }
 }

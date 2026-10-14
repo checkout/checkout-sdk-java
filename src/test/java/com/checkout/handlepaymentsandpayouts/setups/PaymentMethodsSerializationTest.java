@@ -2,6 +2,9 @@ package com.checkout.handlepaymentsandpayouts.setups;
 
 import com.checkout.GsonSerializer;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.applepay.ApplePay;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.applepay.ApplePayTokenData;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.applepay.ApplePayTokenDataHeader;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.bizum.Bizum;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.card.Card;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.card.CardDetails;
@@ -11,6 +14,9 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.comm
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodInitialization;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodStatus;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentSetupScheme;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.WalletToken;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.googlepay.GooglePay;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.googlepay.GooglePayTokenData;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.instrument.Instrument;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.klarna.Klarna;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.paypal.PayPal;
@@ -625,6 +631,119 @@ class PaymentMethodsSerializationTest {
         assertEquals("100", card.getCvv());
         assertEquals(Instant.parse("2030-01-01T10:00:00Z"), card.getExpiresOn());
         assertNull(new Card().getNumber());
+    }
+
+    // ------------------------------------------------------------------------
+    // Apple Pay and Google Pay
+    // token is an object {id, expires_on}, no longer a bare string with
+    // expires_on next to it; plus schemes and preferred_scheme. The flat
+    // expiresOn accessors are deprecated and now write inside token.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldRoundTripApplePayWithEveryProperty() {
+        final ApplePay original = new ApplePay();
+        original.setStatus(PaymentMethodStatus.READY);
+        original.setFlags(Collections.emptyList());
+        original.setTokenData(ApplePayTokenData.builder()
+                .version("EC_v1")
+                .data("t7GeajLB9skXB6QSWfEpPA4WPhDqB7ekdd+F7588arLzve")
+                .signature("MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCAMIID4jCCA4igAwIBAgIIJEPyqAad9XcwCgYIKoZIzj0EAwIwejEuMCwGA1UEAwwlQXBwbGUgQXBwbGljYXRpb24gSW50ZWdyYXRpb24gQ0EgLSBHMzEmMCQGA1UECwwdQXBwbGUgQ2VydGlmaWNhdGlvbiBBdXRob3JpdHkxEzARBgNVBAoMCkFwcGxlIEluYy4xCzAJBgNVBAYTAlVTMB4XDTE0MDkyNTIyMDYxMVoXDTE5MDkyNDIyMDYxMVowXzElMCMGA1UEAwwcZWNjLXNtcC1icm9rZXItc2lnbl9VQzQtUFJPRDEUMBIGA1UECwwLaU9TIFN5c3RlbXMxEzARBgNVBAoMCkFwcGxlIEluYy4xCzAJBgNVBAYTAlVTMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEwhV37evWx7Ihj2jdcJChIY3HsL1vLCg9hGCV2Ur0pUEbg0IO2BHzQH6DMx8cVMP36zIg1rrV1O/0komJPnwPE6OCAhEwggINMEUGCCsGAQUFBwEBBDkwNzA1BggrBgEFBQcwAYYpaHR0cDovL29jc3AuYXBwbGUuY29tL29jc3AwNC1hcHBsZWFpY2EzMDEwHQYDVR0OBBYEFJRX22/VdIGGiYl2L35XhQfnm1gkMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUI/JJxE+T5O8n5sT2KGw/orv9LkswggEdBgNVHSAEggEUMIIBEDCCAQwGCSqGSIb3Y2QFATCB/jCBwwYIKwYBBQUHAgIwgbYMgbNSZWxpYW5jZSBvbiB0aGlzIGNlcnRpZmljYXRlIGJ5IGFueSBwYXJ0eSBhc3N1bWVzIGFjY2VwdGFuY2Ugb2YgdGhlIHRoZW4gYXBwbGljYWJsZSBzdGFuZGFyZCB0ZXJtcyBhbmQgY29uZGl0aW9ucyBvZiB1c2UsIGNlcnRpZmljYXRlIHBvbGljeSBhbmQgY2VydGlmaWNhdGlvbiBwcmFjdGljZSBzdGF0ZW1lbnRzLjA2BggrBgEFBQcCARYqaHR0cDovL3d3dy5hcHBsZS5jb20vY2VydGlmaWNhdGVhdXRob3JpdHkvMDQGA1UdHwQtMCswKaAnoCWGI2h0dHA6Ly9jcmwuYXBwbGUuY29tL2FwcGxlYWljYTMuY3JsMA4GA1UdDwEB/wQEAwIHgDAPBgkqhkiG92NkBh0EAgUAMAoGCCqGSM49BAMCA0gAMEUCIHKKnw+Soyq5mXQr1V62c0BXKpaHodYu9TWXEPUWPpbpAiEAkTecfW6+W5l0r0ADfzTCPq2YtbS39w01XIayqBNy8bEwggLuMIICdaADAgECAghJbS+/OpjalzAKBggqhkjOPQQDAjBnMRswGQYDVQQDDBJBcHBsZSBSb290IENBIC0gRzMxJjAkBgNVBAsMHUFwcGxlIENlcnRpZmljYXRpb24gQXV0aG9yaXR5")
+                .header(ApplePayTokenDataHeader.builder()
+                        .ephemeralPublicKey("MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEX")
+                        .publicKeyHash("tqYV+tmG9aMh+l/K6cicUnPqkb1gUiLjSTM9gEz6Nl0=")
+                        .transactionId("3cee89679130a4b2617c76118a1790e2b3c0bf9a0e6e4d0c9b1f4b2a4b1e3b2d")
+                        .build())
+                .build());
+        original.setToken(WalletToken.builder()
+                .id("tok_ubfj2q76miwundwlk72vxt2i7q")
+                .expiresOn(Instant.parse("2030-01-01T10:00:00Z"))
+                .build());
+        original.setStoreForFutureUse(true);
+        original.setSchemes(Arrays.asList(PaymentSetupScheme.VISA, PaymentSetupScheme.CARTES_BANCAIRES));
+        original.setPreferredScheme(PreferredSchema.CARTES_BANCAIRES);
+
+        final String json = serializer.toJson(original);
+        final JsonObject applePay = JsonParser.parseString(json).getAsJsonObject();
+
+        assertTrue(applePay.get("token").isJsonObject());
+        assertEquals("tok_ubfj2q76miwundwlk72vxt2i7q", applePay.getAsJsonObject("token").get("id").getAsString());
+        assertEquals("2030-01-01T10:00:00Z", applePay.getAsJsonObject("token").get("expires_on").getAsString());
+        assertFalse(applePay.has("expires_on"));
+        assertEquals("EC_v1", applePay.getAsJsonObject("token_data").get("version").getAsString());
+        assertTrue(applePay.get("store_for_future_use").getAsBoolean());
+        assertEquals("cartes_bancaires", applePay.getAsJsonArray("schemes").get(1).getAsString());
+        assertEquals("cartes_bancaires", applePay.get("preferred_scheme").getAsString());
+        assertEquals(original, serializer.fromJson(json, ApplePay.class));
+    }
+
+    @Test
+    void shouldRoundTripGooglePayWithEveryProperty() {
+        final GooglePay original = new GooglePay();
+        original.setStatus(PaymentMethodStatus.READY);
+        original.setFlags(Collections.emptyList());
+        original.setTokenData(GooglePayTokenData.builder()
+                .protocolVersion("ECv2")
+                .signature("MEQCIH6Q4OwQ0jAceFEkGF0JID6sJNXxOEi4r+mA7biRxqBQAiAondqoUpU/bdsrAOpZIsrHQS9nwiiNwOrr24RyPeHA0Q==")
+                .signedMessage("{\"encryptedMessage\":\"abc\"}")
+                .tokenizationKey("pk_sbox_7za2ndl3ahw2k4cmptr5qgyiv4q")
+                .build());
+        original.setToken(WalletToken.builder()
+                .id("tok_ubfj2q76miwundwlk72vxt2i7q")
+                .expiresOn(Instant.parse("2030-01-01T10:00:00Z"))
+                .build());
+        original.setStoreForFutureUse(false);
+        original.setSchemes(Arrays.asList(PaymentSetupScheme.VISA, PaymentSetupScheme.MASTERCARD));
+        original.setPreferredScheme(PreferredSchema.MASTERCARD);
+
+        final String json = serializer.toJson(original);
+        final JsonObject googlePay = JsonParser.parseString(json).getAsJsonObject();
+
+        assertTrue(googlePay.get("token").isJsonObject());
+        assertEquals("tok_ubfj2q76miwundwlk72vxt2i7q", googlePay.getAsJsonObject("token").get("id").getAsString());
+        assertEquals("2030-01-01T10:00:00Z", googlePay.getAsJsonObject("token").get("expires_on").getAsString());
+        assertFalse(googlePay.has("expires_on"));
+        assertEquals("ECv2", googlePay.getAsJsonObject("token_data").get("protocol_version").getAsString());
+        assertFalse(googlePay.get("store_for_future_use").getAsBoolean());
+        assertEquals("mastercard", googlePay.get("preferred_scheme").getAsString());
+        assertEquals(original, serializer.fromJson(json, GooglePay.class));
+    }
+
+    @Test
+    void shouldDeserializeWalletTokenSwaggerExample() {
+        final String json = "{\"status\":\"ready\",\"flags\":[],"
+                + "\"token\":{\"id\":\"tok_ubfj2q76miwundwlk72vxt2i7q\",\"expires_on\":\"2030-01-01T10:00:00Z\"},"
+                + "\"schemes\":[\"visa\",\"mastercard\"],\"preferred_scheme\":\"visa\"}";
+
+        final ApplePay applePay = serializer.fromJson(json, ApplePay.class);
+        final GooglePay googlePay = serializer.fromJson(json, GooglePay.class);
+
+        assertEquals("tok_ubfj2q76miwundwlk72vxt2i7q", applePay.getToken().getId());
+        assertEquals(Instant.parse("2030-01-01T10:00:00Z"), applePay.getToken().getExpiresOn());
+        assertEquals(Arrays.asList(PaymentSetupScheme.VISA, PaymentSetupScheme.MASTERCARD), applePay.getSchemes());
+        assertEquals(PreferredSchema.VISA, applePay.getPreferredScheme());
+        assertEquals("tok_ubfj2q76miwundwlk72vxt2i7q", googlePay.getToken().getId());
+        assertEquals(Instant.parse("2030-01-01T10:00:00Z"), googlePay.getToken().getExpiresOn());
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void shouldWriteUnderTokenThroughTheDeprecatedWalletExpiresOnAccessors() {
+        final ApplePay applePay = new ApplePay();
+        applePay.setExpiresOn(Instant.parse("2030-01-01T10:00:00Z"));
+        final GooglePay googlePay = new GooglePay();
+        googlePay.setToken(WalletToken.builder().id("tok_ubfj2q76miwundwlk72vxt2i7q").build());
+        googlePay.setExpiresOn(Instant.parse("2030-01-01T10:00:00Z"));
+
+        final JsonObject appleJson = JsonParser.parseString(serializer.toJson(applePay)).getAsJsonObject();
+        final JsonObject googleJson = JsonParser.parseString(serializer.toJson(googlePay)).getAsJsonObject();
+
+        assertFalse(appleJson.has("expires_on"));
+        assertEquals("2030-01-01T10:00:00Z", appleJson.getAsJsonObject("token").get("expires_on").getAsString());
+        assertEquals("tok_ubfj2q76miwundwlk72vxt2i7q", googleJson.getAsJsonObject("token").get("id").getAsString());
+        assertEquals("2030-01-01T10:00:00Z", googleJson.getAsJsonObject("token").get("expires_on").getAsString());
+        assertEquals(Instant.parse("2030-01-01T10:00:00Z"), applePay.getExpiresOn());
+        assertNull(new ApplePay().getExpiresOn());
     }
 
     // ------------------------------------------------------------------------
