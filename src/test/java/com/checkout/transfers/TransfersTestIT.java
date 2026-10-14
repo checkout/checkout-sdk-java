@@ -62,10 +62,10 @@ class TransfersTestIT extends SandboxTestFixture {
                 .transferType(TransferType.COMMISSION)
                 .source(TransferSourceRequest.builder()
                         .id("ent_kidtcgc3ge5unf4a5i6enhnr5m")
-                        .amount(100L)
+                        .amount(1L)
                         .build())
                 .destination(TransferDestinationRequest.builder()
-                        .id("ent_w4jelhppmfiufdnatam37wrfc4")
+                        .id("ent_ocw5i74vowfg2edpy66izhts2u")
                         .build())
                 .build();
     }
