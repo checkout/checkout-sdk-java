@@ -14,6 +14,7 @@ import com.checkout.payments.RiskRequest;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
 import com.checkout.payments.request.source.AbstractRequestSource;
+import com.checkout.payments.request.source.RequestCardSource;
 import com.checkout.payments.PaymentPlan;
 import com.checkout.payments.PaymentRouting;
 import com.checkout.payments.PaymentSubscription;
@@ -44,10 +45,16 @@ public final class PaymentRequest {
     private AbstractRequestSource source;
 
     /**
+     * An alternative card source to attempt if the payment using the primary source fails.
+     * [Optional]
+     */
+    private RequestCardSource fallbackSource;
+
+    /**
      * The payment amount in minor currency units. To perform a card verification, do not provide
      * the amount or provide a value of 0.
      * [Optional]
-     * min 0
+     * min 0, max 9999999999
      */
     private Long amount;
 
@@ -197,6 +204,11 @@ public final class PaymentRequest {
     private String failureUrl;
 
     /**
+     * The IP address used to make the payment. Used by Checkout.com's risk engine to check the customer's
+     * IP address. Only accepts IPv4 and IPv6 addresses. Required if source.type is sequra.
+     * [Optional]
+     * Format: ipv4
+     * max 45 characters
      * @deprecated Deprecated in the API on 2025-03-11. Use {@code risk.device.network.ipv4} or {@code risk.device.network.ipv6} instead.
      */
     @Deprecated
@@ -215,6 +227,8 @@ public final class PaymentRequest {
     private PaymentRecipient recipient;
 
     /**
+     * The marketplace data for the payment. No longer in the API specification.
+     * [Optional]
      * @deprecated Use {@link PaymentRequest#amountAllocations} instead.
      */
     @Deprecated
