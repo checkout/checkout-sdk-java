@@ -327,7 +327,7 @@ class LocalDateFieldsRegressionTest {
         OrderSubMerchant original = OrderSubMerchant.builder()
                 .id("SUB-FULL-001")
                 .productCategory("Electronics & Gadgets")
-                .numberOfTrades(250)
+                .numberOfSales(250)
                 .registrationDate(LocalDate.of(2021, 8, 22))
                 .build();
 
@@ -337,7 +337,8 @@ class LocalDateFieldsRegressionTest {
         assertNotNull(deserialized);
         assertEquals("SUB-FULL-001", deserialized.getId());
         assertEquals("Electronics & Gadgets", deserialized.getProductCategory());
-        assertEquals(250, deserialized.getNumberOfTrades());
+        assertEquals(250, deserialized.getNumberOfSales());
+        assertFalse(json.contains("number_of_trades"), "number_of_trades is not an API field: " + json);
         assertEquals(LocalDate.of(2021, 8, 22), deserialized.getRegistrationDate());
     }
 
@@ -357,14 +358,14 @@ class LocalDateFieldsRegressionTest {
 
     @Test
     void orderSubMerchant_registrationDate_shouldDeserializeFromSwaggerExample() {
-        String json = "{\"id\":\"SUB-123\",\"product_category\":\"Fashion\",\"number_of_trades\":50,\"registration_date\":\"2023-01-15\"}";
+        String json = "{\"id\":\"SUB-123\",\"product_category\":\"Fashion\",\"number_of_sales\":50,\"registration_date\":\"2023-01-15\"}";
 
         OrderSubMerchant subMerchant = serializer.fromJson(json, OrderSubMerchant.class);
 
         assertNotNull(subMerchant);
         assertEquals("SUB-123", subMerchant.getId());
         assertEquals("Fashion", subMerchant.getProductCategory());
-        assertEquals(50, subMerchant.getNumberOfTrades());
+        assertEquals(50, subMerchant.getNumberOfSales());
         assertEquals(LocalDate.of(2023, 1, 15), subMerchant.getRegistrationDate());
     }
 }

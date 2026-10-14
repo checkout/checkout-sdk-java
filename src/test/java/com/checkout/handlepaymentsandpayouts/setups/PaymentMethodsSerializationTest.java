@@ -3,19 +3,28 @@ package com.checkout.handlepaymentsandpayouts.setups;
 import com.checkout.GsonSerializer;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.bizum.Bizum;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.card.Card;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.card.CardDetails;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.card.CardToken;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodAction;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodBase;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodInitialization;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodStatus;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentSetupScheme;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.instrument.Instrument;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.klarna.Klarna;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.paypal.PayPal;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.paypal.PayPalShippingPreference;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.paypal.PayPalUserAction;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.stcpay.Stcpay;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.tabby.Tabby;
+import com.checkout.payments.PreferredSchema;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -89,7 +98,7 @@ class PaymentMethodsSerializationTest {
     @Test
     void shouldDeserializeStcpayWithOtpAction() {
         final String json = "{"
-                + "\"status\":\"pending\","
+                + "\"status\":\"action_required\","
                 + "\"flags\":[\"stc_flag\"],"
                 + "\"initialization\":\"enabled\","
                 + "\"otp\":\"123456\","
@@ -99,7 +108,7 @@ class PaymentMethodsSerializationTest {
         final Stcpay stcpay = serializer.fromJson(json, Stcpay.class);
 
         assertNotNull(stcpay);
-        assertEquals(PaymentMethodStatus.PENDING, stcpay.getStatus());
+        assertEquals(PaymentMethodStatus.ACTION_REQUIRED, stcpay.getStatus());
         assertEquals(Collections.singletonList("stc_flag"), stcpay.getFlags());
         assertEquals(PaymentMethodInitialization.ENABLED, stcpay.getInitialization());
         assertEquals("123456", stcpay.getOtp());
@@ -113,7 +122,7 @@ class PaymentMethodsSerializationTest {
     @Test
     void shouldSerializeStcpayOtp() {
         final Stcpay stcpay = new Stcpay();
-        stcpay.setStatus(PaymentMethodStatus.AVAILABLE);
+        stcpay.setStatus(PaymentMethodStatus.READY);
         stcpay.setFlags(Collections.emptyList());
         stcpay.setInitialization(PaymentMethodInitialization.DISABLED);
         stcpay.setOtp("654321");
@@ -127,7 +136,7 @@ class PaymentMethodsSerializationTest {
     @Test
     void shouldRoundTripStcpayWithAllProperties() {
         final Stcpay original = new Stcpay();
-        original.setStatus(PaymentMethodStatus.AVAILABLE);
+        original.setStatus(PaymentMethodStatus.INITIALIZATION_REQUIRED);
         original.setFlags(Collections.singletonList("f"));
         original.setInitialization(PaymentMethodInitialization.DISABLED);
         original.setOtp("111222");
@@ -184,7 +193,7 @@ class PaymentMethodsSerializationTest {
     @Test
     void shouldDeserializePayPalWithAction() {
         final String json = "{"
-                + "\"status\":\"available\","
+                + "\"status\":\"ready\","
                 + "\"flags\":[\"paypal_flag\"],"
                 + "\"initialization\":\"enabled\","
                 + "\"user_action\":\"pay_now\","
@@ -199,7 +208,7 @@ class PaymentMethodsSerializationTest {
         final PayPal paypal = serializer.fromJson(json, PayPal.class);
 
         assertNotNull(paypal);
-        assertEquals(PaymentMethodStatus.AVAILABLE, paypal.getStatus());
+        assertEquals(PaymentMethodStatus.READY, paypal.getStatus());
         assertEquals(Collections.singletonList("paypal_flag"), paypal.getFlags());
         assertEquals(PaymentMethodInitialization.ENABLED, paypal.getInitialization());
         assertEquals(PayPalUserAction.PAY_NOW, paypal.getUserAction());
@@ -215,7 +224,7 @@ class PaymentMethodsSerializationTest {
     @Test
     void shouldRoundTripPayPalWithAllProperties() {
         final PayPal original = new PayPal();
-        original.setStatus(PaymentMethodStatus.PENDING);
+        original.setStatus(PaymentMethodStatus.INVALID);
         original.setFlags(Collections.singletonList("p"));
         original.setInitialization(PaymentMethodInitialization.ENABLED);
         original.setUserAction(PayPalUserAction.CONTINUE);
@@ -281,7 +290,7 @@ class PaymentMethodsSerializationTest {
         klarna.setInitialization(PaymentMethodInitialization.ENABLED);
 
         final PayPal paypal = new PayPal();
-        paypal.setStatus(PaymentMethodStatus.AVAILABLE);
+        paypal.setStatus(PaymentMethodStatus.READY);
         paypal.setFlags(Collections.emptyList());
         paypal.setInitialization(PaymentMethodInitialization.DISABLED);
         paypal.setBrandName("Shop");
@@ -296,7 +305,6 @@ class PaymentMethodsSerializationTest {
         assertTrue(json.contains("\"klarna\""));
         assertTrue(json.contains("\"paypal\""));
         assertTrue(json.contains("\"ready\""));
-        assertTrue(json.contains("\"available\""));
         assertTrue(json.contains("Shop"));
     }
 
@@ -345,7 +353,7 @@ class PaymentMethodsSerializationTest {
                 + "}"
                 + "},"
                 + "\"stcpay\":{"
-                + "\"status\":\"pending\","
+                + "\"status\":\"action_required\","
                 + "\"flags\":[],"
                 + "\"initialization\":\"disabled\","
                 + "\"action\":{\"type\":\"otp\"}"
@@ -357,7 +365,7 @@ class PaymentMethodsSerializationTest {
                 + "\"payment_types\":[\"pay_later\"]"
                 + "},"
                 + "\"paypal\":{"
-                + "\"status\":\"available\","
+                + "\"status\":\"ready\","
                 + "\"flags\":[],"
                 + "\"initialization\":\"enabled\","
                 + "\"user_action\":\"pay_now\","
@@ -443,16 +451,34 @@ class PaymentMethodsSerializationTest {
         assertTrue(json.contains("\"order_id\""));
     }
 
+    /**
+     * PENDING and AVAILABLE are deprecated (not in the PaymentMethodStatus enum of the spec) but still
+     * deserialize, so a response carrying them does not break existing integrations.
+     */
     @Test
+    @SuppressWarnings("deprecation")
     void shouldDeserializeAllPaymentMethodStatusWireValues() {
         assertEquals(PaymentMethodStatus.UNAVAILABLE, serializer.fromJson("{\"status\":\"unavailable\"}", Klarna.class).getStatus());
         assertEquals(PaymentMethodStatus.ACTION_REQUIRED, serializer.fromJson("{\"status\":\"action_required\"}", Klarna.class).getStatus());
         assertEquals(PaymentMethodStatus.PENDING, serializer.fromJson("{\"status\":\"pending\"}", Klarna.class).getStatus());
         assertEquals(PaymentMethodStatus.READY, serializer.fromJson("{\"status\":\"ready\"}", Klarna.class).getStatus());
         assertEquals(PaymentMethodStatus.AVAILABLE, serializer.fromJson("{\"status\":\"available\"}", Klarna.class).getStatus());
+        assertEquals(PaymentMethodStatus.INITIALIZATION_REQUIRED, serializer.fromJson("{\"status\":\"initialization_required\"}", Klarna.class).getStatus());
+        assertEquals(PaymentMethodStatus.INVALID, serializer.fromJson("{\"status\":\"invalid\"}", Klarna.class).getStatus());
     }
 
     @Test
+    @SuppressWarnings("deprecation")
+    void shouldMarkOnlyTheStatusValuesOutsideTheSpecAsDeprecated() throws NoSuchFieldException {
+        for (final PaymentMethodStatus status : PaymentMethodStatus.values()) {
+            final boolean deprecated = PaymentMethodStatus.class.getField(status.name()).isAnnotationPresent(Deprecated.class);
+            final boolean inSpec = status != PaymentMethodStatus.PENDING && status != PaymentMethodStatus.AVAILABLE;
+            assertEquals(!inSpec, deprecated, status.name());
+        }
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
     void shouldSerializeAllPaymentMethodStatusValues() {
         for (final PaymentMethodStatus status : PaymentMethodStatus.values()) {
             final Klarna k = new Klarna();
@@ -496,6 +522,170 @@ class PaymentMethodsSerializationTest {
         }
     }
 
+    // ------------------------------------------------------------------------
+    // Card
+    // PaymentSetup.payment_methods.card: the card data lives under details,
+    // token is an object, plus schemes and preferred_scheme. The flat
+    // accessors are deprecated and now write inside details.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldRoundTripCardWithEveryProperty() {
+        final Card original = buildSampleCard();
+
+        final String json = serializer.toJson(original);
+        final JsonObject card = JsonParser.parseString(json).getAsJsonObject();
+        final JsonObject details = card.getAsJsonObject("details");
+
+        assertEquals("tok_ubfj2q76miwundwlk72vxt2i7q", card.getAsJsonObject("token").get("id").getAsString());
+        assertEquals(11, details.size());
+        assertEquals("4242424242424242", details.get("number").getAsString());
+        assertEquals("4242", details.get("last4").getAsString());
+        assertEquals("424242", details.get("bin").getAsString());
+        assertEquals("visa", details.get("scheme").getAsString());
+        assertEquals(12, details.get("expiry_month").getAsInt());
+        assertEquals(2030, details.get("expiry_year").getAsInt());
+        assertEquals("John Smith", details.get("name").getAsString());
+        assertEquals("100", details.get("cvv").getAsString());
+        assertTrue(details.get("stored").getAsBoolean());
+        assertEquals("2030-01-01T10:00:00Z", details.get("expires_on").getAsString());
+        assertTrue(details.get("allow_update").getAsBoolean());
+        assertTrue(card.get("store_for_future_use").getAsBoolean());
+        assertEquals("cartes_bancaires", card.getAsJsonArray("schemes").get(1).getAsString());
+        assertEquals("china_union_pay", card.getAsJsonArray("schemes").get(2).getAsString());
+        assertEquals("cartes_bancaires", card.get("preferred_scheme").getAsString());
+        assertFalse(card.has("number"));
+        assertFalse(card.has("cvv"));
+        assertFalse(card.has("expiry_month"));
+        assertEquals(original, serializer.fromJson(json, Card.class));
+    }
+
+    @Test
+    void shouldDeserializeCardSwaggerExample() {
+        final String json = "{"
+                + "\"status\":\"ready\","
+                + "\"flags\":[],"
+                + "\"token\":{\"id\":\"tok_ubfj2q76miwundwlk72vxt2i7q\"},"
+                + "\"details\":{\"last4\":\"4242\",\"bin\":\"424242\",\"scheme\":\"visa\","
+                + "\"expiry_month\":12,\"expiry_year\":2030,\"expires_on\":\"2030-01-01T10:00:00Z\","
+                + "\"allow_update\":true},"
+                + "\"schemes\":[\"visa\",\"mastercard\"],"
+                + "\"preferred_scheme\":\"visa\""
+                + "}";
+
+        final Card card = serializer.fromJson(json, Card.class);
+
+        assertEquals(PaymentMethodStatus.READY, card.getStatus());
+        assertEquals("tok_ubfj2q76miwundwlk72vxt2i7q", card.getToken().getId());
+        assertEquals("4242", card.getDetails().getLast4());
+        assertEquals("424242", card.getDetails().getBin());
+        assertEquals("visa", card.getDetails().getScheme());
+        assertEquals(Integer.valueOf(12), card.getDetails().getExpiryMonth());
+        assertEquals(Integer.valueOf(2030), card.getDetails().getExpiryYear());
+        assertEquals(Instant.parse("2030-01-01T10:00:00Z"), card.getDetails().getExpiresOn());
+        assertEquals(Boolean.TRUE, card.getDetails().getAllowUpdate());
+        assertEquals(Arrays.asList(PaymentSetupScheme.VISA, PaymentSetupScheme.MASTERCARD), card.getSchemes());
+        assertEquals(PreferredSchema.VISA, card.getPreferredScheme());
+    }
+
+    @Test
+    void shouldSerializeEveryPaymentSetupSchemeValue() {
+        for (final PaymentSetupScheme scheme : PaymentSetupScheme.values()) {
+            final Card card = new Card();
+            card.setSchemes(Collections.singletonList(scheme));
+            final JsonObject json = JsonParser.parseString(serializer.toJson(card)).getAsJsonObject();
+            assertEquals(scheme.name().toLowerCase(), json.getAsJsonArray("schemes").get(0).getAsString());
+            assertEquals(scheme, serializer.fromJson(serializer.toJson(card), Card.class).getSchemes().get(0));
+        }
+        assertEquals(17, PaymentSetupScheme.values().length);
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void shouldWriteUnderDetailsThroughTheDeprecatedFlatCardAccessors() {
+        final Card card = new Card();
+        card.setNumber("4242424242424242");
+        card.setLast4("4242");
+        card.setBin("424242");
+        card.setScheme("visa");
+        card.setExpiryMonth(12);
+        card.setExpiryYear(2030);
+        card.setName("John Smith");
+        card.setCvv("100");
+        card.setStored(true);
+        card.setExpiresOn(Instant.parse("2030-01-01T10:00:00Z"));
+        card.setAllowUpdate(true);
+
+        final JsonObject json = JsonParser.parseString(serializer.toJson(card)).getAsJsonObject();
+
+        assertEquals(1, json.size());
+        assertEquals(buildSampleCard().getDetails(), card.getDetails());
+        assertEquals(11, json.getAsJsonObject("details").size());
+        assertEquals("4242424242424242", card.getNumber());
+        assertEquals("100", card.getCvv());
+        assertEquals(Instant.parse("2030-01-01T10:00:00Z"), card.getExpiresOn());
+        assertNull(new Card().getNumber());
+    }
+
+    // ------------------------------------------------------------------------
+    // Instrument
+    // PaymentSetupInstrument: id, the read-only type and action.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldRoundTripInstrumentWithEveryProperty() {
+        final Instrument original = new Instrument();
+        original.setStatus(PaymentMethodStatus.READY);
+        original.setFlags(Collections.emptyList());
+        original.setId("src_wmlfc3zttb4uzmk6snpwb43jbi");
+        original.setType("bacs");
+        original.setAction(PaymentMethodAction.builder().type("set_instrument").build());
+
+        final String json = serializer.toJson(original);
+        final JsonObject instrument = JsonParser.parseString(json).getAsJsonObject();
+
+        assertEquals("src_wmlfc3zttb4uzmk6snpwb43jbi", instrument.get("id").getAsString());
+        assertEquals("bacs", instrument.get("type").getAsString());
+        assertEquals("set_instrument", instrument.getAsJsonObject("action").get("type").getAsString());
+        assertEquals(original, serializer.fromJson(json, Instrument.class));
+    }
+
+    @Test
+    void shouldDeserializeInstrumentSwaggerExample() {
+        final String json = "{\"status\":\"ready\",\"flags\":[],\"id\":\"src_wmlfc3zttb4uzmk6snpwb43jbi\","
+                + "\"type\":\"bacs\",\"action\":{\"type\":\"set_instrument\"}}";
+
+        final Instrument instrument = serializer.fromJson(json, Instrument.class);
+
+        assertEquals("src_wmlfc3zttb4uzmk6snpwb43jbi", instrument.getId());
+        assertEquals("bacs", instrument.getType());
+        assertEquals("set_instrument", instrument.getAction().getType());
+    }
+
+    private static Card buildSampleCard() {
+        final Card c = new Card();
+        c.setStatus(PaymentMethodStatus.READY);
+        c.setFlags(Collections.emptyList());
+        c.setToken(CardToken.builder().id("tok_ubfj2q76miwundwlk72vxt2i7q").build());
+        c.setDetails(CardDetails.builder()
+                .number("4242424242424242")
+                .last4("4242")
+                .bin("424242")
+                .scheme("visa")
+                .expiryMonth(12)
+                .expiryYear(2030)
+                .name("John Smith")
+                .cvv("100")
+                .stored(true)
+                .expiresOn(Instant.parse("2030-01-01T10:00:00Z"))
+                .allowUpdate(true)
+                .build());
+        c.setStoreForFutureUse(true);
+        c.setSchemes(Arrays.asList(PaymentSetupScheme.VISA, PaymentSetupScheme.CARTES_BANCAIRES, PaymentSetupScheme.CHINA_UNION_PAY));
+        c.setPreferredScheme(PreferredSchema.CARTES_BANCAIRES);
+        return c;
+    }
+
     private static Klarna buildSampleKlarna() {
         final Klarna k = new Klarna();
         k.setStatus(PaymentMethodStatus.READY);
@@ -507,7 +697,7 @@ class PaymentMethodsSerializationTest {
 
     private static Stcpay buildSampleStcpay() {
         final Stcpay s = new Stcpay();
-        s.setStatus(PaymentMethodStatus.PENDING);
+        s.setStatus(PaymentMethodStatus.INITIALIZATION_REQUIRED);
         s.setFlags(Collections.emptyList());
         s.setInitialization(PaymentMethodInitialization.DISABLED);
         s.setOtp("999888");
@@ -517,7 +707,7 @@ class PaymentMethodsSerializationTest {
 
     private static Tabby buildSampleTabby() {
         final Tabby t = new Tabby();
-        t.setStatus(PaymentMethodStatus.AVAILABLE);
+        t.setStatus(PaymentMethodStatus.INVALID);
         t.setFlags(Collections.singletonList("tf"));
         t.setInitialization(PaymentMethodInitialization.ENABLED);
         t.setPaymentTypes(Collections.singletonList("pay_later"));

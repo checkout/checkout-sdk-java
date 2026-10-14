@@ -3,10 +3,13 @@ package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.goo
 import com.checkout.common.Phone;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.CardAccountHolder;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodBase;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentSetupScheme;
+import com.checkout.payments.PreferredSchema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
+import java.util.List;
 
 /**
  * The Google Pay payment method's details and configuration.
@@ -17,7 +20,7 @@ public final class GooglePay extends PaymentMethodBase {
 
     /**
      * The Google Pay encrypted payment token data.
-     * [Optional]
+     * [Optional] writeOnly
      */
     private GooglePayTokenData tokenData;
 
@@ -35,8 +38,9 @@ public final class GooglePay extends PaymentMethodBase {
     private Instant expiresOn;
 
     /**
-     * Set to true if you intend to reuse the payment credentials in subsequent payments.
-     * [Optional]
+     * Set to true if you intend to reuse the payment credentials in subsequent payments. If set to
+     * false, a payment instrument will not be included in the payment response.
+     * [Optional] writeOnly
      */
     private Boolean storeForFutureUse;
 
@@ -51,4 +55,17 @@ public final class GooglePay extends PaymentMethodBase {
      * [Optional]
      */
     private CardAccountHolder accountHolder;
+
+    /**
+     * The list of supported card scheme names.
+     * [Optional] readOnly
+     */
+    private List<PaymentSetupScheme> schemes;
+
+    /**
+     * The preferred card scheme to process the payment.
+     * Google Pay accepts only VISA and MASTERCARD.
+     * [Optional]
+     */
+    private PreferredSchema preferredScheme;
 }

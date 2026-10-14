@@ -22,7 +22,12 @@ public enum PaymentMethodStatus {
 
     /**
      * Not defined by the current API specification. Kept for backward compatibility.
+     *
+     * @deprecated not part of the PaymentMethodStatus enum in the API specification, which lists
+     * unavailable, action_required, ready, initialization_required and invalid. It will be
+     * removed in the next major version.
      */
+    @Deprecated
     @SerializedName("pending")
     PENDING,
 
@@ -34,7 +39,12 @@ public enum PaymentMethodStatus {
 
     /**
      * Not defined by the current API specification. Kept for backward compatibility.
+     *
+     * @deprecated not part of the PaymentMethodStatus enum in the API specification, which lists
+     * unavailable, action_required, ready, initialization_required and invalid. It will be
+     * removed in the next major version.
      */
+    @Deprecated
     @SerializedName("available")
     AVAILABLE,
 
