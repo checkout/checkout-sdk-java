@@ -95,7 +95,8 @@ class PaymentSetupsNewFieldsSerializationTest {
         final String methodsJson = serializer.toJson(methods);
         assertTrue(methodsJson.contains("\"bacs\""));
         assertTrue(methodsJson.contains("\"card_present\""));
-        assertTrue(methodsJson.contains("\"pay_by_bank\""));
+        assertTrue(methodsJson.contains("\"paybybank\""));
+        assertFalse(methodsJson.contains("pay_by_bank"));
         assertTrue(methodsJson.contains("\"stablecoin\""));
     }
 

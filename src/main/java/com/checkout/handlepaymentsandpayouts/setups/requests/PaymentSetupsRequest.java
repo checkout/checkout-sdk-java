@@ -10,6 +10,7 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.order.Order;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
 import com.checkout.handlepaymentsandpayouts.setups.entities.billingDescriptor.PaymentSetupBillingDescriptor;
 import com.checkout.handlepaymentsandpayouts.setups.entities.presentmentDetails.PaymentSetupPresentmentDetails;
+import com.checkout.handlepaymentsandpayouts.setups.entities.risk.PaymentSetupRisk;
 import com.checkout.handlepaymentsandpayouts.setups.entities.settings.Settings;
 import com.checkout.handlepaymentsandpayouts.setups.entities.terminal.PaymentSetupTerminal;
 import lombok.AllArgsConstructor;
@@ -126,4 +127,10 @@ public final class PaymentSetupsRequest {
      * [Optional]
      */
     private PaymentSetupTerminal terminal;
+
+    /**
+     * Risk assessment settings for the Payment Setup.
+     * [Optional]
+     */
+    private PaymentSetupRisk risk;
 }
