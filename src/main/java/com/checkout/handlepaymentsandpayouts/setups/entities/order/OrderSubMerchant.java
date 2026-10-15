@@ -40,34 +40,4 @@ public final class OrderSubMerchant {
      * Format: yyyy-MM-dd
      */
     private LocalDate registrationDate;
-
-    /**
-     * @deprecated Use {@link #getNumberOfSales()}. The API field is {@code number_of_sales};
-     * {@code number_of_trades} is not part of the API and was dropped.
-     */
-    @Deprecated
-    public Integer getNumberOfTrades() {
-        return numberOfSales;
-    }
-
-    /**
-     * @deprecated Use {@link #setNumberOfSales(Integer)}. The API field is {@code number_of_sales};
-     * {@code number_of_trades} is not part of the API and was dropped.
-     */
-    @Deprecated
-    public void setNumberOfTrades(final Integer numberOfTrades) {
-        this.numberOfSales = numberOfTrades;
-    }
-
-    public static class OrderSubMerchantBuilder {
-
-        /**
-         * @deprecated Use {@link #numberOfSales(Integer)}. The API field is {@code number_of_sales};
-         * {@code number_of_trades} is not part of the API and was dropped.
-         */
-        @Deprecated
-        public OrderSubMerchantBuilder numberOfTrades(final Integer numberOfTrades) {
-            return numberOfSales(numberOfTrades);
-        }
-    }
 }

@@ -314,8 +314,7 @@ class PaymentSetupsNewFieldsSerializationTest {
     // ------------------------------------------------------------------------
     // OrderSubMerchant
     // PaymentSetupSubMerchant.number_of_sales. The model sent number_of_trades,
-    // a key the API does not define; the old accessors are deprecated and now
-    // write number_of_sales.
+    // a key the API does not define.
     // ------------------------------------------------------------------------
 
     @Test
@@ -352,21 +351,4 @@ class PaymentSetupsNewFieldsSerializationTest {
         assertEquals(LocalDate.of(2023, 1, 15), subMerchant.getRegistrationDate());
     }
 
-    @Test
-    @SuppressWarnings("deprecation")
-    void shouldSendNumberOfSalesThroughTheDeprecatedNumberOfTradesAccessors() {
-        final OrderSubMerchant fromBuilder = OrderSubMerchant.builder().numberOfTrades(42).build();
-        final OrderSubMerchant fromSetter = new OrderSubMerchant();
-        fromSetter.setNumberOfTrades(7);
-
-        final JsonObject builderJson = JsonParser.parseString(serializer.toJson(fromBuilder)).getAsJsonObject();
-        final JsonObject setterJson = JsonParser.parseString(serializer.toJson(fromSetter)).getAsJsonObject();
-
-        assertEquals(42, builderJson.get("number_of_sales").getAsInt());
-        assertFalse(builderJson.has("number_of_trades"));
-        assertEquals(7, setterJson.get("number_of_sales").getAsInt());
-        assertFalse(setterJson.has("number_of_trades"));
-        assertEquals(Integer.valueOf(42), fromBuilder.getNumberOfTrades());
-        assertEquals(Integer.valueOf(42), fromBuilder.getNumberOfSales());
-    }
 }

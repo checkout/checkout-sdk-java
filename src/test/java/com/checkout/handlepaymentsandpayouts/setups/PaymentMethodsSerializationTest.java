@@ -58,7 +58,8 @@ class PaymentMethodsSerializationTest {
                 + "\"type\":\"sdk\","
                 + "\"client_token\":\"ct_klarna_abc\","
                 + "\"session_id\":\"sess_111\""
-                + "}"
+                + "},"
+                + "\"iban\":\"DE89370400440532013000\""
                 + "}";
 
         final Klarna klarna = serializer.fromJson(json, Klarna.class);
@@ -72,6 +73,7 @@ class PaymentMethodsSerializationTest {
         assertEquals("ct_klarna_abc", klarna.getAction().getClientToken());
         assertEquals("sess_111", klarna.getAction().getSessionId());
         assertNull(klarna.getAction().getOrderId());
+        assertEquals("DE89370400440532013000", klarna.getIban());
     }
 
     @Test
@@ -86,9 +88,13 @@ class PaymentMethodsSerializationTest {
                 .sessionId("sid")
                 .orderId(null)
                 .build());
+        original.setIban("DE89370400440532013000");
 
         final String json = serializer.toJson(original);
         final Klarna restored = serializer.fromJson(json, Klarna.class);
+
+        assertEquals("DE89370400440532013000", JsonParser.parseString(json).getAsJsonObject().get("iban").getAsString());
+        assertEquals(original.getIban(), restored.getIban());
 
         assertNotNull(restored);
         assertEquals(original.getStatus(), restored.getStatus());
@@ -531,8 +537,7 @@ class PaymentMethodsSerializationTest {
     // ------------------------------------------------------------------------
     // Card
     // PaymentSetup.payment_methods.card: the card data lives under details,
-    // token is an object, plus schemes and preferred_scheme. The flat
-    // accessors are deprecated and now write inside details.
+    // token is an object, plus schemes and preferred_scheme.
     // ------------------------------------------------------------------------
 
     @Test
@@ -606,38 +611,10 @@ class PaymentMethodsSerializationTest {
         assertEquals(17, PaymentSetupScheme.values().length);
     }
 
-    @Test
-    @SuppressWarnings("deprecation")
-    void shouldWriteUnderDetailsThroughTheDeprecatedFlatCardAccessors() {
-        final Card card = new Card();
-        card.setNumber("4242424242424242");
-        card.setLast4("4242");
-        card.setBin("424242");
-        card.setScheme("visa");
-        card.setExpiryMonth(12);
-        card.setExpiryYear(2030);
-        card.setName("John Smith");
-        card.setCvv("100");
-        card.setStored(true);
-        card.setExpiresOn(Instant.parse("2030-01-01T10:00:00Z"));
-        card.setAllowUpdate(true);
-
-        final JsonObject json = JsonParser.parseString(serializer.toJson(card)).getAsJsonObject();
-
-        assertEquals(1, json.size());
-        assertEquals(buildSampleCard().getDetails(), card.getDetails());
-        assertEquals(11, json.getAsJsonObject("details").size());
-        assertEquals("4242424242424242", card.getNumber());
-        assertEquals("100", card.getCvv());
-        assertEquals(Instant.parse("2030-01-01T10:00:00Z"), card.getExpiresOn());
-        assertNull(new Card().getNumber());
-    }
-
     // ------------------------------------------------------------------------
     // Apple Pay and Google Pay
     // token is an object {id, expires_on}, no longer a bare string with
-    // expires_on next to it; plus schemes and preferred_scheme. The flat
-    // expiresOn accessors are deprecated and now write inside token.
+    // expires_on next to it; plus schemes and preferred_scheme.
     // ------------------------------------------------------------------------
 
     @Test
@@ -724,26 +701,6 @@ class PaymentMethodsSerializationTest {
         assertEquals(PreferredSchema.VISA, applePay.getPreferredScheme());
         assertEquals("tok_ubfj2q76miwundwlk72vxt2i7q", googlePay.getToken().getId());
         assertEquals(Instant.parse("2030-01-01T10:00:00Z"), googlePay.getToken().getExpiresOn());
-    }
-
-    @Test
-    @SuppressWarnings("deprecation")
-    void shouldWriteUnderTokenThroughTheDeprecatedWalletExpiresOnAccessors() {
-        final ApplePay applePay = new ApplePay();
-        applePay.setExpiresOn(Instant.parse("2030-01-01T10:00:00Z"));
-        final GooglePay googlePay = new GooglePay();
-        googlePay.setToken(WalletToken.builder().id("tok_ubfj2q76miwundwlk72vxt2i7q").build());
-        googlePay.setExpiresOn(Instant.parse("2030-01-01T10:00:00Z"));
-
-        final JsonObject appleJson = JsonParser.parseString(serializer.toJson(applePay)).getAsJsonObject();
-        final JsonObject googleJson = JsonParser.parseString(serializer.toJson(googlePay)).getAsJsonObject();
-
-        assertFalse(appleJson.has("expires_on"));
-        assertEquals("2030-01-01T10:00:00Z", appleJson.getAsJsonObject("token").get("expires_on").getAsString());
-        assertEquals("tok_ubfj2q76miwundwlk72vxt2i7q", googleJson.getAsJsonObject("token").get("id").getAsString());
-        assertEquals("2030-01-01T10:00:00Z", googleJson.getAsJsonObject("token").get("expires_on").getAsString());
-        assertEquals(Instant.parse("2030-01-01T10:00:00Z"), applePay.getExpiresOn());
-        assertNull(new ApplePay().getExpiresOn());
     }
 
     // ------------------------------------------------------------------------

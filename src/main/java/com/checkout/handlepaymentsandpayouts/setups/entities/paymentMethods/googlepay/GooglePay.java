@@ -9,7 +9,6 @@ import com.checkout.payments.PreferredSchema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.time.Instant;
 import java.util.List;
 
 /**
@@ -62,25 +61,4 @@ public final class GooglePay extends PaymentMethodBase {
      * [Optional]
      */
     private PreferredSchema preferredScheme;
-
-    /**
-     * @deprecated Use {@link WalletToken#getExpiresOn()} through {@link #getToken()}. The API
-     * expects this value under {@code token} and drops it at the Google Pay level.
-     */
-    @Deprecated
-    public Instant getExpiresOn() {
-        return token == null ? null : token.getExpiresOn();
-    }
-
-    /**
-     * @deprecated Use {@link WalletToken#setExpiresOn(Instant)} through {@link #setToken(WalletToken)}.
-     * The API expects this value under {@code token}; this setter now writes it there.
-     */
-    @Deprecated
-    public void setExpiresOn(final Instant expiresOn) {
-        if (token == null) {
-            token = new WalletToken();
-        }
-        token.setExpiresOn(expiresOn);
-    }
 }
