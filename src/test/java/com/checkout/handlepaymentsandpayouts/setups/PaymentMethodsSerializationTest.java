@@ -9,6 +9,8 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.bizu
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.card.Card;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.card.CardDetails;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.card.CardToken;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.CardAccountHolder;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.CardAccountHolderType;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodAction;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodBase;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodInitialization;
@@ -562,6 +564,14 @@ class PaymentMethodsSerializationTest {
         assertEquals("2030-01-01T10:00:00Z", details.get("expires_on").getAsString());
         assertTrue(details.get("allow_update").getAsBoolean());
         assertTrue(card.get("store_for_future_use").getAsBoolean());
+        final JsonObject accountHolder = card.getAsJsonObject("account_holder");
+        assertEquals(6, accountHolder.size());
+        assertEquals("corporate", accountHolder.get("type").getAsString());
+        assertEquals("John", accountHolder.get("first_name").getAsString());
+        assertEquals("Smith", accountHolder.get("last_name").getAsString());
+        assertEquals("Paul", accountHolder.get("middle_name").getAsString());
+        assertEquals("Acme Corporation", accountHolder.get("company_name").getAsString());
+        assertTrue(accountHolder.get("account_name_inquiry").getAsBoolean());
         assertEquals("cartes_bancaires", card.getAsJsonArray("schemes").get(1).getAsString());
         assertEquals("china_union_pay", card.getAsJsonArray("schemes").get(2).getAsString());
         assertEquals("cartes_bancaires", card.get("preferred_scheme").getAsString());
@@ -757,6 +767,14 @@ class PaymentMethodsSerializationTest {
                 .allowUpdate(true)
                 .build());
         c.setStoreForFutureUse(true);
+        c.setAccountHolder(CardAccountHolder.builder()
+                .type(CardAccountHolderType.CORPORATE)
+                .firstName("John")
+                .lastName("Smith")
+                .middleName("Paul")
+                .companyName("Acme Corporation")
+                .accountNameInquiry(true)
+                .build());
         c.setSchemes(Arrays.asList(PaymentSetupScheme.VISA, PaymentSetupScheme.CARTES_BANCAIRES, PaymentSetupScheme.CHINA_UNION_PAY));
         c.setPreferredScheme(PreferredSchema.CARTES_BANCAIRES);
         return c;
