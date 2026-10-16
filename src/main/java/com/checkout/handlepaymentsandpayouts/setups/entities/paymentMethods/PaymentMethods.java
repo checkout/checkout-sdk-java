@@ -59,6 +59,12 @@ import lombok.NoArgsConstructor;
 public final class PaymentMethods {
 
     /**
+     * The payment method that automatically confirms the payment when it is ready, for example "card".
+     * [Optional]
+     */
+    private String autoConfirm;
+
+    /**
      * Instrument (saved payment source) configuration.
      * [Optional]
      */

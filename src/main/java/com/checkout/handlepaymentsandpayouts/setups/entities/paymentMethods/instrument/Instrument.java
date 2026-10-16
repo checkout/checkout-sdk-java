@@ -19,8 +19,14 @@ public final class Instrument extends PaymentMethodBase {
     private String id;
 
     /**
+     * The type of the instrument, for example "bacs".
+     * [Optional] readOnly
+     */
+    private String type;
+
+    /**
      * The next available action for the payment method.
-     * [Optional]
+     * [Optional] readOnly
      */
     private PaymentMethodAction action;
 }

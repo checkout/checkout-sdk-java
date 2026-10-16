@@ -39,7 +39,14 @@ public final class CardAccountHolder {
     private String middleName;
 
     /**
-     * Indicates whether the ANI (account name inquiry) check is performed with the card scheme.
+     * The card account holder's company name.
+     * [Optional]
+     */
+    private String companyName;
+
+    /**
+     * Indicates whether the ANI (account name inquiry) check is performed with the card scheme
+     * (Visa or Mastercard).
      * [Optional]
      */
     private Boolean accountNameInquiry;
