@@ -1,6 +1,7 @@
 package com.checkout.handlepaymentsandpayouts.setups;
 
 import com.checkout.GsonSerializer;
+import com.checkout.common.Phone;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.applepay.ApplePay;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.applepay.ApplePayTokenData;
@@ -18,6 +19,7 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.comm
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentSetupScheme;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.WalletToken;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.googlepay.GooglePay;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.googlepay.GooglePayPreferredScheme;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.googlepay.GooglePayTokenData;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.instrument.Instrument;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.klarna.Klarna;
@@ -564,14 +566,7 @@ class PaymentMethodsSerializationTest {
         assertEquals("2030-01-01T10:00:00Z", details.get("expires_on").getAsString());
         assertTrue(details.get("allow_update").getAsBoolean());
         assertTrue(card.get("store_for_future_use").getAsBoolean());
-        final JsonObject accountHolder = card.getAsJsonObject("account_holder");
-        assertEquals(6, accountHolder.size());
-        assertEquals("corporate", accountHolder.get("type").getAsString());
-        assertEquals("John", accountHolder.get("first_name").getAsString());
-        assertEquals("Smith", accountHolder.get("last_name").getAsString());
-        assertEquals("Paul", accountHolder.get("middle_name").getAsString());
-        assertEquals("Acme Corporation", accountHolder.get("company_name").getAsString());
-        assertTrue(accountHolder.get("account_name_inquiry").getAsBoolean());
+        assertPhoneAndAccountHolder(card);
         assertEquals("cartes_bancaires", card.getAsJsonArray("schemes").get(1).getAsString());
         assertEquals("china_union_pay", card.getAsJsonArray("schemes").get(2).getAsString());
         assertEquals("cartes_bancaires", card.get("preferred_scheme").getAsString());
@@ -647,6 +642,8 @@ class PaymentMethodsSerializationTest {
                 .expiresOn(Instant.parse("2030-01-01T10:00:00Z"))
                 .build());
         original.setStoreForFutureUse(true);
+        original.setPhone(samplePhone());
+        original.setAccountHolder(sampleAccountHolder());
         original.setSchemes(Arrays.asList(PaymentSetupScheme.VISA, PaymentSetupScheme.CARTES_BANCAIRES));
         original.setPreferredScheme(PreferredSchema.CARTES_BANCAIRES);
 
@@ -659,6 +656,7 @@ class PaymentMethodsSerializationTest {
         assertFalse(applePay.has("expires_on"));
         assertEquals("EC_v1", applePay.getAsJsonObject("token_data").get("version").getAsString());
         assertTrue(applePay.get("store_for_future_use").getAsBoolean());
+        assertPhoneAndAccountHolder(applePay);
         assertEquals("cartes_bancaires", applePay.getAsJsonArray("schemes").get(1).getAsString());
         assertEquals("cartes_bancaires", applePay.get("preferred_scheme").getAsString());
         assertEquals(original, serializer.fromJson(json, ApplePay.class));
@@ -680,8 +678,10 @@ class PaymentMethodsSerializationTest {
                 .expiresOn(Instant.parse("2030-01-01T10:00:00Z"))
                 .build());
         original.setStoreForFutureUse(false);
+        original.setPhone(samplePhone());
+        original.setAccountHolder(sampleAccountHolder());
         original.setSchemes(Arrays.asList(PaymentSetupScheme.VISA, PaymentSetupScheme.MASTERCARD));
-        original.setPreferredScheme(PreferredSchema.MASTERCARD);
+        original.setPreferredScheme(GooglePayPreferredScheme.MASTERCARD);
 
         final String json = serializer.toJson(original);
         final JsonObject googlePay = JsonParser.parseString(json).getAsJsonObject();
@@ -692,6 +692,7 @@ class PaymentMethodsSerializationTest {
         assertFalse(googlePay.has("expires_on"));
         assertEquals("ECv2", googlePay.getAsJsonObject("token_data").get("protocol_version").getAsString());
         assertFalse(googlePay.get("store_for_future_use").getAsBoolean());
+        assertPhoneAndAccountHolder(googlePay);
         assertEquals("mastercard", googlePay.get("preferred_scheme").getAsString());
         assertEquals(original, serializer.fromJson(json, GooglePay.class));
     }
@@ -711,6 +712,20 @@ class PaymentMethodsSerializationTest {
         assertEquals(PreferredSchema.VISA, applePay.getPreferredScheme());
         assertEquals("tok_ubfj2q76miwundwlk72vxt2i7q", googlePay.getToken().getId());
         assertEquals(Instant.parse("2030-01-01T10:00:00Z"), googlePay.getToken().getExpiresOn());
+        assertEquals(GooglePayPreferredScheme.VISA, googlePay.getPreferredScheme());
+    }
+
+    @Test
+    void shouldSerializeEveryGooglePayPreferredSchemeValue() {
+        assertEquals(2, GooglePayPreferredScheme.values().length);
+        for (final GooglePayPreferredScheme scheme : GooglePayPreferredScheme.values()) {
+            final GooglePay googlePay = new GooglePay();
+            googlePay.setPreferredScheme(scheme);
+            final String json = serializer.toJson(googlePay);
+            assertEquals(scheme.name().toLowerCase(),
+                    JsonParser.parseString(json).getAsJsonObject().get("preferred_scheme").getAsString());
+            assertEquals(scheme, serializer.fromJson(json, GooglePay.class).getPreferredScheme());
+        }
     }
 
     // ------------------------------------------------------------------------
@@ -767,17 +782,41 @@ class PaymentMethodsSerializationTest {
                 .allowUpdate(true)
                 .build());
         c.setStoreForFutureUse(true);
-        c.setAccountHolder(CardAccountHolder.builder()
+        c.setPhone(samplePhone());
+        c.setAccountHolder(sampleAccountHolder());
+        c.setSchemes(Arrays.asList(PaymentSetupScheme.VISA, PaymentSetupScheme.CARTES_BANCAIRES, PaymentSetupScheme.CHINA_UNION_PAY));
+        c.setPreferredScheme(PreferredSchema.CARTES_BANCAIRES);
+        return c;
+    }
+
+    private static Phone samplePhone() {
+        return Phone.builder().countryCode("+44").number("207 946 0000").build();
+    }
+
+    private static CardAccountHolder sampleAccountHolder() {
+        return CardAccountHolder.builder()
                 .type(CardAccountHolderType.CORPORATE)
                 .firstName("John")
                 .lastName("Smith")
                 .middleName("Paul")
                 .companyName("Acme Corporation")
                 .accountNameInquiry(true)
-                .build());
-        c.setSchemes(Arrays.asList(PaymentSetupScheme.VISA, PaymentSetupScheme.CARTES_BANCAIRES, PaymentSetupScheme.CHINA_UNION_PAY));
-        c.setPreferredScheme(PreferredSchema.CARTES_BANCAIRES);
-        return c;
+                .build();
+    }
+
+    private static void assertPhoneAndAccountHolder(final JsonObject paymentMethod) {
+        final JsonObject phone = paymentMethod.getAsJsonObject("phone");
+        assertEquals(2, phone.size());
+        assertEquals("+44", phone.get("country_code").getAsString());
+        assertEquals("207 946 0000", phone.get("number").getAsString());
+        final JsonObject accountHolder = paymentMethod.getAsJsonObject("account_holder");
+        assertEquals(6, accountHolder.size());
+        assertEquals("corporate", accountHolder.get("type").getAsString());
+        assertEquals("John", accountHolder.get("first_name").getAsString());
+        assertEquals("Smith", accountHolder.get("last_name").getAsString());
+        assertEquals("Paul", accountHolder.get("middle_name").getAsString());
+        assertEquals("Acme Corporation", accountHolder.get("company_name").getAsString());
+        assertTrue(accountHolder.get("account_name_inquiry").getAsBoolean());
     }
 
     private static Klarna buildSampleKlarna() {

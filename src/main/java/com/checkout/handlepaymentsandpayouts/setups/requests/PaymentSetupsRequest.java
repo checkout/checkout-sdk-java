@@ -60,12 +60,14 @@ public final class PaymentSetupsRequest {
     /**
      * A reference you can use to identify the payment. For example, an order number
      * [Optional]
+     * max 80
      */
     private String reference;
 
     /**
      * A description of the payment setup
      * [Optional]
+     * max 100
      */
     private String description;
 

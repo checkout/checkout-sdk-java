@@ -35,7 +35,7 @@ public final class PaymentSetupsResponse extends Resource {
 
     /**
      * The unique identifier of the payment setup.
-     * [Optional]
+     * [Optional] readOnly
      */
     private String id;
 
@@ -68,12 +68,14 @@ public final class PaymentSetupsResponse extends Resource {
     /**
      * A reference you can use to identify the payment setup, such as an order number.
      * [Optional]
+     * max 80
      */
     private String reference;
 
     /**
      * A description of the payment setup.
      * [Optional]
+     * max 100
      */
     private String description;
 
@@ -116,7 +118,7 @@ public final class PaymentSetupsResponse extends Resource {
     /**
      * An ordered list of available payment method names. The order indicates the recommended
      * presentation priority, with the first item being the highest priority.
-     * [Optional]
+     * [Optional] readOnly
      */
     private List<String> availablePaymentMethods;
 

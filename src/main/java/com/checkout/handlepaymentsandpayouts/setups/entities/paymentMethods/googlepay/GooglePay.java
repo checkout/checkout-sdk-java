@@ -5,7 +5,6 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.comm
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodBase;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentSetupScheme;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.WalletToken;
-import com.checkout.payments.PreferredSchema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -57,8 +56,7 @@ public final class GooglePay extends PaymentMethodBase {
 
     /**
      * The preferred card scheme to process the payment.
-     * Google Pay accepts only VISA and MASTERCARD.
      * [Optional]
      */
-    private PreferredSchema preferredScheme;
+    private GooglePayPreferredScheme preferredScheme;
 }
