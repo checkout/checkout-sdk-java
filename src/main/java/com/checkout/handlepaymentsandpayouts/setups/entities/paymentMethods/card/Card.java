@@ -3,82 +3,37 @@ package com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.car
 import com.checkout.common.Phone;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.CardAccountHolder;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodBase;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentSetupScheme;
+import com.checkout.payments.PreferredSchema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.time.Instant;
+import java.util.List;
 
 /**
- * The Card payment method's details and configuration.
+ * The Card payment method's details and configuration. The card data lives under
+ * {@link #getDetails()}, which maps {@code card.details}.
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public final class Card extends PaymentMethodBase {
 
     /**
-     * The card number (without separators). Write-only.
+     * The Checkout.com card token to use instead of the raw card details.
      * [Optional]
      */
-    private String number;
+    private CardToken token;
 
     /**
-     * The last four digits of the card number. Read-only.
+     * The card details.
      * [Optional]
      */
-    private String last4;
+    private CardDetails details;
 
     /**
-     * The card issuer's Bank Identification Number (BIN). Read-only.
-     * [Optional]
-     */
-    private String bin;
-
-    /**
-     * The card scheme. Read-only.
-     * [Optional]
-     */
-    private String scheme;
-
-    /**
-     * The expiry month of the card.
-     * [Optional]
-     */
-    private Integer expiryMonth;
-
-    /**
-     * The expiry year of the card.
-     * [Optional]
-     */
-    private Integer expiryYear;
-
-    /**
-     * The cardholder's name. Write-only.
-     * [Optional]
-     */
-    private String name;
-
-    /**
-     * The card verification value/code. 3 digits, except for American Express (4 digits). Write-only.
-     * [Optional]
-     */
-    private String cvv;
-
-    /**
-     * Set to true for payments that use stored card details. Write-only.
-     * [Optional]
-     */
-    private Boolean stored;
-
-    /**
-     * The time by which the card details must be confirmed. Read-only.
-     * [Optional]
-     * Format: date-time (ISO 8601)
-     */
-    private Instant expiresOn;
-
-    /**
-     * Set to true if you intend to reuse the payment credentials in subsequent payments. Write-only.
-     * [Optional]
+     * Set to true if you intend to reuse the payment credentials in subsequent payments. If set to
+     * false, a payment instrument will not be included in the payment response.
+     * [Optional] writeOnly
      */
     private Boolean storeForFutureUse;
 
@@ -95,8 +50,14 @@ public final class Card extends PaymentMethodBase {
     private CardAccountHolder accountHolder;
 
     /**
-     * Indicates whether to use the Real-Time Account Updater to update the card information.
+     * The list of supported card scheme names.
+     * [Optional] readOnly
+     */
+    private List<PaymentSetupScheme> schemes;
+
+    /**
+     * The preferred card scheme to process the payment.
      * [Optional]
      */
-    private Boolean allowUpdate;
+    private PreferredSchema preferredScheme;
 }

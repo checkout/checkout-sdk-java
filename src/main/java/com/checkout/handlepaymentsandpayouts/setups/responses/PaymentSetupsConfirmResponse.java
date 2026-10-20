@@ -15,6 +15,7 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.terminal.PaymentSet
 import com.checkout.payments.PaymentType;
 
 import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -33,7 +34,7 @@ public final class PaymentSetupsConfirmResponse extends Resource {
 
     /**
      * The unique identifier of the payment setup.
-     * [Optional]
+     * [Optional] readOnly
      */
     private String id;
 
@@ -66,12 +67,14 @@ public final class PaymentSetupsConfirmResponse extends Resource {
     /**
      * A reference you can use to identify the payment setup, such as an order number.
      * [Optional]
+     * max 80
      */
     private String reference;
 
     /**
      * A description of the payment setup.
      * [Optional]
+     * max 100
      */
     private String description;
 
@@ -114,7 +117,7 @@ public final class PaymentSetupsConfirmResponse extends Resource {
     /**
      * An ordered list of available payment method names. The order indicates the recommended
      * presentation priority, with the first item being the highest priority.
-     * [Optional]
+     * [Optional] readOnly
      */
     private List<String> availablePaymentMethods;
 
@@ -149,4 +152,13 @@ public final class PaymentSetupsConfirmResponse extends Resource {
      * [Optional]
      */
     private PaymentSetupTerminal terminal;
+
+    /**
+     * A set of key/value pairs you can attach to a payment. It can be useful for storing additional
+     * information about the payment.
+     * Each value is a string (max 255 characters), a number or a boolean.
+     * [Optional]
+     * max 20 properties
+     */
+    private Map<String, Object> metadata;
 }

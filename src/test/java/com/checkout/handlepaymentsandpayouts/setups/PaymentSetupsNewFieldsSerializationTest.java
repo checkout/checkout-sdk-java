@@ -25,11 +25,19 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.payb
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.stablecoin.Stablecoin;
 import com.checkout.handlepaymentsandpayouts.setups.entities.presentmentDetails.PaymentSetupPresentmentDetails;
 import com.checkout.handlepaymentsandpayouts.setups.entities.terminal.PaymentSetupTerminal;
+import com.checkout.handlepaymentsandpayouts.setups.entities.order.OrderSubMerchant;
+import com.checkout.handlepaymentsandpayouts.setups.entities.settings.Settings;
+import com.checkout.handlepaymentsandpayouts.setups.requests.PaymentSetupsRequest;
+import com.checkout.handlepaymentsandpayouts.setups.responses.PaymentSetupsConfirmResponse;
+import com.checkout.handlepaymentsandpayouts.setups.responses.PaymentSetupsResponse;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -211,4 +219,136 @@ class PaymentSetupsNewFieldsSerializationTest {
         assertEquals("207 946 0000", customer.getPhone().getNumber());
         assertEquals("en_GB", customer.getDevice().getLocale());
     }
+
+    // ------------------------------------------------------------------------
+    // Settings
+    // PaymentSetup.settings: all 4 properties. capture and
+    // excluded_payment_methods were missing from the model.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldRoundTripSettingsWithEveryProperty() {
+        final Settings original = Settings.builder()
+                .successUrl("https://example.com/payments/success")
+                .failureUrl("https://example.com/payments/fail")
+                .capture(false)
+                .excludedPaymentMethods(Arrays.asList("card", "klarna", "stcpay"))
+                .build();
+
+        final String json = serializer.toJson(original);
+        final JsonObject settings = JsonParser.parseString(json).getAsJsonObject();
+
+        assertEquals(4, settings.size());
+        assertEquals("https://example.com/payments/success", settings.get("success_url").getAsString());
+        assertEquals("https://example.com/payments/fail", settings.get("failure_url").getAsString());
+        assertFalse(settings.get("capture").getAsBoolean());
+        assertEquals(3, settings.getAsJsonArray("excluded_payment_methods").size());
+        assertEquals("klarna", settings.getAsJsonArray("excluded_payment_methods").get(1).getAsString());
+        assertEquals(original, serializer.fromJson(json, Settings.class));
+    }
+
+    @Test
+    void shouldDeserializeSettingsSwaggerExample() {
+        final String json = "{\"success_url\":\"https://example.com/payments/success\","
+                + "\"failure_url\":\"https://example.com/payments/fail\","
+                + "\"capture\":true,"
+                + "\"excluded_payment_methods\":[\"card\",\"klarna\",\"stcpay\"]}";
+
+        final Settings settings = serializer.fromJson(json, Settings.class);
+
+        assertEquals("https://example.com/payments/success", settings.getSuccessUrl());
+        assertEquals("https://example.com/payments/fail", settings.getFailureUrl());
+        assertEquals(Boolean.TRUE, settings.getCapture());
+        assertEquals(Arrays.asList("card", "klarna", "stcpay"), settings.getExcludedPaymentMethods());
+    }
+
+    // ------------------------------------------------------------------------
+    // Metadata and auto_confirm
+    // PaymentSetup.metadata (top level, request and response) and
+    // PaymentSetup.payment_methods.auto_confirm, both missing from the model.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldSerializeMetadataAndAutoConfirmOnTheRequest() {
+        final Map<String, Object> metadata = new HashMap<>();
+        metadata.put("coupon_code", "NY2018");
+        metadata.put("partner_id", 123989.5);
+        metadata.put("vip", true);
+        final PaymentSetupsRequest original = PaymentSetupsRequest.builder()
+                .processingChannelId("pc_q4dbxom5jbgudnjzjpz7j2z6uq")
+                .amount(1000L)
+                .currency(Currency.GBP)
+                .paymentMethods(PaymentMethods.builder().autoConfirm("card").build())
+                .metadata(metadata)
+                .build();
+
+        final String json = serializer.toJson(original);
+        final JsonObject request = JsonParser.parseString(json).getAsJsonObject();
+
+        assertEquals("card", request.getAsJsonObject("payment_methods").get("auto_confirm").getAsString());
+        assertFalse(request.getAsJsonObject("payment_methods").has("autoConfirm"));
+        assertEquals("NY2018", request.getAsJsonObject("metadata").get("coupon_code").getAsString());
+        assertEquals(123989.5, request.getAsJsonObject("metadata").get("partner_id").getAsDouble());
+        assertTrue(request.getAsJsonObject("metadata").get("vip").getAsBoolean());
+
+        final PaymentSetupsRequest restored = serializer.fromJson(json, PaymentSetupsRequest.class);
+        assertEquals("card", restored.getPaymentMethods().getAutoConfirm());
+        assertEquals(metadata, restored.getMetadata());
+    }
+
+    @Test
+    void shouldDeserializeMetadataAndAutoConfirmOnTheResponses() {
+        final String json = "{\"id\":\"ps_2Un2jYAVxLsfUfpOvLhEHRW8Ft1\","
+                + "\"payment_methods\":{\"auto_confirm\":\"card\"},"
+                + "\"metadata\":{\"coupon_code\":\"NY2018\"}}";
+
+        final PaymentSetupsResponse response = serializer.fromJson(json, PaymentSetupsResponse.class);
+        final PaymentSetupsConfirmResponse confirm = serializer.fromJson(json, PaymentSetupsConfirmResponse.class);
+
+        assertEquals("card", response.getPaymentMethods().getAutoConfirm());
+        assertEquals("NY2018", response.getMetadata().get("coupon_code"));
+        assertEquals("card", confirm.getPaymentMethods().getAutoConfirm());
+        assertEquals("NY2018", confirm.getMetadata().get("coupon_code"));
+    }
+
+    // ------------------------------------------------------------------------
+    // OrderSubMerchant
+    // PaymentSetupSubMerchant.number_of_sales. The model sent number_of_trades,
+    // a key the API does not define.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldRoundTripOrderSubMerchantWithEveryProperty() {
+        final OrderSubMerchant original = OrderSubMerchant.builder()
+                .id("SUB12345")
+                .productCategory("Electronics")
+                .numberOfSales(500)
+                .registrationDate(LocalDate.of(2023, 1, 15))
+                .build();
+
+        final String json = serializer.toJson(original);
+        final JsonObject subMerchant = JsonParser.parseString(json).getAsJsonObject();
+
+        assertEquals(4, subMerchant.size());
+        assertEquals("SUB12345", subMerchant.get("id").getAsString());
+        assertEquals("Electronics", subMerchant.get("product_category").getAsString());
+        assertEquals(500, subMerchant.get("number_of_sales").getAsInt());
+        assertFalse(subMerchant.has("number_of_trades"));
+        assertEquals("2023-01-15", subMerchant.get("registration_date").getAsString());
+        assertEquals(original, serializer.fromJson(json, OrderSubMerchant.class));
+    }
+
+    @Test
+    void shouldDeserializeOrderSubMerchantSwaggerExample() {
+        final String json = "{\"id\":\"SUB12345\",\"product_category\":\"Electronics\","
+                + "\"number_of_sales\":500,\"registration_date\":\"2023-01-15\"}";
+
+        final OrderSubMerchant subMerchant = serializer.fromJson(json, OrderSubMerchant.class);
+
+        assertEquals("SUB12345", subMerchant.getId());
+        assertEquals("Electronics", subMerchant.getProductCategory());
+        assertEquals(Integer.valueOf(500), subMerchant.getNumberOfSales());
+        assertEquals(LocalDate.of(2023, 1, 15), subMerchant.getRegistrationDate());
+    }
+
 }

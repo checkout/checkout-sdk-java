@@ -14,14 +14,16 @@ import lombok.EqualsAndHashCode;
 public final class Klarna extends PaymentMethodBase {
 
     /**
-     * The initialization state of the payment method. Defaults to disabled.
+     * The initialization state of the payment method. When you create a Payment Setup, this
+     * defaults to disabled.
      * [Optional]
+     * Default: disabled
      */
     private PaymentMethodInitialization initialization = PaymentMethodInitialization.DISABLED;
 
     /**
-     * The next available action. Contains type, client_token, and session_id.
-     * [Optional]
+     * The next available action for the payment method. Contains type, client_token, and session_id.
+     * [Optional] readOnly
      */
     private PaymentMethodAction action;
 
@@ -30,4 +32,10 @@ public final class Klarna extends PaymentMethodBase {
      * [Optional] readOnly
      */
     private KlarnaAccountHolder accountHolder;
+
+    /**
+     * The IBAN of the account used to complete Klarna verification.
+     * [Optional] readOnly
+     */
+    private String iban;
 }
