@@ -10,10 +10,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * The optional HTTP headers accepted when updating a card's details.
+ * The return-encrypted-cvv and Encryption-Key HTTP headers for updating a card's details
+ * (PATCH /issuing/cards/{cardId}). They are still sent when set.
  *
- * @see <a href="https://api-reference.checkout.com/">PATCH /issuing/cards/{cardId}</a>
+ * @deprecated The API no longer supports these headers; use the method without headers. Will be
+ * removed in the next major version.
  */
+@Deprecated
 @Data
 @Builder
 @NoArgsConstructor

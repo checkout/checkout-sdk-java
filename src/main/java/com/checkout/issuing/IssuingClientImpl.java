@@ -281,7 +281,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     @Override
     public CompletableFuture<VoidResponse> revokeCard(final String cardId, final RevokeCardRequest revokeCardRequest) {
-        validateParams("cardId", cardId, "revokeCardRequest", revokeCardRequest);
+        validateParams("cardId", cardId);
         return apiClient.postAsync(
                 buildPath(ISSUING_PATH, CARDS_PATH, cardId, REVOKE_PATH),
                 sdkAuthorization(),
@@ -292,11 +292,16 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
+    public CompletableFuture<VoidResponse> revokeCard(final String cardId) {
+        return revokeCard(cardId, null);
+    }
+
+    @Override
     public CompletableFuture<VoidResponse> suspendCard(
             final String cardId,
             final SuspendCardRequest suspendCardRequest
     ) {
-        validateParams("cardId", cardId, "suspendCardRequest", suspendCardRequest);
+        validateParams("cardId", cardId);
         return apiClient.postAsync(
                 buildPath(ISSUING_PATH, CARDS_PATH, cardId, SUSPEND_PATH),
                 sdkAuthorization(),
@@ -304,6 +309,11 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 suspendCardRequest,
                 null
         );
+    }
+
+    @Override
+    public CompletableFuture<VoidResponse> suspendCard(final String cardId) {
+        return suspendCard(cardId, null);
     }
 
     @Override
@@ -587,16 +597,17 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     /**
-     * Update a card's details, sending the optional return-encrypted-cvv and Encryption-Key
-     * headers. Set return-encrypted-cvv to true to receive the card's encrypted CVV in the
-     * response; the API returns a 422 with error code encryption_key_required if Encryption-Key
-     * is not also supplied.
+     * Update a card's details, sending the return-encrypted-cvv and Encryption-Key headers.
+     * The API no longer documents these headers; they are still sent when set.
      *
      * @param cardId the card ID
      * @param updateCardRequest the card fields to update
      * @param headers the optional return-encrypted-cvv and Encryption-Key headers
      * @return a {@link CompletableFuture} containing the {@link UpdateCardResponse}
+     * @deprecated The API no longer supports these headers; use
+     * {@link #updateCard(String, UpdateCardRequest)} instead. Will be removed in the next major version.
      */
+    @Deprecated
     @Override
     public CompletableFuture<UpdateCardResponse> updateCard(final String cardId, final UpdateCardRequest updateCardRequest,
                                                             final CardUpdateHeaders headers) {
@@ -872,7 +883,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     @Override
     public VoidResponse revokeCardSync(final String cardId, final RevokeCardRequest revokeCardRequest) {
-        validateCardIdAndRevokeRequest(cardId, revokeCardRequest);
+        validateParams("cardId", cardId);
         return apiClient.post(
                 buildPath(ISSUING_PATH, CARDS_PATH, cardId, REVOKE_PATH),
                 sdkAuthorization(),
@@ -883,11 +894,16 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
+    public VoidResponse revokeCardSync(final String cardId) {
+        return revokeCardSync(cardId, null);
+    }
+
+    @Override
     public VoidResponse suspendCardSync(
             final String cardId,
             final SuspendCardRequest suspendCardRequest
     ) {
-        validateCardIdAndSuspendRequest(cardId, suspendCardRequest);
+        validateParams("cardId", cardId);
         return apiClient.post(
                 buildPath(ISSUING_PATH, CARDS_PATH, cardId, SUSPEND_PATH),
                 sdkAuthorization(),
@@ -895,6 +911,11 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 suspendCardRequest,
                 null
         );
+    }
+
+    @Override
+    public VoidResponse suspendCardSync(final String cardId) {
+        return suspendCardSync(cardId, null);
     }
 
     @Override
@@ -1177,16 +1198,17 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     /**
-     * Update a card's details, sending the optional return-encrypted-cvv and Encryption-Key
-     * headers. Set return-encrypted-cvv to true to receive the card's encrypted CVV in the
-     * response; the API returns a 422 with error code encryption_key_required if Encryption-Key
-     * is not also supplied.
+     * Update a card's details, sending the return-encrypted-cvv and Encryption-Key headers.
+     * The API no longer documents these headers; they are still sent when set.
      *
      * @param cardId the card ID
      * @param updateCardRequest the card fields to update
      * @param headers the optional return-encrypted-cvv and Encryption-Key headers
      * @return the {@link UpdateCardResponse}
+     * @deprecated The API no longer supports these headers; use
+     * {@link #updateCardSync(String, UpdateCardRequest)} instead. Will be removed in the next major version.
      */
+    @Deprecated
     @Override
     public UpdateCardResponse updateCardSync(final String cardId, final UpdateCardRequest updateCardRequest,
                                              final CardUpdateHeaders headers) {
@@ -1342,14 +1364,6 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     private void validateCardIdAndCredentialsQuery(final String cardId, final CardCredentialsQuery queryFilter) {
         validateParams("cardId", cardId, "queryFilter", queryFilter);
-    }
-
-    private void validateCardIdAndRevokeRequest(final String cardId, final RevokeCardRequest revokeCardRequest) {
-        validateParams("cardId", cardId, "revokeCardRequest", revokeCardRequest);
-    }
-
-    private void validateCardIdAndSuspendRequest(final String cardId, final SuspendCardRequest suspendCardRequest) {
-        validateParams("cardId", cardId, "suspendCardRequest", suspendCardRequest);
     }
 
     private void validateCardControlRequest(final CardControlRequest cardControlRequest) {

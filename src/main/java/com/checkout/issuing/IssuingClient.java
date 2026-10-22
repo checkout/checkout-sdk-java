@@ -92,9 +92,39 @@ public interface IssuingClient {
 
     CompletableFuture<CardCredentialsResponse> getCardCredentials(final String cardId, final CardCredentialsQuery queryFilter);
 
+    /**
+     * Revokes a card (POST /issuing/cards/{cardId}/revoke).
+     *
+     * @param cardId the card ID
+     * @param revokeCardRequest the optional request body; when {@code null} no body is sent
+     * @return a {@link CompletableFuture} containing the {@link VoidResponse}
+     */
     CompletableFuture<VoidResponse> revokeCard(final String cardId, final RevokeCardRequest revokeCardRequest);
 
+    /**
+     * Revokes a card without a request body (POST /issuing/cards/{cardId}/revoke).
+     *
+     * @param cardId the card ID
+     * @return a {@link CompletableFuture} containing the {@link VoidResponse}
+     */
+    CompletableFuture<VoidResponse> revokeCard(String cardId);
+
+    /**
+     * Suspends a card (POST /issuing/cards/{cardId}/suspend).
+     *
+     * @param cardId the card ID
+     * @param suspendCardRequest the optional request body; when {@code null} no body is sent
+     * @return a {@link CompletableFuture} containing the {@link VoidResponse}
+     */
     CompletableFuture<VoidResponse> suspendCard(final String cardId, final SuspendCardRequest suspendCardRequest);
+
+    /**
+     * Suspends a card without a request body (POST /issuing/cards/{cardId}/suspend).
+     *
+     * @param cardId the card ID
+     * @return a {@link CompletableFuture} containing the {@link VoidResponse}
+     */
+    CompletableFuture<VoidResponse> suspendCard(String cardId);
 
     /**
      * Creates a card control (POST /issuing/controls).
@@ -189,16 +219,17 @@ public interface IssuingClient {
     CompletableFuture<UpdateCardResponse> updateCard(final String cardId, final UpdateCardRequest updateCardRequest);
 
     /**
-     * Update a card's details, sending the optional return-encrypted-cvv and Encryption-Key
-     * headers. Set return-encrypted-cvv to true to receive the card's encrypted CVV in the
-     * response; the API returns a 422 with error code encryption_key_required if Encryption-Key
-     * is not also supplied.
+     * Update a card's details, sending the return-encrypted-cvv and Encryption-Key headers.
+     * The API no longer documents these headers; they are still sent when set.
      *
      * @param cardId the card ID
      * @param updateCardRequest the card fields to update
      * @param headers the optional return-encrypted-cvv and Encryption-Key headers
      * @return a {@link CompletableFuture} containing the {@link UpdateCardResponse}
+     * @deprecated The API no longer supports these headers; use
+     * {@link #updateCard(String, UpdateCardRequest)} instead. Will be removed in the next major version.
      */
+    @Deprecated
     CompletableFuture<UpdateCardResponse> updateCard(String cardId, UpdateCardRequest updateCardRequest, CardUpdateHeaders headers);
 
     CompletableFuture<RenewCardResponse> renewCard(final String cardId, final RenewCardRequest renewCardRequest);
@@ -266,9 +297,39 @@ public interface IssuingClient {
 
     CardCredentialsResponse getCardCredentialsSync(String cardId, CardCredentialsQuery queryFilter);
 
+    /**
+     * Revokes a card (POST /issuing/cards/{cardId}/revoke).
+     *
+     * @param cardId the card ID
+     * @param revokeCardRequest the optional request body; when {@code null} no body is sent
+     * @return the {@link VoidResponse}
+     */
     VoidResponse revokeCardSync(String cardId, RevokeCardRequest revokeCardRequest);
 
+    /**
+     * Revokes a card without a request body (POST /issuing/cards/{cardId}/revoke).
+     *
+     * @param cardId the card ID
+     * @return the {@link VoidResponse}
+     */
+    VoidResponse revokeCardSync(String cardId);
+
+    /**
+     * Suspends a card (POST /issuing/cards/{cardId}/suspend).
+     *
+     * @param cardId the card ID
+     * @param suspendCardRequest the optional request body; when {@code null} no body is sent
+     * @return the {@link VoidResponse}
+     */
     VoidResponse suspendCardSync(String cardId, SuspendCardRequest suspendCardRequest);
+
+    /**
+     * Suspends a card without a request body (POST /issuing/cards/{cardId}/suspend).
+     *
+     * @param cardId the card ID
+     * @return the {@link VoidResponse}
+     */
+    VoidResponse suspendCardSync(String cardId);
 
     /**
      * Creates a card control (POST /issuing/controls).
@@ -363,16 +424,17 @@ public interface IssuingClient {
     UpdateCardResponse updateCardSync(String cardId, UpdateCardRequest updateCardRequest);
 
     /**
-     * Update a card's details, sending the optional return-encrypted-cvv and Encryption-Key
-     * headers. Set return-encrypted-cvv to true to receive the card's encrypted CVV in the
-     * response; the API returns a 422 with error code encryption_key_required if Encryption-Key
-     * is not also supplied.
+     * Update a card's details, sending the return-encrypted-cvv and Encryption-Key headers.
+     * The API no longer documents these headers; they are still sent when set.
      *
      * @param cardId the card ID
      * @param updateCardRequest the card fields to update
      * @param headers the optional return-encrypted-cvv and Encryption-Key headers
      * @return the {@link UpdateCardResponse}
+     * @deprecated The API no longer supports these headers; use
+     * {@link #updateCardSync(String, UpdateCardRequest)} instead. Will be removed in the next major version.
      */
+    @Deprecated
     UpdateCardResponse updateCardSync(String cardId, UpdateCardRequest updateCardRequest, CardUpdateHeaders headers);
 
     RenewCardResponse renewCardSync(String cardId, RenewCardRequest renewCardRequest);
