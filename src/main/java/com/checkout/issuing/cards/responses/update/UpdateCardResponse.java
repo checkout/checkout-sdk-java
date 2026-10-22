@@ -17,10 +17,9 @@ import java.time.LocalDate;
 /**
  * Response returned when updating a card.
  * <p>
- * As of the 2026-09-17 API change, {@code update-card-response} is defined as the full
- * {@code get-card-response} field set (see {@link com.checkout.issuing.cards.responses.CardDetailsResponse})
- * with {@code lastModifiedDate} required. It no longer includes {@code encrypted_cvv}: that field
- * was added by the 2026-09-02 change and removed again by this one.
+ * {@code update-card-response} is the full {@code get-card-response} field set (see
+ * {@link com.checkout.issuing.cards.responses.CardDetailsResponse}) with {@code lastModifiedDate}
+ * required. It does not include {@code encrypted_cvv}.
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

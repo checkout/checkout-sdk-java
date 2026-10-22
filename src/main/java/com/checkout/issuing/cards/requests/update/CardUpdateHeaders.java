@@ -24,18 +24,15 @@ import java.util.Map;
 public class CardUpdateHeaders implements IHeaders {
 
     /**
-     * The return-encrypted-cvv HTTP header. Set to true to retrieve the card's encrypted
-     * credentials in the response. Requires an RSA public key to be provided in the
-     * Encryption-Key header.
+     * The value sent in the return-encrypted-cvv HTTP header. The API no longer documents this
+     * header and ignores it; no encrypted CVV is returned. Still sent when set.
      * [Optional]
      */
     private Boolean returnEncryptedCvv;
 
     /**
-     * The Encryption-Key HTTP header. The RSA public key used to encrypt returned credentials.
-     * Required when the return-encrypted-cvv header is set to true. Provide the public key with
-     * the BEGIN PUBLIC KEY and END PUBLIC KEY headers and any newline characters removed,
-     * encoded as Base64.
+     * The value sent in the Encryption-Key HTTP header. The API no longer documents this header
+     * and ignores it. Still sent when set.
      * [Optional]
      */
     private String encryptionKey;
