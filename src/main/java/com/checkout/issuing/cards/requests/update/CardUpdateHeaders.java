@@ -13,8 +13,8 @@ import java.util.Map;
  * The return-encrypted-cvv and Encryption-Key HTTP headers for updating a card's details
  * (PATCH /issuing/cards/{cardId}). They are still sent when set.
  *
- * @deprecated The API no longer supports these headers; use the method without headers. Will be
- * removed in the next major version.
+ * @deprecated These headers are no longer documented by the API and are still sent when set;
+ * use the method without headers. Will be removed in the next major version.
  */
 @Deprecated
 @Data
@@ -24,15 +24,15 @@ import java.util.Map;
 public class CardUpdateHeaders implements IHeaders {
 
     /**
-     * The value sent in the return-encrypted-cvv HTTP header. The API no longer documents this
-     * header and ignores it; no encrypted CVV is returned. Still sent when set.
+     * The value sent in the return-encrypted-cvv HTTP header. This header is no longer
+     * documented by the API. Still sent when set.
      * [Optional]
      */
     private Boolean returnEncryptedCvv;
 
     /**
-     * The value sent in the Encryption-Key HTTP header. The API no longer documents this header
-     * and ignores it. Still sent when set.
+     * The value sent in the Encryption-Key HTTP header. This header is no longer documented
+     * by the API. Still sent when set.
      * [Optional]
      */
     private String encryptionKey;

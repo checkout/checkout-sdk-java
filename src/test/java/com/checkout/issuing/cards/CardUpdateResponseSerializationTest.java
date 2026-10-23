@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CardUpdateResponseSerializationTest {
 
     @Test
-    void shouldExposeTheUpdateHeadersUsingTheExactSwaggerHeaderNames() {
+    void shouldStillSendTheDeprecatedUpdateHeadersWhenSet() {
         final CardUpdateHeaders headers = CardUpdateHeaders.builder()
                 .returnEncryptedCvv(true)
                 .encryptionKey("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A")

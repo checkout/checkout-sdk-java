@@ -292,11 +292,6 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
-    public CompletableFuture<VoidResponse> revokeCard(final String cardId) {
-        return revokeCard(cardId, null);
-    }
-
-    @Override
     public CompletableFuture<VoidResponse> suspendCard(
             final String cardId,
             final SuspendCardRequest suspendCardRequest
@@ -309,11 +304,6 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 suspendCardRequest,
                 null
         );
-    }
-
-    @Override
-    public CompletableFuture<VoidResponse> suspendCard(final String cardId) {
-        return suspendCard(cardId, null);
     }
 
     @Override
@@ -598,13 +588,13 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     /**
      * Update a card's details, sending the return-encrypted-cvv and Encryption-Key headers.
-     * The API no longer documents these headers; they are still sent when set.
+     * These headers are no longer documented by the API; they are still sent when set.
      *
      * @param cardId the card ID
      * @param updateCardRequest the card fields to update
      * @param headers the optional return-encrypted-cvv and Encryption-Key headers
      * @return a {@link CompletableFuture} containing the {@link UpdateCardResponse}
-     * @deprecated The API no longer supports these headers; use
+     * @deprecated These headers are no longer documented by the API and are still sent when set; use
      * {@link #updateCard(String, UpdateCardRequest)} instead. Will be removed in the next major version.
      */
     @Deprecated
@@ -894,11 +884,6 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
     }
 
     @Override
-    public VoidResponse revokeCardSync(final String cardId) {
-        return revokeCardSync(cardId, null);
-    }
-
-    @Override
     public VoidResponse suspendCardSync(
             final String cardId,
             final SuspendCardRequest suspendCardRequest
@@ -911,11 +896,6 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
                 suspendCardRequest,
                 null
         );
-    }
-
-    @Override
-    public VoidResponse suspendCardSync(final String cardId) {
-        return suspendCardSync(cardId, null);
     }
 
     @Override
@@ -1199,13 +1179,13 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     /**
      * Update a card's details, sending the return-encrypted-cvv and Encryption-Key headers.
-     * The API no longer documents these headers; they are still sent when set.
+     * These headers are no longer documented by the API; they are still sent when set.
      *
      * @param cardId the card ID
      * @param updateCardRequest the card fields to update
      * @param headers the optional return-encrypted-cvv and Encryption-Key headers
      * @return the {@link UpdateCardResponse}
-     * @deprecated The API no longer supports these headers; use
+     * @deprecated These headers are no longer documented by the API and are still sent when set; use
      * {@link #updateCardSync(String, UpdateCardRequest)} instead. Will be removed in the next major version.
      */
     @Deprecated

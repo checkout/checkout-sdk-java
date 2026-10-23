@@ -107,7 +107,9 @@ public interface IssuingClient {
      * @param cardId the card ID
      * @return a {@link CompletableFuture} containing the {@link VoidResponse}
      */
-    CompletableFuture<VoidResponse> revokeCard(String cardId);
+    default CompletableFuture<VoidResponse> revokeCard(String cardId) {
+        return revokeCard(cardId, null);
+    }
 
     /**
      * Suspends a card (POST /issuing/cards/{cardId}/suspend).
@@ -124,7 +126,9 @@ public interface IssuingClient {
      * @param cardId the card ID
      * @return a {@link CompletableFuture} containing the {@link VoidResponse}
      */
-    CompletableFuture<VoidResponse> suspendCard(String cardId);
+    default CompletableFuture<VoidResponse> suspendCard(String cardId) {
+        return suspendCard(cardId, null);
+    }
 
     /**
      * Creates a card control (POST /issuing/controls).
@@ -220,13 +224,13 @@ public interface IssuingClient {
 
     /**
      * Update a card's details, sending the return-encrypted-cvv and Encryption-Key headers.
-     * The API no longer documents these headers; they are still sent when set.
+     * These headers are no longer documented by the API; they are still sent when set.
      *
      * @param cardId the card ID
      * @param updateCardRequest the card fields to update
      * @param headers the optional return-encrypted-cvv and Encryption-Key headers
      * @return a {@link CompletableFuture} containing the {@link UpdateCardResponse}
-     * @deprecated The API no longer supports these headers; use
+     * @deprecated These headers are no longer documented by the API and are still sent when set; use
      * {@link #updateCard(String, UpdateCardRequest)} instead. Will be removed in the next major version.
      */
     @Deprecated
@@ -312,7 +316,9 @@ public interface IssuingClient {
      * @param cardId the card ID
      * @return the {@link VoidResponse}
      */
-    VoidResponse revokeCardSync(String cardId);
+    default VoidResponse revokeCardSync(String cardId) {
+        return revokeCardSync(cardId, null);
+    }
 
     /**
      * Suspends a card (POST /issuing/cards/{cardId}/suspend).
@@ -329,7 +335,9 @@ public interface IssuingClient {
      * @param cardId the card ID
      * @return the {@link VoidResponse}
      */
-    VoidResponse suspendCardSync(String cardId);
+    default VoidResponse suspendCardSync(String cardId) {
+        return suspendCardSync(cardId, null);
+    }
 
     /**
      * Creates a card control (POST /issuing/controls).
@@ -425,13 +433,13 @@ public interface IssuingClient {
 
     /**
      * Update a card's details, sending the return-encrypted-cvv and Encryption-Key headers.
-     * The API no longer documents these headers; they are still sent when set.
+     * These headers are no longer documented by the API; they are still sent when set.
      *
      * @param cardId the card ID
      * @param updateCardRequest the card fields to update
      * @param headers the optional return-encrypted-cvv and Encryption-Key headers
      * @return the {@link UpdateCardResponse}
-     * @deprecated The API no longer supports these headers; use
+     * @deprecated These headers are no longer documented by the API and are still sent when set; use
      * {@link #updateCardSync(String, UpdateCardRequest)} instead. Will be removed in the next major version.
      */
     @Deprecated
