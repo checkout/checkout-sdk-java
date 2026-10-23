@@ -9,17 +9,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests for CardUpdateHeaders.
+ * Tests for the deprecated CardUpdateHeaders, which must keep sending the headers when set.
  *
  * Swagger reference: PATCH /issuing/cards/{cardId}
- * Schema: update-card-response. The 2026-09-02 delta added encrypted_cvv here; the 2026-09-17
- * delta (INT-1700) removed it again, so the current spec never includes it. Coverage for the
- * current update-card-response field set lives in CardScheduledRevocationAndActivationSerializationTest.
+ * The current spec documents neither these headers nor encrypted_cvv in update-card-response.
+ * Coverage for the update-card-response field set lives in
+ * CardScheduledRevocationAndActivationSerializationTest.
  */
+@SuppressWarnings("deprecation")
 class CardUpdateResponseSerializationTest {
 
     @Test
-    void shouldExposeTheUpdateHeadersUsingTheExactSwaggerHeaderNames() {
+    void shouldStillSendTheDeprecatedUpdateHeadersWhenSet() {
         final CardUpdateHeaders headers = CardUpdateHeaders.builder()
                 .returnEncryptedCvv(true)
                 .encryptionKey("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A")

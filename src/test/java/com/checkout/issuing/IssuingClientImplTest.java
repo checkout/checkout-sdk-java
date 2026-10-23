@@ -22,6 +22,7 @@ import com.checkout.issuing.cards.requests.enrollment.ThreeDSUpdateRequest;
 import com.checkout.issuing.cards.requests.renew.RenewCardRequest;
 import com.checkout.issuing.cards.requests.revoke.RevokeCardRequest;
 import com.checkout.issuing.cards.requests.suspend.SuspendCardRequest;
+import com.checkout.issuing.cards.requests.update.CardUpdateHeaders;
 import com.checkout.issuing.cards.requests.update.UpdateCardRequest;
 import com.checkout.issuing.cards.responses.CardDetailsResponse;
 import com.checkout.issuing.cards.responses.CardResponse;
@@ -373,6 +374,57 @@ public class IssuingClientImplTest {
             final CompletableFuture<VoidResponse> future = client.suspendCard("card_id", request);
 
             validateVoidResponse(response, future.get());
+        }
+
+        @Test
+        void shouldRevokeCardWithoutBody() throws ExecutionException, InterruptedException {
+            final VoidResponse response = createVoidResponse();
+
+            when(apiClient.postAsync(
+                    "issuing/cards/card_id/revoke",
+                    authorization,
+                    VoidResponse.class,
+                    null,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            validateVoidResponse(response, client.revokeCard("card_id").get());
+            validateVoidResponse(response, client.revokeCard("card_id", null).get());
+        }
+
+        @Test
+        void shouldSuspendCardWithoutBody() throws ExecutionException, InterruptedException {
+            final VoidResponse response = createVoidResponse();
+
+            when(apiClient.postAsync(
+                    "issuing/cards/card_id/suspend",
+                    authorization,
+                    VoidResponse.class,
+                    null,
+                    null
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            validateVoidResponse(response, client.suspendCard("card_id").get());
+            validateVoidResponse(response, client.suspendCard("card_id", null).get());
+        }
+
+        @Test
+        @SuppressWarnings("deprecation")
+        void shouldUpdateCardWithDeprecatedHeaders() throws ExecutionException, InterruptedException {
+            final UpdateCardRequest request = createUpdateCardRequest();
+            final UpdateCardResponse response = createUpdateCardResponse();
+            final CardUpdateHeaders headers = CardUpdateHeaders.builder().returnEncryptedCvv(true).encryptionKey("key").build();
+
+            when(apiClient.patchAsync(
+                    "issuing/cards/card_id",
+                    authorization,
+                    UpdateCardResponse.class,
+                    request,
+                    null,
+                    headers
+            )).thenReturn(CompletableFuture.completedFuture(response));
+
+            assertEquals(response, client.updateCard("card_id", request, headers).get());
         }
 
         @Test
@@ -1202,6 +1254,57 @@ public class IssuingClientImplTest {
             final VoidResponse actualResponse = client.suspendCardSync("card_id", request);
 
             validateVoidResponse(expectedResponse, actualResponse);
+        }
+
+        @Test
+        void shouldRevokeCardSyncWithoutBody() {
+            final VoidResponse expectedResponse = createVoidResponse();
+
+            when(apiClient.post(
+                    "issuing/cards/card_id/revoke",
+                    authorization,
+                    VoidResponse.class,
+                    null,
+                    null
+            )).thenReturn(expectedResponse);
+
+            validateVoidResponse(expectedResponse, client.revokeCardSync("card_id"));
+            validateVoidResponse(expectedResponse, client.revokeCardSync("card_id", null));
+        }
+
+        @Test
+        void shouldSuspendCardSyncWithoutBody() {
+            final VoidResponse expectedResponse = createVoidResponse();
+
+            when(apiClient.post(
+                    "issuing/cards/card_id/suspend",
+                    authorization,
+                    VoidResponse.class,
+                    null,
+                    null
+            )).thenReturn(expectedResponse);
+
+            validateVoidResponse(expectedResponse, client.suspendCardSync("card_id"));
+            validateVoidResponse(expectedResponse, client.suspendCardSync("card_id", null));
+        }
+
+        @Test
+        @SuppressWarnings("deprecation")
+        void shouldUpdateCardSyncWithDeprecatedHeaders() {
+            final UpdateCardRequest request = createUpdateCardRequest();
+            final UpdateCardResponse expectedResponse = createUpdateCardResponse();
+            final CardUpdateHeaders headers = CardUpdateHeaders.builder().returnEncryptedCvv(true).encryptionKey("key").build();
+
+            when(apiClient.patch(
+                    "issuing/cards/card_id",
+                    authorization,
+                    UpdateCardResponse.class,
+                    request,
+                    null,
+                    headers
+            )).thenReturn(expectedResponse);
+
+            assertEquals(expectedResponse, client.updateCardSync("card_id", request, headers));
         }
 
         @Test

@@ -2,6 +2,9 @@ package com.checkout.issuing.cards.requests.revoke;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * The reason why the card is being revoked.
+ */
 public enum RevokeReason {
 
     @SerializedName("expired")
