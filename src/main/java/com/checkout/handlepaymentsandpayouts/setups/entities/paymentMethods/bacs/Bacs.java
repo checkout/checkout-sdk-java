@@ -14,8 +14,11 @@ import lombok.EqualsAndHashCode;
 public final class Bacs extends PaymentMethodBase {
 
     /**
-     * The initialization state of the payment method. Defaults to disabled.
+     * The initialization state of the payment method. When you create a Payment Setup, this
+     * defaults to disabled. On update the API replaces the payment methods, so send enabled again
+     * to keep the method enabled.
      * [Optional]
+     * Default: disabled
      */
     private PaymentMethodInitialization initialization = PaymentMethodInitialization.DISABLED;
 
@@ -57,8 +60,9 @@ public final class Bacs extends PaymentMethodBase {
     private String currency;
 
     /**
-     * Whether vault may accept a partial match when looking up an existing Bacs instrument for the
-     * supplied account details.
+     * Indicates whether the Bacs instrument is created when account validation returns a partial
+     * match. When true, the instrument is created on a partial match; when false, instrument
+     * creation fails on a partial match.
      * [Optional]
      * Default: false
      */

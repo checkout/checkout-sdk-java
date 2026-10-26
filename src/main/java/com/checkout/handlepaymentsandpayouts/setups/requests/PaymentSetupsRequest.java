@@ -1,7 +1,6 @@
 package com.checkout.handlepaymentsandpayouts.setups.requests;
 
 import com.checkout.common.Currency;
-import com.checkout.payments.PaymentType;
 import com.checkout.handlepaymentsandpayouts.setups.entities.accountFundingTransaction.PaymentSetupAccountFundingTransaction;
 import com.checkout.handlepaymentsandpayouts.setups.entities.billing.PaymentSetupBilling;
 import com.checkout.handlepaymentsandpayouts.setups.entities.customer.Customer;
@@ -9,6 +8,7 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.industry.Industry;
 import com.checkout.handlepaymentsandpayouts.setups.entities.order.Order;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.PaymentMethods;
 import com.checkout.handlepaymentsandpayouts.setups.entities.billingDescriptor.PaymentSetupBillingDescriptor;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentType.PaymentSetupPaymentType;
 import com.checkout.handlepaymentsandpayouts.setups.entities.presentmentDetails.PaymentSetupPresentmentDetails;
 import com.checkout.handlepaymentsandpayouts.setups.entities.risk.PaymentSetupRisk;
 import com.checkout.handlepaymentsandpayouts.setups.entities.settings.Settings;
@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 import java.util.Map;
 
 /**
- * Payment setup request
+ * Payment setup request, the body of POST /payments/setups and PUT /payments/setups/{id}.
  */
 @Data
 @Builder
@@ -30,73 +30,74 @@ import java.util.Map;
 public final class PaymentSetupsRequest {
 
     /**
-     * The processing channel to be used for the payment setup.
+     * The processing channel to use for the payment.
      * [Required]
      * Pattern: ^(pc)_(\w{26})$
      */
     private String processingChannelId;
 
     /**
-     * The payment amount, in the minor currency unit. The exact format depends on the currency
+     * The payment amount, in the minor currency unit.
      * [Required]
      */
     private Long amount;
 
     /**
-     * The currency of the payment, as a three-letter ISO currency code
+     * The currency of the payment, as a three-letter ISO currency code.
      * [Required]
      */
     private Currency currency;
 
     /**
-     * The type of payment. Required for card payments where the cardholder is not present,
-     * such as recurring or MOTO payments.
+     * The type of payment. You must provide this field for card payments in which the cardholder
+     * is not present. For example, if the transaction is a recurring payment, or a mail
+     * order/telephone order (MOTO) payment.
      * [Optional]
-     * Enum: "Regular" "Recurring" "MOTO" "Installment" "PayLater" "Unscheduled"
+     * Default: regular
      */
     @Builder.Default
-    private PaymentType paymentType = PaymentType.REGULAR;
+    private PaymentSetupPaymentType paymentType = PaymentSetupPaymentType.REGULAR;
 
     /**
-     * A reference you can use to identify the payment. For example, an order number
+     * A reference you can use to identify the payment. For example, an order number.
      * [Optional]
-     * max 80
+     * max 80 characters
      */
     private String reference;
 
     /**
-     * A description of the payment setup
+     * A description of the payment.
      * [Optional]
-     * max 100
+     * max 100 characters
      */
     private String description;
 
     /**
-     * The payment methods that are enabled on your account and available for use
+     * The payment methods that are enabled on your account and available for use.
      * [Optional]
      */
     private PaymentMethods paymentMethods;
 
     /**
-     * The payment setup configuration settings
+     * Settings for the Payment Setup.
      * [Optional]
      */
     private Settings settings;
 
     /**
-     * Details about the customer
+     * The customer's details.
      * [Optional]
      */
     private Customer customer;
 
     /**
-     * Details about the order associated with this payment setup
+     * The customer's order details.
      * [Optional]
      */
     private Order order;
 
     /**
-     * Details for specific industries, including airline and accommodation industries
+     * Industry-specific information.
      * [Optional]
      */
     private Industry industry;
@@ -114,7 +115,7 @@ public final class PaymentSetupsRequest {
     private PaymentSetupAccountFundingTransaction accountFundingTransaction;
 
     /**
-     * The billing descriptor for the payment.
+     * The billing descriptor for payment.
      * [Optional]
      */
     private PaymentSetupBillingDescriptor billingDescriptor;

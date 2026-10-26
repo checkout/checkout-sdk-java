@@ -6,8 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * The encrypted PIN block details.
+ * The encrypted PIN block details of the Card Present payment method.
+ *
+ * @deprecated card_present is no longer part of the Payment Setups API specification. There is no
+ * replacement. Will be removed in the next major version.
  */
+@Deprecated
 @Data
 @Builder
 @NoArgsConstructor

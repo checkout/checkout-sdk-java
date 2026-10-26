@@ -8,15 +8,18 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 /**
- * Tabby payment method configuration.
+ * The Tabby payment method's details and configuration.
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public final class Tabby extends PaymentMethodBase {
 
     /**
-     * The initialization state of the payment method. Defaults to disabled.
+     * The initialization state of the payment method. When you create a Payment Setup, this
+     * defaults to disabled. On update the API replaces the payment methods, so send enabled again
+     * to keep the method enabled.
      * [Optional]
+     * Default: disabled
      */
     private PaymentMethodInitialization initialization = PaymentMethodInitialization.DISABLED;
 

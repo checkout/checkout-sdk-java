@@ -15,8 +15,8 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.cash
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.OsType;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodInitialization;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.klarna.Klarna;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentType.PaymentSetupPaymentType;
 import com.checkout.handlepaymentsandpayouts.setups.entities.settings.Settings;
-import com.checkout.payments.PaymentType;
 import com.checkout.handlepaymentsandpayouts.setups.requests.PaymentSetupsRequest;
 import com.checkout.handlepaymentsandpayouts.setups.responses.PaymentSetupsConfirmResponse;
 import com.checkout.handlepaymentsandpayouts.setups.responses.PaymentSetupsResponse;
@@ -230,7 +230,7 @@ class PaymentSetupsTestIT extends SandboxTestFixture {
                 .processingChannelId(System.getenv("CHECKOUT_PROCESSING_CHANNEL_ID"))
                 .amount(1000L)
                 .currency(Currency.GBP)
-                .paymentType(PaymentType.REGULAR)
+                .paymentType(PaymentSetupPaymentType.REGULAR)
                 .reference("TEST-REF-" + randomString(6))
                 .description("Integration test payment setup")
                 .settings(Settings.builder()

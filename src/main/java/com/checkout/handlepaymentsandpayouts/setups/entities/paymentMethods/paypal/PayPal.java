@@ -14,8 +14,11 @@ import lombok.EqualsAndHashCode;
 public final class PayPal extends PaymentMethodBase {
 
     /**
-     * The initialization state of the payment method. Defaults to disabled.
+     * The initialization state of the payment method. When you create a Payment Setup, this
+     * defaults to disabled. On update the API replaces the payment methods, so send enabled again
+     * to keep the method enabled.
      * <p>[Optional]</p>
+     * Default: disabled
      */
     private PaymentMethodInitialization initialization = PaymentMethodInitialization.DISABLED;
 
@@ -28,7 +31,7 @@ public final class PayPal extends PaymentMethodBase {
     /**
      * The brand name to display in the PayPal checkout experience.
      * <p>[Optional]</p>
-     * Maximum length: 127 characters.
+     * max 127 characters
      */
     private String brandName;
 
@@ -39,8 +42,9 @@ public final class PayPal extends PaymentMethodBase {
     private PayPalShippingPreference shippingPreference;
 
     /**
-     * The next available action. Contains type {@code sdk} and {@code order_id}.
-     * <p>[Read-only]</p>
+     * The next available action for the payment method. Contains type {@code sdk} and
+     * {@code order_id}.
+     * <p>[Optional] readOnly</p>
      */
     private PaymentMethodAction action;
 

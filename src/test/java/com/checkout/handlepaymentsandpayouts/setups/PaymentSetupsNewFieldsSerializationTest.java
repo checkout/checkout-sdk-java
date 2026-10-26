@@ -30,18 +30,29 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.settings.Settings;
 import com.checkout.handlepaymentsandpayouts.setups.requests.PaymentSetupsRequest;
 import com.checkout.handlepaymentsandpayouts.setups.responses.PaymentSetupsConfirmResponse;
 import com.checkout.handlepaymentsandpayouts.setups.responses.PaymentSetupsResponse;
+import com.checkout.handlepaymentsandpayouts.setups.entities.order.Order;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodInitialization;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.common.PaymentMethodStatus;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.tamara.Tamara;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.tamara.TamaraRiskAssessment;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentType.PaymentSetupPaymentType;
+import com.checkout.payments.ShippingDetails;
+import com.checkout.payments.contexts.PaymentContextsItems;
+import com.checkout.payments.contexts.PaymentContextsItemsType;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PaymentSetupsNewFieldsSerializationTest {
@@ -74,6 +85,8 @@ class PaymentSetupsNewFieldsSerializationTest {
         assertTrue(json.contains("\"percentage\""));
     }
 
+    // card_present is deprecated and must still be sent while it exists.
+    @SuppressWarnings("deprecation")
     @Test
     void shouldSerializeNewPaymentMethods() {
         final Bacs bacs = new Bacs();
@@ -349,6 +362,237 @@ class PaymentSetupsNewFieldsSerializationTest {
         assertEquals("Electronics", subMerchant.getProductCategory());
         assertEquals(Integer.valueOf(500), subMerchant.getNumberOfSales());
         assertEquals(LocalDate.of(2023, 1, 15), subMerchant.getRegistrationDate());
+    }
+
+    // ------------------------------------------------------------------------
+    // PaymentSetupPaymentType
+    // PaymentSetup.payment_type: the six lowercase values of the spec, on the
+    // request and on both responses. The payments PaymentType sent PascalCase
+    // values that the Payment Setups API rejects.
+    // ------------------------------------------------------------------------
+
+    private static final String[][] PAYMENT_SETUP_PAYMENT_TYPES = {
+            {"REGULAR", "regular"},
+            {"RECURRING", "recurring"},
+            {"MOTO", "moto"},
+            {"INSTALLMENT", "installment"},
+            {"PAY_LATER", "pay_later"},
+            {"UNSCHEDULED", "unscheduled"}
+    };
+
+    @Test
+    void shouldWriteAndReadEveryPaymentSetupPaymentTypeAsItsSpecValue() {
+        assertEquals(PAYMENT_SETUP_PAYMENT_TYPES.length, PaymentSetupPaymentType.values().length);
+        for (final String[] pair : PAYMENT_SETUP_PAYMENT_TYPES) {
+            final PaymentSetupPaymentType type = PaymentSetupPaymentType.valueOf(pair[0]);
+            assertEquals("\"" + pair[1] + "\"", serializer.toJson(type));
+            assertEquals(type, serializer.fromJson("\"" + pair[1] + "\"", PaymentSetupPaymentType.class));
+        }
+    }
+
+    @Test
+    void shouldSendRegularPaymentTypeByDefault() {
+        final PaymentSetupsRequest request = PaymentSetupsRequest.builder()
+                .processingChannelId("pc_q4dbxom5jbgudnjzjpz7j2z6uq")
+                .amount(1000L)
+                .currency(Currency.GBP)
+                .build();
+
+        final JsonObject json = JsonParser.parseString(serializer.toJson(request)).getAsJsonObject();
+
+        assertEquals(PaymentSetupPaymentType.REGULAR, request.getPaymentType());
+        assertEquals("regular", json.get("payment_type").getAsString());
+    }
+
+    @Test
+    void shouldRoundTripEveryPaymentTypeOnRequestAndResponses() {
+        for (final String[] pair : PAYMENT_SETUP_PAYMENT_TYPES) {
+            final PaymentSetupPaymentType type = PaymentSetupPaymentType.valueOf(pair[0]);
+            final PaymentSetupsRequest request = PaymentSetupsRequest.builder().paymentType(type).build();
+
+            final String json = serializer.toJson(request);
+
+            assertEquals(pair[1], JsonParser.parseString(json).getAsJsonObject().get("payment_type").getAsString());
+            assertEquals(type, serializer.fromJson(json, PaymentSetupsRequest.class).getPaymentType());
+            assertEquals(type, serializer.fromJson(json, PaymentSetupsResponse.class).getPaymentType());
+            assertEquals(type, serializer.fromJson(json, PaymentSetupsConfirmResponse.class).getPaymentType());
+        }
+    }
+
+    @Test
+    void shouldNotReadPascalCasePaymentTypeTheApiDoesNotUse() {
+        final PaymentSetupsResponse response =
+                serializer.fromJson("{\"payment_type\":\"PayLater\"}", PaymentSetupsResponse.class);
+
+        assertNull(response.getPaymentType());
+    }
+
+    // ------------------------------------------------------------------------
+    // Order
+    // PaymentSetup.order: all 10 properties, including tipping_amount and
+    // surcharge_amount (int64, min 0).
+    // ------------------------------------------------------------------------
+
+    private Order createFullyPopulatedOrder() {
+        return Order.builder()
+                .items(Collections.singletonList(PaymentContextsItems.builder()
+                        .type(PaymentContextsItemsType.DIGITAL)
+                        .name("Battery Power Pack")
+                        .quantity(1)
+                        .unitPrice(1000)
+                        .totalAmount(1000)
+                        .reference("BA67A")
+                        .discountAmount(150)
+                        .url("https://example.com/products/my-item")
+                        .imageUrl("https://example.com/products/my-item/image")
+                        .build()))
+                .shipping(ShippingDetails.builder()
+                        .firstName("Jane")
+                        .lastName("Doe")
+                        .email("jane.doe@example.com")
+                        .delay(3)
+                        .build())
+                .subMerchants(Collections.singletonList(OrderSubMerchant.builder()
+                        .id("SUB12345")
+                        .productCategory("Electronics")
+                        .numberOfSales(500)
+                        .registrationDate(LocalDate.of(2023, 1, 15))
+                        .build()))
+                .discountAmount(10L)
+                .invoiceId("inv_123456789")
+                .shippingAmount(5L)
+                .surchargeAmount(2L)
+                .taxAmount(2L)
+                .tippingAmount(3L)
+                .amountAllocations(Collections.singletonList(PaymentSetupAmountAllocation.builder()
+                        .id("ent_w4jelhppmfiufdnatam37wrfc4")
+                        .amount(1000L)
+                        .reference("ORD-5023-4E89")
+                        .build()))
+                .build();
+    }
+
+    @Test
+    void shouldRoundTripOrderWithEveryProperty() {
+        final Order original = createFullyPopulatedOrder();
+
+        final String json = serializer.toJson(original);
+        final JsonObject order = JsonParser.parseString(json).getAsJsonObject();
+
+        assertEquals(10, order.size());
+        assertEquals("Battery Power Pack",
+                order.getAsJsonArray("items").get(0).getAsJsonObject().get("name").getAsString());
+        assertEquals("Jane", order.getAsJsonObject("shipping").get("first_name").getAsString());
+        assertEquals("SUB12345",
+                order.getAsJsonArray("sub_merchants").get(0).getAsJsonObject().get("id").getAsString());
+        assertEquals(10L, order.get("discount_amount").getAsLong());
+        assertEquals("inv_123456789", order.get("invoice_id").getAsString());
+        assertEquals(5L, order.get("shipping_amount").getAsLong());
+        assertEquals(2L, order.get("surcharge_amount").getAsLong());
+        assertEquals(2L, order.get("tax_amount").getAsLong());
+        assertEquals(3L, order.get("tipping_amount").getAsLong());
+        assertEquals("ent_w4jelhppmfiufdnatam37wrfc4",
+                order.getAsJsonArray("amount_allocations").get(0).getAsJsonObject().get("id").getAsString());
+        assertEquals(original, serializer.fromJson(json, Order.class));
+    }
+
+    @Test
+    void shouldDeserializeOrderSwaggerExample() {
+        final String json = "{"
+                + "\"items\":[{\"name\":\"Battery Power Pack\",\"quantity\":1,\"unit_price\":1000,"
+                + "\"total_amount\":1000,\"reference\":\"BA67A\",\"discount_amount\":150,"
+                + "\"url\":\"https://example.com/products/my-item\","
+                + "\"image_url\":\"https://example.com/products/my-item/image\",\"type\":\"digital\"}],"
+                + "\"shipping\":{\"first_name\":\"Jane\",\"last_name\":\"Doe\","
+                + "\"email\":\"jane.doe@example.com\",\"delay\":3},"
+                + "\"sub_merchants\":[{\"id\":\"SUB12345\",\"product_category\":\"Electronics\","
+                + "\"number_of_sales\":500,\"registration_date\":\"2023-01-15\"}],"
+                + "\"invoice_id\":\"inv_123456789\","
+                + "\"shipping_amount\":5,"
+                + "\"discount_amount\":10,"
+                + "\"tax_amount\":2,"
+                + "\"tipping_amount\":2,"
+                + "\"surcharge_amount\":2,"
+                + "\"amount_allocations\":[{\"id\":\"ent_w4jelhppmfiufdnatam37wrfc4\",\"amount\":1000,"
+                + "\"reference\":\"ORD-5023-4E89\"}]"
+                + "}";
+
+        final Order order = serializer.fromJson(json, Order.class);
+
+        assertEquals(1, order.getItems().size());
+        assertEquals(PaymentContextsItemsType.DIGITAL, order.getItems().get(0).getType());
+        assertEquals(Integer.valueOf(1000), order.getItems().get(0).getUnitPrice());
+        assertEquals("Doe", order.getShipping().getLastName());
+        assertEquals(Integer.valueOf(3), order.getShipping().getDelay());
+        assertEquals(LocalDate.of(2023, 1, 15), order.getSubMerchants().get(0).getRegistrationDate());
+        assertEquals("inv_123456789", order.getInvoiceId());
+        assertEquals(Long.valueOf(5L), order.getShippingAmount());
+        assertEquals(Long.valueOf(10L), order.getDiscountAmount());
+        assertEquals(Long.valueOf(2L), order.getTaxAmount());
+        assertEquals(Long.valueOf(2L), order.getTippingAmount());
+        assertEquals(Long.valueOf(2L), order.getSurchargeAmount());
+        assertEquals(Long.valueOf(1000L), order.getAmountAllocations().get(0).getAmount());
+    }
+
+    // ------------------------------------------------------------------------
+    // Tamara
+    // PaymentSetup.payment_methods.tamara: status, flags, initialization and
+    // risk_assessment with its 4 properties.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldRoundTripTamaraWithEveryProperty() {
+        final Tamara original = new Tamara();
+        original.setStatus(PaymentMethodStatus.INITIALIZATION_REQUIRED);
+        original.setFlags(Collections.singletonList("customer.property_required"));
+        original.setInitialization(PaymentMethodInitialization.ENABLED);
+        original.setRiskAssessment(TamaraRiskAssessment.builder()
+                .premiumCustomer(true)
+                .riskScore(42)
+                .orderCountLast24h(1)
+                .linkedDeviceCount(2)
+                .build());
+
+        final String json = serializer.toJson(PaymentMethods.builder().tamara(original).build());
+        final JsonObject tamara = JsonParser.parseString(json).getAsJsonObject().getAsJsonObject("tamara");
+        final JsonObject riskAssessment = tamara.getAsJsonObject("risk_assessment");
+
+        assertEquals(4, tamara.size());
+        assertEquals("initialization_required", tamara.get("status").getAsString());
+        assertEquals("customer.property_required", tamara.getAsJsonArray("flags").get(0).getAsString());
+        assertEquals("enabled", tamara.get("initialization").getAsString());
+        assertEquals(4, riskAssessment.size());
+        assertTrue(riskAssessment.get("premium_customer").getAsBoolean());
+        assertEquals(42, riskAssessment.get("risk_score").getAsInt());
+        assertEquals(1, riskAssessment.get("order_count_last24h").getAsInt());
+        assertEquals(2, riskAssessment.get("linked_device_count").getAsInt());
+        assertEquals(original, serializer.fromJson(json, PaymentMethods.class).getTamara());
+    }
+
+    @Test
+    void shouldDeserializeTamaraSwaggerExample() {
+        final String json = "{\"tamara\":{"
+                + "\"status\":\"initialization_required\","
+                + "\"flags\":[],"
+                + "\"initialization\":\"disabled\","
+                + "\"risk_assessment\":{\"premium_customer\":false,\"risk_score\":42,"
+                + "\"order_count_last24h\":0,\"linked_device_count\":2}"
+                + "}}";
+
+        final Tamara tamara = serializer.fromJson(json, PaymentMethods.class).getTamara();
+
+        assertEquals(PaymentMethodStatus.INITIALIZATION_REQUIRED, tamara.getStatus());
+        assertTrue(tamara.getFlags().isEmpty());
+        assertEquals(PaymentMethodInitialization.DISABLED, tamara.getInitialization());
+        assertEquals(Boolean.FALSE, tamara.getRiskAssessment().getPremiumCustomer());
+        assertEquals(Integer.valueOf(42), tamara.getRiskAssessment().getRiskScore());
+        assertEquals(Integer.valueOf(0), tamara.getRiskAssessment().getOrderCountLast24h());
+        assertEquals(Integer.valueOf(2), tamara.getRiskAssessment().getLinkedDeviceCount());
+    }
+
+    @Test
+    void shouldSendDisabledInitializationByDefaultForTamara() {
+        assertEquals("{\"initialization\":\"disabled\"}", serializer.toJson(new Tamara()));
     }
 
 }
