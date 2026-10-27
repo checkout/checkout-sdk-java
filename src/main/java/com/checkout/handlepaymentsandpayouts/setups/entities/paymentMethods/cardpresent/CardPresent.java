@@ -6,11 +6,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * The Card Present payment method's details and configuration.
- *
- * @deprecated card_present is no longer part of the Payment Setups API specification. There is no
- * replacement. Will be removed in the next major version.
  */
-@Deprecated
 @Data
 @EqualsAndHashCode(callSuper = true)
 public final class CardPresent extends PaymentMethodBase {

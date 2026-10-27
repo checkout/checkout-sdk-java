@@ -67,5 +67,5 @@ public final class MerchantAccount {
      * The specification types this as a number (example 55.99); the API currently stores it as an integer.
      * [Optional]
      */
-    private Long lastPaymentAmount;
+    private Double lastPaymentAmount;
 }

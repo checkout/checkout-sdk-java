@@ -85,8 +85,6 @@ class PaymentSetupsNewFieldsSerializationTest {
         assertTrue(json.contains("\"percentage\""));
     }
 
-    // card_present is deprecated and must still be sent while it exists.
-    @SuppressWarnings("deprecation")
     @Test
     void shouldSerializeNewPaymentMethods() {
         final Bacs bacs = new Bacs();
@@ -197,7 +195,7 @@ class PaymentSetupsNewFieldsSerializationTest {
                         .firstTransactionDate(LocalDate.of(2023, 2, 20))
                         .lastTransactionDate(LocalDate.of(2024, 3, 9))
                         .totalOrderCount(5)
-                        .lastPaymentAmount(1000L)
+                        .lastPaymentAmount(55.99)
                         .build())
                 .build();
 

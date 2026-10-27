@@ -300,13 +300,9 @@ public final class PaymentMethods {
     private Bacs bacs;
 
     /**
-     * The Card Present payment method's details and configuration.
+     * Card Present payment method configuration.
      * [Optional]
-     *
-     * @deprecated card_present is no longer part of the Payment Setups API specification. There is no
-     * replacement. Will be removed in the next major version.
      */
-    @Deprecated
     private CardPresent cardPresent;
 
     /**

@@ -785,24 +785,24 @@ class PaymentSetupsPaymentMethodsSerializationTest {
     // ------------------------------------------------------------------------
     // MerchantAccount.last_payment_amount
     // PaymentSetupMerchantAccount.last_payment_amount: the spec types it as a
-    // number (example 55.99), but the API stores it as an integer, so the SDK
-    // keeps Long.
+    // number (example 55.99). The SDK uses that type; the API currently stores
+    // it as an integer.
     // ------------------------------------------------------------------------
 
     @Test
     void shouldRoundTripLastPaymentAmountUnderItsWireKey() {
-        final MerchantAccount original = MerchantAccount.builder().lastPaymentAmount(55L).build();
+        final MerchantAccount original = MerchantAccount.builder().lastPaymentAmount(55.99).build();
 
         final String json = serializer.toJson(original);
 
-        assertEquals("{\"last_payment_amount\":55}", json);
+        assertEquals("{\"last_payment_amount\":55.99}", json);
         assertEquals(original, serializer.fromJson(json, MerchantAccount.class));
     }
 
     @Test
     void shouldDeserializeMerchantAccountSwaggerExample() {
         final String json = "{\"id\":\"1234\",\"returning_customer\":true,\"total_order_count\":6,"
-                + "\"last_payment_amount\":55}";
+                + "\"last_payment_amount\":55.99}";
 
         final MerchantAccount account = serializer.fromJson(json, MerchantAccount.class);
 
@@ -810,7 +810,7 @@ class PaymentSetupsPaymentMethodsSerializationTest {
         assertEquals("1234", account.getId());
         assertEquals(Boolean.TRUE, account.getReturningCustomer());
         assertEquals(Integer.valueOf(6), account.getTotalOrderCount());
-        assertEquals(Long.valueOf(55L), account.getLastPaymentAmount());
+        assertEquals(Double.valueOf(55.99), account.getLastPaymentAmount());
     }
 
     // ------------------------------------------------------------------------
