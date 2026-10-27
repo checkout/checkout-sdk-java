@@ -64,6 +64,7 @@ public final class MerchantAccount {
 
     /**
      * The amount of the customer's last payment with the merchant.
+     * The specification types this as a number (example 55.99); the API currently stores it as an integer.
      * [Optional]
      */
     private Long lastPaymentAmount;
