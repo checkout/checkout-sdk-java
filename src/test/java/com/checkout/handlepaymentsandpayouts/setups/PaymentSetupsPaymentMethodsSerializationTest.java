@@ -33,6 +33,7 @@ import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.knet
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.knet.KnetLanguage;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.mbway.MBWay;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.mobilepay.MobilePay;
+import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.multibanco.Multibanco;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.octopus.Octopus;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.p24.P24;
 import com.checkout.handlepaymentsandpayouts.setups.entities.paymentMethods.p24.P24AccountHolder;
@@ -553,7 +554,7 @@ class PaymentSetupsPaymentMethodsSerializationTest {
     }
 
     // ------------------------------------------------------------------------
-    // Qpay, Ideal, Knet, Bancontact and Blik
+    // Qpay, Ideal, Knet, Bancontact, Multibanco and Blik
     // ------------------------------------------------------------------------
 
     @Test
@@ -660,6 +661,34 @@ class PaymentSetupsPaymentMethodsSerializationTest {
 
         assertEquals(PaymentMethodStatus.READY, bancontact.getStatus());
         assertTrue(bancontact.getFlags().isEmpty());
+    }
+
+    @Test
+    void shouldRoundTripMultibancoWithEveryProperty() {
+        final Multibanco original = new Multibanco();
+        original.setStatus(PaymentMethodStatus.ACTION_REQUIRED);
+        original.setFlags(Collections.singletonList("customer.property_required"));
+        original.setAccountHolderName("John Smith");
+
+        final String json = serializer.toJson(PaymentMethods.builder().multibanco(original).build());
+        final JsonObject multibanco = JsonParser.parseString(json).getAsJsonObject().getAsJsonObject("multibanco");
+
+        assertEquals(3, multibanco.size());
+        assertEquals("action_required", multibanco.get("status").getAsString());
+        assertEquals("customer.property_required", multibanco.getAsJsonArray("flags").get(0).getAsString());
+        assertEquals("John Smith", multibanco.get("account_holder_name").getAsString());
+        assertFalse(multibanco.has("initialization"));
+        assertEquals(original, serializer.fromJson(json, PaymentMethods.class).getMultibanco());
+    }
+
+    @Test
+    void shouldDeserializeMultibancoSwaggerExample() {
+        final String json = "{\"multibanco\":{\"status\":\"ready\",\"flags\":[]}}";
+
+        final Multibanco multibanco = serializer.fromJson(json, PaymentMethods.class).getMultibanco();
+
+        assertEquals(PaymentMethodStatus.READY, multibanco.getStatus());
+        assertTrue(multibanco.getFlags().isEmpty());
     }
 
     @Test
