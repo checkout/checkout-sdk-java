@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Configuration of Dunning retries.
+ */
 @Data
 @Builder
 @AllArgsConstructor
@@ -12,19 +15,21 @@ import lombok.NoArgsConstructor;
 public final class DunningRetryRequest {
 
     /**
-     * Whether dunning retries are enabled.
-     * [Optional]
+     * Indicates if Checkout.com retries the payment when it's declined with a supported decline code.
+     * [Required]
      */
     private Boolean enabled;
 
     /**
-     * The maximum number of retry attempts.
+     * The maximum number of authorization retry attempts, excluding the initial authorization.
+     * Minimum 1, maximum 15. Default: 6.
      * [Optional]
      */
     private Integer maxAttempts;
 
     /**
-     * The number of days after which retries stop.
+     * The maximum number of days between the initial request and the final retry attempt.
+     * Minimum 1, maximum 60. Default: 30.
      * [Optional]
      */
     private Integer endAfterDays;

@@ -5,6 +5,7 @@ import com.checkout.common.Currency;
 import com.checkout.common.CustomerRequest;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Product;
+import com.checkout.handlepaymentsandpayouts.flow.entities.CustomerRetry;
 import com.checkout.payments.AuthorizationType;
 import com.checkout.payments.BillingDescriptor;
 import com.checkout.payments.BillingInformation;
@@ -18,7 +19,6 @@ import com.checkout.payments.RiskRequest;
 import com.checkout.payments.ShippingDetails;
 import com.checkout.payments.ThreeDSRequest;
 import com.checkout.payments.PaymentInstruction;
-import com.checkout.payments.request.PaymentRetryRequest;
 import com.checkout.payments.sender.PaymentSender;
 import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
@@ -171,10 +171,10 @@ public final class PaymentLinkRequest {
     private RiskRequest risk;
 
     /**
-     * The customer retry configuration for failed payments.
+     * Configures the parameters for customer retries (payment attempts performed by the customer on the checkout page).
      * [Optional]
      */
-    private PaymentRetryRequest customerRetry;
+    private CustomerRetry customerRetry;
 
     /**
      * The sender of the payment. Required for financial regulations in some jurisdictions.

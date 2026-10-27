@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Configuration of Downtime retries.
+ */
 @Data
 @Builder
 @AllArgsConstructor
@@ -12,8 +15,8 @@ import lombok.NoArgsConstructor;
 public final class DowntimeRetryRequest {
 
     /**
-     * Whether downtime retries are enabled.
-     * [Optional]
+     * Indicates if Checkout.com retries the payment when it's declined due to issuer or acquirer downtime.
+     * [Required]
      */
     private Boolean enabled;
 
