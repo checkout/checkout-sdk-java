@@ -3,8 +3,8 @@ package com.checkout.payments.request;
 import com.checkout.GsonSerializer;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -16,6 +16,7 @@ class PaymentRetryRequestSerializationTest {
     @Test
     void shouldSerializeWithDunningConfig() {
         final PaymentRetryRequest request = PaymentRetryRequest.builder()
+                .enabled(true)
                 .dunning(DunningRetryRequest.builder()
                         .enabled(true)
                         .maxAttempts(3)
@@ -23,104 +24,109 @@ class PaymentRetryRequestSerializationTest {
                         .build())
                 .build();
 
-        final String json = serializer.toJson(request);
-
-        assertNotNull(json);
-        assertTrue(json.contains("\"dunning\""));
-        assertTrue(json.contains("\"enabled\":true"));
-        assertTrue(json.contains("\"max_attempts\":3"));
-        assertTrue(json.contains("\"end_after_days\":7"));
+        assertEquals("{\"enabled\":true,\"dunning\":{\"enabled\":true,\"max_attempts\":3,\"end_after_days\":7}}",
+                serializer.toJson(request));
     }
 
     @Test
     void shouldSerializeWithDowntimeConfig() {
         final PaymentRetryRequest request = PaymentRetryRequest.builder()
-                .downtime(DowntimeRetryRequest.builder()
-                        .enabled(true)
-                        .build())
+                .enabled(true)
+                .downtime(DowntimeRetryRequest.builder().enabled(true).build())
                 .build();
 
-        final String json = serializer.toJson(request);
-
-        assertNotNull(json);
-        assertTrue(json.contains("\"downtime\""));
-        assertTrue(json.contains("\"enabled\":true"));
+        assertEquals("{\"enabled\":true,\"downtime\":{\"enabled\":true}}", serializer.toJson(request));
     }
 
     @Test
     void shouldSerializeWithBothDunningAndDowntime() {
         final PaymentRetryRequest request = PaymentRetryRequest.builder()
+                .enabled(true)
                 .dunning(DunningRetryRequest.builder()
                         .enabled(true)
                         .maxAttempts(5)
                         .endAfterDays(14)
                         .build())
-                .downtime(DowntimeRetryRequest.builder()
-                        .enabled(false)
-                        .build())
+                .downtime(DowntimeRetryRequest.builder().enabled(false).build())
                 .build();
 
-        assertDoesNotThrow(() -> serializer.toJson(request));
+        assertEquals("{\"enabled\":true,"
+                        + "\"dunning\":{\"enabled\":true,\"max_attempts\":5,\"end_after_days\":14},"
+                        + "\"downtime\":{\"enabled\":false}}",
+                serializer.toJson(request));
     }
 
     @Test
-    void shouldDeserializeDunningFromJson() {
-        final String json = "{"
-                + "\"dunning\":{"
-                + "  \"enabled\":true,"
-                + "  \"max_attempts\":3,"
-                + "  \"end_after_days\":7"
-                + "},"
-                + "\"downtime\":{"
-                + "  \"enabled\":false"
-                + "}"
-                + "}";
+    void shouldSerializeEnabledFalseEverywhere() {
+        final PaymentRetryRequest request = PaymentRetryRequest.builder()
+                .enabled(false)
+                .dunning(DunningRetryRequest.builder().enabled(false).build())
+                .downtime(DowntimeRetryRequest.builder().enabled(false).build())
+                .build();
+
+        assertEquals("{\"enabled\":false,\"dunning\":{\"enabled\":false},\"downtime\":{\"enabled\":false}}",
+                serializer.toJson(request));
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void shouldStillSendDeprecatedTopLevelFields() {
+        final PaymentRetryRequest request = PaymentRetryRequest.builder()
+                .enabled(true)
+                .maxAttempts(4)
+                .endAfterDays(10)
+                .build();
+
+        assertEquals("{\"enabled\":true,\"max_attempts\":4,\"end_after_days\":10}", serializer.toJson(request));
+    }
+
+    @Test
+    void shouldDeserializeFromJson() {
+        final String json = "{\"enabled\":true,"
+                + "\"dunning\":{\"enabled\":true,\"max_attempts\":3,\"end_after_days\":7},"
+                + "\"downtime\":{\"enabled\":false}}";
 
         final PaymentRetryRequest request = serializer.fromJson(json, PaymentRetryRequest.class);
 
-        assertNotNull(request);
-        assertNotNull(request.getDunning());
+        assertTrue(request.getEnabled());
         assertTrue(request.getDunning().getEnabled());
         assertEquals(3, request.getDunning().getMaxAttempts());
         assertEquals(7, request.getDunning().getEndAfterDays());
-        assertNotNull(request.getDowntime());
-        assertEquals(false, request.getDowntime().getEnabled());
+        assertFalse(request.getDowntime().getEnabled());
     }
 
     @Test
-    void shouldRoundTripSerialize() {
+    @SuppressWarnings("deprecation")
+    void shouldRoundTripAllProperties() {
         final PaymentRetryRequest original = PaymentRetryRequest.builder()
+                .enabled(true)
+                .maxAttempts(2)
+                .endAfterDays(3)
                 .dunning(DunningRetryRequest.builder()
                         .enabled(true)
-                        .maxAttempts(3)
-                        .endAfterDays(7)
+                        .maxAttempts(15)
+                        .endAfterDays(60)
                         .build())
-                .downtime(DowntimeRetryRequest.builder()
-                        .enabled(true)
-                        .build())
+                .downtime(DowntimeRetryRequest.builder().enabled(true).build())
                 .build();
 
         final String json = serializer.toJson(original);
-        final PaymentRetryRequest deserialized = serializer.fromJson(json, PaymentRetryRequest.class);
 
-        assertNotNull(deserialized);
-        assertNotNull(deserialized.getDunning());
-        assertEquals(true, deserialized.getDunning().getEnabled());
-        assertEquals(3, deserialized.getDunning().getMaxAttempts());
-        assertEquals(7, deserialized.getDunning().getEndAfterDays());
-        assertNotNull(deserialized.getDowntime());
-        assertEquals(true, deserialized.getDowntime().getEnabled());
+        assertEquals("{\"enabled\":true,"
+                + "\"dunning\":{\"enabled\":true,\"max_attempts\":15,\"end_after_days\":60},"
+                + "\"downtime\":{\"enabled\":true},"
+                + "\"max_attempts\":2,\"end_after_days\":3}", json);
+        assertEquals(original, serializer.fromJson(json, PaymentRetryRequest.class));
     }
 
     @Test
     void shouldHandleAbsentOptionalFields() {
-        final String json = "{}";
-
-        final PaymentRetryRequest request = serializer.fromJson(json, PaymentRetryRequest.class);
+        final PaymentRetryRequest request = serializer.fromJson("{}", PaymentRetryRequest.class);
 
         assertNotNull(request);
-        assertDoesNotThrow(() -> serializer.toJson(request));
+        assertNull(request.getEnabled());
         assertNull(request.getDunning());
         assertNull(request.getDowntime());
+        assertEquals("{}", serializer.toJson(request));
     }
 }

@@ -74,6 +74,10 @@ public final class PaymentResponse extends Resource implements Serializable {
 
     private String schemeId;
 
+    /**
+     * Configuration relating to asynchronous retries.
+     * [Optional]
+     */
     private PaymentRetryResponse retry;
 
     private String paymentIp;

@@ -116,6 +116,10 @@ public final class GetPaymentResponse extends Resource {
 
     private List<PaymentActionSummary> actions;
 
+    /**
+     * Configuration relating to asynchronous retries.
+     * [Optional]
+     */
     private PaymentRetryResponse retry;
 
     private PanProcessedType panTypeProcessed;
