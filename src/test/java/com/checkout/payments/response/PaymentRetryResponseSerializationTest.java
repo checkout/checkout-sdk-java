@@ -57,4 +57,30 @@ class PaymentRetryResponseSerializationTest {
         assertEquals(2, serializer.fromJson(retry, GetPaymentResponse.class).getRetry().getAttemptsMade());
         assertEquals(6, serializer.fromJson(retry, PaymentResponse.class).getRetry().getMaxAttempts());
     }
+
+    // ------------------------------------------------------------------------
+    // PaymentResponse.subscription
+    // The spec PaymentResponse schema returns subscription (Subscription: id, max 50 characters).
+    // The spec has no example value, so the id below is illustrative.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldDeserializePaymentResponseSubscription() {
+        final PaymentResponse response = serializer.fromJson(
+                "{\"id\":\"pay_mbabizu24mvu3mela5njyhpit4\",\"subscription\":{\"id\":\"sub_reference_123\"}}",
+                PaymentResponse.class);
+
+        assertEquals("sub_reference_123", response.getSubscription().getId());
+    }
+
+    @Test
+    void shouldRoundTripPaymentResponseSubscription() {
+        final PaymentResponse original = serializer.fromJson(
+                "{\"subscription\":{\"id\":\"sub_reference_123\"}}", PaymentResponse.class);
+
+        final String json = serializer.toJson(original);
+
+        assertTrue(json.contains("\"subscription\":{\"id\":\"sub_reference_123\"}"));
+        assertEquals(original.getSubscription(), serializer.fromJson(json, PaymentResponse.class).getSubscription());
+    }
 }
