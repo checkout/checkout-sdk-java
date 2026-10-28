@@ -9,6 +9,10 @@ import com.checkout.payments.AuthorizationType;
 import com.checkout.payments.BillingInformation;
 import com.checkout.payments.PaymentPlan;
 import com.checkout.payments.PaymentType;
+import com.checkout.payments.request.PaymentRetryRequest;
+import com.checkout.handlepaymentsandpayouts.flow.entities.CustomerRetry;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -277,5 +281,52 @@ class PaymentLinkRequestSerializationTest {
         assertEquals(30, request.getPaymentPlan().getDaysBetweenPayments());
         assertEquals(12, request.getPaymentPlan().getTotalNumberOfPayments());
         assertEquals("Plan A", request.getPaymentPlan().getName());
+    }
+
+    // ------------------------------------------------------------------------
+    // customer_retry: the CustomerRetry builder method and the deprecated
+    // PaymentRetryRequest overload must send the same customer_retry object.
+    // ------------------------------------------------------------------------
+
+    @Test
+    void shouldSerializeCustomerRetryForPaymentLinkRequest() {
+        final PaymentLinkRequest request = PaymentLinkRequest.builder()
+                .customerRetry(CustomerRetry.builder().maxAttempts(3).build())
+                .build();
+
+        assertEquals("{\"max_attempts\":3}", customerRetryJson(request));
+        assertEquals(3, serializer.fromJson(serializer.toJson(request), PaymentLinkRequest.class)
+                .getCustomerRetry().getMaxAttempts());
+    }
+
+    // The overload under test is deprecated on purpose (kept for compatibility), so calling it is the test.
+    // The PaymentRetryRequest argument is built from JSON to avoid its deprecated builder methods.
+    @Test
+    @SuppressWarnings("deprecation")
+    void shouldSerializeDeprecatedCustomerRetryOverloadLikeCustomerRetryForPaymentLinkRequest() {
+        final PaymentRetryRequest legacy = serializer.fromJson("{\"max_attempts\":3}", PaymentRetryRequest.class);
+
+        final PaymentLinkRequest fromLegacy = PaymentLinkRequest.builder().customerRetry(legacy).build();
+        final PaymentLinkRequest fromCustomerRetry = PaymentLinkRequest.builder()
+                .customerRetry(CustomerRetry.builder().maxAttempts(3).build())
+                .build();
+
+        assertEquals(customerRetryJson(fromCustomerRetry), customerRetryJson(fromLegacy));
+        assertEquals("{\"max_attempts\":3}", customerRetryJson(fromLegacy));
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    void shouldConvertDeprecatedCustomerRetryOverloadEdgeCasesForPaymentLinkRequest() {
+        final PaymentRetryRequest withoutMaxAttempts = serializer.fromJson("{\"enabled\":true}", PaymentRetryRequest.class);
+
+        assertEquals("{\"max_attempts\":5}",
+                customerRetryJson(PaymentLinkRequest.builder().customerRetry(withoutMaxAttempts).build()));
+        assertNull(PaymentLinkRequest.builder().customerRetry((PaymentRetryRequest) null).build().getCustomerRetry());
+    }
+
+    private String customerRetryJson(final PaymentLinkRequest request) {
+        final JsonObject json = JsonParser.parseString(serializer.toJson(request)).getAsJsonObject();
+        return json.get("customer_retry").toString();
     }
 }
