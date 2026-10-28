@@ -69,13 +69,9 @@ class PaymentRetryRequestSerializationTest {
     }
 
     @Test
-    @SuppressWarnings("deprecation")
     void shouldStillSendDeprecatedTopLevelFields() {
-        final PaymentRetryRequest request = PaymentRetryRequest.builder()
-                .enabled(true)
-                .maxAttempts(4)
-                .endAfterDays(10)
-                .build();
+        final PaymentRetryRequest request = serializer.fromJson(
+                "{\"enabled\":true,\"max_attempts\":4,\"end_after_days\":10}", PaymentRetryRequest.class);
 
         assertEquals("{\"enabled\":true,\"max_attempts\":4,\"end_after_days\":10}", serializer.toJson(request));
     }
@@ -96,19 +92,11 @@ class PaymentRetryRequestSerializationTest {
     }
 
     @Test
-    @SuppressWarnings("deprecation")
     void shouldRoundTripAllProperties() {
-        final PaymentRetryRequest original = PaymentRetryRequest.builder()
-                .enabled(true)
-                .maxAttempts(2)
-                .endAfterDays(3)
-                .dunning(DunningRetryRequest.builder()
-                        .enabled(true)
-                        .maxAttempts(15)
-                        .endAfterDays(60)
-                        .build())
-                .downtime(DowntimeRetryRequest.builder().enabled(true).build())
-                .build();
+        final PaymentRetryRequest original = serializer.fromJson("{\"enabled\":true,"
+                + "\"max_attempts\":2,\"end_after_days\":3,"
+                + "\"dunning\":{\"enabled\":true,\"max_attempts\":15,\"end_after_days\":60},"
+                + "\"downtime\":{\"enabled\":true}}", PaymentRetryRequest.class);
 
         final String json = serializer.toJson(original);
 

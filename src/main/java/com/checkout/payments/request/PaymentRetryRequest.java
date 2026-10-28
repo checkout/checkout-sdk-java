@@ -37,7 +37,9 @@ public final class PaymentRetryRequest {
      * where the API does not read it.
      * [Optional]
      *
-     * @deprecated Use {@link DunningRetryRequest#getMaxAttempts()} via {@link #dunning} instead.
+     * @deprecated For customer_retry on hosted payments and payment links, use
+     * {@link com.checkout.handlepaymentsandpayouts.flow.entities.CustomerRetry#getMaxAttempts()} instead.
+     * For retry on payments, use {@link DunningRetryRequest#getMaxAttempts()} via {@link #dunning} instead.
      * This property will be removed in the next major version.
      */
     @Deprecated
@@ -48,7 +50,8 @@ public final class PaymentRetryRequest {
      * where the API does not read it.
      * [Optional]
      *
-     * @deprecated Use {@link DunningRetryRequest#getEndAfterDays()} via {@link #dunning} instead.
+     * @deprecated For retry on payments, use {@link DunningRetryRequest#getEndAfterDays()} via {@link #dunning}
+     * instead.
      * This property will be removed in the next major version.
      */
     @Deprecated
