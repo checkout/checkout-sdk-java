@@ -325,6 +325,25 @@ class PaymentLinkRequestSerializationTest {
         assertNull(PaymentLinkRequest.builder().customerRetry((PaymentRetryRequest) null).build().getCustomerRetry());
     }
 
+    @Test
+    @SuppressWarnings("deprecation")
+    void shouldSetCustomerRetryThroughBothSettersForPaymentLinkRequest() {
+        final PaymentRetryRequest legacy = serializer.fromJson("{\"max_attempts\":2}", PaymentRetryRequest.class);
+
+        final PaymentLinkRequest fromLegacy = PaymentLinkRequest.builder().build();
+        fromLegacy.setCustomerRetry(legacy);
+        final PaymentLinkRequest fromCustomerRetry = PaymentLinkRequest.builder().build();
+        fromCustomerRetry.setCustomerRetry(CustomerRetry.builder().maxAttempts(2).build());
+
+        assertEquals("{\"max_attempts\":2}", customerRetryJson(fromLegacy));
+        assertEquals(customerRetryJson(fromCustomerRetry), customerRetryJson(fromLegacy));
+
+        fromLegacy.setCustomerRetry(serializer.fromJson("{}", PaymentRetryRequest.class));
+        assertEquals("{\"max_attempts\":5}", customerRetryJson(fromLegacy));
+        fromLegacy.setCustomerRetry((PaymentRetryRequest) null);
+        assertNull(fromLegacy.getCustomerRetry());
+    }
+
     private String customerRetryJson(final PaymentLinkRequest request) {
         final JsonObject json = JsonParser.parseString(serializer.toJson(request)).getAsJsonObject();
         return json.get("customer_retry").toString();
