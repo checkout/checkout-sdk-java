@@ -365,8 +365,9 @@ class PaymentSetupsNewFieldsSerializationTest {
     // ------------------------------------------------------------------------
     // PaymentSetupPaymentType
     // PaymentSetup.payment_type: the six lowercase values of the spec, on the
-    // request and on both responses. The payments PaymentType sent PascalCase
-    // values that the Payment Setups API rejects.
+    // request and on both responses. The payments PaymentType sent PayLater,
+    // which the Payment Setups API rejects, and read lowercase values other
+    // than regular as null. Regular, MOTO and Recurring are accepted.
     // ------------------------------------------------------------------------
 
     private static final String[][] PAYMENT_SETUP_PAYMENT_TYPES = {
