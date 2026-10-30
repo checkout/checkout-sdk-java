@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * Order information for payment setup
+ * The customer's order details.
  */
 @Data
 @Builder
@@ -19,23 +19,27 @@ import java.util.List;
 public final class Order {
 
     /**
-     * The items included in the order
+     * A list of items in the order.
+     * [Optional]
      */
     private List<PaymentContextsItems> items;
 
     /**
-     * The shipping information for the order
+     * The customer's shipping details.
+     * [Optional]
      */
     private ShippingDetails shipping;
 
     /**
-     * Information about sub-merchants involved in the order
+     * The details of the sub-merchants.
+     * [Optional]
      */
     private List<OrderSubMerchant> subMerchants;
 
     /**
-     * &gt;= 0
-     * The discount amount applied to the order
+     * The discount amount the merchant applied to the transaction.
+     * [Optional]
+     * min 0
      */
     private Long discountAmount;
 
@@ -48,33 +52,37 @@ public final class Order {
     /**
      * The total shipping amount for the order.
      * [Optional]
-     * &gt;= 0
+     * min 0
      */
     private Long shippingAmount;
 
     /**
      * The total surcharge amount for the order.
      * [Optional]
-     * &gt;= 0
+     * Format: int64
+     * min 0
      */
     private Long surchargeAmount;
 
     /**
      * The total tax amount for the order.
      * [Optional]
-     * &gt;= 0
+     * min 0
      */
     private Long taxAmount;
 
     /**
      * The total tipping amount for the order.
      * [Optional]
-     * &gt;= 0
+     * Format: int64
+     * min 0
      */
     private Long tippingAmount;
 
     /**
-     * The amount allocations representing the sub-entities on whose behalf the payment is processed
+     * The sub-entities that the payment is being processed on behalf of.
+     * [Optional]
+     * min 1 item, max 50 items
      */
     private List<PaymentSetupAmountAllocation> amountAllocations;
 }

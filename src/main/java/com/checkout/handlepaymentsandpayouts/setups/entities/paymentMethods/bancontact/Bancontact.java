@@ -13,6 +13,7 @@ public final class Bancontact extends PaymentMethodBase {
 
     /**
      * The account holder's name.
+     * The specification marks this optional, but the API keeps the method invalid until it is sent.
      * [Optional]
      * min 3 characters, max 100 characters
      */

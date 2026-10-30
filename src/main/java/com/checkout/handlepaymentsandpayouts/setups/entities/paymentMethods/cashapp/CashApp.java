@@ -15,8 +15,11 @@ import lombok.EqualsAndHashCode;
 public final class CashApp extends PaymentMethodBase {
 
     /**
-     * The initialization state of the payment method. Defaults to disabled.
+     * The initialization state of the payment method. When you create a Payment Setup, this
+     * defaults to disabled. On update the API replaces the payment methods, so send {@code ENABLED} again to
+     * keep the method enabled. The specification does not state this; it is the API's behaviour.
      * [Optional]
+     * Default: disabled
      */
     private PaymentMethodInitialization initialization = PaymentMethodInitialization.DISABLED;
 

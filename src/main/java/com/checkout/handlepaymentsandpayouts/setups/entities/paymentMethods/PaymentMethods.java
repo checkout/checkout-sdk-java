@@ -50,7 +50,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Payment methods configuration for a payment setup.
+ * The payment methods that are enabled on your account and available for use.
  */
 @Data
 @Builder
@@ -59,241 +59,242 @@ import lombok.NoArgsConstructor;
 public final class PaymentMethods {
 
     /**
-     * The payment method that automatically confirms the payment when it is ready, for example "card".
+     * The payment method that automatically confirms the payment when it is ready.
+     * For example, card.
      * [Optional]
      */
     private String autoConfirm;
 
     /**
-     * Instrument (saved payment source) configuration.
+     * The instrument payment method's details and configuration.
      * [Optional]
      */
     private Instrument instrument;
 
     /**
-     * Klarna payment method configuration.
+     * The Klarna payment method's details and configuration.
      * [Optional]
      */
     private Klarna klarna;
 
     /**
-     * STC Pay payment method configuration.
+     * The stc pay payment method's details and configuration.
      * [Optional]
      */
     private Stcpay stcpay;
 
     /**
-     * Tabby payment method configuration.
+     * The Tabby payment method's details and configuration.
      * [Optional]
      */
     private Tabby tabby;
 
     /**
-     * PayPal payment method configuration.
+     * The PayPal payment method's details and configuration.
      * [Optional]
      */
     private PayPal paypal;
 
     /**
-     * Bizum payment method configuration.
-     * [Optional]
+     * The Bizum payment method's details and configuration.
+     * [Optional] readOnly
      */
     private Bizum bizum;
 
     /**
-     * Blik payment method configuration.
+     * The Blik payment method's details and configuration.
      * [Optional]
      */
     private Blik blik;
 
     /**
-     * PayNow payment method configuration.
-     * [Optional]
+     * The PayNow payment method's details and configuration.
+     * [Optional] readOnly
      */
     private PayNow paynow;
 
     /**
-     * QPay payment method configuration.
+     * The QPay payment method's details and configuration.
      * [Optional]
      */
     private Qpay qpay;
 
     /**
-     * EPS payment method configuration.
-     * [Optional]
+     * The EPS payment method's details and configuration.
+     * [Optional] readOnly
      */
     private Eps eps;
 
     /**
-     * iDEAL payment method configuration.
+     * The iDEAL payment method's details and configuration.
      * [Optional]
      */
     private Ideal ideal;
 
     /**
-     * KNET payment method configuration.
+     * The KNET payment method's details and configuration.
      * [Optional]
      */
     private Knet knet;
 
     /**
-     * Bancontact payment method configuration.
+     * The Bancontact payment method's details and configuration.
      * [Optional]
      */
     private Bancontact bancontact;
 
     /**
-     * Benefit payment method configuration.
-     * [Optional]
+     * The Benefit payment method's details and configuration.
+     * [Optional] readOnly
      */
     private Benefit benefit;
 
     /**
-     * Vipps payment method configuration.
-     * [Optional]
+     * The Vipps payment method's details and configuration.
+     * [Optional] readOnly
      */
     private Vipps vipps;
 
     /**
-     * Twint payment method configuration.
-     * [Optional]
+     * The Twint payment method's details and configuration.
+     * [Optional] readOnly
      */
     private Twint twint;
 
     /**
-     * Alipay CN payment method configuration.
+     * The Alipay CN payment method's details and configuration.
      * [Optional]
      */
     private AlipayCn alipayCn;
 
     /**
-     * Alipay HK payment method configuration.
+     * The Alipay HK payment method's details and configuration.
      * [Optional]
      */
     private AlipayHk alipayHk;
 
     /**
-     * GCash payment method configuration.
+     * The GCash payment method's details and configuration.
      * [Optional]
      */
     private GCash gcash;
 
     /**
-     * TNG payment method configuration.
+     * The TNG payment method's details and configuration.
      * [Optional]
      */
     private Tng tng;
 
     /**
-     * Dana payment method configuration.
+     * The Dana payment method's details and configuration.
      * [Optional]
      */
     private Dana dana;
 
     /**
-     * MobilePay payment method configuration.
-     * [Optional]
+     * The MobilePay payment method's details and configuration.
+     * [Optional] readOnly
      */
     private MobilePay mobilepay;
 
     /**
-     * Tamara payment method configuration.
+     * The Tamara payment method's details and configuration.
      * [Optional]
      */
     private Tamara tamara;
 
     /**
-     * MBWay payment method configuration.
-     * [Optional]
+     * The MBWay payment method's details and configuration.
+     * [Optional] readOnly
      */
     private MBWay mbway;
 
     /**
-     * Multibanco payment method configuration.
+     * The Multibanco payment method's details and configuration.
      * [Optional]
      */
     private Multibanco multibanco;
 
     /**
-     * WeChatPay payment method configuration.
-     * [Optional]
+     * The WeChatPay payment method's details and configuration.
+     * [Optional] readOnly
      */
     private WeChatPay wechatpay;
 
     /**
-     * KakaoPay payment method configuration.
+     * The KakaoPay payment method's details and configuration.
      * [Optional]
      */
     private KakaoPay kakaopay;
 
     /**
-     * TrueMoney payment method configuration.
+     * The TrueMoney payment method's details and configuration.
      * [Optional]
      */
     private TrueMoney truemoney;
 
     /**
-     * Octopus payment method configuration.
-     * [Optional]
+     * The Octopus payment method's details and configuration.
+     * [Optional] readOnly
      */
     private Octopus octopus;
 
     /**
-     * P24 (Przelewy24) payment method configuration.
+     * The P24 (Przelewy24) payment method's details and configuration.
      * [Optional]
      */
     private P24 p24;
 
     /**
-     * Alma payment method configuration.
+     * The Alma payment method's details and configuration.
      * [Optional]
      */
     private Alma alma;
 
     /**
-     * Swish payment method configuration.
+     * The Swish payment method's details and configuration.
      * [Optional]
      */
     private Swish swish;
 
     /**
-     * Sequra payment method configuration.
+     * The Sequra payment method's details and configuration.
      * [Optional]
      */
     private Sequra sequra;
 
     /**
-     * ACH (Direct Debit) payment method configuration.
+     * The ACH payment method's details and configuration.
      * [Optional]
      */
     private Ach ach;
 
     /**
-     * SEPA (Direct Debit) payment method configuration.
+     * The SEPA payment method's details and configuration.
      * [Optional]
      */
     private Sepa sepa;
 
     /**
-     * GooglePay payment method configuration.
+     * The Google Pay payment method's details and configuration.
      * [Optional]
      */
     private GooglePay googlepay;
 
     /**
-     * ApplePay payment method configuration.
+     * The Apple Pay payment method's details and configuration.
      * [Optional]
      */
     private ApplePay applepay;
 
     /**
-     * Card payment method configuration.
+     * The Card payment method's details and configuration.
      * [Optional]
      */
     private Card card;
 
     /**
-     * Bacs payment method configuration.
+     * The Bacs payment method's details and configuration.
      * [Optional]
      */
     private Bacs bacs;
@@ -305,22 +306,23 @@ public final class PaymentMethods {
     private CardPresent cardPresent;
 
     /**
-     * Pay by Bank (Open Banking) payment method configuration. Serialized as {@code paybybank}.
+     * The Pay by Bank (Open Banking) payment method's details and configuration.
+     * Serialized as {@code paybybank}.
      * [Optional]
      */
     @SerializedName("paybybank")
     private PayByBank payByBank;
 
     /**
-     * Stablecoin payment method configuration.
+     * The Stablecoin payment method's details and configuration.
      * [Optional]
      */
     private Stablecoin stablecoin;
 
     /**
-     * The Cash App Pay payment method's details and configuration. The wire key is the single
-     * word cashapp, so keep this field name lowercase: the naming policy turns cashApp into
-     * cash_app.
+     * The Cash App payment method's details and configuration.
+     * The wire key is the single word cashapp, so keep this field name lowercase: the naming
+     * policy turns cashApp into cash_app.
      * [Optional]
      */
     private CashApp cashapp;

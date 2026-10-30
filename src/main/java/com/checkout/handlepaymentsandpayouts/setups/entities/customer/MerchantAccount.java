@@ -17,7 +17,7 @@ import java.time.LocalDate;
 public final class MerchantAccount {
 
     /**
-     * The unique identifier of the merchant account.
+     * The merchant's unique identifier for the customer's account.
      * [Optional]
      */
     private String id;
@@ -37,34 +37,35 @@ public final class MerchantAccount {
     private LocalDate lastModified;
 
     /**
-     * Indicates whether this is a returning customer.
+     * Specifies if the customer is a returning customer.
      * [Optional]
      */
     private Boolean returningCustomer;
 
     /**
-     * The date of the customer's first transaction with the merchant.
+     * The date of the customer's first transaction.
      * [Optional]
      * Format: yyyy-MM-dd
      */
     private LocalDate firstTransactionDate;
 
     /**
-     * The date of the customer's most recent transaction with the merchant.
+     * The date of the customer's most recent transaction.
      * [Optional]
      * Format: yyyy-MM-dd
      */
     private LocalDate lastTransactionDate;
 
     /**
-     * The total number of orders the customer has placed with the merchant.
+     * The total number of orders made by the customer.
      * [Optional]
      */
     private Integer totalOrderCount;
 
     /**
-     * The amount of the customer's last payment with the merchant.
+     * The payment amount of the customer's most recent transaction.
+     * The specification types this as a number (example 55.99); the API currently stores it as an integer.
      * [Optional]
      */
-    private Long lastPaymentAmount;
+    private Double lastPaymentAmount;
 }

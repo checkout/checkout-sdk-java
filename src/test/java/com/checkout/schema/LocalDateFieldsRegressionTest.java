@@ -259,7 +259,7 @@ class LocalDateFieldsRegressionTest {
                 .firstTransactionDate(LocalDate.of(2023, 9, 15))
                 .lastTransactionDate(LocalDate.of(2025, 3, 28))
                 .totalOrderCount(42)
-                .lastPaymentAmount(75000L)
+                .lastPaymentAmount(55.99)
                 .build();
 
         String json = serializer.toJson(original);
@@ -273,7 +273,7 @@ class LocalDateFieldsRegressionTest {
         assertEquals(LocalDate.of(2023, 9, 15), deserialized.getFirstTransactionDate());
         assertEquals(LocalDate.of(2025, 3, 28), deserialized.getLastTransactionDate());
         assertEquals(42, deserialized.getTotalOrderCount());
-        assertEquals(75000L, deserialized.getLastPaymentAmount());
+        assertEquals(Double.valueOf(55.99), deserialized.getLastPaymentAmount());
     }
 
     @Test
@@ -304,7 +304,7 @@ class LocalDateFieldsRegressionTest {
                 "\"last_transaction_date\":\"2025-03-28\"," +
                 "\"returning_customer\":true," +
                 "\"total_order_count\":10," +
-                "\"last_payment_amount\":20000" +
+                "\"last_payment_amount\":55.99" +
                 "}";
 
         MerchantAccount account = serializer.fromJson(json, MerchantAccount.class);
@@ -317,7 +317,7 @@ class LocalDateFieldsRegressionTest {
         assertEquals(LocalDate.of(2025, 3, 28), account.getLastTransactionDate());
         assertEquals(true, account.getReturningCustomer());
         assertEquals(10, account.getTotalOrderCount());
-        assertEquals(20000L, account.getLastPaymentAmount());
+        assertEquals(Double.valueOf(55.99), account.getLastPaymentAmount());
     }
 
     // ── OrderSubMerchant — ALL properties ────────────────────────────────────
