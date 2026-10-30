@@ -5,11 +5,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Configuration of asynchronous retries.
+ */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public final class PaymentRetryRequest {
+
+    /**
+     * Indicates whether asynchronous retries are enabled for the payment.
+     * [Required]
+     */
+    private Boolean enabled;
 
     /**
      * Configuration of asynchronous Dunning retries.
@@ -23,24 +32,27 @@ public final class PaymentRetryRequest {
      */
     private DowntimeRetryRequest downtime;
 
-    // ========================================
-    // Deprecated — use dunning.enabled instead
-    // ========================================
-
     /**
-     * @deprecated Use {@link DunningRetryRequest#enabled} via {@link #dunning} instead.
-     */
-    @Deprecated
-    private Boolean enabled;
-
-    /**
-     * @deprecated Use {@link DunningRetryRequest#maxAttempts} via {@link #dunning} instead.
+     * Not part of the retry object in the API. If set, it is still sent at the top level of retry,
+     * where the API does not read it.
+     * [Optional]
+     *
+     * @deprecated For customer_retry on hosted payments and payment links, use
+     * {@link com.checkout.handlepaymentsandpayouts.flow.entities.CustomerRetry#getMaxAttempts()} instead.
+     * For retry on payments, use {@link DunningRetryRequest#getMaxAttempts()} via {@link #dunning} instead.
+     * This property will be removed in the next major version.
      */
     @Deprecated
     private Integer maxAttempts;
 
     /**
-     * @deprecated Use {@link DunningRetryRequest#endAfterDays} via {@link #dunning} instead.
+     * Not part of the retry object in the API. If set, it is still sent at the top level of retry,
+     * where the API does not read it.
+     * [Optional]
+     *
+     * @deprecated For retry on payments, use {@link DunningRetryRequest#getEndAfterDays()} via {@link #dunning}
+     * instead.
+     * This property will be removed in the next major version.
      */
     @Deprecated
     private Integer endAfterDays;

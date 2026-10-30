@@ -253,7 +253,7 @@ public final class PaymentRequest {
     private List<ProductRequest> items;
 
     /**
-     * The retry configuration for failed payment attempts.
+     * Configuration of asynchronous retries.
      * [Optional]
      */
     private PaymentRetryRequest retry;
