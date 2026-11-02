@@ -13,6 +13,7 @@ import com.checkout.common.Exemption;
 import com.checkout.common.PaymentSourceType;
 import com.checkout.common.Phone;
 import com.checkout.common.Product;
+import com.checkout.handlepaymentsandpayouts.flow.entities.CustomerRetry;
 import com.checkout.instruments.previous.InstrumentCustomerRequest;
 import com.checkout.payments.Applepay;
 import com.checkout.payments.BillingDescriptor;
@@ -36,7 +37,6 @@ import com.checkout.payments.contexts.PaymentContextsRequest;
 import com.checkout.payments.hosted.HostedPaymentRequest;
 import com.checkout.payments.PaymentPurposeType;
 import com.checkout.payments.links.PaymentLinkRequest;
-import com.checkout.payments.request.PaymentRetryRequest;
 import com.checkout.payments.request.source.contexts.PaymentContextsKlarnaSource;
 import com.checkout.payments.request.source.contexts.PaymentContextsPayPalSource;
 import com.checkout.payments.request.source.contexts.PaymentContextsStcpaySource;
@@ -169,7 +169,7 @@ public final class TestHelper {
                 .metadata(Collections.singletonMap("key", "value"))
                 .threeDS(createThreeDS())
                 .risk(RiskRequest.builder().enabled(false).build())
-                .customerRetry(PaymentRetryRequest.builder()
+                .customerRetry(CustomerRetry.builder()
                         .maxAttempts(3)
                         .build())
                 .sender(PaymentInstrumentSender.builder()
@@ -265,7 +265,7 @@ public final class TestHelper {
                 .risk(RiskRequest.builder()
                         .enabled(false)
                         .build())
-                .customerRetry(PaymentRetryRequest.builder()
+                .customerRetry(CustomerRetry.builder()
                         .maxAttempts(2)
                         .build())
                 .sender(PaymentInstrumentSender.builder()

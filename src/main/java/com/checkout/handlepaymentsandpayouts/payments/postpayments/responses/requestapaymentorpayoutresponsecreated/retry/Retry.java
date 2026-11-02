@@ -1,16 +1,14 @@
 package com.checkout.handlepaymentsandpayouts.payments.postpayments.responses.requestapaymentorpayoutresponsecreated.retry;
 
-import lombok.Builder;
-
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
 /**
- * retry
- * Configuration relating to asynchronous retries
+ * Configuration relating to asynchronous retries.
  */
 @Data
 @Builder
@@ -20,17 +18,16 @@ public final class Retry {
 
     /**
      * Indicates whether asynchronous retries are enabled for the payment.
-     * [Optional]
+     * [Required]
      */
     private Boolean enabled;
 
     /**
-     * Default: 6 The maximum number of authorization retry attempts, excluding the initial authorization.
+     * The maximum number of authorization retry attempts, excluding the initial authorization.
+     * Minimum 1, maximum 15. Default: 6.
      * [Optional]
-     * [ 1 .. 15 ]
      */
-    @Builder.Default
-    private Integer maxAttempts = 6;
+    private Integer maxAttempts;
 
     /**
      * A timestamp that details the date on which the retry schedule expires, in ISO 8601 format.

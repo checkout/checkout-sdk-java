@@ -48,7 +48,7 @@ public final class PaymentSessionCreateRequest extends PaymentSessionCreateBase 
     private PaymentMethodConfiguration paymentMethodConfiguration;
 
     /**
-     * Configuration for asynchronous retries.
+     * Configuration for customer retries. When sent, max_attempts is required.
      * [Optional]
      */
     private CustomerRetry customerRetry;
