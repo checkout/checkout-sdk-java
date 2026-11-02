@@ -302,7 +302,7 @@ class PaymentLinkRequestSerializationTest {
     // The overload under test is deprecated on purpose (kept for compatibility), so calling it is the test.
     // The PaymentRetryRequest argument is built from JSON to avoid its deprecated builder methods.
     @Test
-    @SuppressWarnings("deprecation")
+    @Deprecated
     void shouldSerializeDeprecatedCustomerRetryOverloadLikeCustomerRetryForPaymentLinkRequest() {
         final PaymentRetryRequest legacy = serializer.fromJson("{\"max_attempts\":3}", PaymentRetryRequest.class);
 
@@ -316,7 +316,7 @@ class PaymentLinkRequestSerializationTest {
     }
 
     @Test
-    @SuppressWarnings("deprecation")
+    @Deprecated
     void shouldConvertDeprecatedCustomerRetryOverloadEdgeCasesForPaymentLinkRequest() {
         final PaymentRetryRequest withoutMaxAttempts = serializer.fromJson("{\"enabled\":true}", PaymentRetryRequest.class);
 
@@ -326,7 +326,7 @@ class PaymentLinkRequestSerializationTest {
     }
 
     @Test
-    @SuppressWarnings("deprecation")
+    @Deprecated
     void shouldSetCustomerRetryThroughBothSettersForPaymentLinkRequest() {
         final PaymentRetryRequest legacy = serializer.fromJson("{\"max_attempts\":2}", PaymentRetryRequest.class);
 

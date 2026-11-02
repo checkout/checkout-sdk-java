@@ -259,7 +259,13 @@ public final class PaymentLinkRequest {
         this.customerRetry = toCustomerRetry(customerRetry);
     }
 
-    @SuppressWarnings("deprecation")
+    /**
+     * Converts the deprecated {@link PaymentRetryRequest} overloads to {@link CustomerRetry}.
+     *
+     * @deprecated Only used by the deprecated {@link PaymentRetryRequest} overloads; removed with them in the next
+     * major version.
+     */
+    @Deprecated
     private static CustomerRetry toCustomerRetry(final PaymentRetryRequest customerRetry) {
         if (customerRetry == null) {
             return null;
