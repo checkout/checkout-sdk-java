@@ -98,6 +98,10 @@ class ApacheHttpClientTransportRequestUrlTest {
     void shouldResolveUnderCustomBaseUris() {
         assertEquals("https://proxy.example/checkout/payments/pay_123",
                 transport(URI.create("https://proxy.example/checkout/")).getRequestUrl(VALID_PATH));
+        assertEquals("https://proxy.example/payments/pay_123",
+                transport(URI.create("https://proxy.example")).getRequestUrl(VALID_PATH));
+        assertEquals("https://proxy.example:8443/payments/pay_123",
+                transport(URI.create("https://proxy.example:8443")).getRequestUrl(VALID_PATH));
         // Without a trailing slash, URI.resolve replaces the last base segment, as it always has.
         assertEquals("https://proxy.example/payments/pay_123",
                 transport(URI.create("https://proxy.example/checkout")).getRequestUrl(VALID_PATH));

@@ -45,10 +45,21 @@ public interface ApiClient {
      * @param authorization the authorization to send
      * @param filter       the object whose fields become the query parameters; null fields are left out
      * @param responseType the response type, for example a {@code TypeToken} of {@code ItemsResponse<T>}
+     * The default implementation keeps custom {@code ApiClient} implementations compiling: it delegates to
+     * {@link #queryAsync(String, SdkAuthorization, Object, Class)} when the type is a plain class, and
+     * implementations that need generic response types override it.
+     *
      * @param <T>          the response type
      * @return the response
+     * @throws UnsupportedOperationException if the type is generic and the implementation does not override this method
      */
-    <T extends HttpMetadata> CompletableFuture<T> queryAsync(String path, SdkAuthorization authorization, Object filter, Type responseType);
+    @SuppressWarnings("unchecked")
+    default <T extends HttpMetadata> CompletableFuture<T> queryAsync(String path, SdkAuthorization authorization, Object filter, Type responseType) {
+        if (responseType instanceof Class) {
+            return queryAsync(path, authorization, filter, (Class<T>) responseType);
+        }
+        throw new UnsupportedOperationException("queryAsync with a generic response type is not supported by " + getClass().getName());
+    }
 
     CompletableFuture<ContentResponse> queryCsvContentAsync(String path, SdkAuthorization authorization, Object filter, String targetFile);
 
@@ -92,10 +103,21 @@ public interface ApiClient {
      * @param authorization the authorization to send
      * @param filter       the object whose fields become the query parameters; null fields are left out
      * @param responseType the response type, for example a {@code TypeToken} of {@code ItemsResponse<T>}
+     * The default implementation keeps custom {@code ApiClient} implementations compiling: it delegates to
+     * {@link #query(String, SdkAuthorization, Object, Class)} when the type is a plain class, and
+     * implementations that need generic response types override it.
+     *
      * @param <T>          the response type
      * @return the response
+     * @throws UnsupportedOperationException if the type is generic and the implementation does not override this method
      */
-    <T extends HttpMetadata> T query(String path, SdkAuthorization authorization, Object filter, Type responseType);
+    @SuppressWarnings("unchecked")
+    default <T extends HttpMetadata> T query(String path, SdkAuthorization authorization, Object filter, Type responseType) {
+        if (responseType instanceof Class) {
+            return query(path, authorization, filter, (Class<T>) responseType);
+        }
+        throw new UnsupportedOperationException("query with a generic response type is not supported by " + getClass().getName());
+    }
 
     ContentResponse queryCsvContent(String path, SdkAuthorization authorization, Object filter, String targetFile);
 

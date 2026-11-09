@@ -81,7 +81,7 @@ class ApacheHttpClientTransport implements Transport {
             final CheckoutConfiguration configuration
     ) {
         CheckoutUtils.validateParams("baseUri", baseUri, "httpClientBuilder", httpClientBuilder, "executor", executor);
-        this.baseUri = baseUri;
+        this.baseUri = withRootPath(baseUri);
         this.httpClient = httpClientBuilder
                 .setRedirectStrategy(new CustomAwsRedirectStrategy())
                 .build();
@@ -403,6 +403,15 @@ class ApacheHttpClientTransport implements Transport {
         } catch (final MalformedURLException e) {
             throw new CheckoutException(e);
         }
+    }
+
+    /**
+     * A base URI with no path ("https://api.example.com") resolves "payments" to the host
+     * "api.example.compayments"; the root path "/" keeps the request on the configured host.
+     */
+    private static URI withRootPath(final URI baseUri) {
+        final String path = baseUri.getRawPath();
+        return baseUri.isAbsolute() && !baseUri.isOpaque() && (path == null || path.isEmpty()) ? baseUri.resolve("/") : baseUri;
     }
 
     private static void validateRequestPath(final String path) {
