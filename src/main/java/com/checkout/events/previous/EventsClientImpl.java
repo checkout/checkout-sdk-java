@@ -105,7 +105,7 @@ public class EventsClientImpl extends AbstractClient implements EventsClient {
     private StringBuilder buildEventTypesPath(final String version) {
         final StringBuilder path = new StringBuilder(EVENT_TYPES_PATH);
         if (version != null) {
-            path.append("?version=").append(version);
+            path.append("?version=").append(encode(version));
         }
         return path;
     }

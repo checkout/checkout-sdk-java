@@ -12,7 +12,8 @@ import static com.checkout.common.CheckoutUtils.validateParams;
 public class BacsClientImpl extends AbstractClient implements BacsClient {
 
     private static final String APMS = "apms";
-    private static final String BACS_NOTIFICATIONS = "bacs/notifications";
+    private static final String BACS = "bacs";
+    private static final String NOTIFICATIONS = "notifications";
     private static final String BACS_NOTIFICATION_REQUEST = "bacsNotificationRequest";
 
     /**
@@ -26,14 +27,14 @@ public class BacsClientImpl extends AbstractClient implements BacsClient {
     @Override
     public CompletableFuture<BacsNotificationResponse> sendNotification(final BacsNotificationRequest bacsNotificationRequest) {
         validateParams(BACS_NOTIFICATION_REQUEST, bacsNotificationRequest);
-        return apiClient.postAsync(buildPath(APMS, BACS_NOTIFICATIONS), sdkAuthorization(), BacsNotificationResponse.class, bacsNotificationRequest, null);
+        return apiClient.postAsync(buildPath(APMS, BACS, NOTIFICATIONS), sdkAuthorization(), BacsNotificationResponse.class, bacsNotificationRequest, null);
     }
 
     // Synchronous methods
     @Override
     public BacsNotificationResponse sendNotificationSync(final BacsNotificationRequest bacsNotificationRequest) {
         validateParams(BACS_NOTIFICATION_REQUEST, bacsNotificationRequest);
-        return apiClient.post(buildPath(APMS, BACS_NOTIFICATIONS), sdkAuthorization(), BacsNotificationResponse.class, bacsNotificationRequest, null);
+        return apiClient.post(buildPath(APMS, BACS, NOTIFICATIONS), sdkAuthorization(), BacsNotificationResponse.class, bacsNotificationRequest, null);
     }
 
 }

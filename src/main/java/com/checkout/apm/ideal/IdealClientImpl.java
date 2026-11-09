@@ -9,7 +9,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class IdealClientImpl extends AbstractClient implements IdealClient {
 
-    private static final String IDEAL_EXTERNAL_PATH = "/ideal-external";
+    private static final String IDEAL_EXTERNAL_PATH = "ideal-external";
     private static final String ISSUERS = "issuers";
 
     public IdealClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {

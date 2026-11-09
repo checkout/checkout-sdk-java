@@ -26,7 +26,8 @@ import java.util.concurrent.CompletableFuture;
 public class InstrumentsClientImpl extends AbstractClient implements InstrumentsClient {
 
     private static final String INSTRUMENTS_PATH = "instruments";
-    private static final String VALIDATION_PATH = "validation/bank-accounts";
+    private static final String VALIDATION_PATH = "validation";
+    private static final String BANK_ACCOUNTS_PATH = "bank-accounts";
     private static final String REVOKE_PATH = "revoke";
 
     private static final Type CREATE_TYPE = TypeToken.get(CreateInstrumentResponse.class).getType();
@@ -70,7 +71,7 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
     @Override
     public CompletableFuture<BankAccountFieldResponse> getBankAccountFieldFormatting(final CountryCode country, final Currency currency, final BankAccountFieldQuery query) {
         validateBankAccountFieldParams(country, currency, query);
-        return apiClient.queryAsync(buildPath(VALIDATION_PATH, country.name(), currency.name()), sdkAuthorization(SdkAuthorizationType.OAUTH), query, BankAccountFieldResponse.class);
+        return apiClient.queryAsync(buildPath(VALIDATION_PATH, BANK_ACCOUNTS_PATH, country.name(), currency.name()), sdkAuthorization(SdkAuthorizationType.OAUTH), query, BankAccountFieldResponse.class);
     }
 
     // Synchronous methods
@@ -107,7 +108,7 @@ public class InstrumentsClientImpl extends AbstractClient implements Instruments
     @Override
     public BankAccountFieldResponse getBankAccountFieldFormattingSync(final CountryCode country, final Currency currency, final BankAccountFieldQuery query) {
         validateBankAccountFieldParams(country, currency, query);
-        return apiClient.query(buildPath(VALIDATION_PATH, country.name(), currency.name()), sdkAuthorization(SdkAuthorizationType.OAUTH), query, BankAccountFieldResponse.class);
+        return apiClient.query(buildPath(VALIDATION_PATH, BANK_ACCOUNTS_PATH, country.name(), currency.name()), sdkAuthorization(SdkAuthorizationType.OAUTH), query, BankAccountFieldResponse.class);
     }
 
     // Common methods

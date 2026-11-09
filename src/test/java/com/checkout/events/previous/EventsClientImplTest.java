@@ -81,6 +81,19 @@ class EventsClientImplTest {
     }
 
     @Test
+    void shouldRetrieveAllEventTypes_encodesVersion() throws ExecutionException, InterruptedException {
+        final ItemsResponse response = createMockItemsResponse();
+
+        createMockSdkCredentials();
+        when(apiClient.getAsync("event-types?version=v2%26x%3D1%23y", authorization, EVENT_TYPES_TYPE))
+                .thenReturn(CompletableFuture.completedFuture(response));
+
+        final CompletableFuture<ItemsResponse<EventTypes>> eventTypes = eventsClient.retrieveAllEventTypes("v2&x=1#y");
+
+        validateItemsResponse(response, eventTypes.get());
+    }
+
+    @Test
     void shouldRetrieveEvents() throws ExecutionException, InterruptedException {
         final RetrieveEventsRequest retrieveEventsRequest = createMockRetrieveEventsRequest();
         final EventsPageResponse eventsPageResponse = createMockEventsPageResponse();

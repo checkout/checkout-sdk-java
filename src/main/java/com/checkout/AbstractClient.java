@@ -2,6 +2,8 @@ package com.checkout;
 
 import static com.checkout.common.CheckoutUtils.validateParams;
 
+import java.nio.charset.StandardCharsets;
+
 public abstract class AbstractClient {
 
     protected final ApiClient apiClient;
@@ -25,8 +27,58 @@ public abstract class AbstractClient {
         return configuration.getSdkCredentials().getAuthorization(authorizationType);
     }
 
+    private static final char[] HEX = "0123456789ABCDEF".toCharArray();
+
+    /**
+     * Joins the parameters into a request path, percent-encoding each one as exactly one segment. A
+     * prefix of several segments must be passed as separate parameters.
+     *
+     * @param pathParams the path segments, in order
+     * @return the request path, relative to the base URI
+     * @throws CheckoutArgumentException if a parameter is null, empty, "." or ".."
+     */
     protected static String buildPath(final String... pathParams) {
-        return String.join("/", pathParams);
+        final StringBuilder path = new StringBuilder();
+        for (final String pathParam : pathParams) {
+            if (pathParam == null || pathParam.isEmpty() || ".".equals(pathParam) || "..".equals(pathParam)) {
+                throw new CheckoutArgumentException("Invalid path parameter: it must not be null, empty, '.' or '..'");
+            }
+            if (path.length() > 0) {
+                path.append('/');
+            }
+            path.append(encode(pathParam));
+        }
+        return path.toString();
+    }
+
+    /**
+     * Percent-encodes a value as UTF-8, keeping only the RFC 3986 unreserved characters
+     * (letters, digits, "-", ".", "_" and "~"), so it can be placed in a path segment or a query value.
+     *
+     * @param value the value to encode
+     * @return the encoded value
+     * @throws CheckoutArgumentException if the value is not valid UTF-16 text (an unpaired surrogate)
+     */
+    protected static String encode(final String value) {
+        for (int i = 0; i < value.length(); i++) {
+            final char c = value.charAt(i);
+            if (Character.isHighSurrogate(c) && i + 1 < value.length() && Character.isLowSurrogate(value.charAt(i + 1))) {
+                i++;
+            } else if (Character.isSurrogate(c)) {
+                throw new CheckoutArgumentException("Invalid parameter: it must be valid text");
+            }
+        }
+        final StringBuilder encoded = new StringBuilder(value.length());
+        for (final byte b : value.getBytes(StandardCharsets.UTF_8)) {
+            final int c = b & 0xFF;
+            if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')
+                    || c == '-' || c == '.' || c == '_' || c == '~') {
+                encoded.append((char) c);
+            } else {
+                encoded.append('%').append(HEX[c >> 4]).append(HEX[c & 0x0F]);
+            }
+        }
+        return encoded.toString();
     }
 
     protected boolean isSandbox() {

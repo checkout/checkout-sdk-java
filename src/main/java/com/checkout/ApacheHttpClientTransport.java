@@ -62,6 +62,7 @@ class ApacheHttpClientTransport implements Transport {
     private static final String FILE = "file";
     private static final String PURPOSE = "purpose";
     private static final String PATH = "path";
+    private static final String INVALID_REQUEST_PATH = "Invalid request path: a path parameter is empty, '.' or '..'";
 
     private final URI baseUri;
     private final CloseableHttpClient httpClient;
@@ -382,10 +383,28 @@ class ApacheHttpClientTransport implements Transport {
     }
 
     private String getRequestUrl(final String path) {
+        validateRequestPath(path);
         try {
             return baseUri.resolve(path).toURL().toString();
         } catch (final MalformedURLException e) {
             throw new CheckoutException(e);
+        }
+    }
+
+    /**
+     * Refuses a relative request path that, before any query, is empty, starts with "/", has an empty,
+     * "." or ".." segment, or contains a "#".
+     */
+    private static void validateRequestPath(final String path) {
+        if (path == null || path.indexOf('#') >= 0) {
+            throw new CheckoutArgumentException(INVALID_REQUEST_PATH);
+        }
+        final int query = path.indexOf('?');
+        final String pathOnly = query >= 0 ? path.substring(0, query) : path;
+        for (final String segment : pathOnly.split("/", -1)) {
+            if (segment.isEmpty() || ".".equals(segment) || "..".equals(segment)) {
+                throw new CheckoutArgumentException(INVALID_REQUEST_PATH);
+            }
         }
     }
 }
