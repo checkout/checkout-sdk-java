@@ -180,6 +180,14 @@ public class ApiClientImpl implements ApiClient {
                                                                     final SdkAuthorization authorization,
                                                                     final Object filter,
                                                                     final Class<T> responseType) {
+        return queryAsync(path, authorization, filter, (Type) responseType);
+    }
+
+    @Override
+    public <T extends HttpMetadata> CompletableFuture<T> queryAsync(final String path,
+                                                                    final SdkAuthorization authorization,
+                                                                    final Object filter,
+                                                                    final Type responseType) {
         validateParams(PATH, path, AUTHORIZATION, authorization, "filter", filter);
         return executeAsyncOrSync(
                 () -> query(path, authorization, filter, responseType),
@@ -436,6 +444,14 @@ public class ApiClientImpl implements ApiClient {
                                             final SdkAuthorization authorization,
                                             final Object filter,
                                             final Class<T> responseType) {
+        return query(path, authorization, filter, (Type) responseType);
+    }
+
+    @Override
+    public <T extends HttpMetadata> T query(final String path,
+                                            final SdkAuthorization authorization,
+                                            final Object filter,
+                                            final Type responseType) {
         validateParams(PATH, path, AUTHORIZATION, authorization, "filter", filter);
         final Map<String, String> params = serializer.fromJson(serializer.toJson(filter),
                 new TypeToken<Map<String, String>>() {

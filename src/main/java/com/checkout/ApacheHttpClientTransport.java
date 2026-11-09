@@ -62,7 +62,7 @@ class ApacheHttpClientTransport implements Transport {
     private static final String FILE = "file";
     private static final String PURPOSE = "purpose";
     private static final String PATH = "path";
-    private static final String INVALID_REQUEST_PATH = "Invalid request path: a path parameter is empty, '.' or '..'";
+    private static final String INVALID_REQUEST_PATH = "Invalid request path";
 
     private final URI baseUri;
     private final CloseableHttpClient httpClient;
@@ -382,29 +382,60 @@ class ApacheHttpClientTransport implements Transport {
         return request;
     }
 
-    private String getRequestUrl(final String path) {
+    /**
+     * Resolves a request path against the base URI. The path must be relative and made of non-empty
+     * segments, none of them "." or ".." (also when percent-encoded or followed by ";"), with no "?" or
+     * "#": query parameters are added separately. The resolved URL must keep the scheme, host, port and
+     * base path of the base URI.
+     *
+     * @param path the request path, as built by {@code AbstractClient.buildPath}
+     * @return the absolute request URL
+     * @throws CheckoutArgumentException if the path is invalid or resolves outside the base URI
+     */
+    String getRequestUrl(final String path) {
         validateRequestPath(path);
+        final URI resolved = baseUri.resolve(path);
+        if (!isUnderBaseUri(resolved)) {
+            throw new CheckoutArgumentException(INVALID_REQUEST_PATH);
+        }
         try {
-            return baseUri.resolve(path).toURL().toString();
+            return resolved.toURL().toString();
         } catch (final MalformedURLException e) {
             throw new CheckoutException(e);
         }
     }
 
-    /**
-     * Refuses a relative request path that, before any query, is empty, starts with "/", has an empty,
-     * "." or ".." segment, or contains a "#".
-     */
     private static void validateRequestPath(final String path) {
-        if (path == null || path.indexOf('#') >= 0) {
+        if (path == null || path.isEmpty() || path.indexOf('?') >= 0 || path.indexOf('#') >= 0) {
             throw new CheckoutArgumentException(INVALID_REQUEST_PATH);
         }
-        final int query = path.indexOf('?');
-        final String pathOnly = query >= 0 ? path.substring(0, query) : path;
-        for (final String segment : pathOnly.split("/", -1)) {
-            if (segment.isEmpty() || ".".equals(segment) || "..".equals(segment)) {
+        for (final String segment : path.split("/", -1)) {
+            if (isEmptyOrDotSegment(segment)) {
                 throw new CheckoutArgumentException(INVALID_REQUEST_PATH);
             }
         }
+    }
+
+    private static boolean isEmptyOrDotSegment(final String segment) {
+        final int parameters = segment.indexOf(';');
+        final String name = (parameters >= 0 ? segment.substring(0, parameters) : segment).replaceAll("(?i)%2e", ".");
+        return name.isEmpty() || ".".equals(name) || "..".equals(name);
+    }
+
+    /**
+     * True when the URL has the scheme, host and port of the base URI and a path under the base URI's
+     * directory, the part of its path that {@link URI#resolve(String)} keeps.
+     */
+    private boolean isUnderBaseUri(final URI resolved) {
+        final String basePath = baseUri.getRawPath() == null ? "" : baseUri.getRawPath();
+        final String baseDirectory = basePath.substring(0, basePath.lastIndexOf('/') + 1);
+        return baseUri.getScheme().equalsIgnoreCase(resolved.getScheme())
+                && baseUri.getHost() != null
+                && baseUri.getHost().equalsIgnoreCase(resolved.getHost())
+                && baseUri.getPort() == resolved.getPort()
+                && resolved.getRawPath() != null
+                && resolved.getRawPath().startsWith(baseDirectory)
+                && resolved.getRawQuery() == null
+                && resolved.getRawFragment() == null;
     }
 }

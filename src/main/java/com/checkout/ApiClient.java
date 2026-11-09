@@ -38,6 +38,18 @@ public interface ApiClient {
 
     <T extends HttpMetadata> CompletableFuture<T> queryAsync(String path, SdkAuthorization authorization, Object filter, Class<T> responseType);
 
+    /**
+     * Sends a GET request with the filter's fields as query parameters, for a generic response type.
+     *
+     * @param path         the request path, relative to the base URI
+     * @param authorization the authorization to send
+     * @param filter       the object whose fields become the query parameters; null fields are left out
+     * @param responseType the response type, for example a {@code TypeToken} of {@code ItemsResponse<T>}
+     * @param <T>          the response type
+     * @return the response
+     */
+    <T extends HttpMetadata> CompletableFuture<T> queryAsync(String path, SdkAuthorization authorization, Object filter, Type responseType);
+
     CompletableFuture<ContentResponse> queryCsvContentAsync(String path, SdkAuthorization authorization, Object filter, String targetFile);
 
     <T extends HttpMetadata> CompletableFuture<T> submitFileAsync(String path, SdkAuthorization authorization, AbstractFileRequest request, Class<T> responseType);
@@ -72,6 +84,18 @@ public interface ApiClient {
     HttpMetadata post(String path, SdkAuthorization authorization, Map<Integer, Class<? extends HttpMetadata>> resultTypeMappings, Object request, String idempotencyKey);
 
     <T extends HttpMetadata> T query(String path, SdkAuthorization authorization, Object filter, Class<T> responseType);
+
+    /**
+     * Synchronous version of {@link #queryAsync(String, SdkAuthorization, Object, Type)}.
+     *
+     * @param path         the request path, relative to the base URI
+     * @param authorization the authorization to send
+     * @param filter       the object whose fields become the query parameters; null fields are left out
+     * @param responseType the response type, for example a {@code TypeToken} of {@code ItemsResponse<T>}
+     * @param <T>          the response type
+     * @return the response
+     */
+    <T extends HttpMetadata> T query(String path, SdkAuthorization authorization, Object filter, Type responseType);
 
     ContentResponse queryCsvContent(String path, SdkAuthorization authorization, Object filter, String targetFile);
 

@@ -13,6 +13,8 @@ import com.checkout.ItemsResponse;
 import com.checkout.SdkAuthorizationType;
 import com.google.gson.reflect.TypeToken;
 
+import lombok.Value;
+
 public class EventsClientImpl extends AbstractClient implements EventsClient {
 
     private static final String EVENT_TYPES_PATH = "event-types";
@@ -30,8 +32,7 @@ public class EventsClientImpl extends AbstractClient implements EventsClient {
 
     @Override
     public CompletableFuture<ItemsResponse<EventTypes>> retrieveAllEventTypes(final String version) {
-        final StringBuilder path = buildEventTypesPath(version);
-        return apiClient.getAsync(path.toString(), sdkAuthorization(), EVENT_TYPES_TYPE);
+        return apiClient.queryAsync(EVENT_TYPES_PATH, sdkAuthorization(), new EventTypesQuery(version), EVENT_TYPES_TYPE);
     }
 
     @Override
@@ -67,8 +68,7 @@ public class EventsClientImpl extends AbstractClient implements EventsClient {
     // Synchronous methods
     @Override
     public ItemsResponse<EventTypes> retrieveAllEventTypesSync(final String version) {
-        final StringBuilder path = buildEventTypesPath(version);
-        return apiClient.get(path.toString(), sdkAuthorization(), EVENT_TYPES_TYPE);
+        return apiClient.query(EVENT_TYPES_PATH, sdkAuthorization(), new EventTypesQuery(version), EVENT_TYPES_TYPE);
     }
 
     @Override
@@ -102,12 +102,12 @@ public class EventsClientImpl extends AbstractClient implements EventsClient {
     }
 
     // Common methods
-    private StringBuilder buildEventTypesPath(final String version) {
-        final StringBuilder path = new StringBuilder(EVENT_TYPES_PATH);
-        if (version != null) {
-            path.append("?version=").append(encode(version));
-        }
-        return path;
+    /**
+     * Query of the event types request: {@code version} is sent as a query parameter, and left out when null.
+     */
+    @Value
+    static class EventTypesQuery {
+        String version;
     }
 
     protected void validateRetrieveEventsRequest(final RetrieveEventsRequest retrieveEventsRequest) {

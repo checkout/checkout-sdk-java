@@ -47,7 +47,7 @@ class AbstractClientBuildPathTest {
     @ParameterizedTest
     @NullSource
     @ValueSource(strings = {"", ".", "..", "\ud800", "a\udc00b", "\ud83d"})
-    void shouldRefuseEmptyAndDotPathParameters(final String value) {
+    void shouldRefuseInvalidPathParameters(final String value) {
         assertThrows(CheckoutArgumentException.class, () -> AbstractClient.buildPath("payments", value, "refunds"));
     }
 
