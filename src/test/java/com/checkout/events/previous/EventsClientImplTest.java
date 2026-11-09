@@ -59,7 +59,7 @@ class EventsClientImplTest {
         final ItemsResponse response = createMockItemsResponse();
 
         createMockSdkCredentials();
-        when(apiClient.queryAsync("event-types", authorization, new EventsClientImpl.EventTypesQuery(null), EVENT_TYPES_TYPE))
+        when(apiClient.getAsync("event-types", authorization, EVENT_TYPES_TYPE))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ItemsResponse<EventTypes>> eventTypes = eventsClient.retrieveAllEventTypes(null);
@@ -72,7 +72,7 @@ class EventsClientImplTest {
         final ItemsResponse response = createMockItemsResponse();
 
         createMockSdkCredentials();
-        when(apiClient.queryAsync("event-types", authorization, new EventsClientImpl.EventTypesQuery("v2"), EVENT_TYPES_TYPE))
+        when(apiClient.getAsync("event-types?version=v2", authorization, EVENT_TYPES_TYPE))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ItemsResponse<EventTypes>> eventTypes = eventsClient.retrieveAllEventTypes("v2");
@@ -85,7 +85,7 @@ class EventsClientImplTest {
         final ItemsResponse response = createMockItemsResponse();
 
         createMockSdkCredentials();
-        when(apiClient.queryAsync("event-types", authorization, new EventsClientImpl.EventTypesQuery("v2&x=1#y"), EVENT_TYPES_TYPE))
+        when(apiClient.getAsync("event-types?version=v2%26x%3D1%23y", authorization, EVENT_TYPES_TYPE))
                 .thenReturn(CompletableFuture.completedFuture(response));
 
         final CompletableFuture<ItemsResponse<EventTypes>> eventTypes = eventsClient.retrieveAllEventTypes("v2&x=1#y");
@@ -246,7 +246,7 @@ class EventsClientImplTest {
         final ItemsResponse response = createMockItemsResponse();
 
         createMockSdkCredentials();
-        when(apiClient.query("event-types", authorization, new EventsClientImpl.EventTypesQuery(null), EVENT_TYPES_TYPE))
+        when(apiClient.get("event-types", authorization, EVENT_TYPES_TYPE))
                 .thenReturn(response);
 
         final ItemsResponse<EventTypes> eventTypes = eventsClient.retrieveAllEventTypesSync(null);
@@ -259,7 +259,7 @@ class EventsClientImplTest {
         final ItemsResponse response = createMockItemsResponse();
 
         createMockSdkCredentials();
-        when(apiClient.query("event-types", authorization, new EventsClientImpl.EventTypesQuery("v2"), EVENT_TYPES_TYPE))
+        when(apiClient.get("event-types?version=v2", authorization, EVENT_TYPES_TYPE))
                 .thenReturn(response);
 
         final ItemsResponse<EventTypes> eventTypes = eventsClient.retrieveAllEventTypesSync("v2");

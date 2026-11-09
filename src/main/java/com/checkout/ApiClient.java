@@ -38,29 +38,6 @@ public interface ApiClient {
 
     <T extends HttpMetadata> CompletableFuture<T> queryAsync(String path, SdkAuthorization authorization, Object filter, Class<T> responseType);
 
-    /**
-     * Sends a GET request with the filter's fields as query parameters, for a generic response type.
-     *
-     * @param path         the request path, relative to the base URI
-     * @param authorization the authorization to send
-     * @param filter       the object whose fields become the query parameters; null fields are left out
-     * @param responseType the response type, for example a {@code TypeToken} of {@code ItemsResponse<T>}
-     * The default implementation keeps custom {@code ApiClient} implementations compiling: it delegates to
-     * {@link #queryAsync(String, SdkAuthorization, Object, Class)} when the type is a plain class, and
-     * implementations that need generic response types override it.
-     *
-     * @param <T>          the response type
-     * @return the response
-     * @throws UnsupportedOperationException if the type is generic and the implementation does not override this method
-     */
-    @SuppressWarnings("unchecked")
-    default <T extends HttpMetadata> CompletableFuture<T> queryAsync(String path, SdkAuthorization authorization, Object filter, Type responseType) {
-        if (responseType instanceof Class) {
-            return queryAsync(path, authorization, filter, (Class<T>) responseType);
-        }
-        throw new UnsupportedOperationException("queryAsync with a generic response type is not supported by " + getClass().getName());
-    }
-
     CompletableFuture<ContentResponse> queryCsvContentAsync(String path, SdkAuthorization authorization, Object filter, String targetFile);
 
     <T extends HttpMetadata> CompletableFuture<T> submitFileAsync(String path, SdkAuthorization authorization, AbstractFileRequest request, Class<T> responseType);
@@ -95,29 +72,6 @@ public interface ApiClient {
     HttpMetadata post(String path, SdkAuthorization authorization, Map<Integer, Class<? extends HttpMetadata>> resultTypeMappings, Object request, String idempotencyKey);
 
     <T extends HttpMetadata> T query(String path, SdkAuthorization authorization, Object filter, Class<T> responseType);
-
-    /**
-     * Synchronous version of {@link #queryAsync(String, SdkAuthorization, Object, Type)}.
-     *
-     * @param path         the request path, relative to the base URI
-     * @param authorization the authorization to send
-     * @param filter       the object whose fields become the query parameters; null fields are left out
-     * @param responseType the response type, for example a {@code TypeToken} of {@code ItemsResponse<T>}
-     * The default implementation keeps custom {@code ApiClient} implementations compiling: it delegates to
-     * {@link #query(String, SdkAuthorization, Object, Class)} when the type is a plain class, and
-     * implementations that need generic response types override it.
-     *
-     * @param <T>          the response type
-     * @return the response
-     * @throws UnsupportedOperationException if the type is generic and the implementation does not override this method
-     */
-    @SuppressWarnings("unchecked")
-    default <T extends HttpMetadata> T query(String path, SdkAuthorization authorization, Object filter, Type responseType) {
-        if (responseType instanceof Class) {
-            return query(path, authorization, filter, (Class<T>) responseType);
-        }
-        throw new UnsupportedOperationException("query with a generic response type is not supported by " + getClass().getName());
-    }
 
     ContentResponse queryCsvContent(String path, SdkAuthorization authorization, Object filter, String targetFile);
 

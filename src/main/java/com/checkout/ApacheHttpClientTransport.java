@@ -41,6 +41,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.retry.Retry;
@@ -63,6 +64,7 @@ class ApacheHttpClientTransport implements Transport {
     private static final String PURPOSE = "purpose";
     private static final String PATH = "path";
     private static final String INVALID_REQUEST_PATH = "Invalid request path";
+    private static final Pattern ENCODED_QUERY = Pattern.compile("[A-Za-z0-9._~*+%=&-]+");
 
     private final URI baseUri;
     private final CloseableHttpClient httpClient;
@@ -384,9 +386,10 @@ class ApacheHttpClientTransport implements Transport {
 
     /**
      * Resolves a request path against the base URI. The path must be relative and made of non-empty
-     * segments, none of them "." or ".." (also when percent-encoded or followed by ";"), with no "?" or
-     * "#": query parameters are added separately. The resolved URL must keep the scheme, host, port and
-     * base path of the base URI.
+     * segments, none of them "." or ".." (also when percent-encoded or followed by ";"). It may end with
+     * an already encoded query ("?name=value&amp;..." made only of unreserved characters, "%", "+", "="
+     * and "&amp;"), and never with a "#". The resolved URL must keep the scheme, host, port and base path
+     * of the base URI.
      *
      * @param path the request path, as built by {@code AbstractClient.buildPath}
      * @return the absolute request URL
@@ -415,10 +418,15 @@ class ApacheHttpClientTransport implements Transport {
     }
 
     private static void validateRequestPath(final String path) {
-        if (path == null || path.isEmpty() || path.indexOf('?') >= 0 || path.indexOf('#') >= 0) {
+        if (path == null || path.isEmpty() || path.indexOf('#') >= 0) {
             throw new CheckoutArgumentException(INVALID_REQUEST_PATH);
         }
-        for (final String segment : path.split("/", -1)) {
+        final int queryStart = path.indexOf('?');
+        if (queryStart >= 0 && !ENCODED_QUERY.matcher(path.substring(queryStart + 1)).matches()) {
+            throw new CheckoutArgumentException(INVALID_REQUEST_PATH);
+        }
+        final String pathOnly = queryStart >= 0 ? path.substring(0, queryStart) : path;
+        for (final String segment : pathOnly.split("/", -1)) {
             if (isEmptyOrDotSegment(segment)) {
                 throw new CheckoutArgumentException(INVALID_REQUEST_PATH);
             }
@@ -444,7 +452,6 @@ class ApacheHttpClientTransport implements Transport {
                 && baseUri.getPort() == resolved.getPort()
                 && resolved.getRawPath() != null
                 && resolved.getRawPath().startsWith(baseDirectory)
-                && resolved.getRawQuery() == null
                 && resolved.getRawFragment() == null;
     }
 }

@@ -92,6 +92,8 @@ class ApacheHttpClientTransportRequestUrlTest {
         assertEquals("https://api.sandbox.checkout.com/payments/pay_1%2Frefunds", transport.getRequestUrl("payments/pay_1%2Frefunds"));
         assertEquals("https://api.sandbox.checkout.com/payments/...", transport.getRequestUrl("payments/..."));
         assertEquals("https://api.sandbox.checkout.com/ideal-external/issuers", transport.getRequestUrl("ideal-external/issuers"));
+        assertEquals("https://api.sandbox.checkout.com/event-types?version=v2%26x%3D1%23y",
+                transport.getRequestUrl("event-types?version=v2%26x%3D1%23y"));
     }
 
     @Test
@@ -122,7 +124,11 @@ class ApacheHttpClientTransportRequestUrlTest {
             "/payments/pay_1",
             "//example.com/payments",
             "payments/pay_1/refunds?",
-            "event-types?version=v2",
+            "event-types?version=v2#x",
+            "event-types?version=../x",
+            "event-types?version=a?b",
+            "a?b/../c",
+            "payments/../x?version=v2",
             "payments/pay_1#refunds",
             "https:evil.example/payments",
             "https://evil.example/payments",
