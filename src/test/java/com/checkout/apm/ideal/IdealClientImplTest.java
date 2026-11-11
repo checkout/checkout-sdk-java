@@ -46,9 +46,26 @@ class IdealClientImplTest {
     }
 
     @Test
+    void shouldGetInfo() throws ExecutionException, InterruptedException {
+        final IdealInfo idealInfo = new IdealInfo();
+        when(apiClient.getAsync("ideal-external", authorization, IdealInfo.class))
+                .thenReturn(CompletableFuture.completedFuture(idealInfo));
+
+        assertEquals(idealInfo, idealClient.getInfo().get());
+    }
+
+    @Test
+    void shouldGetInfoSync() {
+        final IdealInfo idealInfo = new IdealInfo();
+        when(apiClient.get("ideal-external", authorization, IdealInfo.class)).thenReturn(idealInfo);
+
+        assertEquals(idealInfo, idealClient.getInfoSync());
+    }
+
+    @Test
     void shouldGetIssuers() throws ExecutionException, InterruptedException {
 
-        when(apiClient.getAsync("/ideal-external/issuers", authorization, IssuerResponse.class))
+        when(apiClient.getAsync("ideal-external/issuers", authorization, IssuerResponse.class))
                 .thenReturn(CompletableFuture.completedFuture(issuerResponse));
 
         final CompletableFuture<IssuerResponse> future = idealClient.getIssuers();
@@ -61,7 +78,7 @@ class IdealClientImplTest {
     @Test
     void shouldGetIssuersSync() throws ExecutionException, InterruptedException {
 
-        when(apiClient.get("/ideal-external/issuers", authorization, IssuerResponse.class))
+        when(apiClient.get("ideal-external/issuers", authorization, IssuerResponse.class))
                 .thenReturn(issuerResponse);
 
         final IssuerResponse response = idealClient.getIssuersSync();

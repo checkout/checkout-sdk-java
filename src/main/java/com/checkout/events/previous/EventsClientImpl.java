@@ -2,7 +2,10 @@ package com.checkout.events.previous;
 
 import static com.checkout.common.CheckoutUtils.validateParams;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 
 import com.checkout.AbstractClient;
@@ -30,8 +33,7 @@ public class EventsClientImpl extends AbstractClient implements EventsClient {
 
     @Override
     public CompletableFuture<ItemsResponse<EventTypes>> retrieveAllEventTypes(final String version) {
-        final StringBuilder path = buildEventTypesPath(version);
-        return apiClient.getAsync(path.toString(), sdkAuthorization(), EVENT_TYPES_TYPE);
+        return apiClient.getAsync(eventTypesPath(version), sdkAuthorization(), EVENT_TYPES_TYPE);
     }
 
     @Override
@@ -67,8 +69,7 @@ public class EventsClientImpl extends AbstractClient implements EventsClient {
     // Synchronous methods
     @Override
     public ItemsResponse<EventTypes> retrieveAllEventTypesSync(final String version) {
-        final StringBuilder path = buildEventTypesPath(version);
-        return apiClient.get(path.toString(), sdkAuthorization(), EVENT_TYPES_TYPE);
+        return apiClient.get(eventTypesPath(version), sdkAuthorization(), EVENT_TYPES_TYPE);
     }
 
     @Override
@@ -102,12 +103,18 @@ public class EventsClientImpl extends AbstractClient implements EventsClient {
     }
 
     // Common methods
-    private StringBuilder buildEventTypesPath(final String version) {
-        final StringBuilder path = new StringBuilder(EVENT_TYPES_PATH);
-        if (version != null) {
-            path.append("?version=").append(version);
+    /**
+     * The event types path, with {@code version} as a form-encoded query parameter when it is set.
+     */
+    private static String eventTypesPath(final String version) {
+        if (version == null) {
+            return EVENT_TYPES_PATH;
         }
-        return path;
+        try {
+            return EVENT_TYPES_PATH + "?version=" + URLEncoder.encode(version, StandardCharsets.UTF_8.name());
+        } catch (final UnsupportedEncodingException e) {
+            throw new IllegalStateException("UTF-8 is always supported", e);
+        }
     }
 
     protected void validateRetrieveEventsRequest(final RetrieveEventsRequest retrieveEventsRequest) {

@@ -17,7 +17,8 @@ import static com.checkout.common.CheckoutUtils.validateParams;
  */
 public class PaymentSetupsClientImpl extends AbstractClient implements PaymentSetupsClient {
 
-    private static final String PAYMENT_SETUPS_PATH = "payments/setups";
+    private static final String PAYMENTS_PATH = "payments";
+    private static final String SETUPS_PATH = "setups";
     private static final String CONFIRM_PATH = "confirm";
 
     public PaymentSetupsClientImpl(final ApiClient apiClient, final CheckoutConfiguration configuration) {
@@ -34,7 +35,7 @@ public class PaymentSetupsClientImpl extends AbstractClient implements PaymentSe
     public CompletableFuture<PaymentSetupsResponse> createPaymentSetup(
             final PaymentSetupsRequest paymentSetupsRequest) {
         validateParams("paymentSetupsRequest", paymentSetupsRequest);
-        return apiClient.postAsync(PAYMENT_SETUPS_PATH, sdkAuthorization(), PaymentSetupsResponse.class,
+        return apiClient.postAsync(buildPath(PAYMENTS_PATH, SETUPS_PATH), sdkAuthorization(), PaymentSetupsResponse.class,
                 paymentSetupsRequest, null);
     }
 
@@ -49,7 +50,7 @@ public class PaymentSetupsClientImpl extends AbstractClient implements PaymentSe
     public CompletableFuture<PaymentSetupsResponse> updatePaymentSetup(final String id,
             final PaymentSetupsRequest paymentSetupsRequest) {
         validateParams("id", id, "paymentSetupsRequest", paymentSetupsRequest);
-        return apiClient.putAsync(buildPath(PAYMENT_SETUPS_PATH, id), sdkAuthorization(), PaymentSetupsResponse.class,
+        return apiClient.putAsync(buildPath(PAYMENTS_PATH, SETUPS_PATH, id), sdkAuthorization(), PaymentSetupsResponse.class,
                 paymentSetupsRequest);
     }
 
@@ -62,7 +63,7 @@ public class PaymentSetupsClientImpl extends AbstractClient implements PaymentSe
     @Override
     public CompletableFuture<PaymentSetupsResponse> getPaymentSetup(final String id) {
         validateParams("id", id);
-        return apiClient.getAsync(buildPath(PAYMENT_SETUPS_PATH, id), sdkAuthorization(), PaymentSetupsResponse.class);
+        return apiClient.getAsync(buildPath(PAYMENTS_PATH, SETUPS_PATH, id), sdkAuthorization(), PaymentSetupsResponse.class);
     }
 
     /**
@@ -76,7 +77,7 @@ public class PaymentSetupsClientImpl extends AbstractClient implements PaymentSe
     public CompletableFuture<PaymentSetupsConfirmResponse> confirmPaymentSetup(final String id,
             final String paymentMethodName) {
         validateParams("id", id, "paymentMethodName", paymentMethodName);
-        return apiClient.postAsync(buildPath(PAYMENT_SETUPS_PATH, id, CONFIRM_PATH, paymentMethodName),
+        return apiClient.postAsync(buildPath(PAYMENTS_PATH, SETUPS_PATH, id, CONFIRM_PATH, paymentMethodName),
                 sdkAuthorization(), PaymentSetupsConfirmResponse.class, null, null);
     }
 }

@@ -110,7 +110,9 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
 
     private static final String RENEW_PATH = "renew";
 
-    private static final String ACCESS_TOKEN_PATH = "access/connect/token";
+    private static final String ACCESS_PATH = "access";
+    private static final String CONNECT_PATH = "connect";
+    private static final String TOKEN_PATH = "token";
     private static final String DISPUTES_PATH = "disputes";
 
     private static final String TRANSACTIONS_PATH = "transactions";
@@ -134,7 +136,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         final UrlEncodedFormEntity form = createFormUrlEncodedContent(cardholderAccessTokenRequest);
 
         return apiClient.postAsync(
-                buildPath(ISSUING_PATH, ACCESS_TOKEN_PATH),
+                buildPath(ISSUING_PATH, ACCESS_PATH, CONNECT_PATH, TOKEN_PATH),
                 sdkAuthorization(),
                 CardholderAccessTokenResponse.class,
                 form,
@@ -727,7 +729,7 @@ public class IssuingClientImpl extends AbstractClient implements IssuingClient {
         UrlEncodedFormEntity form = createFormUrlEncodedContent(cardholderAccessTokenRequest);
         
         return apiClient.post(
-                buildPath(ISSUING_PATH, ACCESS_TOKEN_PATH),
+                buildPath(ISSUING_PATH, ACCESS_PATH, CONNECT_PATH, TOKEN_PATH),
                 sdkAuthorization(),
                 CardholderAccessTokenResponse.class,
                 form,
