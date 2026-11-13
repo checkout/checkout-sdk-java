@@ -8,7 +8,8 @@ public abstract class AbstractClient {
 
     private static final char[] HEX = "0123456789ABCDEF".toCharArray();
     private static final String INVALID_PATH_PARAMETER =
-            "Invalid path parameter: it must be valid text, not null, empty, '.' or '..'";
+            "Invalid path parameter: it must be valid text, not null, empty, '.' or '..', "
+                    + "and must not contain '/', '\\' or ASCII control characters";
 
     protected final ApiClient apiClient;
     protected final CheckoutConfiguration configuration;
@@ -37,8 +38,9 @@ public abstract class AbstractClient {
      *
      * @param pathParams the path segments, in order
      * @return the request path, relative to the base URI
-     * @throws CheckoutArgumentException if a parameter is null, empty, "." or "..", or is not valid
-     *                                   UTF-16 text (an unpaired surrogate)
+     * @throws CheckoutArgumentException if a parameter is null, empty, "." or "..", contains "/", "\\" or
+     *                                   an ASCII control character (U+0000 to U+001F, U+007F), or is not
+     *                                   valid UTF-16 text (an unpaired surrogate)
      */
     protected static String buildPath(final String... pathParams) {
         final StringBuilder path = new StringBuilder();
@@ -53,11 +55,13 @@ public abstract class AbstractClient {
 
     /**
      * Percent-encodes a path parameter as UTF-8, keeping only the RFC 3986 unreserved characters
-     * (letters, digits, "-", ".", "_" and "~"), so the result is exactly one path segment.
+     * (letters, digits, "-", ".", "_" and "~"), so the result is exactly one path segment. "/", "\\" and
+     * ASCII control characters are refused rather than encoded: the API decodes "%2F" and "%5C" back
+     * into separators, so an encoded value could still reach another endpoint.
      */
     private static String encodePathSegment(final String pathParam) {
         if (pathParam == null || pathParam.isEmpty() || ".".equals(pathParam) || "..".equals(pathParam)
-                || hasUnpairedSurrogate(pathParam)) {
+                || hasForbiddenCharacter(pathParam) || hasUnpairedSurrogate(pathParam)) {
             throw new CheckoutArgumentException(INVALID_PATH_PARAMETER);
         }
         final StringBuilder encoded = new StringBuilder(pathParam.length());
@@ -75,6 +79,16 @@ public abstract class AbstractClient {
     private static boolean isUnreserved(final int c) {
         return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')
                 || c == '-' || c == '.' || c == '_' || c == '~';
+    }
+
+    private static boolean hasForbiddenCharacter(final String value) {
+        for (int i = 0; i < value.length(); i++) {
+            final char c = value.charAt(i);
+            if (c == '/' || c == '\\' || c <= 0x1F || c == 0x7F) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean hasUnpairedSurrogate(final String value) {
