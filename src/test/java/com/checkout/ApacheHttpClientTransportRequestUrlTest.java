@@ -89,7 +89,7 @@ class ApacheHttpClientTransportRequestUrlTest {
         final ApacheHttpClientTransport transport = transport(SANDBOX);
 
         assertEquals("https://api.sandbox.checkout.com/payments/pay_123", transport.getRequestUrl(VALID_PATH));
-        assertEquals("https://api.sandbox.checkout.com/payments/pay_1%2Frefunds", transport.getRequestUrl("payments/pay_1%2Frefunds"));
+        assertEquals("https://api.sandbox.checkout.com/payments/pay_1%252Frefunds", transport.getRequestUrl("payments/pay_1%252Frefunds"));
         assertEquals("https://api.sandbox.checkout.com/payments/...", transport.getRequestUrl("payments/..."));
         assertEquals("https://api.sandbox.checkout.com/ideal-external/issuers", transport.getRequestUrl("ideal-external/issuers"));
         assertEquals("https://api.sandbox.checkout.com/event-types?version=v2%26x%3D1%23y",
@@ -107,6 +107,47 @@ class ApacheHttpClientTransportRequestUrlTest {
         // Without a trailing slash, URI.resolve replaces the last base segment, as it always has.
         assertEquals("https://proxy.example/payments/pay_123",
                 transport(URI.create("https://proxy.example/checkout")).getRequestUrl(VALID_PATH));
+    }
+
+    @Test
+    void shouldResolveUnderBaseUrisWithUnderscoreHostsOrUnnormalisedPaths() {
+        assertEquals("https://proxy_host.example/payments/pay_123",
+                transport(URI.create("https://proxy_host.example/")).getRequestUrl(VALID_PATH));
+        assertEquals("http://checkout_proxy:8080/api/payments/pay_123",
+                transport(URI.create("http://checkout_proxy:8080/api/")).getRequestUrl(VALID_PATH));
+        assertEquals("https://proxy.example/b/payments/pay_123",
+                transport(URI.create("https://proxy.example/a/../b/")).getRequestUrl(VALID_PATH));
+        assertEquals("https://proxy.example/payments/pay_123",
+                transport(URI.create("https://proxy.example//")).getRequestUrl(VALID_PATH));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"api.example.com/", "/checkout/", "mailto:x@example.com", "https:///payments/"})
+    void shouldRefuseBaseUrisThatAreNotAbsoluteWithAHost(final String baseUri) {
+        assertThrows(CheckoutArgumentException.class, () -> transport(URI.create(baseUri)));
+    }
+
+    @Test
+    void shouldNotSendTheAuthorizationHeaderWhenFollowingARedirect() {
+        final List<String> targetAuthorization = Collections.synchronizedList(new ArrayList<>());
+        server.createContext("/redirect", exchange -> {
+            exchange.getResponseHeaders().add("Location", "/target");
+            exchange.sendResponseHeaders(307, -1);
+            exchange.close();
+        });
+        server.createContext("/target", exchange -> {
+            targetAuthorization.add(String.valueOf(exchange.getRequestHeaders().getFirst("Authorization")));
+            final byte[] body = "{}".getBytes(StandardCharsets.UTF_8);
+            exchange.getResponseHeaders().add("Content-Type", "application/json");
+            exchange.sendResponseHeaders(200, body.length);
+            try (OutputStream out = exchange.getResponseBody()) {
+                out.write(body);
+            }
+        });
+
+        localTransport().invokeSync(ClientOperation.GET, "redirect", authorization, null, null, Collections.emptyMap());
+
+        assertEquals(Collections.singletonList("null"), targetAuthorization, "the redirect was followed without credentials");
     }
 
     @ParameterizedTest
@@ -127,6 +168,21 @@ class ApacheHttpClientTransportRequestUrlTest {
             "event-types?version=v2#x",
             "event-types?version=../x",
             "event-types?version=a?b",
+            "event-types?version=%zz",
+            "payments/%2F..%2Fworkflows",
+            "payments/a%2fb",
+            "payments/pay_1%2Frefunds",
+            "payments/%5C..%5Cx",
+            "payments/a%00b",
+            "payments/a%0D%0Ab",
+            "payments/a%7Fb",
+            "payments/a%zzb",
+            "payments/a%",
+            "p\\..\\x",
+            "payments/a b",
+            "payments/a:b",
+            "event-types?version=%2",
+            "event-types?version=v2%",
             "a?b/../c",
             "payments/../x?version=v2",
             "payments/pay_1#refunds",
