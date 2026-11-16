@@ -65,7 +65,8 @@ class ApacheHttpClientTransport implements Transport {
     private static final String PATH = "path";
     private static final String INVALID_REQUEST_PATH = "Invalid request path";
     private static final String INVALID_BASE_URI = "Invalid base URI: it must be an absolute http or https URI with a host";
-    // Characters allowed unencoded in a path segment (RFC 3986 unreserved) and, in addition, in the query.
+    // Characters allowed unencoded besides ASCII letters and digits: in a path segment (RFC 3986
+    // unreserved) and in the query string.
     static final String SEGMENT_CHARACTERS = "._~-";
     static final String QUERY_CHARACTERS = "._~-*+=&";
     private static final Pattern ENCODED_DOT = Pattern.compile("%2e", Pattern.CASE_INSENSITIVE);

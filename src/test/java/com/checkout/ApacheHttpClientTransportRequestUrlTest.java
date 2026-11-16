@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
 
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -215,8 +216,9 @@ class ApacheHttpClientTransportRequestUrlTest {
         assertEquals(2, receivedPaths.size(), "no request may reach the server");
     }
 
+    /** The previous patterns threw StackOverflowError on long values like these (5 000 repetitions were enough). */
     @Test
-    void shouldRefuseLongInvalidSegmentsAndQueriesInLinearTime() {
+    void shouldRefuseLongInvalidSegmentsAndQueries() {
         final String longSegment = repeat("%41a", 50_000) + "!";
         final String longQuery = repeat("a=%41&", 50_000) + "!";
         final ApacheHttpClientTransport transport = transport(SANDBOX);
@@ -227,14 +229,15 @@ class ApacheHttpClientTransportRequestUrlTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"pay_123", "a", "%41", "%2e%2E", "A-Z_a.z~0-9", "%ff%00x"})
+    @ValueSource(strings = {"pay_123", "a", "%41", "%2e%2E", "A-Z_a.z~0-9", "%ff%00x", "%AF%af"})
     void shouldAcceptEncodedSegments(final String segment) {
         assertTrue(ApacheHttpClientTransport.isPercentEncoded(segment, SEGMENT_CHARACTERS));
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "%", "%4", "%4G", "a%", "a%4", "%%41", "a b", "a+b", "a*b", "a=b", "a&b", "a;b",
-            "a/b", "a\\b", "a?b", "a#b", "café", "١", "Ａ", "a\u0000b"})
+    @ValueSource(strings = {"", "%", "%4", "%4G", "%G4", "%@0", "a%", "a%4", "%%41", "a b", "a+b", "a*b", "a=b", "a&b",
+            "a;b", "a:b", "a@b", "a[b", "a`b", "a{b", "a/b", "a\\b", "a?b", "a#b", "caf\u00e9", "\u0661", "\uff21",
+            "\ud83d\ude00", "\ud800", "a\u0000b"})
     void shouldRefuseSegmentsThatAreNotEncoded(final String segment) {
         assertFalse(ApacheHttpClientTransport.isPercentEncoded(segment, SEGMENT_CHARACTERS));
     }
@@ -246,33 +249,47 @@ class ApacheHttpClientTransportRequestUrlTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "a=1 b", "a=%2", "a=1;b", "a=1#f", "a=?", "a=/b", "a=café"})
+    @ValueSource(strings = {"", "a=1 b", "a=%2", "a=1;b", "a=1#f", "a=?", "a=/b", "a=caf\u00e9", "a=@", "a=:"})
     void shouldRefuseQueriesThatAreNotEncoded(final String query) {
         assertFalse(ApacheHttpClientTransport.isPercentEncoded(query, QUERY_CHARACTERS));
     }
 
     /**
-     * Differential check against the patterns this validator replaces: same answer on random strings
-     * built from every character class that matters (allowed, "%", hex and non-hex, reserved, non-ASCII).
+     * Exhaustive check against the patterns this validator replaced, which only differ from it on
+     * stack depth: every single char, and every pair of ASCII chars alone, after "%" and between
+     * letters. Covers the range boundaries ("/", ":", "@", "[", "`", "{"), hex boundaries and surrogates.
      */
     @Test
-    void shouldMatchThePreviousPatternsOnRandomInput() {
-        final java.util.regex.Pattern segmentReference = java.util.regex.Pattern.compile("(?:[A-Za-z0-9._~-]|%[0-9A-Fa-f]{2})+");
-        final java.util.regex.Pattern queryReference = java.util.regex.Pattern.compile("(?:[A-Za-z0-9._~*+=&-]|%[0-9A-Fa-f]{2})+");
-        final String alphabet = "aZ09._~-*+=&%%%fFgG/\\?#; é١Ａ\u0000";
-        final java.util.Random random = new java.util.Random(20261116L);
-        for (int run = 0; run < 200_000; run++) {
-            final StringBuilder value = new StringBuilder();
-            final int length = random.nextInt(8);
-            for (int i = 0; i < length; i++) {
-                value.append(alphabet.charAt(random.nextInt(alphabet.length())));
-            }
-            final String candidate = value.toString();
-            assertEquals(segmentReference.matcher(candidate).matches(),
-                    ApacheHttpClientTransport.isPercentEncoded(candidate, SEGMENT_CHARACTERS), "segment: " + candidate);
-            assertEquals(queryReference.matcher(candidate).matches(),
-                    ApacheHttpClientTransport.isPercentEncoded(candidate, QUERY_CHARACTERS), "query: " + candidate);
+    void shouldMatchThePreviousPatternsOnEveryShortInput() {
+        final Pattern segmentReference = Pattern.compile("(?:[A-Za-z0-9._~-]|%[0-9A-Fa-f]{2})+"); // NOSONAR reference only
+        final Pattern queryReference = Pattern.compile("(?:[A-Za-z0-9._~*+=&-]|%[0-9A-Fa-f]{2})+"); // NOSONAR reference only
+        final List<String> inputs = new ArrayList<>();
+        for (int c = 0; c <= Character.MAX_VALUE; c++) {
+            inputs.add(String.valueOf((char) c));
+            inputs.add("%" + (char) c + "0");
+            inputs.add("%0" + (char) c);
         }
+        for (char x = 0; x < 128; x++) {
+            for (char y = 0; y < 128; y++) {
+                inputs.add("" + x + y);
+                inputs.add("%" + x + y);
+                inputs.add("a%" + x + y + "b");
+            }
+        }
+        for (final String candidate : inputs) {
+            assertEquals(segmentReference.matcher(candidate).matches(),
+                    ApacheHttpClientTransport.isPercentEncoded(candidate, SEGMENT_CHARACTERS), () -> "segment: " + escape(candidate));
+            assertEquals(queryReference.matcher(candidate).matches(),
+                    ApacheHttpClientTransport.isPercentEncoded(candidate, QUERY_CHARACTERS), () -> "query: " + escape(candidate));
+        }
+    }
+
+    private static String escape(final String value) {
+        final StringBuilder builder = new StringBuilder();
+        for (final char c : value.toCharArray()) {
+            builder.append(c >= 0x20 && c < 0x7f ? String.valueOf(c) : String.format("\\u%04x", (int) c));
+        }
+        return builder.toString();
     }
 
     private static String repeat(final String value, final int times) {
