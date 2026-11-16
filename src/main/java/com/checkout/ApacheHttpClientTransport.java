@@ -65,9 +65,9 @@ class ApacheHttpClientTransport implements Transport {
     private static final String PATH = "path";
     private static final String INVALID_REQUEST_PATH = "Invalid request path";
     private static final String INVALID_BASE_URI = "Invalid base URI: it must be an absolute http or https URI with a host";
-    private static final Pattern ENCODED_QUERY = Pattern.compile("(?:[A-Za-z0-9._~*+=&-]|%[0-9A-Fa-f]{2})+");
+    private static final Pattern ENCODED_QUERY = Pattern.compile("(?:[A-Za-z0-9._~*+=&-]|%[0-9A-Fa-f]{2})++");
     private static final Pattern ENCODED_DOT = Pattern.compile("%2e", Pattern.CASE_INSENSITIVE);
-    private static final Pattern ENCODED_SEGMENT = Pattern.compile("(?:[A-Za-z0-9._~-]|%[0-9A-Fa-f]{2})+");
+    private static final Pattern ENCODED_SEGMENT = Pattern.compile("(?:[A-Za-z0-9._~-]|%[0-9A-Fa-f]{2})++");
     private static final Pattern ENCODED_SEPARATOR_OR_CONTROL =
             Pattern.compile("%(?:2F|5C|[01][0-9A-F]|7F)", Pattern.CASE_INSENSITIVE);
 

@@ -3,6 +3,7 @@ package com.checkout;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
@@ -13,6 +14,7 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -207,6 +209,25 @@ class ApacheHttpClientTransportRequestUrlTest {
                 () -> transport.invokeSync(operation, DOT_SEGMENT_PATH, authorization, null, null, Collections.emptyMap()));
         assertRefusedAsync(() -> transport.invoke(operation, DOT_SEGMENT_PATH, authorization, null, null, Collections.emptyMap()).join());
         assertEquals(2, receivedPaths.size(), "no request may reach the server");
+    }
+
+    @Test
+    void shouldRefuseLongInvalidSegmentsAndQueriesInLinearTime() {
+        final String longSegment = repeat("%41a", 50_000) + "!";
+        final String longQuery = repeat("a=%41&", 50_000) + "!";
+        final ApacheHttpClientTransport transport = transport(SANDBOX);
+        assertTimeoutPreemptively(Duration.ofSeconds(2), () -> {
+            assertThrows(CheckoutArgumentException.class, () -> transport.getRequestUrl("payments/" + longSegment));
+            assertThrows(CheckoutArgumentException.class, () -> transport.getRequestUrl("payments?" + longQuery));
+        });
+    }
+
+    private static String repeat(final String value, final int times) {
+        final StringBuilder builder = new StringBuilder(value.length() * times);
+        for (int i = 0; i < times; i++) {
+            builder.append(value);
+        }
+        return builder.toString();
     }
 
     @Test
