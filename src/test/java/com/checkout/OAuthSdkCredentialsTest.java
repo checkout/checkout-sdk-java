@@ -1,10 +1,13 @@
 package com.checkout;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpVersion;
+import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicStatusLine;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -36,6 +39,10 @@ class OAuthSdkCredentialsTest {
     private static final HttpClientBuilder DEFAULT_CLIENT_BUILDER = HttpClientBuilder.create();
 
     private static final String BEARER = "Bearer ";
+
+    private static final URI TOKEN_URI = URI.create("https://test.checkout.com/oauth/token");
+
+    private static final StatusLine OK = new BasicStatusLine(HttpVersion.HTTP_1_1, 200, "OK");
 
     @Mock
     private CloseableHttpClient client;
@@ -78,7 +85,7 @@ class OAuthSdkCredentialsTest {
     @Test
     void shouldCreateOAuthSdkCredentials() {
 
-        final SdkCredentials credentials = new OAuthSdkCredentials(DEFAULT_CLIENT_BUILDER, Mockito.mock(URI.class), "client_id", "client_secret", EnumSet.allOf(OAuthScope.class));
+        final SdkCredentials credentials = new OAuthSdkCredentials(DEFAULT_CLIENT_BUILDER, TOKEN_URI, "client_id", "client_secret", EnumSet.allOf(OAuthScope.class));
         assertEquals(DEFAULT_OAUTH, credentials.getPlatformType());
 
     }
@@ -86,7 +93,7 @@ class OAuthSdkCredentialsTest {
     @Test
     void authorization_shouldNotGetWhenTheresAValidAccessToken() {
 
-        final OAuthSdkCredentials credentials = new OAuthSdkCredentials(DEFAULT_CLIENT_BUILDER, Mockito.mock(URI.class), "client_id", "client_secret", EnumSet.allOf(OAuthScope.class));
+        final OAuthSdkCredentials credentials = new OAuthSdkCredentials(DEFAULT_CLIENT_BUILDER, TOKEN_URI, "client_id", "client_secret", EnumSet.allOf(OAuthScope.class));
         credentials.setAccessToken(new OAuthAccessToken("y123", "Bearer", LocalDateTime.now().plusMinutes(5)));
         credentials.setClient(client);
         credentials.setSerializer(serializer);
@@ -114,6 +121,7 @@ class OAuthSdkCredentialsTest {
         when(entity.getContent()).thenReturn(stream);
 
         final CloseableHttpResponse response = Mockito.mock(CloseableHttpResponse.class);
+        when(response.getStatusLine()).thenReturn(OK);
         when(response.getEntity()).thenReturn(entity);
         when(client.execute(Mockito.argThat(req -> req instanceof HttpPost &&
                 Objects.equals(req.getURI().toString(), "https://test.checkout.com/oauth/token"))))
@@ -154,6 +162,7 @@ class OAuthSdkCredentialsTest {
         when(entity.getContent()).thenReturn(stream);
 
         final CloseableHttpResponse response = Mockito.mock(CloseableHttpResponse.class);
+        when(response.getStatusLine()).thenReturn(OK);
         when(response.getEntity()).thenReturn(entity);
         when(client.execute(any(HttpPost.class))).thenReturn(response);
 
@@ -187,12 +196,13 @@ class OAuthSdkCredentialsTest {
         when(entity.getContent()).thenReturn(stream);
 
         final CloseableHttpResponse response = Mockito.mock(CloseableHttpResponse.class);
+        when(response.getStatusLine()).thenReturn(OK);
         when(response.getEntity()).thenReturn(entity);
         when(client.execute(any(HttpPost.class))).thenReturn(response);
 
         final OAuthSdkCredentials credentials = new OAuthSdkCredentials(
                 DEFAULT_CLIENT_BUILDER,
-                URI.create("http://test.checkout.com/oauth/token"),
+                URI.create("https://test.checkout.com/oauth/token"),
                 "client_id",
                 "client_secret",
                 EnumSet.allOf(OAuthScope.class));
@@ -200,11 +210,11 @@ class OAuthSdkCredentialsTest {
         credentials.setClient(client);
 
         CheckoutException exception = assertThrows(
-                CheckoutException.class,
+                CheckoutAuthorizationException.class,
                 () -> credentials.getAuthorization(SdkAuthorizationType.PUBLIC_KEY_OR_OAUTH)
         );
 
-        assertEquals("Invalid OAuth response: {}", exception.getMessage());
+        assertEquals("OAuth token response is invalid", exception.getMessage());
     }
 
     @Test
@@ -218,6 +228,7 @@ class OAuthSdkCredentialsTest {
         when(entity.getContent()).thenReturn(stream);
 
         final CloseableHttpResponse response = Mockito.mock(CloseableHttpResponse.class);
+        when(response.getStatusLine()).thenReturn(OK);
         when(response.getEntity()).thenReturn(entity);
         when(client.execute(any(HttpPost.class))).thenReturn(response);
 
@@ -231,12 +242,11 @@ class OAuthSdkCredentialsTest {
         credentials.setClient(client);
 
         CheckoutException exception = assertThrows(
-                CheckoutException.class,
+                CheckoutAuthorizationException.class,
                 () -> credentials.getAuthorization(SdkAuthorizationType.PUBLIC_KEY_OR_OAUTH)
         );
 
-        assertEquals("Invalid OAuth response: { \"access_token\": null, \"token_type\": \"Bearer\", \"expires_in\": 3600 }",
-                exception.getMessage());
+        assertEquals("OAuth token response is invalid", exception.getMessage());
     }
 
     @Test
@@ -247,6 +257,7 @@ class OAuthSdkCredentialsTest {
         when(entity.getContent()).thenReturn(stream);
 
         final CloseableHttpResponse response = Mockito.mock(CloseableHttpResponse.class);
+        when(response.getStatusLine()).thenReturn(OK);
         when(response.getEntity()).thenReturn(entity);
         when(client.execute(any(HttpPost.class))).thenReturn(response);
 
@@ -260,7 +271,7 @@ class OAuthSdkCredentialsTest {
         credentials.setClient(client);
 
         CheckoutException exception = assertThrows(
-                CheckoutException.class,
+                CheckoutAuthorizationException.class,
                 () -> credentials.getAuthorization(SdkAuthorizationType.PUBLIC_KEY_OR_OAUTH)
         );
 

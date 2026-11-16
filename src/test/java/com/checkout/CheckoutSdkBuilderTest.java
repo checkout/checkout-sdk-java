@@ -2,6 +2,9 @@ package com.checkout;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -82,9 +85,15 @@ class CheckoutSdkBuilderTest {
     @Test
     void shouldCreateOAuthSdkWithExplicitAuthorizationUriAndLegacyDomain() throws URISyntaxException {
 
+        final int closedPort;
+        try (ServerSocket socket = new ServerSocket(0, 1, InetAddress.getByName("127.0.0.1"))) {
+            closedPort = socket.getLocalPort();
+        } catch (final IOException e) {
+            throw new IllegalStateException(e);
+        }
         try {
             new CheckoutSdkBuilder().oAuth()
-                    .clientCredentials(new URI("test"), "client_id", "client_secret")
+                    .clientCredentials(new URI("https://127.0.0.1:" + closedPort + "/connect/token"), "client_id", "client_secret")
                     .scopes(OAuthScope.GATEWAY)
                     .environment(Environment.SANDBOX)
                     .useLegacyDomain()
