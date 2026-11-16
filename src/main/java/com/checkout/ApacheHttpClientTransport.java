@@ -65,9 +65,10 @@ class ApacheHttpClientTransport implements Transport {
     private static final String PATH = "path";
     private static final String INVALID_REQUEST_PATH = "Invalid request path";
     private static final String INVALID_BASE_URI = "Invalid base URI: it must be an absolute http or https URI with a host";
-    private static final Pattern ENCODED_QUERY = Pattern.compile("(?:[A-Za-z0-9._~*+=&-]|%[0-9A-Fa-f]{2})++");
+    // Characters allowed unencoded in a path segment (RFC 3986 unreserved) and, in addition, in the query.
+    static final String SEGMENT_CHARACTERS = "._~-";
+    static final String QUERY_CHARACTERS = "._~-*+=&";
     private static final Pattern ENCODED_DOT = Pattern.compile("%2e", Pattern.CASE_INSENSITIVE);
-    private static final Pattern ENCODED_SEGMENT = Pattern.compile("(?:[A-Za-z0-9._~-]|%[0-9A-Fa-f]{2})++");
     private static final Pattern ENCODED_SEPARATOR_OR_CONTROL =
             Pattern.compile("%(?:2F|5C|[01][0-9A-F]|7F)", Pattern.CASE_INSENSITIVE);
 
@@ -446,16 +447,49 @@ class ApacheHttpClientTransport implements Transport {
             throw new CheckoutArgumentException(INVALID_REQUEST_PATH);
         }
         final int queryStart = path.indexOf('?');
-        if (queryStart >= 0 && !ENCODED_QUERY.matcher(path.substring(queryStart + 1)).matches()) {
+        if (queryStart >= 0 && !isPercentEncoded(path.substring(queryStart + 1), QUERY_CHARACTERS)) {
             throw new CheckoutArgumentException(INVALID_REQUEST_PATH);
         }
         final String pathOnly = queryStart >= 0 ? path.substring(0, queryStart) : path;
         for (final String segment : pathOnly.split("/", -1)) {
-            if (isEmptyOrDotSegment(segment) || !ENCODED_SEGMENT.matcher(segment).matches()
+            if (isEmptyOrDotSegment(segment) || !isPercentEncoded(segment, SEGMENT_CHARACTERS)
                     || ENCODED_SEPARATOR_OR_CONTROL.matcher(segment).find()) {
                 throw new CheckoutArgumentException(INVALID_REQUEST_PATH);
             }
         }
+    }
+
+    /**
+     * True when the value is not empty and every character is an ASCII letter or digit, one of
+     * {@code allowed}, or a "%" followed by two hex digits. One pass, no backtracking.
+     */
+    static boolean isPercentEncoded(final String value, final String allowed) {
+        if (value.isEmpty()) {
+            return false;
+        }
+        int i = 0;
+        while (i < value.length()) {
+            final char c = value.charAt(i);
+            if (c == '%') {
+                if (i + 2 >= value.length() || !isHexDigit(value.charAt(i + 1)) || !isHexDigit(value.charAt(i + 2))) {
+                    return false;
+                }
+                i += 3;
+            } else if (isAsciiLetterOrDigit(c) || allowed.indexOf(c) >= 0) {
+                i++;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean isAsciiLetterOrDigit(final char c) {
+        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9');
+    }
+
+    private static boolean isHexDigit(final char c) {
+        return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
     }
 
     private static boolean isEmptyOrDotSegment(final String segment) {

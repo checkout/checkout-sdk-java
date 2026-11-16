@@ -1,6 +1,10 @@
 package com.checkout;
 
+import static com.checkout.ApacheHttpClientTransport.QUERY_CHARACTERS;
+import static com.checkout.ApacheHttpClientTransport.SEGMENT_CHARACTERS;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
@@ -220,6 +224,55 @@ class ApacheHttpClientTransportRequestUrlTest {
             assertThrows(CheckoutArgumentException.class, () -> transport.getRequestUrl("payments/" + longSegment));
             assertThrows(CheckoutArgumentException.class, () -> transport.getRequestUrl("payments?" + longQuery));
         });
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"pay_123", "a", "%41", "%2e%2E", "A-Z_a.z~0-9", "%ff%00x"})
+    void shouldAcceptEncodedSegments(final String segment) {
+        assertTrue(ApacheHttpClientTransport.isPercentEncoded(segment, SEGMENT_CHARACTERS));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "%", "%4", "%4G", "a%", "a%4", "%%41", "a b", "a+b", "a*b", "a=b", "a&b", "a;b",
+            "a/b", "a\\b", "a?b", "a#b", "café", "١", "Ａ", "a\u0000b"})
+    void shouldRefuseSegmentsThatAreNotEncoded(final String segment) {
+        assertFalse(ApacheHttpClientTransport.isPercentEncoded(segment, SEGMENT_CHARACTERS));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"a=1", "a=1&b=2", "q=%20x", "a*b+c", "&&", "="})
+    void shouldAcceptEncodedQueries(final String query) {
+        assertTrue(ApacheHttpClientTransport.isPercentEncoded(query, QUERY_CHARACTERS));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "a=1 b", "a=%2", "a=1;b", "a=1#f", "a=?", "a=/b", "a=café"})
+    void shouldRefuseQueriesThatAreNotEncoded(final String query) {
+        assertFalse(ApacheHttpClientTransport.isPercentEncoded(query, QUERY_CHARACTERS));
+    }
+
+    /**
+     * Differential check against the patterns this validator replaces: same answer on random strings
+     * built from every character class that matters (allowed, "%", hex and non-hex, reserved, non-ASCII).
+     */
+    @Test
+    void shouldMatchThePreviousPatternsOnRandomInput() {
+        final java.util.regex.Pattern segmentReference = java.util.regex.Pattern.compile("(?:[A-Za-z0-9._~-]|%[0-9A-Fa-f]{2})+");
+        final java.util.regex.Pattern queryReference = java.util.regex.Pattern.compile("(?:[A-Za-z0-9._~*+=&-]|%[0-9A-Fa-f]{2})+");
+        final String alphabet = "aZ09._~-*+=&%%%fFgG/\\?#; é١Ａ\u0000";
+        final java.util.Random random = new java.util.Random(20261116L);
+        for (int run = 0; run < 200_000; run++) {
+            final StringBuilder value = new StringBuilder();
+            final int length = random.nextInt(8);
+            for (int i = 0; i < length; i++) {
+                value.append(alphabet.charAt(random.nextInt(alphabet.length())));
+            }
+            final String candidate = value.toString();
+            assertEquals(segmentReference.matcher(candidate).matches(),
+                    ApacheHttpClientTransport.isPercentEncoded(candidate, SEGMENT_CHARACTERS), "segment: " + candidate);
+            assertEquals(queryReference.matcher(candidate).matches(),
+                    ApacheHttpClientTransport.isPercentEncoded(candidate, QUERY_CHARACTERS), "query: " + candidate);
+        }
     }
 
     private static String repeat(final String value, final int times) {
