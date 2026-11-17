@@ -34,11 +34,27 @@ public class ApiClientImpl implements ApiClient {
     private final CheckoutConfiguration configuration;
     private final java.util.concurrent.Executor executor;
 
+    /**
+     * Creates an API client for the base URI the strategy returns.
+     *
+     * @param configuration the SDK configuration
+     * @param uriStrategy   the strategy returning the base URI
+     * @throws CheckoutArgumentException if the base URI is missing or invalid; the error names
+     *                                   "uriStrategy", never the URI
+     */
     public ApiClientImpl(final CheckoutConfiguration configuration, final UriStrategy uriStrategy) {
+        this(configuration, uriStrategy, "uriStrategy");
+    }
+
+    /**
+     * Creates an API client for the base URI the strategy returns, naming the setting it comes from in
+     * errors ("filesApi") instead of the URI.
+     */
+    ApiClientImpl(final CheckoutConfiguration configuration, final UriStrategy uriStrategy, final String baseUriSetting) {
         this.serializer = new GsonSerializer();
         this.configuration = configuration;
         this.executor = configuration.getExecutor();
-        this.transport = new ApacheHttpClientTransport(uriStrategy.getUri(), configuration.getHttpClientBuilder(), configuration.getExecutor(), configuration.getTransportConfiguration(), configuration);
+        this.transport = new ApacheHttpClientTransport(uriStrategy.getUri(), baseUriSetting, configuration.getHttpClientBuilder(), configuration.getExecutor(), configuration.getTransportConfiguration(), configuration);
     }
 
     @Override

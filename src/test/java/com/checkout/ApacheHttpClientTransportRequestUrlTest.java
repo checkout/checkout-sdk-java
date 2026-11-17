@@ -1,8 +1,5 @@
 package com.checkout;
 
-import static com.checkout.ApacheHttpClientTransport.QUERY_CHARACTERS;
-import static com.checkout.ApacheHttpClientTransport.SEGMENT_CHARACTERS;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -25,7 +22,6 @@ import java.util.List;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.regex.Pattern;
 
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -51,6 +47,7 @@ class ApacheHttpClientTransportRequestUrlTest {
     private final SdkAuthorization authorization = new SdkAuthorization(PlatformType.DEFAULT, "sk_test");
     private final List<String> receivedPaths = Collections.synchronizedList(new ArrayList<>());
     private final List<String> receivedQueries = Collections.synchronizedList(new ArrayList<>());
+    private final List<String> receivedHosts = Collections.synchronizedList(new ArrayList<>());
     private final List<ExecutorService> executors = new ArrayList<>();
 
     private HttpServer server;
@@ -64,6 +61,7 @@ class ApacheHttpClientTransportRequestUrlTest {
         server.createContext("/", exchange -> {
             receivedPaths.add(exchange.getRequestURI().getRawPath());
             receivedQueries.add(String.valueOf(exchange.getRequestURI().getRawQuery()));
+            receivedHosts.add(exchange.getRequestHeaders().getFirst("Host"));
             final byte[] body = "{}".getBytes(StandardCharsets.UTF_8);
             exchange.getResponseHeaders().add("Content-Type", "application/json");
             exchange.sendResponseHeaders(200, body.length);
@@ -80,11 +78,32 @@ class ApacheHttpClientTransportRequestUrlTest {
         executors.forEach(ExecutorService::shutdownNow);
     }
 
-    private ApacheHttpClientTransport transport(final URI baseUri) {
+    private ApacheHttpClientTransport transport(final URI baseUri, final HttpClientBuilder httpClientBuilder) {
         final ExecutorService executor = Executors.newSingleThreadExecutor();
         executors.add(executor);
-        return new ApacheHttpClientTransport(baseUri, HttpClientBuilder.create(), executor,
+        return new ApacheHttpClientTransport(baseUri, "checkoutApi", httpClientBuilder, executor,
                 new DefaultTransportConfiguration(), mock(CheckoutConfiguration.class));
+    }
+
+    private ApacheHttpClientTransport transport(final URI baseUri) {
+        return transport(baseUri, HttpClientBuilder.create());
+    }
+
+    /** Sends a GET through the public transport method and returns the URL the HTTP client received. */
+    private String requestUrl(final URI baseUri, final String path) {
+        final RecordingHttpClientBuilder recorder = new RecordingHttpClientBuilder();
+        transport(baseUri, recorder).invokeSync(ClientOperation.GET, path, authorization, null, null, Collections.emptyMap());
+        assertEquals(1, recorder.requests.size());
+        return recorder.requests.get(0);
+    }
+
+    /** Asserts the public transport method refuses the path before anything is sent. */
+    private void assertRefused(final URI baseUri, final String path) {
+        final RecordingHttpClientBuilder recorder = new RecordingHttpClientBuilder();
+        final ApacheHttpClientTransport transport = transport(baseUri, recorder);
+        assertThrows(CheckoutArgumentException.class,
+                () -> transport.invokeSync(ClientOperation.GET, path, authorization, null, null, Collections.emptyMap()));
+        assertTrue(recorder.requests.isEmpty(), "nothing is sent");
     }
 
     private ApacheHttpClientTransport localTransport() {
@@ -93,49 +112,81 @@ class ApacheHttpClientTransportRequestUrlTest {
 
     @Test
     void shouldResolveValidRequestPaths() {
-        final ApacheHttpClientTransport transport = transport(SANDBOX);
-
-        assertEquals("https://api.sandbox.checkout.com/payments/pay_123", transport.getRequestUrl(VALID_PATH));
-        assertEquals("https://api.sandbox.checkout.com/payments/pay_1%252Frefunds", transport.getRequestUrl("payments/pay_1%252Frefunds"));
-        assertEquals("https://api.sandbox.checkout.com/payments/...", transport.getRequestUrl("payments/..."));
-        assertEquals("https://api.sandbox.checkout.com/ideal-external/issuers", transport.getRequestUrl("ideal-external/issuers"));
+        assertEquals("https://api.sandbox.checkout.com/payments/pay_123", requestUrl(SANDBOX, VALID_PATH));
+        assertEquals("https://api.sandbox.checkout.com/payments/pay_1%252Frefunds", requestUrl(SANDBOX, "payments/pay_1%252Frefunds"));
+        assertEquals("https://api.sandbox.checkout.com/payments/...", requestUrl(SANDBOX, "payments/..."));
+        assertEquals("https://api.sandbox.checkout.com/ideal-external/issuers", requestUrl(SANDBOX, "ideal-external/issuers"));
         assertEquals("https://api.sandbox.checkout.com/event-types?version=v2%26x%3D1%23y",
-                transport.getRequestUrl("event-types?version=v2%26x%3D1%23y"));
+                requestUrl(SANDBOX, "event-types?version=v2%26x%3D1%23y"));
     }
 
     @Test
     void shouldResolveUnderCustomBaseUris() {
         assertEquals("https://proxy.example/checkout/payments/pay_123",
-                transport(URI.create("https://proxy.example/checkout/")).getRequestUrl(VALID_PATH));
+                requestUrl(URI.create("https://proxy.example/checkout/"), VALID_PATH));
         assertEquals("https://proxy.example/payments/pay_123",
-                transport(URI.create("https://proxy.example")).getRequestUrl(VALID_PATH));
+                requestUrl(URI.create("https://proxy.example"), VALID_PATH));
         assertEquals("https://proxy.example:8443/payments/pay_123",
-                transport(URI.create("https://proxy.example:8443")).getRequestUrl(VALID_PATH));
-        // Without a trailing slash, URI.resolve replaces the last base segment, as it always has.
+                requestUrl(URI.create("https://proxy.example:8443"), VALID_PATH));
+        // The base directory (the path up to the last "/") is kept, so without a trailing slash the last segment is replaced.
         assertEquals("https://proxy.example/payments/pay_123",
-                transport(URI.create("https://proxy.example/checkout")).getRequestUrl(VALID_PATH));
+                requestUrl(URI.create("https://proxy.example/checkout"), VALID_PATH));
     }
 
     @Test
     void shouldResolveUnderBaseUrisWithUnderscoreHostsOrUnnormalisedPaths() {
         assertEquals("https://proxy_host.example/payments/pay_123",
-                transport(URI.create("https://proxy_host.example/")).getRequestUrl(VALID_PATH));
+                requestUrl(URI.create("https://proxy_host.example/"), VALID_PATH));
         assertEquals("http://checkout_proxy:8080/api/payments/pay_123",
-                transport(URI.create("http://checkout_proxy:8080/api/")).getRequestUrl(VALID_PATH));
+                requestUrl(URI.create("http://checkout_proxy:8080/api/"), VALID_PATH));
         assertEquals("https://proxy.example/b/payments/pay_123",
-                transport(URI.create("https://proxy.example/a/../b/")).getRequestUrl(VALID_PATH));
+                requestUrl(URI.create("https://proxy.example/a/../b/"), VALID_PATH));
         assertEquals("https://proxy.example/payments/pay_123",
-                transport(URI.create("https://proxy.example//")).getRequestUrl(VALID_PATH));
+                requestUrl(URI.create("https://proxy.example//"), VALID_PATH));
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"api.example.com/", "/checkout/", "mailto:x@example.com", "https:///payments/"})
-    void shouldRefuseBaseUrisThatAreNotAbsoluteWithAHost(final String baseUri) {
-        assertThrows(CheckoutArgumentException.class, () -> transport(URI.create(baseUri)));
+    @ValueSource(strings = {"api.example.com/", "/checkout/", "mailto:x@example.com", "https:///payments/", "http://:80/",
+            "https://user@/", "https://@/", "https://user:pass@proxy.example/", "https://proxy.example/../x/",
+            "https://proxy.example/%2e%2e/x/", "https://proxy.example:x/"})
+    void shouldRefuseBaseUrisThatAreNotAbsoluteWithAHostOrHoldUserInfoOrDotSegments(final String baseUri) {
+        final CheckoutArgumentException exception = assertThrows(CheckoutArgumentException.class, () -> transport(URI.create(baseUri)));
+        assertTrue(exception.getMessage().startsWith("Invalid base URI for checkoutApi:"), exception::getMessage);
+        assertFalse(exception.getMessage().contains(baseUri), exception::getMessage);
     }
 
     @Test
-    void shouldNotSendTheAuthorizationHeaderWhenFollowingARedirect() {
+    void shouldSendRequestsToTheConfiguredHostAndPort() {
+        final int port = server.getAddress().getPort();
+        transport(URI.create("http://127.0.0.1:" + port + "/v1/"))
+                .invokeSync(ClientOperation.GET, VALID_PATH, authorization, null, null, Collections.emptyMap());
+        transport(URI.create("http://localhost:" + port + "/"))
+                .invokeSync(ClientOperation.GET, VALID_PATH, authorization, null, null, Collections.emptyMap());
+
+        assertEquals(java.util.Arrays.asList("/v1/" + VALID_PATH, "/" + VALID_PATH), receivedPaths);
+        assertEquals(java.util.Arrays.asList("127.0.0.1:" + port, "localhost:" + port), receivedHosts);
+    }
+
+    /** Base URIs whose authority holds escapes or an out-of-range port, pointing at the local server: refused, nothing sent. */
+    @ParameterizedTest
+    @ValueSource(strings = {"http://good.example%40127.0.0.1:{port}/v1/", "http://user%3Asecret%40127.0.0.1:{port}/",
+            "http://127.0.0.1%3A{port}/", "http://localhost%2F127.0.0.1:{port}/", "http://127.0.0.1:{port}00000/",
+            "http://127.0.0.1:0/", "http://127.0.0.1:99999999999/"})
+    void shouldRefuseBaseUrisWithEscapesInTheAuthorityOrAPortOutOfRange(final String template) {
+        final String baseUri = template.replace("{port}", String.valueOf(server.getAddress().getPort()));
+
+        final CheckoutArgumentException exception = assertThrows(CheckoutArgumentException.class, () -> transport(URI.create(baseUri)));
+        assertTrue(exception.getMessage().startsWith("Invalid base URI for checkoutApi:"), exception::getMessage);
+        assertFalse(exception.getMessage().contains("127.0.0.1"), exception::getMessage);
+        assertTrue(receivedPaths.isEmpty(), "nothing is sent");
+    }
+
+    /**
+     * Pins the existing redirect behaviour, which this change does not alter: a same-host GET redirect
+     * is followed and the followed request carries no Authorization header.
+     */
+    @Test
+    void shouldKeepFollowingSameHostGetRedirectsWithoutTheAuthorizationHeader() {
         final List<String> targetAuthorization = Collections.synchronizedList(new ArrayList<>());
         server.createContext("/redirect", exchange -> {
             exchange.getResponseHeaders().add("Location", "/target");
@@ -198,7 +249,7 @@ class ApacheHttpClientTransportRequestUrlTest {
             "mailto:x"
     })
     void shouldRefuseInvalidRequestPaths(final String path) {
-        assertThrows(CheckoutArgumentException.class, () -> transport(SANDBOX).getRequestUrl(path));
+        assertRefused(SANDBOX, path);
     }
 
     @ParameterizedTest
@@ -216,80 +267,14 @@ class ApacheHttpClientTransportRequestUrlTest {
         assertEquals(2, receivedPaths.size(), "no request may reach the server");
     }
 
-    /** The previous patterns threw StackOverflowError on long values like these (5 000 repetitions were enough). */
     @Test
-    void shouldRefuseLongInvalidSegmentsAndQueries() {
+    void shouldRefuseLongInvalidSegmentsAndQueriesQuickly() {
         final String longSegment = repeat("%41a", 50_000) + "!";
         final String longQuery = repeat("a=%41&", 50_000) + "!";
-        final ApacheHttpClientTransport transport = transport(SANDBOX);
         assertTimeoutPreemptively(Duration.ofSeconds(2), () -> {
-            assertThrows(CheckoutArgumentException.class, () -> transport.getRequestUrl("payments/" + longSegment));
-            assertThrows(CheckoutArgumentException.class, () -> transport.getRequestUrl("payments?" + longQuery));
+            assertRefused(SANDBOX, "payments/" + longSegment);
+            assertRefused(SANDBOX, "payments?" + longQuery);
         });
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"pay_123", "a", "%41", "%2e%2E", "A-Z_a.z~0-9", "%ff%00x", "%AF%af"})
-    void shouldAcceptEncodedSegments(final String segment) {
-        assertTrue(ApacheHttpClientTransport.isPercentEncoded(segment, SEGMENT_CHARACTERS));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"", "%", "%4", "%4G", "%G4", "%@0", "a%", "a%4", "%%41", "a b", "a+b", "a*b", "a=b", "a&b",
-            "a;b", "a:b", "a@b", "a[b", "a`b", "a{b", "a/b", "a\\b", "a?b", "a#b", "caf\u00e9", "\u0661", "\uff21",
-            "\ud83d\ude00", "\ud800", "a\u0000b"})
-    void shouldRefuseSegmentsThatAreNotEncoded(final String segment) {
-        assertFalse(ApacheHttpClientTransport.isPercentEncoded(segment, SEGMENT_CHARACTERS));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"a=1", "a=1&b=2", "q=%20x", "a*b+c", "&&", "="})
-    void shouldAcceptEncodedQueries(final String query) {
-        assertTrue(ApacheHttpClientTransport.isPercentEncoded(query, QUERY_CHARACTERS));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"", "a=1 b", "a=%2", "a=1;b", "a=1#f", "a=?", "a=/b", "a=caf\u00e9", "a=@", "a=:"})
-    void shouldRefuseQueriesThatAreNotEncoded(final String query) {
-        assertFalse(ApacheHttpClientTransport.isPercentEncoded(query, QUERY_CHARACTERS));
-    }
-
-    /**
-     * Exhaustive check against the patterns this validator replaced, which only differ from it on
-     * stack depth: every single char, and every pair of ASCII chars alone, after "%" and between
-     * letters. Covers the range boundaries ("/", ":", "@", "[", "`", "{"), hex boundaries and surrogates.
-     */
-    @Test
-    void shouldMatchThePreviousPatternsOnEveryShortInput() {
-        final Pattern segmentReference = Pattern.compile("(?:[A-Za-z0-9._~-]|%[0-9A-Fa-f]{2})+"); // NOSONAR reference only
-        final Pattern queryReference = Pattern.compile("(?:[A-Za-z0-9._~*+=&-]|%[0-9A-Fa-f]{2})+"); // NOSONAR reference only
-        final List<String> inputs = new ArrayList<>();
-        for (int c = 0; c <= Character.MAX_VALUE; c++) {
-            inputs.add(String.valueOf((char) c));
-            inputs.add("%" + (char) c + "0");
-            inputs.add("%0" + (char) c);
-        }
-        for (char x = 0; x < 128; x++) {
-            for (char y = 0; y < 128; y++) {
-                inputs.add("" + x + y);
-                inputs.add("%" + x + y);
-                inputs.add("a%" + x + y + "b");
-            }
-        }
-        for (final String candidate : inputs) {
-            assertEquals(segmentReference.matcher(candidate).matches(),
-                    ApacheHttpClientTransport.isPercentEncoded(candidate, SEGMENT_CHARACTERS), () -> "segment: " + escape(candidate));
-            assertEquals(queryReference.matcher(candidate).matches(),
-                    ApacheHttpClientTransport.isPercentEncoded(candidate, QUERY_CHARACTERS), () -> "query: " + escape(candidate));
-        }
-    }
-
-    private static String escape(final String value) {
-        final StringBuilder builder = new StringBuilder();
-        for (final char c : value.toCharArray()) {
-            builder.append(c >= 0x20 && c < 0x7f ? String.valueOf(c) : String.format("\\u%04x", (int) c));
-        }
-        return builder.toString();
     }
 
     private static String repeat(final String value, final int times) {

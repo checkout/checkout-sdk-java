@@ -41,6 +41,7 @@ class Resilience4jIntegrationTest {
         final URI baseUri = URI.create("https://api.sandbox.checkout.com/");
         transport = new ApacheHttpClientTransport(
                 baseUri,
+                "checkoutApi",
                 HttpClientBuilder.create(),
                 Executors.newSingleThreadExecutor(),
                 new DefaultTransportConfiguration(),

@@ -38,8 +38,8 @@ public abstract class AbstractClient {
      *
      * @param pathParams the path segments, in order
      * @return the request path, relative to the base URI
-     * @throws CheckoutArgumentException if a parameter is null, empty, "." or "..", contains "/", "\\" or
-     *                                   an ASCII control character (U+0000 to U+001F, U+007F), or is not
+     * @throws CheckoutArgumentException if a parameter is null, empty, "." or "..", contains "/", {@code \}
+     *                                   or an ASCII control character (U+0000 to U+001F, U+007F), or is not
      *                                   valid UTF-16 text (an unpaired surrogate)
      */
     protected static String buildPath(final String... pathParams) {
@@ -55,9 +55,8 @@ public abstract class AbstractClient {
 
     /**
      * Percent-encodes a path parameter as UTF-8, keeping only the RFC 3986 unreserved characters
-     * (letters, digits, "-", ".", "_" and "~"), so the result is exactly one path segment. "/", "\\" and
-     * ASCII control characters are refused rather than encoded: the API decodes "%2F" and "%5C" back
-     * into separators, so an encoded value could still reach another endpoint.
+     * (letters, digits, "-", ".", "_" and "~"), so the result is exactly one path segment. "/",
+     * {@code \} and ASCII control characters are refused rather than encoded.
      */
     private static String encodePathSegment(final String pathParam) {
         if (pathParam == null || pathParam.isEmpty() || ".".equals(pathParam) || "..".equals(pathParam)
@@ -67,18 +66,13 @@ public abstract class AbstractClient {
         final StringBuilder encoded = new StringBuilder(pathParam.length());
         for (final byte b : pathParam.getBytes(StandardCharsets.UTF_8)) {
             final int c = b & 0xFF;
-            if (isUnreserved(c)) {
+            if (UriCharacters.isUnreserved(c)) {
                 encoded.append((char) c);
             } else {
                 encoded.append('%').append(HEX[c >> 4]).append(HEX[c & 0x0F]);
             }
         }
         return encoded.toString();
-    }
-
-    private static boolean isUnreserved(final int c) {
-        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9')
-                || c == '-' || c == '.' || c == '_' || c == '~';
     }
 
     private static boolean hasForbiddenCharacter(final String value) {

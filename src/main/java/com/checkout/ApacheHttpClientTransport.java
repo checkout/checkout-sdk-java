@@ -41,7 +41,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 import java.util.function.Supplier;
-import java.util.regex.Pattern;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.retry.Retry;
@@ -64,14 +63,6 @@ class ApacheHttpClientTransport implements Transport {
     private static final String PURPOSE = "purpose";
     private static final String PATH = "path";
     private static final String INVALID_REQUEST_PATH = "Invalid request path";
-    private static final String INVALID_BASE_URI = "Invalid base URI: it must be an absolute http or https URI with a host";
-    // Characters allowed unencoded besides ASCII letters and digits: in a path segment (RFC 3986
-    // unreserved) and in the query string.
-    static final String SEGMENT_CHARACTERS = "._~-";
-    static final String QUERY_CHARACTERS = "._~-*+=&";
-    private static final Pattern ENCODED_DOT = Pattern.compile("%2e", Pattern.CASE_INSENSITIVE);
-    private static final Pattern ENCODED_SEPARATOR_OR_CONTROL =
-            Pattern.compile("%(?:2F|5C|[01][0-9A-F]|7F)", Pattern.CASE_INSENSITIVE);
 
     private final URI baseUri;
     private final String baseDirectory;
@@ -83,15 +74,26 @@ class ApacheHttpClientTransport implements Transport {
 
     private static final ThreadLocal<RequestMetrics> telemetryData = ThreadLocal.withInitial(RequestMetrics::new);
 
+    /**
+     * @param baseUri                the base URI every request path is resolved against
+     * @param baseUriSetting         the name of the setting the base URI comes from ("filesApi"), used in
+     *                               errors instead of the value
+     * @param httpClientBuilder      the HTTP client builder
+     * @param executor               the executor for asynchronous calls
+     * @param transportConfiguration the transport configuration
+     * @param configuration          the SDK configuration
+     * @throws CheckoutArgumentException if the base URI is missing or invalid (see {@link BaseUri#normalise})
+     */
     ApacheHttpClientTransport(
             final URI baseUri,
+            final String baseUriSetting,
             final HttpClientBuilder httpClientBuilder,
             final Executor executor,
             final TransportConfiguration transportConfiguration,
             final CheckoutConfiguration configuration
     ) {
-        CheckoutUtils.validateParams("baseUri", baseUri, "httpClientBuilder", httpClientBuilder, "executor", executor);
-        this.baseUri = normalisedBaseUri(baseUri);
+        CheckoutUtils.validateParams(baseUriSetting, baseUri, "httpClientBuilder", httpClientBuilder, "executor", executor);
+        this.baseUri = BaseUri.normalise(baseUri, baseUriSetting);
         this.baseDirectory = directoryOf(this.baseUri);
         this.httpClient = httpClientBuilder
                 .setRedirectStrategy(new CustomAwsRedirectStrategy())
@@ -396,17 +398,18 @@ class ApacheHttpClientTransport implements Transport {
     /**
      * Resolves a request path against the base URI. The path must be relative and made of non-empty
      * segments of unreserved characters and "%XX" escapes, none of them "." or ".." (also when
-     * percent-encoded) and none containing an encoded "/", "\\" or ASCII control character, which the
-     * API would decode back into a separator. It may end with
-     * an already encoded query ("?name=value&amp;..." made only of unreserved characters, "*", "+", "=",
-     * "&amp;" and "%" followed by two hex digits), and never with a "#". The resolved URL must keep the scheme, host, port and base path
-     * of the base URI.
+     * percent-encoded) and none containing an encoded "/", {@code \} or ASCII control character. It may
+     * end with an already encoded query ("?name=value&amp;..." made only of unreserved characters, "*",
+     * "+", "=", "&amp;" and "%" followed by two hex digits), and never with a "#". The resolved URL keeps
+     * the scheme and authority of the base URI, and its base directory (the path up to the last "/") is
+     * kept: a base URI without a trailing slash has its last path segment replaced, as
+     * {@link URI#resolve(String)} (RFC 3986) defines.
      *
      * @param path the request path, as built by {@code AbstractClient.buildPath}
      * @return the absolute request URL
      * @throws CheckoutArgumentException if the path is invalid or resolves outside the base URI
      */
-    String getRequestUrl(final String path) {
+    private String getRequestUrl(final String path) {
         validateRequestPath(path);
         final URI resolved = baseUri.resolve(path);
         if (!isUnderBaseUri(resolved)) {
@@ -420,23 +423,9 @@ class ApacheHttpClientTransport implements Transport {
     }
 
     /**
-     * Checks that the base URI is absolute http or https with an authority, and normalises its path. A
-     * base URI with no path ("https://api.example.com") resolves "payments" to the host
-     * "api.example.compayments"; the root path "/" keeps the request on the configured host.
-     */
-    private static URI normalisedBaseUri(final URI baseUri) {
-        final String scheme = baseUri.getScheme();
-        if (scheme == null || baseUri.isOpaque() || baseUri.getRawAuthority() == null
-                || !("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))) {
-            throw new CheckoutArgumentException(INVALID_BASE_URI);
-        }
-        final String path = baseUri.getRawPath();
-        return path == null || path.isEmpty() ? baseUri.resolve("/") : baseUri.normalize();
-    }
-
-    /**
-     * The part of the base path that {@link URI#resolve(String)} keeps, read from a resolved probe so it
-     * matches resolve exactly (it drops the last segment and collapses empty ones).
+     * The base directory (the path up to the last "/") that {@link URI#resolve(String)} keeps, read from a resolved probe so it
+     * matches resolve exactly (it drops the last segment and collapses empty ones). Used only by the
+     * defence-in-depth check in {@link #isUnderBaseUri(URI)}.
      */
     private static String directoryOf(final URI baseUri) {
         final String probe = baseUri.resolve("probe").getRawPath();
@@ -448,61 +437,24 @@ class ApacheHttpClientTransport implements Transport {
             throw new CheckoutArgumentException(INVALID_REQUEST_PATH);
         }
         final int queryStart = path.indexOf('?');
-        if (queryStart >= 0 && !isPercentEncoded(path.substring(queryStart + 1), QUERY_CHARACTERS)) {
+        if (queryStart >= 0 && !UriCharacters.isPercentEncoded(path.substring(queryStart + 1), UriCharacters.QUERY_EXTRA)) {
             throw new CheckoutArgumentException(INVALID_REQUEST_PATH);
         }
         final String pathOnly = queryStart >= 0 ? path.substring(0, queryStart) : path;
         for (final String segment : pathOnly.split("/", -1)) {
-            if (isEmptyOrDotSegment(segment) || !isPercentEncoded(segment, SEGMENT_CHARACTERS)
-                    || ENCODED_SEPARATOR_OR_CONTROL.matcher(segment).find()) {
+            if (segment.isEmpty() || UriCharacters.isDotSegment(segment) || !UriCharacters.isPercentEncoded(segment, "")
+                    || UriCharacters.hasEncodedSeparatorOrControl(segment)) {
                 throw new CheckoutArgumentException(INVALID_REQUEST_PATH);
             }
         }
     }
 
     /**
-     * True when the value is not empty and every character is an ASCII letter or digit, one of
-     * {@code allowed}, or a "%" followed by two hex digits. One pass, no backtracking.
-     */
-    static boolean isPercentEncoded(final String value, final String allowed) {
-        if (value.isEmpty()) {
-            return false;
-        }
-        int i = 0;
-        while (i < value.length()) {
-            final char c = value.charAt(i);
-            if (c == '%') {
-                if (i + 2 >= value.length() || !isHexDigit(value.charAt(i + 1)) || !isHexDigit(value.charAt(i + 2))) {
-                    return false;
-                }
-                i += 3;
-            } else if (isAsciiLetterOrDigit(c) || allowed.indexOf(c) >= 0) {
-                i++;
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static boolean isAsciiLetterOrDigit(final char c) {
-        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9');
-    }
-
-    private static boolean isHexDigit(final char c) {
-        return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
-    }
-
-    private static boolean isEmptyOrDotSegment(final String segment) {
-        final int parameters = segment.indexOf(';');
-        final String name = ENCODED_DOT.matcher(parameters >= 0 ? segment.substring(0, parameters) : segment).replaceAll(".");
-        return name.isEmpty() || ".".equals(name) || "..".equals(name);
-    }
-
-    /**
      * True when the URL has the scheme and authority of the base URI and a path under the base URI's
      * directory. The raw authority is compared because {@link URI#getHost()} is null for host names
-     * that are not valid DNS names, such as those with "_".
+     * that are not valid DNS names, such as those with "_". Defence in depth: a path that passed
+     * {@link #validateRequestPath(String)} always resolves under the base URI, so this check is not
+     * expected to fail; it guards against a change to either rule.
      */
     private boolean isUnderBaseUri(final URI resolved) {
         return baseUri.getScheme().equalsIgnoreCase(resolved.getScheme())

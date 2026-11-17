@@ -46,7 +46,7 @@ public abstract class AbstractCheckoutApmApi {
 
     private ApiClient getBaseApiClient(final CheckoutConfiguration configuration) {
 
-        return new ApiClientImpl(configuration, new BaseUriStrategy(configuration));
+        return new ApiClientImpl(configuration, new BaseUriStrategy(configuration), "checkoutApi");
     }
 
     private static class BaseUriStrategy implements UriStrategy {
