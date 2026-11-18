@@ -89,7 +89,8 @@ class CheckoutSdkBaseUriTest {
                 "http://good.example%40127.0.0.1:8080/v1/", "http://user%3Asecret-value%40127.0.0.1/",
                 "http://127.0.0.1%3A8080/", "https://other.example%2Fgood.example/", "https://proxy%2Eexample/",
                 "https://%70roxy.example/", "https://proxy.example:0/", "https://proxy.example:00000/",
-                "https://proxy.example:65536/", "https://proxy.example:99999999999/"
+                "https://proxy.example:65536/", "https://proxy.example:99999999999/",
+                "https://b\u00FCcher.example/", "https://api.te\u202Est/", "https://\u0430pi.example/"
         };
         final List<Arguments> arguments = new ArrayList<>();
         for (final String setting : SETTINGS) {

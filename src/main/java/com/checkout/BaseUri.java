@@ -10,7 +10,7 @@ import java.net.URISyntaxException;
 final class BaseUri {
 
     private static final String INVALID_BASE_URI = "Invalid base URI for %s: it must be an absolute http or https URI "
-            + "with a host written without percent-encoding, an optional port from 1 to 65535, no user information, "
+            + "with an ASCII host written without percent-encoding, an optional port from 1 to 65535, no user information, "
             + "and a path without dot segments, encoded separators or encoded control characters";
     private static final String INVALID_SUBDOMAIN_URI = "Invalid URI for %s: the environment subdomain can only be "
             + "added to an absolute URI whose host is a domain name of ASCII letters, digits, \"-\" and \"_\", "
@@ -23,7 +23,7 @@ final class BaseUri {
     /**
      * Checks a base URI and returns it with a normalised path. It must be absolute http or https with a
      * non-empty host, an optional port from 1 to 65535 and no user information, and its authority must
-     * hold no "%" (an escape there reads differently once decoded). After normalising, no path
+     * be visible ASCII and hold no "%" (an escape there reads differently once decoded). After normalising, no path
      * segment may be "." or ".." (also when percent-encoded, and also before a ";" parameter) or hold an
      * encoded "/", {@code \} or ASCII control character. A base URI with no path gets the root path "/".
      * Request paths are resolved against the base directory, the path up to its last "/".
@@ -40,7 +40,7 @@ final class BaseUri {
         final String scheme = baseUri.getScheme();
         final String authority = baseUri.getRawAuthority();
         if (scheme == null || baseUri.isOpaque() || authority == null || authority.indexOf('@') >= 0
-                || authority.indexOf('%') >= 0 || hostOf(authority) == null
+                || authority.indexOf('%') >= 0 || !isVisibleAscii(authority) || hostOf(authority) == null
                 || !("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme))) {
             throw invalid(INVALID_BASE_URI, setting);
         }
@@ -58,9 +58,10 @@ final class BaseUri {
 
     /**
      * Prepends the subdomain to the host of the URI, refusing an authority that holds a "%" and a host
-     * that is not a domain name (see {@link #isDomainName(String)}). Port, raw path, raw query and raw fragment are
-     * copied as written, without decoding; user information is not copied, as before (base URIs refuse
-     * it in {@link #normalise(URI, String)} before they get here).
+     * that is not a domain name (see {@link #isDomainName(String)}). Port, raw path, raw query and raw
+     * fragment of the given URI are copied without decoding (callers pass {@code checkoutApi} already
+     * normalised); user information is not copied, as before (base URIs refuse it in
+     * {@link #normalise(URI, String)} before they get here).
      *
      * @param uri       the configured URI
      * @param subdomain the subdomain, already validated
@@ -156,6 +157,16 @@ final class BaseUri {
 
     private static boolean isAsciiLetter(final char c) {
         return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+    }
+
+    private static boolean isVisibleAscii(final String value) {
+        for (int i = 0; i < value.length(); i++) {
+            final char c = value.charAt(i);
+            if (c <= ' ' || c > '~') {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static CheckoutArgumentException invalid(final String message, final String setting) {
