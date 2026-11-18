@@ -309,23 +309,23 @@ public class CheckoutApiImpl extends AbstractCheckoutApmApi implements CheckoutA
     public OnboardingSimulatorClient onboardingSimulatorClient() { return onboardingSimulatorClient; }
 
     private ApiClient getFilesClient(final CheckoutConfiguration configuration) {
-        return new ApiClientImpl(configuration, new FilesApiUriStrategy(configuration));
+        return new ApiClientImpl(configuration, new FilesApiUriStrategy(configuration), "filesApi");
     }
 
     private ApiClient getTransfersClient(final CheckoutConfiguration configuration) {
-        return new ApiClientImpl(configuration, new TransfersApiUriStrategy(configuration));
+        return new ApiClientImpl(configuration, new TransfersApiUriStrategy(configuration), "transfersApi");
     }
 
     private ApiClient getBalancesClient(final CheckoutConfiguration configuration) {
-        return new ApiClientImpl(configuration, new BalancesApiUriStrategy(configuration));
+        return new ApiClientImpl(configuration, new BalancesApiUriStrategy(configuration), "balancesApi");
     }
 
     private ApiClient getForwardClient(final CheckoutConfiguration configuration) {
-        return new ApiClientImpl(configuration, new ForwardApiUriStrategy(configuration));
+        return new ApiClientImpl(configuration, new ForwardApiUriStrategy(configuration), "forwardApi");
     }
 
     private ApiClient getIdentityClient(final CheckoutConfiguration configuration) {
-        return new ApiClientImpl(configuration, new IdentityApiUriStrategy(configuration));
+        return new ApiClientImpl(configuration, new IdentityApiUriStrategy(configuration), "identityApi");
     }
 
     private static class FilesApiUriStrategy implements UriStrategy {

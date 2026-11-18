@@ -445,9 +445,11 @@ In case that you want to use an integrator or mock server, you can specify your 
 final CustomEnvironment environment = CustomEnvironment.builder()
         .checkoutApi(create("https://the.base.uri/")) // the uri for all Checkout operations
         .oAuthAuthorizationApi(create("https://the.oauth.uri/connect/token")) // the uri used for OAUTH authorization, only required for OAuth operations
-        .filesApi(create("https://the.files.uri/")) // the uri used for Files operations, only required for Accounts module
-        .transfersApi(create("https://the.transfers.uri/")) // the uri used for Transfer operations, only required for Transfers module
-        .balancesApi(create("https://the.balances.uri/")) // the uri used for Balances operations, only required for Balances module
+        .filesApi(create("https://the.files.uri/")) // the uri used for Files operations (Accounts module)
+        .transfersApi(create("https://the.transfers.uri/")) // the uri used for Transfers operations
+        .balancesApi(create("https://the.balances.uri/")) // the uri used for Balances operations
+        .forwardApi(create("https://the.forward.uri/")) // the uri used for Forward operations
+        .identityApi(create("https://the.identity.uri/")) // the uri used for Identity operations
         .sandbox(false) // flag to determine if Sanbox or Production configured, default false
         .build();
 
@@ -459,7 +461,15 @@ final CheckoutApi checkoutApi = CheckoutSdk.builder()
         .build();
 ```
 
-You don't need to specify all the previous URI's, only the ones for the modules that you're going to use.
+The SDK creates a client for every module when it is built, so set `checkoutApi`, `filesApi`, `transfersApi`,
+`balancesApi`, `forwardApi` and `identityApi`, also for the modules you do not call; `oAuthAuthorizationApi` is only
+needed for OAuth. Each of the six API settings must be an absolute `http` or `https` URI with an ASCII host written
+without percent-encoding, an optional port from 1 to 65535 and no user information, and its path must not hold dot
+segments, encoded separators or encoded control characters; a query or fragment on it is not sent. Set
+`oAuthAuthorizationApi` to the absolute `https` token URI of your environment. With `environmentSubdomain`, the hosts of `checkoutApi` and `oAuthAuthorizationApi` must be
+domain names (ASCII letters, digits, `-` and `_`), not IP addresses. Request paths are resolved against the base directory (the path
+up to the last `/`), which is kept: end the URI with `/` when it has a path, otherwise its last segment is replaced. A
+missing or invalid URI fails `build()` with a `CheckoutArgumentException` that names the setting.
 
 ## Custom HttpClient
 
