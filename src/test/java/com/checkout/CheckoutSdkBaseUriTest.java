@@ -29,6 +29,8 @@ class CheckoutSdkBaseUriTest {
 
     private final RecordingHttpClientBuilder httpClientBuilder = new RecordingHttpClientBuilder();
 
+    // Builds without a subdomain on purpose, so the legacy domain switch is needed here.
+    @SuppressWarnings("deprecation")
     private CheckoutApi build(final CustomEnvironment environment) {
         return CheckoutSdk.builder().staticKeys()
                 .secretKey(VALID_DEFAULT_SK)
