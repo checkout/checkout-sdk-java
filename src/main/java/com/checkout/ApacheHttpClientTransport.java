@@ -274,7 +274,7 @@ class ApacheHttpClientTransport implements Transport {
 
             final int statusCode = response.getStatusLine().getStatusCode();
             final Map<String, String> headers = Arrays.stream(response.getAllHeaders())
-                    .collect(Collectors.toMap(Header::getName, Header::getValue));
+                    .collect(Collectors.toMap(Header::getName, Header::getValue, (first, ignored) -> first));
 
             if (statusCode != HttpStatus.SC_NOT_FOUND && response.getEntity() != null && response.getEntity().getContent() != null) {
                 return Response.builder()
