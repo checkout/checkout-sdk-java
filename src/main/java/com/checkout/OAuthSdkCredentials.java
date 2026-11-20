@@ -44,7 +44,7 @@ import static java.time.LocalDateTime.now;
 @Slf4j
 final class OAuthSdkCredentials extends SdkCredentials {
 
-    private static final String INVALID_AUTHORIZATION_URI = "OAuth authorization URI must be an absolute https URI";
+    private static final String INVALID_AUTHORIZATION_URI = "OAuth authorization URI is invalid";
     private static final String TOKEN_REQUEST_FAILED = "OAuth token request failed with status ";
     private static final String INVALID_TOKEN_RESPONSE = "OAuth token response is invalid";
     private static final String AUTHENTICATION_FAILED_WITH_ERROR = "OAuth client_credentials authentication failed with error: %s";

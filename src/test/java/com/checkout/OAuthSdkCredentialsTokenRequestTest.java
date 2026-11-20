@@ -42,7 +42,7 @@ class OAuthSdkCredentialsTokenRequestTest {
     private static final String ECHO = "{{request}}";
     private static final String TOKEN_REQUEST_FAILED = "OAuth token request failed with status ";
     private static final String INVALID_TOKEN_RESPONSE = "OAuth token response is invalid";
-    private static final String INVALID_URI = "OAuth authorization URI must be an absolute https URI";
+    private static final String INVALID_URI = "OAuth authorization URI is invalid";
 
     private HttpServer server;
     private volatile int status;
