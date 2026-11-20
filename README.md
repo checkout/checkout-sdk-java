@@ -466,8 +466,11 @@ The SDK creates a client for every module when it is built, so set `checkoutApi`
 needed for OAuth. Each of the six API settings must be an absolute `http` or `https` URI with an ASCII host written
 without percent-encoding, an optional port from 1 to 65535 and no user information, and its path must not hold dot
 segments, encoded separators or encoded control characters; a query or fragment on it is not sent. Set
-`oAuthAuthorizationApi` to the absolute `https` token URI of your environment. With `environmentSubdomain`, the hosts of `checkoutApi` and `oAuthAuthorizationApi` must be
-domain names (ASCII letters, digits, `-` and `_`), not IP addresses. Request paths are resolved against the base directory (the path
+`oAuthAuthorizationApi` to the absolute `https` token URI of your environment, with an ASCII host written without
+percent-encoding, no user information and an optional port from 1 to 65535; a local mock server can use `http` on
+`localhost`, `127.0.0.0/8` or `[::1]` only, and any other `http` URI throws `CheckoutArgumentException` when the SDK is
+built. With `environmentSubdomain`, the hosts of `checkoutApi` and `oAuthAuthorizationApi` must be domain names (ASCII
+letters, digits, `-` and `_`), not IP addresses. Request paths are resolved against the base directory (the path
 up to the last `/`), which is kept: end the URI with `/` when it has a path, otherwise its last segment is replaced. A
 missing or invalid URI fails `build()` with a `CheckoutArgumentException` that names the setting.
 

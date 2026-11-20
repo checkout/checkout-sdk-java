@@ -30,12 +30,18 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
@@ -54,6 +60,10 @@ import static org.apache.http.HttpHeaders.AUTHORIZATION;
 import static org.apache.http.HttpHeaders.CONTENT_TYPE;
 import static org.apache.http.HttpHeaders.USER_AGENT;
 
+/**
+ * The Apache HttpClient transport: builds and sends every API request with the SDK headers, retries and telemetry,
+ * and logs each request and response.
+ */
 @Slf4j
 class ApacheHttpClientTransport implements Transport {
 
@@ -63,6 +73,9 @@ class ApacheHttpClientTransport implements Transport {
     private static final String PURPOSE = "purpose";
     private static final String PATH = "path";
     private static final String INVALID_REQUEST_PATH = "Invalid request path";
+    private static final int MAX_DECODING_ROUNDS = 3;
+    private static final Set<String> LOGGED_RESPONSE_HEADERS = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(
+            "cko-request-id", "cko-version", "content-type", "content-length", "date")));
 
     private final URI baseUri;
     private final String baseDirectory;
@@ -227,12 +240,16 @@ class ApacheHttpClientTransport implements Transport {
         return performCall(authorization, requestBody, request, clientOperation, null);
     }
 
+    /**
+     * Sends the request and logs the operation with its path and the response status with the allowlisted response
+     * headers.
+     */
     private Response performCall(final SdkAuthorization authorization,
                                  final Object requestBody,
                                  final HttpUriRequest request,
                                  final ClientOperation clientOperation,
                                  final IHeaders customHeaders) {
-        log.info("{}: {}", clientOperation, request.getURI());
+        log.info("{}: {}", clientOperation, loggablePath(request.getURI().getRawPath()));
         request.setHeader(USER_AGENT, PROJECT_NAME + "/" + getVersionFromManifest());
         request.setHeader(ACCEPT, getAcceptHeader(clientOperation));
         request.setHeader(AUTHORIZATION, authorization.getAuthorizationHeader());
@@ -268,7 +285,8 @@ class ApacheHttpClientTransport implements Transport {
 
         try (final CloseableHttpResponse response = httpClient.execute(request)) {
             long elapsed = System.currentTimeMillis() - startTime;
-            log.info("Response: " + response.getStatusLine().getStatusCode() + " " + Arrays.toString(response.getAllHeaders()));
+            log.info("Response: " + response.getStatusLine().getStatusCode() + " "
+                    + escapeForLog(Arrays.toString(loggableResponseHeaders(response.getAllHeaders()))));
 
             updateTelemetryData(currentRequestId, elapsed);
 
@@ -338,6 +356,95 @@ class ApacheHttpClientTransport implements Transport {
         return Arrays.stream(headers)
                 .filter(it -> !it.getName().equals(AUTHORIZATION))
                 .filter(it -> !it.getName().equalsIgnoreCase("Signature"))
+                .toArray(Header[]::new);
+    }
+
+    /**
+     * The request path written to the log: path segments that hold an at sign, as an email address does ("@", also
+     * percent-encoded once or more, or its full-width or small form), are masked, and control characters, Unicode
+     * format characters and line or paragraph separators are percent-encoded.
+     */
+    static String loggablePath(final String rawPath) {
+        if (rawPath == null || rawPath.isEmpty()) {
+            return rawPath;
+        }
+        final String[] segments = rawPath.split("/", -1);
+        for (int i = 0; i < segments.length; i++) {
+            if (holdsAtSign(segments[i])) {
+                segments[i] = "***";
+            }
+        }
+        return escapeForLog(String.join("/", segments));
+    }
+
+    /**
+     * Whether the segment, decoded up to {@value #MAX_DECODING_ROUNDS} times, contains an at sign ("@", full-width or
+     * small form). A segment that still changes after the last decoding is treated as holding one.
+     */
+    private static boolean holdsAtSign(final String segment) {
+        String value = segment;
+        for (int round = 0; round <= MAX_DECODING_ROUNDS; round++) {
+            if (value.indexOf('@') >= 0 || value.indexOf('\uFF20') >= 0 || value.indexOf('\uFE6B') >= 0) {
+                return true;
+            }
+            final String decoded = percentDecode(value);
+            if (decoded.equals(value)) {
+                return false;
+            }
+            value = decoded;
+        }
+        return true;
+    }
+
+    /**
+     * Decodes every "%XX" escape as UTF-8 and keeps any other character, malformed escapes included.
+     */
+    private static String percentDecode(final String value) {
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream(value.length());
+        int i = 0;
+        while (i < value.length()) {
+            final boolean escape = value.charAt(i) == '%' && i + 2 < value.length();
+            final int high = escape ? Character.digit(value.charAt(i + 1), 16) : -1;
+            final int low = high >= 0 ? Character.digit(value.charAt(i + 2), 16) : -1;
+            if (low >= 0) {
+                bytes.write(high * 16 + low);
+                i += 3;
+            } else {
+                final int codePoint = value.codePointAt(i);
+                final byte[] encoded = new String(Character.toChars(codePoint)).getBytes(StandardCharsets.UTF_8);
+                bytes.write(encoded, 0, encoded.length);
+                i += Character.charCount(codePoint);
+            }
+        }
+        return new String(bytes.toByteArray(), StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Percent-encodes the control characters, Unicode format characters and line or paragraph separators of a log
+     * value; any other character, a space included, is kept.
+     */
+    static String escapeForLog(final String value) {
+        final StringBuilder escaped = new StringBuilder(value.length());
+        value.codePoints().forEach(c -> {
+            final int type = Character.getType(c);
+            if (Character.isISOControl(c) || type == Character.FORMAT || type == Character.LINE_SEPARATOR
+                    || type == Character.PARAGRAPH_SEPARATOR) {
+                for (final byte b : new String(Character.toChars(c)).getBytes(StandardCharsets.UTF_8)) {
+                    escaped.append('%').append(String.format("%02X", b & 0xFF));
+                }
+            } else {
+                escaped.appendCodePoint(c);
+            }
+        });
+        return escaped.toString();
+    }
+
+    /**
+     * Response headers written to the log: only the headers of a fixed allowlist.
+     */
+    private static Header[] loggableResponseHeaders(final Header[] headers) {
+        return Arrays.stream(headers)
+                .filter(it -> LOGGED_RESPONSE_HEADERS.contains(it.getName().toLowerCase(Locale.ROOT)))
                 .toArray(Header[]::new);
     }
 

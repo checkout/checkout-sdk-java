@@ -244,19 +244,10 @@ class CheckoutSdkBaseUriTest {
                 new EnvironmentSubdomain(environment, "abc123").getOAuthAuthorizationApi().toString());
     }
 
-    @Test
-    void shouldLeaveUserInformationOutOfTheAuthorizationUriOnTheSubdomain() {
-        final CustomEnvironment environment = CustomEnvironment.builder()
-                .checkoutApi(VALID)
-                .oAuthAuthorizationApi(URI.create("https://user:pass@access.example:8443/connect/token"))
-                .build();
-
-        assertEquals("https://abc123.access.example:8443/connect/token",
-                new EnvironmentSubdomain(environment, "abc123").getOAuthAuthorizationApi().toString());
-    }
-
     @ParameterizedTest
-    @ValueSource(strings = {"https://[::1]/connect/token", "http://127.0.0.1/connect/token", "https:///connect/token",
+    @ValueSource(strings = {"https://user:pass@access.example:8443/connect/token",
+            "https://user@access.example/connect/token", "https://@access.example/connect/token",
+            "https://[::1]/connect/token", "http://127.0.0.1/connect/token", "https:///connect/token",
             "connect/token", "mailto:x@example.com", "https://u%3Ap%40access.example/connect/token",
             "https://access%2Eexample/connect/token", "http://0x7f000001/connect/token",
             "https://access.example:0/connect/token", "https://access.example:65536/connect/token"})

@@ -14,7 +14,8 @@ final class BaseUri {
             + "and a path without dot segments, encoded separators or encoded control characters";
     private static final String INVALID_SUBDOMAIN_URI = "Invalid URI for %s: the environment subdomain can only be "
             + "added to an absolute URI whose host is a domain name of ASCII letters, digits, \"-\" and \"_\", "
-            + "written without percent-encoding, not an IP address, with an optional port from 1 to 65535";
+            + "written without percent-encoding, not an IP address, with no user information and an optional port "
+            + "from 1 to 65535";
     private static final int MAX_PORT = 65535;
 
     private BaseUri() {
@@ -57,37 +58,36 @@ final class BaseUri {
     }
 
     /**
-     * Prepends the subdomain to the host of the URI, refusing an authority that holds a "%" and a host
-     * that is not a domain name (see {@link #isDomainName(String)}). Port, raw path, raw query and raw
-     * fragment of the given URI are copied without decoding (callers pass {@code checkoutApi} already
-     * normalised); user information is not copied, as before (base URIs refuse it in
-     * {@link #normalise(URI, String)} before they get here).
+     * Prepends the subdomain to the host of the URI, refusing an authority that holds user information or
+     * a "%" and a host that is not a domain name (see {@link #isDomainName(String)}). Port, raw path, raw
+     * query and raw fragment of the given URI are copied without decoding (callers pass {@code checkoutApi}
+     * already normalised).
      *
      * @param uri       the configured URI
      * @param subdomain the subdomain, already validated
      * @param setting   the name of the setting the URI comes from, used in errors instead of the value
      * @return the URI on the subdomain host
      * @throws CheckoutArgumentException if the URI is missing, not absolute with an authority, its
-     *                                   authority holds a "%", its port is out of range, or its host is not a
-     *                                   domain name
+     *                                   authority holds user information or a "%", its port is out of range,
+     *                                   or its host is not a domain name
      */
     static URI withSubdomain(final URI uri, final String subdomain, final String setting) {
         if (uri == null) {
             throw new CheckoutArgumentException(setting + " cannot be null");
         }
         final String authority = uri.getRawAuthority();
-        if (uri.getScheme() == null || uri.isOpaque() || authority == null || authority.indexOf('%') >= 0) {
+        if (uri.getScheme() == null || uri.isOpaque() || authority == null || authority.indexOf('@') >= 0
+                || authority.indexOf('%') >= 0) {
             throw invalid(INVALID_SUBDOMAIN_URI, setting);
         }
-        final int hostStart = authority.lastIndexOf('@') + 1;
-        final String host = hostOf(authority.substring(hostStart));
+        final String host = hostOf(authority);
         if (host == null || !isDomainName(host)) {
             throw invalid(INVALID_SUBDOMAIN_URI, setting);
         }
         final StringBuilder rebuilt = new StringBuilder()
                 .append(uri.getScheme()).append("://")
                 .append(subdomain).append('.')
-                .append(authority.substring(hostStart));
+                .append(authority);
         if (uri.getRawPath() != null) {
             rebuilt.append(uri.getRawPath());
         }
@@ -111,7 +111,7 @@ final class BaseUri {
      * @return the host (an IPv6 literal keeps its brackets), or null when the host is empty or the port
      *         is not a number from 1 to 65535 (leading zeros allowed); an empty port after ":" is allowed
      */
-    private static String hostOf(final String hostAndPort) {
+    static String hostOf(final String hostAndPort) {
         final int hostEnd = hostAndPort.startsWith("[") ? hostAndPort.indexOf(']') + 1 : hostAndPort.indexOf(':');
         final String host = hostEnd < 0 ? hostAndPort : hostAndPort.substring(0, hostEnd);
         final String port = hostEnd < 0 ? "" : hostAndPort.substring(hostEnd);
@@ -159,7 +159,7 @@ final class BaseUri {
         return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
     }
 
-    private static boolean isVisibleAscii(final String value) {
+    static boolean isVisibleAscii(final String value) {
         for (int i = 0; i < value.length(); i++) {
             final char c = value.charAt(i);
             if (c <= ' ' || c > '~') {

@@ -19,11 +19,12 @@ public final class EnvironmentSubdomain {
      * Moves the environment's base URIs to the merchant-specific subdomain. {@code checkoutApi} is
      * validated and normalised first with the same rules as every base URI; the rebuilt URIs keep the port,
      * path, query and fragment of that URI (normalised for {@code checkoutApi}, as configured for
-     * {@code oAuthAuthorizationApi}) without decoding, and leave out any user information.
+     * {@code oAuthAuthorizationApi}) without decoding. A URI with user information is refused.
      *
      * @param environment the environment whose {@code checkoutApi} and {@code oAuthAuthorizationApi} are moved
      * @param subdomain   the merchant-specific subdomain, typically the client ID without the "cli_" prefix
-     * @throws CheckoutArgumentException if the subdomain is invalid, a URI is missing or invalid, or its host
+     * @throws CheckoutArgumentException if the subdomain is invalid, a URI is missing or invalid (user
+     *                                   information included), or its host
      *                                   cannot take a subdomain (empty, an IPv6 literal or an IPv4 address);
      *                                   the error names the setting, never the value
      */
