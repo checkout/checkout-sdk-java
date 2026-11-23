@@ -1,26 +1,222 @@
 name: build-release
+
+# Runs on a push to master that changes gradle.properties. Only a release commit publishes: its
+# first line is "Release <version>" or starts with "Release <version> " (the /release PR title),
+# where <version> is the one gradle.properties declares. A first line that starts with "Release"
+# but names another version fails the run. Any other push builds and tests only. A version
+# already on Maven Central is not uploaded again. To finish a release that failed part way (the
+# upload or the GitHub release), re-run that same run: a later push is not the release commit of
+# that version, so it does not publish or create the release.
+#
+#   build    no secrets; Gradle with verified dependencies (through gradle.sh);
+#            stages the five release files; artifact
+#   verify   no secrets, no Gradle, a fresh runner: verify-artifacts.py and the artifact's sha256
+#   test     integration secrets only; gradle.sh test check
+#   publish  environment "maven-central", only the signing key and the Central token, no token
+#            scope; no checkout, no Gradle, no repository code; signs and uploads the artifact
+#            only after its sha256 matches the verify job's
+#   release  contents: write; gh release create
 on:
   push:
     branches:
       - master
     paths:
       - gradle.properties
+
+permissions:
+  contents: read
+
+# One run at a time. GitHub keeps one pending run per group: a newer push cancels a pending one.
+# A cancelled release run publishes nothing, even when the newer push carries its version, since
+# that push is not the release commit; the build job then warns that the version is not on Maven
+# Central. Re-run the cancelled run (re-runs use its original commit).
+concurrency:
+  group: build-release
+  cancel-in-progress: false
+
 jobs:
-  deploy:
+  build:
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
+      release_commit: ${{ steps.version.outputs.release_commit }}
+      central_state: ${{ steps.published.outputs.central_state }}
+      release_exists: ${{ steps.release-exists.outputs.release_exists }}
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-java@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
         with:
           distribution: 'temurin'
           java-version: '11'
-      - id: read-version
-        run: echo "CURRENT_VERSION=$( grep "version" gradle.properties | awk -F "=" '{print $2}' )" >> $GITHUB_ENV
-      - id: print-version
-        run: echo "Releasing $CURRENT_VERSION"
       - id: validate-wrapper
-        uses: gradle/wrapper-validation-action@v3
-      - id: build
+        uses: gradle/actions/wrapper-validation@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
+      - id: version
+        name: Read and validate the version
+        env:
+          HEAD_MESSAGE: ${{ github.event.head_commit.message }}
+        run: |
+          set -euo pipefail
+          # gradle.properties must declare the version literally, once, on its own line.
+          lines="$(grep -c '^version=' gradle.properties || true)"
+          if [ "$lines" != 1 ]; then
+            echo "::error::gradle.properties must declare version= exactly once"
+            exit 1
+          fi
+          version="$(sed -n 's/^version=//p' gradle.properties)"
+          semver='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z]+(\.[0-9A-Za-z]+)*)?$'
+          if ! [[ "$version" =~ $semver ]]; then
+            echo "::error::Version in gradle.properties is not MAJOR.MINOR.PATCH[-PRERELEASE]"
+            exit 1
+          fi
+          prerelease=false
+          case "$version" in *-*) prerelease=true ;; esac
+          # Only the release commit of this version publishes (see the top of this file).
+          message="${HEAD_MESSAGE:-}"
+          subject="${message%%$'\n'*}"
+          release_commit=false
+          case "$subject" in
+            "Release $version" | "Release $version "*) release_commit=true ;;
+            [Rr][Ee][Ll][Ee][Aa][Ss][Ee] | [Rr][Ee][Ll][Ee][Aa][Ss][Ee][[:space:]]*)
+              echo "::error::The commit looks like a release but is not \"Release $version\" (the version in gradle.properties)"
+              exit 1
+              ;;
+          esac
+          {
+            echo "version=$version"
+            echo "prerelease=$prerelease"
+            echo "release_commit=$release_commit"
+          } >> "$GITHUB_OUTPUT"
+          echo "Version $version (pre-release: $prerelease, release commit: $release_commit)"
+          if [ "$release_commit" = false ]; then
+            echo "::notice::Not a release commit for $version: build and test only, nothing is published"
+          fi
+      - id: publishing-secrets
+        name: Check the publishing secrets live only in the maven-central environment
+        # This job has no environment: it must not see the publishing secrets. The expression
+        # yields only true or false, never a secret value.
+        env:
+          VISIBLE: ${{ secrets.GPG_KEY != '' || secrets.GPG_PASSPHRASE != '' || secrets.SONATYPE_USERNAME != '' || secrets.SONATYPE_PASSWORD != '' }}
+          RELEASE_COMMIT: ${{ steps.version.outputs.release_commit }}
+        run: |
+          set -euo pipefail
+          if [ "$VISIBLE" != false ]; then
+            message="GPG_KEY, GPG_PASSPHRASE, SONATYPE_USERNAME and SONATYPE_PASSWORD must be secrets of the maven-central environment only, not repository or organisation secrets"
+            if [ "$RELEASE_COMMIT" = true ]; then
+              echo "::error::$message"
+              exit 1
+            fi
+            echo "::warning::$message"
+          fi
+      - id: published
+        name: Check Maven Central for this version
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          RELEASE_COMMIT: ${{ steps.version.outputs.release_commit }}
+        run: |
+          set -euo pipefail
+          url="https://repo1.maven.org/maven2/com/checkout/checkout-sdk-java/$VERSION/checkout-sdk-java-$VERSION.pom"
+          code="$(curl -sS --retry 3 -o /dev/null -w '%{http_code}' "$url")" || code=000
+          case "$code" in
+            200) state=published; echo "::notice::$VERSION is already on Maven Central; nothing to upload" ;;
+            404) state=missing ;;
+            *) echo "::error::Maven Central lookup for $VERSION failed (HTTP $code)"; exit 1 ;;
+          esac
+          if [ "${RELEASE_COMMIT:-}" = true ] && [ "$state" = published ] && [ "${GITHUB_RUN_ATTEMPT:-1}" = 1 ]; then
+            echo "::warning::$VERSION was already on Maven Central before this release commit: nothing is uploaded and no release is created"
+          fi
+          if [ "${RELEASE_COMMIT:-}" != true ] && [ "$state" != published ]; then
+            echo "::warning::$VERSION is not on Maven Central and this push is not its release commit: if its release run was cancelled or failed, re-run that run"
+          fi
+          echo "central_state=$state" >> "$GITHUB_OUTPUT"
+      - id: release-exists
+        name: Check for the GitHub release of this version
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          code="$(curl -sS --retry 3 -o /dev/null -w '%{http_code}' \
+            -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/releases/tags/$VERSION")" || code=000
+          case "$code" in
+            200) exists=true ;;
+            404) exists=false ;;
+            *) echo "::error::GitHub release lookup for $VERSION failed (HTTP $code)"; exit 1 ;;
+          esac
+          echo "release_exists=$exists" >> "$GITHUB_OUTPUT"
+      - id: stage
+        name: Build and stage the release files
+        # Every dependency and plugin is checked against gradle/verification-metadata.xml.
+        run: bash .github/scripts/gradle.sh --no-daemon --no-build-cache publishMavenPublicationToStagingRepository
+      - id: collect
+        name: Collect the five release files
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          staged="build/staging-deploy/com/checkout/checkout-sdk-java/$VERSION"
+          out="$RUNNER_TEMP/maven-artifacts"
+          mkdir "$out"
+          for suffix in .jar -sources.jar -javadoc.jar .pom .module; do
+            cp "$staged/checkout-sdk-java-$VERSION$suffix" "$out/"
+          done
+      - id: upload
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: maven-artifacts
+          path: ${{ runner.temp }}/maven-artifacts/
+          if-no-files-found: error
+          retention-days: 7
+
+  verify:
+    # A fresh runner with no secret and no Gradle: nothing the build job ran can reach this check.
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      artifacts_sha256: ${{ steps.hashes.outputs.artifacts_sha256 }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - id: download
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: maven-artifacts
+          path: ${{ runner.temp }}/maven-artifacts
+      - id: hashes
+        name: Verify the release files and record their sha256
+        env:
+          VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/maven-artifacts"
+          python3 -I .github/scripts/verify-artifacts.py --version "$VERSION" --directory "$out" --repo .
+          cd "$out"
+          sums="$(LC_ALL=C find . -mindepth 1 -printf '%P\n' | LC_ALL=C sort | xargs -d '\n' sha256sum)"
+          echo "$sums"
+          echo "artifacts_sha256=$(sha256sum <<< "$sums" | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+      - id: validate-wrapper
+        uses: gradle/actions/wrapper-validation@0723195856401067f7a2779048b490ace7a47d7c # v5.0.2
+      - id: test
         env:
           CHECKOUT_PROCESSING_CHANNEL_ID: ${{ secrets.IT_CHECKOUT_PROCESSING_CHANNEL_ID }}
           CHECKOUT_PREVIOUS_SECRET_KEY: ${{ secrets.IT_CHECKOUT_PREVIOUS_SECRET_KEY }}
@@ -36,21 +232,214 @@ jobs:
           CHECKOUT_DEFAULT_OAUTH_ISSUING_CLIENT_ID: ${{ secrets.IT_CHECKOUT_DEFAULT_OAUTH_ISSUING_CLIENT_ID }}
           CHECKOUT_DEFAULT_OAUTH_ISSUING_CLIENT_SECRET: ${{ secrets.IT_CHECKOUT_DEFAULT_OAUTH_ISSUING_CLIENT_SECRET }}
           CHECKOUT_MERCHANT_SUBDOMAIN: ${{ secrets.IT_CHECKOUT_MERCHANT_SUBDOMAIN }}
-        run: ./gradlew build test --fail-fast jar
-      - id: publish
-        env:
-          GPG_KEY: '${{ secrets.GPG_KEY }}'
-          GPG_PASSPHRASE: '${{ secrets.GPG_PASSPHRASE }}'
-          SONATYPE_PASSWORD: '${{ secrets.SONATYPE_PASSWORD }}'
-          SONATYPE_USERNAME: '${{ secrets.SONATYPE_USERNAME }}'
-        run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository --no-daemon --stacktrace
-      - id: create-release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bash .github/scripts/gradle.sh --no-daemon test --fail-fast check
+
+  publish:
+    needs: [build, verify, test]
+    if: needs.build.outputs.release_commit == 'true' && needs.build.outputs.central_state == 'missing'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: maven-central
+    permissions: {} # same-run download-artifact needs no token scope
+    steps:
+      - id: download
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          tag_name: ${{ env.CURRENT_VERSION }}
-          release_name: ${{ env.CURRENT_VERSION }}
-          body: ${{ github.event.head_commit.message }}
-          draft: false
-          prerelease: false
+          name: maven-artifacts
+          path: ${{ runner.temp }}/maven-artifacts
+      - id: verify
+        name: Verify the artifact is the one the verify job checked
+        env:
+          VERSION: ${{ needs.build.outputs.version }}
+          ARTIFACTS_SHA256: ${{ needs.verify.outputs.artifacts_sha256 }}
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/maven-artifacts"
+          if [ ! -d "$dir" ] || [ -L "$dir" ]; then
+            echo "::error::The maven-artifacts artifact is missing"
+            exit 1
+          fi
+          # The build job validated the version; this only keeps it a plain token in file names.
+          if ! [[ "$VERSION" =~ ^[0-9A-Za-z.-]+$ ]]; then
+            echo "::error::Invalid version from the build job"
+            exit 1
+          fi
+          if ! [[ "$ARTIFACTS_SHA256" =~ ^[0-9a-f]{64}$ ]]; then
+            echo "::error::Missing or invalid sha256 from the verify job"
+            exit 1
+          fi
+          cd "$dir"
+          expected="$(for suffix in .jar -sources.jar -javadoc.jar .pom .module; do
+            echo "checkout-sdk-java-$VERSION$suffix"; done | LC_ALL=C sort)"
+          actual="$(LC_ALL=C find . -mindepth 1 -printf '%P\n' | LC_ALL=C sort)"
+          if [ "$actual" != "$expected" ]; then
+            echo "::error::The artifact must hold exactly the five release files of $VERSION"
+            exit 1
+          fi
+          while IFS= read -r file; do
+            if [ ! -f "$file" ] || [ -L "$file" ]; then
+              echo "::error::$file is not a regular file"
+              exit 1
+            fi
+          done <<< "$expected"
+          sums="$(xargs -d '\n' sha256sum <<< "$expected")"
+          if [ "$(sha256sum <<< "$sums" | cut -d' ' -f1)" != "$ARTIFACTS_SHA256" ]; then
+            echo "::error::The artifact does not match the sha256 the verify job recorded"
+            exit 1
+          fi
+          echo "$sums"
+      - id: sign
+        name: Sign and bundle
+        env:
+          VERSION: ${{ needs.build.outputs.version }}
+          GPG_KEY: ${{ secrets.GPG_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          set -euo pipefail
+          if [ -z "${GPG_KEY:-}" ] || [ -z "${GPG_PASSPHRASE:-}" ]; then
+            echo "::error::GPG_KEY or GPG_PASSPHRASE is empty (expected as secrets of the maven-central environment)"
+            exit 1
+          fi
+          # Throwaway keyring. On every exit, success or failure, no agent keeps the unlocked key
+          # and the keyring is removed.
+          GNUPGHOME="$(mktemp -d)"
+          export GNUPGHOME
+          trap 'gpgconf --kill gpg-agent || true; rm -rf "$GNUPGHOME"' EXIT
+          chmod 700 "$GNUPGHOME"
+          if ! gpg --batch --quiet --import <<< "$GPG_KEY"; then
+            echo "::error::GPG_KEY is not a GPG secret key"
+            exit 1
+          fi
+          keys="$(gpg --batch --list-secret-keys --with-colons | grep -c '^sec:' || true)"
+          if [ "$keys" != 1 ]; then
+            echo "::error::GPG_KEY must hold exactly one secret key"
+            exit 1
+          fi
+          bundle_root="$(mktemp -d)"
+          target="$bundle_root/com/checkout/checkout-sdk-java/$VERSION"
+          mkdir -p "$target"
+          cp "$RUNNER_TEMP/maven-artifacts/"* "$target/"
+          cd "$target"
+          for file in *; do
+            if ! gpg --batch --yes --quiet --pinentry-mode loopback --passphrase-fd 0 \
+              --armor --detach-sign --output "$file.asc" "$file" <<< "$GPG_PASSPHRASE"; then
+              echo "::error::Signing failed (check GPG_KEY and GPG_PASSPHRASE)"
+              exit 1
+            fi
+            gpg --batch --quiet --verify "$file.asc" "$file"
+            md5sum "$file" | cut -d' ' -f1 > "$file.md5"
+            sha1sum "$file" | cut -d' ' -f1 > "$file.sha1"
+            sha256sum "$file" | cut -d' ' -f1 > "$file.sha256"
+            sha512sum "$file" | cut -d' ' -f1 > "$file.sha512"
+          done
+          cd "$bundle_root"
+          zip -q -r -X "$RUNNER_TEMP/central-bundle.zip" com
+          unzip -Z1 "$RUNNER_TEMP/central-bundle.zip"
+      - id: upload
+        name: Upload to Maven Central
+        env:
+          VERSION: ${{ needs.build.outputs.version }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SONATYPE_USERNAME:-}" ] || [ -z "${SONATYPE_PASSWORD:-}" ]; then
+            echo "::error::SONATYPE_USERNAME or SONATYPE_PASSWORD is empty (expected as secrets of the maven-central environment)"
+            exit 1
+          fi
+          token="$(printf '%s:%s' "$SONATYPE_USERNAME" "$SONATYPE_PASSWORD" | base64 -w0)"
+          echo "::add-mask::$token"
+          # The header goes to curl on stdin (printf is a shell builtin), never on a command line.
+          auth() { printf 'Authorization: Bearer %s\n' "$token"; }
+          api=https://central.sonatype.com/api/v1/publisher
+          response="$RUNNER_TEMP/central-response"
+          # No retry: an upload the server accepted but answered with an error must not be sent
+          # twice. A failed upload is retried by re-running the run.
+          code="$(auth | curl -sS -o "$response" -w '%{http_code}' -H @- \
+            -F "bundle=@$RUNNER_TEMP/central-bundle.zip;type=application/octet-stream" \
+            "$api/upload?name=checkout-sdk-java-$VERSION&publishingType=AUTOMATIC")" || code=000
+          if [ "$code" != 201 ]; then
+            echo "::error::Maven Central upload failed (HTTP $code)"
+            exit 1
+          fi
+          # The body is the bare deployment id; only a trailing line break is dropped.
+          deployment="$(tr -d '\r\n' < "$response")"
+          if ! [[ "$deployment" =~ ^[0-9A-Za-z-]{1,64}$ ]]; then
+            echo "::error::Maven Central returned an unexpected deployment id"
+            exit 1
+          fi
+          echo "Deployment $deployment"
+          # AUTOMATIC: validation, then publication. PUBLISHING means validation passed and the
+          # files are on their way to the repository (it can take a while to show on repo1).
+          for _ in $(seq 1 120); do
+            code="$(auth | curl -sS --retry 3 -o "$response" -w '%{http_code}' -H @- -X POST \
+              "$api/status?id=$deployment")" || code=000
+            if [ "$code" != 200 ]; then
+              echo "::error::Maven Central status lookup failed (HTTP $code)"
+              exit 1
+            fi
+            state="$(jq -r '.deploymentState // empty' "$response" 2> /dev/null || true)"
+            case "$state" in
+              PUBLISHING | PUBLISHED) echo "Deployment $deployment: $state"; exit 0 ;;
+              PENDING | VALIDATING) sleep 15 ;;
+              FAILED)
+                echo "::error::Maven Central refused the deployment"
+                jq -c '.errors // empty' "$response" 2> /dev/null || true
+                exit 1
+                ;;
+              *) echo "::error::Unexpected Maven Central deployment state"; exit 1 ;;
+            esac
+          done
+          echo "::error::Maven Central did not validate the deployment in time; check deployment $deployment in the Central Portal"
+          exit 1
+
+  release:
+    # Runs after this run's upload, or, when publish was skipped because the version is on Maven
+    # Central, only on a re-run of the run (its upload succeeded, its GitHub release failed). A
+    # later "Release <version>" commit for a published version does nothing.
+    needs: [build, verify, test, publish]
+    if: >-
+      always() &&
+      needs.build.result == 'success' && needs.verify.result == 'success' &&
+      needs.test.result == 'success' &&
+      (needs.publish.result == 'success' ||
+       (needs.publish.result == 'skipped' && github.run_attempt > 1)) &&
+      needs.build.outputs.release_commit == 'true' &&
+      needs.build.outputs.release_exists == 'false'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - id: release-tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.build.outputs.version }}
+          PRERELEASE: ${{ needs.build.outputs.prerelease }}
+          NOTES: ${{ github.event.head_commit.message }}
+        run: |
+          set -euo pipefail
+          # The build job validated the version; this only keeps it a plain token.
+          if ! [[ "$VERSION" =~ ^[0-9A-Za-z.-]+$ ]]; then
+            echo "::error::Invalid version from the build job"
+            exit 1
+          fi
+          # gh reuses an existing tag and ignores --target, so a tag on another commit is refused.
+          refs="$(gh api "repos/$GH_REPO/git/matching-refs/tags/$VERSION")"
+          ref="$(jq -c --arg r "refs/tags/$VERSION" 'map(select(.ref == $r)) | first // empty' <<< "$refs")"
+          if [ -n "$ref" ]; then
+            sha="$(jq -r '.object.sha' <<< "$ref")"
+            if [ "$(jq -r '.object.type' <<< "$ref")" = tag ]; then
+              sha="$(gh api "repos/$GH_REPO/git/tags/$sha" --jq '.object.sha')"
+            fi
+            if [ "$sha" != "$GITHUB_SHA" ]; then
+              echo "::error::Tag $VERSION already exists on another commit"
+              exit 1
+            fi
+          fi
+          args=(--target "$GITHUB_SHA")
+          if [ "$PRERELEASE" = true ]; then
+            args+=(--prerelease)
+          fi
+          gh release create "$VERSION" "${args[@]}" --title "$VERSION" --notes "${NOTES:-$VERSION}"
