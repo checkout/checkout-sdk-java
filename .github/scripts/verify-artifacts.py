@@ -17,11 +17,12 @@ on anything unexpected (fail closed):
 - sources jar: exactly the tracked src/main/java/**/*.java files, byte for byte, plus the manifest;
 - javadoc jar: documentation file types only (no class, jar or other binary; only the javadoc
   search-index zips, each holding only its JSON index);
-- POM: UTF-8 and ASCII only, its name, description, url, license, developer and scm values
-  exactly the project_* values of gradle.properties, no DTD, entity or processing instruction, no control or format characters (also
-  as character references), no attribute below the root, no text next to child elements, the
-  nested licenses, developers and scm shapes Gradle writes, only the expected top-level elements, coordinates com.checkout:checkout-sdk-java:<v>, and dependencies
-  exactly the `implementation` dependencies of build.gradle, scope runtime;
+- POM: UTF-8 and ASCII only; name, description, url, license, developer and scm values exactly
+  the project_* values of gradle.properties; no DTD, entity, processing instruction, control or
+  format character, attribute below the root or text next to child elements; the licenses,
+  developers and scm shapes Gradle writes; only the expected top-level elements; coordinates
+  com.checkout:checkout-sdk-java:<v>; dependencies exactly the `api` (scope compile),
+  `implementation` and `runtimeOnly` (scope runtime) dependencies of build.gradle;
 - module: no duplicate JSON keys, the same coordinates and dependencies, exactly the two Gradle
   variants of the main jar with their expected attributes (JSON types compared too), and each
   file entry bound to the real file by size and sha256.
@@ -76,8 +77,11 @@ JAVADOC_NAMES = {
     "module-search-index.zip", "tag-search-index.zip",
 }
 PLAIN_MANIFEST = b"Manifest-Version: 1.0\r\n\r\n"
-DEPENDENCY_LINE = re.compile(r"^\s*implementation\s+'([A-Za-z0-9_.-]+):([A-Za-z0-9_.-]+):([A-Za-z0-9_.-]+)'\s*$")
+DEPENDENCY_LINE = re.compile(r"^\s*(api|implementation|runtimeOnly)\s+'([A-Za-z0-9_.-]+):([A-Za-z0-9_.-]+):([A-Za-z0-9_.-]+)'\s*$")
 CONFIGURATION_LINE = re.compile(r"^\s*(api|implementation|runtimeOnly|compileOnlyApi)\b")
+# How Gradle publishes each configuration: POM scope, and whether the module's apiElements variant
+# lists it (runtimeElements lists all three).
+PUBLISHED_CONFIGURATIONS = {"api": ("compile", True), "implementation": ("runtime", False), "runtimeOnly": ("runtime", False)}
 
 
 class VerificationError(Exception):
@@ -112,18 +116,33 @@ def check_file_set(directory, files):
 
 
 def read_dependencies(build_gradle):
-    expected = set()
+    """{(group, name, version): configuration} for the api, implementation and runtimeOnly lines."""
+    expected = {}
     with open(build_gradle, encoding="utf-8") as handle:
         for number, line in enumerate(handle, 1):
             if not CONFIGURATION_LINE.match(line):
                 continue
             match = DEPENDENCY_LINE.match(line)
             if not match:
-                fail(f"build.gradle:{number}: dependency declaration not in the form implementation 'group:name:version'")
-            expected.add(match.groups())
+                fail(f"build.gradle:{number}: dependency declaration not in the form "
+                     f"api|implementation|runtimeOnly 'group:name:version'")
+            configuration, key = match.group(1), match.groups()[1:]
+            if any(known[:2] == key[:2] for known in expected):
+                fail(f"build.gradle:{number}: {key[0]}:{key[1]} is declared twice")
+            expected[key] = configuration
     if not expected:
-        fail("build.gradle declares no implementation dependency")
+        fail("build.gradle declares no published dependency")
     return expected
+
+
+def pom_dependencies(dependencies):
+    return {key: PUBLISHED_CONFIGURATIONS[configuration][0] for key, configuration in dependencies.items()}
+
+
+def module_dependencies(dependencies, variant):
+    if variant == "runtimeElements":
+        return set(dependencies)
+    return {key for key, configuration in dependencies.items() if PUBLISHED_CONFIGURATIONS[configuration][1]}
 
 
 def tracked_sources(repo):
@@ -139,10 +158,8 @@ def tracked_sources(repo):
 
 
 def raw_zip_names(data, label):
-    """Entry names as stored in the zip (zipfile cuts them at a NUL), after checking that the
-    local entries follow each other from the first byte to the central directory with nothing
-    in between: no entry can hide from the central directory, and each local name equals the
-    central one (stream readers such as JarInputStream use the local headers)."""
+    """Entry names as stored in the zip, after checking that the local entries follow each other
+    from the first byte to the central directory and match the central records."""
     end = data.rfind(b"PK\x05\x06")
     if end < 0 or len(data) - end < 22:
         fail(f"{label} has no zip end record")
@@ -173,12 +190,11 @@ def raw_zip_names(data, label):
     cursor = 0
     for local_offset, compressed, flags, name, method, crc, uncompressed, needed in sorted(entries):
         if local_offset != cursor or data[cursor:cursor + 4] != b"PK\x03\x04":
-            fail(f"{label} has data that no central directory entry describes (a hidden entry?)")
+            fail(f"{label} has data outside its listed entries")
         local_length, local_extra = struct.unpack("<HH", data[cursor + 26:cursor + 30])
         if data[cursor + 30:cursor + 30 + local_length] != name:
             fail(f"{label} has a local header name that differs from the central directory")
-        # The local header must describe the same entry as the central record: stream readers
-        # (JarInputStream) use the local method, flags and sizes to find where the entry ends.
+        # The local header matches the central record (version, flags, method, CRC, sizes).
         l_needed, l_flags, l_method = struct.unpack("<HHH", data[cursor + 4:cursor + 10])
         l_crc, l_compressed, l_uncompressed = struct.unpack("<III", data[cursor + 14:cursor + 26])
         if (l_needed, l_flags, l_method) != (needed, flags, method):
@@ -188,8 +204,7 @@ def raw_zip_names(data, label):
             fail(f"{label} has a local header whose CRC or sizes differ from the central directory")
         start = cursor + 30 + local_length + local_extra
         stored = data[start:start + compressed]
-        # The entry's data must be exactly its compressed stream: a deflate stream that ends before
-        # the central size would leave room for an entry only stream readers see.
+        # The entry's data is exactly its compressed stream, of the recorded size.
         if method == 8:
             inflater = zlib.decompressobj(-15)
             try:
@@ -212,7 +227,7 @@ def raw_zip_names(data, label):
                 fail(f"{label} has a data descriptor that differs from the central directory")
             cursor += 12
     if cursor != offset:
-        fail(f"{label} has data that no central directory entry describes (a hidden entry?)")
+        fail(f"{label} has data outside its listed entries")
     return [entry[3] for entry in entries]
 
 
@@ -245,13 +260,13 @@ def zip_entries(path, manifest):
             fail(f"{label} has a directory entry with data: {name!r}")
     if found_manifest != manifest:
         fail(f"{label} manifest is not the expected one")
-    return [name for name in names if not name.endswith("/") and name != "META-INF/MANIFEST.MF"], path
+    return [name for name in names if not name.endswith("/") and name != "META-INF/MANIFEST.MF"]
 
 
 def check_jar(path, version, sources):
     manifest = (f"Manifest-Version: 1.0\r\nImplementation-Title: {ARTIFACT}\r\n"
                 f"Implementation-Version: {version}\r\n\r\n").encode("utf-8")
-    names, _ = zip_entries(path, manifest)
+    names = zip_entries(path, manifest)
     packages = {os.path.dirname(source) for source in sources}
     if not names:
         fail("the jar holds no class")
@@ -261,7 +276,7 @@ def check_jar(path, version, sources):
 
 
 def check_sources(path, repo, sources):
-    names, _ = zip_entries(path, PLAIN_MANIFEST)
+    names = zip_entries(path, PLAIN_MANIFEST)
     entries = set(names)
     if entries != sources:
         extra = sorted(entries - sources)[:5]
@@ -275,7 +290,7 @@ def check_sources(path, repo, sources):
 
 
 def check_javadoc(path):
-    names, _ = zip_entries(path, PLAIN_MANIFEST)
+    names = zip_entries(path, PLAIN_MANIFEST)
     pages = 0
     for name in names:
         if name.endswith("-search-index.zip") and name in JAVADOC_NAMES:
@@ -331,7 +346,7 @@ def local(tag):
 
 def text(element, tag):
     child = element.find(POM_NS + tag)
-    # Only ASCII whitespace, as Maven's trim(): a non-breaking space must not vanish here.
+    # Only ASCII whitespace is trimmed, as Maven does.
     return None if child is None else (child.text or "").strip(" \t\r\n")
 
 
@@ -432,7 +447,7 @@ def check_pom(path, version, dependencies, properties):
     check_pom_values(root, properties)
     if text(root, "packaging") not in (None, "jar"):
         fail("the POM packaging is not jar")
-    found = set()
+    found = {}
     container = root.find(POM_NS + "dependencies")
     for dependency in ([] if container is None else list(container)):
         if dependency.tag != POM_NS + "dependency":
@@ -440,14 +455,14 @@ def check_pom(path, version, dependencies, properties):
         children = [local(child.tag) for child in dependency]
         if sorted(children) != sorted(POM_DEPENDENCY_CHILDREN) or any(len(child) for child in dependency):
             fail(f"POM dependency with elements {sorted(str(c) for c in children)}")
-        if text(dependency, "scope") != "runtime":
-            fail("a POM dependency is not scope runtime")
         key = (text(dependency, "groupId"), text(dependency, "artifactId"), text(dependency, "version"))
         if key in found:
             fail(f"duplicate POM dependency {key}")
-        found.add(key)
-    if found != dependencies:
-        fail(f"POM dependencies differ from build.gradle (extra {sorted(found - dependencies)}, missing {sorted(dependencies - found)})")
+        found[key] = text(dependency, "scope")
+    expected = pom_dependencies(dependencies)
+    if found != expected:
+        differ = sorted(set(found.items()) ^ set(expected.items()))
+        fail(f"POM dependencies or scopes differ from build.gradle ({differ[:6]})")
 
 
 def sha256(path):
@@ -477,7 +492,7 @@ def check_module(path, directory, version, dependencies):
         fail("unexpected module format version")
     component = module["component"]
     if not isinstance(component, dict) or set(component) != {"group", "module", "version", "attributes"}:
-        fail("the module component has unexpected keys (a redirect elsewhere?)")
+        fail("the module component has unexpected keys")
     if (component["group"], component["module"], component["version"]) != (GROUP, ARTIFACT, version):
         fail("the module coordinates are not com.checkout:checkout-sdk-java at this version")
     if not strictly_equal(component["attributes"], COMPONENT_ATTRIBUTES):
@@ -519,7 +534,7 @@ def check_module(path, directory, version, dependencies):
             if key in found:
                 fail(f"duplicate module dependency {key}")
             found.add(key)
-        expected = dependencies if name == "runtimeElements" else set()
+        expected = module_dependencies(dependencies, name)
         if found != expected:
             fail(f"module variant {name} dependencies differ from build.gradle (extra {sorted(found - expected)}, missing {sorted(expected - found)})")
 
@@ -542,7 +557,7 @@ def main(argv):
     check_javadoc(path["javadoc"])
     check_pom(path["pom"], args.version, dependencies, read_properties(os.path.join(args.repo, "gradle.properties")))
     check_module(path["module"], args.directory, args.version, dependencies)
-    print(f"Artifacts of {ARTIFACT} {args.version} verified ({len(dependencies)} runtime dependencies)")
+    print(f"Artifacts of {ARTIFACT} {args.version} verified ({len(dependencies)} dependencies)")
 
 
 if __name__ == "__main__":

@@ -6,8 +6,8 @@
 # added: IDEs that download -sources or -javadoc jars need them listed too (run the IDE sync
 # once with --write-verification-metadata sha256, or resolve them here).
 #
-# It uses a fresh Gradle home and an empty local Maven repository, so every artifact is
-# downloaded again from Maven Central or the Gradle Plugin Portal instead of a local copy, and
+# It uses a fresh Gradle home, so every artifact is downloaded again from Maven Central or the
+# Gradle Plugin Portal instead of a local copy, and
 # it resolves every configuration (plugins, compile, test, jacoco, javadoc, the release staging)
 # so nothing CI uses is left out.
 # Entries already in the file are kept; delete the file first to drop stale ones.
@@ -29,9 +29,7 @@ allprojects {
 }
 GRADLE
 
-# An empty local Maven repository too: build.gradle lists mavenLocal() first, so a developer's
-# ~/.m2 copy would otherwise be what gets pinned.
-GRADLE_USER_HOME="$work/gradle-home" ./gradlew --no-daemon --quiet -Dmaven.repo.local="$work/m2" \
+GRADLE_USER_HOME="$work/gradle-home" ./gradlew --no-daemon --quiet --no-scan \
   --init-script "$work/resolve-all.gradle" \
   --write-verification-metadata sha256 \
   resolveAllConfigurations compileJava compileTestJava javadoc jar sourcesJar javadocJar \

@@ -12,9 +12,10 @@ name: build-release
 #            stages the five release files; artifact
 #   verify   no secrets, no Gradle, a fresh runner: verify-artifacts.py and the artifact's sha256
 #   test     integration secrets only; gradle.sh test check
-#   publish  environment "maven-central", only the signing key and the Central token, no token
-#            scope; no checkout, no Gradle, no repository code; signs and uploads the artifact
-#            only after its sha256 matches the verify job's
+#   publish  environment "maven-central", the signing key and the Central token, actions: read;
+#            no checkout, no Gradle, no repository code; signs and uploads the artifact only after
+#            its sha256 matches the verify job's, once per run (a re-run after an upload waits for
+#            the version on Maven Central instead)
 #   release  contents: write; gh release create
 on:
   push:
@@ -68,7 +69,7 @@ jobs:
             exit 1
           fi
           version="$(sed -n 's/^version=//p' gradle.properties)"
-          semver='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z]+(\.[0-9A-Za-z]+)*)?$'
+          semver='^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$'
           if ! [[ "$version" =~ $semver ]]; then
             echo "::error::Version in gradle.properties is not MAJOR.MINOR.PATCH[-PRERELEASE]"
             exit 1
@@ -97,8 +98,7 @@ jobs:
           fi
       - id: publishing-secrets
         name: Check the publishing secrets live only in the maven-central environment
-        # This job has no environment: it must not see the publishing secrets. The expression
-        # yields only true or false, never a secret value.
+        # This job has no environment. The expression yields only true or false.
         env:
           VISIBLE: ${{ secrets.GPG_KEY != '' || secrets.GPG_PASSPHRASE != '' || secrets.SONATYPE_USERNAME != '' || secrets.SONATYPE_PASSWORD != '' }}
           RELEASE_COMMIT: ${{ steps.version.outputs.release_commit }}
@@ -174,7 +174,7 @@ jobs:
           retention-days: 7
 
   verify:
-    # A fresh runner with no secret and no Gradle: nothing the build job ran can reach this check.
+    # A separate runner, with no secret and no Gradle.
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -238,16 +238,51 @@ jobs:
     needs: [build, verify, test]
     if: needs.build.outputs.release_commit == 'true' && needs.build.outputs.central_state == 'missing'
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 75
     environment: maven-central
-    permissions: {} # same-run download-artifact needs no token scope
+    permissions:
+      actions: read # the jobs of earlier attempts of this run (step "published")
     steps:
+      # done: the version is on Maven Central already (nothing to upload); wait: an earlier attempt
+      # of this run uploaded it (wait until it is on Maven Central, no second upload); upload.
+      - id: published
+        name: Check whether this version is already uploaded
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          set -euo pipefail
+          if ! [[ "$VERSION" =~ ^[0-9A-Za-z.-]+$ ]]; then
+            echo "::error::Invalid version from the build job"
+            exit 1
+          fi
+          url="https://repo1.maven.org/maven2/com/checkout/checkout-sdk-java/$VERSION/checkout-sdk-java-$VERSION.pom"
+          code="$(curl -sS --retry 3 -o /dev/null -w '%{http_code}' "$url")" || code=000
+          case "$code" in
+            200) echo "::notice::$VERSION is on Maven Central; nothing to upload"; echo "mode=done" >> "$GITHUB_OUTPUT"; exit 0 ;;
+            404) ;;
+            *) echo "::error::Maven Central lookup for $VERSION failed (HTTP $code)"; exit 1 ;;
+          esac
+          mode="upload"
+          attempt=1
+          while [ "$attempt" -lt "${GITHUB_RUN_ATTEMPT:-1}" ]; do
+            jobs="$(gh api --paginate "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/attempts/$attempt/jobs?per_page=100" \
+              --jq '.jobs[] | select(.name == "publish") | .steps[] | select(.name == "Upload to Maven Central") | .conclusion')"
+            if grep -qx success <<< "$jobs"; then
+              mode="wait"
+              echo "::notice::Attempt $attempt of this run uploaded $VERSION; waiting for it on Maven Central instead of uploading again"
+            fi
+            attempt=$((attempt + 1))
+          done
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
       - id: download
+        if: steps.published.outputs.mode == 'upload'
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: maven-artifacts
           path: ${{ runner.temp }}/maven-artifacts
       - id: verify
+        if: steps.published.outputs.mode == 'upload'
         name: Verify the artifact is the one the verify job checked
         env:
           VERSION: ${{ needs.build.outputs.version }}
@@ -289,6 +324,7 @@ jobs:
           fi
           echo "$sums"
       - id: sign
+        if: steps.published.outputs.mode == 'upload'
         name: Sign and bundle
         env:
           VERSION: ${{ needs.build.outputs.version }}
@@ -336,6 +372,7 @@ jobs:
           zip -q -r -X "$RUNNER_TEMP/central-bundle.zip" com
           unzip -Z1 "$RUNNER_TEMP/central-bundle.zip"
       - id: upload
+        if: steps.published.outputs.mode == 'upload'
         name: Upload to Maven Central
         env:
           VERSION: ${{ needs.build.outputs.version }}
@@ -351,13 +388,11 @@ jobs:
           echo "::add-mask::$token"
           # The header goes to curl on stdin (printf is a shell builtin), never on a command line.
           auth() { printf 'Authorization: Bearer %s\n' "$token"; }
-          api=https://central.sonatype.com/api/v1/publisher
           response="$RUNNER_TEMP/central-response"
-          # No retry: an upload the server accepted but answered with an error must not be sent
-          # twice. A failed upload is retried by re-running the run.
+          # One request per attempt; a failed upload is retried by re-running the run.
           code="$(auth | curl -sS -o "$response" -w '%{http_code}' -H @- \
             -F "bundle=@$RUNNER_TEMP/central-bundle.zip;type=application/octet-stream" \
-            "$api/upload?name=checkout-sdk-java-$VERSION&publishingType=AUTOMATIC")" || code=000
+            "https://central.sonatype.com/api/v1/publisher/upload?name=checkout-sdk-java-$VERSION&publishingType=AUTOMATIC")" || code=000
           if [ "$code" != 201 ]; then
             echo "::error::Maven Central upload failed (HTTP $code)"
             exit 1
@@ -369,28 +404,66 @@ jobs:
             exit 1
           fi
           echo "Deployment $deployment"
-          # AUTOMATIC: validation, then publication. PUBLISHING means validation passed and the
-          # files are on their way to the repository (it can take a while to show on repo1).
+          echo "deployment=$deployment" >> "$GITHUB_OUTPUT"
+      - id: status
+        if: steps.published.outputs.mode == 'upload'
+        name: Wait for the deployment to publish
+        env:
+          DEPLOYMENT: ${{ steps.upload.outputs.deployment }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          if ! [[ "$DEPLOYMENT" =~ ^[0-9A-Za-z-]{1,64}$ ]]; then
+            echo "::error::Missing deployment id from the upload step"
+            exit 1
+          fi
+          token="$(printf '%s:%s' "$SONATYPE_USERNAME" "$SONATYPE_PASSWORD" | base64 -w0)"
+          echo "::add-mask::$token"
+          auth() { printf 'Authorization: Bearer %s\n' "$token"; }
+          response="$RUNNER_TEMP/central-status"
+          # AUTOMATIC: validation, then publication. PUBLISHING means validation passed and the files
+          # are on their way to the repository. Lookup errors and states other than FAILED are
+          # retried until the deadline (30 minutes).
           for _ in $(seq 1 120); do
-            code="$(auth | curl -sS --retry 3 -o "$response" -w '%{http_code}' -H @- -X POST \
-              "$api/status?id=$deployment")" || code=000
-            if [ "$code" != 200 ]; then
-              echo "::error::Maven Central status lookup failed (HTTP $code)"
-              exit 1
+            code="$(auth | curl -sS -o "$response" -w '%{http_code}' -H @- -X POST \
+              "https://central.sonatype.com/api/v1/publisher/status?id=$DEPLOYMENT")" || code=000
+            state=""
+            if [ "$code" = 200 ]; then
+              state="$(jq -r '.deploymentState // empty' "$response" 2> /dev/null || true)"
             fi
-            state="$(jq -r '.deploymentState // empty' "$response" 2> /dev/null || true)"
             case "$state" in
-              PUBLISHING | PUBLISHED) echo "Deployment $deployment: $state"; exit 0 ;;
-              PENDING | VALIDATING) sleep 15 ;;
+              PUBLISHING | PUBLISHED) echo "Deployment $DEPLOYMENT: $state"; exit 0 ;;
               FAILED)
                 echo "::error::Maven Central refused the deployment"
                 jq -c '.errors // empty' "$response" 2> /dev/null || true
                 exit 1
                 ;;
-              *) echo "::error::Unexpected Maven Central deployment state"; exit 1 ;;
+              PENDING | VALIDATING | VALIDATED) ;;
+              "") echo "::warning::Maven Central status lookup failed (HTTP $code); retrying" ;;
+              *) echo "::warning::Unexpected Maven Central deployment state; retrying" ;;
             esac
+            sleep 15
           done
-          echo "::error::Maven Central did not validate the deployment in time; check deployment $deployment in the Central Portal"
+          echo "::error::Deployment $DEPLOYMENT was not published in time; check it in the Central Portal, then re-run this run"
+          exit 1
+      - id: wait-central
+        if: steps.published.outputs.mode == 'wait'
+        name: Wait for the earlier upload on Maven Central
+        env:
+          VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          set -euo pipefail
+          url="https://repo1.maven.org/maven2/com/checkout/checkout-sdk-java/$VERSION/checkout-sdk-java-$VERSION.pom"
+          for _ in $(seq 1 80); do
+            code="$(curl -sS -o /dev/null -w '%{http_code}' "$url")" || code=000
+            if [ "$code" = 200 ]; then
+              echo "$VERSION is on Maven Central"
+              exit 0
+            fi
+            sleep 30
+          done
+          echo "::error::$VERSION is not on Maven Central after 40 minutes; check deployment checkout-sdk-java-$VERSION in the Central Portal, then re-run this run"
           exit 1
 
   release:

@@ -8,7 +8,6 @@ plugins {
 
 allprojects {
     repositories {
-        mavenLocal()
         mavenCentral()
     }
 }
@@ -119,9 +118,8 @@ publishing {
             }
         }
     }
-    // CI stages the release here (build-release.yml, build job). Signing and the upload to Maven
-    // Central happen in the publish job, which runs no Gradle: no build or plugin code runs next
-    // to the signing key or the Central token.
+    // CI stages the release here (build-release.yml, build job); the publish job of that workflow
+    // signs the files and uploads them to Maven Central.
     repositories {
         maven {
             name = 'staging'
