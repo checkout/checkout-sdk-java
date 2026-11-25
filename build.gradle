@@ -1,8 +1,6 @@
 plugins {
     id 'java-library'
-    id 'signing'
     id 'maven-publish'
-    id 'io.github.gradle-nexus.publish-plugin' version '2.0.0'
     id 'io.freefair.lombok' version '8.14.4'
     id "org.sonarqube" version "7.5.0.8588"
     id 'jacoco'
@@ -10,7 +8,6 @@ plugins {
 
 allprojects {
     repositories {
-        mavenLocal()
         mavenCentral()
     }
 }
@@ -121,27 +118,14 @@ publishing {
             }
         }
     }
-}
-
-nexusPublishing {
+    // CI stages the release here (build-release.yml, build job); the publish job of that workflow
+    // signs the files and uploads them to Maven Central.
     repositories {
-        sonatype {
-            nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
-            username = System.getenv("SONATYPE_USERNAME")
-            password = System.getenv("SONATYPE_PASSWORD")
+        maven {
+            name = 'staging'
+            url = layout.buildDirectory.dir('staging-deploy')
         }
     }
-    connectTimeout = Duration.ofMinutes(3)
-    clientTimeout = Duration.ofMinutes(3)
-}
-
-signing {
-    def signingKey = System.getenv('GPG_KEY')
-    def signingPassword = System.getenv('GPG_PASSPHRASE')
-    required { signingKey != null && signingPassword != null && gradle.taskGraph.hasTask("publish") }
-    useInMemoryPgpKeys(signingKey, signingPassword)
-    sign publishing.publications.maven
 }
 
 jar {
